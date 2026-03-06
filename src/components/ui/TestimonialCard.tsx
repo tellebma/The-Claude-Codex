@@ -13,7 +13,7 @@ export function TestimonialCard({
 }: TestimonialCardProps) {
   return (
     <div className="glass-card flex flex-col p-6">
-      <div className="mb-4 text-3xl text-brand-500">&ldquo;</div>
+      <div className="mb-4 text-3xl text-brand-700 dark:text-brand-400">&ldquo;</div>
       <blockquote className="mb-4 flex-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
         {quote}
       </blockquote>

@@ -33,6 +33,16 @@
   ::selection {
     @apply bg-brand-500/30 text-brand-900 dark:text-brand-100;
   }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    @apply outline-none ring-2 ring-brand-700 ring-offset-2 ring-offset-white dark:ring-offset-slate-950;
+  }
+
+  .skip-to-content {
+    @apply absolute left-4 top-4 z-[100] -translate-y-16 rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white transition-transform focus:translate-y-0;
+  }
 }
 
 @layer components {

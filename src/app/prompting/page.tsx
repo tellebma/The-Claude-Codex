@@ -110,7 +110,7 @@ const templates = [
   {
     icon: Globe,
     category: "Developpement web",
-    color: "text-brand-500",
+    color: "text-brand-700 dark:text-brand-400",
     bgColor: "bg-brand-500/10",
     description:
       "Pour creer des composants, des pages ou des fonctionnalites web completes.",
@@ -396,9 +396,9 @@ export default function PromptingPage() {
                     <div className="flex flex-col justify-center p-6 sm:p-8 lg:w-2/5">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                          <Icon className="h-5 w-5 text-brand-500" />
+                          <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400" />
                         </div>
-                        <span className="text-sm font-semibold text-brand-500">
+                        <span className="text-sm font-semibold text-brand-700 dark:text-brand-400">
                           Principe {index + 1}
                         </span>
                       </div>
@@ -560,7 +560,7 @@ export default function PromptingPage() {
             <div className="glass-card p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10">
-                  <Link2 className="h-6 w-6 text-brand-500" />
+                  <Link2 className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
@@ -713,7 +713,7 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
             <div className="glass-card p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10">
-                  <BookOpen className="h-6 w-6 text-brand-500" />
+                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
@@ -794,7 +794,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-xl border border-slate-200/40 p-5 dark:border-slate-700/40">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500/10">
-                    <Sparkles className="h-5 w-5 text-brand-500" />
+                    <Sparkles className="h-5 w-5 text-brand-700 dark:text-brand-400" />
                   </div>
                   <h4 className="mb-1 font-semibold">Global</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-400">

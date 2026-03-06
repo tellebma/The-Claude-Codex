@@ -19,13 +19,13 @@ export function Header() {
 
   return (
     <header className="glass sticky top-0 z-50">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <nav aria-label="Navigation principale" className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link
           href="/"
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500">
-            <Terminal className="h-4 w-4 text-white" />
+            <Terminal className="h-4 w-4 text-white" aria-hidden="true" />
           </div>
           <span className="hidden sm:inline">
             The Claude <span className="text-gradient">Codex</span>
@@ -53,9 +53,9 @@ export function Header() {
             aria-expanded={mobileOpen}
           >
             {mobileOpen ? (
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" aria-hidden="true" />
             ) : (
-              <Menu className="h-4 w-4" />
+              <Menu className="h-4 w-4" aria-hidden="true" />
             )}
           </button>
         </div>
@@ -66,6 +66,8 @@ export function Header() {
           "overflow-hidden border-t border-slate-200/50 transition-all duration-300 dark:border-slate-700/50 md:hidden",
           mobileOpen ? "max-h-80" : "max-h-0"
         )}
+        inert={!mobileOpen || undefined}
+        aria-hidden={!mobileOpen}
       >
         <div className="space-y-1 px-4 py-3">
           {navigation.map((item) => (

@@ -167,7 +167,7 @@ export default function McpPage() {
             <div className="mt-12 grid gap-6 sm:grid-cols-3">
               <div className="glass-card p-6 text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <Terminal className="h-7 w-7 text-brand-500" />
+                  <Terminal className="h-7 w-7 text-brand-700 dark:text-brand-400" />
                 </div>
                 <h4 className="mb-2 font-semibold">Sans MCP</h4>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -215,7 +215,7 @@ export default function McpPage() {
               {/* User */}
               <div className="glass-card flex-1 p-5 text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <BookOpen className="h-6 w-6 text-brand-500" />
+                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                 </div>
                 <p className="text-sm font-semibold">Vous</p>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -231,7 +231,7 @@ export default function McpPage() {
               {/* Claude Code */}
               <div className="glass-card flex-1 border-brand-500/30 p-5 text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <Terminal className="h-6 w-6 text-brand-500" />
+                  <Terminal className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                 </div>
                 <p className="text-sm font-semibold">Claude Code</p>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
@@ -424,7 +424,7 @@ claude "Liste les fichiers dans mon dossier projet"`}
               >
                 <div className="mb-4 flex items-start justify-between">
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                    <mcp.icon className="h-6 w-6 text-brand-500" />
+                    <mcp.icon className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                   </div>
                   <span
                     className={`rounded-full px-3 py-1 text-xs font-semibold ${mcp.difficultyColor}`}

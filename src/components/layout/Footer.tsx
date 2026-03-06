@@ -31,7 +31,7 @@ export function Footer() {
           <div className="sm:col-span-2 lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 text-lg font-bold">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500">
-                <Terminal className="h-4 w-4 text-white" />
+                <Terminal className="h-4 w-4 text-white" aria-hidden="true" />
               </div>
               The Claude <span className="text-gradient">Codex</span>
             </Link>
@@ -42,7 +42,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div>
+          <nav aria-label="Guides">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               Guides
             </h3>
@@ -51,16 +51,16 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-slate-500 transition-colors hover:text-brand-500 dark:text-slate-400"
+                    className="text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
                   >
                     {link.name}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          <div>
+          <nav aria-label="Ressources">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               Ressources
             </h3>
@@ -72,15 +72,15 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-slate-500 transition-colors hover:text-brand-500 dark:text-slate-400"
+                      className="inline-flex items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
                     >
                       {link.name}
-                      <ExternalLink className="h-3 w-3" />
+                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
                     </a>
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-500 transition-colors hover:text-brand-500 dark:text-slate-400"
+                      className="text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
                     >
                       {link.name}
                     </Link>
@@ -88,20 +88,20 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200/50 pt-8 dark:border-slate-800 sm:flex-row">
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             {new Date().getFullYear()} The Claude Codex. Projet open-source.
           </p>
           <a
             href="https://github.com/anthropics/claude-code"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-brand-500"
+            className="flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
           >
-            <Github className="h-4 w-4" />
+            <Github className="h-4 w-4" aria-hidden="true" />
             GitHub
           </a>
         </div>

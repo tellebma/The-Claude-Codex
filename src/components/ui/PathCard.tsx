@@ -20,9 +20,9 @@ const borderColors = {
 };
 
 const badgeColors = {
-  teal: "bg-brand-500/10 text-brand-500",
-  amber: "bg-accent-500/10 text-accent-500",
-  purple: "bg-violet-500/10 text-violet-500",
+  teal: "bg-brand-500/10 text-brand-700 dark:text-brand-400",
+  amber: "bg-accent-500/10 text-accent-700 dark:text-accent-400",
+  purple: "bg-violet-500/10 text-violet-700 dark:text-violet-400",
 };
 
 const iconBg = {
@@ -43,6 +43,7 @@ export function PathCard({
   return (
     <Link
       href={href}
+      aria-label={`${level} : ${title}`}
       className={clsx(
         "glass-card group flex flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
         borderColors[color]
@@ -55,7 +56,7 @@ export function PathCard({
             iconBg[color]
           )}
         >
-          <Icon className="h-5 w-5" />
+          <Icon className="h-5 w-5" aria-hidden="true" />
         </div>
         <span
           className={clsx(
@@ -84,9 +85,9 @@ export function PathCard({
         ))}
       </ul>
 
-      <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-500 transition-all group-hover:gap-2">
+      <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-700 dark:text-brand-400 transition-all group-hover:gap-2">
         Commencer ce parcours
-        <ArrowRight className="h-4 w-4" />
+        <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </span>
     </Link>
   );

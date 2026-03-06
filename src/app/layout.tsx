@@ -48,9 +48,12 @@ export default function RootLayout({
         className={`${jakarta.variable} ${mono.variable} font-sans antialiased`}
       >
         <ThemeProvider>
+          <a href="#main-content" className="skip-to-content">
+            Aller au contenu principal
+          </a>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1">{children}</main>
+            <main id="main-content" className="flex-1">{children}</main>
             <Footer />
           </div>
         </ThemeProvider>

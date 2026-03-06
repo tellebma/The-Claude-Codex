@@ -71,7 +71,7 @@ export default function GettingStartedPage() {
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-200/50 bg-white/50 p-6 dark:border-slate-700/50 dark:bg-slate-800/50">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500/10">
-                <Terminal className="h-5 w-5 text-brand-500" />
+                <Terminal className="h-5 w-5 text-brand-700 dark:text-brand-400" />
               </div>
               <h3 className="font-semibold text-slate-900 dark:text-white">
                 Node.js 18+
@@ -83,7 +83,7 @@ export default function GettingStartedPage() {
                   href="https://nodejs.org"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-brand-500 underline hover:text-brand-400"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-700 dark:hover:text-brand-300"
                 >
                   nodejs.org
                 </a>
@@ -93,7 +93,7 @@ export default function GettingStartedPage() {
 
             <div className="rounded-xl border border-slate-200/50 bg-white/50 p-6 dark:border-slate-700/50 dark:bg-slate-800/50">
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500/10">
-                <FolderOpen className="h-5 w-5 text-brand-500" />
+                <FolderOpen className="h-5 w-5 text-brand-700 dark:text-brand-400" />
               </div>
               <h3 className="font-semibold text-slate-900 dark:text-white">
                 Un terminal
@@ -117,7 +117,7 @@ export default function GettingStartedPage() {
                   href="https://console.anthropic.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-brand-500 underline hover:text-brand-400"
+                  className="text-brand-700 dark:text-brand-400 underline hover:text-brand-700 dark:hover:text-brand-300"
                 >
                   console.anthropic.com
                 </a>{" "}
@@ -623,7 +623,7 @@ Claude > Puis-je creer le fichier index.html ? (y/n)`}
                       href="https://nodejs.org"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-brand-500 underline hover:text-brand-400"
+                      className="text-brand-700 dark:text-brand-400 underline hover:text-brand-700 dark:hover:text-brand-300"
                     >
                       nodejs.org
                     </a>{" "}

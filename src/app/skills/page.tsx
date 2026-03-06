@@ -37,9 +37,9 @@ const topSkills = [
   {
     name: "TDD Guide",
     category: "Dev",
-    categoryColor: "bg-brand-500/10 text-brand-500",
+    categoryColor: "bg-brand-500/10 text-brand-700 dark:text-brand-400",
     icon: FlaskConical,
-    iconColor: "text-brand-500",
+    iconColor: "text-brand-700 dark:text-brand-400",
     iconBg: "from-brand-500/20 to-brand-500/5",
     description:
       "Impose un workflow Test-Driven Development rigoureux : ecrire les tests d'abord, implementer le minimum pour les faire passer, puis refactorer.",
@@ -202,7 +202,7 @@ export default function SkillsPage() {
             <div className="glass-card p-8 sm:p-10">
               <div className="flex items-start gap-4">
                 <div className="hidden shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 p-3 sm:flex">
-                  <BookOpen className="h-6 w-6 text-brand-500" />
+                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold sm:text-2xl">
@@ -263,7 +263,7 @@ export default function SkillsPage() {
             {/* Built-in Skills */}
             <div className="glass-card p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                <Users className="h-6 w-6 text-brand-500" />
+                <Users className="h-6 w-6 text-brand-700 dark:text-brand-400" />
               </div>
               <h3 className="mb-2 text-xl font-bold">Built-in Skills</h3>
               <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
@@ -279,7 +279,7 @@ export default function SkillsPage() {
                 language="bash"
                 filename="terminal"
               />
-              <div className="mt-4 flex items-center gap-2 text-sm text-brand-500">
+              <div className="mt-4 flex items-center gap-2 text-sm text-brand-700 dark:text-brand-400">
                 <Boxes className="h-4 w-4" />
                 <span>Prets a l&apos;emploi, maintenus par la communaute</span>
               </div>
@@ -373,7 +373,7 @@ mon-projet/
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <Terminal className="h-4 w-4 text-brand-500" />
+                  <Terminal className="h-4 w-4 text-brand-700 dark:text-brand-400" />
                 </div>
                 <h3 className="text-xl font-bold">
                   Invocation explicite avec{" "}
@@ -756,7 +756,7 @@ $ claude
                   className="glass-card flex flex-col p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                    <Icon className="h-6 w-6 text-brand-500" />
+                    <Icon className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                   </div>
                   <h3 className="mb-3 text-lg font-bold">{useCase.title}</h3>
                   <p className="mb-6 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
@@ -766,7 +766,7 @@ $ claude
                     {useCase.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold text-brand-500"
+                        className="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold text-brand-700 dark:text-brand-400"
                       >
                         {skill}
                       </span>

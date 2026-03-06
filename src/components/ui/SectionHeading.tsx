@@ -16,7 +16,7 @@ export function SectionHeading({
   return (
     <div className={clsx("max-w-3xl", centered && "mx-auto text-center")}>
       {badge && (
-        <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-500">
+        <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
           {badge}
         </span>
       )}

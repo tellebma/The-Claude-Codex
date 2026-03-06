@@ -179,7 +179,7 @@ const professionGradients = {
 };
 
 const professionIconColors = {
-  teal: "text-brand-500",
+  teal: "text-brand-700 dark:text-brand-400",
   amber: "text-accent-500",
   purple: "text-violet-500",
   green: "text-emerald-500",
@@ -354,7 +354,7 @@ export default function FuturePage() {
                   {/* Content */}
                   <div className="pb-8">
                     <div className="mb-1 flex items-center gap-2">
-                      <Icon className="h-4 w-4 text-brand-500" />
+                      <Icon className="h-4 w-4 text-brand-700 dark:text-brand-400" />
                       <h3 className="text-lg font-semibold">{item.title}</h3>
                     </div>
                     <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
@@ -363,7 +363,7 @@ export default function FuturePage() {
                     {item.link && (
                       <Link
                         href={item.link.href}
-                        className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brand-500 transition-colors hover:text-brand-400"
+                        className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brand-700 dark:text-brand-400 transition-colors hover:text-brand-700 dark:hover:text-brand-300"
                       >
                         {item.link.label}
                         <ArrowRight className="h-3 w-3" />
@@ -425,7 +425,7 @@ export default function FuturePage() {
               L&apos;ecosysteme evolue rapidement. Suivez le{" "}
               <Link
                 href="https://github.com/anthropics/claude-code"
-                className="font-medium text-brand-500 underline underline-offset-2 hover:text-brand-400"
+                className="font-medium text-brand-700 dark:text-brand-400 underline underline-offset-2 hover:text-brand-700 dark:hover:text-brand-300"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -481,7 +481,7 @@ export default function FuturePage() {
                         <span
                           className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
                             isFirst
-                              ? "bg-brand-500/10 text-brand-500"
+                              ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
                               : "bg-slate-100 text-slate-500 dark:bg-slate-700/50 dark:text-slate-400"
                           }`}
                         >

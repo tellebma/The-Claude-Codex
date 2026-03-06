@@ -16,10 +16,10 @@ const gradients = {
 };
 
 const iconColors = {
-  teal: "text-brand-500",
-  amber: "text-accent-500",
-  purple: "text-violet-500",
-  green: "text-emerald-500",
+  teal: "text-brand-700 dark:text-brand-400",
+  amber: "text-accent-600 dark:text-accent-400",
+  purple: "text-violet-600 dark:text-violet-400",
+  green: "text-emerald-600 dark:text-emerald-400",
 };
 
 export function FeatureCard({
@@ -36,7 +36,7 @@ export function FeatureCard({
           gradients[gradient]
         )}
       >
-        <Icon className={clsx("h-6 w-6", iconColors[gradient])} />
+        <Icon className={clsx("h-6 w-6", iconColors[gradient])} aria-hidden="true" />
       </div>
       <h3 className="mb-2 text-lg font-semibold">{title}</h3>
       <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">

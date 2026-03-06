@@ -1,0 +1,35 @@
+{
+  "name": "the-claude-codex",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The Claude Codex - Guide de reference pour maitriser Claude Code",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "docker:build": "docker build -t tellebma/how_to_use_claude .",
+    "docker:push": "docker push tellebma/how_to_use_claude",
+    "docker:release": "npm run docker:build && npm run docker:push"
+  },
+  "dependencies": {
+    "next": "14.2.21",
+    "next-themes": "^0.4.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.468.0",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.21",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}

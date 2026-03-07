@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Terminal } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { Logo } from "./Logo";
 import { SearchDialog } from "@/components/ui/SearchDialog";
 import clsx from "clsx";
 
@@ -29,9 +30,7 @@ export function Header() {
           href="/"
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500">
-            <Terminal className="h-4 w-4 text-white" aria-hidden="true" />
-          </div>
+          <Logo />
           <span className="hidden sm:inline">
             The Claude <span className="text-gradient">Codex</span>
           </span>
@@ -63,15 +62,15 @@ export function Header() {
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700 md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700 md:hidden"
             aria-label="Menu de navigation"
             aria-expanded={mobileOpen}
             aria-controls={MOBILE_MENU_ID}
           >
             {mobileOpen ? (
-              <X className="h-4 w-4" aria-hidden="true" />
+              <X className="h-5 w-5" aria-hidden="true" />
             ) : (
-              <Menu className="h-4 w-4" aria-hidden="true" />
+              <Menu className="h-5 w-5" aria-hidden="true" />
             )}
           </button>
         </div>
@@ -96,7 +95,7 @@ export function Header() {
                 onClick={() => setMobileOpen(false)}
                 aria-current={isActive ? "page" : undefined}
                 className={clsx(
-                  "block rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "block rounded-lg px-3 py-3 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  Terminal,
   Globe,
   FileText,
   Zap,
@@ -23,23 +22,24 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 import { PathCard } from "@/components/ui/PathCard";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import { AudienceCard } from "@/components/ui/AudienceCard";
+import { Logo } from "@/components/layout/Logo";
 
 export default function HomePage() {
   return (
     <>
       {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-slate-950">
+      <section className="relative overflow-hidden bg-slate-50 dark:bg-slate-950">
         {/* Background effects */}
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at top right, var(--gradient-hero-radial-1), transparent 60%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at bottom left, var(--gradient-hero-radial-2), transparent 60%)" }} />
 
         {/* Grid pattern */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+              "linear-gradient(var(--hero-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hero-grid-line) 1px, transparent 1px)",
             backgroundSize: "60px 60px",
           }}
         />
@@ -47,13 +47,25 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 sm:pb-28 sm:pt-28 lg:px-8 lg:pb-36 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             {/* Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
+            <div
+              className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm"
+              style={{
+                borderWidth: "1px",
+                borderStyle: "solid",
+                borderColor: "var(--hero-badge-border)",
+                backgroundColor: "var(--hero-badge-bg)",
+                color: "var(--hero-badge-text)",
+              }}
+            >
               <Sparkles className="h-4 w-4" />
               Guide gratuit & open-source
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
+            <h1
+              className="text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
+              style={{ color: "var(--hero-text-primary)" }}
+            >
               Maitrisez{" "}
               <span className="text-gradient">Claude Code</span>
               <br />
@@ -61,7 +73,10 @@ export default function HomePage() {
             </h1>
 
             {/* Subtitle */}
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
+            <p
+              className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl"
+              style={{ color: "var(--hero-text-secondary)" }}
+            >
               Le guide de reference pour exploiter toute la puissance de l&apos;IA
               dans votre quotidien. Que vous soyez developpeur, entrepreneur ou
               simplement curieux — tout commence ici.
@@ -71,14 +86,20 @@ export default function HomePage() {
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/getting-started"
-                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
+                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
                 Commencer le guide
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/mcp"
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-slate-200 transition-all hover:border-slate-500 hover:bg-white/5"
+                className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
+                style={{
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "var(--hero-cta-secondary-border)",
+                  color: "var(--hero-cta-secondary-text)",
+                }}
               >
                 Decouvrir les MCP
               </Link>
@@ -86,15 +107,23 @@ export default function HomePage() {
 
             {/* Terminal preview */}
             <div className="mx-auto mt-16 max-w-2xl">
-              <div className="glow overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-900/90 shadow-2xl backdrop-blur">
+              <div
+                className="glow overflow-hidden rounded-2xl shadow-2xl backdrop-blur"
+                style={{
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "var(--hero-terminal-border)",
+                  backgroundColor: "var(--hero-terminal-bg)",
+                }}
+              >
                 <div className="flex items-center gap-2 border-b border-slate-700/50 px-4 py-3">
                   <div className="h-3 w-3 rounded-full bg-red-500/80" />
                   <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
                   <div className="h-3 w-3 rounded-full bg-green-500/80" />
-                  <span className="ml-2 text-xs text-slate-500">terminal</span>
+                  <span className="ml-2 text-xs text-slate-400">terminal</span>
                 </div>
                 <div className="p-6 font-mono text-sm leading-relaxed">
-                  <div className="text-slate-500">
+                  <div className="text-slate-400">
                     $ <span className="text-brand-400">claude</span>
                   </div>
                   <div className="mt-2 text-slate-400">
@@ -106,15 +135,15 @@ export default function HomePage() {
                   <div className="mt-3 text-emerald-400">
                     Bien sur ! Je vais creer votre projet etape par etape...
                   </div>
-                  <div className="mt-1 text-slate-500">
+                  <div className="mt-1 text-slate-400">
                     {"  "}Analyse des besoins...{" "}
                     <span className="text-brand-400">fait</span>
                   </div>
-                  <div className="text-slate-500">
+                  <div className="text-slate-400">
                     {"  "}Creation de l&apos;architecture...{" "}
                     <span className="text-brand-400">fait</span>
                   </div>
-                  <div className="text-slate-500">
+                  <div className="text-slate-400">
                     {"  "}Generation du code...{" "}
                     <span className="animate-pulse text-accent-400">en cours</span>
                   </div>
@@ -320,16 +349,16 @@ export default function HomePage() {
       </section>
 
       {/* ===== CTA FINAL ===== */}
-      <section className="relative overflow-hidden bg-slate-950 py-20 sm:py-28">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+      <section className="relative overflow-hidden bg-slate-100 py-20 dark:bg-slate-950 sm:py-28">
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-slate-50 to-brand-100 dark:from-brand-950 dark:via-slate-900 dark:to-brand-900" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.08),_transparent_70%)] dark:bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
             Pret a transformer votre facon de{" "}
             <span className="text-gradient">travailler</span> ?
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
             Le guide est gratuit, open-source et fait pour durer. Commencez
             maintenant et rejoignez une communaute qui repousse les limites du
             possible.
@@ -337,15 +366,15 @@ export default function HomePage() {
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               href="/getting-started"
-              className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:bg-slate-100"
+              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30 dark:bg-white dark:from-white dark:to-white dark:text-slate-900 dark:shadow-none dark:hover:bg-slate-100 dark:hover:shadow-none"
             >
-              <Terminal className="h-4 w-4" />
+              <Logo size="sm" />
               Commencer maintenant
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/future"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:border-slate-500 hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-8 py-3.5 text-base font-semibold text-slate-700 transition-all hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:text-white dark:hover:border-slate-500 dark:hover:bg-white/5"
             >
               <MessageSquare className="h-4 w-4" />
               Voir la vision

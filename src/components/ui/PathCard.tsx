@@ -75,7 +75,7 @@ export function PathCard({
       </div>
 
       <h3 className="mb-2 text-xl font-bold">{title}</h3>
-      <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
+      <p className="mb-4 text-base text-slate-600 dark:text-slate-400">
         {description}
       </p>
 
@@ -83,7 +83,7 @@ export function PathCard({
         {items.map((item) => (
           <li
             key={item}
-            className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300"
+            className="flex items-start gap-2 text-base text-slate-600 dark:text-slate-300"
           >
             <span className={clsx("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", bulletColors[color])} />
             {item}

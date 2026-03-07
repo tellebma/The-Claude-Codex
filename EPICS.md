@@ -177,8 +177,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 4 — Amelioration du light mode et polish du design system
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1 (haute)
 - **Estimation** : S (3-5 jours)
 - **Dependances** : Epic 1
@@ -698,7 +698,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 1 | Corrections critiques accessibilite WCAG | P0 | S | 1 | `TERMINÉ` | `REVIEWÉ ✅` | AUDIT |
 | 2 | Corrections bugs critiques design system | P0 | S | 1 | `TERMINÉ` | `REVIEWÉ ✅` | AUDIT |
 | 3 | Infrastructure navigation multi-pages | P0 | M | 1 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
-| 4 | Amelioration light mode et polish design | P1 | S | 1 | `TODO` | `NON REVIEWÉ` | AUDIT |
+| 4 | Amelioration light mode et polish design | P1 | S | 1 | `TERMINÉ` | `REVIEWÉ ✅` | AUDIT |
 | 5 | Infrastructure SEO et meta-donnees | P1 | S | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
 | 6 | Optimisation performances et build | P1 | S | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
 | 7 | Correction contenu et migration MDX | P1 | M | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
@@ -714,7 +714,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 17 | Page 404 et finitions UX | P3 | XS | 5 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 18 | Tests, CI/CD et assurance qualite | P1 | M | Continu | `TODO` | `NON REVIEWÉ` | LES DEUX |
 
-**Progression** : 3/18 terminee (17%) — 3/18 reviewee (17%)
+**Progression** : 4/18 terminee (22%) — 4/18 reviewee (22%)
 
 ---
 
@@ -729,7 +729,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 1 | Corrections critiques accessibilite WCAG | S | `TERMINÉ` | `REVIEWÉ ✅` |
 | 2 | Corrections bugs critiques design system | S | `TERMINÉ` | `REVIEWÉ ✅` |
 | 3 | Infrastructure navigation multi-pages | M | `TERMINÉ` | `REVIEWÉ ✅` |
-| 4 | Amelioration light mode et polish design | S | `TODO` | `NON REVIEWÉ` |
+| 4 | Amelioration light mode et polish design | S | `TERMINÉ` | `REVIEWÉ ✅` |
 
 **Parallelisme** : Epics 1 et 2 en parallele (semaine 1). Epic 3 demarre semaine 2 apres 1+2. Epic 4 en parallele de Epic 3.
 

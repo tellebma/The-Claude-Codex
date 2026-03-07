@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import clsx from "clsx";
 
@@ -6,6 +7,7 @@ interface FeatureCardProps {
   title: string;
   description: string;
   gradient?: "teal" | "amber" | "purple" | "green";
+  href?: string;
 }
 
 const gradients = {
@@ -27,9 +29,12 @@ export function FeatureCard({
   title,
   description,
   gradient = "teal",
+  href,
 }: FeatureCardProps) {
-  return (
-    <div className="glass-card group p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+  const sharedClassName = "glass-card group p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg";
+
+  const content = (
+    <>
       <div
         className={clsx(
           "mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br",
@@ -42,6 +47,20 @@ export function FeatureCard({
       <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
         {description}
       </p>
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={clsx(sharedClassName, "block")}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <div className={sharedClassName}>
+      {content}
     </div>
   );
 }

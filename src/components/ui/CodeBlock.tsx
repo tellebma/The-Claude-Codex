@@ -1,4 +1,8 @@
-import { Copy } from "lucide-react";
+"use client";
+
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Highlight, themes } from "prism-react-renderer";
+import { Check, Clipboard } from "lucide-react";
 
 interface CodeBlockProps {
   code: string;
@@ -7,6 +11,44 @@ interface CodeBlockProps {
 }
 
 export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps) {
+  const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleCopy = useCallback(async () => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      timeoutRef.current = setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for browsers without Clipboard API support
+      const textArea = document.createElement("textarea");
+      textArea.value = code;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      // execCommand is deprecated but retained as a best-effort fallback
+      const success = document.execCommand("copy");
+      document.body.removeChild(textArea);
+      if (success) {
+        setCopied(true);
+        timeoutRef.current = setTimeout(() => setCopied(false), 2000);
+      }
+    }
+  }, [code]);
+
   return (
     <div className="group my-4 overflow-hidden rounded-xl border border-slate-200/50 bg-slate-950 dark:border-slate-700/50">
       {filename && (
@@ -18,9 +60,34 @@ export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps)
         </div>
       )}
       <div className="relative">
-        <pre className="overflow-x-auto p-4 text-sm leading-relaxed">
-          <code className="text-slate-300">{code}</code>
-        </pre>
+        <button
+          onClick={handleCopy}
+          className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800 text-slate-400 opacity-0 transition-all hover:border-slate-600 hover:bg-slate-700 hover:text-slate-300 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          aria-label={copied ? "Code copié" : "Copier le code"}
+          type="button"
+        >
+          {copied ? (
+            <Check className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+          ) : (
+            <Clipboard className="h-4 w-4" aria-hidden="true" />
+          )}
+        </button>
+        <Highlight theme={themes.nightOwl} code={code} language={language}>
+          {({ className, style, tokens, getLineProps, getTokenProps }) => (
+            <pre
+              className={`${className} overflow-x-auto p-4 text-sm leading-relaxed`}
+              style={{ ...style, backgroundColor: "transparent" }}
+            >
+              {tokens.map((line, i) => (
+                <div key={i} {...getLineProps({ line })}>
+                  {line.map((token, j) => (
+                    <span key={j} {...getTokenProps({ token })} />
+                  ))}
+                </div>
+              ))}
+            </pre>
+          )}
+        </Highlight>
       </div>
     </div>
   );

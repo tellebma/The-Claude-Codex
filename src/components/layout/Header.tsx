@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, Terminal } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import clsx from "clsx";
@@ -14,8 +15,11 @@ const navigation = [
   { name: "Vision", href: "/future" },
 ];
 
+const MOBILE_MENU_ID = "mobile-nav-menu";
+
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="glass sticky top-0 z-50">
@@ -33,15 +37,24 @@ export function Header() {
         </Link>
 
         <div className="hidden items-center gap-1 md:flex">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
-            >
-              {item.name}
-            </Link>
-          ))}
+          {navigation.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={isActive ? "page" : undefined}
+                className={clsx(
+                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                )}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="flex items-center gap-2">
@@ -51,6 +64,7 @@ export function Header() {
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700 md:hidden"
             aria-label="Menu de navigation"
             aria-expanded={mobileOpen}
+            aria-controls={MOBILE_MENU_ID}
           >
             {mobileOpen ? (
               <X className="h-4 w-4" aria-hidden="true" />
@@ -62,6 +76,7 @@ export function Header() {
       </nav>
 
       <div
+        id={MOBILE_MENU_ID}
         className={clsx(
           "overflow-hidden border-t border-slate-200/50 transition-all duration-300 dark:border-slate-700/50 md:hidden",
           mobileOpen ? "max-h-80" : "max-h-0"
@@ -70,16 +85,25 @@ export function Header() {
         aria-hidden={!mobileOpen}
       >
         <div className="space-y-1 px-4 py-3">
-          {navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setMobileOpen(false)}
-              className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
-            >
-              {item.name}
-            </Link>
-          ))}
+          {navigation.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+                aria-current={isActive ? "page" : undefined}
+                className={clsx(
+                  "block rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                )}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </header>

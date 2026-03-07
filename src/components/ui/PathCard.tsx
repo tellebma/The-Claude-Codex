@@ -31,6 +31,12 @@ const iconBg = {
   purple: "from-violet-500 to-violet-600",
 };
 
+const bulletColors = {
+  teal: "bg-brand-500",
+  amber: "bg-accent-500",
+  purple: "bg-violet-500",
+};
+
 export function PathCard({
   icon: Icon,
   level,
@@ -79,7 +85,7 @@ export function PathCard({
             key={item}
             className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300"
           >
-            <span className={clsx("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", `bg-${color === "teal" ? "brand" : color === "amber" ? "accent" : "violet"}-500`)} />
+            <span className={clsx("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", bulletColors[color])} />
             {item}
           </li>
         ))}

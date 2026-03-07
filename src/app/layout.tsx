@@ -18,6 +18,9 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://theclaudecodex.com"
+  ),
   title: {
     default: "The Claude Codex | Maitrisez Claude Code",
     template: "%s | The Claude Codex",
@@ -30,6 +33,18 @@ export const metadata: Metadata = {
       "Le guide de reference gratuit pour maitriser Claude Code.",
     type: "website",
     locale: "fr_FR",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "The Claude Codex — Guide de reference pour maitriser Claude Code",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,

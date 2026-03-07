@@ -99,8 +99,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 2 — Correction des bugs critiques du design system
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P0 (bloquant)
 - **Estimation** : S (3-5 jours)
 - **Dependances** : Aucune (parallelisable avec Epic 1)
@@ -695,8 +695,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 | # | Titre | Priorite | Taille | Phase | Statut | Review | Source |
 |---|-------|----------|--------|-------|--------|--------|--------|
-| 1 | Corrections critiques accessibilite WCAG | P0 | S | 1 | `TERMINÉ` | `NON REVIEWÉ` | AUDIT |
-| 2 | Corrections bugs critiques design system | P0 | S | 1 | `TODO` | `NON REVIEWÉ` | AUDIT |
+| 1 | Corrections critiques accessibilite WCAG | P0 | S | 1 | `TERMINÉ` | `REVIEWÉ ✅` | AUDIT |
+| 2 | Corrections bugs critiques design system | P0 | S | 1 | `TERMINÉ` | `REVIEWÉ ✅` | AUDIT |
 | 3 | Infrastructure navigation multi-pages | P0 | M | 1 | `TODO` | `NON REVIEWÉ` | LES DEUX |
 | 4 | Amelioration light mode et polish design | P1 | S | 1 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 5 | Infrastructure SEO et meta-donnees | P1 | S | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
@@ -714,7 +714,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 17 | Page 404 et finitions UX | P3 | XS | 5 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 18 | Tests, CI/CD et assurance qualite | P1 | M | Continu | `TODO` | `NON REVIEWÉ` | LES DEUX |
 
-**Progression** : 1/18 terminee (6%) — 0/18 reviewee (0%)
+**Progression** : 2/18 terminee (11%) — 2/18 reviewee (11%)
 
 ---
 
@@ -726,8 +726,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 | Epic | Titre | Estimation | Statut | Review |
 |------|-------|------------|--------|--------|
-| 1 | Corrections critiques accessibilite WCAG | S | `TERMINÉ` | `NON REVIEWÉ` |
-| 2 | Corrections bugs critiques design system | S | `TODO` | `NON REVIEWÉ` |
+| 1 | Corrections critiques accessibilite WCAG | S | `TERMINÉ` | `REVIEWÉ ✅` |
+| 2 | Corrections bugs critiques design system | S | `TERMINÉ` | `REVIEWÉ ✅` |
 | 3 | Infrastructure navigation multi-pages | M | `TODO` | `NON REVIEWÉ` |
 | 4 | Amelioration light mode et polish design | S | `TODO` | `NON REVIEWÉ` |
 

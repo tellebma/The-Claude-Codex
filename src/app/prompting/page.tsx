@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -26,12 +25,24 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
-  title: "Prompting",
+export const metadata = createPageMetadata({
+  title: "Prompting : L'art de communiquer avec l'IA",
   description:
     "Maitrisez l'art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
-};
+  path: "/prompting",
+});
+
+const articleJsonLd = createArticleSchema({
+  title: "Prompting : L'art de communiquer avec l'IA",
+  description:
+    "Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
+  url: `${SITE_URL}/prompting`,
+  datePublished: "2026-03-07",
+  dateModified: "2026-03-07",
+});
 
 const principles = [
   {
@@ -320,6 +331,12 @@ Relations : User 1-N Project, Project 1-N Task, User 1-N Task"`,
 export default function PromptingPage() {
   return (
     <>
+      {/* JSON-LD structured data — safe: static schema via JSON.stringify */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }}
+      />
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />

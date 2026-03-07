@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -15,21 +14,53 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import {
+  createHowToSchema,
+  serializeJsonLd,
+} from "@/lib/structured-data";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Premiers pas avec Claude Code",
   description:
     "Guide complet pour installer, configurer et utiliser Claude Code. De zero a votre premier projet en quelques minutes.",
-  openGraph: {
-    title: "Premiers pas avec Claude Code | The Claude Codex",
-    description:
-      "Guide complet pour installer, configurer et utiliser Claude Code. De zero a votre premier projet en quelques minutes.",
-  },
-};
+  path: "/getting-started",
+});
+
+const howToJsonLd = createHowToSchema({
+  title: "Premiers pas avec Claude Code",
+  description:
+    "Guide complet pour installer, configurer et utiliser Claude Code.",
+  url: `${SITE_URL}/getting-started`,
+  steps: [
+    {
+      name: "Installer les prerequis",
+      text: "Installer Node.js et un terminal compatible pour utiliser Claude Code.",
+    },
+    {
+      name: "Installer Claude Code",
+      text: "Executer la commande npm install -g @anthropic/claude-code pour installer Claude Code globalement.",
+    },
+    {
+      name: "Configurer votre environnement",
+      text: "Configurer votre cle API et vos preferences pour personnaliser Claude Code.",
+    },
+    {
+      name: "Creer votre premier projet",
+      text: "Lancer Claude Code dans un dossier et lui demander de creer un projet.",
+    },
+  ],
+});
 
 export default function GettingStartedPage() {
   return (
     <>
+      {/* JSON-LD structured data — safe: static schema via JSON.stringify, no user input */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(howToJsonLd) }}
+      />
       {/* ===== HERO / INTRO ===== */}
       <section className="relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />

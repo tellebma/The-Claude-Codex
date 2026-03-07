@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   Wand2,
@@ -26,12 +25,24 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
-  title: "Skills",
+export const metadata = createPageMetadata({
+  title: "Skills : Enseignez de nouveaux talents a Claude Code",
   description:
     "Apprenez a utiliser et creer des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacites et enseignez de nouveaux talents a votre assistant IA.",
-};
+  path: "/skills",
+});
+
+const articleJsonLd = createArticleSchema({
+  title: "Skills : Enseignez de nouveaux talents a Claude Code",
+  description:
+    "Apprenez a utiliser et creer des Skills pour Claude Code.",
+  url: `${SITE_URL}/skills`,
+  datePublished: "2026-03-07",
+  dateModified: "2026-03-07",
+});
 
 const topSkills = [
   {
@@ -135,6 +146,12 @@ const useCases = [
 export default function SkillsPage() {
   return (
     <>
+      {/* JSON-LD structured data — safe: static schema via JSON.stringify */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }}
+      />
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />

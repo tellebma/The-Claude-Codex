@@ -1,13 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Puzzle, Sparkles } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Plugins pour Claude Code",
   description:
     "Decouvrez les plugins disponibles pour etendre les capacites de Claude Code.",
-};
+  path: "/plugins",
+  type: "website",
+});
 
 export default function PluginsPage() {
   return (

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -30,12 +29,24 @@ import {
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
-  title: "Vision & Futur",
+export const metadata = createPageMetadata({
+  title: "Vision & Futur de l'IA",
   description:
     "L'avenir de l'IA est deja la. Decouvrez comment vous preparer, les tendances a suivre, et la roadmap de The Claude Codex.",
-};
+  path: "/future",
+});
+
+const articleJsonLd = createArticleSchema({
+  title: "Vision & Futur de l'IA",
+  description:
+    "L'avenir de l'IA est deja la. Decouvrez comment vous preparer et les tendances a suivre.",
+  url: `${SITE_URL}/future`,
+  datePublished: "2026-03-07",
+  dateModified: "2026-03-07",
+});
 
 /* ---------- data ---------- */
 
@@ -217,6 +228,12 @@ const trendColorMap = {
 export default function FuturePage() {
   return (
     <>
+      {/* JSON-LD structured data — safe: static schema via JSON.stringify */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }}
+      />
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden bg-slate-950">
         {/* Background effects */}

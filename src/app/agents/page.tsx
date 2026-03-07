@@ -1,13 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Bot, Sparkles } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Agents pour Claude Code",
   description:
     "Decouvrez les agents disponibles pour orchestrer des workflows complexes avec Claude Code.",
-};
+  path: "/agents",
+  type: "website",
+});
 
 export default function AgentsPage() {
   return (

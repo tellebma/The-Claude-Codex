@@ -1,13 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Settings, Sparkles } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Configurateur Claude Code",
   description:
     "Configurez Claude Code de maniere interactive. Generez votre CLAUDE.md, settings.json et plus encore.",
-};
+  path: "/configurator",
+  type: "website",
+});
 
 export default function ConfiguratorPage() {
   return (

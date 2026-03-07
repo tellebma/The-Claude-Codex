@@ -213,8 +213,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 5 — Infrastructure SEO et meta-donnees completes
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1 (haute)
 - **Estimation** : S (3-5 jours)
 - **Dependances** : Epic 3 (structure de routing)
@@ -699,7 +699,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 2 | Corrections bugs critiques design system | P0 | S | 1 | `TERMINÉ` | `REVIEWÉ ✅` | AUDIT |
 | 3 | Infrastructure navigation multi-pages | P0 | M | 1 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
 | 4 | Amelioration light mode et polish design | P1 | S | 1 | `TERMINÉ` | `REVIEWÉ ✅` | AUDIT |
-| 5 | Infrastructure SEO et meta-donnees | P1 | S | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
+| 5 | Infrastructure SEO et meta-donnees | P1 | S | 2 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
 | 6 | Optimisation performances et build | P1 | S | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
 | 7 | Correction contenu et migration MDX | P1 | M | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
 | 8 | Refonte landing page | P1 | M | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
@@ -714,7 +714,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 17 | Page 404 et finitions UX | P3 | XS | 5 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 18 | Tests, CI/CD et assurance qualite | P1 | M | Continu | `TODO` | `NON REVIEWÉ` | LES DEUX |
 
-**Progression** : 4/18 terminee (22%) — 4/18 reviewee (22%)
+**Progression** : 5/18 terminee (28%) — 5/18 reviewee (28%)
 
 ---
 
@@ -743,7 +743,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 | Epic | Titre | Estimation | Statut | Review |
 |------|-------|------------|--------|--------|
-| 5 | Infrastructure SEO et meta-donnees | S | `TODO` | `NON REVIEWÉ` |
+| 5 | Infrastructure SEO et meta-donnees | S | `TERMINÉ` | `REVIEWÉ ✅` |
 | 6 | Optimisation performances et build | S | `TODO` | `NON REVIEWÉ` |
 | 7 | Correction contenu et migration MDX | M | `TODO` | `NON REVIEWÉ` |
 | 8 | Refonte landing page | M | `TODO` | `NON REVIEWÉ` |

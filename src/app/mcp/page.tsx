@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -22,12 +21,24 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Les MCP : Donnez des super-pouvoirs a Claude Code",
   description:
     "Decouvrez les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris : GitHub, Slack, Gmail, bases de donnees et plus encore.",
-};
+  path: "/mcp",
+});
+
+const articleJsonLd = createArticleSchema({
+  title: "Les MCP : Donnez des super-pouvoirs a Claude Code",
+  description:
+    "Decouvrez les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris.",
+  url: `${SITE_URL}/mcp`,
+  datePublished: "2026-03-07",
+  dateModified: "2026-03-07",
+});
 
 const recommendedMcps = [
   {
@@ -95,6 +106,12 @@ const recommendedMcps = [
 export default function McpPage() {
   return (
     <>
+      {/* JSON-LD structured data — safe: static schema via JSON.stringify */}
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd) }}
+      />
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />

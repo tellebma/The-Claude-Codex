@@ -3,6 +3,16 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_LOCALE,
+  DEFAULT_OG_IMAGE,
+} from "@/lib/metadata";
+import {
+  createWebSiteSchema,
+  serializeJsonLd,
+} from "@/lib/structured-data";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -17,40 +27,54 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
+const siteDescription =
+  "Le guide de reference gratuit pour maitriser Claude Code. MCP, Skills, Prompting avance — pour developpeurs et non-developpeurs.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://theclaudecodex.com"
+    process.env.NEXT_PUBLIC_SITE_URL ?? SITE_URL
   ),
   title: {
-    default: "The Claude Codex | Maitrisez Claude Code",
-    template: "%s | The Claude Codex",
+    default: `${SITE_NAME} | Maitrisez Claude Code`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Le guide de reference gratuit pour maitriser Claude Code. MCP, Skills, Prompting avance — pour developpeurs et non-developpeurs.",
+  description: siteDescription,
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
-    title: "The Claude Codex",
-    description:
-      "Le guide de reference gratuit pour maitriser Claude Code.",
+    title: SITE_NAME,
+    description: siteDescription,
     type: "website",
-    locale: "fr_FR",
+    locale: SITE_LOCALE,
+    siteName: SITE_NAME,
+    url: SITE_URL,
     images: [
       {
-        url: "/og-image.png",
+        url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "The Claude Codex — Guide de reference pour maitriser Claude Code",
+        alt: `${SITE_NAME} — Guide de reference pour maitriser Claude Code`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/og-image.png"],
+    title: SITE_NAME,
+    description: siteDescription,
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
     follow: true,
   },
 };
+
+const websiteJsonLd = createWebSiteSchema({
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: siteDescription,
+});
 
 export default function RootLayout({
   children,
@@ -59,6 +83,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd(websiteJsonLd),
+          }}
+        />
+      </head>
       <body
         className={`${jakarta.variable} ${mono.variable} font-sans antialiased`}
       >

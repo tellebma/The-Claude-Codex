@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, Terminal } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { SearchDialog } from "@/components/ui/SearchDialog";
 import clsx from "clsx";
 
 const navigation = [
@@ -58,6 +59,7 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-2">
+          <SearchDialog />
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}

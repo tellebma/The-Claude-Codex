@@ -25,6 +25,7 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { AnimateOnScroll, StaggerChildren } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
@@ -209,11 +210,13 @@ export default function SkillsPage() {
       {/* ===== QU'EST-CE QU'UN SKILL ? ===== */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Concept"
-            title="Qu'est-ce qu'un Skill ?"
-            description="Comprendre les Skills en 2 minutes, meme si vous n'etes pas developpeur."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Concept"
+              title="Qu'est-ce qu'un Skill ?"
+              description="Comprendre les Skills en 2 minutes, meme si vous n'etes pas developpeur."
+            />
+          </AnimateOnScroll>
 
           <div className="mx-auto mt-16 max-w-4xl">
             <div className="glass-card p-8 sm:p-10">
@@ -492,13 +495,15 @@ mon-projet/
         className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Selection"
-            title="Top Skills recommandes"
-            description="Les 6 Skills incontournables pour transformer votre workflow de developpement."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Selection"
+              title="Top Skills recommandes"
+              description="Les 6 Skills incontournables pour transformer votre workflow de developpement."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             {topSkills.map((skill) => {
               const Icon = skill.icon;
               return (
@@ -534,7 +539,7 @@ mon-projet/
                 </div>
               );
             })}
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 

@@ -14,6 +14,7 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { AnimateOnScroll } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
   createHowToSchema,
@@ -92,12 +93,14 @@ export default function GettingStartedPage() {
       {/* ===== PREREQUIS ===== */}
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Etape 0"
-            title="Prerequis"
-            description="Avant de commencer, assurez-vous d'avoir ces trois elements. Si l'un d'entre eux vous manque, pas de panique — on vous explique tout."
-            centered={false}
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Etape 0"
+              title="Prerequis"
+              description="Avant de commencer, assurez-vous d'avoir ces trois elements. Si l'un d'entre eux vous manque, pas de panique — on vous explique tout."
+              centered={false}
+            />
+          </AnimateOnScroll>
 
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-200/50 bg-white/50 p-6 dark:border-slate-700/50 dark:bg-slate-800/50">

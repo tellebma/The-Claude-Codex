@@ -21,6 +21,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { AnimateOnScroll, StaggerChildren } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
@@ -152,11 +153,13 @@ export default function McpPage() {
       {/* ===== QU'EST-CE QU'UN MCP ? ===== */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Concept"
-            title="Qu'est-ce qu'un MCP ?"
-            description="Le Model Context Protocol, c'est l'adaptateur universel entre Claude Code et le reste du monde numerique."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Concept"
+              title="Qu'est-ce qu'un MCP ?"
+              description="Le Model Context Protocol, c'est l'adaptateur universel entre Claude Code et le reste du monde numerique."
+            />
+          </AnimateOnScroll>
 
           <div className="mx-auto mt-16 max-w-4xl">
             <div className="glass-card p-8 sm:p-10">
@@ -427,13 +430,15 @@ claude "Liste les fichiers dans mon dossier projet"`}
       {/* ===== TOP MCP RECOMMANDES ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Recommandations"
-            title="Les MCP incontournables"
-            description="Notre selection des meilleurs MCP servers pour debuter et aller plus loin avec Claude Code."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Recommandations"
+              title="Les MCP incontournables"
+              description="Notre selection des meilleurs MCP servers pour debuter et aller plus loin avec Claude Code."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             {recommendedMcps.map((mcp) => (
               <div
                 key={mcp.name}
@@ -461,7 +466,7 @@ claude "Liste les fichiers dans mon dossier projet"`}
                 </div>
               </div>
             ))}
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 

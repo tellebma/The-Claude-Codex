@@ -23,6 +23,10 @@ import { PathCard } from "@/components/ui/PathCard";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import { AudienceCard } from "@/components/ui/AudienceCard";
 import { Logo } from "@/components/layout/Logo";
+import {
+  AnimateOnScroll,
+  StaggerChildren,
+} from "@/components/ui/AnimateOnScroll";
 
 export default function HomePage() {
   return (
@@ -157,13 +161,15 @@ export default function HomePage() {
       {/* ===== CE QUE VOUS POUVEZ FAIRE ===== */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Possibilites"
-            title="Ce que vous pouvez faire avec Claude Code"
-            description="Claude Code n'est pas un simple chatbot. C'est un partenaire de creation qui comprend votre contexte et agit dans votre environnement."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Possibilites"
+              title="Ce que vous pouvez faire avec Claude Code"
+              description="Claude Code n'est pas un simple chatbot. C'est un partenaire de creation qui comprend votre contexte et agit dans votre environnement."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.08}>
             <FeatureCard
               icon={Globe}
               title="Creer un site web"
@@ -212,20 +218,22 @@ export default function HomePage() {
               description="Docker, CI/CD, monitoring — Claude Code gere votre infrastructure de A a Z."
               gradient="green"
             />
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 
       {/* ===== POUR QUI ? ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Pour tous"
-            title="Peu importe votre profil, Claude Code est fait pour vous"
-            description="L'IA n'est plus reservee aux ingenieurs. Chaque personne creative, ambitieuse ou simplement curieuse peut en tirer parti."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Pour tous"
+              title="Peu importe votre profil, Claude Code est fait pour vous"
+              description="L'IA n'est plus reservee aux ingenieurs. Chaque personne creative, ambitieuse ou simplement curieuse peut en tirer parti."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             <AudienceCard
               icon={Code2}
               title="Developpeurs"
@@ -256,20 +264,22 @@ export default function HomePage() {
               title="Equipes & Managers"
               description="Standardisez vos workflows, documentez automatiquement, et donnez des super-pouvoirs a toute votre equipe."
             />
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 
       {/* ===== PARCOURS ===== */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Parcours"
-            title="Choisissez votre chemin"
-            description="Trois parcours adaptes a votre niveau. Commencez la ou vous etes, progressez a votre rythme."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Parcours"
+              title="Choisissez votre chemin"
+              description="Trois parcours adaptes a votre niveau. Commencez la ou vous etes, progressez a votre rythme."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-3">
+          <StaggerChildren className="mt-16 grid gap-8 lg:grid-cols-3" staggerDelay={0.12}>
             <PathCard
               icon={BookOpen}
               level="Debutant"
@@ -312,20 +322,22 @@ export default function HomePage() {
               href="/prompting"
               color="purple"
             />
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 
       {/* ===== TEMOIGNAGES ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Temoignages"
-            title="Ils ont transforme leur quotidien"
-            description="Decouvrez comment des personnes de tous horizons utilisent Claude Code pour creer, apprendre et innover."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Temoignages"
+              title="Ils ont transforme leur quotidien"
+              description="Decouvrez comment des personnes de tous horizons utilisent Claude Code pour creer, apprendre et innover."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
             <TestimonialCard
               quote="Je n'avais jamais ecrit une ligne de code. En une semaine avec Claude Code, j'ai lance le site de mon restaurant avec reservation en ligne. Mes clients n'en reviennent pas."
               author="Marie L."
@@ -344,7 +356,7 @@ export default function HomePage() {
               role="Etudiante en sociologie, Bordeaux"
               result="Memoire termine 2 mois en avance"
             />
-          </div>
+          </StaggerChildren>
         </div>
       </section>
 
@@ -353,7 +365,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-slate-50 to-brand-100 dark:from-brand-950 dark:via-slate-900 dark:to-brand-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.08),_transparent_70%)] dark:bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
 
-        <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+        <AnimateOnScroll preset="fade-up" className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
             Pret a transformer votre facon de{" "}
             <span className="text-gradient">travailler</span> ?
@@ -380,7 +392,7 @@ export default function HomePage() {
               Voir la vision
             </Link>
           </div>
-        </div>
+        </AnimateOnScroll>
       </section>
     </>
   );

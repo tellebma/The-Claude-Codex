@@ -12,7 +12,27 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-# Stage 3: Production
+# Stage 3: Pre-compress static assets (Brotli + gzip)
+FROM node:20-alpine AS compressor
+RUN apk add --no-cache brotli gzip
+WORKDIR /app
+COPY --from=builder /app/out ./out
+# Pre-compress all text-based assets with Brotli and gzip
+# This enables nginx gzip_static to serve pre-compressed files
+RUN find ./out -type f \( \
+    -name "*.html" -o \
+    -name "*.css" -o \
+    -name "*.js" -o \
+    -name "*.json" -o \
+    -name "*.xml" -o \
+    -name "*.svg" -o \
+    -name "*.txt" \
+  \) -exec sh -c ' \
+    brotli -q 11 -o "{}.br" "{}" && \
+    gzip -9 -k "{}" \
+  ' \;
+
+# Stage 4: Production
 FROM nginx:1.27-alpine AS runner
 LABEL maintainer="The Claude Codex Team"
 LABEL description="The Claude Codex - Guide de reference pour maitriser Claude Code"
@@ -23,8 +43,8 @@ RUN rm -rf /etc/nginx/conf.d/default.conf /usr/share/nginx/html/*
 # Copy custom nginx config
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Copy static output from Next.js build
-COPY --from=builder /app/out /usr/share/nginx/html
+# Copy pre-compressed static output from Next.js build
+COPY --from=compressor /app/out /usr/share/nginx/html
 
 # Run as non-root user
 RUN chown -R nginx:nginx /usr/share/nginx/html && \

@@ -25,6 +25,7 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
+import { AnimateOnScroll } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
@@ -394,11 +395,13 @@ export default function PromptingPage() {
       {/* ===== FONDAMENTAUX ===== */}
       <section id="fondamentaux" className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Fondamentaux"
-            title="Les 5 principes du bon prompting"
-            description="Ces principes sont la base de toute interaction efficace avec Claude Code. Maitrisez-les et vous obtiendrez des resultats 10x meilleurs."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Fondamentaux"
+              title="Les 5 principes du bon prompting"
+              description="Ces principes sont la base de toute interaction efficace avec Claude Code. Maitrisez-les et vous obtiendrez des resultats 10x meilleurs."
+            />
+          </AnimateOnScroll>
 
           <div className="mt-16 space-y-12">
             {principles.map((principle, index) => {

@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
+import { AnimateOnScroll, StaggerChildren } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
@@ -302,13 +303,15 @@ export default function FuturePage() {
       {/* ===== POURQUOI L'IA VA TRANSFORMER CHAQUE METIER ===== */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Transformation"
-            title="Pourquoi l'IA va transformer chaque metier"
-            description="L'IA n'est pas un outil de plus. C'est un multiplicateur universel de capacites humaines — un changement de paradigme comparable a l'arrivee d'Internet."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Transformation"
+              title="Pourquoi l'IA va transformer chaque metier"
+              description="L'IA n'est pas un outil de plus. C'est un multiplicateur universel de capacites humaines — un changement de paradigme comparable a l'arrivee d'Internet."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2">
+          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2" staggerDelay={0.1}>
             {professions.map((item) => {
               const Icon = item.icon;
               return (
@@ -330,7 +333,7 @@ export default function FuturePage() {
                 </div>
               );
             })}
-          </div>
+          </StaggerChildren>
 
           <div className="mt-12">
             <Callout type="tip" title="Le point cle">
@@ -397,13 +400,15 @@ export default function FuturePage() {
       {/* ===== TENDANCES A SUIVRE ===== */}
       <section className="py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <SectionHeading
-            badge="Tendances"
-            title="Les tendances a suivre"
-            description="Cinq evolutions majeures qui vont faconner l'ecosysteme IA dans les 12 a 24 prochains mois."
-          />
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Tendances"
+              title="Les tendances a suivre"
+              description="Cinq evolutions majeures qui vont faconner l'ecosysteme IA dans les 12 a 24 prochains mois."
+            />
+          </AnimateOnScroll>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             {trends.map((trend) => {
               const Icon = trend.icon;
               const colors = trendColorMap[trend.color];
@@ -435,7 +440,7 @@ export default function FuturePage() {
                 </div>
               );
             })}
-          </div>
+          </StaggerChildren>
 
           <div className="mt-12">
             <Callout type="info" title="Restez informe">

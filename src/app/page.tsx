@@ -22,6 +22,7 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 import { PathCard } from "@/components/ui/PathCard";
 import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import { AudienceCard } from "@/components/ui/AudienceCard";
+import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
 import {
   AnimateOnScroll,
@@ -61,7 +62,7 @@ export default function HomePage() {
                 color: "var(--hero-badge-text)",
               }}
             >
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
               Guide gratuit & open-source
             </div>
 
@@ -70,10 +71,10 @@ export default function HomePage() {
               className="text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
               style={{ color: "var(--hero-text-primary)" }}
             >
-              Maitrisez{" "}
+              Maîtrisez{" "}
               <span className="text-gradient">Claude Code</span>
               <br />
-              en partant de zero
+              en partant de zéro
             </h1>
 
             {/* Subtitle */}
@@ -81,8 +82,8 @@ export default function HomePage() {
               className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl"
               style={{ color: "var(--hero-text-secondary)" }}
             >
-              Le guide de reference pour exploiter toute la puissance de l&apos;IA
-              dans votre quotidien. Que vous soyez developpeur, entrepreneur ou
+              Le guide de référence pour exploiter toute la puissance de l&apos;IA
+              dans votre quotidien. Que vous soyez développeur, entrepreneur ou
               simplement curieux — tout commence ici.
             </p>
 
@@ -93,7 +94,7 @@ export default function HomePage() {
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
                 Commencer le guide
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <Link
                 href="/mcp"
@@ -105,7 +106,7 @@ export default function HomePage() {
                   color: "var(--hero-cta-secondary-text)",
                 }}
               >
-                Decouvrir les MCP
+                Découvrir les MCP
               </Link>
             </div>
 
@@ -131,24 +132,24 @@ export default function HomePage() {
                     $ <span className="text-brand-400">claude</span>
                   </div>
                   <div className="mt-2 text-slate-400">
-                    <span className="text-accent-400">{">"}</span> Cree-moi un site web moderne avec une landing page,{" "}
+                    <span className="text-accent-400">{">"}</span> Crée-moi un site web moderne avec une landing page,{" "}
                   </div>
                   <div className="text-slate-400">
-                    {"  "}un systeme d&apos;authentification et un dashboard admin.
+                    {"  "}un système d&apos;authentification et un dashboard admin.
                   </div>
                   <div className="mt-3 text-emerald-400">
-                    Bien sur ! Je vais creer votre projet etape par etape...
+                    Bien sûr ! Je vais créer votre projet étape par étape...
                   </div>
                   <div className="mt-1 text-slate-400">
                     {"  "}Analyse des besoins...{" "}
                     <span className="text-brand-400">fait</span>
                   </div>
                   <div className="text-slate-400">
-                    {"  "}Creation de l&apos;architecture...{" "}
+                    {"  "}Création de l&apos;architecture...{" "}
                     <span className="text-brand-400">fait</span>
                   </div>
                   <div className="text-slate-400">
-                    {"  "}Generation du code...{" "}
+                    {"  "}Génération du code...{" "}
                     <span className="animate-pulse text-accent-400">en cours</span>
                   </div>
                 </div>
@@ -163,59 +164,59 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Possibilites"
+              badge="Possibilités"
               title="Ce que vous pouvez faire avec Claude Code"
-              description="Claude Code n'est pas un simple chatbot. C'est un partenaire de creation qui comprend votre contexte et agit dans votre environnement."
+              description="Claude Code n'est pas un simple chatbot. C'est un partenaire de création qui comprend votre contexte et agit dans votre environnement."
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.08}>
             <FeatureCard
               icon={Globe}
-              title="Creer un site web"
-              description="De la landing page au e-commerce complet, Claude Code genere, structure et deploie vos projets web."
+              title="Créer un site web"
+              description="De la landing page au e-commerce complet, Claude Code génère, structure et déploie vos projets web."
               gradient="teal"
             />
             <FeatureCard
               icon={FileText}
-              title="Generer des documents"
-              description="Rapports, presentations, documentation technique — laissez l'IA structurer et rediger pour vous."
+              title="Générer des documents"
+              description="Rapports, présentations, documentation technique — laissez l'IA structurer et rédiger pour vous."
               gradient="amber"
             />
             <FeatureCard
               icon={Zap}
-              title="Automatiser vos taches"
-              description="Scripts, pipelines CI/CD, migrations de donnees. Transformez des heures de travail en quelques minutes."
+              title="Automatiser vos tâches"
+              description="Scripts, pipelines CI/CD, migrations de données. Transformez des heures de travail en quelques minutes."
               gradient="purple"
             />
             <FeatureCard
               icon={BarChart3}
-              title="Analyser des donnees"
+              title="Analyser des données"
               description="Connectez vos sources, explorez vos datasets et obtenez des insights en langage naturel."
               gradient="green"
             />
             <FeatureCard
               icon={Code2}
-              title="Coder sans etre dev"
-              description="Decrivez ce que vous voulez en francais. Claude Code traduit vos idees en code fonctionnel."
+              title="Coder sans être dev"
+              description="Décrivez ce que vous voulez en français. Claude Code traduit vos idées en code fonctionnel."
               gradient="teal"
             />
             <FeatureCard
               icon={Palette}
               title="Designer des interfaces"
-              description="Creez des interfaces modernes et accessibles en decrivant simplement votre vision."
+              description="Créez des interfaces modernes et accessibles en décrivant simplement votre vision."
               gradient="amber"
             />
             <FeatureCard
               icon={Puzzle}
               title="Connecter vos outils"
-              description="Grace aux MCP, integrez Gmail, Slack, GitHub, bases de donnees et bien plus encore."
+              description="Grâce aux MCP, intégrez Gmail, Slack, GitHub, bases de données et bien plus encore."
               gradient="purple"
             />
             <FeatureCard
               icon={Rocket}
-              title="Deployer en production"
-              description="Docker, CI/CD, monitoring — Claude Code gere votre infrastructure de A a Z."
+              title="Déployer en production"
+              description="Docker, CI/CD, monitoring — Claude Code gère votre infrastructure de A à Z."
               gradient="green"
             />
           </StaggerChildren>
@@ -229,40 +230,40 @@ export default function HomePage() {
             <SectionHeading
               badge="Pour tous"
               title="Peu importe votre profil, Claude Code est fait pour vous"
-              description="L'IA n'est plus reservee aux ingenieurs. Chaque personne creative, ambitieuse ou simplement curieuse peut en tirer parti."
+              description="L'IA n'est plus réservée aux ingénieurs. Chaque personne créative, ambitieuse ou simplement curieuse peut en tirer parti."
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             <AudienceCard
               icon={Code2}
-              title="Developpeurs"
-              description="Accelerez votre workflow x10. Code review, refactoring, tests automatises, debugging assiste. Votre copilote ultime."
+              title="Développeurs"
+              description="Accélérez votre workflow x10. Code review, refactoring, tests automatisés, debugging assisté. Votre copilote ultime."
             />
             <AudienceCard
               icon={Briefcase}
               title="Entrepreneurs"
-              description="Lancez votre MVP en jours au lieu de semaines. Prototypez, iterez et deployez sans equipe technique."
+              description="Lancez votre MVP en jours au lieu de semaines. Prototypez, itérez et déployez sans équipe technique."
             />
             <AudienceCard
               icon={Palette}
-              title="Creatifs & Designers"
-              description="Transformez vos maquettes en sites vivants. Generez des animations, des composants UI sur mesure."
+              title="Créatifs & Designers"
+              description="Transformez vos maquettes en sites vivants. Générez des animations, des composants UI sur mesure."
             />
             <AudienceCard
               icon={GraduationCap}
-              title="Etudiants"
-              description="Apprenez en faisant. Claude Code explique chaque concept, corrige vos erreurs et vous guide pas a pas."
+              title="Étudiants"
+              description="Apprenez en faisant. Claude Code explique chaque concept, corrige vos erreurs et vous guide pas à pas."
             />
             <AudienceCard
               icon={Lightbulb}
               title="Curieux & Autodidactes"
-              description="Explorez le monde du code sans prerequis. Posez vos questions, experimentez, creez vos premiers projets."
+              description="Explorez le monde du code sans prérequis. Posez vos questions, expérimentez, créez vos premiers projets."
             />
             <AudienceCard
               icon={Users}
-              title="Equipes & Managers"
-              description="Standardisez vos workflows, documentez automatiquement, et donnez des super-pouvoirs a toute votre equipe."
+              title="Équipes & Managers"
+              description="Standardisez vos workflows, documentez automatiquement, et donnez des super-pouvoirs à toute votre équipe."
             />
           </StaggerChildren>
         </div>
@@ -275,34 +276,34 @@ export default function HomePage() {
             <SectionHeading
               badge="Parcours"
               title="Choisissez votre chemin"
-              description="Trois parcours adaptes a votre niveau. Commencez la ou vous etes, progressez a votre rythme."
+              description="Trois parcours adaptés à votre niveau. Commencez là où vous êtes, progressez à votre rythme."
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-8 lg:grid-cols-3" staggerDelay={0.12}>
             <PathCard
               icon={BookOpen}
-              level="Debutant"
+              level="Débutant"
               title="Les fondamentaux"
-              description="Vous n'avez jamais utilise Claude Code ? Parfait. On part de zero, ensemble."
+              description="Vous n'avez jamais utilisé Claude Code ? Parfait. On part de zéro, ensemble."
               items={[
                 "Installer Claude Code en 5 minutes",
                 "Comprendre le terminal et les bases",
-                "Votre premier projet guide pas a pas",
-                "Les commandes essentielles a connaitre",
+                "Votre premier projet guidé pas à pas",
+                "Les commandes essentielles à connaître",
               ]}
               href="/getting-started"
               color="teal"
             />
             <PathCard
               icon={Puzzle}
-              level="Intermediaire"
-              title="Maitrise des outils"
-              description="Vous savez utiliser Claude Code ? Decouvrez les MCP, les Skills et le prompting avance."
+              level="Intermédiaire"
+              title="Maîtrise des outils"
+              description="Vous savez utiliser Claude Code ? Découvrez les MCP, les Skills et le prompting avancé."
               items={[
                 "Connecter vos outils favoris via les MCP",
-                "Creer et utiliser des Skills personnalises",
-                "Techniques de prompting qui font la difference",
+                "Créer et utiliser des Skills personnalisés",
+                "Techniques de prompting qui font la différence",
                 "Automatiser vos workflows quotidiens",
               ]}
               href="/mcp"
@@ -310,14 +311,14 @@ export default function HomePage() {
             />
             <PathCard
               icon={Rocket}
-              level="Avance"
+              level="Avancé"
               title="Expert & Architecte"
-              description="Poussez Claude Code dans ses retranchements. Multi-agents, workflows complexes, deployments."
+              description="Poussez Claude Code dans ses retranchements. Multi-agents, workflows complexes, déploiements."
               items={[
                 "Orchestration multi-agents",
-                "Workflows complexes et chainage de prompts",
-                "CI/CD et deploiement automatise",
-                "Creer vos propres MCP servers",
+                "Workflows complexes et chaînage de prompts",
+                "CI/CD et déploiement automatisé",
+                "Créer vos propres MCP servers",
               ]}
               href="/prompting"
               color="purple"
@@ -326,35 +327,55 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== TEMOIGNAGES ===== */}
+      {/* ===== CONFIGURATEUR RAPIDE ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Temoignages"
-              title="Ils ont transforme leur quotidien"
-              description="Decouvrez comment des personnes de tous horizons utilisent Claude Code pour creer, apprendre et innover."
+              badge="Configurateur"
+              title="Votre configuration sur mesure en 2 minutes"
+              description="Pas besoin de tout lire. Répondez à quelques questions et recevez une configuration personnalisée, prête à l'emploi."
+            />
+          </AnimateOnScroll>
+
+          <AnimateOnScroll preset="scale" delay={0.2} className="mt-12">
+            <ConfiguratorTeaser />
+          </AnimateOnScroll>
+        </div>
+      </section>
+
+      {/* ===== TÉMOIGNAGES ===== */}
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge="Témoignages"
+              title="Ils ont transformé leur quotidien"
+              description="Découvrez comment des personnes de tous horizons utilisent Claude Code pour créer, apprendre et innover."
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
             <TestimonialCard
-              quote="Je n'avais jamais ecrit une ligne de code. En une semaine avec Claude Code, j'ai lance le site de mon restaurant avec reservation en ligne. Mes clients n'en reviennent pas."
+              quote="Je n'avais jamais écrit une ligne de code. En une semaine avec Claude Code, j'ai lancé le site de mon restaurant avec réservation en ligne. Mes clients n'en reviennent pas."
               author="Marie L."
               role="Restauratrice, Lyon"
-              result="Site web lance en 7 jours"
+              result="Site web lancé en 7 jours"
+              avatarColor="teal"
             />
             <TestimonialCard
-              quote="En connectant le MCP GitHub et le MCP PostgreSQL, j'ai automatise tout le pipeline de review de mon equipe. On gagne 3 heures par jour, facile."
+              quote="En connectant le MCP GitHub et le MCP PostgreSQL, j'ai automatisé tout le pipeline de review de mon équipe. On gagne 3 heures par jour, facile."
               author="Thomas K."
               role="Lead Developer, Paris"
-              result="3h gagnees par jour"
+              result="3h gagnées par jour"
+              avatarColor="amber"
             />
             <TestimonialCard
-              quote="Pour mon memoire de master, Claude Code m'a aide a analyser 500 articles scientifiques et a structurer ma revue de litterature. Mon directeur etait impressionne."
+              quote="Pour mon mémoire de master, Claude Code m'a aidé à analyser 500 articles scientifiques et à structurer ma revue de littérature. Mon directeur était impressionné."
               author="Amina B."
-              role="Etudiante en sociologie, Bordeaux"
-              result="Memoire termine 2 mois en avance"
+              role="Étudiante en sociologie, Bordeaux"
+              result="Mémoire terminé 2 mois en avance"
+              avatarColor="purple"
             />
           </StaggerChildren>
         </div>
@@ -367,12 +388,12 @@ export default function HomePage() {
 
         <AnimateOnScroll preset="fade-up" className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-            Pret a transformer votre facon de{" "}
+            Prêt à transformer votre façon de{" "}
             <span className="text-gradient">travailler</span> ?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
             Le guide est gratuit, open-source et fait pour durer. Commencez
-            maintenant et rejoignez une communaute qui repousse les limites du
+            maintenant et rejoignez une communauté qui repousse les limites du
             possible.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -382,13 +403,13 @@ export default function HomePage() {
             >
               <Logo size="sm" />
               Commencer maintenant
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
             <Link
               href="/future"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-8 py-3.5 text-base font-semibold text-slate-700 transition-all hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:text-white dark:hover:border-slate-500 dark:hover:bg-white/5"
             >
-              <MessageSquare className="h-4 w-4" />
+              <MessageSquare className="h-4 w-4" aria-hidden="true" />
               Voir la vision
             </Link>
           </div>

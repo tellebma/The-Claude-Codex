@@ -323,8 +323,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 8 — Refonte de la landing page
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1 (haute)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 1, Epic 2, Epic 4, Epic 6 (animations)
@@ -702,7 +702,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 5 | Infrastructure SEO et meta-donnees | P1 | S | 2 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
 | 6 | Optimisation performances et build | P1 | S | 2 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
 | 7 | Correction contenu et migration MDX | P1 | M | 2 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
-| 8 | Refonte landing page | P1 | M | 2 | `TODO` | `NON REVIEWÉ` | LES DEUX |
+| 8 | Refonte landing page | P1 | M | 2 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
 | 9 | Section Getting Started (4 pages) | P2 | M | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 10 | Section MCP (6 pages) | P2 | L | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 11 | Section Plugins (5 pages) | P2 | M | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
@@ -714,7 +714,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 17 | Page 404 et finitions UX | P3 | XS | 5 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 18 | Tests, CI/CD et assurance qualite | P1 | M | Continu | `TODO` | `NON REVIEWÉ` | LES DEUX |
 
-**Progression** : 7/18 terminee (39%) — 7/18 reviewee (39%)
+**Progression** : 8/18 terminee (44%) — 8/18 reviewee (44%)
 
 ---
 
@@ -746,7 +746,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 5 | Infrastructure SEO et meta-donnees | S | `TERMINÉ` | `REVIEWÉ ✅` |
 | 6 | Optimisation performances et build | S | `TERMINÉ` | `REVIEWÉ ✅` |
 | 7 | Correction contenu et migration MDX | M | `TERMINÉ` | `REVIEWÉ ✅` |
-| 8 | Refonte landing page | M | `TODO` | `NON REVIEWÉ` |
+| 8 | Refonte landing page | M | `TERMINÉ` | `REVIEWÉ ✅` |
 
 **Parallelisme** : Epics 5 et 6 en parallele (semaine 4-5). Epic 7 demarre semaine 4 (long). Epic 8 demarre semaine 5 apres les corrections visuelles.
 

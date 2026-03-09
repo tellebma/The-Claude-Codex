@@ -131,3 +131,52 @@ export function getMdxFilesBySection(
     (file) => file.frontmatter.section === section
   );
 }
+
+/**
+ * Returns all MDX slugs found in a section subdirectory (e.g. "getting-started").
+ * Used for `generateStaticParams` in section-specific dynamic routes.
+ */
+export function getSectionMdxSlugs(
+  section: string
+): ReadonlyArray<string> {
+  const sectionDir = path.join(CONTENT_DIR, section);
+
+  if (!fs.existsSync(sectionDir)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(sectionDir)
+    .filter((filename) => filename.endsWith(".mdx"))
+    .map((filename) => filename.replace(/\.mdx$/, ""));
+}
+
+/**
+ * Reads a single MDX file from a section subdirectory by slug.
+ * Equivalent to getMdxBySlug(`${section}/${slug}`).
+ */
+export function getSectionMdxBySlug(
+  section: string,
+  slug: string
+): MdxFile {
+  return getMdxBySlug(`${section}/${slug}`);
+}
+
+/**
+ * Returns all MDX files in a section subdirectory, sorted by `order` frontmatter.
+ */
+export function getAllSectionMdxFiles(
+  section: string
+): ReadonlyArray<MdxFile> {
+  const slugs = getSectionMdxSlugs(section);
+
+  const files = slugs.map((slug) =>
+    getSectionMdxBySlug(section, slug)
+  );
+
+  return [...files].sort((a, b) => {
+    const orderA = a.frontmatter.order ?? 999;
+    const orderB = b.frontmatter.order ?? 999;
+    return orderA - orderB;
+  });
+}

@@ -98,10 +98,46 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/getting-started",
     title: "Premiers pas avec Claude Code",
     description:
-      "Guide complet pour installer, configurer et utiliser Claude Code. De zero a votre premier projet en quelques minutes.",
+      "Guide complet pour installer, configurer et utiliser Claude Code. De z\u00e9ro \u00e0 votre premier projet en quelques minutes.",
     priority: 0.9,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/getting-started/what-is-claude-code",
+    title: "Qu\u2019est-ce que Claude Code ?",
+    description:
+      "D\u00e9couvrez Claude Code, l\u2019assistant IA en ligne de commande d\u2019Anthropic. Comprenez ce qui le diff\u00e9rencie de Copilot ou Cursor.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/getting-started/installation",
+    title: "Pr\u00e9requis et installation de Claude Code",
+    description:
+      "Installez Claude Code en quelques minutes : Node.js 18+, npm, authentification API key ou Max, et r\u00e9solution des erreurs courantes.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/getting-started/environment-setup",
+    title: "Configuration de l\u2019environnement Claude Code",
+    description:
+      "Configurez Claude Code : variable d\u2019environnement API key, fichier settings.json, fichier CLAUDE.md, permissions et s\u00e9curit\u00e9.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/getting-started/first-project",
+    title: "Premier projet avec Claude Code",
+    description:
+      "Tutoriel concret : cr\u00e9ez votre premier site web avec Claude Code en 5 minutes. Exemples de prompts et bonnes pratiques.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
   },
   {
     path: "/mcp",

@@ -1,0 +1,105 @@
+---
+title: "Qu'est-ce que Claude Code ?"
+description: "Découvrez Claude Code, l'assistant IA en ligne de commande d'Anthropic. Comprenez ce qui le différencie de Copilot ou Cursor, à qui il s'adresse et ses cas d'usage concrets."
+section: "getting-started"
+order: 1
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Claude Code en une phrase
+
+Claude Code est un **assistant IA en ligne de commande** développé par Anthropic. Il vit dans votre terminal, comprend votre projet dans son ensemble, et peut agir directement sur vos fichiers, votre code et vos outils.
+
+Imaginez un collègue développeur senior qui connaît votre codebase sur le bout des doigts, qui ne dort jamais, et qui est toujours prêt à vous aider. C'est Claude Code.
+
+<Callout type="info" title="Terminal = Superpouvoir">
+Contrairement aux chatbots classiques qui ne peuvent que répondre à des questions, Claude Code **agit** dans votre environnement réel. Il crée des fichiers, exécute des commandes, analyse votre arborescence et interagit avec Git. C'est la différence fondamentale.
+</Callout>
+
+## Comment ça fonctionne ?
+
+Le fonctionnement de Claude Code repose sur trois principes simples :
+
+1. **Vous lancez Claude Code** dans un terminal, à la racine de votre projet
+2. **Vous décrivez** ce que vous voulez en langage naturel (en français ou en anglais)
+3. **Claude Code agit** : il lit vos fichiers, propose un plan, crée ou modifie du code, et exécute des commandes — toujours avec votre accord
+
+<Steps>
+<Step title="Contexte automatique" stepNumber={1}>
+Dès que vous lancez Claude Code dans un dossier, il analyse l'arborescence, lit les fichiers de configuration (package.json, CLAUDE.md, etc.) et comprend la structure de votre projet. Pas besoin de tout lui réexpliquer à chaque fois.
+</Step>
+
+<Step title="Conversation naturelle" stepNumber={2}>
+Vous communiquez en langage naturel. Pas de syntaxe spéciale, pas de raccourcis à mémoriser. Dites simplement ce que vous voulez accomplir, comme vous le feriez avec un collègue.
+</Step>
+
+<Step title="Actions concrètes" stepNumber={3} isLast>
+Claude Code ne se contente pas de suggérer du code dans un panneau latéral. Il crée, modifie et supprime des fichiers. Il exécute des commandes shell. Il fait des commits Git. Tout en vous demandant votre autorisation.
+</Step>
+</Steps>
+
+## Claude Code vs les autres outils
+
+Vous connaissez peut-être déjà GitHub Copilot, Cursor ou d'autres assistants IA. Voici ce qui distingue Claude Code.
+
+| Critère | Claude Code | GitHub Copilot | Cursor |
+|---------|------------|----------------|--------|
+| **Interface** | Terminal (CLI) | Extension IDE | IDE complet |
+| **Portée** | Projet entier + système | Fichier en cours | Projet entier |
+| **Actions** | Lecture, écriture, exécution | Suggestions inline | Édition + chat |
+| **MCP** | Oui (Gmail, GitHub, Slack...) | Non | Limité |
+| **Skills** | Oui (workflows réutilisables) | Non | Non |
+| **Modèle** | Claude (Anthropic) | GPT / Claude | Multiples |
+| **Prix** | API pay-as-you-go ou Max | Abonnement mensuel | Abonnement mensuel |
+
+<Callout type="tip" title="Ce n'est pas un remplacement, c'est un complément">
+Claude Code ne remplace pas votre IDE. Beaucoup de développeurs utilisent Claude Code **en parallèle** de VS Code ou Cursor. Claude Code excelle pour les tâches qui dépassent le cadre d'un seul fichier : refactoring multi-fichiers, création de projets complets, débogage complexe, interactions avec des APIs externes.
+</Callout>
+
+### Les forces uniques de Claude Code
+
+- **Accès au système de fichiers complet** : Claude Code voit tout votre projet, pas seulement le fichier ouvert
+- **Exécution de commandes** : il peut lancer vos tests, vérifier votre build, analyser vos logs
+- **Extensibilité via MCP** : connectez-le à Gmail, Slack, GitHub, PostgreSQL et des dizaines d'autres outils
+- **Mémoire de projet via CLAUDE.md** : donnez-lui du contexte permanent qu'il lira à chaque session
+- **Skills personnalisés** : créez des workflows réutilisables pour automatiser vos tâches récurrentes
+
+## À qui s'adresse Claude Code ?
+
+<Card title="Développeurs expérimentés" variant="accent">
+Vous connaissez déjà le terminal et le développement. Claude Code accélère votre workflow : refactoring rapide, génération de tests, revue de code, scaffolding de projets. Pensez à un pair programmer disponible 24h/24 qui connaît votre stack.
+</Card>
+
+<Card title="Développeurs débutants" variant="highlight">
+Vous apprenez à coder. Claude Code est un formidable outil d'apprentissage : il explique chaque ligne de code qu'il produit, répond à vos questions, et vous guide étape par étape. C'est comme avoir un mentor patient et toujours disponible.
+</Card>
+
+<Card title="Non-développeurs (product managers, designers, marketers...)" variant="default">
+Vous n'avez jamais écrit une ligne de code. Claude Code rend la création de prototypes, d'outils internes et de scripts d'automatisation accessible à tous. Décrivez ce que vous voulez, Claude Code le construit.
+</Card>
+
+## Cas d'usage concrets
+
+Voici quelques exemples de ce que les gens font avec Claude Code au quotidien :
+
+- **Créer un site web complet** en décrivant le design et les fonctionnalités souhaités
+- **Refactorer un codebase** de milliers de lignes en respectant de nouvelles conventions
+- **Écrire et exécuter des tests** automatiquement pour améliorer la couverture de code
+- **Déboguer un problème** en analysant les logs, le code et la stack trace
+- **Générer une API REST** complète avec validation, gestion d'erreurs et documentation
+- **Automatiser des tâches** : envoyer des emails, mettre à jour un tableur, publier sur Slack
+- **Analyser des données** en écrivant des scripts de traitement et de visualisation
+- **Créer des outils internes** pour son équipe sans être développeur
+
+<Callout type="info" title="Le saviez-vous ?">
+Ce site que vous lisez en ce moment a été entièrement construit avec Claude Code. De l'architecture Next.js au contenu MDX, en passant par le design Tailwind et la configuration Docker — chaque ligne a été produite en collaboration avec l'IA.
+</Callout>
+
+## Prochaines étapes
+
+Convaincu ? Passons à la pratique. La prochaine étape est d'installer Claude Code sur votre machine.
+
+- [Installer Claude Code](/getting-started/installation) — Prérequis et installation pas à pas
+- [Configurer votre environnement](/getting-started/environment-setup) — API key, settings.json et CLAUDE.md
+- [Votre premier projet](/getting-started/first-project) — Créer un site web en 5 minutes

@@ -1,0 +1,205 @@
+---
+title: "Premier projet pas à pas"
+description: "Tutoriel concret : créez votre premier site web avec Claude Code en 5 minutes. Exemples de prompts, itérations et bonnes pratiques pour bien démarrer."
+section: "getting-started"
+order: 4
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Ce que vous allez créer
+
+Dans ce tutoriel, vous allez créer une **page web complète** en partant d'un dossier vide. En 5 minutes, vous aurez un site fonctionnel avec un design moderne, du contenu dynamique et des animations — le tout sans écrire une seule ligne de code vous-même.
+
+<Callout type="info" title="Prérequis">
+Avant de commencer, assurez-vous que Claude Code est installé et authentifié. Si ce n'est pas fait, suivez d'abord le guide [Prérequis et installation](/getting-started/installation).
+</Callout>
+
+## Étape 1 : Préparer le terrain
+
+Créez un nouveau dossier pour votre projet et lancez Claude Code à l'intérieur.
+
+```bash
+# Créez un dossier vide
+mkdir ~/mon-premier-site && cd ~/mon-premier-site
+
+# Lancez Claude Code
+claude
+```
+
+Claude Code va s'initialiser et analyser le dossier (vide pour l'instant). Vous êtes prêt à lui parler.
+
+## Étape 2 : Décrire ce que vous voulez
+
+La qualité du résultat dépend directement de la qualité de votre demande. Voici un bon prompt pour commencer :
+
+```text
+> Crée-moi une page web HTML/CSS moderne avec :
+> - Un header avec un logo texte "Mon Portfolio" et une navigation
+> - Une section hero avec un titre accrocheur, une description et un bouton CTA
+> - Une section "Mes projets" avec 3 cartes de projets fictifs
+> - Un footer avec des liens vers les réseaux sociaux
+> - Design : fond sombre (#0f172a), accents cyan (#06b6d4), typographie moderne
+> - Responsive (mobile, tablette, desktop)
+> - Animations CSS subtiles au survol des cartes
+> - Le tout dans un seul fichier index.html avec CSS intégré
+```
+
+<Callout type="tip" title="Les clés d'un bon prompt">
+Remarquez la structure du prompt ci-dessus : **Quoi** (une page web HTML/CSS), **Structure** (chaque section décrite), **Design** (couleurs précises), **Contraintes** (responsive, un seul fichier), **Détails** (animations, typographie). Plus votre prompt est précis, plus le résultat sera proche de ce que vous imaginez.
+</Callout>
+
+## Étape 3 : Observer Claude Code travailler
+
+Après avoir envoyé votre prompt, Claude Code va :
+
+1. **Analyser** votre demande et formuler un plan
+2. **Vous montrer** ce qu'il va faire avant de le faire
+3. **Demander votre accord** pour créer le fichier
+
+```text
+Claude > Je vais créer votre page portfolio. Voici mon plan :
+
+  1. Créer index.html avec la structure HTML sémantique
+  2. Intégrer le CSS avec votre palette de couleurs
+  3. Ajouter les animations CSS au survol
+  4. Rendre le design responsive avec des media queries
+
+Claude > Je vais créer le fichier index.html.
+         Voulez-vous que je procède ? (y/n)
+```
+
+Tapez `y` (ou appuyez sur Entrée) pour accepter. Claude Code va générer le fichier complet.
+
+## Étape 4 : Voir le résultat
+
+Ouvrez le fichier dans votre navigateur :
+
+```bash
+# Sur macOS
+open index.html
+
+# Sur Linux
+xdg-open index.html
+
+# Sur Windows (WSL)
+explorer.exe index.html
+
+# Ou simplement : glissez le fichier dans votre navigateur
+```
+
+Vous devriez voir une page web complète avec le design que vous avez demandé.
+
+## Étape 5 : Itérer et affiner
+
+C'est là que Claude Code brille vraiment. Au lieu de modifier le code à la main, demandez simplement les changements que vous voulez :
+
+```text
+> Ajoute une animation d'apparition progressive (fade-in)
+> sur chaque section quand on scrolle vers le bas
+```
+
+Claude Code va modifier le fichier existant pour ajouter cette fonctionnalité. Vous pouvez enchaîner autant de demandes que nécessaire :
+
+```text
+> Change la couleur d'accent de cyan à violet (#8b5cf6)
+> et ajoute un dégradé subtil sur le header
+```
+
+```text
+> Ajoute un formulaire de contact avec les champs
+> nom, email et message. Style-le pour qu'il soit cohérent
+> avec le reste du design.
+```
+
+```text
+> Rends le site accessible : ajoute les attributs aria,
+> vérifie les contrastes de couleur et assure-toi que tout
+> est navigable au clavier
+```
+
+<Callout type="tip" title="L'itération, c'est la clé">
+Ne cherchez pas à tout décrire parfaitement du premier coup. Commencez simple, puis affinez étape par étape. Claude Code garde le contexte de toute la conversation et comprend vos retours. C'est exactement comme travailler avec un collègue : vous lui montrez le résultat, vous lui dites ce que vous voulez changer, et il s'adapte.
+</Callout>
+
+## Aller plus loin : un projet Next.js
+
+Prêt pour quelque chose de plus ambitieux ? Demandez à Claude Code de créer un projet complet avec un framework.
+
+```text
+> Initialise un projet Next.js 14 avec TypeScript et Tailwind CSS.
+> Crée une landing page pour une app de productivité avec :
+> - Header avec navigation
+> - Hero section avec titre, sous-titre et CTA
+> - Section fonctionnalités (3 colonnes avec icônes)
+> - Section témoignages
+> - Footer
+> - Dark mode par défaut
+> - Design minimaliste et professionnel
+```
+
+Claude Code va :
+- Initialiser le projet (`npx create-next-app`)
+- Configurer TypeScript et Tailwind
+- Créer les composants React nécessaires
+- Structurer les fichiers correctement
+- Tout connecter pour que le projet fonctionne du premier coup
+
+```bash
+# Après la génération, lancez le serveur de développement
+npm run dev
+
+# Ouvrez http://localhost:3000 dans votre navigateur
+```
+
+## Bonnes pratiques pour vos premiers projets
+
+<Steps>
+<Step title="Commencez petit" stepNumber={1}>
+Votre premier projet avec Claude Code ne devrait pas être une application complète. Commencez par une page HTML, un script Python, ou une fonction utilitaire. Apprenez à communiquer avec l'outil avant de vous attaquer à des projets complexes.
+</Step>
+
+<Step title="Soyez précis dans vos demandes" stepNumber={2}>
+"Fais-moi un site" donnera un résultat générique. "Fais-moi une landing page pour une app de méditation, fond bleu nuit, typographie serif, avec une section pricing à 3 tiers" donnera un résultat proche de votre vision.
+</Step>
+
+<Step title="Itérez rapidement" stepNumber={3}>
+Envoyez des demandes courtes et fréquentes plutôt qu'un pavé de 50 lignes. Claude Code comprend mieux les instructions incrémentales.
+</Step>
+
+<Step title="Utilisez le CLAUDE.md" stepNumber={4}>
+Dès que votre projet dépasse une seule session, créez un fichier `CLAUDE.md` à la racine. Documentez la stack, les conventions et les commandes utiles. Claude Code le lira automatiquement.
+</Step>
+
+<Step title="Vérifiez le résultat" stepNumber={5} isLast>
+Claude Code est puissant mais pas infaillible. Testez toujours le code généré, relisez les modifications critiques, et n'acceptez pas aveuglément chaque suggestion.
+</Step>
+</Steps>
+
+## Commandes utiles à connaître
+
+Pendant votre session Claude Code, vous pouvez utiliser ces commandes spéciales :
+
+| Commande | Description |
+|----------|-------------|
+| `/help` | Afficher l'aide et les commandes disponibles |
+| `/clear` | Effacer le contexte de la conversation |
+| `/compact` | Compresser la conversation pour libérer de la mémoire |
+| `/cost` | Afficher le coût de la session en cours |
+| `/doctor` | Diagnostiquer les problèmes de configuration |
+| `Ctrl+C` | Annuler la génération en cours |
+| `Ctrl+D` | Quitter Claude Code |
+
+## Prochaines étapes
+
+Bravo, vous avez créé votre premier projet avec Claude Code ! Vous maîtrisez maintenant les bases : lancer Claude Code, formuler des demandes, itérer sur le résultat.
+
+Pour aller plus loin, explorez les fonctionnalités avancées qui transformeront votre quotidien :
+
+- [Les MCP](/mcp) — Connectez Claude Code à Gmail, GitHub, Slack et des dizaines d'autres outils
+- [Les Skills](/skills) — Créez des workflows réutilisables pour automatiser vos tâches
+- [Le Prompting avancé](/prompting) — Maîtrisez l'art de communiquer avec l'IA pour des résultats optimaux
+
+<Callout type="tip" title="Rejoignez la communauté">
+Partagez vos créations, posez vos questions et découvrez ce que d'autres utilisateurs construisent avec Claude Code. L'apprentissage est plus rapide quand on le fait ensemble.
+</Callout>

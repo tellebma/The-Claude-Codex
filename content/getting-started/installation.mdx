@@ -1,0 +1,218 @@
+---
+title: "Prérequis et installation"
+description: "Installez Claude Code en quelques minutes. Prérequis (Node.js 18+, terminal, compte Anthropic), installation npm, authentification API key ou Max, et résolution des erreurs courantes."
+section: "getting-started"
+order: 2
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Prérequis
+
+Avant d'installer Claude Code, vérifiez que vous avez ces trois éléments. Si l'un d'entre eux vous manque, pas de panique — on vous explique tout juste en dessous.
+
+<Card title="Node.js 18 ou supérieur" variant="accent">
+Claude Code fonctionne grâce à Node.js, le moteur JavaScript qui permet d'exécuter du code côté serveur. Vous avez besoin de la version 18 minimum (la version 22 LTS est recommandée).
+
+Téléchargez-le sur [nodejs.org](https://nodejs.org) ou utilisez un gestionnaire de versions comme `nvm`.
+</Card>
+
+<Card title="Un terminal" variant="accent">
+Claude Code vit dans le terminal. Sur **macOS**, utilisez Terminal ou iTerm2. Sur **Windows**, utilisez PowerShell ou WSL (Windows Subsystem for Linux). Sur **Linux**, n'importe quel émulateur de terminal fera l'affaire.
+</Card>
+
+<Card title="Un compte Anthropic" variant="accent">
+Vous avez besoin soit d'une **clé API** (pay-as-you-go via la console Anthropic), soit d'un **abonnement Claude Max/Pro/Team** qui inclut l'accès à Claude Code.
+
+Créez votre compte sur [console.anthropic.com](https://console.anthropic.com).
+</Card>
+
+### Vérifiez votre version de Node.js
+
+Ouvrez votre terminal et tapez la commande suivante :
+
+```bash
+node --version
+# v22.4.0  ← Parfait, vous êtes prêt !
+```
+
+<Callout type="warning" title="Version trop ancienne ?">
+Si vous voyez un numéro inférieur à v18.0.0, ou si la commande n'est pas reconnue, vous devez installer ou mettre à jour Node.js. Consultez la section Troubleshooting en bas de cette page.
+</Callout>
+
+## Installation de Claude Code
+
+L'installation se fait en une seule commande. Ouvrez votre terminal et exécutez :
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Cette commande installe Claude Code **globalement** sur votre machine. Cela signifie que la commande `claude` sera disponible depuis n'importe quel dossier de votre système.
+
+<Callout type="info" title="Pourquoi le flag -g ?">
+Le flag `-g` signifie "global". Sans ce flag, le paquet serait installé uniquement dans le dossier courant. Avec `-g`, Claude Code devient un outil système accessible partout, comme `git` ou `node`.
+</Callout>
+
+### Vérifiez l'installation
+
+Après l'installation, vérifiez que tout fonctionne :
+
+```bash
+claude --version
+# @anthropic-ai/claude-code v1.x.x
+```
+
+Si la commande est reconnue et affiche un numéro de version, l'installation est réussie.
+
+## Authentification
+
+Lors du premier lancement, Claude Code vous demandera de vous authentifier. Deux méthodes sont disponibles.
+
+### Méthode 1 : Clé API (pay-as-you-go)
+
+C'est la méthode la plus flexible. Vous payez uniquement ce que vous consommez.
+
+<Steps>
+<Step title="Générez une clé API" stepNumber={1}>
+Rendez-vous sur [console.anthropic.com](https://console.anthropic.com), connectez-vous, puis allez dans **API Keys** et cliquez sur **Create Key**. Copiez la clé générée (elle commence par `sk-ant-`).
+</Step>
+
+<Step title="Configurez la variable d'environnement" stepNumber={2}>
+Ajoutez votre clé API dans votre fichier de configuration shell :
+
+```bash
+# Ajoutez cette ligne à votre ~/.bashrc ou ~/.zshrc
+export ANTHROPIC_API_KEY="sk-ant-votre-clé-ici"
+
+# Rechargez votre configuration
+source ~/.bashrc  # ou source ~/.zshrc
+```
+</Step>
+
+<Step title="Lancez Claude Code" stepNumber={3} isLast>
+Placez-vous dans un dossier de projet et lancez la commande `claude`. L'authentification sera automatique grâce à la variable d'environnement.
+
+```bash
+cd ~/mon-projet
+claude
+```
+</Step>
+</Steps>
+
+<Callout type="warning" title="Sécurité de votre clé API">
+Ne partagez **jamais** votre clé API. Ne la commitez **jamais** dans un dépôt Git. Si vous pensez qu'elle a été exposée, régénérez-la immédiatement depuis [console.anthropic.com](https://console.anthropic.com).
+</Callout>
+
+### Méthode 2 : Abonnement Claude Max / Pro / Team
+
+Si vous avez un abonnement Claude (Max, Pro ou Team), vous pouvez utiliser Claude Code sans clé API séparée.
+
+<Steps>
+<Step title="Lancez Claude Code" stepNumber={1}>
+Exécutez simplement la commande `claude` dans votre terminal :
+
+```bash
+claude
+```
+</Step>
+
+<Step title="Choisissez la méthode d'authentification" stepNumber={2}>
+Claude Code vous propose deux options. Sélectionnez **Claude App** :
+
+```text
+? How would you like to authenticate?
+> Claude App (Max subscription)
+  Anthropic Console (API key)
+```
+</Step>
+
+<Step title="Connectez-vous dans votre navigateur" stepNumber={3} isLast>
+Un navigateur s'ouvre automatiquement. Connectez-vous avec votre compte Claude. Une fois authentifié, retournez dans le terminal — Claude Code est prêt.
+</Step>
+</Steps>
+
+<Callout type="tip" title="Quel abonnement choisir ?">
+L'abonnement **Max** ($100/mois) offre une utilisation intensive de Claude Code. L'abonnement **Pro** ($20/mois) donne un accès limité. La clé API (pay-as-you-go) est idéale pour tester ou pour un usage ponctuel — comptez environ $5-15 par jour d'utilisation active.
+</Callout>
+
+## Troubleshooting : erreurs courantes
+
+### "command not found: node" ou version trop ancienne
+
+Node.js n'est pas installé ou votre version est trop ancienne.
+
+```bash
+# Installer nvm (gestionnaire de versions Node.js)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+# Redémarrer le terminal, puis :
+nvm install 22
+nvm use 22
+
+# Vérifier
+node --version
+# v22.x.x
+```
+
+### "EACCES: permission denied"
+
+npm n'a pas les permissions pour installer des paquets globaux.
+
+<Callout type="warning" title="Ne jamais utiliser sudo avec npm">
+La commande `sudo npm install -g` est une mauvaise pratique qui crée des problèmes de permissions en cascade. Utilisez plutôt l'une des solutions ci-dessous.
+</Callout>
+
+**Solution 1 : Configurer le préfixe npm** (recommandé)
+
+```bash
+mkdir -p ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Relancez l'installation
+npm install -g @anthropic-ai/claude-code
+```
+
+**Solution 2 : Utiliser nvm**
+
+Si vous utilisez `nvm`, les problèmes de permissions sont gérés automatiquement.
+
+### "command not found: claude"
+
+Le terminal ne trouve pas la commande `claude` après l'installation.
+
+```bash
+# Vérifiez où npm installe les paquets globaux
+npm config get prefix
+
+# Le sous-dossier bin/ de ce chemin doit être dans votre PATH
+# Si vous avez configuré ~/.npm-global :
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Si vous avez fermé et rouvert votre terminal après l'installation et que le problème persiste, vérifiez que le dossier bin de npm est bien dans votre variable `PATH`.
+
+### "API key not found" ou "Invalid API key"
+
+```bash
+# Vérifiez que la variable est définie
+echo $ANTHROPIC_API_KEY
+
+# Si rien ne s'affiche, la variable n'est pas configurée
+# Vérifiez votre fichier de configuration shell
+cat ~/.bashrc | grep ANTHROPIC
+
+# Assurez-vous que la clé commence par sk-ant-
+# et qu'elle n'a pas été révoquée sur console.anthropic.com
+```
+
+## Prochaines étapes
+
+Claude Code est installé et vous êtes authentifié. Passons à la configuration de votre environnement pour tirer le meilleur parti de l'outil.
+
+- [Configurer votre environnement](/getting-started/environment-setup) — API key, settings.json et CLAUDE.md
+- [Votre premier projet](/getting-started/first-project) — Créer un site web en 5 minutes
+- [Retour à la vue d'ensemble](/getting-started) — Toutes les pages du guide

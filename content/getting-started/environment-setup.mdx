@@ -1,0 +1,259 @@
+---
+title: "Configuration de l'environnement"
+description: "Configurez Claude Code pour tirer le meilleur de l'IA : variable d'environnement API key, fichier settings.json, fichier CLAUDE.md, permissions et sécurité."
+section: "getting-started"
+order: 3
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Vue d'ensemble de la configuration
+
+Claude Code utilise trois niveaux de configuration, du plus global au plus spécifique :
+
+1. **La variable d'environnement** `ANTHROPIC_API_KEY` — votre identité
+2. **Le fichier `settings.json`** — vos préférences globales
+3. **Le fichier `CLAUDE.md`** — le contexte spécifique à chaque projet
+
+Chaque niveau enrichit le précédent. Ensemble, ils permettent à Claude Code de comprendre *qui* vous êtes, *comment* vous travaillez, et *sur quoi* vous travaillez.
+
+## Abonnement ou clé API ?
+
+Avant de configurer quoi que ce soit, un point important : **aujourd'hui, un abonnement Claude (Pro ou Max) est bien plus avantageux financièrement qu'une clé API** pour utiliser Claude Code.
+
+<Callout type="tip" title="Abonnement vs clé API — le calcul est vite fait">
+- **Abonnement Claude Pro** (20 $/mois) : accès à Claude Code avec un quota généreux de tokens inclus
+- **Abonnement Claude Max** (100 ou 200 $/mois) : usage intensif de Claude Code avec des limites très élevées
+- **Clé API** : facturation à l'usage, qui peut vite dépasser 100 $/mois pour un usage quotidien de Claude Code
+
+Pour la plupart des utilisateurs, **l'abonnement Max à 100 $/mois offre le meilleur rapport qualité-prix**. Vous payez un montant fixe et prévisible, sans surprise en fin de mois. La clé API reste utile pour les cas d'usage programmatiques ou les équipes avec des besoins très spécifiques.
+</Callout>
+
+Si vous utilisez un abonnement Claude (Pro ou Max), sélectionnez simplement "Claude App" lors de l'authentification — aucune configuration supplémentaire n'est nécessaire.
+
+## Configurer la clé API (si applicable)
+
+Si vous avez choisi d'utiliser une clé API plutôt qu'un abonnement, la méthode recommandée est de définir une variable d'environnement dans votre shell.
+
+```bash
+# Ajoutez cette ligne à votre ~/.bashrc (bash) ou ~/.zshrc (zsh)
+export ANTHROPIC_API_KEY="sk-ant-votre-clé-ici"
+
+# Rechargez votre configuration
+source ~/.bashrc  # ou source ~/.zshrc
+
+# Vérifiez que la variable est bien définie
+echo $ANTHROPIC_API_KEY
+# sk-ant-... ← Vous devriez voir votre clé
+```
+
+<Callout type="warning" title="Règles de sécurité pour votre clé API">
+- Ne commitez **jamais** votre clé dans un dépôt Git
+- Ne la partagez **jamais** par email, Slack ou chat
+- Ajoutez `.env` à votre `.gitignore` si vous utilisez des fichiers d'environnement
+- Régénérez votre clé immédiatement si elle a été exposée
+- Utilisez des clés différentes pour le développement et la production
+</Callout>
+
+### Alternative : définir la clé dans settings.json
+
+Vous pouvez aussi stocker votre clé dans le fichier de configuration de Claude Code (voir section suivante). Cette méthode est moins recommandée car elle mélange configuration et secrets, mais elle fonctionne.
+
+## Le fichier settings.json
+
+Le fichier `~/.claude/settings.json` est le fichier de configuration globale de Claude Code. Il contrôle le comportement par défaut sur toute votre machine.
+
+### Emplacement
+
+```bash
+# Le fichier se trouve dans votre dossier home
+~/.claude/settings.json
+
+# Sur macOS/Linux
+/home/votre-nom/.claude/settings.json
+
+# Sur Windows (WSL)
+/home/votre-nom/.claude/settings.json
+```
+
+### Structure du fichier
+
+Voici un exemple complet avec les options les plus utiles :
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(git *)",
+      "Bash(npm run *)",
+      "Bash(node *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(sudo *)"
+    ]
+  },
+  "env": {
+    "ANTHROPIC_API_KEY": "sk-ant-..."
+  }
+}
+```
+
+### Les permissions en détail
+
+Le système de permissions contrôle ce que Claude Code peut faire sans vous demander confirmation.
+
+<Card title="allow — Actions autorisées automatiquement" variant="accent">
+Les outils listés dans `allow` seront exécutés sans demander votre accord. Utilisez des patterns avec `*` pour autoriser une famille de commandes. Par exemple, `Bash(git *)` autorise toutes les commandes git.
+</Card>
+
+<Card title="deny — Actions toujours bloquées" variant="highlight">
+Les outils listés dans `deny` seront **toujours refusés**, même si Claude Code les juge nécessaires. C'est votre filet de sécurité pour empêcher les commandes dangereuses comme `rm -rf` ou `sudo`.
+</Card>
+
+<Callout type="tip" title="Commencez permissif, affinez ensuite">
+Au début, laissez les permissions par défaut et acceptez manuellement chaque action. Après quelques sessions, vous saurez quelles actions vous voulez autoriser automatiquement. Ajoutez-les progressivement au fichier settings.json.
+</Callout>
+
+### Configuration par projet
+
+En plus du fichier global `~/.claude/settings.json`, vous pouvez créer un fichier `.claude/settings.json` à la racine de chaque projet. Les paramètres du projet sont fusionnés avec les paramètres globaux (le projet a priorité).
+
+```text
+mon-projet/
+├── .claude/
+│   └── settings.json   ← Configuration spécifique au projet
+├── CLAUDE.md            ← Contexte du projet
+├── src/
+├── package.json
+└── ...
+```
+
+## Le fichier CLAUDE.md
+
+C'est **le fichier le plus important** de toute votre configuration. Le fichier `CLAUDE.md` donne du contexte permanent à Claude Code sur votre projet. Il le lit automatiquement à chaque session.
+
+<Callout type="tip" title="Le CLAUDE.md, c'est comme un briefing d'équipe">
+Imaginez que vous accueillez un nouveau développeur dans votre équipe. Le CLAUDE.md, c'est le document que vous lui donneriez pour qu'il comprenne le projet en 5 minutes : stack technique, conventions, commandes utiles, architecture, pièges à éviter.
+</Callout>
+
+### Où le placer ?
+
+Placez le fichier `CLAUDE.md` à la racine de votre projet (au même niveau que `package.json` ou `Cargo.toml`).
+
+### Structure recommandée
+
+Voici un template que vous pouvez adapter à vos projets :
+
+```markdown
+# CLAUDE.md
+
+## À propos de ce projet
+Application e-commerce construite avec Next.js 14, TypeScript et Prisma.
+Base de données PostgreSQL hébergée sur Supabase.
+
+## Conventions de code
+- Composants fonctionnels React uniquement (pas de classes)
+- Nommage des fichiers en kebab-case (mon-composant.tsx)
+- Tests avec Vitest, coverage minimum 80%
+- Imports absolus avec le préfixe @/
+- TypeScript strict, jamais de `any`
+
+## Commandes utiles
+- `npm run dev` — Serveur de développement (port 3000)
+- `npm run test` — Lancer les tests
+- `npm run build` — Build de production
+- `npm run lint` — Vérifier le linting
+
+## Structure du projet
+- src/app/ — Pages Next.js (App Router)
+- src/components/ — Composants réutilisables
+- src/lib/ — Utilitaires et configuration
+- prisma/ — Schéma et migrations de la BDD
+
+## Règles importantes
+- Ne JAMAIS modifier les fichiers dans /generated/
+- Les migrations Prisma doivent toujours être nommées
+- Les variables d'environnement sont dans .env.local (jamais commitées)
+- Le déploiement se fait via GitHub Actions sur la branche main
+```
+
+### CLAUDE.md hiérarchique
+
+Claude Code supporte les fichiers `CLAUDE.md` **hiérarchiques**. Cela signifie que vous pouvez placer un `CLAUDE.md` dans n'importe quel sous-dossier. Claude Code lira tous les fichiers `CLAUDE.md` entre la racine du projet et le dossier courant.
+
+```text
+mon-monorepo/
+├── CLAUDE.md                    ← Règles globales du monorepo
+├── apps/
+│   ├── web/
+│   │   ├── CLAUDE.md            ← Règles spécifiques à l'app web
+│   │   └── src/
+│   └── api/
+│       ├── CLAUDE.md            ← Règles spécifiques à l'API
+│       └── src/
+└── packages/
+    └── shared/
+        ├── CLAUDE.md            ← Règles du package partagé
+        └── src/
+```
+
+<Callout type="info" title="Ordre de lecture">
+Claude Code lit les fichiers CLAUDE.md du plus général au plus spécifique. Si le CLAUDE.md racine dit "utiliser Vitest" mais que le CLAUDE.md d'un sous-dossier dit "utiliser Jest", c'est Jest qui sera utilisé pour ce sous-dossier.
+</Callout>
+
+### Ce qui fait un bon CLAUDE.md
+
+Un bon CLAUDE.md est :
+
+- **Concis** : allez droit au but, pas de prose inutile
+- **Structuré** : utilisez des titres, des listes et des blocs de code
+- **Actionnable** : chaque information doit aider Claude Code à prendre de meilleures décisions
+- **À jour** : mettez-le à jour quand vos conventions changent
+
+Un mauvais CLAUDE.md est vague ("ce projet est cool") ou trop long (copier-coller de toute la documentation). Visez 30 à 100 lignes.
+
+## Permissions et sécurité
+
+Claude Code est conçu avec la sécurité au centre. Voici les principes clés.
+
+### Le principe du moindre privilège
+
+Par défaut, Claude Code vous demande votre accord avant chaque action qui modifie votre système (écriture de fichiers, exécution de commandes). C'est le comportement le plus sûr.
+
+<Steps>
+<Step title="Actions en lecture seule" stepNumber={1}>
+Lire des fichiers, rechercher dans le code, analyser l'arborescence — ces actions sont généralement sûres et peuvent être autorisées automatiquement dans `settings.json`.
+</Step>
+
+<Step title="Actions d'écriture" stepNumber={2}>
+Créer ou modifier des fichiers, écrire dans Git — ces actions nécessitent votre validation par défaut. Autorisez-les progressivement pour les commandes que vous utilisez souvent.
+</Step>
+
+<Step title="Commandes système" stepNumber={3} isLast>
+Exécuter des scripts, installer des paquets, interagir avec des services — ces actions sont les plus sensibles. Gardez la validation manuelle pour les commandes que vous ne connaissez pas.
+</Step>
+</Steps>
+
+### Bonnes pratiques de sécurité
+
+- Utilisez la liste `deny` pour bloquer les commandes dangereuses (`rm -rf`, `sudo`, etc.)
+- Gardez votre clé API secrète et ne la commitez jamais
+- Vérifiez toujours les commandes proposées par Claude Code avant de les accepter
+- Utilisez des clés API avec des permissions limitées quand c'est possible
+- Activez la rotation régulière de vos clés API
+
+<Callout type="warning" title="En cas de doute, refusez">
+Si Claude Code propose une action que vous ne comprenez pas, refusez-la et demandez une explication. Il n'y a aucun mal à dire "non" — Claude Code reformulera sa proposition.
+</Callout>
+
+## Prochaines étapes
+
+Votre environnement est configuré. Il est temps de passer à la pratique et de créer votre premier projet avec Claude Code.
+
+- [Votre premier projet](/getting-started/first-project) — Créer un site web en 5 minutes
+- [Qu'est-ce que Claude Code ?](/getting-started/what-is-claude-code) — Revenir aux fondamentaux
+- [Retour à la vue d'ensemble](/getting-started) — Toutes les pages du guide

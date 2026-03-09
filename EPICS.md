@@ -391,8 +391,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 10 — Section MCP (6 pages)
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2 (moyenne)
 - **Estimation** : L (2-4 semaines)
 - **Dependances** : Epic 3, Epic 5, Epic 7
@@ -704,7 +704,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 7 | Correction contenu et migration MDX | P1 | M | 2 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
 | 8 | Refonte landing page | P1 | M | 2 | `TERMINÉ` | `REVIEWÉ ✅` | LES DEUX |
 | 9 | Section Getting Started (4 pages) | P2 | M | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
-| 10 | Section MCP (6 pages) | P2 | L | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
+| 10 | Section MCP (6 pages) | P2 | L | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
 | 11 | Section Plugins (5 pages) | P2 | M | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 12 | Section Skills (4 pages) | P2 | M | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 13 | Section Agents & Subagents (5 pages) | P2 | L | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
@@ -714,7 +714,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 17 | Page 404 et finitions UX | P3 | XS | 5 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 18 | Tests, CI/CD et assurance qualite | P1 | M | Continu | `TODO` | `NON REVIEWÉ` | LES DEUX |
 
-**Progression** : 9/18 terminee (50%) — 9/18 reviewee (50%)
+**Progression** : 10/18 terminee (56%) — 10/18 reviewee (56%)
 
 ---
 
@@ -761,7 +761,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | Epic | Titre | Estimation | Statut | Review |
 |------|-------|------------|--------|--------|
 | 9 | Section Getting Started (4 pages) | M | `TERMINÉ` | `REVIEWÉ ✅` |
-| 10 | Section MCP (6 pages) | L | `TODO` | `NON REVIEWÉ` |
+| 10 | Section MCP (6 pages) | L | `TERMINÉ` | `REVIEWÉ ✅` |
 | 11 | Section Plugins (5 pages) | M | `TODO` | `NON REVIEWÉ` |
 | 12 | Section Skills (4 pages) | M | `TODO` | `NON REVIEWÉ` |
 | 13 | Section Agents & Subagents (5 pages) | L | `TODO` | `NON REVIEWÉ` |

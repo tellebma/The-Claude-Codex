@@ -1,0 +1,232 @@
+---
+title: "Top MCP productivité"
+description: "Les meilleurs MCP pour booster votre productivité avec Claude Code : Figma, Lighthouse, Gmail, Slack et Google Calendar. Installation, configuration et cas d'usage."
+section: "mcp"
+order: 3
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Les MCP qui transforment votre quotidien
+
+Les MCP de productivité connectent Claude Code à vos outils du quotidien : email, messagerie, calendrier, design et audit web. Ils transforment Claude Code en assistant personnel capable d'agir dans votre environnement professionnel réel.
+
+<Callout type="tip" title="Configuration globale recommandée">
+Les MCP de productivité sont généralement personnels (votre Gmail, votre Slack). Configurez-les en **global** (`~/.claude/settings.json` ou `claude mcp add --scope global`) pour qu'ils soient disponibles dans tous vos projets.
+</Callout>
+
+---
+
+## Figma — Design et maquettes
+
+**Accédez à vos designs Figma directement depuis Claude Code.** Exportez des composants, analysez des maquettes et intégrez le design dans votre workflow de développement.
+
+### Installation
+
+```bash
+# Via la commande Claude
+claude mcp add figma -e FIGMA_ACCESS_TOKEN=figd_votre-token -- npx -y @anthropic/mcp-figma
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-figma"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "figd_votre-token-figma"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info" title="Obtenir un token Figma">
+Allez dans **Figma > Settings > Personal Access Tokens** pour générer un token. Accordez les permissions de lecture sur les fichiers dont vous avez besoin.
+</Callout>
+
+### Cas d'usage
+
+- **Analyser un design** : *"Regarde cette maquette Figma et décris-moi les composants, couleurs et spacings utilisés"*
+- **Générer du code depuis un design** : *"Transforme ce composant Figma en composant React avec Tailwind CSS"*
+- **Comparer implémentation et maquette** : *"Compare ma page actuelle avec la maquette Figma et liste les différences"*
+
+---
+
+## Lighthouse — Audit de performance web
+
+**Lancez des audits Lighthouse directement depuis Claude Code.** Analysez les performances, l'accessibilité, le SEO et les bonnes pratiques de n'importe quel site web.
+
+### Installation
+
+```bash
+# Via la commande Claude
+claude mcp add lighthouse -- npx -y @anthropic/mcp-lighthouse
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "lighthouse": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-lighthouse"]
+    }
+  }
+}
+```
+
+### Cas d'usage
+
+- **Audit complet** : *"Lance un audit Lighthouse sur https://mon-site.fr et donne-moi un résumé des scores"*
+- **Optimisation ciblée** : *"Analyse la performance de ma page d'accueil et propose des corrections concrètes"*
+- **Suivi d'amélioration** : *"Compare les scores Lighthouse avant et après mes modifications"*
+
+<Callout type="tip" title="Automatisation">
+Combinez Lighthouse avec le MCP Playwright pour auditer des pages qui nécessitent une authentification ou des interactions préalables.
+</Callout>
+
+---
+
+## Gmail — Gestion des emails
+
+**Lisez, recherchez et gérez vos emails depuis Claude Code.** Créez des brouillons, analysez des conversations et extrayez des informations clés de votre boîte mail.
+
+### Installation
+
+```bash
+# Gmail utilise OAuth - suivez le flux d'authentification
+claude mcp add gmail -- npx -y @anthropic/mcp-gmail
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "gmail": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-gmail"],
+      "env": {
+        "GMAIL_OAUTH_CLIENT_ID": "votre-client-id",
+        "GMAIL_OAUTH_CLIENT_SECRET": "votre-client-secret",
+        "GMAIL_OAUTH_REFRESH_TOKEN": "votre-refresh-token"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Configuration OAuth">
+Gmail nécessite une configuration OAuth via Google Cloud Console. Créez un projet, activez l'API Gmail, et générez des identifiants OAuth 2.0. Le processus est détaillé dans la documentation du MCP.
+</Callout>
+
+### Cas d'usage
+
+- **Triage intelligent** : *"Montre-moi les emails non lus de cette semaine et résume chacun en une phrase"*
+- **Recherche avancée** : *"Trouve tous les emails de @client.com concernant le projet X"*
+- **Brouillons automatiques** : *"Rédige une réponse professionnelle à cet email en reprenant les points soulevés"*
+- **Extraction d'information** : *"Extrais toutes les dates de réunion mentionnées dans mes emails de la semaine"*
+
+---
+
+## Slack — Messagerie d'équipe
+
+**Interagissez avec Slack directement depuis Claude Code.** Lisez et envoyez des messages, gérez les channels, et recherchez dans l'historique de votre équipe.
+
+### Installation
+
+```bash
+# Slack nécessite un Bot Token
+claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-votre-token -- npx -y @anthropic/mcp-slack
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "xoxb-votre-bot-token"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info" title="Créer un Bot Slack">
+Allez sur **api.slack.com/apps**, créez une nouvelle app, ajoutez les scopes OAuth nécessaires (`channels:read`, `channels:history`, `chat:write`, `users:read`), et installez l'app dans votre workspace pour obtenir le Bot Token.
+</Callout>
+
+### Cas d'usage
+
+- **Veille d'équipe** : *"Résume les messages importants du channel #engineering de cette semaine"*
+- **Notification automatique** : *"Envoie un message dans #releases pour annoncer la nouvelle version"*
+- **Recherche contextuelle** : *"Retrouve la conversation où on a décidé de l'architecture de la base de données"*
+- **Compte-rendu** : *"Génère un compte-rendu des discussions du channel #standup d'aujourd'hui"*
+
+---
+
+## Google Calendar — Gestion de l'agenda
+
+**Consultez et gérez votre agenda Google directement depuis Claude Code.** Visualisez vos événements, trouvez des créneaux libres et planifiez des réunions.
+
+### Installation
+
+```bash
+# Google Calendar utilise OAuth comme Gmail
+claude mcp add google-calendar -- npx -y @anthropic/mcp-google-calendar
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "google-calendar": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-google-calendar"],
+      "env": {
+        "GOOGLE_OAUTH_CLIENT_ID": "votre-client-id",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "votre-client-secret",
+        "GOOGLE_OAUTH_REFRESH_TOKEN": "votre-refresh-token"
+      }
+    }
+  }
+}
+```
+
+### Cas d'usage
+
+- **Vue d'ensemble** : *"Montre-moi mon agenda de demain avec les détails de chaque réunion"*
+- **Planification intelligente** : *"Trouve un créneau libre d'une heure cette semaine pour une session de code review"*
+- **Préparation de réunion** : *"Regarde ma prochaine réunion et prépare-moi un résumé du contexte basé sur les emails et messages Slack liés"*
+
+<Callout type="tip" title="Workflow combiné puissant">
+Combinez Google Calendar + Gmail + Slack pour un assistant de productivité complet : *"Regarde mon agenda de demain, prépare un brief pour chaque réunion basé sur les emails récents, et envoie-moi un résumé sur Slack."*
+</Callout>
+
+---
+
+## Récapitulatif
+
+| MCP | Difficulté | Auth requise | Meilleur pour |
+|-----|-----------|-------------|---------------|
+| **Figma** | Intermédiaire | Token personnel | Design-to-code, analyse de maquettes |
+| **Lighthouse** | Débutant | Aucune | Audits web, optimisation performance |
+| **Gmail** | Intermédiaire | OAuth Google | Triage email, recherche, brouillons |
+| **Slack** | Débutant | Bot Token | Communication d'équipe, veille |
+| **Google Calendar** | Intermédiaire | OAuth Google | Planning, organisation |
+
+## Prochaines étapes
+
+- [Top MCP développement](/mcp/best-development) — Context7, GitHub, Sentry, bases de données
+- [Top MCP design & UI](/mcp/best-design) — Playwright, Chrome DevTools, 21st.dev Magic
+- [Créer son premier workflow MCP](/mcp/first-workflow) — Combiner plusieurs MCP dans un flux de travail

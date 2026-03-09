@@ -16,6 +16,12 @@ import {
   Sparkles,
   Shield,
   Cable,
+  HelpCircle,
+  Wrench,
+  Briefcase,
+  Code2,
+  Palette,
+  Route,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
@@ -104,6 +110,85 @@ const recommendedMcps = [
   },
 ];
 
+/**
+ * Sub-pages of the MCP section, displayed as clickable cards.
+ */
+const SUB_PAGES = [
+  {
+    href: "/mcp/what-are-mcps",
+    icon: HelpCircle,
+    step: "01",
+    title: "Comprendre les MCP en 5 minutes",
+    description:
+      "Le protocole MCP expliqu\u00e9 simplement : architecture client-serveur, JSON-RPC, diff\u00e9rences avec les plugins et skills.",
+    color: "brand" as const,
+  },
+  {
+    href: "/mcp/setup",
+    icon: Wrench,
+    step: "02",
+    title: "Installer et configurer un MCP",
+    description:
+      "Le fichier .mcp.json, la commande claude mcp add, les trois m\u00e9thodes d\u2019installation et le debug des probl\u00e8mes courants.",
+    color: "brand" as const,
+  },
+  {
+    href: "/mcp/best-productivity",
+    icon: Briefcase,
+    step: "03",
+    title: "Top MCP productivit\u00e9",
+    description:
+      "Figma, Lighthouse, Gmail, Slack, Google Calendar \u2014 les MCP qui transforment votre quotidien professionnel.",
+    color: "accent" as const,
+  },
+  {
+    href: "/mcp/best-development",
+    icon: Code2,
+    step: "04",
+    title: "Top MCP d\u00e9veloppement",
+    description:
+      "Context7, Sentry, Linear, PostgreSQL, GitHub \u2014 les MCP essentiels pour les d\u00e9veloppeurs.",
+    color: "accent" as const,
+  },
+  {
+    href: "/mcp/best-design",
+    icon: Palette,
+    step: "05",
+    title: "Top MCP design & UI",
+    description:
+      "Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer \u2014 voir et interagir avec le web.",
+    color: "brand" as const,
+  },
+  {
+    href: "/mcp/first-workflow",
+    icon: Route,
+    step: "06",
+    title: "Cr\u00e9er son premier workflow MCP",
+    description:
+      "Tutoriel concret : combinez Context7 + GitHub + Playwright dans un flux de travail complet.",
+    color: "accent" as const,
+  },
+] as const;
+
+const colorStyles = {
+  brand: {
+    iconBg: "bg-brand-500/10",
+    iconText: "text-brand-700 dark:text-brand-400",
+    hoverBorder: "hover:border-brand-500/30",
+    linkText: "text-brand-700 dark:text-brand-400",
+    linkHover: "group-hover:text-brand-600 dark:group-hover:text-brand-300",
+    step: "text-brand-500/40",
+  },
+  accent: {
+    iconBg: "bg-accent-500/10",
+    iconText: "text-accent-600 dark:text-accent-400",
+    hoverBorder: "hover:border-accent-500/30",
+    linkText: "text-accent-600 dark:text-accent-400",
+    linkHover: "group-hover:text-accent-500 dark:group-hover:text-accent-300",
+    step: "text-accent-500/40",
+  },
+};
+
 export default function McpPage() {
   return (
     <>
@@ -131,21 +216,88 @@ export default function McpPage() {
         <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 sm:pb-28 sm:pt-28 lg:px-8 lg:pb-32 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-              <Cable className="h-4 w-4" />
+              <Cable className="h-4 w-4" aria-hidden="true" />
               Model Context Protocol
             </div>
 
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
               Les <span className="text-gradient">MCP</span> : Donnez des
               <br />
-              super-pouvoirs a Claude Code
+              super-pouvoirs &agrave; Claude Code
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
-              Connectez Claude Code a vos outils favoris — GitHub, Slack,
-              Gmail, bases de donnees — et transformez-le en assistant
-              tout-puissant qui agit dans votre environnement reel.
+              Connectez Claude Code &agrave; vos outils favoris — GitHub, Slack,
+              Gmail, bases de donn&eacute;es — et transformez-le en assistant
+              tout-puissant qui agit dans votre environnement r&eacute;el.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== SUB-PAGES CARDS ===== */}
+      <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <AnimateOnScroll preset="fade-up">
+            <div className="mb-12 text-center">
+              <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
+                6 guides
+              </span>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Explorez les MCP en profondeur
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+                De la th&eacute;orie &agrave; la pratique, chaque guide couvre un aspect
+                essentiel des MCP. Suivez-les dans l&apos;ordre ou piochez
+                directement celui qui vous int&eacute;resse.
+              </p>
+            </div>
+          </AnimateOnScroll>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {SUB_PAGES.map((page) => {
+              const Icon = page.icon;
+              const styles = colorStyles[page.color];
+
+              return (
+                <AnimateOnScroll key={page.href} preset="fade-up">
+                  <Link
+                    href={page.href}
+                    className={`group relative flex flex-col rounded-xl border border-slate-200/50 bg-white/50 p-6 transition-all hover:bg-white hover:shadow-lg dark:border-slate-700/50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80 ${styles.hoverBorder}`}
+                  >
+                    <div className="mb-4 flex items-center justify-between">
+                      <div
+                        className={`flex h-12 w-12 items-center justify-center rounded-xl ${styles.iconBg}`}
+                      >
+                        <Icon
+                          className={`h-6 w-6 ${styles.iconText}`}
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <span
+                        className={`text-3xl font-black ${styles.step}`}
+                      >
+                        {page.step}
+                      </span>
+                    </div>
+
+                    <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
+                      {page.title}
+                    </h3>
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                      {page.description}
+                    </p>
+
+                    <div
+                      className={`flex items-center gap-1 text-sm font-medium ${styles.linkText} transition-colors ${styles.linkHover}`}
+                    >
+                      Lire le guide
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                    </div>
+                  </Link>
+                </AnimateOnScroll>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -1,9 +1,28 @@
 import type { MDXComponents } from "mdx/types";
+import type { ReactElement, ReactNode } from "react";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
 import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
 import { Card } from "@/components/mdx/Card";
+
+/**
+ * Extract text content from React children recursively.
+ * Handles strings, numbers, arrays, and nested elements.
+ */
+function extractTextFromChildren(children: ReactNode): string {
+  if (typeof children === "string") return children;
+  if (typeof children === "number") return String(children);
+  if (children == null || typeof children === "boolean") return "";
+  if (Array.isArray(children)) {
+    return children.map(extractTextFromChildren).join("");
+  }
+  if (typeof children === "object" && "props" in children) {
+    const element = children as ReactElement<{ children?: ReactNode }>;
+    return extractTextFromChildren(element.props.children);
+  }
+  return "";
+}
 
 /**
  * Registry of custom components available in MDX files.
@@ -83,18 +102,47 @@ export const mdxComponents: MDXComponents = {
       {...props}
     />
   ),
+  // Inline code (not inside a fenced code block)
   code: (props: React.HTMLAttributes<HTMLElement>) => (
     <code
       className="rounded bg-slate-200/50 px-1.5 py-0.5 font-mono text-sm dark:bg-slate-700/50"
       {...props}
     />
   ),
-  pre: (props: React.HTMLAttributes<HTMLPreElement>) => (
-    <pre
-      className="my-4 overflow-x-auto rounded-xl bg-slate-950 p-4 text-sm leading-relaxed"
-      {...props}
-    />
-  ),
+  // Fenced code blocks: intercept <pre><code className="language-*"> and render with CodeBlock
+  pre: (props: React.HTMLAttributes<HTMLPreElement> & { children?: ReactNode }) => {
+    const { children, ...rest } = props;
+
+    // Check if the child is a <code> element with a language class (fenced code block)
+    if (
+      children != null &&
+      typeof children === "object" &&
+      "props" in children
+    ) {
+      const codeElement = children as ReactElement<{
+        className?: string;
+        children?: ReactNode;
+      }>;
+      const className = codeElement.props.className ?? "";
+      const languageMatch = className.match(/language-(\w+)/);
+
+      if (languageMatch) {
+        const language = languageMatch[1];
+        const code = extractTextFromChildren(codeElement.props.children).trimEnd();
+        return <CodeBlock code={code} language={language} />;
+      }
+    }
+
+    // Fallback for pre without a language-tagged code child
+    return (
+      <pre
+        className="my-4 overflow-x-auto rounded-xl bg-slate-950 p-4 text-sm leading-relaxed"
+        {...rest}
+      >
+        {children}
+      </pre>
+    );
+  },
   hr: () => (
     <hr className="my-8 border-slate-200 dark:border-slate-700" />
   ),

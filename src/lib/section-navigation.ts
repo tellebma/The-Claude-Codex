@@ -23,6 +23,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "MCP",
     items: [
       { label: "Vue d'ensemble", href: "/mcp" },
+      { label: "Comprendre les MCP", href: "/mcp/what-are-mcps" },
+      { label: "Installer et configurer", href: "/mcp/setup" },
+      { label: "Top MCP productivité", href: "/mcp/best-productivity" },
+      { label: "Top MCP développement", href: "/mcp/best-development" },
+      { label: "Top MCP design & UI", href: "/mcp/best-design" },
+      { label: "Premier workflow MCP", href: "/mcp/first-workflow" },
     ],
   },
   plugins: {

@@ -51,7 +51,7 @@ export function PathCard({
       href={href}
       aria-label={`${level} : ${title}`}
       className={clsx(
-        "glass-card group flex flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
+        "glass-card group flex h-full flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
         borderColors[color]
       )}
     >

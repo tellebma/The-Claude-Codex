@@ -146,7 +146,61 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Decouvrez les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris : GitHub, Slack, Gmail, bases de donnees et plus encore.",
     priority: 0.9,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/mcp/what-are-mcps",
+    title: "Comprendre les MCP en 5 minutes",
+    description:
+      "D\u00e9couvrez le Model Context Protocol (MCP) : l\u2019adaptateur universel qui connecte Claude Code \u00e0 vos outils. Architecture, fonctionnement et diff\u00e9rences avec les plugins et skills.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/mcp/setup",
+    title: "Installer et configurer un MCP",
+    description:
+      "Guide complet pour installer, configurer et d\u00e9boguer un MCP dans Claude Code. Fichier .mcp.json, commande claude mcp add, et r\u00e9solution des probl\u00e8mes courants.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/mcp/best-productivity",
+    title: "Top MCP productivit\u00e9",
+    description:
+      "Les meilleurs MCP pour booster votre productivit\u00e9 avec Claude Code : Figma, Lighthouse, Gmail, Slack et Google Calendar.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/mcp/best-development",
+    title: "Top MCP d\u00e9veloppement",
+    description:
+      "Les meilleurs MCP pour le d\u00e9veloppement avec Claude Code : Context7, Sentry, Linear, PostgreSQL/Supabase et GitHub.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/mcp/best-design",
+    title: "Top MCP design & UI",
+    description:
+      "Les meilleurs MCP pour le design et l\u2019UI avec Claude Code : Playwright, Chrome DevTools, 21st.dev Magic et Puppeteer.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/mcp/first-workflow",
+    title: "Cr\u00e9er son premier workflow MCP",
+    description:
+      "Tutoriel pas \u00e0 pas pour combiner Context7, GitHub et Playwright dans un workflow MCP complet.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
   },
   {
     path: "/skills",

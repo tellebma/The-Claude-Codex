@@ -37,7 +37,7 @@ export function TestimonialCard({
   const initials = getInitials(author);
 
   return (
-    <figure className="glass-card flex flex-col p-6">
+    <figure className="glass-card flex h-full flex-col p-6">
       <div className="mb-4 text-3xl text-brand-700 dark:text-brand-400" aria-hidden="true">&ldquo;</div>
       <blockquote className="mb-4 flex-1 text-base leading-relaxed text-slate-600 dark:text-slate-300">
         <p>{quote}</p>

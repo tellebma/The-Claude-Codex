@@ -31,7 +31,7 @@ export function FeatureCard({
   gradient = "teal",
   href,
 }: FeatureCardProps) {
-  const sharedClassName = "glass-card group p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg";
+  const sharedClassName = "glass-card group h-full p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg";
 
   const content = (
     <>

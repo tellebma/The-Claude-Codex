@@ -22,7 +22,7 @@ export default function ContentIndexPage() {
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
 
-        <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
+        <div className="relative px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
           <div className="text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <BookOpen className="h-4 w-4" />
@@ -41,7 +41,7 @@ export default function ContentIndexPage() {
 
       {/* Articles list */}
       <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Articles"
             title="Guides disponibles"

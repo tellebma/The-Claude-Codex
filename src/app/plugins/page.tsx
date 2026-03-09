@@ -156,7 +156,7 @@ export default function PluginsPage() {
 
       {/* ===== SUB-PAGES CARDS ===== */}
       <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <div className="mb-12 text-center">
               <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
@@ -224,7 +224,7 @@ export default function PluginsPage() {
 
       {/* ===== PLUGIN VS MCP VS SKILL ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Concept"
@@ -233,7 +233,7 @@ export default function PluginsPage() {
             />
           </AnimateOnScroll>
 
-          <div className="mx-auto mt-16 max-w-4xl">
+          <div className="mt-16">
             <div className="grid gap-6 sm:grid-cols-3">
               <div className="glass-card p-6 text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">

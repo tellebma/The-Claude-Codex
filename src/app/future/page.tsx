@@ -302,7 +302,7 @@ export default function FuturePage() {
 
       {/* ===== POURQUOI L'IA VA TRANSFORMER CHAQUE METIER ===== */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Transformation"
@@ -349,7 +349,7 @@ export default function FuturePage() {
 
       {/* ===== COMMENT SE PREPARER ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Passer a l'action"
             title="Comment se preparer des maintenant"
@@ -399,7 +399,7 @@ export default function FuturePage() {
 
       {/* ===== TENDANCES A SUIVRE ===== */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Tendances"
@@ -461,7 +461,7 @@ export default function FuturePage() {
 
       {/* ===== ROADMAP DU SITE ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Roadmap"
             title="Ce qui arrive sur The Claude Codex"

@@ -133,7 +133,7 @@ export default function GettingStartedPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
 
-        <div className="relative mx-auto max-w-4xl px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28 lg:px-8">
+        <div className="relative px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28 lg:px-8">
           <div className="text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <Sparkles className="h-4 w-4" aria-hidden="true" />
@@ -157,7 +157,7 @@ export default function GettingStartedPage() {
 
       {/* ===== SUB-PAGES CARDS ===== */}
       <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <div className="mb-12 text-center">
               <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
@@ -227,7 +227,7 @@ export default function GettingStartedPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.12),_transparent_70%)]" />
 
-        <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="relative px-4 sm:px-6 lg:px-0">
           <div className="text-center">
             <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-400">
               Et ensuite ?

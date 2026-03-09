@@ -26,7 +26,7 @@ const footerLinks = {
 export function Footer() {
   return (
     <footer className="border-t border-slate-200/50 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 text-lg font-bold">
@@ -96,7 +96,7 @@ export function Footer() {
             {new Date().getFullYear()} The Claude Codex. Projet open-source.
           </p>
           <a
-            href="https://github.com/anthropics/claude-code"
+            href="https://github.com/tellebma/The-Claude-Codex"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"

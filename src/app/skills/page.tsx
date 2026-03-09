@@ -209,7 +209,7 @@ export default function SkillsPage() {
 
       {/* ===== QU'EST-CE QU'UN SKILL ? ===== */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Concept"
@@ -218,7 +218,7 @@ export default function SkillsPage() {
             />
           </AnimateOnScroll>
 
-          <div className="mx-auto mt-16 max-w-4xl">
+          <div className="mt-16">
             <div className="glass-card p-8 sm:p-10">
               <div className="flex items-start gap-4">
                 <div className="hidden shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 p-3 sm:flex">
@@ -272,7 +272,7 @@ export default function SkillsPage() {
 
       {/* ===== TYPES DE SKILLS ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Categories"
             title="Les trois types de Skills"
@@ -381,14 +381,14 @@ mon-projet/
 
       {/* ===== COMMENT UTILISER UN SKILL ===== */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Utilisation"
             title="Comment utiliser un Skill"
             description="Deux manieres d'activer un Skill : l'invocation explicite et l'activation automatique."
           />
 
-          <div className="mx-auto mt-16 max-w-4xl space-y-12">
+          <div className="mt-16 space-y-12">
             {/* Explicit invocation */}
             <div>
               <div className="mb-4 flex items-center gap-3">
@@ -494,7 +494,7 @@ mon-projet/
         id="top-skills"
         className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Selection"
@@ -545,14 +545,14 @@ mon-projet/
 
       {/* ===== TUTORIAL ===== */}
       <section id="tutorial" className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Tutorial"
             title="Creez votre premier Skill en 10 minutes"
             description="Un guide pas-a-pas pour creer un Skill personnalise qui automatise la creation de composants React."
           />
 
-          <div className="mx-auto mt-16 max-w-4xl space-y-10">
+          <div className="mt-16 space-y-10">
             {/* Step 1 */}
             <div className="flex gap-4 sm:gap-6">
               <div className="flex shrink-0 flex-col items-center">
@@ -762,7 +762,7 @@ $ claude
 
       {/* ===== CAS D'USAGE ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="En pratique"
             title="Les Skills en action"

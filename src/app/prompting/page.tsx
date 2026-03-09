@@ -394,7 +394,7 @@ export default function PromptingPage() {
 
       {/* ===== FONDAMENTAUX ===== */}
       <section id="fondamentaux" className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Fondamentaux"
@@ -460,7 +460,7 @@ export default function PromptingPage() {
         id="templates"
         className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Templates"
             title="Prompts prets a l'emploi"
@@ -508,7 +508,7 @@ export default function PromptingPage() {
 
       {/* ===== ERREURS COURANTES ===== */}
       <section id="erreurs" className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="A eviter"
             title="Les erreurs courantes de prompting"
@@ -568,7 +568,7 @@ export default function PromptingPage() {
         id="avance"
         className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Avance"
             title="Prompting avance pour power users"
@@ -722,7 +722,7 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
 
       {/* ===== CLAUDE.MD ===== */}
       <section id="claude-md" className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Secret weapon"
             title="CLAUDE.md — Votre arme secrete"

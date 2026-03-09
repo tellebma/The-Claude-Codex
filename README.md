@@ -45,8 +45,8 @@ The Claude Codex est un site web open-source qui rend accessible à tous les bon
 
 ```bash
 # Cloner le projet
-git clone <repo-url>
-cd how_to_use_claude
+git clone https://github.com/tellebma/The-Claude-Codex.git
+cd The-Claude-Codex
 
 # Installer les dépendances
 npm install

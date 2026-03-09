@@ -26,7 +26,7 @@ export function Header() {
 
   return (
     <header className="glass sticky top-0 z-50">
-      <nav aria-label="Navigation principale" className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <nav aria-label="Navigation principale" className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
         <Link
           href="/"
           className="flex items-center gap-2 text-lg font-bold tracking-tight"

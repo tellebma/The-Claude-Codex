@@ -119,7 +119,7 @@ export default function McpSlugPage({
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
 
-        <div className="relative mx-auto max-w-4xl px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
+        <div className="relative px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
           {/* Breadcrumb */}
           <nav
             aria-label="Fil d'Ariane"
@@ -161,14 +161,14 @@ export default function McpSlugPage({
 
       {/* Content */}
       <section className="py-12 sm:py-16">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <MdxRenderer source={content} />
         </div>
       </section>
 
       {/* Navigation between pages */}
       <section className="border-t border-slate-200/50 py-12 dark:border-slate-800">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
             {prev ? (
               <Link

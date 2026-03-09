@@ -237,7 +237,7 @@ export default function McpPage() {
 
       {/* ===== SUB-PAGES CARDS ===== */}
       <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <div className="mb-12 text-center">
               <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
@@ -304,7 +304,7 @@ export default function McpPage() {
 
       {/* ===== QU'EST-CE QU'UN MCP ? ===== */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Concept"
@@ -313,7 +313,7 @@ export default function McpPage() {
             />
           </AnimateOnScroll>
 
-          <div className="mx-auto mt-16 max-w-4xl">
+          <div className="mt-16">
             <div className="glass-card p-8 sm:p-10">
               <h3 className="mb-4 text-xl font-bold">
                 L&apos;analogie simple
@@ -374,7 +374,7 @@ export default function McpPage() {
 
       {/* ===== COMMENT CA MARCHE ? ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Architecture"
             title="Comment ca marche ?"
@@ -382,7 +382,7 @@ export default function McpPage() {
           />
 
           {/* Flow diagram */}
-          <div className="mx-auto mt-16 max-w-4xl">
+          <div className="mt-16">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-0">
               {/* User */}
               <div className="glass-card flex-1 p-5 text-center">
@@ -456,14 +456,14 @@ export default function McpPage() {
 
       {/* ===== COMMENT INSTALLER UN MCP ? ===== */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Installation"
             title="Comment installer un MCP ?"
             description="Trois etapes simples pour connecter un nouveau service a Claude Code."
           />
 
-          <div className="mx-auto mt-16 max-w-4xl space-y-12">
+          <div className="mt-16 space-y-12">
             {/* Step 1 */}
             <div>
               <div className="mb-4 flex items-center gap-3">
@@ -581,7 +581,7 @@ claude "Liste les fichiers dans mon dossier projet"`}
 
       {/* ===== TOP MCP RECOMMANDES ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
               badge="Recommandations"
@@ -624,14 +624,14 @@ claude "Liste les fichiers dans mon dossier projet"`}
 
       {/* ===== TUTORIAL : PREMIER WORKFLOW MCP ===== */}
       <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Tutoriel"
             title="Votre premier workflow MCP"
             description="Installez et utilisez le MCP Filesystem en 5 minutes pour decouvrir la puissance des MCP."
           />
 
-          <div className="mx-auto mt-16 max-w-4xl space-y-10">
+          <div className="mt-16 space-y-10">
             {/* Step 1 */}
             <div className="glass-card p-6 sm:p-8">
               <div className="mb-4 flex items-center gap-3">
@@ -770,13 +770,13 @@ claude
 
       {/* ===== BONNES PRATIQUES ===== */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Bonnes pratiques"
             title="Tirer le meilleur des MCP"
           />
 
-          <div className="mx-auto mt-16 max-w-4xl space-y-6">
+          <div className="mt-16 space-y-6">
             <div className="grid gap-6 sm:grid-cols-2">
               <FeatureCard
                 icon={Shield}

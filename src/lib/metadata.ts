@@ -240,12 +240,57 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/plugins",
-    title: "Plugins pour Claude Code",
+    title: "Plugins : Etendez les capacites de Claude Code",
     description:
-      "Decouvrez les plugins disponibles pour etendre les capacites de Claude Code.",
-    priority: 0.5,
+      "Decouvrez les plugins Claude Code pour enrichir votre assistant IA. Agents specialises, design, securite, qualite — installez les meilleurs plugins du marketplace.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/plugins/what-are-plugins",
+    title: "Comprendre les plugins Claude Code",
+    description:
+      "Qu\u2019est-ce qu\u2019un plugin Claude Code ? Architecture, marketplace, diff\u00e9rences avec les MCP et Skills, et comparaison avec les extensions VS Code.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/plugins/setup",
+    title: "Installer et g\u00e9rer ses plugins",
+    description:
+      "Guide complet pour installer, configurer et g\u00e9rer les plugins Claude Code. Commandes marketplace, installation, suppression et cr\u00e9ation de plugins custom.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/plugins/best-essential",
+    title: "Top plugins essentiels 2026",
+    description:
+      "Les plugins Claude Code incontournables en 2026 : Everything Claude Code, Context7, Prompt Improver, Repomix et Ralph Loop.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/plugins/best-design",
+    title: "Plugins design & frontend",
+    description:
+      "Les meilleurs plugins Claude Code pour le design et le frontend : Frontend Design, UI UX Pro Max, 21st Magic et Playwright.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
+  },
+  {
+    path: "/plugins/best-security",
+    title: "Plugins s\u00e9curit\u00e9 & qualit\u00e9",
+    description:
+      "Les meilleurs plugins Claude Code pour la s\u00e9curit\u00e9 et la qualit\u00e9 du code : Security Guidance, Code Review, AgentShield et TDD Guide.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-09",
   },
   {
     path: "/agents",

@@ -1,0 +1,220 @@
+---
+title: "Installer et gérer ses plugins"
+description: "Guide complet pour installer, configurer et gérer les plugins Claude Code. Commandes marketplace, installation, suppression et création de plugins custom."
+section: "plugins"
+order: 2
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Gestion des plugins en ligne de commande
+
+Claude Code fournit un ensemble de commandes dédiées pour gérer vos plugins directement depuis le terminal. Pas besoin d'interface graphique — tout se fait en quelques commandes.
+
+<Callout type="info" title="Prérequis">
+Assurez-vous d'avoir Claude Code à jour (`claude update`) pour bénéficier de toutes les commandes plugins. Le système de plugins est disponible depuis la version 1.x+.
+</Callout>
+
+## Les commandes essentielles
+
+### Parcourir le marketplace
+
+```bash
+# Ouvrir le marketplace interactif
+/plugin marketplace
+
+# Rechercher un plugin par mot-clé
+/plugin marketplace search "design"
+
+# Voir les détails d'un plugin
+/plugin marketplace info everything-claude-code
+```
+
+Le marketplace affiche pour chaque plugin : le nom, la description, le nombre d'installations, la note moyenne et le nom de l'auteur. Vous pouvez trier par popularité, date de publication ou catégorie.
+
+### Installer un plugin
+
+```bash
+# Installer un plugin depuis le marketplace
+/plugin install everything-claude-code
+
+# Installer une version spécifique
+/plugin install context7@2.1.0
+
+# Installer depuis une URL (plugin custom)
+/plugin install https://github.com/auteur/mon-plugin
+```
+
+<Callout type="tip" title="Installation en lot">
+Vous pouvez installer plusieurs plugins en une seule commande : `/plugin install plugin1 plugin2 plugin3`. Pratique pour configurer un nouvel environnement rapidement.
+</Callout>
+
+### Lister les plugins installés
+
+```bash
+# Voir tous les plugins installés
+/plugin list
+
+# Résultat exemple :
+# ✓ everything-claude-code  v3.2.1  (57K installs)  Agents & Skills
+# ✓ context7               v2.1.0  (71K installs)  Documentation
+# ✓ prompt-improver         v1.5.0  (23K installs)  Prompting
+# ○ ralph-loop              v1.0.3  (8K installs)   Workflows [désactivé]
+```
+
+Le symbole `✓` indique un plugin activé, `○` un plugin installé mais désactivé dans le projet courant.
+
+### Supprimer un plugin
+
+```bash
+# Supprimer un plugin
+/plugin remove prompt-improver
+
+# Supprimer et nettoyer les données du plugin
+/plugin remove --purge ralph-loop
+```
+
+### Activer et désactiver
+
+```bash
+# Désactiver un plugin sans le supprimer
+/plugin disable ralph-loop
+
+# Réactiver un plugin
+/plugin enable ralph-loop
+```
+
+## Configuration dans les settings
+
+Les plugins peuvent être configurés dans votre fichier `settings.json` pour un contrôle plus fin.
+
+### Configuration globale
+
+```json
+{
+  "plugins": {
+    "everything-claude-code": {
+      "enabled": true,
+      "config": {
+        "autoSuggest": true,
+        "defaultAgent": "senior-dev"
+      }
+    },
+    "context7": {
+      "enabled": true,
+      "config": {
+        "autoResolve": true,
+        "maxResults": 10
+      }
+    }
+  }
+}
+```
+
+### Configuration par projet
+
+Vous pouvez aussi configurer les plugins au niveau du projet dans `.claude/settings.json` :
+
+```json
+{
+  "plugins": {
+    "frontend-design": {
+      "enabled": true,
+      "config": {
+        "framework": "react",
+        "cssFramework": "tailwind",
+        "designSystem": "shadcn"
+      }
+    },
+    "tdd-guide": {
+      "enabled": true,
+      "config": {
+        "testRunner": "vitest",
+        "coverage": 80
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Priorité des configurations">
+La configuration par projet prend toujours le dessus sur la configuration globale. Un plugin désactivé au niveau du projet le restera même s'il est activé globalement. C'est le **principe du moindre privilège** appliqué aux plugins.
+</Callout>
+
+## Créer un plugin custom
+
+Vous pouvez créer vos propres plugins pour partager des workflows, agents ou configurations avec votre équipe.
+
+### Structure d'un plugin
+
+```bash
+mon-plugin/
+├── plugin.json          # Manifeste du plugin (métadonnées, config)
+├── agents/              # Agents personnalisés
+│   ├── reviewer.md      # Agent de code review
+│   └── architect.md     # Agent d'architecture
+├── skills/              # Skills intégrés
+│   ├── deploy.md        # Skill de déploiement
+│   └── hotfix.md        # Skill de hotfix
+├── templates/           # Templates de code
+│   └── component.tsx    # Template de composant React
+└── README.md            # Documentation du plugin
+```
+
+### Le fichier plugin.json
+
+```json
+{
+  "name": "mon-plugin-equipe",
+  "version": "1.0.0",
+  "description": "Plugin interne pour les conventions de notre équipe",
+  "author": "Mon Équipe",
+  "category": "workflow",
+  "keywords": ["conventions", "review", "deploy"],
+  "config": {
+    "defaultBranch": {
+      "type": "string",
+      "default": "main",
+      "description": "Branche principale du projet"
+    },
+    "reviewRequired": {
+      "type": "boolean",
+      "default": true,
+      "description": "Exiger une review avant merge"
+    }
+  }
+}
+```
+
+### Publier sur le marketplace
+
+<Steps>
+<Step title="Préparer le plugin" stepNumber={1}>
+Vérifiez que votre `plugin.json` est complet et que tous les fichiers sont présents. Ajoutez un README.md clair avec des exemples d'utilisation.
+</Step>
+
+<Step title="Tester localement" stepNumber={2}>
+Installez votre plugin en local pour le tester : `/plugin install ./mon-plugin`. Vérifiez que tous les agents et skills fonctionnent correctement.
+</Step>
+
+<Step title="Publier" stepNumber={3} isLast>
+Utilisez la commande de publication : `/plugin publish ./mon-plugin`. Le plugin sera soumis à une vérification avant d'apparaître dans le marketplace.
+</Step>
+</Steps>
+
+<Callout type="tip" title="Plugins privés">
+Pour les plugins internes à votre entreprise, vous pouvez les distribuer via un repository Git privé. L'installation se fait avec `/plugin install https://github.com/votre-org/votre-plugin-prive` — les collaborateurs avec accès au repo pourront l'installer.
+</Callout>
+
+## Bonnes pratiques
+
+- **Mettez à jour régulièrement** : les plugins évoluent vite, vérifiez les mises à jour avec `/plugin list --updates`
+- **N'installez que l'essentiel** : chaque plugin consomme du contexte. Désactivez ceux que vous n'utilisez pas activement
+- **Lisez les permissions** : certains plugins accèdent au système de fichiers ou au réseau. Vérifiez les permissions avant d'installer
+- **Testez dans un projet de test** : avant d'activer un nouveau plugin sur un projet critique, testez-le d'abord dans un environnement isolé
+
+## Prochaines étapes
+
+- [Top plugins essentiels 2026](/plugins/best-essential) — Les plugins incontournables pour démarrer
+- [Plugins design & frontend](/plugins/best-design) — Les meilleurs plugins pour le design et l'UI
+- [Plugins sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez votre code

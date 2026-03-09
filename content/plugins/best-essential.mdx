@@ -1,0 +1,189 @@
+---
+title: "Top plugins essentiels 2026"
+description: "Les plugins Claude Code incontournables en 2026 : Everything Claude Code, Context7, Prompt Improver, Repomix et Ralph Loop. Installation, cas d'usage et comparatif."
+section: "plugins"
+order: 3
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Les plugins que tout le monde devrait avoir
+
+Ces plugins sont les **fondamentaux** de l'écosystème Claude Code. Que vous soyez développeur, designer ou product manager, ils enrichissent considérablement votre expérience quotidienne avec Claude Code.
+
+<Callout type="tip" title="Installation rapide">
+Installez tous les plugins de cette page en une seule commande :
+`/plugin install everything-claude-code context7 prompt-improver repomix ralph-loop`
+</Callout>
+
+---
+
+## Everything Claude Code — Le couteau suisse
+
+**57 000+ installations** | Catégorie : Agents & Skills | Auteur : Anthropic Community
+
+Everything Claude Code est le plugin le plus populaire de l'écosystème. Il regroupe une **collection d'agents spécialisés et de skills** prêts à l'emploi qui couvrent les cas d'usage les plus courants du développement.
+
+### Ce qu'il apporte
+
+- **Agents spécialisés** : `senior-dev`, `architect`, `reviewer`, `debugger`, `optimizer` — chacun avec une expertise et un style de réponse adaptés
+- **Skills de workflow** : review de PR, refactoring guidé, génération de tests, documentation automatique
+- **Templates de prompting** : prompts optimisés pour les tâches courantes (debug, feature, migration)
+- **Configuration intelligente** : s'adapte automatiquement au langage et au framework détectés dans votre projet
+
+### Installation
+
+```bash
+/plugin install everything-claude-code
+```
+
+### Cas d'usage
+
+- **Revue de code complète** : *"Utilise l'agent reviewer pour analyser ma dernière PR et suggérer des améliorations"*
+- **Architecture d'un nouveau module** : *"Active l'agent architect pour m'aider à concevoir le système de notification"*
+- **Debugging avancé** : *"L'agent debugger m'aide à trouver pourquoi les tests E2E échouent sur CI mais passent en local"*
+- **Optimisation** : *"L'agent optimizer analyse les performances de mon API et propose des améliorations concrètes"*
+
+<Callout type="info" title="Agents à la demande">
+Vous n'avez pas besoin d'activer manuellement chaque agent. Claude Code sélectionne automatiquement l'agent le plus pertinent en fonction de votre demande. Vous pouvez aussi forcer un agent spécifique : *"En tant qu'architect, conçois le schéma de base de données pour..."*
+</Callout>
+
+---
+
+## Context7 — La documentation toujours à jour
+
+**71 000+ installations** | Catégorie : Documentation | Auteur : Context7 Team
+
+Context7 résout un problème majeur : les **connaissances obsolètes**. Claude Code a une date de coupure pour ses connaissances. Context7 lui permet d'accéder à la **documentation la plus récente** de n'importe quelle bibliothèque ou framework, en temps réel.
+
+### Ce qu'il apporte
+
+- **Résolution automatique** : détecte les bibliothèques utilisées dans votre projet et récupère leur documentation actuelle
+- **Recherche contextuelle** : interroge la documentation en fonction de votre question, pas juste par mot-clé
+- **Cache intelligent** : stocke les résultats localement pour des réponses instantanées
+- **Support universel** : fonctionne avec npm, PyPI, crates.io, Go modules, et plus
+
+### Installation
+
+```bash
+/plugin install context7
+```
+
+### Cas d'usage
+
+- **API inconnue** : *"Comment utiliser la nouvelle API `useOptimistic` de React 19 ? Montre-moi la doc officielle et un exemple"*
+- **Migration de version** : *"Quels breaking changes dans Next.js 15 par rapport à Next.js 14 ?"*
+- **Vérification de syntaxe** : *"Vérifie dans la doc Tailwind v4 si la classe `text-balance` existe et comment l'utiliser"*
+- **Recherche d'alternatives** : *"Quelle est la différence entre `zod` et `valibot` selon leurs docs officielles ?"*
+
+<Callout type="warning" title="Aussi disponible en MCP">
+Context7 existe aussi en tant que MCP Server. Le plugin offre une intégration plus transparente (résolution automatique des dépendances du projet), tandis que le MCP donne un contrôle plus granulaire. Vous pouvez utiliser l'un ou l'autre, mais pas les deux simultanément.
+</Callout>
+
+---
+
+## Prompt Improver — Des prompts optimisés
+
+**23 000+ installations** | Catégorie : Prompting | Auteur : PromptEng Labs
+
+Prompt Improver analyse vos prompts et les enrichit automatiquement pour obtenir de **meilleurs résultats**. Il ajoute du contexte, de la structure et des contraintes que vous auriez oubliés.
+
+### Ce qu'il apporte
+
+- **Enrichissement automatique** : reformule vos prompts vagues en instructions précises et structurées
+- **Ajout de contraintes** : ajoute les bonnes pratiques manquantes (gestion d'erreurs, types, tests)
+- **Adaptation au contexte** : tient compte du langage, du framework et des conventions de votre projet
+- **Mode apprentissage** : explique pourquoi et comment le prompt a été amélioré
+
+### Installation
+
+```bash
+/plugin install prompt-improver
+```
+
+### Cas d'usage
+
+- **Prompt vague** : Vous écrivez *"Fais un formulaire de contact"*. Prompt Improver enrichit en : *"Crée un formulaire de contact React avec validation Zod, gestion des erreurs, états de chargement, feedback utilisateur, composants accessibles (WCAG AA), et tests unitaires"*
+- **Feature complexe** : *"Ajoute l'authentification"* devient un plan détaillé avec choix de stratégie, gestion des tokens, middleware, routes protégées et tests
+- **Refactoring** : *"Nettoie ce fichier"* devient une liste structurée de refactorings avec priorités et justifications
+
+<Callout type="tip" title="Mode transparent">
+Prompt Improver fonctionne en arrière-plan par défaut. Il enrichit silencieusement vos prompts avant qu'ils soient traités. Vous pouvez voir les enrichissements avec `/plugin config prompt-improver showEnhancements true`.
+</Callout>
+
+---
+
+## Repomix — Analyse complète de codebase
+
+**35 000+ installations** | Catégorie : Analyse | Auteur : Repomix Team
+
+Repomix permet à Claude Code d'ingérer et d'analyser une **codebase entière** de manière structurée. Au lieu de lire fichier par fichier, Claude Code obtient une vue d'ensemble complète et organisée de votre projet.
+
+### Ce qu'il apporte
+
+- **Vue d'ensemble structurée** : génère un résumé complet de votre codebase (architecture, dépendances, patterns)
+- **Analyse inter-fichiers** : comprend les relations entre les modules, les imports et les dépendances
+- **Détection de patterns** : identifie les design patterns utilisés, les conventions de nommage, les anti-patterns
+- **Contexte enrichi** : fournit à Claude Code un contexte complet pour des réponses plus pertinentes
+
+### Installation
+
+```bash
+/plugin install repomix
+```
+
+### Cas d'usage
+
+- **Onboarding** : *"Analyse cette codebase et donne-moi un résumé de l'architecture, des technologies et des conventions"*
+- **Impact analysis** : *"Si je modifie ce module, quels autres fichiers seront impactés ?"*
+- **Détection de dette technique** : *"Identifie les zones de dette technique dans ce projet et priorise les refactorings"*
+- **Documentation automatique** : *"Génère une documentation d'architecture basée sur l'analyse du code"*
+
+---
+
+## Ralph Loop — Boucles itératives
+
+**8 000+ installations** | Catégorie : Workflows | Auteur : Ralph AI
+
+Ralph Loop introduit des **boucles d'amélioration itérative** dans Claude Code. Au lieu d'obtenir un résultat en une seule passe, Ralph Loop fait itérer Claude Code sur son propre output pour l'améliorer progressivement.
+
+### Ce qu'il apporte
+
+- **Itérations automatiques** : Claude Code génère, évalue, améliore et re-évalue son travail en boucle
+- **Critères de qualité** : définissez des critères de sortie (couverture de tests, score de qualité, absence de warnings)
+- **Historique des itérations** : chaque itération est enregistrée pour que vous puissiez voir l'évolution
+- **Convergence intelligente** : la boucle s'arrête automatiquement quand les améliorations deviennent marginales
+
+### Installation
+
+```bash
+/plugin install ralph-loop
+```
+
+### Cas d'usage
+
+- **Code de qualité** : *"Implémente cette feature avec Ralph Loop — itère jusqu'à 0 warning TypeScript et 90% de couverture de tests"*
+- **Optimisation progressive** : *"Optimise ce composant React en boucle jusqu'à ce qu'il score 95+ sur Lighthouse"*
+- **Écriture technique** : *"Rédige cette documentation technique et itère jusqu'à ce qu'elle soit claire, complète et sans ambiguïté"*
+
+<Callout type="warning" title="Coût en tokens">
+Les boucles itératives consomment plus de tokens qu'une exécution simple. Définissez toujours un nombre maximum d'itérations pour éviter les coûts excessifs. Par défaut, Ralph Loop est limité à 5 itérations.
+</Callout>
+
+---
+
+## Récapitulatif
+
+| Plugin | Installations | Catégorie | Meilleur pour |
+|--------|--------------|-----------|---------------|
+| **Everything Claude Code** | 57K+ | Agents & Skills | Workflow complet de développement |
+| **Context7** | 71K+ | Documentation | Documentation à jour, migration |
+| **Prompt Improver** | 23K+ | Prompting | Améliorer la qualité des résultats |
+| **Repomix** | 35K+ | Analyse | Comprendre et analyser une codebase |
+| **Ralph Loop** | 8K+ | Workflows | Amélioration itérative du code |
+
+## Prochaines étapes
+
+- [Plugins design & frontend](/plugins/best-design) — Les meilleurs plugins pour le design et l'UI
+- [Plugins sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez la qualité de votre code
+- [Installer et gérer ses plugins](/plugins/setup) — Guide d'installation et de configuration

@@ -1,0 +1,239 @@
+---
+title: "Plugins sécurité & qualité"
+description: "Les meilleurs plugins Claude Code pour la sécurité et la qualité du code : Security Guidance, Code Review, AgentShield et TDD Guide. Installation et cas d'usage."
+section: "plugins"
+order: 5
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Sécurisez et fiabilisez votre code
+
+La sécurité et la qualité du code ne sont pas des options — ce sont des fondamentaux. Ces plugins intègrent les **bonnes pratiques de sécurité et de qualité** directement dans votre workflow Claude Code, de manière proactive et automatisée.
+
+<Callout type="warning" title="Responsabilité partagée">
+Ces plugins sont des **outils d'aide**, pas des substituts à une revue de sécurité humaine. Ils détectent les problèmes courants et appliquent les bonnes pratiques, mais une expertise humaine reste nécessaire pour les aspects critiques de sécurité.
+</Callout>
+
+---
+
+## Security Guidance — L'expert sécurité
+
+**19 000+ installations** | Catégorie : Sécurité | Auteur : SecureCode Labs
+
+Security Guidance transforme Claude Code en un **auditeur de sécurité proactif**. Au lieu d'attendre qu'un problème soit découvert en production, ce plugin analyse votre code en continu et alerte sur les vulnérabilités avant qu'elles ne soient commitées.
+
+### Ce qu'il apporte
+
+- **Analyse en temps réel** : chaque modification de code est analysée pour détecter les vulnérabilités OWASP Top 10
+- **Suggestions proactives** : propose des corrections sécurisées au moment où vous écrivez le code
+- **Audit de dépendances** : vérifie les vulnérabilités connues (CVE) dans vos dépendances
+- **Conformité** : vérifie la conformité avec les standards de sécurité (OWASP, SANS, CIS)
+- **Checklists automatiques** : génère des checklists de sécurité adaptées à votre stack
+
+### Installation
+
+```bash
+/plugin install security-guidance
+```
+
+### Cas d'usage
+
+- **Revue de sécurité** : *"Fais un audit de sécurité complet de mon API d'authentification"*
+- **Prévention XSS** : *"Vérifie que tous les inputs utilisateur sont correctement sanitisés dans mon application React"*
+- **Gestion des secrets** : *"Scanne mon projet pour détecter les secrets hardcodés et propose une migration vers des variables d'environnement"*
+- **Sécurité des API** : *"Analyse mes endpoints REST et vérifie l'authentification, l'autorisation, la validation des inputs et le rate limiting"*
+
+<Callout type="info" title="Intégration au workflow">
+Security Guidance peut être configuré pour s'exécuter automatiquement avant chaque commit. Ajoutez `"preCommitScan": true` dans la configuration du plugin pour activer cette fonctionnalité.
+</Callout>
+
+### Configuration recommandée
+
+```json
+{
+  "plugins": {
+    "security-guidance": {
+      "enabled": true,
+      "config": {
+        "severity": "medium",
+        "preCommitScan": true,
+        "autoFix": false,
+        "standards": ["owasp-top-10", "sans-top-25"],
+        "ignorePaths": ["test/", "*.test.ts"]
+      }
+    }
+  }
+}
+```
+
+---
+
+## Code Review — La revue automatisée
+
+**45 000+ installations** | Catégorie : Qualité | Auteur : ReviewBot Team
+
+Code Review automatise le processus de **revue de code** avec une analyse approfondie de la qualité, de la lisibilité et des bonnes pratiques. C'est comme avoir un reviewer senior disponible 24h/24.
+
+### Ce qu'il apporte
+
+- **Analyse multi-dimensionnelle** : qualité, lisibilité, performance, sécurité, maintenabilité
+- **Suggestions concrètes** : chaque problème détecté est accompagné d'une suggestion de correction avec explication
+- **Scoring** : note globale de qualité avec détail par catégorie (A à F)
+- **Patterns et anti-patterns** : détecte les design patterns mal implémentés et les anti-patterns courants
+- **Conventions d'équipe** : s'adapte aux conventions de votre projet via la configuration
+
+### Installation
+
+```bash
+/plugin install code-review
+```
+
+### Cas d'usage
+
+- **Review de PR** : *"Fais une review complète de tous les fichiers modifiés dans cette branche"*
+- **Qualité ciblée** : *"Analyse ce module et donne-moi un score de qualité avec les points à améliorer en priorité"*
+- **Standards d'équipe** : *"Vérifie que ce code respecte nos conventions : immutabilité, fonctions pures, gestion d'erreurs explicite"*
+- **Onboarding** : *"Analyse cette PR d'un nouveau développeur et prépare un feedback constructif avec des exemples"*
+
+<Callout type="tip" title="Review à plusieurs niveaux">
+Code Review propose trois niveaux de profondeur :
+- **Quick** : survol rapide, problèmes critiques uniquement (30 secondes)
+- **Standard** : analyse complète, suggestions détaillées (2-3 minutes)
+- **Deep** : analyse approfondie avec refactoring suggéré et comparaison avec les bonnes pratiques (5-10 minutes)
+</Callout>
+
+---
+
+## AgentShield — Scan de configuration
+
+**12 000+ installations** | Catégorie : Sécurité | Auteur : ShieldAI Team
+
+AgentShield est spécialisé dans l'**analyse des configurations** de Claude Code et de ses extensions. Il scanne vos fichiers de configuration (MCP, plugins, settings) pour détecter les problèmes de sécurité et les mauvaises pratiques.
+
+### Ce qu'il apporte
+
+- **Scan de configuration MCP** : vérifie que vos MCP ne demandent pas de permissions excessives
+- **Audit des plugins** : analyse les plugins installés pour détecter les risques potentiels
+- **Détection de secrets exposés** : scanne les fichiers de configuration pour les tokens, clés API et mots de passe en clair
+- **Recommandations de hardening** : propose des configurations plus sécurisées
+- **Rapport de conformité** : génère un rapport de sécurité complet de votre environnement Claude Code
+
+### Installation
+
+```bash
+/plugin install agentshield
+```
+
+### Cas d'usage
+
+- **Audit complet** : *"Scanne toute ma configuration Claude Code et signale les problèmes de sécurité"*
+- **Vérification MCP** : *"Vérifie que mes MCP configurés utilisent le principe du moindre privilège"*
+- **Secrets exposés** : *"Y a-t-il des tokens ou des secrets en clair dans mes fichiers de configuration ?"*
+- **Hardening** : *"Comment sécuriser davantage ma configuration Claude Code ? Propose un plan de hardening"*
+
+<Callout type="warning" title="Exécution régulière">
+Lancez un scan AgentShield après chaque ajout de MCP ou de plugin, et au minimum une fois par mois. Les configurations évoluent et de nouvelles vulnérabilités sont découvertes régulièrement.
+</Callout>
+
+### Exemple de rapport
+
+```bash
+# Lancer un scan complet
+> Utilise AgentShield pour scanner ma configuration
+
+# Rapport exemple :
+# ╔══════════════════════════════════════════╗
+# ║     AgentShield Security Report          ║
+# ╠══════════════════════════════════════════╣
+# ║ MCP Servers : 4 configurés               ║
+# ║ Plugins     : 7 installés                ║
+# ║ ──────────────────────────────────────── ║
+# ║ 🔴 CRITIQUE : Token GitHub dans .mcp.json║
+# ║ 🟡 MOYEN    : MCP Filesystem trop permissif║
+# ║ 🟢 INFO     : Plugin X non mis à jour    ║
+# ╚══════════════════════════════════════════╝
+```
+
+---
+
+## TDD Guide — Tests first, toujours
+
+**15 000+ installations** | Catégorie : Qualité | Auteur : TDD Community
+
+TDD Guide impose une discipline de **Test-Driven Development** dans Claude Code. Il force un workflow structuré : écrire le test d'abord, le voir échouer, implémenter le code, voir le test passer, refactorer.
+
+### Ce qu'il apporte
+
+- **Workflow TDD strict** : guide Claude Code à travers les étapes RED → GREEN → REFACTOR
+- **Génération de tests** : propose des tests pertinents avant l'implémentation
+- **Couverture de code** : surveille la couverture et alerte quand elle descend sous le seuil configuré
+- **Patterns de test** : connaît les meilleurs patterns pour chaque type de test (unit, integration, E2E)
+- **Multi-framework** : supporte Jest, Vitest, pytest, Go test, RSpec, etc.
+
+### Installation
+
+```bash
+/plugin install tdd-guide
+```
+
+### Configuration recommandée
+
+```json
+{
+  "plugins": {
+    "tdd-guide": {
+      "enabled": true,
+      "config": {
+        "testRunner": "vitest",
+        "minCoverage": 80,
+        "strictMode": true,
+        "autoRunTests": true,
+        "generateMocks": true
+      }
+    }
+  }
+}
+```
+
+### Cas d'usage
+
+- **Nouvelle feature** : *"Implémente le système de pagination avec TDD — commence par les tests"*
+- **Bug fix** : *"Corrige ce bug en TDD : d'abord un test qui reproduit le bug, puis le fix"*
+- **Refactoring sûr** : *"Refactore ce module en s'assurant que tous les tests existants passent à chaque étape"*
+- **Couverture ciblée** : *"Ce fichier a 45% de couverture. Ajoute les tests manquants pour atteindre 80%"*
+
+<Steps>
+<Step title="RED — Écrire le test" stepNumber={1}>
+TDD Guide demande à Claude Code d'écrire d'abord un test qui décrit le comportement attendu. Le test doit échouer — c'est normal et voulu.
+</Step>
+
+<Step title="GREEN — Implémenter" stepNumber={2}>
+Claude Code écrit le code minimal pour faire passer le test. Pas de sur-ingénierie, juste ce qu'il faut pour le vert.
+</Step>
+
+<Step title="REFACTOR — Améliorer" stepNumber={3} isLast>
+Une fois le test au vert, Claude Code refactore le code pour le rendre propre, lisible et performant. Les tests garantissent que rien n'est cassé.
+</Step>
+</Steps>
+
+<Callout type="tip" title="Mode strict">
+En mode strict (`strictMode: true`), TDD Guide **refuse de générer du code** d'implémentation tant qu'un test correspondant n'existe pas. C'est la meilleure façon d'ancrer la discipline TDD dans votre workflow.
+</Callout>
+
+---
+
+## Récapitulatif
+
+| Plugin | Installations | Spécialité | Meilleur pour |
+|--------|--------------|------------|---------------|
+| **Security Guidance** | 19K+ | Sécurité du code | Audits, prévention de vulnérabilités |
+| **Code Review** | 45K+ | Qualité du code | Revue automatisée, standards d'équipe |
+| **AgentShield** | 12K+ | Config sécurité | Audit des MCP et plugins, secrets |
+| **TDD Guide** | 15K+ | Tests | Discipline TDD, couverture de code |
+
+## Prochaines étapes
+
+- [Comprendre les plugins](/plugins/what-are-plugins) — Revenez aux fondamentaux si besoin
+- [Installer et gérer ses plugins](/plugins/setup) — Guide d'installation et de configuration
+- [Top plugins essentiels 2026](/plugins/best-essential) — Les plugins fondamentaux pour démarrer

@@ -1,0 +1,186 @@
+---
+title: "Plugins design & frontend"
+description: "Les meilleurs plugins Claude Code pour le design et le frontend : Frontend Design, UI UX Pro Max, 21st Magic et Playwright. Installation et cas d'usage."
+section: "plugins"
+order: 4
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Transformez Claude Code en expert design
+
+Ces plugins spécialisés transforment Claude Code en un véritable assistant design et frontend. Que vous construisiez des interfaces utilisateur, des systèmes de design ou que vous testiez vos composants, ces outils vous feront gagner un temps considérable.
+
+<Callout type="tip" title="Complémentarité avec les MCP">
+Ces plugins s'utilisent idéalement **en combinaison avec les MCP design** (Playwright, Chrome DevTools, 21st.dev Magic en MCP). Le plugin fournit l'intelligence et les styles, le MCP fournit l'interaction avec le navigateur.
+</Callout>
+
+---
+
+## Frontend Design — Le designer professionnel
+
+**96 000+ installations** | Catégorie : Design | Auteur : Frontend Design Team
+
+Frontend Design est le plugin le plus installé de toute la catégorie design. Il transforme Claude Code en un expert capable de produire des interfaces **professionnelles et pixel-perfect**, en respectant les conventions modernes de design web.
+
+### Ce qu'il apporte
+
+- **Design system automatique** : génère des tokens de design (couleurs, typographie, espacements, ombres) cohérents
+- **Composants production-ready** : produit des composants accessibles, responsive et animés
+- **Responsive intelligent** : adapte automatiquement les layouts pour mobile, tablette et desktop
+- **Patterns modernes** : maîtrise les patterns actuels (bento grids, glassmorphism, micro-interactions)
+- **Accessibilité native** : tous les composants générés respectent WCAG 2.1 AA
+
+### Installation
+
+```bash
+/plugin install frontend-design
+```
+
+### Configuration recommandée
+
+```json
+{
+  "plugins": {
+    "frontend-design": {
+      "enabled": true,
+      "config": {
+        "framework": "react",
+        "cssFramework": "tailwind",
+        "designSystem": "shadcn",
+        "animations": "framer-motion",
+        "accessibilityLevel": "AA"
+      }
+    }
+  }
+}
+```
+
+### Cas d'usage
+
+- **Landing page complète** : *"Crée une landing page professionnelle pour un SaaS avec hero, features, pricing et footer"*
+- **Système de design** : *"Génère un design system complet avec tokens, composants de base et documentation"*
+- **Redesign** : *"Modernise cette page en utilisant les tendances design 2026 : bento layout, glassmorphism subtil et micro-animations"*
+- **Dark mode** : *"Ajoute un dark mode complet à mon application avec des transitions fluides"*
+
+<Callout type="info" title="Détection automatique">
+Frontend Design détecte automatiquement votre stack (React/Vue/Svelte, Tailwind/CSS Modules, etc.) et adapte son output. Vous pouvez aussi forcer une configuration spécifique via les settings.
+</Callout>
+
+---
+
+## UI UX Pro Max — 50 styles, 21 palettes
+
+**42 000+ installations** | Catégorie : Design | Auteur : UI UX Labs
+
+UI UX Pro Max est une bibliothèque de **styles prédéfinis et de palettes de couleurs** qui permet de changer radicalement l'apparence de vos interfaces en quelques commandes. Pensez-le comme un catalogue de thèmes professionnels.
+
+### Ce qu'il apporte
+
+- **50 styles de design** : minimaliste, brutalist, néomorphism, glassmorphism, retro, corporate, startup, luxe, etc.
+- **21 palettes de couleurs** : chaque palette est pensée pour l'accessibilité (contraste AA/AAA) et inclut les variantes light/dark
+- **Typography presets** : combinaisons de polices testées et harmonieuses
+- **Spacing systems** : systèmes d'espacement cohérents (4px, 8px, modular scale)
+- **Animation presets** : bibliothèque d'animations prêtes à l'emploi
+
+### Installation
+
+```bash
+/plugin install ui-ux-pro-max
+```
+
+### Cas d'usage
+
+- **Exploration de styles** : *"Montre-moi ce composant Card dans les styles minimaliste, brutalist et glassmorphism pour que je compare"*
+- **Palette personnalisée** : *"Applique la palette 'Ocean Breeze' à mon application avec les variantes dark mode"*
+- **Cohérence visuelle** : *"Uniformise tous les composants de mon app en utilisant le style 'Modern SaaS' et la palette 'Electric'"*
+- **Prototypage rapide** : *"Génère 3 variantes de cette page d'accueil avec 3 styles différents"*
+
+<Callout type="tip" title="Combinaison gagnante">
+Utilisez UI UX Pro Max pour choisir un style et une palette, puis Frontend Design pour l'implémentation production-ready. Les deux plugins sont conçus pour fonctionner ensemble.
+</Callout>
+
+---
+
+## 21st Magic — Composants premium
+
+**31 000+ installations** | Catégorie : Composants | Auteur : 21st.dev
+
+21st Magic donne accès à une bibliothèque de **composants UI premium** directement dans Claude Code. Au lieu de coder chaque composant from scratch, Claude Code pioche dans un catalogue de composants testés et optimisés.
+
+### Ce qu'il apporte
+
+- **Bibliothèque de composants** : headers, heros, features, pricing tables, testimonials, footers, dashboards, etc.
+- **Variantes multiples** : chaque composant existe en plusieurs variantes (simple, détaillé, animé, compact)
+- **Source code complet** : vous obtenez le code source, pas des composants packagés — total contrôle
+- **Inspiration contextuelle** : suggère des composants pertinents en fonction de ce que vous construisez
+
+### Installation
+
+```bash
+/plugin install 21st-magic
+```
+
+### Cas d'usage
+
+- **Composant complexe** : *"J'ai besoin d'une section pricing avec 3 tiers, toggle mensuel/annuel et feature comparison"*
+- **Inspiration** : *"Montre-moi 5 variantes de hero section pour un site de documentation technique"*
+- **Dashboard** : *"Construis un dashboard analytics avec sidebar, charts et data tables en utilisant les composants 21st Magic"*
+- **Personnalisation** : *"Prends le composant testimonials de 21st Magic et adapte-le à mon design system"*
+
+<Callout type="info" title="Aussi disponible en MCP">
+21st.dev propose aussi un MCP Server (`@21st-dev/magic`) qui fournit des composants via le protocole MCP. Le plugin offre une intégration plus riche avec des suggestions contextuelles et des variantes, tandis que le MCP est plus léger.
+</Callout>
+
+---
+
+## Playwright — Tests E2E visuels
+
+**28 000+ installations** | Catégorie : Tests | Auteur : Microsoft Community
+
+Le plugin Playwright intègre les tests end-to-end directement dans le workflow de Claude Code. Il permet de **tester visuellement** vos interfaces, prendre des screenshots et valider les interactions utilisateur.
+
+### Ce qu'il apporte
+
+- **Tests E2E automatiques** : génère et exécute des tests Playwright basés sur votre description en langage naturel
+- **Captures d'écran** : prend des screenshots pour vérifier visuellement le rendu de vos pages
+- **Comparaison visuelle** : compare des screenshots avant/après pour détecter les régressions visuelles
+- **Multi-navigateur** : teste sur Chromium, Firefox et WebKit simultanément
+- **Rapports détaillés** : génère des rapports HTML avec captures d'écran et traces
+
+### Installation
+
+```bash
+/plugin install playwright
+
+# Note : Playwright nécessite aussi les navigateurs
+npx playwright install
+```
+
+### Cas d'usage
+
+- **Test visuel** : *"Prends un screenshot de chaque page de mon site et vérifie qu'aucun élément ne déborde"*
+- **Test de parcours** : *"Teste le parcours complet d'inscription : landing → formulaire → confirmation → email"*
+- **Régression visuelle** : *"Compare le rendu de la page d'accueil avant et après mon refactoring CSS"*
+- **Responsive testing** : *"Teste cette page sur mobile (375px), tablette (768px) et desktop (1440px) et montre-moi les screenshots"*
+
+<Callout type="warning" title="Plugin vs MCP">
+Le plugin Playwright gère la **génération de tests** et l'analyse des résultats. Pour l'**interaction directe avec le navigateur** (navigation, clics, remplissage de formulaires), utilisez le MCP Playwright. Les deux sont complémentaires.
+</Callout>
+
+---
+
+## Récapitulatif
+
+| Plugin | Installations | Spécialité | Meilleur pour |
+|--------|--------------|------------|---------------|
+| **Frontend Design** | 96K+ | Design system & UI | Interfaces production-ready |
+| **UI UX Pro Max** | 42K+ | Styles & palettes | Exploration visuelle, prototypage |
+| **21st Magic** | 31K+ | Composants premium | Composants complexes, inspiration |
+| **Playwright** | 28K+ | Tests E2E | Tests visuels, régression |
+
+## Prochaines étapes
+
+- [Plugins sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez la qualité de votre code
+- [Top plugins essentiels 2026](/plugins/best-essential) — Les plugins fondamentaux
+- [Installer et gérer ses plugins](/plugins/setup) — Guide d'installation et de configuration

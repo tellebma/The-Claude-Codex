@@ -35,6 +35,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Plugins",
     items: [
       { label: "Vue d'ensemble", href: "/plugins" },
+      { label: "Comprendre les plugins", href: "/plugins/what-are-plugins" },
+      { label: "Installer et gérer", href: "/plugins/setup" },
+      { label: "Top plugins essentiels", href: "/plugins/best-essential" },
+      { label: "Plugins design & frontend", href: "/plugins/best-design" },
+      { label: "Plugins sécurité & qualité", href: "/plugins/best-security" },
     ],
   },
   skills: {

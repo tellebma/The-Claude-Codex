@@ -11,6 +11,7 @@ import clsx from "clsx";
 
 const navigation = [
   { name: "Demarrer", href: "/getting-started" },
+  { name: "Contenus", href: "/content" },
   { name: "MCP", href: "/mcp" },
   { name: "Skills", href: "/skills" },
   { name: "Prompting", href: "/prompting" },

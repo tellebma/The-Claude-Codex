@@ -1,0 +1,80 @@
+---
+title: "Guide complet des MCP"
+description: "Tout savoir sur les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris."
+badge: "MCP"
+order: 2
+section: "mcp"
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Qu'est-ce qu'un MCP ?
+
+Le **Model Context Protocol** (MCP) est un protocole ouvert cree par Anthropic qui permet a Claude Code de se connecter a des services externes. C'est l'adaptateur universel entre Claude Code et le reste du monde numerique.
+
+<Callout type="tip" title="L'analogie simple">
+Imaginez que Claude Code est un expert polyvalent enferme dans une piece. Les MCP sont des **prises universelles** que vous branchez entre Claude et vos outils : votre boite mail, votre code source, vos bases de donnees, votre navigateur.
+</Callout>
+
+## Comment installer un MCP
+
+L'installation se fait en trois etapes :
+
+### 1. Utiliser la commande dediee
+
+```bash
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /home/votre-user/projets
+```
+
+### 2. Configurer dans settings.json
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/chemin/vers/votre/dossier"
+      ]
+    }
+  }
+}
+```
+
+### 3. Verifier la connexion
+
+```bash
+claude mcp list
+
+# Resultat attendu :
+# filesystem: connected
+#   Tools: read_file, write_file, list_directory, search_files, ...
+```
+
+## Les MCP incontournables
+
+| MCP | Niveau | Cas d'usage |
+|-----|--------|-------------|
+| **Filesystem** | Debutant | Lire, ecrire et explorer des fichiers |
+| **GitHub** | Intermediaire | Gerer les PR, issues et workflows CI/CD |
+| **PostgreSQL / SQLite** | Intermediaire | Interroger vos bases de donnees |
+| **Puppeteer / Playwright** | Avance | Automatiser un navigateur web |
+| **Slack** | Debutant | Lire et envoyer des messages |
+| **Gmail** | Debutant | Gerer vos emails |
+
+## Bonnes pratiques
+
+<Callout type="warning" title="Securite des tokens">
+Ne commitez jamais vos tokens dans un repository Git. Utilisez des variables d'environnement ou un gestionnaire de secrets pour les informations sensibles. Preferez la configuration globale pour les tokens personnels.
+</Callout>
+
+- **Principe du moindre privilege** : n'accordez a chaque MCP que les permissions necessaires
+- **Configuration par projet** : utilisez `.claude/settings.json` a la racine de chaque projet
+- **Combinez les MCP** : la vraie puissance emerge quand Claude enchaine plusieurs MCP
+- **Documentez vos configurations** : ajoutez un fichier CLAUDE.md pour expliquer quels MCP sont utilises
+
+## Prochaines etapes
+
+Maintenant que vous maitrisez les MCP, decouvrez les [Skills](/skills) pour enseigner de nouveaux comportements a Claude Code, ou perfectionnez votre [prompting](/prompting) pour des resultats optimaux.

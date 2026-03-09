@@ -87,9 +87,9 @@ export interface PageInfo {
 export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   {
     path: "/",
-    title: "Maitrisez Claude Code",
+    title: "Ma\u00eetrisez Claude Code",
     description:
-      "Le guide de reference gratuit pour maitriser Claude Code. MCP, Skills, Prompting avance — pour developpeurs et non-developpeurs.",
+      "Le guide de r\u00e9f\u00e9rence gratuit pour ma\u00eetriser Claude Code. MCP, Skills, Prompting avanc\u00e9 \u2014 pour d\u00e9veloppeurs et non-d\u00e9veloppeurs.",
     priority: 1.0,
     changeFrequency: "weekly",
     lastModified: "2026-03-07",
@@ -138,6 +138,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-03-07",
+  },
+  {
+    path: "/content",
+    title: "Contenus \u00e9ditoriaux",
+    description:
+      "Tous les articles et guides \u00e9ditoriaux du Claude Codex. Explorez nos contenus MDX sur Claude Code, les MCP, les Skills et le prompting.",
+    priority: 0.6,
+    changeFrequency: "weekly",
+    lastModified: "2026-03-09",
   },
   {
     path: "/plugins",

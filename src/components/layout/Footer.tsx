@@ -3,7 +3,7 @@ import { Terminal, Github, ExternalLink } from "lucide-react";
 
 const footerLinks = {
   guides: [
-    { name: "Demarrer", href: "/getting-started" },
+    { name: "D\u00e9marrer", href: "/getting-started" },
     { name: "MCP", href: "/mcp" },
     { name: "Skills", href: "/skills" },
     { name: "Prompting", href: "/prompting" },
@@ -36,9 +36,9 @@ export function Footer() {
               The Claude <span className="text-gradient">Codex</span>
             </Link>
             <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-400">
-              Le guide de reference gratuit pour maitriser Claude Code. Cree par
-              la communaute, pour la communaute. Pas de paywall, pas de tracking
-              — juste du savoir partage.
+              Le guide de r\u00e9f\u00e9rence gratuit pour ma\u00eetriser Claude Code. Cr\u00e9\u00e9 par
+              la communaut\u00e9, pour la communaut\u00e9. Pas de paywall, pas de tracking
+              — juste du savoir partag\u00e9.
             </p>
           </div>
 

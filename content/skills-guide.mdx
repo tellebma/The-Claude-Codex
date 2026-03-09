@@ -1,0 +1,86 @@
+---
+title: "Guide complet des Skills"
+description: "Apprenez a utiliser et creer des Skills pour Claude Code. Automatisez vos workflows et enseignez de nouveaux talents a votre assistant IA."
+badge: "Skills"
+order: 3
+section: "skills"
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Qu'est-ce qu'un Skill ?
+
+Un Skill est une **recette structuree** qui guide Claude Code pour executer des taches complexes de maniere reproductible. Concretement, c'est un fichier Markdown qui definit un workflow, des regles et des etapes a suivre.
+
+<Callout type="tip" title="Analogie">
+Si les MCP sont les **outils** de Claude (marteau, tournevis, perceuse), les Skills sont les **modes d'emploi** qui lui expliquent *comment* et *quand* utiliser ces outils ensemble pour accomplir une tache complexe.
+</Callout>
+
+## Les trois types de Skills
+
+<Card title="Built-in Skills" variant="accent">
+Fournis par la communaute et les outils, ces Skills sont disponibles immediatement. Ils couvrent les workflows les plus courants : TDD, code review, planning, etc. Utilisez-les avec la syntaxe /tdd-guide, /code-reviewer, /planner.
+</Card>
+
+<Card title="Custom Skills" variant="highlight">
+Crees par vous dans le dossier ~/.claude/skills/. Ils sont disponibles dans tous vos projets et refletent vos preferences personnelles.
+</Card>
+
+<Card title="Project Skills" variant="default">
+Definis dans le fichier CLAUDE.md ou le dossier .claude/ de votre projet. Partages avec toute l'equipe via Git.
+</Card>
+
+## Comment utiliser un Skill
+
+### Invocation explicite
+
+Prefixez le nom du Skill avec `/` dans votre prompt :
+
+```bash
+# Invoquer un Skill directement
+> /tdd-guide Implemente une fonction de validation d'email
+
+# Claude va alors :
+# 1. Charger les instructions du Skill "tdd-guide"
+# 2. Ecrire les tests en premier (RED)
+# 3. Implementer le minimum pour passer les tests (GREEN)
+# 4. Refactorer si necessaire (IMPROVE)
+```
+
+### Activation automatique
+
+Certains Skills s'activent automatiquement selon le contexte. Les instructions dans votre fichier `CLAUDE.md` sont appliquees systematiquement a chaque session.
+
+## Top Skills recommandes
+
+| Skill | Categorie | Description |
+|-------|-----------|-------------|
+| **TDD Guide** | Dev | Workflow Test-Driven Development rigoureux |
+| **Frontend Design** | Design | Composants UI modernes et accessibles |
+| **Code Reviewer** | Qualite | Revue de code automatique |
+| **Plan** | Process | Plan d'implementation structure |
+| **E2E Testing** | Testing | Tests end-to-end avec Playwright |
+| **Security Review** | Securite | Analyse de securite systematique |
+
+## Creez votre premier Skill
+
+```bash
+# 1. Creer le dossier Skills
+mkdir -p ~/.claude/skills
+
+# 2. Creer le fichier du Skill
+touch ~/.claude/skills/react-component.md
+
+# 3. Ecrire les instructions (voir le guide complet)
+
+# 4. Tester votre Skill
+# > /react-component Cree un composant Avatar
+```
+
+<Callout type="info" title="Conseil de pro">
+Versionez vos Skills avec Git ! Creez un repository dedie pour vos fichiers ~/.claude/skills/ et partagez-les avec votre equipe. Chaque amelioration profite a tout le monde.
+</Callout>
+
+## Prochaines etapes
+
+Perfectionnez votre communication avec Claude Code grace au guide de [prompting avance](/prompting), ou decouvrez les [tendances IA](/future) qui faconneront l'avenir.

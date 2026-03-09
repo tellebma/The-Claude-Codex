@@ -122,6 +122,22 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
       "open-source",
     ],
   },
+  // Content (MDX)
+  {
+    title: "Contenus \u00e9ditoriaux",
+    description:
+      "Articles et guides au format MDX. Explorez nos contenus sur Claude Code, les MCP, les Skills et le prompting.",
+    href: "/content",
+    section: "Contenus",
+    keywords: [
+      "contenu",
+      "article",
+      "mdx",
+      "editorial",
+      "guide",
+      "tutoriel",
+    ],
+  },
 ];
 
 export function searchEntries(

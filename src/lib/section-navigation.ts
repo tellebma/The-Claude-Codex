@@ -57,6 +57,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Vue d'ensemble", href: "/configurator" },
     ],
   },
+  content: {
+    title: "Contenus",
+    items: [
+      { label: "Tous les articles", href: "/content" },
+    ],
+  },
 };
 
 export function getSectionFromPathname(pathname: string): string | null {

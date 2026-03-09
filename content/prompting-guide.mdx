@@ -1,0 +1,96 @@
+---
+title: "Guide du prompting avec Claude Code"
+description: "Maitrisez l'art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour des resultats optimaux."
+badge: "Prompting"
+order: 4
+section: "prompting"
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Les 5 principes du bon prompting
+
+Un bon prompt fait la difference entre une reponse generique et un resultat exactement adapte a vos besoins. Voici les principes fondamentaux.
+
+### 1. Soyez specifique
+
+Fournissez du contexte et des contraintes claires. Plus votre prompt est precis, plus la reponse sera pertinente.
+
+```markdown
+# Vague
+"Fais-moi un formulaire"
+
+# Specifique
+"Cree un formulaire de contact en React avec TypeScript.
+Champs : nom (requis), email (requis, valide), message (requis, min 20 caracteres).
+Utilise react-hook-form avec validation Zod.
+Style avec Tailwind CSS, responsive mobile-first."
+```
+
+### 2. Definissez un role
+
+Donnez une identite a Claude pour cadrer ses reponses. Le role influence le niveau de detail, le vocabulaire et l'approche.
+
+### 3. Specifiez le format attendu
+
+Indiquez clairement la structure de la reponse souhaitee : code, liste, tableau, JSON, markdown, etc.
+
+### 4. Donnez des exemples (few-shot)
+
+Montrez a Claude ce que vous attendez avec des exemples concrets. C'est la technique la plus puissante pour obtenir le format exact souhaite.
+
+### 5. Iterez et affinez
+
+Le prompting est un dialogue. Affinez progressivement vos demandes en fonction des reponses obtenues.
+
+<Callout type="tip" title="La regle d'or">
+Imaginez que vous deleguez une tache a un collegue brillant mais qui ne connait rien a votre projet. Que lui diriez-vous pour qu'il reussisse du premier coup ? C'est exactement ce qu'il faut dire a Claude.
+</Callout>
+
+## Erreurs courantes a eviter
+
+| Erreur | Probleme | Solution |
+|--------|----------|----------|
+| Trop vague | Reponse generique | Ajoutez du contexte et des contraintes |
+| Pas de contexte | Claude ne comprend pas le probleme | Fournissez fichier, erreur, comportement attendu |
+| Tout d'un coup | Resultat incomplet | Decomposez en etapes |
+| Ne pas iterer | Frustration | Donnez du feedback precis |
+
+## CLAUDE.md : votre arme secrete
+
+Le fichier `CLAUDE.md` est le contexte persistant que Claude Code lit a chaque session. Placez-le a la racine de votre projet pour des resultats coherents et adaptes.
+
+```markdown
+# CLAUDE.md
+
+## Projet
+Nom : MonApp - Application SaaS de gestion de projet
+Stack : Next.js 14, TypeScript, Tailwind CSS, Prisma
+
+## Conventions de code
+- Immutabilite : toujours creer de nouveaux objets
+- Fichiers < 400 lignes, fonctions < 50 lignes
+- Tests obligatoires (couverture 80%+)
+
+## Git
+- Conventional commits : feat:, fix:, refactor:
+- PR avec description detaillee
+```
+
+## Techniques avancees
+
+### Prompt chaining
+
+Decomposez une tache complexe en une sequence de prompts ou chaque etape alimente la suivante. Cela force Claude a se concentrer sur une seule tache a la fois.
+
+### Orchestration multi-agents
+
+Utilisez plusieurs agents specialises qui travaillent en parallele sur differents aspects d'un probleme : planification, tests, revue de code et securite.
+
+<Callout type="info" title="Parallelisme">
+Les agents independants peuvent travailler simultanement. Cela divise le temps de travail et apporte des perspectives differentes sur le meme probleme.
+</Callout>
+
+## Prochaines etapes
+
+Explorez la [vision et les tendances IA](/future) pour comprendre ou va l'ecosysteme, ou revenez aux [fondamentaux](/getting-started) si vous souhaitez solidifier vos bases.

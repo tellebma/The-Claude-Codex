@@ -46,8 +46,14 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 # Copy pre-compressed static output from Next.js build
 COPY --from=compressor /app/out /usr/share/nginx/html
 
-# Run as non-root user
+# Create required nginx directories and set permissions for non-root user
+# These directories must exist for nginx to start, even with tmpfs mounts
 RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    mkdir -p /var/cache/nginx/client_temp \
+             /var/cache/nginx/proxy_temp \
+             /var/cache/nginx/fastcgi_temp \
+             /var/cache/nginx/uwsgi_temp \
+             /var/cache/nginx/scgi_temp && \
     chown -R nginx:nginx /var/cache/nginx && \
     chown -R nginx:nginx /var/log/nginx && \
     touch /tmp/nginx.pid && \

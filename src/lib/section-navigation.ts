@@ -84,7 +84,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
   configurator: {
     title: "Configurateur",
     items: [
-      { label: "Vue d'ensemble", href: "/configurator" },
+      { label: "Configurateur interactif", href: "/configurator" },
     ],
   },
   content: {

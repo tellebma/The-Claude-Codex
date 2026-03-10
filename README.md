@@ -24,7 +24,34 @@ The Claude Codex est un site web open-source qui rend accessible à tous les bon
 
 ### Progression du backlog
 
-9/18 epics terminées (50%) — voir [EPICS.md](./EPICS.md) pour le détail.
+13/18 epics terminées (72%) — voir [EPICS.md](./EPICS.md) pour le détail complet (32 epics au total).
+
+### Roadmap
+
+**Court terme — T1 2026**
+- Refonte section Prompting (6 pages enrichies)
+- Configurateur interactif (killer feature — génération de config ZIP)
+- Audit de crédibilité et correction des informations fictives
+- Contenu visuel : captures d'écran annotées, GIFs, vidéos embarquées
+
+**Moyen terme — T2 2026**
+- Parcours grand débutant et prérequis zéro (glossaire, tutoriel pas-à-pas)
+- Documentation de référence technique (cheatsheet CLI, hooks, mode headless)
+- Guides vidéo et walkthroughs visuels pour chaque section
+- Contributions communautaires (recettes, workflows, retours d'expérience)
+
+**Long terme — T3-T4 2026**
+- Parcours différenciés par persona (novice, dev expérimenté, entreprise)
+- Section Enterprise complète (sécurité, compliance, TCO, adoption d'équipe)
+- Répertoire searchable de MCP & Skills
+- Analytics self-hosted respectueux du RGPD (Matomo cookieless)
+- Enrichissement des sections Skills et Agents pour profils avancés
+
+**Très long terme — 2027+**
+- Support multilingue (anglais, espagnol, arabe et plus)
+- Tutoriels interactifs dans le navigateur
+- Contenu non-développeur et cas d'usage universels
+- Comparaisons objectives, limites et coûts réels de Claude Code
 
 ## Stack technique
 

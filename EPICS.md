@@ -557,8 +557,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 15 — Le Configurateur Interactif (killer feature)
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `APPROUVÉ` ✅ (code review + UX review + content accuracy review)
 - **Priorite** : P1 (haute)
 - **Estimation** : XL (1+ mois)
 - **Dependances** : Epic 3 (routing), Epic 7 (MDX pour les presets), Epic 5 (SEO)
@@ -2269,9 +2269,124 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 - DEMANDE UTILISATEUR (suivi d'usage, conformite RGPD, solution gratuite self-hosted)
 
 ---
+
+## Epic 33 — Dangers, pieges et idees recues : MCP, Plugins, contexte et couts
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWÉ`
+- **Priorite** : P1
+- **Estimation** : M (5-8 jours)
+- **Dependances** : Epic 19 (audit credibilite) recommandee avant pour eviter de documenter des infos fictives
+- **Description** : Creer une section de contenu educatif sur les **risques reels**, les **pieges courants** et les **fausses idees recues** lies a l'utilisation de MCP, des plugins, de la gestion du contexte et des couts. L'objectif est de faire de The Claude Codex un site qui ne vend pas du reve mais qui informe honnêtement, y compris sur les limites et dangers. Aucun autre site francophone ne traite ces sujets en profondeur.
+
+### Sujets identifies
+
+#### 1. Securite des MCP — Les risques que personne n'explique
+
+- **Prompt injection via tool results** : un MCP malveillant (ou compromis) peut injecter des instructions dans les resultats d'outils, detournant le comportement de Claude
+- **Exfiltration de donnees** : un MCP peut lire des fichiers locaux (code source, .env, credentials) et les envoyer a un serveur distant
+- **Execution de code arbitraire** : certains MCP executent du code sur la machine (Bash, eval). Un MCP malveillant = acces complet au systeme
+- **Supply chain attack** : installer un MCP depuis npm/GitHub sans audit = faire confiance aveugle a un inconnu
+- **Confusion de permissions** : l'utilisateur approuve "Read" mais le MCP lit /etc/passwd ou ~/.ssh/id_rsa
+- **MCP "officiels" vs communautaires** : comment verifier la legitimite et la surete d'un serveur MCP
+
+#### 2. Surconsommation de contexte — Le piege invisible
+
+- **Comment le contexte se remplit** : chaque outil MCP ajoute sa definition (schema JSON) au prompt systeme, meme s'il n'est jamais utilise
+- **Le mythe "plus de MCP = plus puissant"** : 10 MCP installes = des milliers de tokens de definitions d'outils consommes avant la moindre question
+- **Deferred tools** : comment Claude Code differe le chargement des schemas pour economiser du contexte, et pourquoi c'est important
+- **Signes d'un contexte sature** : reponses tronquees, perte de memoire conversationnelle, hallucinations en fin de session
+- **Impact sur la qualite des reponses** : plus le contexte est charge, moins Claude est precis sur chaque element
+- **Compaction automatique** : comment fonctionne la compression du contexte, ce qui est perdu, strategies pour la controler
+
+#### 3. Couts reels — Ce que personne ne dit
+
+- **Tokens = argent** : chaque token de contexte (MCP, outils, historique) est facture. Plus de MCP = facture plus elevee
+- **Calcul concret** : estimation du cout/session avec 0, 3, 10 MCP actifs
+- **Les abonnements Claude Pro/Max ne sont pas illimites** : limites de messages, throttling, difference entre les plans
+- **Couts caches des MCP tiers** : certains MCP appellent des APIs payantes (ex: Brave Search, bases de donnees cloud)
+- **Optimisation du ratio cout/valeur** : ne charger que ce qui est necessaire pour la tache en cours
+
+#### 4. Fausses idees recues — Mythbusting
+
+| Mythe | Realite |
+|-------|---------|
+| "Les MCP officiels sont tous surs" | Il n'y a pas de processus de certification. "Officiel" signifie souvent "dans le repo Anthropic" mais pas audite en profondeur |
+| "Plus j'installe de MCP, plus Claude est capable" | Chaque MCP non utilise gaspille du contexte et peut degrader les reponses |
+| "Claude Code est gratuit avec l'abonnement Pro" | Pro = 5x limite de messages. Les sessions longues avec beaucoup de MCP consomment le quota rapidement |
+| "Les plugins et MCP c'est pareil" | Les plugins sont un concept de configuration locale, les MCP sont des serveurs externes avec des implications de securite differentes |
+| "Je peux faire confiance a n'importe quel MCP sur GitHub" | Un MCP populaire peut etre compromis (typosquatting, dependance malveillante, mainteneur pirate) |
+| "Le mode auto/yolo est pratique et sans risque" | Il autorise toutes les actions sans confirmation = un MCP malveillant a carte blanche |
+| "CLAUDE.md est lu uniquement par Claude" | Tout processus ayant acces au repo peut lire CLAUDE.md. Ne JAMAIS y mettre de secrets |
+| "La fenetre de contexte est infinie avec la compaction" | La compaction resume et perd des details. Les sessions tres longues degradent la precision |
+
+#### 5. Bonnes pratiques — Comment se proteger
+
+- **Principe du moindre privilege** : n'installer que les MCP necessaires a la tache
+- **Audit avant installation** : verifier le code source, les permissions demandees, la reputation de l'auteur
+- **Profils de configuration** : utiliser des fichiers `.mcp.json` par projet plutot qu'une config globale
+- **Monitoring du contexte** : surveiller l'utilisation du contexte (commande `/cost` ou equivalent)
+- **Rotation de sessions** : commencer des sessions fraiches pour les taches critiques plutot que de reutiliser une session saturee
+- **Mode permission par defaut** : ne jamais utiliser `dangerouslySkipPermissions` en production
+- **Review des resultats MCP** : verifier les outputs suspects, surtout si un MCP retourne du contenu inattendu
+- **Separation des environnements** : ne pas utiliser les memes MCP en dev et en acces a des donnees sensibles
+
+#### 6. Guide de depannage contexte
+
+- "Claude oublie ce que je lui ai dit" → contexte sature, strategies de resolution
+- "Les reponses sont de plus en plus lentes" → trop de MCP actifs, comment diagnostiquer
+- "Claude invente des choses en fin de session" → hallucinations liees a la saturation, quand redemarrer
+- "Ma facture API a explose" → audit des tokens consommes, identification des MCP gourmands
+
+### Pages MDX prevues
+
+| # | Fichier | Titre | Section |
+|---|---------|-------|---------|
+| 1 | `content/mcp/securite-mcp.mdx` | Securite des MCP : risques et protections | MCP |
+| 2 | `content/prompting/gestion-contexte.mdx` | Gerer son contexte : eviter la saturation | Prompting |
+| 3 | `content/content/couts-reels-claude-code.mdx` | Couts reels de Claude Code : ce que personne ne dit | Content |
+| 4 | `content/content/mythes-claude-code.mdx` | 8 idees recues sur Claude Code (et la verite) | Content |
+| 5 | `content/content/bonnes-pratiques-securite.mdx` | Guide de securite : MCP, plugins et permissions | Content |
+
+### User Stories
+
+1. En tant qu'utilisateur debutant, je veux comprendre les risques de securite des MCP **avant** d'en installer afin de ne pas compromettre mon systeme par ignorance.
+2. En tant qu'utilisateur regulier, je veux savoir pourquoi Claude "oublie" des choses en fin de session afin de comprendre le fonctionnement du contexte et adapter mon usage.
+3. En tant qu'utilisateur soucieux des couts, je veux un calcul concret du cout par session avec differentes configurations de MCP afin de maitriser ma facture.
+4. En tant qu'utilisateur experimente, je veux une liste de fausses idees recues dementie par des faits afin de corriger mes propres assumptions.
+5. En tant qu'utilisateur en entreprise, je veux un guide de bonnes pratiques de securite afin de deployer Claude Code sans risque pour les donnees de l'entreprise.
+6. En tant qu'utilisateur frustre par des performances degradees, je veux un guide de depannage contexte afin de diagnostiquer et resoudre les problemes.
+
+### Criteres d'acceptation
+
+- 5 pages MDX publiees avec frontmatter complet (title, description, order, section)
+- Chaque page contient au moins 1 schema/diagramme explicatif (ex: flux d'une attaque MCP, diagramme de saturation contexte)
+- La page "mythes" est structuree en format mythbusting (mythe → realite → source/preuve)
+- La page "couts" contient des calculs concrets avec des chiffres reels (prix/token, estimation par session)
+- La page "securite" contient un checklist actionnable (copier-coller dans un CLAUDE.md)
+- Toutes les pages ont des meta SEO et sont indexees dans `search-index.ts`
+- Les pages sont liees depuis les sections MCP, Prompting et Content existantes
+- Aucune information fictive (tout est verifiable avec la documentation officielle Anthropic)
+
+### Fichiers impactes
+
+- `content/mcp/securite-mcp.mdx` (nouveau)
+- `content/prompting/gestion-contexte.mdx` (nouveau)
+- `content/content/couts-reels-claude-code.mdx` (nouveau)
+- `content/content/mythes-claude-code.mdx` (nouveau)
+- `content/content/bonnes-pratiques-securite.mdx` (nouveau)
+- `src/lib/section-navigation.ts` (ajout des nouvelles pages)
+- `src/lib/metadata.ts` (ajout dans SITE_PAGES)
+- `src/lib/search-index.ts` (ajout des entrees de recherche)
+
+### Source
+
+- DEMANDE UTILISATEUR (dangers MCP/plugins, surconsommation contexte, mythbusting)
+
+---
 ---
 
-## Tableau recapitulatif des Epics Persona-Driven (19-32)
+## Tableau recapitulatif des Epics Persona-Driven (19-33)
 
 | Epic | Titre | Priorite | Estimation | Personas cibles | Statut | Review | Source |
 |------|-------|----------|------------|-----------------|--------|--------|--------|
@@ -2289,8 +2404,9 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 30 | Enrichissement section Skills tous niveaux | P2 | S | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 31 | Enrichissement section Agents profils avances | P2 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 32 | Suivi d'usage et analytics (Matomo) | P2 | S | Toutes (ops) | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
+| 33 | Dangers, pieges et idees recues (MCP, contexte, couts) | P1 | M | Toutes | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
 
-**Progression** : 0/14 terminee (0%)
+**Progression** : 0/15 terminee (0%)
 
 ---
 
@@ -2328,17 +2444,18 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 
 ### Phase C — Contenu expert et reference (Semaines 6-10)
 
-**Objectif** : Ajouter la profondeur technique que les experts et connaisseurs attendent.
+**Objectif** : Ajouter la profondeur technique que les experts et connaisseurs attendent, y compris les risques et pieges.
 
 | Epic | Titre | Estimation |
 |------|-------|------------|
 | 23 | Documentation de reference technique | M |
 | 24 | Hooks, mode headless et CI/CD | M |
 | 25 | Creation MCP custom (tutoriel complet) | M |
+| 33 | Dangers, pieges et idees recues (MCP, contexte, couts) | M |
 
-**Parallelisme** : Les 3 epics sont independantes et peuvent etre travaillees en parallele.
+**Parallelisme** : Les 4 epics sont independantes et peuvent etre travaillees en parallele. L'Epic 33 est particulierement complementaire de l'Epic 25 (MCP custom) : l'une montre comment construire, l'autre avertit des risques.
 
-**Livrable** : Un site avec de la profondeur technique bookmarkable.
+**Livrable** : Un site avec de la profondeur technique bookmarkable et un discours honnete sur les limites.
 
 ---
 
@@ -2379,12 +2496,12 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 
 | Persona | Score actuel | Score projete (toutes epics) | Epics principales |
 |---------|-------------|------------------------------|-------------------|
-| **Novice** | 5.5/10 | 8/10 | 20, 21, 22, 26, 28 |
-| **Debutant** | 5.5/10 | 8/10 | 20, 21, 22, 26, 28 |
-| **Experimente** | 6/10 | 8/10 | 19, 22, 23, 26, 29 |
-| **Connaisseur** | 5.5/10 | 8.5/10 | 19, 22, 24, 25, 30, 31 |
-| **Expert** | 4.5/10 | 7.5/10 | 19, 23, 24, 25, 29, 31 |
-| **Entreprise** | 3/10 | 7/10 | 27, 26, 29 |
+| **Novice** | 5.5/10 | 8/10 | 20, 21, 22, 26, 28, 33 |
+| **Debutant** | 5.5/10 | 8/10 | 20, 21, 22, 26, 28, 33 |
+| **Experimente** | 6/10 | 8.5/10 | 19, 22, 23, 26, 29, 33 |
+| **Connaisseur** | 5.5/10 | 8.5/10 | 19, 22, 24, 25, 30, 31, 33 |
+| **Expert** | 4.5/10 | 8/10 | 19, 23, 24, 25, 29, 31, 33 |
+| **Entreprise** | 3/10 | 7.5/10 | 27, 26, 29, 33 |
 
 ---
 

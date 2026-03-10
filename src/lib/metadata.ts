@@ -438,11 +438,11 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/configurator",
-    title: "Configurateur Claude Code",
+    title: "Configurateur interactif Claude Code",
     description:
-      "Configurez Claude Code de maniere interactive. Generez votre CLAUDE.md, settings.json et plus encore.",
-    priority: 0.5,
+      "Générez votre configuration Claude Code sur mesure. CLAUDE.md, settings.json, .mcp.json et agents — en quelques clics.",
+    priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-10",
   },
 ];

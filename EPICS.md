@@ -523,8 +523,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 14 — Section Prompting (6 pages)
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2 (moyenne)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 3, Epic 5, Epic 7
@@ -708,13 +708,13 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 11 | Section Plugins (5 pages) | P2 | M | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
 | 12 | Section Skills (4 pages) | P2 | M | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
 | 13 | Section Agents & Subagents (5 pages) | P2 | L | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
-| 14 | Section Prompting (6 pages) | P2 | M | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
+| 14 | Section Prompting (6 pages) | P2 | M | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
 | 15 | Configurateur interactif | P1 | XL | 4 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 16 | Section Vision & Futur (3 pages) | P3 | S | 5 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 17 | Page 404 et finitions UX | P3 | XS | 5 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 18 | Tests, CI/CD et assurance qualite | P1 | M | Continu | `TODO` | `NON REVIEWÉ` | LES DEUX |
 
-**Progression** : 13/18 terminee (72%) — 13/18 reviewee (72%)
+**Progression** : 14/18 terminee (78%) — 14/18 reviewee (78%)
 
 ---
 
@@ -765,7 +765,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 11 | Section Plugins (5 pages) | M | `TERMINÉ` | `REVIEWÉ ✅` |
 | 12 | Section Skills (4 pages) | M | `TERMINÉ` | `REVIEWÉ ✅` |
 | 13 | Section Agents & Subagents (5 pages) | L | `TERMINÉ` | `REVIEWÉ ✅` |
-| 14 | Section Prompting (6 pages) | M | `TODO` | `NON REVIEWÉ` |
+| 14 | Section Prompting (6 pages) | M | `TERMINÉ` | `REVIEWÉ ✅` |
 
 **Parallelisme** : Les sections sont independantes et peuvent etre developpees en parallele par des contributeurs differents. Ordre recommande si sequentiel : Getting Started > MCP > Plugins > Skills > Agents > Prompting (suit le parcours utilisateur).
 
@@ -2175,9 +2175,103 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | Connaisseur | 5.5 → 8 (+2.5) | La lacune #1 comblee |
 
 ---
+
+## Epic 32 — Suivi d'usage et analytics respectueux de la vie privee
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWÉ`
+- **Priorite** : P2
+- **Estimation** : S (2-3 jours)
+- **Dependances** : Aucune (peut etre fait a tout moment)
+- **Description** : Mettre en place un systeme d'analytics self-hosted, respectueux du RGPD et sans cookies tiers, pour comprendre l'usage du site (pages visitees, parcours utilisateurs, sources de trafic). La solution retenue est **Matomo** en mode cookieless, auto-hebergee via Docker. Alternative evaluee : Umami (plus leger mais moins complet).
+
+### Analyse comparative des solutions gratuites et self-hosted
+
+| Critere | Matomo | Umami | Plausible (self-hosted) | GoatCounter |
+|---------|--------|-------|------------------------|-------------|
+| **Licence** | GPL v3 | MIT | AGPL v3 | EUPL |
+| **Mode cookieless** | Oui (natif) | Oui (par defaut) | Oui (par defaut) | Oui |
+| **RGPD sans bandeau** | Oui (cookieless) | Oui | Oui | Oui |
+| **Stack Docker** | PHP + MySQL/MariaDB | Node.js + PostgreSQL | Elixir + ClickHouse + PG | Go + SQLite/PG |
+| **Ressources serveur** | ~256 MB RAM | ~128 MB RAM | ~512 MB RAM (ClickHouse) | ~64 MB RAM |
+| **Features analytics** | Tres complet (goals, heatmaps, funnels, events, SEO) | Essentiel (pages, referrers, events, UTM) | Essentiel (pages, referrers, goals) | Minimaliste (pages, referrers) |
+| **UI/UX dashboard** | Fonctionnel (classique) | Moderne et epure | Moderne et epure | Minimaliste |
+| **API de donnees** | Oui (tres riche) | Oui | Oui | Oui (basique) |
+| **Communaute** | Tres grande (15+ ans) | En croissance rapide | En croissance | Petite |
+| **Maturite** | Tres mature | Mature | Mature | Stable |
+
+### Decision : Matomo (mode cookieless)
+
+**Raisons du choix** :
+1. **Fonctionnalites** : Suite analytique la plus complete en self-hosted gratuit (goals, events, funnels, SEO keywords, custom dimensions)
+2. **RGPD** : Mode cookieless natif = zero bandeau de consentement necessaire, les donnees restent 100% sur le serveur
+3. **Ecosysteme Docker** : Image officielle bien maintenue, s'integre naturellement dans le `docker-compose.yml` existant
+4. **Perennite** : 15+ ans d'existence, enorme communaute, mises a jour regulieres
+5. **Migration** : Si besoin d'evoluer vers Umami a l'avenir (plus leger), la migration est simple (les deux exportent en CSV/API)
+
+### User Stories
+
+1. En tant que proprietaire du site, je veux connaitre le nombre de visiteurs uniques et de pages vues par jour/semaine/mois afin de mesurer l'audience du site.
+2. En tant que proprietaire du site, je veux voir les pages les plus consultees afin de prioriser le contenu a ameliorer ou enrichir.
+3. En tant que proprietaire du site, je veux connaitre les sources de trafic (moteurs de recherche, reseaux sociaux, liens directs) afin d'optimiser ma strategie de diffusion.
+4. En tant que proprietaire du site, je veux voir le parcours de navigation des utilisateurs afin de comprendre comment ils explorent le site et identifier les points de sortie.
+5. En tant que visiteur europeen, je veux que mes donnees soient traitees sans cookies et sans transfert hors UE afin que ma vie privee soit respectee.
+6. En tant que proprietaire du site, je veux un dashboard accessible en self-hosted afin de consulter les metriques sans dependre d'un service tiers.
+
+### Taches techniques
+
+1. **Ajout de Matomo au docker-compose.yml** :
+   - Service `matomo` (image officielle `matomo:fpm-alpine`)
+   - Service `matomo-db` (MariaDB)
+   - Volume persistant pour les donnees Matomo et la base
+   - Reseau interne partage avec le service Nginx existant
+2. **Configuration Nginx** :
+   - Ajout d'un bloc `location /matomo` ou sous-domaine `analytics.claude-codex.fr`
+   - Reverse proxy vers le service Matomo
+   - Headers de securite adaptes
+3. **Integration du script de tracking** :
+   - Ajout du snippet Matomo dans `src/app/layout.tsx` (balise `<Script>`)
+   - Configuration en mode **cookieless** (`_paq.push(['disableCookies'])`)
+   - Respect du `Do Not Track` du navigateur
+   - Chargement asynchrone pour ne pas impacter les performances
+4. **Configuration Matomo** :
+   - Desactivation des cookies (mode cookieless)
+   - Anonymisation des IP (2 derniers octets)
+   - Retention des donnees : 12 mois
+   - Desactivation du tracking des User-Agents complets
+   - Configuration des goals (ex: visite de la page Getting Started, clic sur CTA)
+5. **Verification de conformite** :
+   - Pas de cookies tiers (conforme CLAUDE.md)
+   - Pas de transfert de donnees hors UE (self-hosted)
+   - Pas de tracking intrusif (cookieless + IP anonymisee)
+   - Score Lighthouse non impacte (script async < 5 KB)
+
+### Criteres d'acceptation
+
+- Matomo est accessible via le dashboard self-hosted
+- Le mode cookieless est actif (aucun cookie Matomo depose)
+- Les IPs sont anonymisees (2 derniers octets)
+- Le script de tracking est charge en asynchrone et ne degrade pas le Lighthouse score (< 50ms d'impact)
+- Le `docker-compose.yml` inclut les services Matomo + MariaDB avec volumes persistants
+- Le `Do Not Track` du navigateur est respecte
+- Aucune donnee personnelle identifiable n'est collectee
+- Les donnees restent 100% sur le serveur (pas de service tiers)
+
+### Fichiers impactes
+
+- `docker-compose.yml` (ajout services matomo + matomo-db)
+- `docker/nginx.conf` (reverse proxy Matomo)
+- `src/app/layout.tsx` (script de tracking)
+- `.env.example` (variables Matomo : URL, site ID)
+
+### Source
+
+- DEMANDE UTILISATEUR (suivi d'usage, conformite RGPD, solution gratuite self-hosted)
+
+---
 ---
 
-## Tableau recapitulatif des Epics Persona-Driven (19-31)
+## Tableau recapitulatif des Epics Persona-Driven (19-32)
 
 | Epic | Titre | Priorite | Estimation | Personas cibles | Statut | Review | Source |
 |------|-------|----------|------------|-----------------|--------|--------|--------|
@@ -2194,8 +2288,9 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 29 | Limites, comparaisons objectives et couts reels | P2 | M | Expert, Connaisseur, Experimente | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 30 | Enrichissement section Skills tous niveaux | P2 | S | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 31 | Enrichissement section Agents profils avances | P2 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 32 | Suivi d'usage et analytics (Matomo) | P2 | S | Toutes (ops) | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
 
-**Progression** : 0/13 terminee (0%)
+**Progression** : 0/14 terminee (0%)
 
 ---
 
@@ -2272,10 +2367,11 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 29 | Limites, comparaisons objectives et couts reels | M |
 | 30 | Enrichissement section Skills tous niveaux | S |
 | 31 | Enrichissement section Agents profils avances | M |
+| 32 | Suivi d'usage et analytics (Matomo) | S |
 
-**Parallelisme** : Toutes les epics sont independantes.
+**Parallelisme** : Toutes les epics sont independantes. L'Epic 32 (analytics) peut etre demarree a tout moment.
 
-**Livrable** : Un site complet qui repond a chaque persona.
+**Livrable** : Un site complet qui repond a chaque persona, avec un suivi d'usage respectueux du RGPD.
 
 ---
 

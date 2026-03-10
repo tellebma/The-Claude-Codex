@@ -30,19 +30,19 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "Skills : Enseignez de nouveaux talents a Claude Code",
+  title: "Skills : Enseignez de nouveaux talents \u00e0 Claude Code",
   description:
-    "Apprenez a utiliser et creer des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacites et enseignez de nouveaux talents a votre assistant IA.",
+    "Apprenez \u00e0 utiliser et cr\u00e9er des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacit\u00e9s et enseignez de nouveaux talents \u00e0 votre assistant IA.",
   path: "/skills",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "Skills : Enseignez de nouveaux talents a Claude Code",
+  title: "Skills : Enseignez de nouveaux talents \u00e0 Claude Code",
   description:
-    "Apprenez a utiliser et creer des Skills pour Claude Code.",
+    "Apprenez \u00e0 utiliser et cr\u00e9er des Skills pour Claude Code.",
   url: `${SITE_URL}/skills`,
   datePublished: "2026-03-07",
-  dateModified: "2026-03-07",
+  dateModified: "2026-03-10",
 });
 
 const topSkills = [
@@ -314,7 +314,7 @@ export default function SkillsPage() {
               <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                 Crees par vous dans le dossier{" "}
                 <code className="rounded bg-slate-200/80 px-1.5 py-0.5 text-xs font-mono dark:bg-slate-700/80">
-                  ~/.claude/skills/
+                  ~/.claude/commands/
                 </code>
                 . Ils sont disponibles dans tous vos projets et refletent vos
                 preferences personnelles.
@@ -322,7 +322,7 @@ export default function SkillsPage() {
               <CodeBlock
                 code={`# Structure des custom skills
 ~/.claude/
-  skills/
+  commands/
     my-api-pattern.md
     react-component.md
     deploy-checklist.md`}
@@ -356,7 +356,7 @@ export default function SkillsPage() {
                 code={`# Skills de projet
 mon-projet/
   .claude/
-    skills/
+    commands/
       api-convention.md
       db-migration.md
   CLAUDE.md  # instructions globales`}
@@ -570,7 +570,7 @@ mon-projet/
                   contiendra vos Skills personnalises.
                 </p>
                 <CodeBlock
-                  code={`mkdir -p ~/.claude/skills`}
+                  code={`mkdir -p ~/.claude/commands`}
                   language="bash"
                   filename="terminal"
                 />
@@ -595,7 +595,7 @@ mon-projet/
                   standardises.
                 </p>
                 <CodeBlock
-                  code={`touch ~/.claude/skills/react-component.md`}
+                  code={`touch ~/.claude/commands/react-component.md`}
                   language="bash"
                   filename="terminal"
                 />
@@ -687,7 +687,7 @@ export function Button({
 }
 \`\`\``}
                   language="markdown"
-                  filename="~/.claude/skills/react-component.md"
+                  filename="~/.claude/commands/react-component.md"
                 />
               </div>
             </div>
@@ -749,7 +749,7 @@ $ claude
                   Versionez vos Skills avec Git ! Creez un repository dedie
                   pour vos fichiers{" "}
                   <code className="rounded bg-emerald-200/50 px-1 py-0.5 text-xs font-mono dark:bg-emerald-800/30">
-                    ~/.claude/skills/
+                    ~/.claude/commands/
                   </code>{" "}
                   et partagez-les avec votre equipe. Chaque amelioration
                   profite a tout le monde.

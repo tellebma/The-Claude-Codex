@@ -1,0 +1,213 @@
+---
+title: "Skills vs MCP vs Plugins : le comparatif complet"
+description: "Comparaison détaillée entre Skills, MCP et Plugins Claude Code. Quand utiliser quoi, exemples concrets, combinaisons recommandées et FAQ."
+section: "skills"
+order: 4
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Trois mécanismes, trois missions
+
+Claude Code propose trois façons d'étendre ses capacités : les **Skills**, les **MCP** (Model Context Protocol) et les **Plugins**. Chacun répond à un besoin différent, et c'est en les **combinant** qu'on tire le meilleur de l'écosystème.
+
+<Callout type="info" title="L'analogie complète">
+Imaginez Claude Code comme un artisan dans son atelier.
+- Les **Skills** sont ses **recettes et procédures** — elles lui disent comment réaliser une tâche précise, étape par étape.
+- Les **MCP** sont ses **outils connectés** — une perceuse branchée au réseau électrique, un poste à souder relié au gaz. Ils donnent accès à des ressources externes.
+- Les **Plugins** sont des **extensions de son atelier** — un nouveau plan de travail, un bras robotisé, un système d'éclairage intelligent. Ils enrichissent les capacités internes de l'atelier lui-même.
+</Callout>
+
+## Le tableau comparatif
+
+| Critère | **Skill** | **MCP** | **Plugin** |
+|---|---|---|---|
+| **Définition** | Fichier Markdown d'instructions | Serveur externe exposant des outils via JSON-RPC | Extension modulaire intégrée |
+| **Analogie** | Recette de cuisine | Prise USB vers un service | Application installée |
+| **Format** | Fichier `.md` | Serveur (Node.js, Python, etc.) | Package avec manifeste `plugin.json` |
+| **Installation** | Copier dans `.claude/commands/` | `claude mcp add` ou `settings.json` | `/plugin install` ou marketplace |
+| **Portée** | Projet ou utilisateur | Projet ou global | Global, activable par projet |
+| **Invocation** | Slash command (`/project:...`) | Automatique (Claude choisit l'outil) | Automatique ou via commande |
+| **Intelligence** | Instructions suivies par Claude | Outils appelés par Claude | Capacités intégrées dans Claude |
+| **Complexité** | Faible (juste du Markdown) | Moyenne (serveur à maintenir) | Moyenne (structure de package) |
+| **Partage** | Via git (`.claude/commands/`) | Via configuration partagée | Via marketplace ou git |
+| **Exemples** | Review PR, TDD Guide, Deploy | GitHub, Slack, PostgreSQL | Design system, agents spécialisés |
+
+## Quand utiliser quoi ?
+
+Le choix dépend de ce que vous essayez d'accomplir. Voici un guide de décision rapide.
+
+### Utilisez un Skill quand...
+
+- Vous voulez **standardiser un processus** (review, deploy, onboarding)
+- Vous voulez **enseigner un comportement** spécifique à Claude
+- Vous voulez quelque chose de **simple à créer et maintenir**
+- Le workflow est **auto-contenu** (pas besoin d'appeler un service externe)
+- Vous voulez **partager un process** avec l'équipe via git
+
+```bash
+# Exemples parfaits pour un Skill
+/project:review-pr          # Process de review standardisé
+/project:create-component   # Création de composant selon vos conventions
+/user:tdd-guide             # Workflow TDD personnel
+/project:deploy-checklist   # Checklist de déploiement
+```
+
+### Utilisez un MCP quand...
+
+- Vous devez **accéder à un service externe** (API, base de données, SaaS)
+- Vous voulez que Claude **lise ou écrive** dans un système tiers
+- L'outil doit être **toujours disponible** (pas invoqué manuellement)
+- Vous avez besoin d'un **protocole standardisé** de communication
+
+```bash
+# Exemples parfaits pour un MCP
+claude mcp add github       # Accéder aux repos, PRs, issues GitHub
+claude mcp add slack        # Lire et envoyer des messages Slack
+claude mcp add postgres     # Requêter une base de données
+claude mcp add context7     # Accéder à la documentation à jour
+```
+
+<Card title="Pour approfondir les MCP" variant="default">
+Consultez notre [guide complet sur les MCP](/mcp/what-are-mcps) pour comprendre leur fonctionnement en détail, et le [top MCP recommandés](/mcp/best-productivity) pour découvrir les plus utiles.
+</Card>
+
+### Utilisez un Plugin quand...
+
+- Vous voulez **enrichir les capacités internes** de Claude Code
+- Vous avez besoin d'un **package complet** (agents + skills + templates)
+- Vous voulez bénéficier d'un **écosystème maintenu** par la communauté
+- La fonctionnalité est **complexe** et nécessite plusieurs fichiers coordonnés
+
+```bash
+# Exemples parfaits pour un Plugin
+/plugin install everything-claude-code   # Pack complet d'agents et skills
+/plugin install frontend-design          # Design system intégré
+/plugin install security-scanner         # Analyseur de sécurité avancé
+```
+
+<Card title="Pour approfondir les Plugins" variant="default">
+Consultez notre [guide complet sur les Plugins](/plugins/what-are-plugins) pour comprendre leur architecture, et le [top plugins essentiels](/plugins/best-essential) pour démarrer.
+</Card>
+
+## Les combinaisons gagnantes
+
+La vraie puissance de Claude Code se révèle quand vous **combinez** ces trois mécanismes. Voici les combinaisons les plus efficaces.
+
+### Combo 1 : Développement full-stack
+
+```bash
+# MCP pour le contexte externe
+claude mcp add github          # Accès aux issues et PRs
+claude mcp add context7        # Documentation à jour des librairies
+
+# Plugin pour les capacités internes
+/plugin install everything-claude-code
+
+# Skills pour les workflows d'équipe
+/project:create-api            # Créer un endpoint selon vos conventions
+/project:review-pr             # Review standardisée
+```
+
+**Résultat** : Claude accède aux issues GitHub (MCP), utilise les agents spécialisés du plugin, et suit vos conventions d'équipe (Skills).
+
+### Combo 2 : Workflow de sécurité
+
+```bash
+# MCP pour scanner les dépendances
+claude mcp add npm-audit
+
+# Skill pour l'audit complet
+/project:security-audit
+
+# Plugin pour l'analyse avancée
+/plugin install security-scanner
+```
+
+**Résultat** : Le MCP remonte les CVE des dépendances, le Skill structure l'audit selon votre checklist, et le plugin enrichit l'analyse avec des patterns de détection avancés.
+
+### Combo 3 : Onboarding développeur
+
+```bash
+# MCP pour accéder à la documentation
+claude mcp add confluence
+claude mcp add context7
+
+# Skill pour guider le nouvel arrivant
+/project:onboarding
+
+# Plugin pour la productivité
+/plugin install prompt-improver
+```
+
+**Résultat** : Le MCP donne accès à la documentation interne (Confluence), le Skill guide le nouveau développeur à travers les étapes d'onboarding, et le plugin l'aide à formuler ses demandes efficacement.
+
+<Callout type="tip" title="Commencez simple, enrichissez progressivement">
+Pas besoin de tout installer d'un coup. Commencez par un ou deux Skills pour vos workflows quotidiens, ajoutez les MCP pour les services que vous utilisez, puis explorez les plugins quand vous serez à l'aise. L'écosystème est conçu pour une adoption progressive.
+</Callout>
+
+## Arbre de décision
+
+Vous ne savez pas quel mécanisme utiliser ? Suivez ce guide :
+
+<Steps>
+<Step title="Avez-vous besoin d'accéder à un service externe ?" stepNumber={1}>
+**Oui** → Utilisez un **MCP**. C'est le seul mécanisme qui connecte Claude Code à des services tiers (GitHub, Slack, bases de données, APIs).
+
+**Non** → Passez à la question suivante.
+</Step>
+
+<Step title="Voulez-vous standardiser un processus ou un workflow ?" stepNumber={2}>
+**Oui** → Utilisez un **Skill**. C'est le moyen le plus simple de codifier un processus. Un fichier Markdown suffit.
+
+**Non** → Passez à la question suivante.
+</Step>
+
+<Step title="Avez-vous besoin d'un package complet de fonctionnalités ?" stepNumber={3} isLast>
+**Oui** → Utilisez un **Plugin**. Les plugins regroupent agents, skills et templates dans un package cohérent, maintenu par un auteur ou la communauté.
+
+**Non** → Un Skill simple suffit probablement. Commencez par là et évoluez si besoin.
+</Step>
+</Steps>
+
+## FAQ
+
+### Puis-je utiliser les trois en même temps ?
+
+Absolument. Les trois mécanismes sont conçus pour être **complémentaires**. Un Plugin peut inclure des Skills, et ces Skills peuvent utiliser des outils exposés par des MCP. C'est la combinaison des trois qui donne les meilleurs résultats.
+
+### Un Skill peut-il appeler un MCP ?
+
+Pas directement. Un Skill donne des **instructions** à Claude, et Claude peut ensuite décider d'utiliser un outil MCP si c'est pertinent. Le Skill ne "connaît" pas les MCP, mais Claude fait le lien intelligemment.
+
+### Un Plugin remplace-t-il les Skills et les MCP ?
+
+Non. Un Plugin peut **inclure** des Skills (fichiers Markdown dans son dossier `skills/`), mais il ne remplace pas les MCP. Les MCP restent nécessaires pour la connexion aux services externes. Pensez au Plugin comme un **superset** des Skills avec des capacités supplémentaires.
+
+### Comment choisir entre un Skill de projet et un Skill personnel ?
+
+- **Skill de projet** (`.claude/commands/`) : pour tout ce qui concerne les conventions et workflows **partagés** par l'équipe. Versionné avec le code.
+- **Skill personnel** (`~/.claude/commands/`) : pour vos préférences individuelles de travail. Non partagé.
+
+### Les Skills consomment-ils du contexte ?
+
+Oui, quand un Skill est invoqué, son contenu est injecté dans le contexte de Claude. C'est pourquoi il est important de garder les Skills **concis et ciblés**. Un Skill de 100-200 lignes est idéal. Au-delà de 500 lignes, envisagez de le découper.
+
+### Peut-on créer un MCP custom ?
+
+Oui, un MCP est un serveur qui implémente le protocole JSON-RPC. Vous pouvez en créer avec le [SDK MCP](https://modelcontextprotocol.io) en TypeScript, Python ou d'autres langages. Consultez notre [guide MCP](/mcp/what-are-mcps) pour plus de détails.
+
+### Quel est l'impact sur les performances ?
+
+- **Skills** : impact minimal (juste du texte injecté dans le contexte)
+- **MCP** : dépend du service externe (latence réseau, temps de réponse de l'API)
+- **Plugins** : impact variable selon le plugin (certains ajoutent des agents qui consomment du contexte)
+
+## Pour aller plus loin
+
+- [Qu'est-ce qu'un Skill ?](/skills/what-are-skills) — Comprendre le concept en profondeur
+- [Créer un Skill custom](/skills/create-custom) — Guide pas à pas pour écrire vos propres Skills
+- [Comprendre les MCP](/mcp/what-are-mcps) — Tout sur le Model Context Protocol
+- [Comprendre les Plugins](/plugins/what-are-plugins) — Architecture et marketplace des plugins
+- [Guide de prompting](/prompting) — Optimiser vos interactions avec Claude Code
+- [Configurer Claude Code](/configurator) — Personnaliser votre environnement

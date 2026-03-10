@@ -1,0 +1,305 @@
+---
+title: "Top Skills recommandés 2026"
+description: "Les meilleurs Skills Claude Code pour la productivité, le développement et la qualité de code. TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing et plus."
+section: "skills"
+order: 2
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Les Skills incontournables
+
+Voici les Skills les plus populaires et les plus utiles de l'écosystème Claude Code en 2026. Chacun transforme Claude en **expert spécialisé** pour une tâche précise. Ils sont classés par catégorie pour vous aider à trouver celui dont vous avez besoin.
+
+<Callout type="info" title="Où trouver ces Skills ?">
+Les Skills présentés ici sont disponibles sous forme de fichiers Markdown à placer dans `.claude/commands/` (projet) ou `~/.claude/commands/` (personnel). Certains sont inclus dans des [plugins populaires](/plugins/best-essential) comme **everything-claude-code**. D'autres sont disponibles directement dans la documentation officielle d'Anthropic.
+</Callout>
+
+---
+
+## Développement & Qualité
+
+### TDD Guide
+
+Le Skill **TDD Guide** transforme Claude en coach de développement piloté par les tests. Il impose une discipline stricte : écrire le test d'abord, le faire échouer, puis implémenter le minimum pour le faire passer.
+
+```bash
+# Invocation
+/user:tdd-guide créer une fonction de validation d'email
+```
+
+**Cas d'usage :**
+- Implémenter une nouvelle fonctionnalité avec une couverture de tests solide
+- Apprendre le TDD sur un projet existant
+- Refactoriser du code legacy en ajoutant des tests au préalable
+
+**Ce que fait le Skill :**
+
+<Steps>
+<Step title="RED — Écrire le test" stepNumber={1}>
+Claude écrit un test qui décrit le comportement attendu. Le test doit échouer car la fonctionnalité n'existe pas encore.
+</Step>
+
+<Step title="GREEN — Implémenter" stepNumber={2}>
+Claude écrit le code minimal pour faire passer le test. Pas d'optimisation prématurée, juste le strict nécessaire.
+</Step>
+
+<Step title="REFACTOR — Améliorer" stepNumber={3} isLast>
+Claude refactorise le code tout en s'assurant que les tests passent toujours. Il vérifie la couverture et propose des cas limites supplémentaires.
+</Step>
+</Steps>
+
+<Card title="Exemple de résultat" variant="default">
+Le Skill produit un fichier de test (`email-validator.test.ts`) et un fichier d'implémentation (`email-validator.ts`), avec un rapport de couverture montrant 95%+ de couverture sur la fonctionnalité.
+</Card>
+
+---
+
+### Code Reviewer
+
+Le **Code Reviewer** simule une revue de code par un développeur senior. Il analyse le diff courant et produit un rapport structuré avec des suggestions concrètes.
+
+```bash
+# Reviewer le diff courant par rapport à main
+/user:code-reviewer
+
+# Reviewer un diff spécifique
+/user:code-reviewer develop
+```
+
+**Cas d'usage :**
+- Vérifier son code avant de créer une Pull Request
+- Obtenir un second regard automatisé sur des changements critiques
+- Former les juniors aux bonnes pratiques de code review
+
+**Ce que le Skill vérifie :**
+- Bugs logiques et cas limites non gérés
+- Failles de sécurité (injections, XSS, CSRF)
+- Problèmes de performance (boucles imbriquées, requêtes N+1)
+- Respect des conventions du projet (via CLAUDE.md)
+- Couverture de tests des changements
+- Code dupliqué et opportunités de refactorisation
+
+<Callout type="tip" title="Combinez avec le TDD Guide">
+Utilisez le **TDD Guide** pour implémenter, puis le **Code Reviewer** pour vérifier. Cette combinaison couvre à la fois la qualité des tests et la qualité du code.
+</Callout>
+
+---
+
+### Debugging
+
+Le Skill **Debugging** structure l'approche de résolution de bugs. Au lieu de tâtonner, Claude suit une méthode systématique pour identifier et corriger le problème.
+
+```bash
+# Débugger une erreur spécifique
+/user:debugging TypeError: Cannot read property 'map' of undefined
+
+# Débugger avec un contexte
+/user:debugging le formulaire de contact ne soumet pas les données
+```
+
+**Cas d'usage :**
+- Résoudre des erreurs runtime avec une approche structurée
+- Investiguer des bugs intermittents
+- Comprendre des comportements inattendus dans du code complexe
+
+**Ce que fait le Skill :**
+1. Reproduire le problème (identifier les conditions exactes)
+2. Isoler la cause racine (pas le symptôme)
+3. Proposer un correctif minimal et ciblé
+4. Ajouter un test de régression
+5. Vérifier qu'aucun effet de bord n'est introduit
+
+---
+
+## Architecture & Planification
+
+### Plan
+
+Le Skill **Plan** est votre assistant de planification pour les fonctionnalités complexes. Il décompose une demande en phases, identifie les risques et produit un plan d'action détaillé.
+
+```bash
+# Planifier une nouvelle fonctionnalité
+/user:plan ajouter un système d'authentification OAuth2
+
+# Planifier une migration
+/user:plan migrer de REST à GraphQL
+```
+
+**Cas d'usage :**
+- Démarrer une feature complexe sans savoir par où commencer
+- Estimer l'effort de développement d'une tâche
+- Identifier les dépendances et les risques avant de coder
+- Créer une roadmap technique pour un epic
+
+**Ce que le Skill produit :**
+- Un **PRD** (Product Requirements Document) synthétique
+- Une liste de tâches ordonnées avec dépendances
+- Les risques identifiés et les stratégies de mitigation
+- Les fichiers qui seront créés ou modifiés
+- Une estimation de complexité (S/M/L/XL)
+
+<Card title="Conseil d'utilisation" variant="accent">
+Lancez **Plan** avant toute fonctionnalité qui touche plus de 3 fichiers. Le temps investi dans la planification est toujours récupéré lors de l'implémentation. Combinez avec l'[agent architecte](/agents) pour les décisions structurantes.
+</Card>
+
+---
+
+### Brainstorming
+
+Le **Brainstorming** aide à explorer des idées et des solutions sous plusieurs angles. Claude adopte différentes perspectives pour enrichir la réflexion.
+
+```bash
+# Explorer des solutions techniques
+/user:brainstorm quelle base de données choisir pour un système de chat temps réel
+
+# Explorer des approches produit
+/user:brainstorm comment améliorer l'expérience d'onboarding
+```
+
+**Cas d'usage :**
+- Choisir entre plusieurs approches techniques
+- Explorer des solutions créatives à un problème
+- Préparer une RFC ou une proposition technique
+- Évaluer les compromis (trade-offs) d'une architecture
+
+**Ce que fait le Skill :**
+- Génère 3 à 5 approches distinctes
+- Évalue chaque approche selon des critères (performance, maintenabilité, coût, complexité)
+- Identifie les compromis de chaque solution
+- Recommande l'approche la plus adaptée au contexte du projet
+
+---
+
+## Tests & Sécurité
+
+### E2E Testing
+
+Le Skill **E2E Testing** génère des tests end-to-end pour les parcours utilisateurs critiques. Il cible les frameworks populaires comme Playwright et Cypress.
+
+```bash
+# Générer des tests E2E pour un parcours
+/user:e2e-testing parcours d'inscription et connexion
+
+# Générer pour un framework spécifique
+/user:e2e-testing --framework playwright panier d'achat
+```
+
+**Cas d'usage :**
+- Couvrir les parcours critiques avant une release
+- Automatiser les tests de régression sur les flux principaux
+- Générer des tests pour des fonctionnalités existantes non couvertes
+
+**Ce que le Skill produit :**
+
+```typescript
+// Exemple de sortie pour un parcours d'inscription
+import { test, expect } from "@playwright/test";
+
+test.describe("Inscription utilisateur", () => {
+  test("inscription avec des données valides", async ({ page }) => {
+    await page.goto("/register");
+    await page.fill("[name=email]", "test@example.com");
+    await page.fill("[name=password]", "SecureP@ss123");
+    await page.fill("[name=confirmPassword]", "SecureP@ss123");
+    await page.click("button[type=submit]");
+    await expect(page).toHaveURL("/dashboard");
+    await expect(
+      page.getByText("Bienvenue")
+    ).toBeVisible();
+  });
+
+  test("affiche une erreur avec un email invalide", async ({ page }) => {
+    await page.goto("/register");
+    await page.fill("[name=email]", "invalid-email");
+    await page.click("button[type=submit]");
+    await expect(
+      page.getByText("Email invalide")
+    ).toBeVisible();
+  });
+});
+```
+
+---
+
+### Security Review
+
+Le **Security Review** analyse votre code sous l'angle de la sécurité. Il identifie les vulnérabilités connues (OWASP Top 10) et propose des correctifs.
+
+```bash
+# Audit de sécurité global
+/user:security-review
+
+# Audit ciblé sur un module
+/user:security-review src/auth/
+```
+
+**Cas d'usage :**
+- Audit de sécurité avant déploiement en production
+- Vérification des endpoints API exposés
+- Revue de la gestion des secrets et tokens
+- Conformité OWASP pour les applications web
+
+**Ce que le Skill vérifie :**
+- Injections SQL et NoSQL
+- Failles XSS (Cross-Site Scripting)
+- Problèmes d'authentification et d'autorisation
+- Exposition de données sensibles (clés API, tokens, mots de passe)
+- Mauvaise configuration de sécurité (CORS, headers, CSP)
+- Dépendances avec des vulnérabilités connues (CVE)
+
+<Callout type="warning" title="Pas un remplacement pour un audit professionnel">
+Le Skill Security Review est un excellent premier filtre, mais il ne remplace pas un audit de sécurité professionnel pour les applications critiques. Utilisez-le comme complément à vos pratiques de sécurité existantes.
+</Callout>
+
+---
+
+## Design & Frontend
+
+### Frontend Design
+
+Le **Frontend Design** aide à concevoir et implémenter des interfaces utilisateur modernes. Il intègre les principes de design system et les bonnes pratiques d'accessibilité.
+
+```bash
+# Créer un composant UI
+/user:frontend-design créer un composant de pricing table responsive
+
+# Améliorer un composant existant
+/user:frontend-design améliorer l'accessibilité du composant Modal
+```
+
+**Cas d'usage :**
+- Créer des composants UI accessibles et responsive
+- Implémenter un design system cohérent
+- Convertir une maquette Figma en code
+- Améliorer l'UX d'un composant existant
+
+**Ce que le Skill produit :**
+- Composant React/Vue/Svelte fonctionnel
+- Styles Tailwind CSS optimisés pour le responsive
+- Attributs d'accessibilité (ARIA, focus management, contraste)
+- Variantes de thème (light/dark mode)
+- Tests de composant avec Testing Library
+
+---
+
+## Récapitulatif
+
+| Skill | Catégorie | Commande | Idéal pour |
+|---|---|---|---|
+| TDD Guide | Développement | `/user:tdd-guide` | Nouvelles fonctionnalités |
+| Code Reviewer | Qualité | `/user:code-reviewer` | Avant une PR |
+| Debugging | Développement | `/user:debugging` | Résolution de bugs |
+| Plan | Planification | `/user:plan` | Features complexes |
+| Brainstorming | Planification | `/user:brainstorm` | Exploration de solutions |
+| E2E Testing | Tests | `/user:e2e-testing` | Parcours critiques |
+| Security Review | Sécurité | `/user:security-review` | Avant un déploiement |
+| Frontend Design | Design | `/user:frontend-design` | Composants UI |
+
+## Prochaines étapes
+
+Vous connaissez maintenant les Skills les plus utiles. Passons à la création de vos propres Skills sur mesure.
+
+- [Créer un Skill custom pas à pas](/skills/create-custom) — Écrivez vos propres Skills adaptés à votre workflow
+- [Skills vs MCP vs Plugins](/skills/comparison) — Comprendre quand utiliser chaque outil
+- [Qu'est-ce qu'un Skill ?](/skills/what-are-skills) — Revenir aux fondamentaux

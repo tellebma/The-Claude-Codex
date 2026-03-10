@@ -204,12 +204,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/skills",
-    title: "Skills : Enseignez de nouveaux talents a Claude Code",
+    title: "Skills : Enseignez de nouveaux talents \u00e0 Claude Code",
     description:
-      "Apprenez a utiliser et creer des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacites et enseignez de nouveaux talents a votre assistant IA.",
+      "Apprenez \u00e0 utiliser et cr\u00e9er des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacit\u00e9s et enseignez de nouveaux talents \u00e0 votre assistant IA.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-10",
   },
   {
     path: "/prompting",
@@ -291,6 +291,42 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+  },
+  {
+    path: "/skills/what-are-skills",
+    title: "Qu\u2019est-ce qu\u2019un Skill Claude Code ?",
+    description:
+      "Comprendre les Skills Claude Code : concept, types, fonctionnement et diff\u00e9rences avec les instructions du CLAUDE.md. Guide complet pour ma\u00eetriser les slash commands.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/skills/best-skills",
+    title: "Top Skills recommand\u00e9s 2026",
+    description:
+      "Les meilleurs Skills Claude Code pour la productivit\u00e9, le d\u00e9veloppement et la qualit\u00e9 de code. TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing et plus.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/skills/create-custom",
+    title: "Cr\u00e9er un Skill custom pas \u00e0 pas",
+    description:
+      "Guide complet pour cr\u00e9er vos propres Skills Claude Code. Structure, bonnes pratiques, exemples concrets et tutoriel pas \u00e0 pas pour \u00e9crire des slash commands sur mesure.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/skills/comparison",
+    title: "Skills vs MCP vs Plugins : le comparatif complet",
+    description:
+      "Comparaison d\u00e9taill\u00e9e entre Skills, MCP et Plugins Claude Code. Quand utiliser quoi, exemples concrets, combinaisons recommand\u00e9es et FAQ.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
   },
   {
     path: "/agents",

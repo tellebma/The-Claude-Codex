@@ -46,6 +46,10 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Skills",
     items: [
       { label: "Vue d'ensemble", href: "/skills" },
+      { label: "Qu'est-ce qu'un Skill ?", href: "/skills/what-are-skills" },
+      { label: "Top Skills recommandés", href: "/skills/best-skills" },
+      { label: "Créer un Skill custom", href: "/skills/create-custom" },
+      { label: "Skills vs MCP vs Plugins", href: "/skills/comparison" },
     ],
   },
   agents: {

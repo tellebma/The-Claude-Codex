@@ -1,0 +1,288 @@
+---
+title: "Le guide complet CLAUDE.md"
+description: "Tout sur le fichier CLAUDE.md : rôle, structure, bonnes pratiques, commande /init, différences avec settings.json et .claude/rules/. Exemples réels et recommandations."
+section: "prompting"
+order: 5
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Le CLAUDE.md, c'est quoi ?
+
+Le fichier `CLAUDE.md` est le **contexte persistant** de votre projet. Claude Code le lit automatiquement au début de chaque session et l'utilise comme base pour toutes ses réponses. C'est votre moyen le plus efficace de transformer Claude d'un assistant généraliste en un membre de votre équipe qui connaît votre projet sur le bout des doigts.
+
+<Callout type="info" title="L'analogie du guide d'onboarding">
+Imaginez que vous accueillez un nouveau développeur dans votre équipe. Vous lui donnez un document qui résume : la stack technique, les conventions de code, l'architecture du projet, les commandes utiles et les règles à respecter. Le CLAUDE.md, c'est exactement ce document — sauf qu'il est lu par Claude à chaque nouvelle session.
+</Callout>
+
+## Générer un CLAUDE.md avec `/init`
+
+La manière la plus rapide de créer un CLAUDE.md est d'utiliser la commande built-in `/init`. Elle analyse automatiquement votre projet et génère un fichier adapté.
+
+```bash
+# Dans votre terminal, lancez Claude Code à la racine du projet
+claude
+
+# Puis tapez la commande /init
+> /init
+```
+
+<Steps>
+<Step title="Analyse automatique" stepNumber={1}>
+Claude scanne votre codebase : `package.json`, `tsconfig.json`, structure des dossiers, fichiers de configuration, dépendances installées.
+</Step>
+
+<Step title="Génération du CLAUDE.md" stepNumber={2}>
+Claude génère un fichier CLAUDE.md à la racine de votre projet avec les sections pertinentes : stack, commandes, architecture, conventions.
+</Step>
+
+<Step title="Personnalisation" stepNumber={3} isLast>
+Relisez le fichier généré et ajustez-le. Ajoutez vos conventions spécifiques, retirez ce qui n'est pas pertinent, et complétez les sections manquantes.
+</Step>
+</Steps>
+
+<Callout type="tip" title="Astuce : le CLAUDE.md est versionné">
+Commitez votre CLAUDE.md dans le repo. Toute l'équipe bénéficie du même contexte. Mettez-le à jour quand les conventions évoluent, comme vous le feriez pour un fichier `.eslintrc` ou un `tsconfig.json`.
+</Callout>
+
+## Structure recommandée
+
+Un CLAUDE.md efficace suit une structure en 6 sections. L'ordre compte : les informations les plus importantes d'abord, car Claude les pondère davantage.
+
+<Callout type="warning" title="Gardez votre CLAUDE.md sous 200 lignes">
+Un CLAUDE.md trop long surcharge le contexte de Claude et dilue les instructions importantes. Visez 100-200 lignes maximum. Si vous avez besoin de plus de détails, utilisez les fichiers `.claude/rules/` pour les règles thématiques.
+</Callout>
+
+### Section 1 : Présentation du projet
+
+```markdown
+# CLAUDE.md
+
+Site de documentation Next.js 14 (App Router), TypeScript strict, Tailwind CSS, MDX.
+Déployé via Docker (Nginx Alpine). 100% statique (SSG), pas de SSR ni d'API routes.
+URL : https://mon-site.fr
+```
+
+Cette section donne à Claude le contexte minimal pour comprendre *quel* projet il accompagne. Soyez bref : 2-3 lignes suffisent.
+
+### Section 2 : Commandes
+
+```markdown
+## Commandes
+
+- `npm run dev` : Serveur de dev (port 3000)
+- `npm run build` : Build de production
+- `npm run lint` : ESLint + Prettier
+- `npm run type-check` : Vérification TypeScript
+- `npm run test` : Vitest en mode watch
+- `npm run test:coverage` : Couverture de tests
+```
+
+Claude utilise ces commandes pour exécuter les vérifications nécessaires. Listez toutes les commandes que Claude pourrait avoir besoin d'utiliser.
+
+### Section 3 : Architecture
+
+```markdown
+## Architecture
+
+/app                  → Pages et layouts (App Router)
+/components/ui        → Composants réutilisables
+/components/layout    → Header, Footer, Sidebar
+/lib                  → Utilitaires et helpers
+/content              → Fichiers MDX
+/public               → Assets statiques
+```
+
+Cette section aide Claude à naviguer dans votre codebase et à créer les fichiers au bon endroit.
+
+### Section 4 : Style de code
+
+```markdown
+## Style de code
+
+- TypeScript strict, jamais de `any`
+- Exports nommés uniquement, pas de default exports (sauf pages Next.js)
+- Composants fonctionnels avec hooks, pas de classes React
+- Tailwind CSS uniquement, pas de CSS custom
+- Fichiers < 400 lignes, fonctions < 50 lignes
+- Immutabilité : toujours créer de nouveaux objets, jamais muter
+```
+
+Ce sont les règles que Claude doit **toujours** respecter dans ce projet. Soyez explicite.
+
+### Section 5 : Contenu et rédaction
+
+```markdown
+## Contenu
+
+- Tout le contenu est en français avec accents
+- Ton : accessible, enthousiaste, jamais condescendant
+- Utiliser des analogies concrètes pour les concepts techniques
+- Blocs de code avec langage spécifié pour le syntax highlighting
+```
+
+Si votre projet contient de la documentation ou du contenu éditorial, ces règles assurent la cohérence.
+
+### Section 6 : Règles importantes
+
+```markdown
+## Règles importantes
+
+- JAMAIS de secrets, clés API ou .env dans le repo
+- Accessibilité : WCAG 2.1 AA minimum
+- Images en WebP avec lazy loading
+- Score Lighthouse visé : > 90 sur les 4 métriques
+```
+
+Les règles critiques qui ne doivent jamais être violées. Claude les traite comme des contraintes prioritaires.
+
+## Exemple réel de CLAUDE.md bien écrit
+
+Voici un CLAUDE.md complet pour un projet SaaS typique.
+
+```markdown
+# CLAUDE.md
+
+MonApp — SaaS de gestion de projet. Monorepo pnpm.
+Stack : Next.js 14 (App Router), TypeScript, Tailwind CSS, Prisma, PostgreSQL.
+API : tRPC. Auth : NextAuth.js v5. Déploiement : Vercel.
+
+## Commandes
+
+- `pnpm dev` : Dev (turbo)
+- `pnpm build` : Build production
+- `pnpm lint` : ESLint
+- `pnpm type-check` : TypeScript
+- `pnpm test` : Vitest
+- `pnpm db:push` : Push schema Prisma
+- `pnpm db:seed` : Seed données de test
+
+## Architecture
+
+apps/web/           → Frontend Next.js
+apps/api/           → API tRPC
+packages/ui/        → Design system partagé
+packages/db/        → Prisma schema + client
+packages/config/    → ESLint, TypeScript, Tailwind configs
+
+## Style de code
+
+- TypeScript strict (no any, no as unknown)
+- Immutabilité obligatoire
+- Feature-based: src/features/[feature]/{components,hooks,utils}
+- Repository pattern pour l'accès données
+- Erreurs gérées avec Result<T, E> (pas de throw)
+
+## Conventions
+
+- Commits : feat:, fix:, refactor:, test:, docs:
+- PR : description détaillée + test plan
+- Tests : TDD obligatoire, couverture > 80%
+- API responses : { success, data, error, meta }
+
+## Sécurité
+
+- Pas de secrets en dur (.env uniquement)
+- Inputs validés avec Zod à toutes les frontières
+- Requêtes Prisma paramétrées
+- Rate limiting sur les endpoints publics
+```
+
+Ce CLAUDE.md fait environ 50 lignes. Il couvre l'essentiel sans surcharger le contexte.
+
+## Les 3 niveaux de CLAUDE.md
+
+Claude Code supporte des fichiers CLAUDE.md à plusieurs niveaux, du plus global au plus spécifique.
+
+<Card title="Niveau 1 : Global" variant="accent">
+**Chemin** : `~/.claude/CLAUDE.md`
+
+Vos préférences personnelles appliquées à **tous** vos projets : langue préférée, style de commit, conventions personnelles. Ce fichier est lu en premier.
+</Card>
+
+<Card title="Niveau 2 : Projet" variant="accent">
+**Chemin** : `./CLAUDE.md` (racine du projet)
+
+Le contexte spécifique au projet : stack, architecture, conventions d'équipe. C'est le fichier le plus important. Il est partagé avec l'équipe via le repo.
+</Card>
+
+<Card title="Niveau 3 : Module" variant="accent">
+**Chemin** : `./src/features/auth/CLAUDE.md`
+
+Le contexte ultra-spécifique pour un module : schéma de données, contraintes métier, API externes. Utilisez-le pour les modules complexes qui ont leurs propres règles.
+</Card>
+
+La hiérarchie fonctionne par accumulation : les trois niveaux se combinent, avec le niveau le plus spécifique qui a la priorité en cas de conflit.
+
+## CLAUDE.md vs settings.json vs .claude/rules/
+
+Ces trois fichiers ont des rôles différents et complémentaires. Voici comment les utiliser.
+
+| Fichier | Rôle | Portée | Contenu |
+|---------|------|--------|---------|
+| **CLAUDE.md** | Contexte du projet | Lu à chaque session | Stack, architecture, conventions, commandes |
+| **settings.json** | Configuration technique | Comportement de Claude | Modèle, permissions, tools autorisés |
+| **.claude/rules/** | Règles thématiques | Chargées par sujet | Sécurité, tests, performance, git |
+
+```bash
+# Structure complète de la configuration Claude Code
+projet/
+  CLAUDE.md                    # Contexte projet (commité)
+  .claude/
+    settings.json             # Config technique (commité ou non)
+    commands/                 # Skills de projet
+      review-pr.md
+      deploy.md
+    rules/                    # Règles thématiques (commitées)
+      security.md
+      testing.md
+      performance.md
+~/.claude/
+  CLAUDE.md                   # Préférences globales
+  settings.json              # Config globale
+  commands/                  # Skills personnels
+  rules/                     # Règles globales
+```
+
+<Callout type="tip" title="La règle simple">
+- **CLAUDE.md** = ce que Claude doit **savoir** sur le projet
+- **settings.json** = ce que Claude doit **faire** (ou ne pas faire) techniquement
+- **.claude/rules/** = les **règles détaillées** par thème (trop longues pour le CLAUDE.md)
+</Callout>
+
+## Bonnes pratiques
+
+### Ce qu'il faut mettre dans le CLAUDE.md
+
+- La stack technique et les versions importantes
+- Les commandes de build, test et lint
+- L'arborescence du projet (simplifiée)
+- Les conventions de code non standard
+- Les patterns architecturaux utilisés
+- Les règles de nommage
+
+### Ce qu'il NE faut PAS mettre
+
+- Des secrets, tokens ou mots de passe (utilisez `.env`)
+- Du code ou des snippets trop longs (utilisez les rules)
+- Des instructions contradictoires
+- Des informations qui changent souvent (mettez-les dans les rules)
+- Plus de 200 lignes de contenu
+
+### Mise à jour du CLAUDE.md
+
+Mettez à jour votre CLAUDE.md quand :
+- Vous ajoutez une nouvelle technologie à la stack
+- Vous changez de convention de code
+- Vous ajoutez un nouveau pattern architectural
+- Un nouveau membre rejoint l'équipe (ajoutez les conventions de l'équipe)
+- Vous constatez que Claude refait les mêmes erreurs (ajoutez la règle correspondante)
+
+## Prochaines étapes
+
+Votre CLAUDE.md est maintenant en place. Explorez les sujets connexes.
+
+- [Prompting avancé et multi-agents](/prompting/advanced) — Techniques avancées pour exploiter le contexte
+- [Créer un Skill custom](/skills/create-custom) — Transformez vos workflows en slash commands
+- [Comprendre les agents](/agents/what-are-agents) — Configurez des agents dans votre CLAUDE.md
+- [Le configurateur Claude Code](/configurator) — Outil interactif pour générer votre configuration

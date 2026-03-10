@@ -213,12 +213,66 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/prompting",
-    title: "Prompting : L'art de communiquer avec l'IA",
+    title: "Prompting : L\u2019art de communiquer avec l\u2019IA",
     description:
-      "Maitrisez l'art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
+      "Ma\u00eetrisez l\u2019art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour tirer le maximum de l\u2019IA.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/prompting/basics",
+    title: "Les bases du prompting avec Claude Code",
+    description:
+      "Apprenez les fondamentaux du prompting avec Claude Code. Structure d\u2019un bon prompt, 5 principes cl\u00e9s, exemples avant/apr\u00e8s et erreurs de d\u00e9butants \u00e0 \u00e9viter.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/prompting/directives",
+    title: "Les directives qui font la diff\u00e9rence",
+    description:
+      "Ma\u00eetrisez les directives avanc\u00e9es de prompting : r\u00f4les, contraintes, formats de sortie, patterns DO/DON\u2019T et instructions syst\u00e8me pour cadrer Claude Code efficacement.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/prompting/templates",
+    title: "Templates de prompts par m\u00e9tier",
+    description:
+      "Templates de prompts pr\u00eats \u00e0 l\u2019emploi pour d\u00e9veloppeurs web, mobile, backend, DevOps, designers et r\u00e9dacteurs. Copiez, adaptez et utilisez directement avec Claude Code.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/prompting/mistakes",
+    title: "Erreurs courantes \u00e0 \u00e9viter",
+    description:
+      "Les 10 erreurs les plus fr\u00e9quentes en prompting avec Claude Code. Pour chaque erreur : description, impact, correction et exemples concrets de mauvais vs bon prompt.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/prompting/claude-md",
+    title: "Le guide complet CLAUDE.md",
+    description:
+      "Tout sur le fichier CLAUDE.md : r\u00f4le, structure, bonnes pratiques, commande /init, diff\u00e9rences avec settings.json et .claude/rules/. Exemples r\u00e9els et recommandations.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/prompting/advanced",
+    title: "Prompting avanc\u00e9 et multi-agents",
+    description:
+      "Techniques avanc\u00e9es de prompting : chain-of-thought, few-shot, d\u00e9composition, multi-agents, Extended Thinking, Plan Mode et debugging de prompts.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
   },
   {
     path: "/future",

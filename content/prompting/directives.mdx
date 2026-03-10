@@ -1,0 +1,294 @@
+---
+title: "Les directives qui font la différence"
+description: "Maîtrisez les directives avancées de prompting : rôles, contraintes, formats de sortie, patterns DO/DON'T et instructions système pour cadrer Claude Code efficacement."
+section: "prompting"
+order: 2
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Qu'est-ce qu'une directive ?
+
+Une **directive** est une instruction explicite qui cadre le comportement de Claude. Contrairement à une simple demande ("fais ceci"), une directive définit *comment* Claude doit travailler : son rôle, ses limites, ses priorités et son format de sortie.
+
+<Callout type="info" title="L'analogie du metteur en scène">
+Si le prompt est le scénario, les directives sont les indications de mise en scène. Elles disent à l'acteur (Claude) *comment* jouer son rôle : le ton, le rythme, les contraintes techniques. Un bon metteur en scène ne laisse rien au hasard — un bon prompteur non plus.
+</Callout>
+
+Les directives se répartissent en quatre catégories fondamentales que nous allons explorer en détail.
+
+## 1. Les directives de rôle : "Tu es..."
+
+La directive de rôle est la plus puissante. Elle transforme Claude d'un assistant généraliste en un **expert spécialisé**. Le rôle influence le vocabulaire, le niveau de détail, l'approche méthodologique et les priorités.
+
+```markdown
+# Rôle de développeur senior
+Tu es un développeur senior React/TypeScript avec 10 ans d'expérience.
+Tu privilégies la maintenabilité, la performance et les bonnes pratiques.
+Tu commentes ton code en français et tu expliques chaque décision d'architecture.
+
+# Rôle d'architecte
+Tu es un architecte logiciel spécialisé en systèmes distribués.
+Tu analyses les trade-offs de chaque décision (scalabilité vs complexité,
+performance vs maintenabilité) et tu justifies tes choix avec des arguments techniques.
+
+# Rôle de reviewer sécurité
+Tu es un expert en sécurité applicative (OWASP Top 10).
+Tu analyses le code avec un regard paranoïaque : chaque input est suspect,
+chaque endpoint est une surface d'attaque potentielle.
+Tu classes tes findings par sévérité : CRITICAL, HIGH, MEDIUM, LOW.
+```
+
+<Card title="Comment choisir le bon rôle" variant="highlight">
+- **Développeur** : pour générer du code de qualité production
+- **Architecte** : pour les décisions de design et de structure
+- **Reviewer** : pour analyser du code existant
+- **Rédacteur technique** : pour la documentation
+- **DevOps** : pour les scripts, la CI/CD et l'infrastructure
+- **Data analyst** : pour l'analyse de données et les requêtes SQL
+</Card>
+
+### Combiner plusieurs rôles
+
+Vous pouvez attribuer plusieurs facettes à Claude pour couvrir différents aspects d'une tâche.
+
+```markdown
+Tu es un développeur fullstack senior ET un expert en accessibilité WCAG 2.1.
+Quand tu génères du code UI, tu appliques systématiquement :
+- Les bons rôles ARIA
+- La gestion du focus au clavier
+- Les contrastes de couleurs conformes AA
+- Les alternatives textuelles pour les éléments visuels
+```
+
+## 2. Les directives de contraintes
+
+Les contraintes délimitent le terrain de jeu de Claude. Elles définissent ce qui est obligatoire, interdit ou préférable. C'est grâce aux contraintes que vous obtenez du code conforme à *vos* standards plutôt qu'à des conventions génériques.
+
+### Le pattern ALWAYS/NEVER
+
+Ce pattern est le plus explicite pour définir des règles absolues. Claude les traite comme des priorités maximales.
+
+```markdown
+## Règles absolues
+
+ALWAYS:
+- Utilise TypeScript strict (pas de any, pas de as unknown)
+- Gère les erreurs explicitement avec try/catch ou Result types
+- Crée des objets immuables (spread operator, Object.freeze)
+- Valide les inputs à la frontière du système
+- Nomme les variables en anglais, les commentaires en français
+
+NEVER:
+- Ne mute jamais un objet existant
+- Ne fais jamais de console.log en production (utilise un logger structuré)
+- N'utilise jamais de valeurs magiques (hardcodées) — utilise des constantes
+- Ne crée jamais de fichier de plus de 400 lignes
+- Ne commite jamais de secrets ou de tokens dans le code
+```
+
+### Contraintes techniques
+
+Les contraintes techniques spécifient l'environnement, les dépendances autorisées et les limites du système.
+
+```markdown
+## Contraintes techniques
+
+Stack autorisée :
+- Framework : Next.js 14 (App Router uniquement, pas de Pages Router)
+- Style : Tailwind CSS (pas de CSS modules, pas de styled-components)
+- State : Zustand pour le state global, React state pour le local
+- Formulaires : react-hook-form + Zod pour la validation
+- API : tRPC ou Server Actions (pas de REST traditionnel)
+- Tests : Vitest + Testing Library (pas de Jest, pas d'Enzyme)
+
+Dépendances interdites :
+- Moment.js (utilise date-fns ou dayjs)
+- lodash complet (importe les fonctions individuellement si nécessaire)
+- jQuery (jamais)
+```
+
+## 3. Les directives de format de sortie
+
+Le format de sortie contrôle la structure de la réponse de Claude. Sans directive de format, Claude choisit un format par défaut qui peut ne pas correspondre à vos besoins.
+
+```markdown
+## Format de sortie attendu
+
+Pour chaque composant React généré, fournis :
+
+1. **Le composant** — code complet avec types TypeScript
+2. **Les types** — interfaces et types exportés dans un fichier séparé
+3. **Les tests** — au minimum : rendu sans erreur, props obligatoires, interactions utilisateur
+4. **L'exemple d'utilisation** — un snippet montrant comment utiliser le composant
+5. **Les notes** — limites connues, améliorations possibles, dépendances requises
+```
+
+### Formats spécialisés
+
+```markdown
+# Pour une analyse de code
+Fournis ton analyse au format :
+| Fichier | Ligne | Sévérité | Problème | Correction suggérée |
+|---------|-------|----------|----------|---------------------|
+
+# Pour une comparaison technique
+Fournis un tableau comparatif :
+| Critère | Option A | Option B | Recommandation |
+|---------|----------|----------|----------------|
+
+# Pour un plan d'implémentation
+Fournis un plan structuré :
+## Phase 1 : [nom] (durée estimée)
+- [ ] Tâche 1
+- [ ] Tâche 2
+```
+
+## 4. Les directives par exemples (few-shot)
+
+Montrer à Claude ce que vous attendez est souvent plus efficace que de le décrire. La technique du **few-shot prompting** consiste à fournir des exemples concrets du résultat attendu.
+
+```markdown
+Génère des messages de commit en suivant ce pattern :
+
+Exemple 1 : ajout d'un bouton de connexion
+→ feat: add login button with OAuth2 redirect
+
+Exemple 2 : correction d'un bug d'affichage sur mobile
+→ fix: resolve navbar overflow on mobile viewport
+
+Exemple 3 : réécriture du service d'authentification
+→ refactor: rewrite auth service with repository pattern
+
+Maintenant, génère pour :
+- ajout de la pagination sur la liste des produits
+- correction du calcul de TVA qui arrondissait mal
+- mise à jour des dépendances npm
+```
+
+<Callout type="tip" title="La puissance du few-shot">
+Avec 2-3 exemples bien choisis, Claude comprend le pattern et le reproduit fidèlement. C'est la technique la plus fiable pour obtenir un format de sortie exact.
+</Callout>
+
+## Les patterns DO/DON'T
+
+Le pattern DO/DON'T est une version structurée et visuelle des contraintes. Il fonctionne particulièrement bien dans le fichier [CLAUDE.md](/prompting/claude-md) ou dans les [Skills](/skills/what-are-skills).
+
+```markdown
+## Conventions de code
+
+DO:
+- Utilise des fonctions fléchées pour les composants React
+- Exporte les types et interfaces depuis un fichier types.ts dédié
+- Gère le loading, l'erreur et le succès dans chaque appel API
+- Utilise des early returns pour réduire l'imbrication
+
+DON'T:
+- Ne crée pas de composants classes React
+- N'utilise pas useEffect pour du fetching (utilise useSWR ou React Query)
+- Ne fais pas de prop drilling sur plus de 2 niveaux
+- N'utilise pas d'index comme clé dans les listes dynamiques
+```
+
+## Combiner les directives : un prompt complet
+
+Voici comment les quatre types de directives se combinent dans un prompt professionnel.
+
+```markdown
+# Rôle
+Tu es un développeur backend senior spécialisé en API REST avec Node.js/Express.
+
+# Tâche
+Crée un endpoint POST /api/users/register pour l'inscription d'un utilisateur.
+
+# Contraintes
+ALWAYS:
+- Valide le body avec Zod (email, password, name)
+- Hash le mot de passe avec bcrypt (12 rounds)
+- Retourne un JWT access token (15 min) et un refresh token (7 jours)
+- Log chaque tentative d'inscription (succès ou échec)
+
+NEVER:
+- Ne stocke jamais le mot de passe en clair
+- Ne retourne jamais le hash dans la réponse API
+- N'utilise pas de any TypeScript
+
+# Format de sortie
+1. Le controller dans src/controllers/auth.controller.ts
+2. Le service dans src/services/auth.service.ts
+3. Le schéma Zod dans src/schemas/auth.schema.ts
+4. Les tests unitaires du service
+5. Un exemple de requête curl pour tester
+```
+
+## Directives dans le CLAUDE.md vs dans le prompt
+
+Il est important de savoir où placer vos directives pour maximiser leur efficacité.
+
+| Où | Quand | Exemple |
+|---|-------|---------|
+| **CLAUDE.md** | Règles permanentes du projet | Stack, conventions, patterns obligatoires |
+| **Skills** | Workflows réutilisables | Review de PR, déploiement, onboarding |
+| **Prompt** | Instructions ponctuelles | Tâche spécifique à accomplir maintenant |
+| **.claude/rules/** | Règles thématiques | Sécurité, tests, performance |
+
+<Callout type="tip" title="La hiérarchie des directives">
+Les directives du prompt actuel ont la priorité la plus élevée, suivies des Skills activés, puis du CLAUDE.md, puis des règles globales. Si deux directives se contredisent, celle du niveau le plus spécifique l'emporte.
+</Callout>
+
+## Exemples concrets par type de tâche
+
+### Pour du code frontend
+
+```markdown
+Tu es un développeur frontend expert React/Next.js.
+
+Règles UI :
+- Mobile-first, responsive sur tous les breakpoints
+- Accessibilité WCAG 2.1 AA minimum
+- Animations subtiles avec framer-motion (pas de surcharge)
+- Dark mode supporté via CSS variables ou next-themes
+```
+
+### Pour du code backend
+
+```markdown
+Tu es un développeur backend Node.js/TypeScript.
+
+Règles API :
+- Format de réponse uniforme : { success, data, error, meta }
+- Codes HTTP sémantiques (201 Created, 404 Not Found, 422 Unprocessable)
+- Rate limiting sur tous les endpoints publics
+- Pagination cursor-based pour les listes
+```
+
+### Pour de la revue de code
+
+```markdown
+Tu es un reviewer de code senior. Pour chaque issue trouvée, fournis :
+- Sévérité : CRITICAL / HIGH / MEDIUM / LOW
+- Catégorie : bug, security, performance, maintainability, style
+- Fichier et ligne concernés
+- Description du problème
+- Suggestion de correction avec code
+```
+
+### Pour de l'analyse de données
+
+```markdown
+Tu es un data analyst senior. Pour chaque analyse :
+- Commence par les statistiques descriptives
+- Identifie les outliers et les données manquantes
+- Propose des visualisations pertinentes
+- Termine par des recommandations actionnables
+- Explique les résultats en langage non-technique
+```
+
+## Prochaines étapes
+
+Maintenant que vous maîtrisez les directives, passez à la pratique avec des templates concrets.
+
+- [Templates de prompts par métier](/prompting/templates) — Des prompts complets prêts à l'emploi
+- [Erreurs courantes à éviter](/prompting/mistakes) — Les pièges les plus fréquents en prompting
+- [Le guide complet CLAUDE.md](/prompting/claude-md) — Automatisez vos directives avec le fichier de configuration
+- [Créer un Skill custom](/skills/create-custom) — Transformez vos directives en slash commands réutilisables

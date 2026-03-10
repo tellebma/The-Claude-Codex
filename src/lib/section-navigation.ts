@@ -67,6 +67,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Prompting",
     items: [
       { label: "Vue d'ensemble", href: "/prompting" },
+      { label: "Les bases du prompting", href: "/prompting/basics" },
+      { label: "Directives avanc\u00e9es", href: "/prompting/directives" },
+      { label: "Templates par m\u00e9tier", href: "/prompting/templates" },
+      { label: "Erreurs \u00e0 \u00e9viter", href: "/prompting/mistakes" },
+      { label: "Guide CLAUDE.md", href: "/prompting/claude-md" },
+      { label: "Prompting avanc\u00e9", href: "/prompting/advanced" },
     ],
   },
   future: {
@@ -85,6 +91,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Contenus",
     items: [
       { label: "Tous les articles", href: "/content" },
+      { label: "Introduction à Claude Code", href: "/content/getting-started-intro" },
+      { label: "Guide complet des MCP", href: "/content/mcp-guide" },
+      { label: "Guide complet des Skills", href: "/content/skills-guide" },
+      { label: "Guide du prompting", href: "/content/prompting-guide" },
+      { label: "Vision et tendances IA", href: "/content/future-vision" },
     ],
   },
 };

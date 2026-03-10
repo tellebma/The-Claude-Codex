@@ -1,0 +1,255 @@
+---
+title: "Erreurs courantes à éviter"
+description: "Les 10 erreurs les plus fréquentes en prompting avec Claude Code. Pour chaque erreur : description, impact, correction et exemples concrets de mauvais vs bon prompt."
+section: "prompting"
+order: 4
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Pourquoi ces erreurs comptent
+
+Le prompting est une compétence qui s'apprend. La différence entre un débutant et un expert ne tient pas à la complexité des prompts, mais à la **capacité d'éviter les erreurs classiques**. Chacune des erreurs ci-dessous gaspille du temps, du contexte et de la qualité de réponse.
+
+<Callout type="info" title="La règle des 80/20 du prompting">
+80% des problèmes de réponse viennent de 20% des erreurs. Les 10 erreurs listées ici couvrent la quasi-totalité des situations où Claude "ne fait pas ce qu'on veut". Éliminez-les et vos résultats s'amélioreront drastiquement.
+</Callout>
+
+## Erreur 1 : Le prompt trop vague
+
+**Le problème** : vous demandez quelque chose sans donner assez de détails. Claude doit deviner ce que vous voulez et ses choix par défaut ne correspondent pas à vos attentes.
+
+**L'impact** : vous obtenez un résultat générique qui nécessite 3-4 itérations pour arriver au résultat souhaité. Vous perdez du temps et du contexte.
+
+```markdown
+# Mauvais prompt
+"Fais-moi une page de login"
+
+# Bon prompt
+"Crée une page de connexion en React/TypeScript avec Tailwind CSS.
+Champs : email (requis, format validé) et mot de passe (requis, min 8 caractères).
+Inclus un lien 'Mot de passe oublié' et un bouton 'Se connecter avec Google'.
+Gère les états : formulaire, loading, erreur (mauvais identifiants), succès.
+Utilise react-hook-form avec validation Zod.
+Accessible : labels explicites, aria-describedby pour les erreurs, focus management."
+```
+
+<Callout type="tip" title="Comment corriger">
+Posez-vous la question : "Si je donnais ce brief à un collègue qui ne connaît pas le projet, pourrait-il livrer exactement ce que j'attends ?" Si la réponse est non, ajoutez du contexte.
+</Callout>
+
+## Erreur 2 : L'absence de contexte technique
+
+**Le problème** : vous ne précisez pas la stack, les conventions ou l'environnement technique. Claude choisit des technologies par défaut qui ne correspondent pas à votre projet.
+
+**L'impact** : vous recevez du code en JavaScript quand vous vouliez du TypeScript, avec des classes React quand vous utilisez des hooks, ou avec styled-components quand votre projet est en Tailwind.
+
+```markdown
+# Mauvais prompt
+"Crée un composant de tableau"
+
+# Bon prompt
+"Crée un composant DataTable en React/TypeScript pour Next.js 14 (App Router).
+Stack : Tailwind CSS, @tanstack/react-table v8.
+Fonctionnalités : tri par colonne, pagination (20 items/page), recherche globale.
+Les données viennent d'une API REST avec le format { data: T[], total: number }.
+TypeScript strict, pas de any. Exports nommés uniquement."
+```
+
+## Erreur 3 : Tout demander d'un coup
+
+**Le problème** : vous demandez une application complète en un seul prompt. La tâche est trop grosse pour être réalisée correctement en une seule passe.
+
+**L'impact** : Claude produit un résultat superficiel sur chaque aspect plutôt qu'un résultat approfondi sur un aspect précis. Le code est souvent incomplet ou mal structuré.
+
+```markdown
+# Mauvais prompt
+"Crée-moi une app complète de gestion de projet avec auth, dashboard,
+gestion des tâches, API, base de données, tests, CI/CD et déploiement"
+
+# Bon prompt (décomposé en étapes)
+"Étape 1 : Créons le schéma de base de données.
+Crée le schema.prisma pour une app de gestion de tâches avec :
+- Table User (id uuid, email unique, name, passwordHash, createdAt)
+- Table Project (id uuid, name, description, ownerId FK User, createdAt)
+- Table Task (id uuid, title, description, status enum, priority enum,
+  projectId FK Project, assigneeId FK User nullable, dueDate nullable)
+Relations : User 1→N Project, Project 1→N Task, User 1→N Task (assigned)"
+```
+
+<Card title="La règle de décomposition" variant="highlight">
+Si votre prompt fait plus de 15 lignes ou couvre plus de 2 responsabilités distinctes, décomposez-le. Une tâche par prompt = un résultat de qualité par réponse.
+</Card>
+
+## Erreur 4 : Ne pas itérer
+
+**Le problème** : quand la première réponse n'est pas parfaite, vous repartez de zéro au lieu d'affiner la réponse existante.
+
+**L'impact** : vous perdez le contexte de la conversation et vous devez tout réexpliquer. Les prompts de suivi ciblés sont beaucoup plus efficaces.
+
+```markdown
+# Mauvais prompt (repartir de zéro)
+"Finalement, ce n'est pas ce que je voulais.
+Refais un composant Button complètement différent."
+
+# Bon prompt (itérer sur l'existant)
+"Le composant Button est une bonne base. Voici 3 ajustements :
+1. Remplace les variantes 'info' et 'success' par 'ghost' et 'outline'
+2. Ajoute la prop 'leftIcon' et 'rightIcon' de type LucideIcon
+3. L'état loading doit désactiver le bouton ET remplacer le label par un spinner
+Garde tout le reste tel quel."
+```
+
+## Erreur 5 : Ignorer la gestion des erreurs
+
+**Le problème** : vous demandez le "happy path" sans mentionner les cas d'erreur, les edge cases ou les états intermédiaires.
+
+**L'impact** : le code fonctionne dans le cas nominal mais plante dès qu'un utilisateur fait quelque chose d'inattendu.
+
+```markdown
+# Mauvais prompt
+"Crée une fonction qui récupère les utilisateurs depuis l'API"
+
+# Bon prompt
+"Crée une fonction fetchUsers qui récupère les utilisateurs depuis GET /api/users.
+Gère les cas suivants :
+- Succès : retourne le tableau d'utilisateurs typé User[]
+- Erreur réseau : retourne une erreur explicite avec retry automatique (3 tentatives)
+- Erreur 401 : déclenche le refresh token puis retente la requête
+- Erreur 429 : attend le délai indiqué dans Retry-After puis retente
+- Erreur 500 : log l'erreur et retourne un message user-friendly
+- Timeout : abort après 10 secondes avec message explicite
+Retourne un type Result<User[], ApiError> (pas de throw)."
+```
+
+## Erreur 6 : Le prompt copier-coller sans adaptation
+
+**Le problème** : vous copiez un template de prompt trouvé sur internet sans l'adapter à votre contexte spécifique.
+
+**L'impact** : le résultat est techniquement correct mais ne correspond pas à votre stack, vos conventions ou vos besoins métier.
+
+```markdown
+# Mauvais prompt (template non adapté)
+"Tu es un développeur expert. Crée un CRUD complet pour User."
+
+# Bon prompt (template adapté au projet)
+"Tu es un développeur backend TypeScript/Express dans notre projet MonApp.
+Crée le CRUD User en suivant nos conventions (voir CLAUDE.md) :
+- Repository pattern (src/repositories/user.repository.ts)
+- Service layer (src/services/user.service.ts)
+- Controller (src/controllers/user.controller.ts)
+- Validation Zod (src/schemas/user.schema.ts)
+- Format de réponse : { success, data, error, meta }
+- Tests du service avec mocks du repository"
+```
+
+<Callout type="tip" title="Utilisez les templates comme base">
+Les [templates par métier](/prompting/templates) sont conçus pour être adaptés. Ne les utilisez jamais tels quels — personnalisez-les avec le contexte de votre projet.
+</Callout>
+
+## Erreur 7 : Oublier de spécifier les tests
+
+**Le problème** : vous demandez du code sans mentionner les tests. Claude génère du code non testé par défaut.
+
+**L'impact** : vous devez faire un deuxième prompt pour les tests, et ces tests sont souvent déconnectés de l'implémentation car Claude a "oublié" les détails du code.
+
+```markdown
+# Mauvais prompt
+"Crée un hook useDebounce"
+
+# Bon prompt
+"Crée un hook useDebounce<T>(value: T, delay: number): T.
+Le hook retourne la valeur debouncée après 'delay' ms sans changement.
+Nettoie le timeout au unmount et quand value/delay changent.
+
+Inclus les tests unitaires (Vitest + Testing Library renderHook) :
+- Retourne la valeur initiale immédiatement
+- Retourne la valeur mise à jour après le délai
+- Ne met pas à jour si la valeur change avant le délai
+- Nettoie le timeout au démontage du composant
+- Fonctionne avec des types génériques (string, number, object)"
+```
+
+## Erreur 8 : Ne pas utiliser le CLAUDE.md
+
+**Le problème** : vous répétez les mêmes informations contextuelles dans chaque prompt au lieu de les centraliser dans le fichier [CLAUDE.md](/prompting/claude-md).
+
+**L'impact** : perte de temps, incohérence entre les sessions, et risque d'oublier des conventions importantes.
+
+```markdown
+# Mauvais (répéter à chaque prompt)
+"Utilise TypeScript strict, pas de any, Tailwind CSS, composants fonctionnels,
+exports nommés, fichiers < 400 lignes, immutabilité..."
+
+# Bon (utiliser CLAUDE.md)
+Mettez ces informations dans votre CLAUDE.md une fois pour toutes.
+Ensuite, votre prompt se réduit à :
+"Crée un composant SearchBar avec autocomplétion et debounce de 300ms."
+```
+
+<Card title="Créez votre CLAUDE.md en 2 minutes" variant="accent">
+Lancez `/init` dans Claude Code. La commande analyse votre projet et génère un CLAUDE.md personnalisé avec votre stack, vos conventions et votre architecture. Consultez le [guide complet CLAUDE.md](/prompting/claude-md) pour l'optimiser.
+</Card>
+
+## Erreur 9 : Ignorer le contexte de la conversation
+
+**Le problème** : vous traitez chaque prompt comme indépendant au lieu d'utiliser l'historique de la conversation comme contexte.
+
+**L'impact** : vous réexpliquez des informations que Claude connaît déjà, gaspillant de la fenêtre de contexte.
+
+```markdown
+# Mauvais (réexpliquer tout)
+"Pour mon projet Next.js 14 TypeScript Tailwind CSS Prisma PostgreSQL
+(celui dont on parlait tout à l'heure), crée un..."
+
+# Bon (s'appuyer sur le contexte)
+"Maintenant, crée le middleware de rate limiting pour les endpoints
+qu'on vient de créer. Utilise la même structure que le middleware auth."
+```
+
+## Erreur 10 : Ne pas vérifier les résultats
+
+**Le problème** : vous acceptez la réponse de Claude sans la vérifier ni lui demander de s'auto-évaluer.
+
+**L'impact** : des bugs subtils, des failles de sécurité ou des problèmes de performance passent inaperçus.
+
+```markdown
+# Mauvais (accepter sans vérifier)
+"Super, merci !" → on passe à la suite
+
+# Bon (demander une vérification)
+"Avant de continuer, vérifie le code que tu viens de générer :
+1. Y a-t-il des failles de sécurité ? (injection SQL, XSS, CSRF)
+2. Les edge cases sont-ils gérés ? (null, undefined, tableau vide, string vide)
+3. Le code est-il testable ? (pas de dépendances hardcodées)
+4. Les performances sont-elles acceptables pour 10 000 items ?
+5. Le TypeScript est-il strict ? (pas de any, pas de as unknown)"
+```
+
+<Callout type="warning" title="La responsabilité reste humaine">
+Claude est un outil puissant, mais la validation finale reste votre responsabilité. Relisez toujours le code généré, exécutez les tests, et vérifiez la logique métier avant de commiter.
+</Callout>
+
+## Tableau récapitulatif
+
+| Erreur | Symptôme | Solution rapide |
+|--------|----------|-----------------|
+| Trop vague | Résultat générique | Ajoutez détails et contraintes |
+| Pas de contexte | Mauvaise stack/conventions | Précisez la stack ou utilisez CLAUDE.md |
+| Tout d'un coup | Code superficiel | Décomposez en étapes |
+| Pas d'itération | Perte de contexte | Affinez la réponse existante |
+| Pas d'erreurs | Code fragile | Listez les edge cases |
+| Copier-coller | Code inadapté | Personnalisez les templates |
+| Pas de tests | Code non vérifié | Demandez les tests dans le prompt |
+| Pas de CLAUDE.md | Répétitions | Lancez `/init` |
+| Pas de contexte conversation | Gaspillage de contexte | Référencez les échanges précédents |
+| Pas de vérification | Bugs cachés | Demandez une auto-review |
+
+## Prochaines étapes
+
+Maintenant que vous savez quelles erreurs éviter, perfectionnez votre approche.
+
+- [Le guide complet CLAUDE.md](/prompting/claude-md) — Éliminez l'erreur n°8 définitivement
+- [Prompting avancé et multi-agents](/prompting/advanced) — Techniques de chaînage et orchestration
+- [Les bases du prompting](/prompting/basics) — Révisez les fondamentaux si nécessaire
+- [Comprendre les agents](/agents/what-are-agents) — Déléguez les vérifications à des agents spécialisés

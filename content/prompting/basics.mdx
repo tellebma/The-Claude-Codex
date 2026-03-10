@@ -1,0 +1,214 @@
+---
+title: "Les bases du prompting avec Claude Code"
+description: "Apprenez les fondamentaux du prompting avec Claude Code. Structure d'un bon prompt, 5 principes clés, exemples avant/après et erreurs de débutants à éviter."
+section: "prompting"
+order: 1
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Comment Claude interprète vos messages
+
+Quand vous écrivez un prompt à Claude Code, il ne se contente pas de lire vos mots — il analyse le **contexte**, la **structure** et l'**intention** derrière votre message. Comprendre ce mécanisme est la clé pour obtenir des résultats précis dès le premier essai.
+
+<Callout type="info" title="L'analogie du brief créatif">
+Imaginez que vous briefez un freelance talentueux mais qui ne connaît rien à votre projet. Plus votre brief est clair et structuré, plus le livrable sera conforme à vos attentes. Un brief vague produit un résultat vague. Un brief précis produit un résultat précis. Le prompting, c'est exactement ça : l'art de rédiger le brief parfait.
+</Callout>
+
+Claude Code prend en compte plusieurs couches d'information pour interpréter votre demande :
+
+1. **Le contexte du projet** — le fichier `CLAUDE.md`, les fichiers ouverts, le codebase
+2. **L'historique de la conversation** — les échanges précédents dans la session
+3. **Votre prompt actuel** — le message que vous venez d'écrire
+4. **Les instructions système** — les Skills et directives chargées
+
+Plus vous donnez de contexte explicite dans votre prompt, moins Claude doit deviner — et moins il fait d'erreurs.
+
+## Structure d'un bon prompt
+
+Un prompt efficace suit une structure en 4 parties. Vous n'avez pas besoin de toutes les utiliser à chaque fois, mais les connaître vous permet de les activer quand la situation l'exige.
+
+<Steps>
+<Step title="Le contexte" stepNumber={1}>
+Décrivez la situation : quel projet, quelle technologie, quel problème. Claude a besoin de comprendre *où* il intervient.
+
+```markdown
+Je travaille sur une API REST en Node.js/Express avec TypeScript.
+La base de données est PostgreSQL via Prisma.
+Le module d'authentification utilise JWT avec refresh tokens.
+```
+</Step>
+
+<Step title="La tâche" stepNumber={2}>
+Décrivez précisément ce que vous attendez. Utilisez des verbes d'action : "crée", "corrige", "analyse", "refactorise", "explique".
+
+```markdown
+Crée un middleware Express qui vérifie le JWT dans le header Authorization,
+extrait l'utilisateur et l'attache à req.user.
+```
+</Step>
+
+<Step title="Les contraintes" stepNumber={3}>
+Spécifiez les règles, limites et exigences non fonctionnelles. C'est ce qui transforme une réponse générique en solution adaptée à *votre* projet.
+
+```markdown
+Contraintes :
+- Gestion des erreurs : retourne 401 si token absent, 403 si token invalide/expiré
+- TypeScript strict (pas de any)
+- Le middleware doit être testable unitairement (injection du service JWT)
+- Log les tentatives d'accès invalides avec le timestamp et l'IP
+```
+</Step>
+
+<Step title="Le format de sortie" stepNumber={4} isLast>
+Dites à Claude comment structurer sa réponse. Code seul ? Avec explications ? En plusieurs fichiers ?
+
+```markdown
+Génère :
+1. Le middleware dans src/middlewares/auth.middleware.ts
+2. Les types dans src/types/auth.types.ts
+3. Les tests unitaires dans src/middlewares/__tests__/auth.middleware.test.ts
+4. Un exemple d'utilisation dans une route protégée
+```
+</Step>
+</Steps>
+
+## Les 5 principes clés du prompting
+
+Ces principes sont la base de toute interaction efficace avec Claude Code. Maîtrisez-les et vous obtiendrez des résultats considérablement meilleurs.
+
+### Principe 1 : Soyez précis
+
+La précision est le facteur numéro un de la qualité d'une réponse. Chaque détail que vous ajoutez élimine une ambiguïté.
+
+```markdown
+# Vague (mauvais)
+"Fais-moi un formulaire"
+
+# Précis (bon)
+"Crée un formulaire d'inscription en React avec TypeScript.
+Champs : email (requis, format validé), mot de passe (requis, min 8 caractères,
+1 majuscule, 1 chiffre), confirmation du mot de passe.
+Utilise react-hook-form avec validation Zod.
+Style avec Tailwind CSS, responsive mobile-first.
+Affiche les erreurs inline sous chaque champ."
+```
+
+### Principe 2 : Donnez du contexte
+
+Claude ne voit pas votre écran et ne connaît pas votre historique. Partagez le contexte pertinent : la stack, l'architecture, les conventions, le problème rencontré.
+
+```markdown
+# Sans contexte (mauvais)
+"Corrige ce bug"
+
+# Avec contexte (bon)
+"J'ai une erreur TypeError: Cannot read property 'map' of undefined
+dans mon composant ProductList.tsx à la ligne 42.
+Ce composant reçoit un prop 'products' depuis une API REST via useSWR.
+L'erreur apparaît au premier rendu, avant que l'API réponde.
+Le composant n'a pas de gestion de l'état de chargement."
+```
+
+### Principe 3 : Spécifiez le format
+
+Indiquez clairement la structure de la réponse souhaitée. Cela évite les allers-retours et vous fait gagner du temps.
+
+```markdown
+"Génère la réponse au format suivant :
+1. Un résumé en 2-3 phrases
+2. Le code complet avec commentaires inline
+3. Un tableau des dépendances nécessaires (nom | version | usage)
+4. Les instructions d'installation étape par étape"
+```
+
+### Principe 4 : Itérez progressivement
+
+Ne demandez pas tout d'un coup. Construisez votre solution étape par étape, en vérifiant chaque étape avant de passer à la suivante.
+
+```markdown
+# Itération 1
+"Crée un composant Button avec les props : label, onClick, disabled"
+
+# Itération 2
+"Ajoute les variantes de couleur : primary, secondary, danger, ghost"
+
+# Itération 3
+"Ajoute le support des icônes (à gauche et à droite) et un état loading"
+
+# Itération 4
+"Écris les tests unitaires avec Testing Library"
+```
+
+### Principe 5 : Vérifiez les résultats
+
+Demandez à Claude de vérifier son propre travail, d'expliquer ses choix ou de signaler les risques potentiels.
+
+```markdown
+"Après avoir généré le code, vérifie :
+- Qu'il compile sans erreur TypeScript
+- Que tous les cas limites sont gérés (null, undefined, tableau vide)
+- Qu'il n'y a pas de faille de sécurité évidente
+- Que les performances sont acceptables pour une liste de 10 000 éléments"
+```
+
+## Exemples avant/après : de débutant à optimisé
+
+Voici des transformations concrètes qui montrent comment un prompt médiocre devient excellent.
+
+<Card title="Exemple 1 : Créer un composant" variant="accent">
+
+**Avant** (prompt débutant) :
+```markdown
+"Fais-moi un composant de navigation"
+```
+
+**Après** (prompt optimisé) :
+```markdown
+"Crée un composant Navbar responsive en React/TypeScript avec Tailwind CSS.
+- Desktop : logo à gauche, liens de navigation au centre, bouton CTA à droite
+- Mobile : burger menu avec sidebar animée (framer-motion)
+- Dark mode toggle avec next-themes
+- Lien actif mis en surbrillance selon le pathname (usePathname de Next.js)
+- Accessible : aria-labels, focus visible, navigation au clavier
+- Les liens : Accueil, Fonctionnalités, Tarifs, Blog, Contact"
+```
+</Card>
+
+<Card title="Exemple 2 : Débugger une erreur" variant="accent">
+
+**Avant** (prompt débutant) :
+```markdown
+"Ça marche pas, aide-moi"
+```
+
+**Après** (prompt optimisé) :
+```markdown
+"Mon formulaire de connexion ne soumet pas les données.
+Comportement attendu : au clic sur 'Connexion', les données sont envoyées à POST /api/auth/login.
+Comportement observé : rien ne se passe, pas de requête réseau dans l'onglet Network.
+Stack : React 18, react-hook-form, axios.
+J'ai vérifié : le handleSubmit est bien attaché au form, pas d'erreur console.
+Voici le composant LoginForm.tsx : [code]"
+```
+</Card>
+
+## Les erreurs de débutants à éviter
+
+<Callout type="warning" title="Les 5 erreurs fatales">
+Ces erreurs sont les plus fréquentes chez les débutants. Les éviter vous fera gagner des heures de travail.
+</Callout>
+
+1. **Être trop vague** — "Fais-moi un truc cool" ne produit jamais un résultat utile. Soyez spécifique.
+2. **Ne pas donner de contexte** — Claude ne peut pas deviner votre stack, votre architecture ou vos conventions.
+3. **Tout demander d'un coup** — Décomposez les gros projets en étapes gérables.
+4. **Ne pas itérer** — Si la première réponse n'est pas parfaite, affinez votre demande au lieu de recommencer à zéro.
+5. **Ignorer le format de sortie** — Si vous ne dites pas à Claude comment structurer sa réponse, il choisira un format par défaut qui ne correspondra pas forcément à vos besoins.
+
+## Prochaines étapes
+
+Vous maîtrisez maintenant les fondamentaux du prompting. Pour aller plus loin :
+
+- [Les directives qui font la différence](/prompting/directives) — Apprenez à cadrer Claude avec des instructions avancées
+- [Templates de prompts par métier](/prompting/templates) — Des prompts prêts à l'emploi pour chaque type de tâche
+- [Le guide complet CLAUDE.md](/prompting/claude-md) — Automatisez votre contexte avec le fichier CLAUDE.md

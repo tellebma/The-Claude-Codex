@@ -1,0 +1,310 @@
+---
+title: "Orchestration multi-agents avancée"
+description: "Patterns d'orchestration pour combiner plusieurs agents Claude Code : séquentiel, parallèle, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques."
+section: "agents"
+order: 5
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## L'art de l'orchestration multi-agents
+
+L'orchestration multi-agents consiste à **combiner plusieurs agents** pour accomplir des tâches complexes qu'aucun agent seul ne pourrait réaliser efficacement. C'est le niveau avancé de l'utilisation de Claude Code — celui qui transforme un assistant intelligent en une véritable **équipe de développement automatisée**.
+
+<Callout type="info" title="L'analogie du chef d'orchestre">
+Un chef d'orchestre ne joue d'aucun instrument, mais il coordonne 80 musiciens pour produire une symphonie. De la même manière, l'orchestration multi-agents consiste à coordonner des agents spécialisés pour produire un résultat qu'aucun d'entre eux ne pourrait atteindre seul. Votre rôle est celui du chef d'orchestre : vous définissez la partition (les instructions), et Claude Code dirige l'exécution.
+</Callout>
+
+## Les 4 patterns d'orchestration
+
+### 1. Pattern séquentiel
+
+Le pattern le plus simple : les agents s'exécutent **l'un après l'autre**, chacun utilisant le résultat du précédent comme input.
+
+```bash
+# Séquentiel : chaque agent dépend du précédent
+> Étape 1 : Utilise l'agent planner pour planifier le refactoring
+> Étape 2 : Utilise l'agent tdd-guide pour implémenter selon le plan
+> Étape 3 : Utilise l'agent code-reviewer pour valider le code
+> Étape 4 : Utilise l'agent doc-updater pour mettre à jour la doc
+```
+
+<Card title="Quand utiliser le séquentiel ?" variant="accent">
+Utilisez ce pattern quand chaque étape dépend du résultat de la précédente. C'est le cas typique du pipeline de développement : planifier → coder → reviewer → documenter. Simple, prévisible, facile à débugger.
+</Card>
+
+**Avantages :**
+- Facile à comprendre et à débugger
+- Chaque étape a un contexte clair
+- Les erreurs sont facilement traçables
+
+**Inconvénients :**
+- Lent — les étapes ne peuvent pas être parallélisées
+- Si une étape échoue, tout le pipeline s'arrête
+
+### 2. Pattern parallèle
+
+Plusieurs agents travaillent **simultanément** sur des tâches indépendantes, puis leurs résultats sont fusionnés.
+
+```bash
+# Parallèle : les agents travaillent en même temps
+> Lance en parallèle :
+> - Agent security-reviewer : audite le module auth
+> - Agent code-reviewer : review le module API
+> - Agent e2e-runner : teste le parcours utilisateur
+> Puis synthétise les résultats des trois agents.
+```
+
+Ce pattern est idéal quand les tâches sont indépendantes. Claude Code peut lancer les subagents simultanément en utilisant la fonctionnalité **run in background**.
+
+```bash
+# Conceptuellement, Claude Code fait :
+# 1. Lance 3 subagents en parallèle (run_in_background: true)
+# 2. Attend que les 3 aient terminé
+# 3. Consolide les résultats dans un rapport unique
+```
+
+**Avantages :**
+- Beaucoup plus rapide que le séquentiel
+- Utilise les ressources efficacement
+
+**Inconvénients :**
+- Les agents ne peuvent pas dépendre des résultats des autres
+- Risque de conflits si les agents modifient les mêmes fichiers
+
+### 3. Pattern pipeline
+
+Un **pipeline** combine le séquentiel et le parallèle : certaines étapes sont parallélisées, d'autres sont séquentielles.
+
+```bash
+# Pipeline complet de release
+> Exécute ce pipeline :
+>
+> Phase 1 (parallèle) :
+>   - Agent tdd-guide : vérifie que tous les tests passent
+>   - Agent security-reviewer : audit de sécurité
+>
+> Phase 2 (séquentiel, après Phase 1) :
+>   - Agent code-reviewer : review finale du code
+>
+> Phase 3 (parallèle, après Phase 2) :
+>   - Agent doc-updater : mise à jour de la documentation
+>   - Agent e2e-runner : tests end-to-end
+>
+> Phase 4 (séquentiel, après Phase 3) :
+>   - Prépare le tag de release et le changelog
+```
+
+<Steps>
+<Step title="Phase 1 — Vérifications parallèles" stepNumber={1}>
+Les tests et l'audit de sécurité sont indépendants et peuvent s'exécuter en parallèle. Si l'un des deux échoue, le pipeline s'arrête.
+</Step>
+
+<Step title="Phase 2 — Review séquentielle" stepNumber={2}>
+La review ne peut commencer qu'une fois les tests et la sécurité validés. Le reviewer a besoin de savoir que le code est fonctionnel et sûr.
+</Step>
+
+<Step title="Phase 3 — Documentation et E2E" stepNumber={3}>
+La documentation et les tests E2E sont indépendants. Ils peuvent s'exécuter en parallèle après la review.
+</Step>
+
+<Step title="Phase 4 — Release" stepNumber={4} isLast>
+La préparation de la release n'est déclenchée que si toutes les étapes précédentes sont vertes.
+</Step>
+</Steps>
+
+### 4. Pattern split-role (multi-perspectives)
+
+Plusieurs agents analysent le **même sujet** sous des angles différents, puis un agent synthétiseur combine les perspectives.
+
+```bash
+# Split-role : perspectives multiples sur un même problème
+> Analyse cette PR sous 4 angles différents :
+>
+> Agent 1 (factuel) : Vérifie que le code fait ce que la PR dit
+> Agent 2 (senior) : Évalue la qualité et la maintenabilité
+> Agent 3 (sécurité) : Cherche les failles de sécurité
+> Agent 4 (consistance) : Vérifie la cohérence avec le reste du codebase
+>
+> Puis synthétise les 4 analyses en un rapport consolidé.
+```
+
+<Callout type="tip" title="Le split-role pour les décisions complexes">
+Le pattern split-role est particulièrement puissant pour les **décisions d'architecture**. Au lieu de demander un seul avis, vous obtenez 4 perspectives différentes et complémentaires. C'est comme réunir un comité d'experts pour prendre une décision éclairée.
+</Callout>
+
+## Gestion du contexte entre agents
+
+Un des défis majeurs de l'orchestration est la **gestion du contexte**. Chaque agent a sa propre fenêtre de contexte, et les informations ne sont pas automatiquement partagées.
+
+### Stratégies de passage de contexte
+
+```markdown
+# Stratégie 1 : Via les fichiers
+L'agent A écrit ses résultats dans un fichier.
+L'agent B lit ce fichier au début de sa mission.
+
+# Stratégie 2 : Via le prompt
+L'agent orchestrateur résume le résultat de l'agent A
+et l'inclut dans le prompt de l'agent B.
+
+# Stratégie 3 : Via Git
+L'agent A commite ses changements.
+L'agent B travaille sur la même branche et voit les modifications.
+```
+
+<Card title="Attention au context overflow" variant="highlight">
+Chaque agent subagent consomme du contexte dans l'agent principal. Si vous lancez trop de subagents ou que leurs résultats sont trop verbeux, l'agent principal peut atteindre la limite de sa fenêtre de contexte. Préférez des résultats concis et structurés.
+</Card>
+
+## Worktrees pour l'isolation
+
+Les **worktrees Git** sont essentiels pour l'orchestration multi-agents. Ils permettent à chaque agent de travailler dans une copie isolée du code sans risque de conflit.
+
+```bash
+# Conceptuellement, Claude Code crée des worktrees isolés :
+
+# Agent 1 travaille dans /tmp/worktree-security
+git worktree add /tmp/worktree-security main
+
+# Agent 2 travaille dans /tmp/worktree-tests
+git worktree add /tmp/worktree-tests main
+
+# Agent 3 travaille dans /tmp/worktree-docs
+git worktree add /tmp/worktree-docs main
+
+# Chaque agent modifie ses fichiers sans affecter les autres
+# À la fin, les changements sont fusionnés
+```
+
+### Quand utiliser les worktrees ?
+
+| Situation | Worktree ? | Raison |
+|---|---|---|
+| Agents qui lisent seulement | Non | Pas de risque de conflit |
+| Agents qui modifient des fichiers différents | Optionnel | Faible risque de conflit |
+| Agents qui modifient les mêmes fichiers | Oui | Risque élevé de conflit |
+| Agents en parallèle | Recommandé | Isolation garantie |
+
+## Run in background
+
+La fonctionnalité **run in background** permet de lancer des subagents sans bloquer l'agent principal. C'est essentiel pour la parallélisation.
+
+```bash
+# Sans background : séquentiel forcé
+# Agent A travaille... (60 secondes)
+# Agent B travaille... (60 secondes)
+# Total : 120 secondes
+
+# Avec background : parallèle
+# Agent A travaille en background... (60 secondes)
+# Agent B travaille en background... (60 secondes)
+# Total : 60 secondes (les deux en parallèle)
+```
+
+L'agent principal lance les subagents en background, continue son travail, puis récupère les résultats quand ils sont prêts.
+
+## Bonnes pratiques
+
+### 1. Évitez le context overflow
+
+La règle d'or : ne jamais utiliser plus de **80% de la fenêtre de contexte** pour des opérations multi-agents. Gardez une marge pour les corrections et ajustements.
+
+```markdown
+# BON : Résultats concis
+"L'audit de sécurité a trouvé 3 problèmes :
+1 CRITICAL (CSRF manquant), 2 MEDIUM (rate limiting)."
+
+# MAUVAIS : Résultats verbeux
+"J'ai analysé chaque fichier un par un. D'abord auth.ts,
+qui contient 342 lignes de code. La ligne 42 est
+intéressante parce que..." (500 lignes de rapport)
+```
+
+### 2. Évitez la duplication de travail
+
+Définissez clairement les responsabilités de chaque agent pour éviter que deux agents fassent le même travail.
+
+```markdown
+# MAUVAIS : Chevauchement
+Agent 1 : "Review le code et vérifie la sécurité"
+Agent 2 : "Vérifie la sécurité et la qualité du code"
+# → Les deux font de la sécurité = duplication
+
+# BON : Responsabilités distinctes
+Agent 1 : "Review la qualité du code (lisibilité, patterns, tests)"
+Agent 2 : "Audit de sécurité uniquement (injection, XSS, secrets)"
+# → Chacun son domaine, pas de chevauchement
+```
+
+### 3. Définissez des critères de succès
+
+Chaque agent doit savoir quand sa tâche est **terminée avec succès**.
+
+```markdown
+## Critères de succès pour l'agent de tests
+- Tous les tests passent (exit code 0)
+- Couverture de code > 80%
+- Aucun test flaky (relancer 3 fois si un test échoue)
+- Rapport de couverture généré dans /coverage
+```
+
+### 4. Prévoyez la gestion des erreurs
+
+Que se passe-t-il si un agent échoue ? Définissez un plan de fallback.
+
+```markdown
+# Plan de fallback
+Si l'agent security-reviewer trouve un problème CRITICAL :
+  → Arrêter le pipeline
+  → Notifier le développeur avec le détail du problème
+  → Ne PAS continuer vers la review ou la release
+
+Si l'agent e2e-runner échoue sur un test :
+  → Relancer le test 2 fois (peut être un flaky test)
+  → Si toujours en échec, signaler et continuer
+```
+
+## Exemple complet : pipeline de release
+
+Voici un prompt qui orchestre un pipeline complet de release en utilisant tous les patterns.
+
+```bash
+> Exécute un pipeline de release pour la version 2.3.0 :
+>
+> 1. PLANIFICATION (séquentiel)
+>    - Utilise l'agent planner pour lister tous les changements
+>      depuis le dernier tag
+>
+> 2. VÉRIFICATIONS (parallèle)
+>    - Agent tdd-guide : tous les tests passent, couverture 80%+
+>    - Agent security-reviewer : audit de sécurité complet
+>    - Agent refactor-cleaner : pas de code mort introduit
+>
+> 3. REVIEW (split-role)
+>    - Perspective qualité : code propre et maintenable
+>    - Perspective performance : pas de régressions
+>    - Perspective consistance : cohérent avec le codebase
+>
+> 4. DOCUMENTATION (parallèle)
+>    - Agent doc-updater : mise à jour de la doc technique
+>    - Génère le changelog depuis le dernier tag
+>
+> 5. RELEASE (séquentiel)
+>    - Si tout est vert : crée le tag v2.3.0
+>    - Génère les release notes
+>
+> Si une étape CRITIQUE échoue, arrête tout et donne-moi
+> un rapport détaillé du problème.
+```
+
+Ce pipeline combine les 4 patterns d'orchestration pour un processus de release robuste et automatisé.
+
+## Prochaines étapes
+
+Vous maîtrisez maintenant l'orchestration multi-agents. Continuez votre apprentissage avec ces ressources complémentaires.
+
+- [Comprendre les agents](/agents/what-are-agents) — Revenir aux fondamentaux
+- [Créer un subagent](/agents/create-subagent) — Créez des agents sur mesure pour vos besoins
+- [Maîtriser le prompting](/prompting) — L'art de communiquer efficacement avec Claude Code
+- [Configurer votre environnement](/configurator) — Optimisez votre configuration Claude Code

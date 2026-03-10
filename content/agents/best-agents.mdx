@@ -1,0 +1,258 @@
+---
+title: "Top agents par cas d'usage"
+description: "Les meilleurs agents Claude Code classés par catégorie : développement, architecture, sécurité, tests et maintenance. Description, quand les utiliser et exemples d'invocation."
+section: "agents"
+order: 4
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Les agents incontournables
+
+Claude Code dispose d'un catalogue d'agents spécialisés, chacun optimisé pour un type de tâche précis. Voici les agents les plus utiles classés par domaine, avec des exemples concrets d'utilisation.
+
+<Callout type="tip" title="Comment invoquer un agent ?">
+Les agents s'invoquent de deux manières : soit Claude Code les utilise **automatiquement** quand il juge la situation pertinente (si votre `CLAUDE.md` le configure), soit vous les demandez **explicitement** dans votre prompt. Par exemple : "Utilise l'agent code-reviewer pour analyser mon diff".
+</Callout>
+
+## Développement
+
+### TDD Guide
+
+Le guide TDD (Test-Driven Development) impose un workflow rigoureux qui garantit que chaque fonctionnalité est couverte par des tests.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Pour toute nouvelle feature ou correction de bug |
+| **Ce qu'il fait** | Écrit les tests d'abord (RED), implémente le minimum (GREEN), puis refactore (IMPROVE) |
+| **Avantage clé** | Garantit une couverture de tests de 80%+ dès le départ |
+
+```bash
+# Invocation explicite
+> Utilise l'agent tdd-guide pour implémenter une fonction
+> de validation d'adresse email avec les cas limites
+
+# Claude Code va :
+# 1. Écrire les tests (cas nominal, limites, erreurs)
+# 2. Vérifier que les tests échouent (RED)
+# 3. Implémenter le minimum pour les faire passer (GREEN)
+# 4. Refactorer pour améliorer la qualité (IMPROVE)
+# 5. Vérifier la couverture finale
+```
+
+### Code Reviewer
+
+L'agent de review analyse le code modifié et produit un rapport structuré avec des suggestions de correction.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Après chaque modification de code, avant un commit |
+| **Ce qu'il fait** | Analyse le diff, identifie bugs, problèmes de performance, failles de sécurité |
+| **Avantage clé** | Review systématique et reproductible, classement par sévérité |
+
+```bash
+# Invocation explicite
+> Utilise l'agent code-reviewer pour analyser mes derniers changements
+
+# Claude Code produit un rapport :
+# - CRITICAL: Injection SQL dans la requête utilisateur (auth.ts:42)
+# - HIGH: Variable non validée en entrée (utils.ts:18)
+# - MEDIUM: Boucle N+1 dans la récupération des produits (api.ts:95)
+# - LOW: Nom de variable peu descriptif (helpers.ts:12)
+```
+
+### Build Error Resolver
+
+Cet agent diagnostique et corrige les erreurs de build de manière méthodique.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Quand le build échoue et que l'erreur n'est pas évidente |
+| **Ce qu'il fait** | Analyse le message d'erreur, identifie la cause racine, propose et applique la correction |
+| **Avantage clé** | Résolution incrémentale — corrige une erreur à la fois et revérifie |
+
+```bash
+# Invocation explicite
+> Le build échoue avec "Module not found". Utilise l'agent
+> build-error-resolver pour diagnostiquer et corriger.
+
+# Claude Code va :
+# 1. Lire le message d'erreur complet
+# 2. Identifier le module manquant
+# 3. Vérifier si c'est un problème d'import, de dépendance ou de config
+# 4. Appliquer la correction minimale
+# 5. Relancer le build pour vérifier
+```
+
+## Architecture
+
+### Planner
+
+L'agent de planification crée un plan d'implémentation structuré avant de toucher au code.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Avant tout refactoring majeur ou nouvelle feature complexe |
+| **Ce qu'il fait** | Produit un plan avec PRD, architecture, design système, liste de tâches priorisées |
+| **Avantage clé** | Évite de coder trop vite sans réflexion — identifie les risques en amont |
+
+```bash
+# Invocation explicite
+> Utilise l'agent planner pour planifier le refactoring
+> du module de paiement. On veut passer de Stripe v2 à v3
+> et ajouter le support Apple Pay.
+
+# Claude Code produit :
+# - PRD : objectifs, critères de succès, hors périmètre
+# - Architecture : diagramme des composants impactés
+# - Risques : compatibilité descendante, migration des données
+# - Plan de tâches : 12 tâches ordonnées avec estimations
+# - Critères de validation : tests à écrire pour chaque étape
+```
+
+### Architect
+
+L'agent architecte intervient sur les décisions de design système et les choix techniques structurants.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Pour les décisions d'architecture qui impactent plusieurs modules |
+| **Ce qu'il fait** | Analyse les options, compare les trade-offs, recommande une approche |
+| **Avantage clé** | Prend en compte les contraintes de scalabilité, maintenabilité et performance |
+
+```bash
+# Invocation explicite
+> Utilise l'agent architect pour décider si on devrait
+> utiliser un monorepo ou un multi-repo pour notre nouveau
+> projet avec 3 microservices et un frontend.
+
+# Claude Code analyse :
+# - Taille de l'équipe et organisation
+# - Fréquence de déploiement
+# - Partage de code entre services
+# - Complexité du CI/CD
+# → Recommandation argumentée avec ADR (Architecture Decision Record)
+```
+
+## Sécurité
+
+### Security Reviewer
+
+L'agent de sécurité effectue un audit systématique du code à la recherche de vulnérabilités.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Avant chaque commit, et en profondeur avant chaque release |
+| **Ce qu'il fait** | Vérifie injection SQL, XSS, CSRF, secrets en clair, dépendances vulnérables |
+| **Avantage clé** | Checklist exhaustive — rien n'est oublié |
+
+```bash
+# Invocation explicite
+> Utilise l'agent security-reviewer pour auditer
+> le module d'authentification avant la release.
+
+# Claude Code vérifie :
+# Pas de secrets en dur dans le code source
+# Toutes les entrées utilisateur sont validées
+# Requêtes SQL paramétrées (pas de concaténation)
+# CSRF token manquant sur le formulaire de login
+# Rate limiting non configuré sur /api/auth/login
+# Mots de passe hashés avec bcrypt (cost factor 12)
+# Session cookie sans flag HttpOnly
+```
+
+<Callout type="warning" title="Un agent ne remplace pas un audit professionnel">
+L'agent security-reviewer est un excellent filet de sécurité pour le développement quotidien, mais il ne remplace pas un audit de sécurité professionnel pour les applications critiques. Utilisez-le comme première ligne de défense, pas comme unique protection.
+</Callout>
+
+## Tests
+
+### E2E Runner
+
+L'agent E2E génère et exécute des tests end-to-end qui simulent de vrais parcours utilisateurs.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Pour tester les parcours critiques avant une release |
+| **Ce qu'il fait** | Écrit des tests Playwright qui naviguent, remplissent des formulaires, vérifient les résultats |
+| **Avantage clé** | Teste le comportement réel de l'application, pas juste les unités de code |
+
+```bash
+# Invocation explicite
+> Utilise l'agent e2e-runner pour tester le parcours
+> d'inscription : formulaire, email de confirmation,
+> première connexion, page d'accueil personnalisée.
+
+# Claude Code génère et exécute un test Playwright complet
+# qui simule tout le parcours utilisateur de bout en bout
+```
+
+## Maintenance
+
+### Refactor Cleaner
+
+L'agent de refactoring identifie et supprime le code mort, les dépendances inutilisées et les patterns obsolètes.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Lors des sprints de maintenance, après une migration majeure |
+| **Ce qu'il fait** | Détecte le code non utilisé, les imports inutiles, les dépendances fantômes |
+| **Avantage clé** | Réduit la taille de la codebase et améliore la lisibilité |
+
+```bash
+# Invocation explicite
+> Utilise l'agent refactor-cleaner pour nettoyer
+> le dossier src/utils/. Identifie le code mort et
+> les fonctions jamais appelées.
+
+# Claude Code analyse :
+# - formatDate() — jamais importée (dead code)
+# - legacyParser.ts — tout le fichier est inutilisé
+# - import lodash — seul _.get est utilisé, remplacer par optional chaining
+# - calculateTax() — utilisée uniquement dans un test, à vérifier
+```
+
+### Doc Updater
+
+L'agent de documentation maintient la documentation technique à jour en fonction des changements de code.
+
+| | |
+|---|---|
+| **Quand l'utiliser** | Après un refactoring ou l'ajout de nouvelles fonctionnalités |
+| **Ce qu'il fait** | Compare le code actuel avec la documentation, met à jour les sections obsolètes |
+| **Avantage clé** | La documentation reste synchronisée avec le code, sans effort manuel |
+
+```bash
+# Invocation explicite
+> Utilise l'agent doc-updater pour mettre à jour
+> la documentation après le refactoring du module API.
+
+# Claude Code :
+# 1. Compare la doc existante avec le code actuel
+# 2. Met à jour les signatures de fonctions modifiées
+# 3. Ajoute la documentation des nouvelles routes
+# 4. Corrige les exemples de code obsolètes
+# 5. Vérifie que tous les liens internes fonctionnent
+```
+
+## Tableau récapitulatif
+
+| Agent | Domaine | Usage principal | Fréquence recommandée |
+|---|---|---|---|
+| **tdd-guide** | Dev | Nouvelles features avec tests | Chaque feature |
+| **code-reviewer** | Dev | Review automatique du code | Chaque commit |
+| **build-error-resolver** | Dev | Diagnostic d'erreurs de build | Quand le build échoue |
+| **planner** | Architecture | Planification avant codage | Features complexes |
+| **architect** | Architecture | Décisions techniques structurantes | Choix d'architecture |
+| **security-reviewer** | Sécurité | Audit de sécurité du code | Avant chaque release |
+| **e2e-runner** | Tests | Tests de parcours utilisateur | Avant chaque release |
+| **refactor-cleaner** | Maintenance | Nettoyage du code mort | Sprints de maintenance |
+| **doc-updater** | Maintenance | Mise à jour de la documentation | Après chaque refactoring |
+
+## Prochaines étapes
+
+Maintenant que vous connaissez les agents disponibles, apprenez à les combiner efficacement.
+
+- [Orchestration avancée](/agents/orchestration) — Patterns pour combiner plusieurs agents
+- [Créer un subagent](/agents/create-subagent) — Créez vos propres agents spécialisés
+- [Comprendre les Skills](/skills/what-are-skills) — Les Skills complètent les agents pour un workflow complet

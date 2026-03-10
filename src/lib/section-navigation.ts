@@ -56,6 +56,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Agents",
     items: [
       { label: "Vue d'ensemble", href: "/agents" },
+      { label: "Comprendre les agents", href: "/agents/what-are-agents" },
+      { label: "Créer un subagent", href: "/agents/create-subagent" },
+      { label: "Agent Teams", href: "/agents/agent-teams" },
+      { label: "Top agents par cas d'usage", href: "/agents/best-agents" },
+      { label: "Orchestration avancée", href: "/agents/orchestration" },
     ],
   },
   prompting: {

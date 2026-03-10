@@ -330,12 +330,57 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/agents",
-    title: "Agents pour Claude Code",
+    title: "Agents & Subagents : Orchestrez des workflows complexes avec Claude Code",
     description:
-      "Decouvrez les agents disponibles pour orchestrer des workflows complexes avec Claude Code.",
-    priority: 0.5,
+      "D\u00e9couvrez les agents et subagents Claude Code. Cr\u00e9ez des agents sp\u00e9cialis\u00e9s, orchestrez des workflows multi-agents et automatisez vos processus de d\u00e9veloppement.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/agents/what-are-agents",
+    title: "Comprendre les agents et subagents Claude Code",
+    description:
+      "Qu\u2019est-ce qu\u2019un agent Claude Code ? D\u00e9couvrez les subagents, leur fonctionnement, les types d\u2019agents disponibles et comment ils orchestrent des workflows complexes de mani\u00e8re autonome.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/agents/create-subagent",
+    title: "Cr\u00e9er un subagent sp\u00e9cialis\u00e9",
+    description:
+      "Guide complet pour cr\u00e9er des agents custom dans Claude Code. Structure d\u2019un agent, exemples concrets, configuration et bonnes pratiques d\u2019\u00e9criture de prompts pour agents.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/agents/agent-teams",
+    title: "Agent Teams : le guide complet",
+    description:
+      "D\u00e9couvrez Agent Teams, la fonctionnalit\u00e9 exp\u00e9rimentale de Claude Code pour faire collaborer plusieurs agents sur un m\u00eame projet. Configuration, cas d\u2019usage et limites.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/agents/best-agents",
+    title: "Top agents par cas d\u2019usage",
+    description:
+      "Les meilleurs agents Claude Code class\u00e9s par cat\u00e9gorie : d\u00e9veloppement, architecture, s\u00e9curit\u00e9, tests et maintenance. Description, quand les utiliser et exemples d\u2019invocation.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
+  },
+  {
+    path: "/agents/orchestration",
+    title: "Orchestration multi-agents avanc\u00e9e",
+    description:
+      "Patterns d\u2019orchestration pour combiner plusieurs agents Claude Code : s\u00e9quentiel, parall\u00e8le, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-10",
   },
   {
     path: "/configurator",

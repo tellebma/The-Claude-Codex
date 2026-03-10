@@ -489,8 +489,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 13 — Section Agents & Subagents (5 pages) — Nouvelle section
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2 (moyenne)
 - **Estimation** : L (2-4 semaines)
 - **Dependances** : Epic 3, Epic 5, Epic 7
@@ -707,14 +707,14 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 10 | Section MCP (6 pages) | P2 | L | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
 | 11 | Section Plugins (5 pages) | P2 | M | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
 | 12 | Section Skills (4 pages) | P2 | M | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
-| 13 | Section Agents & Subagents (5 pages) | P2 | L | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
+| 13 | Section Agents & Subagents (5 pages) | P2 | L | 3 | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE |
 | 14 | Section Prompting (6 pages) | P2 | M | 3 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 15 | Configurateur interactif | P1 | XL | 4 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 16 | Section Vision & Futur (3 pages) | P3 | S | 5 | `TODO` | `NON REVIEWÉ` | DEMANDE |
 | 17 | Page 404 et finitions UX | P3 | XS | 5 | `TODO` | `NON REVIEWÉ` | AUDIT |
 | 18 | Tests, CI/CD et assurance qualite | P1 | M | Continu | `TODO` | `NON REVIEWÉ` | LES DEUX |
 
-**Progression** : 12/18 terminee (67%) — 12/18 reviewee (67%)
+**Progression** : 13/18 terminee (72%) — 13/18 reviewee (72%)
 
 ---
 
@@ -764,7 +764,7 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 | 10 | Section MCP (6 pages) | L | `TERMINÉ` | `REVIEWÉ ✅` |
 | 11 | Section Plugins (5 pages) | M | `TERMINÉ` | `REVIEWÉ ✅` |
 | 12 | Section Skills (4 pages) | M | `TERMINÉ` | `REVIEWÉ ✅` |
-| 13 | Section Agents & Subagents (5 pages) | L | `TODO` | `NON REVIEWÉ` |
+| 13 | Section Agents & Subagents (5 pages) | L | `TERMINÉ` | `REVIEWÉ ✅` |
 | 14 | Section Prompting (6 pages) | M | `TODO` | `NON REVIEWÉ` |
 
 **Parallelisme** : Les sections sont independantes et peuvent etre developpees en parallele par des contributeurs differents. Ordre recommande si sequentiel : Getting Started > MCP > Plugins > Skills > Agents > Prompting (suit le parcours utilisateur).
@@ -872,3 +872,1532 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 - **Audit** : 6/6 critiques couverts, 8/8 importants couverts, 16/16 nice-to-have couverts = **30/30 (100%)**
 - **Demande** : 10/10 sections couvertes, ~35 pages planifiees, configurateur dedie = **100%**
 - **Aucun point orphelin** : chaque element de l'audit et de la demande apparait dans au moins une Epic.
+
+---
+---
+
+# Epics Persona-Driven — Issues des 6 Audits UX (mars 2026)
+
+> Les epics ci-dessous (19 a 31) sont issues de l'analyse croisee de 6 audits UX par persona :
+> - **Novice** (5.5/10) — N'a jamais code, ne connait pas le terminal
+> - **Debutant** (5.5/10) — Utilise un ordinateur mais n'a jamais code
+> - **Experimente** (6/10) — Developpeur 3-5 ans, connait le terminal et les frameworks
+> - **Connaisseur** (5.5/10) — Utilise Claude Code depuis quelques mois, explore l'ecosysteme
+> - **Expert** (4.5/10) — Senior/architecte/CTO, veut de la profondeur technique
+> - **Entreprise** (3/10) — Decideur evaluant Claude Code pour son organisation
+>
+> **Problemes transversaux identifies :**
+> 1. La section Plugins presente un ecosysteme potentiellement fictif (commandes, chiffres, packages non verifiables)
+> 2. La page Prompting est la plus courte du site alors qu'elle devrait etre la plus riche
+> 3. Zero capture d'ecran dans tout le site — contenu 100% textuel
+> 4. Le contenu avance est quasi-absent (Hooks, Agent SDK, MCP custom, CI/CD, mode headless)
+> 5. Le persona Entreprise n'a aucun contenu dedie (compliance, TCO, adoption, gouvernance)
+> 6. Aucune differenciation de parcours par niveau — le meme contenu pour tous
+> 7. Les exemples sont quasi-exclusivement orientes developpeur, excluant les profils non-techniques promis sur la landing page
+
+---
+
+## Epic 19 — Audit de credibilite et correction des informations fictives
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P0 (bloquant — la credibilite est le capital le plus precieux du site)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Aucune
+- **Personas impactees** : Expert (critique), Connaisseur (critique), Experimente (critique)
+- **Source Audit** : EXPERT C5, CONNAISSEUR Plugins critiques, EXPERIMENTE C1, tous les audits section Plugins
+
+### Probleme identifie
+
+Les audits Expert, Connaisseur et Experimente convergent sur un meme constat : **la section Plugins presente un ecosysteme qui n'existe pas officiellement** sous la forme decrite. Les commandes `/plugin install`, `/plugin marketplace`, `/plugin publish`, les chiffres d'installations (57K, 71K, 96K), et les noms de packages ne sont pas verifiables. De meme, certains noms de packages MCP (`@anthropic/mcp-figma`, `@anthropic/mcp-gmail`, etc.) pourraient etre incorrects.
+
+Un developpeur qui detecte des informations fausses quitte le site et ne revient pas. La credibilite est le capital le plus precieux d'un site de documentation technique.
+
+### Description
+
+Conduire un audit factuel complet de toutes les informations techniques du site. Verifier chaque nom de package, chaque commande, chaque chiffre. Corriger ou retirer tout ce qui est non verifiable. Etre transparent sur ce qui est reel, en beta, ou anticipe.
+
+### User Stories
+
+1. En tant que developpeur experimente, je veux que chaque nom de package MCP mentionne sur le site soit un vrai package publie sur npm/PyPI afin de pouvoir l'installer sans erreur.
+2. En tant que connaisseur Claude Code, je veux que les commandes presentees dans la section Plugins soient des commandes reelles de Claude Code afin de ne pas perdre du temps a essayer des commandes inexistantes.
+3. En tant qu'expert/CTO, je veux que les chiffres d'installations soient retires ou sources afin de pouvoir faire confiance au reste du contenu du site.
+4. En tant que developpeur, je veux un lien vers le repo GitHub ou la page npm de chaque outil mentionne afin de pouvoir verifier par moi-meme.
+5. En tant qu'utilisateur de tout niveau, je veux que le site distingue clairement ce qui existe aujourd'hui de ce qui est a venir ou experimental afin de ne pas etre induit en erreur.
+
+### Taches detaillees
+
+1. **Audit des noms de packages MCP** :
+   - Verifier chaque package mentionne (`@anthropic/mcp-figma`, `@anthropic/mcp-slack`, `@anthropic/mcp-gmail`, `@anthropic/mcp-lighthouse`, `@anthropic/mcp-21st-magic`, `@anthropic/mcp-google-calendar`, `@anthropic/mcp-linear`, etc.)
+   - Pour chaque package inexistant : trouver le vrai nom ou retirer la reference
+   - Ajouter un lien npm/GitHub pour chaque MCP reference
+
+2. **Audit de la section Plugins** :
+   - Verifier si les commandes `/plugin install`, `/plugin marketplace`, `/plugin publish`, `/plugin enable`, `/plugin disable`, `/plugin list --updates` existent reellement dans Claude Code
+   - Si elles n'existent pas : reecrire la section en clarifiant l'etat reel du systeme de plugins
+   - Retirer tous les chiffres d'installations non verifiables (57K, 71K, 96K, 23K, etc.)
+   - Verifier si "Everything Claude Code", "Prompt Improver", "Ralph Loop", "UI UX Pro Max", "Frontend Design" sont des projets reels avec des repos GitHub
+
+3. **Audit des configurations JSON** :
+   - Verifier que les structures `settings.json` montrees correspondent aux schemas reels de Claude Code
+   - Verifier les options de configuration mentionnees
+
+4. **Ajout de sources verifiables** :
+   - Ajouter un lien (GitHub, npm, PyPI) pour chaque outil, MCP, ou plugin reference
+   - Ajouter un lien vers la documentation officielle Anthropic quand pertinent
+
+5. **Balisage du contenu anticipe** :
+   - Creer un callout `<Callout type="warning">` pour les fonctionnalites a venir ou experimentales
+   - Distinguer visuellement "Disponible aujourd'hui" vs "A venir" vs "Propose par ce site"
+
+### Criteres d'acceptation
+
+- 100% des noms de packages MCP sont verifies et corrigent : soit un lien npm valide, soit retires
+- 100% des commandes de la section Plugins sont verifiees contre la CLI reelle de Claude Code
+- Aucun chiffre d'installation non verifiable ne subsiste dans le site
+- Chaque MCP et plugin reference a un lien vers sa source (repo, npm, documentation)
+- Les fonctionnalites anticipees ou experimentales sont clairement balisees avec un callout dedie
+- Le build passe sans erreur apres les corrections
+
+### Fichiers impactes
+
+- `content/plugins/what-are-plugins.mdx`
+- `content/plugins/setup.mdx`
+- `content/plugins/best-essential.mdx`
+- `content/plugins/best-design.mdx`
+- `content/plugins/best-security.mdx`
+- `content/mcp/best-productivity.mdx`
+- `content/mcp/best-development.mdx`
+- `content/mcp/best-design.mdx`
+- `content/mcp/setup.mdx`
+- `content/skills/best-skills.mdx` (verifier les liens de telechargement)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Expert | 4.5 → 5.5 (+1) | Section plugins credible |
+| Connaisseur | 5.5 → 6.5 (+1) | Informations fiables |
+| Experimente | 6 → 7 (+1) | Packages installables |
+
+---
+
+## Epic 20 — Contenu visuel : captures d'ecran, GIFs et videos
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P0 (bloquant — le contenu est 100% textuel, le novice ne peut pas suivre)
+- **Estimation** : L (2-4 semaines)
+- **Dependances** : Aucune
+- **Personas impactees** : Novice (critique), Debutant (critique), Experimente (important)
+- **Source Audit** : NOVICE C2, DEBUTANT C1, EXPERIMENTE manque de demos visuelles
+
+### Probleme identifie
+
+Les audits Novice et Debutant identifient l'absence de captures d'ecran comme un probleme critique. Le site est 100% textuel avec des blocs de code. Aucune image, aucun GIF, aucune video ne montre Claude Code en action. C'est comme un manuel de conduite sans aucune photo de voiture.
+
+Pour un novice, ne pas voir a quoi ressemble un terminal, une commande, ou un resultat est un frein absolu. Pour un developpeur experimente, l'absence de demos visuelles empêche d'evaluer l'outil avant de l'installer.
+
+**Reference** : Google Cloud, Stripe, Zapier, Canva — tous utilisent des captures d'ecran annotees, des GIFs, et des videos courtes dans leur documentation.
+
+### Description
+
+Creer un ensemble complet de contenus visuels pour accompagner les pages du site : captures d'ecran annotees pour le Getting Started, GIFs montrant Claude Code en action, et video(s) d'introduction.
+
+### User Stories
+
+1. En tant que novice, je veux voir une capture d'ecran de comment ouvrir un terminal sur macOS/Windows/Linux afin de savoir ou aller.
+2. En tant que debutant, je veux voir une capture d'ecran du site nodejs.org avec une fleche sur le bouton a cliquer afin de ne pas me tromper.
+3. En tant que novice, je veux voir a quoi ressemble la console Anthropic pour creer une cle API afin de comprendre les etapes.
+4. En tant que debutant, je veux voir un GIF de Claude Code lancé pour la premiere fois dans un terminal afin de savoir a quoi m'attendre.
+5. En tant que novice, je veux voir le resultat final d'un premier projet (une page web dans un navigateur) afin de comprendre ce que Claude Code produit.
+6. En tant que developpeur experimente, je veux voir un GIF de 30 secondes montrant Claude Code en action sur un vrai refactoring afin d'evaluer l'outil rapidement.
+7. En tant que visiteur de la landing page, je veux une video d'introduction de 2-3 minutes montrant Claude Code de l'installation au premier resultat afin de comprendre la valeur de l'outil.
+
+### Taches detaillees
+
+1. **Captures d'ecran Getting Started (8 images minimum)** :
+   - Ouvrir le terminal sur macOS (Spotlight → Terminal)
+   - Ouvrir le terminal sur Windows (PowerShell ou Windows Terminal)
+   - Ouvrir le terminal sur Linux (raccourci Ctrl+Alt+T)
+   - Le site nodejs.org avec le bouton LTS entoure
+   - La console Anthropic (creation de compte, generation de cle API)
+   - Le lancement de `claude` pour la premiere fois dans le terminal
+   - Le dialogue de confirmation y/n dans Claude Code
+   - Le resultat du premier projet dans un navigateur
+
+2. **GIFs demonstratifs (4 GIFs minimum)** :
+   - Claude Code lancé et repondant a un premier prompt simple (15 secondes)
+   - Claude Code creant un fichier HTML et l'utilisateur l'ouvrant dans le navigateur (30 secondes)
+   - Claude Code effectuant un refactoring sur un projet existant (30 secondes)
+   - Claude Code utilisant un MCP (GitHub ou Playwright) en action (30 secondes)
+
+3. **Video d'introduction (1 video, 2-3 minutes)** :
+   - Script : installation → premier prompt → resultat → iteration → resultat final
+   - Hebergement : YouTube embed ou fichier MP4 dans `/public/videos/`
+   - Sous-titres en francais
+
+4. **Infrastructure technique** :
+   - Creer un repertoire `public/images/screenshots/` organise par section
+   - Creer un composant `<Screenshot>` avec lazy loading, alt text, et zoom au clic
+   - Optimiser toutes les images en WebP (< 100 KB chacune)
+   - Ajouter un composant `<VideoEmbed>` responsive pour la video
+
+5. **Integration dans les pages MDX** :
+   - Inserer les captures d'ecran dans `content/getting-started/installation.mdx` (6 images)
+   - Inserer les captures d'ecran dans `content/getting-started/first-project.mdx` (2 images + 1 GIF)
+   - Inserer le GIF de demo MCP dans `content/mcp/first-workflow.mdx`
+   - Inserer la video d'intro sur la landing page ou la page "Qu'est-ce que Claude Code"
+
+### Criteres d'acceptation
+
+- Minimum 8 captures d'ecran annotees dans le Getting Started
+- Minimum 4 GIFs demonstratifs (15-30 secondes chacun)
+- Minimum 1 video d'introduction (2-3 minutes)
+- Toutes les images en WebP, < 100 KB chacune, avec lazy loading
+- Composant `<Screenshot>` avec alt text descriptif et zoom au clic
+- Composant `<VideoEmbed>` responsive
+- Score Lighthouse Performance > 90 malgre les images ajoutees
+
+### Fichiers impactes
+
+- `public/images/screenshots/` (nouveau repertoire, ~15 fichiers)
+- `public/videos/` ou embed YouTube
+- `src/components/ui/Screenshot.tsx` (nouveau)
+- `src/components/ui/VideoEmbed.tsx` (nouveau)
+- `content/getting-started/installation.mdx`
+- `content/getting-started/first-project.mdx`
+- `content/getting-started/what-is-claude-code.mdx`
+- `content/mcp/first-workflow.mdx`
+- `src/app/page.tsx` ou `content/landing.mdx` (video hero)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Novice | 5.5 → 7 (+1.5) | Peut enfin suivre visuellement |
+| Debutant | 5.5 → 7 (+1.5) | Reperes visuels a chaque etape |
+| Experimente | 6 → 6.5 (+0.5) | Demo rapide de la valeur |
+
+---
+
+## Epic 21 — Parcours grand debutant et pre-requis zero
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P0 (bloquant — le novice abandonne des la premiere etape)
+- **Estimation** : L (2-3 semaines)
+- **Dependances** : Epic 20 (captures d'ecran necessaires)
+- **Personas impactees** : Novice (critique), Debutant (critique)
+- **Source Audit** : NOVICE C1/C3/C4, DEBUTANT C2/C4
+
+### Probleme identifie
+
+Les audits Novice et Debutant convergent : la promesse de la landing page ("en partant de zero", "pour les curieux") n'est pas tenue. Le contenu bascule immediatement dans un registre technique que le novice ne comprend pas. Le terminal, npm, les cles API, les variables d'environnement, .bashrc — aucun de ces concepts n'est explique au niveau zero.
+
+Le point de rupture principal est l'installation : le novice ne sait pas ouvrir un terminal, ne connait pas Node.js, ne comprend pas ce qu'est une cle API.
+
+**Reference** : Apple Swift Playgrounds (guide clic par clic), Duolingo (progression micro-pas), Stripe (mode no-code pour non-devs).
+
+### Description
+
+Creer un "sas d'entree" pour les grands debutants : une page pre-requis, un parcours d'installation simplifie, un glossaire interactif, une FAQ rassurant sur les peurs courantes, et un premier projet ultra-simple.
+
+### User Stories
+
+1. En tant que novice complet, je veux une page "Avant de commencer" qui m'explique ce qu'est un terminal et comment l'ouvrir afin de pouvoir suivre le guide d'installation.
+2. En tant que novice, je veux qu'un seul chemin d'installation soit recommande pour moi (sans "OU", sans choix a faire) afin de ne pas etre paralyse par les options.
+3. En tant que novice, je veux que chaque terme technique soit defini la premiere fois qu'il apparait (avec un tooltip ou un lien) afin de ne pas me sentir exclu.
+4. En tant que novice, je veux un glossaire accessible depuis toutes les pages afin de retrouver la definition d'un terme a tout moment.
+5. En tant que novice, je veux une FAQ "Questions de debutant" qui repond a mes peurs (casser mon ordinateur, vie privee, legalite, cout) afin d'etre rassure.
+6. En tant que debutant non-technique, je veux un premier projet ultra-simple ("Cree une page qui dit bonjour avec mon prenom") afin de reussir rapidement.
+7. En tant que novice, je veux comprendre combien ca coute en termes simples (gratuit pour essayer / 20€ pour un usage regulier / 100€ pour un usage intensif) afin de savoir si c'est dans mon budget.
+
+### Taches detaillees
+
+1. **Page "Pre-requis pour grands debutants"** (`content/getting-started/prerequisites-zero.mdx`) :
+   - Qu'est-ce qu'un terminal ? (definition en 2 phrases + analogie)
+   - Comment ouvrir un terminal sur macOS (capture d'ecran annotee)
+   - Comment ouvrir un terminal sur Windows (capture d'ecran annotee)
+   - Comment ouvrir un terminal sur Linux (capture d'ecran annotee)
+   - Qu'est-ce qu'une commande ? (taper du texte, appuyer sur Entree, lire le resultat)
+   - Qu'est-ce qu'une cle API ? (analogie : un badge d'acces pour un batiment)
+   - Qu'est-ce que l'intelligence artificielle ? (2 paragraphes simples)
+   - Mini-exercice : "Ouvrez votre terminal et tapez `echo bonjour` — vous devriez voir 'bonjour' s'afficher"
+
+2. **Simplification du parcours d'installation pour novices** :
+   - Modifier `content/getting-started/installation.mdx` pour ajouter un systeme d'onglets `<Tabs>` : "Debutant (recommande)" vs "Avance"
+   - L'onglet Debutant ne propose qu'UN SEUL chemin : abonnement Claude Max → authentification automatique → `npm install -g @anthropic-ai/claude-code`
+   - Chaque etape est accompagnee d'une capture d'ecran
+   - Zero choix : pas de "OU", pas de "si vous utilisez X alors Y"
+   - La cle API et la configuration manuelle sont dans l'onglet "Avance"
+
+3. **Glossaire interactif** :
+   - Creer un fichier `content/glossary.json` avec 40+ termes definis (terminal, CLI, npm, API, API key, JSON, Git, MCP, Skill, Plugin, etc.)
+   - Chaque terme a : definition en 1 phrase, analogie concrete, lien vers la page pertinente
+   - Creer un composant `<GlossaryTooltip term="terminal">` qui affiche la definition au survol
+   - Creer une page `/glossary` accessible depuis le header
+   - Integrer les tooltips dans les pages Getting Started
+
+4. **FAQ "Questions de debutant"** (`content/getting-started/faq-beginner.mdx`) :
+   - "Est-ce que ca peut casser mon ordinateur ?" → Non, Claude Code ne modifie que les fichiers que vous lui demandez de modifier, et il vous demande toujours confirmation
+   - "Est-ce que l'IA voit mes fichiers personnels / photos ?" → Claude Code ne voit que les fichiers du dossier ou vous le lancez
+   - "C'est quoi la difference entre ChatGPT et Claude Code ?" → ChatGPT est un chatbot web, Claude Code est un assistant qui travaille directement dans vos fichiers
+   - "Est-ce que c'est legal ?" → Oui, c'est un outil professionnel edite par Anthropic
+   - "J'ai besoin d'Internet pour l'utiliser ?" → Oui, Claude Code communique avec les serveurs d'Anthropic
+   - "Ca marche sur mon Chromebook / tablette / telephone ?" → Claude Code necessite un ordinateur (Mac, Windows ou Linux)
+   - "C'est vraiment gratuit ?" → Le guide est gratuit, l'outil coute entre 0 (essai) et 100€/mois
+   - "Est-ce que je peux annuler mon abonnement a tout moment ?" → Oui
+
+5. **Simplification du premier projet** :
+   - Ajouter un prompt ultra-simple en PREMIER dans `content/getting-started/first-project.mdx` : "Cree-moi une page web qui dit 'Bonjour, je m'appelle [prenom]' avec un fond bleu et un texte blanc"
+   - Ajouter une capture d'ecran du resultat attendu
+   - L'instruction pour ouvrir le fichier est "Glissez le fichier dans votre navigateur" (pas de commande `open`/`xdg-open`)
+   - Le portfolio actuel devient le "Deuxieme projet" pour ceux qui veulent aller plus loin
+
+6. **Presentation des couts claire et visible** :
+   - Creer un composant `<PricingTable>` simple avec 3 colonnes : Essai gratuit / Usage regulier / Usage intensif
+   - Integrer ce tableau dans la page d'installation et sur la landing page
+   - Chaque option a un conseil clair : "Recommande pour commencer" sur l'option la plus simple
+
+### Criteres d'acceptation
+
+- Page "Pre-requis zero" complete avec captures d'ecran pour 3 OS
+- L'onglet "Debutant" de la page d'installation propose un seul chemin sans choix
+- Glossaire de 40+ termes avec composant tooltip fonctionnel
+- Page glossaire accessible depuis le header
+- FAQ de 8+ questions/reponses rassurant le novice
+- Premier projet ultra-simple en premiere position sur la page
+- Tableau de prix clair et visible
+- Parcours novice testable de bout en bout sans jargon non defini
+
+### Fichiers impactes
+
+- `content/getting-started/prerequisites-zero.mdx` (nouveau)
+- `content/getting-started/installation.mdx` (modification : ajout onglets)
+- `content/getting-started/first-project.mdx` (modification : premier projet simplifie)
+- `content/getting-started/faq-beginner.mdx` (nouveau)
+- `content/glossary.json` (nouveau)
+- `src/components/ui/GlossaryTooltip.tsx` (nouveau)
+- `src/components/ui/PricingTable.tsx` (nouveau)
+- `src/app/glossary/page.tsx` (nouveau)
+- `src/components/layout/Header.tsx` (ajout lien glossaire)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Novice | 5.5 → 7.5 (+2) | Peut enfin suivre le parcours de A a Z |
+| Debutant | 5.5 → 7 (+1.5) | Installation simplifiee, termes definis |
+
+---
+
+## Epic 22 — Refonte majeure de la section Prompting
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P0 (bloquant — la page la plus attendue est la plus vide)
+- **Estimation** : L (2-4 semaines)
+- **Dependances** : Epic 7 (pipeline MDX)
+- **Personas impactees** : Toutes (critique pour Novice, Debutant, Expert, Connaisseur ; important pour Experimente)
+- **Source Audit** : NOVICE C5, DEBUTANT I1/I5, EXPERIMENTE C2, CONNAISSEUR Prompting critiques, EXPERT C3
+
+### Probleme identifie
+
+TOUS les audits convergent : la page Prompting est la plus decevante du site. C'est la page la plus courte (~97 lignes MDX) alors qu'elle devrait etre la plus riche. Les 5 principes sont des banalites. Le prompt chaining et l'orchestration multi-agents sont mentionnes en 2 phrases sans aucun exemple. Il n'y a pas de techniques avancees specifiques a Claude Code, pas de patterns par use case, pas d'exemples non-techniques.
+
+**Reference** : Anthropic Prompt Engineering Guide, Vercel AI SDK docs, Langchain prompting docs.
+
+### Description
+
+Transformer la section Prompting d'une page unique squelettique en une section complete de 4-6 pages couvrant tous les niveaux : fondamentaux, patterns par use case, techniques avancees, gestion du contexte, et prompting pour non-developpeurs.
+
+### User Stories
+
+1. En tant que novice, je veux des exemples de prompts pour des taches du quotidien (email, resume, tableau) afin d'apprendre a communiquer avec Claude Code.
+2. En tant que debutant, je veux des templates de prompts par categorie (communication, analyse, creation) que je peux copier-coller et adapter.
+3. En tant que developpeur experimente, je veux des patterns de prompts specifiques par use case (debug, refactoring, tests, migration, code review) afin d'optimiser mon workflow.
+4. En tant que connaisseur, je veux comprendre comment fonctionne la fenetre de contexte, quand utiliser /compact, et comment structurer des sessions longues.
+5. En tant que connaisseur, je veux un guide complet sur l'extended thinking et le plan mode afin de savoir quand et comment les activer.
+6. En tant qu'expert, je veux un guide sur le prompt chaining avec 3-5 exemples concrets et fonctionnels afin de construire des workflows complexes.
+7. En tant qu'expert, je veux un guide sur l'orchestration multi-agents avec des architectures et des patterns reels afin de maximiser la puissance de Claude Code.
+8. En tant que developpeur, je veux connaitre les anti-patterns specifiques a Claude Code (vs ChatGPT, vs Copilot) afin d'eviter les erreurs courantes.
+9. En tant que developpeur, je veux connaitre les differences de prompting entre les modeles (Haiku, Sonnet, Opus) afin de choisir le bon modele pour chaque tache.
+
+### Taches detaillees
+
+1. **Page 1 : Fondamentaux du prompting** (refonte de `content/prompting-guide.mdx`) :
+   - Garder les 5 principes mais les enrichir avec 3 exemples concrets chacun
+   - Ajouter 10+ exemples avant/apres par profil :
+     - Developpeur : refactoring, debug, tests, review
+     - Entrepreneur : email, rapport, prototype, analyse de marche
+     - Etudiant : resume, explication, traduction, recherche
+     - Creatif : contenu, design, brainstorming, storytelling
+   - Ajouter un tableau d'erreurs courantes etendu (15+ erreurs)
+   - Corriger les accents manquants
+
+2. **Page 2 : Prompting avance — Patterns par use case** (`content/prompting/advanced-patterns.mdx`, nouveau) :
+   - Pattern debugging : reproduction → isolation → fix → regression test
+   - Pattern refactoring : analyse d'impact → migration progressive → validation
+   - Pattern code review : structure → logique → securite → performance
+   - Pattern migration : inventaire → plan → execution → verification
+   - Pattern tests : identification des cas → ecriture TDD → couverture → mutation
+   - Chaque pattern a un exemple complet avec le prompt reel et le resultat attendu
+
+3. **Page 3 : Gestion du contexte et sessions longues** (`content/prompting/context-management.mdx`, nouveau) :
+   - Comment fonctionne la fenetre de contexte (200K tokens)
+   - Quand et comment utiliser `/compact`
+   - Strategies pour les gros projets (decouper en sessions, cibler des fichiers)
+   - Impact du nombre de fichiers lus sur la qualite des reponses
+   - Le systeme de CLAUDE.md comme "memoire persistante"
+   - Bonnes pratiques pour les conversations longues
+   - Metriques : utiliser `/cost` pour suivre sa consommation
+
+4. **Page 4 : Extended thinking, plan mode et techniques avancees** (`content/prompting/thinking-and-planning.mdx`, nouveau) :
+   - Qu'est-ce que l'extended thinking ? Comment et quand l'activer ?
+   - Qu'est-ce que le plan mode ? Quand l'utiliser vs le mode par defaut ?
+   - Chain-of-thought dans les prompts
+   - Self-reflection et critique rounds
+   - Constraint-setting pour eviter les hallucinations
+   - Structured output forcing (demander un format precis)
+   - Differences de comportement entre Haiku, Sonnet et Opus
+   - Impact sur les couts et la latence
+
+5. **Page 5 : Prompt chaining et orchestration multi-agents** (`content/prompting/chaining-and-agents.mdx`, nouveau) :
+   - Prompt chaining : decomposer une tache complexe en sequence de prompts
+   - 3 exemples complets de chaining :
+     - Feature complete : spec → implementation → tests → documentation
+     - Bug investigation : logs → reproduction → isolation → fix → regression
+     - Migration : inventaire → plan → execution par module → verification globale
+   - Orchestration multi-agents : utiliser le Task tool pour paralleliser
+   - Architectures : fan-out/fan-in, pipeline sequentiel, multi-perspective
+   - Exemples de configuration d'agents dans `~/.claude/agents/`
+   - Limites : cout en tokens, profondeur de recursion, gestion des erreurs
+
+6. **Page 6 (optionnelle) : Prompting pour non-developpeurs** (`content/prompting/non-dev-prompting.mdx`, nouveau) :
+   - 20+ templates de prompts par categorie :
+     - Communication : email professionnel, relance client, annonce interne
+     - Analyse : resume de document, extraction de donnees, comparaison
+     - Creation : post LinkedIn, article de blog, presentation
+     - Organisation : planning, todo list, compte-rendu de reunion
+   - Chaque template est un bloc copiable avec des placeholders a remplir
+   - Exercices pratiques : "Essayez ce prompt et comparez avec notre resultat"
+
+### Criteres d'acceptation
+
+- Minimum 4 nouvelles pages MDX dans la section Prompting (en plus de la page existante refondee)
+- 50+ exemples de prompts concrets et realistes au total
+- 10+ exemples non-techniques (email, rapport, resume, etc.)
+- Chaque technique avancee a au minimum 1 exemple concret avec prompt reel et resultat
+- Les differences entre modeles (Haiku/Sonnet/Opus) sont documentees
+- L'extended thinking et le plan mode sont documentes avec cas d'usage
+- Tous les accents francais sont presents
+- Navigation laterale entre les pages de la section
+- Chaque page a : title, meta description, breadcrumbs
+
+### Fichiers impactes
+
+- `content/prompting-guide.mdx` (refonte majeure)
+- `content/prompting/advanced-patterns.mdx` (nouveau)
+- `content/prompting/context-management.mdx` (nouveau)
+- `content/prompting/thinking-and-planning.mdx` (nouveau)
+- `content/prompting/chaining-and-agents.mdx` (nouveau)
+- `content/prompting/non-dev-prompting.mdx` (nouveau, optionnel)
+- Navigation sidebar de la section Prompting
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Novice | 5.5 → 6.5 (+1) | Templates non-techniques disponibles |
+| Debutant | 5.5 → 7 (+1.5) | Exemples adaptes, exercices pratiques |
+| Experimente | 6 → 7.5 (+1.5) | Patterns par use case avances |
+| Connaisseur | 5.5 → 7 (+1.5) | Context management, thinking, chaining |
+| Expert | 4.5 → 6 (+1.5) | Multi-agents, techniques avancees |
+
+---
+
+## Epic 23 — Documentation de reference technique complete
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P1 (haute — l'expert n'a rien a bookmarker)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Aucune
+- **Personas impactees** : Expert (critique), Connaisseur (critique), Experimente (important)
+- **Source Audit** : EXPERT C3, CONNAISSEUR Configuration avancee, EXPERIMENTE Quick Reference
+
+### Probleme identifie
+
+Le site est un guide/tutoriel mais pas une documentation de reference. Il n'existe aucune page avec la liste complete des commandes, flags, variables d'environnement et options de configuration. Un developpeur experimente ou expert veut une reference exhaustive qu'il peut bookmarker — comme Stripe Docs ou Vercel Docs.
+
+### Description
+
+Creer une section "Reference" avec une cheatsheet, une reference CLI complete, une reference settings.json complete, et une page de variables d'environnement.
+
+### User Stories
+
+1. En tant que developpeur, je veux une cheatsheet sur une seule page avec toutes les commandes, slash commands, et raccourcis clavier afin de l'avoir sous la main.
+2. En tant qu'expert, je veux la reference complete de la CLI (`claude --help`, tous les flags et sous-commandes) afin de connaitre toutes les options disponibles.
+3. En tant que connaisseur, je veux la reference complete de `settings.json` (toutes les options, pas juste un exemple) afin de configurer finement mon environnement.
+4. En tant qu'expert, je veux la liste de toutes les variables d'environnement reconnues par Claude Code afin d'automatiser ma configuration.
+5. En tant que developpeur, je veux la liste de toutes les slash commands avec leurs parametres afin de connaitre toutes les capacites interactives.
+
+### Taches detaillees
+
+1. **Page Quick Reference / Cheatsheet** (`content/reference/cheatsheet.mdx`, nouveau) :
+   - Toutes les slash commands (`/help`, `/clear`, `/compact`, `/cost`, `/doctor`, `/init`, `/review`, `/memory`, etc.) avec description courte
+   - Tous les raccourcis clavier (Escape, Ctrl+C, Ctrl+D, Option+T, etc.)
+   - Structure des fichiers de configuration (ou sont settings.json, CLAUDE.md, .claude/)
+   - Les 3 modes d'execution (interactif, print, headless)
+   - Les commandes de gestion MCP (`claude mcp add`, `claude mcp list`, etc.)
+   - Format : tableau dense, copiable, imprimable
+
+2. **Reference CLI complete** (`content/reference/cli.mdx`, nouveau) :
+   - `claude` (mode interactif) : tous les flags (`--model`, `--print`, `--output-format`, `--dangerously-skip-permissions`, `--continue`, `--resume`, etc.)
+   - `claude config` : sous-commandes et options
+   - `claude mcp` : `add`, `remove`, `list`, `logs` avec tous les flags
+   - `claude doctor` : diagnostics disponibles
+   - Format de sortie JSON (`--output-format json`)
+   - Mode pipe (`echo "prompt" | claude --print`)
+   - Mode headless pour CI/CD
+
+3. **Reference settings.json complete** (`content/reference/settings.mdx`, nouveau) :
+   - Toutes les options : `model`, `apiProvider`, `customApiUrl`, `maxTokens`, `thinking`, `permissions` (allow/deny), `allowedTools`, `disabledTools`, `env`, `mcpServers`, etc.
+   - Les 3 niveaux : global (`~/.claude/settings.json`), utilisateur (`~/.claude/settings.local.json`), projet (`.claude/settings.json`)
+   - Precedence des niveaux
+   - Exemples pour chaque option
+   - Schema JSON si disponible
+
+4. **Reference variables d'environnement** (`content/reference/environment.mdx`, nouveau) :
+   - `ANTHROPIC_API_KEY`
+   - `CLAUDE_MODEL`
+   - `MAX_THINKING_TOKENS`
+   - `DISABLE_AUTOUPDATER`
+   - `ANTHROPIC_BASE_URL`
+   - Variables proxy (`HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY`)
+   - Variables de diagnostic/debug
+   - Pour chaque variable : nom, description, valeur par defaut, exemple
+
+### Criteres d'acceptation
+
+- 4 pages de reference completes et a jour
+- Cheatsheet tenant sur une seule page (dense, format tableau)
+- Reference CLI avec chaque flag et sous-commande documente
+- Reference settings.json avec chaque option documentee
+- Reference variables d'environnement complete
+- Toutes les informations sont verifiees contre la derniere version de Claude Code
+- Les pages sont navigables via des ancres et un sommaire lateral
+
+### Fichiers impactes
+
+- `content/reference/cheatsheet.mdx` (nouveau)
+- `content/reference/cli.mdx` (nouveau)
+- `content/reference/settings.mdx` (nouveau)
+- `content/reference/environment.mdx` (nouveau)
+- `src/app/reference/[slug]/page.tsx` (nouveau)
+- `src/app/reference/layout.tsx` (nouveau)
+- Header navigation (ajout section "Reference")
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Expert | 4.5 → 6 (+1.5) | Reference bookmarkable |
+| Connaisseur | 5.5 → 7 (+1.5) | Configuration avancee documentee |
+| Experimente | 6 → 7 (+1) | Cheatsheet disponible |
+
+---
+
+## Epic 24 — Hooks, mode headless et integration CI/CD
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P1 (haute — sujet #2 pour experts, totalement absent)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Aucune
+- **Personas impactees** : Expert (critique), Connaisseur (critique)
+- **Source Audit** : EXPERT C2 (Hooks), EXPERT I2 (CI/CD), CONNAISSEUR Hooks critiques
+
+### Probleme identifie
+
+Les audits Expert et Connaisseur identifient l'absence totale de documentation sur les Hooks (PreToolUse, PostToolUse, Stop) et le mode headless/CI/CD comme une lacune redhibitoire. Ce sont des fonctionnalites avancees cles que tout expert et connaisseur recherche. Le mode headless est un cas d'usage majeur pour les equipes DevOps.
+
+### Description
+
+Creer le contenu documentant les Hooks de Claude Code, le mode headless/non-interactif, et l'integration dans les pipelines CI/CD.
+
+### User Stories
+
+1. En tant qu'expert, je veux comprendre le systeme de hooks (PreToolUse, PostToolUse, Stop) afin d'automatiser des actions quand Claude Code utilise ses outils.
+2. En tant qu'expert, je veux des exemples concrets de hooks custom (auto-format, auto-lint, notification Slack) afin de les adapter a mon workflow.
+3. En tant que DevOps, je veux savoir comment executer Claude Code dans GitHub Actions afin d'automatiser mes reviews de code et mes tests.
+4. En tant que connaisseur, je veux comprendre le mode `--print` et le piping afin d'integrer Claude Code dans mes scripts shell.
+5. En tant qu'expert, je veux savoir comment utiliser Claude Code en mode headless pour des taches automatisees afin de l'integrer dans mon infrastructure.
+6. En tant qu'architecte, je veux savoir comment configurer Claude Code avec differents providers (Bedrock, Vertex AI, proxy) afin de l'utiliser dans mon environnement d'entreprise.
+
+### Taches detaillees
+
+1. **Page Hooks** (`content/advanced/hooks.mdx`, nouveau) :
+   - Qu'est-ce qu'un hook ? (PreToolUse, PostToolUse, Stop)
+   - Comment configurer un hook dans `settings.json`
+   - Exemples concrets :
+     - PreToolUse : validation des parametres avant une commande shell
+     - PostToolUse : auto-format avec prettier apres chaque edit
+     - PostToolUse : notification Slack quand un commit est cree
+     - Stop : generation d'un rapport de session
+   - Patterns avances : hooks conditionnels, hooks chaînes
+   - Troubleshooting : debugging des hooks qui echouent
+
+2. **Page Mode Headless et CI/CD** (`content/advanced/headless-ci.mdx`, nouveau) :
+   - Mode `--print` / `-p` : usage basique, piping, scripts
+   - Mode headless non-interactif : `--dangerously-skip-permissions` (avec avertissement securite)
+   - Format de sortie JSON (`--output-format json`) pour parsing automatise
+   - Integration GitHub Actions :
+     - Exemple de workflow YAML complet
+     - Review automatique de PR
+     - Generation de tests automatique
+     - Audit de securite automatique
+   - Integration GitLab CI : exemple basique
+   - Pre-commit hooks avec Claude Code
+   - Bonnes pratiques securite pour le mode headless
+
+3. **Page Multi-provider et configuration enterprise** (`content/advanced/multi-provider.mdx`, nouveau) :
+   - Utiliser Claude Code avec AWS Bedrock
+   - Utiliser Claude Code avec Google Vertex AI
+   - Configurer un proxy OpenAI-compatible
+   - Changer de modele par tache (Haiku pour les requetes simples, Opus pour les decisions complexes)
+   - Configuration de `customApiUrl` et `apiProvider`
+   - Gestion des credentials par provider
+
+### Criteres d'acceptation
+
+- 3 pages de contenu avance completes
+- Minimum 4 exemples concrets de hooks fonctionnels
+- Minimum 1 workflow GitHub Actions complet et testable
+- Le mode headless et le piping sont documentes avec exemples
+- La configuration multi-provider est documentee
+- Tous les avertissements de securite necessaires sont presents
+- Le contenu est verifie contre la version actuelle de Claude Code
+
+### Fichiers impactes
+
+- `content/advanced/hooks.mdx` (nouveau)
+- `content/advanced/headless-ci.mdx` (nouveau)
+- `content/advanced/multi-provider.mdx` (nouveau)
+- `src/app/advanced/[slug]/page.tsx` (nouveau)
+- `src/app/advanced/layout.tsx` (nouveau)
+- Header navigation (ajout section "Avance")
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Expert | 4.5 → 6.5 (+2) | Hooks et CI/CD documentes |
+| Connaisseur | 5.5 → 7 (+1.5) | Mode avance accessible |
+
+---
+
+## Epic 25 — Creation de MCP custom (tutoriel complet)
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P1 (haute — sujet #1 pour connaisseurs et experts, totalement absent)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Epic 19 (corrections de credibilite MCP)
+- **Personas impactees** : Expert (critique), Connaisseur (critique)
+- **Source Audit** : CONNAISSEUR MCP critiques #1, EXPERT C1
+
+### Probleme identifie
+
+Les audits Connaisseur et Expert convergent : l'absence de tutoriel pour creer un MCP Server custom est la lacune #1 pour les utilisateurs avances. Le site explique comment consommer des MCP mais jamais comment en creer un. Un architecte ou CTO qui veut connecter un outil interne proprietaire n'a aucune information.
+
+### Description
+
+Creer un tutoriel complet de creation de MCP Server, de la specification au deploiement, avec le SDK TypeScript et Python. Documenter les transports alternatifs (SSE, HTTP) et les patterns avances.
+
+### User Stories
+
+1. En tant que connaisseur, je veux un tutoriel pas a pas pour creer un MCP Server en TypeScript afin de connecter mes outils internes a Claude Code.
+2. En tant qu'expert, je veux un tutoriel pour creer un MCP Server en Python afin de l'integrer dans mon ecosysteme Python.
+3. En tant qu'architecte, je veux comprendre les transports alternatifs (SSE, Streamable HTTP) afin de deployer des MCP distants en production.
+4. En tant qu'expert, je veux comprendre le protocole MCP en profondeur (types de messages, lifecycle, capabilities) afin de creer des MCP complexes.
+5. En tant que connaisseur, je veux connaitre les limites et gotchas de chaque MCP (quotas, latence, timeouts) afin de debugger efficacement.
+
+### Taches detaillees
+
+1. **Page "Creer un MCP Server — TypeScript"** (`content/mcp/create-mcp-typescript.mdx`, nouveau) :
+   - Prerequis : Node.js, npm, SDK `@modelcontextprotocol/sdk`
+   - Scaffolding du projet (structure de fichiers recommandee)
+   - Definition des Tools (nom, description, schema de parametres, handler)
+   - Definition des Resources (URIs, templates, contenu)
+   - Definition des Prompts (templates reutilisables)
+   - Lifecycle : `initialize`, `shutdown`
+   - Test local : comment tester un MCP avant de l'utiliser
+   - Integration dans Claude Code : configuration JSON
+   - Publication sur npm (optionnel)
+   - Exemple complet : un MCP "meteo" qui retourne la meteo d'une ville
+
+2. **Page "Creer un MCP Server — Python"** (`content/mcp/create-mcp-python.mdx`, nouveau) :
+   - Prerequis : Python 3.10+, pip, SDK `mcp`
+   - Scaffolding avec le SDK Python
+   - Definition des Tools, Resources, Prompts en Python
+   - Test avec `uvx`
+   - Exemple complet : un MCP "base de donnees interne" qui requête une API REST
+
+3. **Page "MCP avance — Protocole et transports"** (`content/mcp/advanced-protocol.mdx`, nouveau) :
+   - Specification du protocole JSON-RPC 2.0 : types de requêtes (`tools/list`, `tools/call`, `resources/list`, `prompts/list`)
+   - Capabilities negotiation : comment le client et le serveur se mettent d'accord
+   - Transport stdio (par defaut) : fonctionnement, limites
+   - Transport SSE (Server-Sent Events) : quand et comment l'utiliser
+   - Transport Streamable HTTP : le nouveau standard pour les MCP distants
+   - Sampling : quand le MCP server demande au LLM de completer
+   - Performance : impact des MCP sur la latence, gestion des timeouts
+   - Securite avancee : sandboxing, audit logs, token rotation
+   - Debugging : inspection des messages JSON-RPC, logging verbeux
+
+4. **Enrichissement de la page MCP existante** :
+   - Ajouter les limites et gotchas de chaque MCP documente (quotas API, latence, cas de panne)
+   - Ajouter un lien vers le registre MCP communautaire (smithery.ai ou equivalent)
+   - Ajouter des criteres de selection pour evaluer un MCP tiers (maintenance, securite, performance)
+
+### Criteres d'acceptation
+
+- Tutoriel TypeScript avec code complet et fonctionnel
+- Tutoriel Python avec code complet et fonctionnel
+- Page protocole avance avec les 3 transports documentes
+- Chaque MCP existant dans le site a ses limites/gotchas documentees
+- Lien vers le registre MCP communautaire
+- Le code est testable (repository de demo ou blocs copiables)
+
+### Fichiers impactes
+
+- `content/mcp/create-mcp-typescript.mdx` (nouveau)
+- `content/mcp/create-mcp-python.mdx` (nouveau)
+- `content/mcp/advanced-protocol.mdx` (nouveau)
+- `content/mcp/best-productivity.mdx` (enrichissement)
+- `content/mcp/best-development.mdx` (enrichissement)
+- `content/mcp/best-design.mdx` (enrichissement)
+- Navigation sidebar MCP (ajout des nouvelles pages)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Expert | 4.5 → 6 (+1.5) | Peut creer ses propres MCP |
+| Connaisseur | 5.5 → 7.5 (+2) | Tutoriel avance #1 disponible |
+
+---
+
+## Epic 26 — Parcours differencies et navigation par persona
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P1 (haute — tous les audits identifient l'absence de differenciation)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Epic 21 (contenu debutant), Epic 22 (contenu prompting)
+- **Personas impactees** : Toutes
+- **Source Audit** : NOVICE I1, DEBUTANT C4/I3, EXPERIMENTE I1, tous les audits
+
+### Probleme identifie
+
+Tous les audits pointent le meme probleme : le site propose le meme contenu pour tous les niveaux. Un novice est submerge par les pages MCP/Skills/Plugins, un expert s'ennuie avec le Getting Started. La landing page propose 3 niveaux (Debutant/Intermediaire/Avance) mais le contenu ne suit pas cette differenciation.
+
+**Reference** : Apple Developer (contenus par niveau), HashiCorp Learn (labels explicites beginner/advanced), Kubernetes docs (labels sur chaque page).
+
+### Description
+
+Implementer un systeme de parcours differencies par persona avec des badges de niveau sur chaque page, un filtrage optionnel par niveau, un "Fast Track" pour les devs experimentes, et un parcours dedie "zero technique" pour les non-developpeurs.
+
+### User Stories
+
+1. En tant que visiteur, je veux voir un badge de niveau (Debutant/Intermediaire/Avance) sur chaque page afin de savoir immediatement si le contenu est pour moi.
+2. En tant que developpeur experimente, je veux un parcours "Fast Track" en 60 secondes (installation → configuration → premier prompt avance) afin de ne pas perdre de temps avec les bases.
+3. En tant que novice non-technique, je veux un parcours dedie "Je n'ai jamais code" qui filtre le contenu et ne montre que les pages pertinentes pour moi.
+4. En tant qu'entrepreneur, je veux un parcours dedie "Je veux automatiser mes taches" avec des cas d'usage business afin de savoir comment Claude Code peut m'aider.
+5. En tant que visiteur de la landing page, je veux que les 3 parcours (Debutant/Intermediaire/Avance) pointent vers du contenu reel et adapte.
+6. En tant qu'utilisateur, je veux un indicateur de progression dans mon parcours (etape 2/4, 50% complete) afin de savoir ou j'en suis.
+7. En tant qu'utilisateur avance, je veux un CTA alternatif sur la landing page ("Allez plus loin" ou "Quoi de neuf") afin de ne pas etre redirige vers le contenu debutant.
+
+### Taches detaillees
+
+1. **Systeme de badges de niveau** :
+   - Creer un composant `<LevelBadge level="debutant|intermediaire|avance">` affiche en haut de chaque page
+   - Chaque fichier MDX a un champ frontmatter `level: debutant | intermediaire | avance`
+   - Les badges ont des couleurs distinctes (vert/jaune/rouge ou similaire)
+   - La sidebar affiche le badge a cote du titre de chaque page
+
+2. **Parcours "Fast Track" pour devs experimentes** (`content/getting-started/fast-track.mdx`, nouveau) :
+   - Tout sur une seule page, en 60 secondes :
+   - `npm install -g @anthropic-ai/claude-code && claude` — et c'est parti
+   - Table des slash commands essentielles
+   - Liens directs vers : MCP, Skills, Prompting avance, Reference CLI
+   - Pas d'analogie, pas de pedagogie, juste les faits
+   - Un seul prompt d'exemple avance (refactoring d'un module existant)
+
+3. **Parcours "Zero technique"** :
+   - Definir la liste des pages du parcours novice : Pre-requis → Installation simplifiee → Premier projet simple → Prompting non-dev → FAQ
+   - Creer un composant `<PathGuide>` qui affiche les etapes du parcours avec progression
+   - Filtrer les pages avancees de ce parcours (pas de MCP setup, pas de Skills creation, pas de Plugins)
+   - Ajouter des callouts "Si vous debutez, passez directement a [page suivante]" en haut des pages avancees
+
+4. **Parcours "Entrepreneur / Business"** :
+   - Definir la liste des pages : Qu'est-ce que Claude Code → Installation → Prompting non-dev → Cas d'usage business → Couts
+   - Exemples specifiques : automatiser des rapports, creer un prototype, analyser des donnees
+
+5. **Refonte de la section Parcours sur la landing page** :
+   - Le parcours "Debutant" pointe vers le parcours zero technique
+   - Le parcours "Intermediaire" pointe vers le Getting Started standard → MCP → Skills
+   - Le parcours "Avance" pointe vers le Fast Track → Prompting avance → Hooks → MCP custom → Agents
+   - Ajouter un 4eme parcours "Entreprise" (pointant vers l'Epic 27)
+   - CTA secondaire : remplacer "Decouvrir les MCP" par "Voir un exemple en 2 minutes" ou "Fast Track pour devs"
+
+6. **Indicateur de progression** :
+   - Creer un composant `<ProgressBar>` affiche en haut de chaque page du parcours
+   - Progression basee sur les pages visitees (localStorage)
+   - Affichage : "Etape 2/4 — Installation" avec barre de progression
+
+### Criteres d'acceptation
+
+- Badge de niveau visible sur chaque page du site
+- Page Fast Track fonctionnelle avec installation en 60 secondes
+- Parcours zero technique identifie et guide
+- Parcours entrepreneur/business identifie
+- Landing page avec 4 parcours fonctionnels pointant vers du contenu reel
+- CTA secondaire accessible remplacant "Decouvrir les MCP"
+- Indicateur de progression fonctionnel (localStorage)
+
+### Fichiers impactes
+
+- `src/components/ui/LevelBadge.tsx` (nouveau)
+- `src/components/ui/PathGuide.tsx` (nouveau)
+- `src/components/ui/ProgressBar.tsx` (nouveau)
+- `content/getting-started/fast-track.mdx` (nouveau)
+- Tous les fichiers MDX (ajout frontmatter `level`)
+- `src/app/page.tsx` (refonte section parcours et CTA)
+- `src/components/layout/SectionSidebar.tsx` (ajout badges)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Novice | 5.5 → 7 (+1.5) | Parcours dedie, pages filtrees |
+| Debutant | 5.5 → 7 (+1.5) | Parcours guide, badges de niveau |
+| Experimente | 6 → 7.5 (+1.5) | Fast Track, contenu cible |
+| Connaisseur | 5.5 → 6.5 (+1) | Navigation par niveau |
+| Expert | 4.5 → 5.5 (+1) | Fast Track, plus de bruit |
+| Entreprise | 3 → 4 (+1) | Parcours dedie visible |
+
+---
+
+## Epic 27 — Section Enterprise complete
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P1 (haute — score 3/10, le segment le plus faible)
+- **Estimation** : L (2-4 semaines)
+- **Dependances** : Aucune (peut commencer immediatement)
+- **Personas impactees** : Entreprise (critique)
+- **Source Audit** : ENTREPRISE CR1-CR5, IM1-IM7, NH1-NH10
+
+### Probleme identifie
+
+L'audit Entreprise revele un score de 3/10 — le plus bas de tous les personas. Le site ne repond a aucune des questions qu'un decideur se pose : ROI, securite, compliance, TCO, plan d'adoption, temoignages entreprise, comparaison concurrentielle, support. Un CTO qui ne trouve pas de page "Enterprise" en 5 secondes quitte le site.
+
+**Reference** : GitHub Enterprise, Atlassian Enterprise, Vercel Enterprise, Datadog Enterprise — tous ont une page Enterprise prominente avec securite, compliance, temoignages, pricing, et CTA contact.
+
+### Description
+
+Creer une section Enterprise complete avec une page d'accueil, une page securite/compliance, un guide d'adoption d'equipe, un calculateur de TCO, une FAQ enterprise, et un guide de gouvernance.
+
+### User Stories
+
+1. En tant que CTO, je veux une page "Enterprise" accessible depuis le header principal afin de trouver les informations adaptees a mon besoin en 1 clic.
+2. En tant que RSSI/DPO, je veux une page securite et compliance (RGPD, AI Act, donnees, retention) afin de valider la conformite avant deploiement.
+3. En tant que VP Engineering, je veux un guide d'adoption d'equipe structure en phases (pilote → deploiement → optimisation) afin de planifier le rollout.
+4. En tant que CFO, je veux un calculateur de TCO montrant le cout pour 10, 50, 200 developpeurs afin de construire un business case.
+5. En tant que decideur, je veux des temoignages ou case studies d'entreprises utilisant Claude Code afin d'avoir de la preuve sociale.
+6. En tant que Engineering Manager, je veux un guide de gouvernance (roles, permissions, secrets, audit) afin de controler le deploiement.
+7. En tant que decideur, je veux une comparaison enterprise (vs Copilot Enterprise, vs Cursor Business) sur des criteres organisationnels afin de choisir la meilleure option.
+8. En tant que decideur, je veux une FAQ enterprise repondant aux 10 questions les plus courantes afin d'anticiper les objections.
+9. En tant que Tech Lead, je veux un template de "business case" telechargeable afin de presenter le projet a ma hierarchie.
+10. En tant que manager, je veux un guide "convaincre sa hierarchie" avec les arguments par interlocuteur (CFO, RSSI, DRH, CEO) afin de preparer mes presentations.
+
+### Taches detaillees
+
+1. **Page Enterprise principale** (`content/enterprise/index.mdx`, nouveau) :
+   - Hero : "Claude Code pour votre organisation"
+   - 4 piliers : Productivite, Securite, Gouvernance, Adoption
+   - Chiffres cles : metriques de productivite (citer etudes GitHub/McKinsey)
+   - CTA : "Contactez Anthropic pour un plan Enterprise" + "Commencer un pilote"
+   - Section temoignages enterprise (scenarios realistes si pas de vrais temoignages, clairement identifies)
+   - Ajouter un lien "Entreprise" ou "Pour les equipes" dans le header principal
+
+2. **Page Securite & Compliance** (`content/enterprise/security-compliance.mdx`, nouveau) :
+   - Ou sont traitees les donnees ? (renvoi vers Anthropic)
+   - Quelles donnees sont envoyees a l'API Anthropic ? (le code source, les prompts, les resultats)
+   - Politique de retention des donnees d'Anthropic
+   - RGPD : base legale, droits, DPA, renvoi vers Anthropic Trust Center
+   - AI Act europeen : classification du risque pour un assistant de code
+   - Protection des secrets : comment empecher l'envoi de secrets (.env, credentials) via la deny list
+   - Audit trail : quelles actions sont tracees par Claude Code
+   - Certifications Anthropic : SOC 2, etc. (avec liens officiels)
+   - Bonnes pratiques de securite pour les equipes
+
+3. **Guide d'adoption d'equipe** (`content/enterprise/team-adoption.mdx`, nouveau) :
+   - Phase 1 — Preparation (1 semaine) :
+     - Identifier 3-5 champions early adopters
+     - Definir les objectifs du pilote (metriques de succes)
+     - Choisir le plan (Max par developpeur ou API Team)
+     - Preparer la configuration de base (CLAUDE.md d'equipe, deny list, Skills partages)
+   - Phase 2 — Pilote (4-6 semaines) :
+     - Deployer sur l'equipe pilote (5-10 devs)
+     - Sessions de formation hebdomadaires (30 min)
+     - Tracking des metriques (temps de review, commits, satisfaction)
+     - Retrospective a mi-parcours
+   - Phase 3 — Deploiement (2-4 semaines) :
+     - Etendre par cohortes (10-20 devs par vague)
+     - Onboarding standardise (Skill d'onboarding, CLAUDE.md de reference)
+     - Documentation interne (wiki, FAQ)
+   - Phase 4 — Optimisation (continu) :
+     - Skills d'equipe partages et versiones
+     - Centre d'excellence IA interne
+     - Benchmarking mensuel
+     - Retours communautaires internes
+   - Change management :
+     - Comment convaincre les sceptiques
+     - Gerer la peur du remplacement
+     - Templates de communication interne
+
+4. **Calculateur de TCO** (`content/enterprise/tco-calculator.mdx` + composant interactif) :
+   - Tableau statique ou outil interactif
+   - Inputs : nombre de devs, plan choisi (Max/API), heures d'utilisation estimees
+   - Outputs : cout mensuel, cout annuel, cout par dev, comparaison avec Copilot Enterprise ($39) et Cursor Business ($40)
+   - Section ROI : estimation du temps gagne par dev (citer etude GitHub : 55% reduction du temps de completion)
+   - Projection a 3, 6, 12 mois
+
+5. **FAQ Enterprise** (`content/enterprise/faq.mdx`, nouveau) :
+   - 15+ questions/reponses couvrant :
+     - Donnees et vie privee
+     - Conformite reglementaire
+     - Couts et licensing
+     - Deploiement et administration
+     - Formation des equipes
+     - Propriete intellectuelle du code genere
+     - Support et SLA
+     - Reversibilite (quitter Claude Code)
+     - Integration avec les outils existants (Jira, Confluence, Azure DevOps)
+     - Impact sur les emplois
+
+6. **Guide de gouvernance** (`content/enterprise/governance.mdx`, nouveau) :
+   - Roles et responsabilites : admin, tech lead, developpeur, auditeur
+   - Permissions recommandees par role :
+     - Junior dev : restreint (deny list stricte, pas de shell dangereux)
+     - Senior dev : permissif (allow list elargie)
+     - Tech lead : complet + gestion MCP
+     - DevOps : headless mode + CI/CD
+   - Gestion centralisee des configurations (CLAUDE.md racine + overrides projet)
+   - Gestion des secrets : integration avec Vault, AWS Secrets Manager (concepts)
+   - Allow list de MCP et plugins pour l'organisation
+   - Audit : que loguer, ou, combien de temps conserver
+   - Politique de mise a jour (cadence, validation avant deploiement)
+
+7. **Comparaison Enterprise detaillee** (intégree dans la page principale ou page dediee) :
+   - Tableau : Claude Code vs Copilot Enterprise vs Cursor Business
+   - Criteres : SSO/SAML, audit logs, policy management, data residency, SOC 2, SLA, prix/utilisateur, support, privacy mode
+   - Honnetetement : noter "?" quand l'info n'est pas disponible
+
+### Criteres d'acceptation
+
+- 6 pages enterprise completes
+- Lien "Entreprise" visible dans le header principal
+- Page securite/compliance avec renvois vers Anthropic Trust Center
+- Guide d'adoption structure en 4 phases avec checklists
+- Calculateur de TCO fonctionnel (statique ou interactif)
+- FAQ de 15+ questions enterprise
+- Guide de gouvernance avec permissions par role
+- Comparaison enterprise vs Copilot Enterprise et Cursor Business
+
+### Fichiers impactes
+
+- `content/enterprise/index.mdx` (nouveau)
+- `content/enterprise/security-compliance.mdx` (nouveau)
+- `content/enterprise/team-adoption.mdx` (nouveau)
+- `content/enterprise/tco-calculator.mdx` (nouveau)
+- `content/enterprise/faq.mdx` (nouveau)
+- `content/enterprise/governance.mdx` (nouveau)
+- `src/app/enterprise/[slug]/page.tsx` (nouveau)
+- `src/app/enterprise/layout.tsx` (nouveau)
+- `src/components/ui/TcoCalculator.tsx` (nouveau, optionnel interactif)
+- `src/components/layout/Header.tsx` (ajout lien "Entreprise")
+- `src/app/page.tsx` (ajout parcours Enterprise)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Entreprise | 3 → 7 (+4) | Transformation complete du parcours decideur |
+
+---
+
+## Epic 28 — Contenu non-developpeur et cas d'usage universels
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P2 (moyenne — aligne la promesse de la landing page)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Epic 22 (prompting non-dev)
+- **Personas impactees** : Novice (important), Debutant (important)
+- **Source Audit** : NOVICE I4, DEBUTANT I1/I2, tous audits sur les exemples 100% dev
+
+### Probleme identifie
+
+La landing page promet "pour les entrepreneurs, etudiants, creatifs, curieux" mais 100% des exemples du site sont orientes developpement (formulaire React, TDD, code review, CI/CD). Les Skills, MCP, et Plugins presentes ciblent exclusivement les developpeurs. Un non-developpeur ne trouve aucun cas d'usage pertinent pour lui.
+
+### Description
+
+Creer du contenu non-technique : Skills pour le quotidien, cas d'usage business, exemples de MCP accessibles, case studies de non-developpeurs, et une section "Cas d'usage sans code".
+
+### User Stories
+
+1. En tant que non-developpeur, je veux des exemples de Skills pour le quotidien (email, planning, resume, rapport) afin de comprendre l'utilite de Claude Code pour moi.
+2. En tant qu'entrepreneur, je veux des cas d'usage business concrets (prototype web, analyse de marche, automatisation) afin de voir le potentiel pour mon activite.
+3. En tant que novice, je veux au moins un MCP zero-config qui fonctionne sans token ni JSON afin de decouvrir les MCP sans barriere technique.
+4. En tant que debutant, je veux des case studies de non-developpeurs (comme Marie la restauratrice) avec des details concrets afin de m'identifier.
+5. En tant que non-developpeur, je veux une section "Cas d'usage sans code" avec des tutoriels pas a pas illustres afin de savoir exactement quoi faire.
+
+### Taches detaillees
+
+1. **Skills non-techniques** (enrichissement de `content/skills/best-skills.mdx`) :
+   - Ajouter 5+ Skills pour non-developpeurs :
+     - "Rediger un email professionnel" (contexte → ton → structure → resultat)
+     - "Resumer un document" (type de document → longueur → format de sortie)
+     - "Creer un planning hebdomadaire" (contraintes → priorites → format)
+     - "Preparer une presentation" (sujet → audience → nombre de slides → style)
+     - "Generer un post LinkedIn" (sujet → ton → objectif → CTA)
+   - Chaque Skill a un exemple complet de fichier Markdown a copier-coller
+
+2. **Cas d'usage business** (`content/use-cases/business.mdx`, nouveau) :
+   - Prototyper un site web pour son business (prompt complet, resultat attendu)
+   - Creer un tableur de suivi budgetaire
+   - Rediger une proposition commerciale
+   - Analyser les retours clients (avis Google, emails)
+   - Generer un rapport mensuel a partir de donnees brutes
+   - Automatiser les relances par email
+   - Chaque cas d'usage a : contexte, prompt exact, resultat attendu, temps estime
+
+3. **MCP accessibles pour non-developpeurs** :
+   - Identifier 2-3 MCP zero-config ou quasi-zero-config
+   - Documenter un MCP Filesystem (lecture de fichiers locaux) comme premier MCP sans token
+   - Ajouter un callout en haut de la section MCP : "Les MCP sont des fonctionnalites avancees. Si vous debutez, commencez par le guide de demarrage."
+
+4. **Case studies detaillees** (`content/use-cases/success-stories.mdx`, nouveau) :
+   - 3-4 histoires detaillees de non-developpeurs (basees sur les temoignages de la landing ou scenarios realistes) :
+     - La restauratrice qui a cree le site de son restaurant
+     - L'etudiante qui a automatise ses fiches de revision
+     - L'entrepreneur qui a prototype son MVP en une semaine
+     - Le freelance qui a automatise ses devis et factures
+   - Chaque histoire : probleme → decouverte de Claude Code → parcours d'apprentissage → resultat concret → temps investi
+
+5. **Section "Cas d'usage sans code"** (`content/use-cases/no-code.mdx`, nouveau) :
+   - Tutoriels pas a pas avec captures d'ecran :
+     - Creer un site web simple (de A a Z, avec captures)
+     - Generer et organiser des documents
+     - Automatiser des taches repetitives
+     - Analyser des donnees a partir d'un fichier CSV
+
+### Criteres d'acceptation
+
+- 5+ Skills non-techniques avec fichiers Markdown copiables
+- 6+ cas d'usage business avec prompts exacts et resultats attendus
+- 3+ case studies detaillees de non-developpeurs
+- Section "Cas d'usage sans code" avec tutoriels pas a pas
+- Callout d'aiguillage en haut des sections avancees (MCP, Skills, Plugins)
+- Lien vers les cas d'usage depuis la landing page
+
+### Fichiers impactes
+
+- `content/skills/best-skills.mdx` (enrichissement)
+- `content/use-cases/business.mdx` (nouveau)
+- `content/use-cases/success-stories.mdx` (nouveau)
+- `content/use-cases/no-code.mdx` (nouveau)
+- `src/app/use-cases/[slug]/page.tsx` (nouveau)
+- `src/app/use-cases/layout.tsx` (nouveau)
+- `content/mcp/what-are-mcps.mdx` (ajout callout debutant)
+- `content/skills/what-are-skills.mdx` (ajout callout debutant)
+- `content/plugins/what-are-plugins.mdx` (ajout callout debutant)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Novice | 5.5 → 7 (+1.5) | Cas d'usage concrets pour lui |
+| Debutant | 5.5 → 7 (+1.5) | Exemples business et non-techniques |
+
+---
+
+## Epic 29 — Limites, comparaisons objectives et couts reels
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P2 (moyenne — renforce la credibilite pour experts et connaisseurs)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Aucune
+- **Personas impactees** : Expert (critique), Connaisseur (important), Experimente (important)
+- **Source Audit** : EXPERT I4, CONNAISSEUR Limites critiques, EXPERIMENTE I4
+
+### Probleme identifie
+
+Tous les audits de profils techniques pointent l'absence totale de contenu sur les limitations de Claude Code. Le site presente l'outil comme sans defaut, ce qui est percu comme du marketing, pas de la documentation. Un developpeur experimente, un connaisseur, ou un expert veut savoir OU l'outil echoue, pas juste ou il excelle.
+
+De meme, les couts reels de sessions sont absents : combien coute un refactoring de 500 fichiers ? Une review de PR ? Une journee d'utilisation intensive ?
+
+### Description
+
+Creer une page "Limites et workarounds", une comparaison honnete avec les concurrents, et une page de couts reels avec benchmarks de consommation.
+
+### User Stories
+
+1. En tant qu'expert, je veux connaitre les limites de Claude Code (quand il hallucine, quels projets il gere mal) afin de calibrer mes attentes.
+2. En tant que connaisseur, je veux une comparaison honnete Claude Code vs Cursor vs Copilot vs Aider afin de choisir le bon outil pour chaque tache.
+3. En tant que developpeur, je veux des benchmarks de couts reels (cout par session, par refactoring, par journee) afin de budgeter mon usage.
+4. En tant qu'expert, je veux connaitre les strategies de contournement pour les limites connues afin de rester productif malgre les limitations.
+5. En tant que connaisseur, je veux savoir quand Claude Code n'est pas le bon outil afin de ne pas perdre de temps.
+
+### Taches detaillees
+
+1. **Page "Limites et workarounds"** (`content/reference/limitations.mdx`, nouveau) :
+   - Hallucinations : quand et pourquoi Claude Code invente du code ou des APIs
+   - Fenetre de contexte : que se passe-t-il quand on approche les 200K tokens
+   - Grands projets : limites pour les codebases de 100K+ lignes, monorepos
+   - Langages moins bien supportes : quels langages ont moins de performance
+   - Actions destructives : risques de `rm -rf`, modifications non desirees
+   - Drift dans les sessions longues : perte de coherence
+   - Limites de rate limiting par provider (API, Max, Pro)
+   - Pour chaque limite : description, quand ca arrive, workaround recommande
+
+2. **Comparaison honnete avec les concurrents** (`content/reference/comparison.mdx`, nouveau) :
+   - Claude Code vs GitHub Copilot : forces et faiblesses de chacun
+     - Copilot : meilleur pour l'inline completion, integration VS Code native
+     - Claude Code : meilleur pour le multi-fichiers, la conversation, les agents
+   - Claude Code vs Cursor : forces et faiblesses de chacun
+     - Cursor : meilleur pour l'integration IDE, Tab completion
+     - Claude Code : meilleur pour la CLI, le headless, les MCP
+   - Claude Code vs Aider : forces et faiblesses de chacun
+   - Claude Code vs Windsurf, Continue, Cline
+   - Quand utiliser l'un vs l'autre (tableau de decision)
+   - Complementarite : comment utiliser Claude Code + Copilot ensemble
+
+3. **Page "Couts reels et optimisation"** (`content/reference/costs.mdx`, nouveau) :
+   - Benchmarks de couts reels par type de tache :
+     - Session de debug (30 min) : ~$X
+     - Refactoring d'un module (200 lignes) : ~$X
+     - Review de PR : ~$X
+     - Journee d'utilisation active : ~$X
+   - Comparaison API vs Max vs Pro pour differents profils d'usage
+   - Strategies d'optimisation :
+     - Choisir le bon modele (Haiku pour les taches simples, Opus pour le raisonnement)
+     - Utiliser /compact pour reduire le contexte
+     - Structurer les sessions pour minimiser les tokens
+     - Combien de MCP est raisonnable (impact sur les tokens)
+   - Comment lire le resultat de `/cost`
+
+### Criteres d'acceptation
+
+- Page limitations avec 8+ limites documentees et workarounds
+- Comparaison avec 4+ concurrents sur des criteres objectifs
+- Benchmarks de couts avec 5+ scenarios chiffres
+- Strategies d'optimisation des couts documentees
+- Ton honnete et objectif (pas de marketing)
+- Le contenu renforce la credibilite, pas la defiance
+
+### Fichiers impactes
+
+- `content/reference/limitations.mdx` (nouveau)
+- `content/reference/comparison.mdx` (nouveau)
+- `content/reference/costs.mdx` (nouveau)
+- Navigation sidebar Reference (ajout des nouvelles pages)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Expert | 4.5 → 6 (+1.5) | Honnetete = credibilite |
+| Connaisseur | 5.5 → 7 (+1.5) | Limites connues, couts calibres |
+| Experimente | 6 → 7 (+1) | Comparaison objective pour choisir |
+
+---
+
+## Epic 30 — Enrichissement de la section Skills pour tous niveaux
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P2 (moyenne)
+- **Estimation** : S (3-5 jours)
+- **Dependances** : Epic 28 (Skills non-dev)
+- **Personas impactees** : Expert (important), Connaisseur (important)
+- **Source Audit** : EXPERT Skills, CONNAISSEUR Skills manques
+
+### Probleme identifie
+
+Les Skills sont presentes comme "incontournables" mais sont des fichiers Markdown qu'on demande au lecteur de creer lui-meme. Il n'y a pas de repository telechargeable, pas de documentation exhaustive des variables, et pas de patterns avances.
+
+### Description
+
+Publier les Skills dans un repository telechargeable, documenter exhaustivement les variables et le templating, et ajouter des patterns avances.
+
+### User Stories
+
+1. En tant que connaisseur, je veux telecharger les Skills recommandes depuis un repo GitHub afin de les utiliser immediatement.
+2. En tant qu'expert, je veux la documentation complete des variables disponibles dans les Skills ($ARGUMENTS et autres) afin de creer des Skills parametriques.
+3. En tant qu'expert, je veux des patterns avances de Skills (conditionnels, multi-etapes, orchestration) afin de creer des workflows complexes.
+4. En tant que connaisseur, je veux savoir combien de tokens un Skill consomme afin de gerer mon budget contexte.
+
+### Taches detaillees
+
+1. **Repository GitHub de Skills** :
+   - Creer un repo public `claude-codex-skills` (ou l'ajouter au repo du site)
+   - Y publier tous les Skills presentes dans le site (React Component Generator, API Pattern, Deploy Checklist, TDD Guide, Code Reviewer, etc.)
+   - Chaque Skill est un fichier Markdown telechargeable avec instructions d'installation
+   - Ajouter les liens de telechargement dans les pages du site
+
+2. **Documentation des variables et du templating** :
+   - Documenter `$ARGUMENTS` en detail : parsing, arguments optionnels, flags
+   - Documenter les autres variables disponibles (si existantes)
+   - Documenter les variables d'environnement accessibles dans un Skill
+   - Impact en tokens : estimation de la consommation par Skill type
+
+3. **Patterns avances** (enrichissement de `content/skills/create-custom.mdx`) :
+   - Skills conditionnels (adapter le comportement selon le contexte)
+   - Skills multi-etapes avec dependances
+   - Skills qui orchestrent des sous-agents
+   - Skills avec validation de sortie
+   - Versionning et migration des Skills
+
+### Criteres d'acceptation
+
+- Repository GitHub avec 10+ Skills telechargeables
+- Documentation exhaustive des variables de templating
+- 3+ patterns avances documentes avec exemples
+- Liens de telechargement fonctionnels sur le site
+
+### Fichiers impactes
+
+- `content/skills/best-skills.mdx` (ajout liens telechargement)
+- `content/skills/create-custom.mdx` (enrichissement patterns avances)
+- `content/skills/variables-reference.mdx` (nouveau, optionnel)
+- Repository externe ou repertoire `public/skills/`
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Expert | 4.5 → 5.5 (+1) | Skills telechargeables et avances |
+| Connaisseur | 5.5 → 6.5 (+1) | Skills prets a l'emploi |
+
+---
+
+## Epic 31 — Enrichissement de la section Agents pour profils avances
+
+- **Statut** : `TODO`
+- **Review** : `NON REVIEWE`
+- **Priorite** : P2 (moyenne)
+- **Estimation** : M (1-2 semaines)
+- **Dependances** : Epic 13 (section Agents de base), Epic 24 (hooks et mode avance)
+- **Personas impactees** : Expert (critique), Connaisseur (critique)
+- **Source Audit** : CONNAISSEUR Agents (1/10, la pire note), EXPERT Agent SDK
+
+### Probleme identifie
+
+L'audit Connaisseur donne 1/10 a la section Agents — la pire note de tout le site. Les agents et l'orchestration multi-agents sont la fonctionnalite avancee #1 de Claude Code, promise sur la landing page mais absente du contenu. L'Epic 13 existante prevoit de creer la section, mais elle doit etre enrichie avec du contenu de niveau expert.
+
+### Description
+
+S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, patterns d'orchestration multi-agents, agents custom dans `~/.claude/agents/`, limites et couts, et comparaison avec les systemes d'agents concurrents.
+
+### User Stories
+
+1. En tant que connaisseur, je veux comprendre comment configurer des agents custom dans `~/.claude/agents/` afin de creer mes propres workflows automatises.
+2. En tant qu'expert, je veux connaitre l'Agent SDK pour construire des agents programmatiques afin d'integrer Claude Code dans mes outils.
+3. En tant qu'architecte, je veux des patterns d'orchestration multi-agents (fan-out/fan-in, pipeline, multi-perspective) avec des exemples concrets.
+4. En tant qu'expert, je veux connaitre les limites des agents (cout en tokens, profondeur de recursion, timeouts) afin de dimensionner mes workflows.
+5. En tant que connaisseur, je veux une comparaison des systemes d'agents (Claude Code vs Devin vs Aider vs Cline) afin de choisir le bon outil.
+
+### Taches detaillees
+
+1. **Enrichissement du contenu Agents prevu par l'Epic 13** :
+   - S'assurer que les pages incluent :
+     - Configuration d'agents dans `~/.claude/agents/` et `.claude/agents/`
+     - Fichiers AGENTS.md : format, variables, exemples
+     - Le Task tool : comment lancer des sous-agents programmatiquement
+     - Patterns : fan-out/fan-in, pipeline sequentiel, multi-perspective analysis
+     - Exemples concrets : code review multi-perspectives, migration guidee, audit de securite parallele
+
+2. **Page Agent SDK** (`content/agents/agent-sdk.mdx`, nouveau ou integre) :
+   - Qu'est-ce que le Claude Agent SDK ?
+   - Comment construire un agent programmatique
+   - Integration avec des outils externes
+   - Exemples : un agent de monitoring, un agent de deploy, un agent de triage de bugs
+
+3. **Page Limites et performance des agents** :
+   - Cout en tokens : combien coute un workflow multi-agents
+   - Profondeur de recursion : limites et recommandations
+   - Gestion des erreurs : que faire quand un sous-agent echoue
+   - Timeouts et retry strategies
+   - Bonnes pratiques pour les workflows en production
+
+4. **Comparaison avec les concurrents** :
+   - Claude Code agents vs Devin (autonome vs assiste)
+   - Claude Code agents vs Aider (multi-fichiers)
+   - Claude Code agents vs systemes multi-agents custom (LangGraph, CrewAI)
+   - Quand utiliser chaque approche
+
+### Criteres d'acceptation
+
+- Section Agents complete avec contenu expert
+- Agent SDK documente avec exemples
+- Patterns d'orchestration avec 3+ exemples concrets
+- Limites et couts des agents documentes
+- Comparaison avec 3+ systemes concurrents
+- Le contenu de l'Epic 13 est enrichi, pas remplace
+
+### Fichiers impactes
+
+- Fichiers prevus par l'Epic 13 (enrichissement)
+- `content/agents/agent-sdk.mdx` (nouveau ou integre)
+- `content/agents/performance-limits.mdx` (nouveau ou integre)
+
+### Impact attendu sur les scores persona
+
+| Persona | Score actuel | Score vise |
+|---------|-------------|------------|
+| Expert | 4.5 → 6 (+1.5) | Agent SDK et patterns avances |
+| Connaisseur | 5.5 → 8 (+2.5) | La lacune #1 comblee |
+
+---
+---
+
+## Tableau recapitulatif des Epics Persona-Driven (19-31)
+
+| Epic | Titre | Priorite | Estimation | Personas cibles | Statut | Review | Source |
+|------|-------|----------|------------|-----------------|--------|--------|--------|
+| 19 | Audit credibilite et corrections fictives | P0 | M | Expert, Connaisseur, Experimente | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 20 | Contenu visuel (screenshots, GIFs, video) | P0 | L | Novice, Debutant, Experimente | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 21 | Parcours grand debutant et pre-requis zero | P0 | L | Novice, Debutant | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 22 | Refonte majeure section Prompting | P0 | L | Toutes | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 23 | Documentation de reference technique | P1 | M | Expert, Connaisseur, Experimente | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 24 | Hooks, mode headless et CI/CD | P1 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 25 | Creation MCP custom (tutoriel complet) | P1 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 26 | Parcours differencies et navigation par persona | P1 | M | Toutes | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 27 | Section Enterprise complete | P1 | L | Entreprise | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 28 | Contenu non-developpeur et cas d'usage universels | P2 | M | Novice, Debutant | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 29 | Limites, comparaisons objectives et couts reels | P2 | M | Expert, Connaisseur, Experimente | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 30 | Enrichissement section Skills tous niveaux | P2 | S | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 31 | Enrichissement section Agents profils avances | P2 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+
+**Progression** : 0/13 terminee (0%)
+
+---
+
+## Roadmap Persona-Driven en phases
+
+### Phase A — Credibilite et fondations visuelles (Semaines 1-3)
+
+**Objectif** : Restaurer la credibilite technique et ajouter le contenu visuel manquant.
+
+| Epic | Titre | Estimation |
+|------|-------|------------|
+| 19 | Audit credibilite et corrections fictives | M |
+| 20 | Contenu visuel (screenshots, GIFs, video) | L |
+
+**Parallelisme** : Epics 19 et 20 en parallele. L'audit de credibilite (19) est un prerequis pour les corrections MCP/Plugins qui impactent les autres epics.
+
+**Livrable** : Un site avec des informations verifiees et du contenu visuel.
+
+---
+
+### Phase B — Contenus pour novices et prompting (Semaines 3-6)
+
+**Objectif** : Combler le fosse entre la promesse de la landing page et le contenu pour debutants. Refondre la section prompting.
+
+| Epic | Titre | Estimation |
+|------|-------|------------|
+| 21 | Parcours grand debutant et pre-requis zero | L |
+| 22 | Refonte majeure section Prompting | L |
+
+**Parallelisme** : Epics 21 et 22 en parallele (equipes differentes ou themes differents).
+
+**Livrable** : Un site ou un novice peut suivre le parcours de A a Z, et une section prompting complete.
+
+---
+
+### Phase C — Contenu expert et reference (Semaines 6-10)
+
+**Objectif** : Ajouter la profondeur technique que les experts et connaisseurs attendent.
+
+| Epic | Titre | Estimation |
+|------|-------|------------|
+| 23 | Documentation de reference technique | M |
+| 24 | Hooks, mode headless et CI/CD | M |
+| 25 | Creation MCP custom (tutoriel complet) | M |
+
+**Parallelisme** : Les 3 epics sont independantes et peuvent etre travaillees en parallele.
+
+**Livrable** : Un site avec de la profondeur technique bookmarkable.
+
+---
+
+### Phase D — Navigation personnalisee et enterprise (Semaines 10-14)
+
+**Objectif** : Implementer les parcours differencies et creer la section enterprise.
+
+| Epic | Titre | Estimation |
+|------|-------|------------|
+| 26 | Parcours differencies et navigation par persona | M |
+| 27 | Section Enterprise complete | L |
+
+**Parallelisme** : Epics 26 et 27 en parallele (composants UI vs contenu).
+
+**Livrable** : Un site ou chaque persona trouve son chemin et un decideur a ses reponses.
+
+---
+
+### Phase E — Enrichissements et completude (Semaines 14-18)
+
+**Objectif** : Combler les lacunes restantes et enrichir le contenu existant.
+
+| Epic | Titre | Estimation |
+|------|-------|------------|
+| 28 | Contenu non-developpeur et cas d'usage universels | M |
+| 29 | Limites, comparaisons objectives et couts reels | M |
+| 30 | Enrichissement section Skills tous niveaux | S |
+| 31 | Enrichissement section Agents profils avances | M |
+
+**Parallelisme** : Toutes les epics sont independantes.
+
+**Livrable** : Un site complet qui repond a chaque persona.
+
+---
+
+## Impact global projete par persona
+
+| Persona | Score actuel | Score projete (toutes epics) | Epics principales |
+|---------|-------------|------------------------------|-------------------|
+| **Novice** | 5.5/10 | 8/10 | 20, 21, 22, 26, 28 |
+| **Debutant** | 5.5/10 | 8/10 | 20, 21, 22, 26, 28 |
+| **Experimente** | 6/10 | 8/10 | 19, 22, 23, 26, 29 |
+| **Connaisseur** | 5.5/10 | 8.5/10 | 19, 22, 24, 25, 30, 31 |
+| **Expert** | 4.5/10 | 7.5/10 | 19, 23, 24, 25, 29, 31 |
+| **Entreprise** | 3/10 | 7/10 | 27, 26, 29 |
+
+---
+
+## Matrice de tracabilite — Audits Persona → Epics
+
+### Persona Novice (5.5/10)
+
+| # Audit | Description | Epic(s) |
+|---------|-------------|---------|
+| C1 | Page "Pre-requis zero" avec captures d'ecran | Epic 21 |
+| C2 | Captures d'ecran annotees dans le Getting Started | Epic 20 |
+| C3 | Un seul chemin d'installation recommande | Epic 21 |
+| C4 | Definitions des termes techniques au premier usage | Epic 21 |
+| C5 | Page Prompting detaillee et illustree | Epic 22 |
+| I1 | Parcours differencies par persona | Epic 26 |
+| I2 | Glossaire interactif | Epic 21 |
+| I3 | Premier projet ultra-simple | Epic 21 |
+| I4 | Exemples non-techniques de Skills/MCP | Epic 28 |
+| I5 | Badges "Avance" sur les sections | Epic 26 |
+| I6 | FAQ "Questions de debutant" | Epic 21 |
+| I7 | CTA landing page accessible | Epic 26 |
+
+### Persona Debutant (5.5/10)
+
+| # Audit | Description | Epic(s) |
+|---------|-------------|---------|
+| C1 | Screenshots/GIFs a chaque etape Getting Started | Epic 20 |
+| C2 | Page "Qu'est-ce qu'un terminal" | Epic 21 |
+| C3 | Mention de prix claire et visible | Epic 21 |
+| C4 | Parcours "debutant complet" dedie | Epic 26 |
+| C5 | Corriger les accents manquants | Deja couvert Epic 7 |
+| I1 | Exemples de prompts pour non-developpeurs | Epic 22, 28 |
+| I2 | Alternative "essayer sans installer" | Nice-to-have |
+| I3 | Badges de niveau | Epic 26 |
+| I4 | Restructurer page installation (onglets) | Epic 21 |
+| I5 | Enrichir page Prompting (3x plus long) | Epic 22 |
+| I6 | Video d'introduction | Epic 20 |
+| I7 | Plugins dans le menu navigation | Epic 26 |
+
+### Persona Experimente (6/10)
+
+| # Audit | Description | Epic(s) |
+|---------|-------------|---------|
+| C1 | Verifier/corriger section Plugins | Epic 19 |
+| C2 | Reecrire page Prompting | Epic 22 |
+| C3 | Quick Reference / Cheatsheet | Epic 23 |
+| C4 | Retirer configurateur de la navigation | Note pour Epic existante |
+| I1 | Parcours "Fast Track" pour devs | Epic 26 |
+| I2 | Exemples de code realistes | Epic 22 |
+| I3 | Mode headless et CI/CD | Epic 24 |
+| I4 | Section "Limitations & Troubleshooting avance" | Epic 29 |
+| I5 | Verifier noms de packages MCP | Epic 19 |
+| I6 | Documenter les modeles (Haiku, Sonnet, Opus) | Epic 22 |
+| I7 | Reduire les analogies repetitives | Contenu transversal |
+
+### Persona Connaisseur (5.5/10)
+
+| # Audit | Description | Epic(s) |
+|---------|-------------|---------|
+| CRITIQUE 1 | Creer section Agents complete | Epic 31 + Epic 13 |
+| CRITIQUE 2 | Tutoriel "Creer un MCP custom" | Epic 25 |
+| CRITIQUE 3 | Corriger infos fictives Plugins | Epic 19 |
+| CRITIQUE 4 | Honorer promesses landing "Avance" | Epics 24, 25, 31 |
+| IMP 5 | Section Hooks | Epic 24 |
+| IMP 6 | Enrichir prompting avance | Epic 22 |
+| IMP 7 | Page "Configuration avancee" | Epic 23 |
+| IMP 8 | Page "Limites et workarounds" | Epic 29 |
+| IMP 9 | Page "Couts et optimisation" | Epic 29 |
+| IMP 10 | Reecrire page Future/Vision | Note pour Epic 16 |
+| IMP 11 | Skills telechargeables | Epic 30 |
+
+### Persona Expert (4.5/10)
+
+| # Audit | Description | Epic(s) |
+|---------|-------------|---------|
+| CRITIQUE 1 | Creer MCP Server custom | Epic 25 |
+| CRITIQUE 2 | Section Hooks (PreToolUse, PostToolUse, Stop) | Epic 24 |
+| CRITIQUE 3 | Refondre section Prompting (3-4 pages) | Epic 22 |
+| CRITIQUE 4 | Verifier noms de packages MCP | Epic 19 |
+| CRITIQUE 5 | Clarifier ecosysteme Plugins | Epic 19 |
+| IMP 6 | Section Couts et performance | Epic 29 |
+| IMP 7 | Integration CI/CD et mode headless | Epic 24 |
+| IMP 8 | Limitations et comparaison honnete | Epic 29 |
+| IMP 9 | Reference CLI complete | Epic 23 |
+| IMP 10 | Corriger accents | Deja couvert Epic 7 |
+
+### Persona Entreprise (3/10)
+
+| # Audit | Description | Epic(s) |
+|---------|-------------|---------|
+| CR1 | Page Enterprise dediee | Epic 27 |
+| CR2 | Section Securite & Compliance | Epic 27 |
+| CR3 | Guide d'adoption d'equipe | Epic 27 |
+| CR4 | Temoignages enterprise | Epic 27 |
+| CR5 | Calculateur TCO | Epic 27 |
+| IM1 | Guide de gouvernance | Epic 27 |
+| IM2 | Comparaison enterprise detaillee | Epic 27 |
+| IM3 | Integration outils enterprise (Jira, etc.) | Epic 27 |
+| IM4 | FAQ enterprise | Epic 27 |
+| IM5 | Parcours "Entreprise" sur la landing | Epic 26 |
+| IM6 | Deploiement a l'echelle | Epic 27 |
+| IM7 | Metriques de productivite referencees | Epic 27 |
+
+### Verification de couverture persona
+
+- **Novice** : 12/12 points couverts = **100%**
+- **Debutant** : 11/12 points couverts (1 nice-to-have "sandbox en ligne" non couvert) = **92%**
+- **Experimente** : 7/7 critiques et importants couverts = **100%**
+- **Connaisseur** : 11/11 points couverts = **100%**
+- **Expert** : 10/10 points couverts = **100%**
+- **Entreprise** : 12/12 points couverts = **100%**
+- **Couverture globale : 63/64 points couverts = 98.4%**

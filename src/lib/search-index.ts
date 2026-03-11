@@ -346,6 +346,103 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
       "tutoriel",
     ],
   },
+  // MCP Security
+  {
+    title: "Securite des MCP : dangers reels et comment s'en proteger",
+    description:
+      "Prompt injection, exfiltration de donnees, supply chain attacks, confusion de permissions. Checklist de securite copiable pour CLAUDE.md.",
+    href: "/mcp/securite-mcp",
+    section: "MCP",
+    keywords: [
+      "securite",
+      "mcp",
+      "prompt injection",
+      "exfiltration",
+      "supply chain",
+      "typosquatting",
+      "permissions",
+      "dangerouslySkipPermissions",
+      "checklist",
+      "audit",
+      "malveillant",
+      "credentials",
+      "exploit",
+    ],
+  },
+  // Costs
+  {
+    title: "Couts reels de Claude Code : tokens, MCP et abonnements",
+    description:
+      "Prix Anthropic a jour, calcul concret par session, impact des MCP sur la consommation, comparatif des plans et strategies d'optimisation.",
+    href: "/content/couts-reels-claude-code",
+    section: "Contenus",
+    keywords: [
+      "cout",
+      "prix",
+      "tokens",
+      "budget",
+      "abonnement",
+      "pro",
+      "max",
+      "api",
+      "facture",
+      "sonnet",
+      "opus",
+      "haiku",
+      "mcp",
+      "economiser",
+      "throttling",
+      "limite",
+    ],
+  },
+  // Myths
+  {
+    title: "8 idees recues sur Claude Code - Mythes et realites",
+    description:
+      "Les mythes les plus repandus demystifies : securite des MCP, couts reels, terminologie correcte, risques du mode auto et limites du contexte.",
+    href: "/content/mythes-claude-code",
+    section: "Contenus",
+    keywords: [
+      "mythes",
+      "idees recues",
+      "demystifier",
+      "realite",
+      "mcp officiel",
+      "securite",
+      "gratuit",
+      "plugin",
+      "skill",
+      "mode auto",
+      "context",
+      "compact",
+      "CLAUDE.md prive",
+    ],
+  },
+  // Security Best Practices
+  {
+    title: "Guide de securite Claude Code : principes et bonnes pratiques",
+    description:
+      "Moindre privilege, audit avant installation, profils de configuration, monitoring, rotation des sessions et checklist complete copiable.",
+    href: "/content/bonnes-pratiques-securite",
+    section: "Contenus",
+    keywords: [
+      "securite",
+      "bonnes pratiques",
+      "moindre privilege",
+      "audit",
+      "profil",
+      "configuration",
+      "monitoring",
+      "rotation",
+      "session",
+      "checklist",
+      "permissions",
+      "sandbox",
+      "credentials",
+      "production",
+      "developpement",
+    ],
+  },
 ];
 
 export function searchEntries(

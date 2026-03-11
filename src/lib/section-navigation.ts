@@ -31,6 +31,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Top MCP développement", href: "/mcp/best-development" },
       { label: "Top MCP design & UI", href: "/mcp/best-design" },
       { label: "Premier workflow MCP", href: "/mcp/first-workflow" },
+      { label: "Sécurité des MCP", href: "/mcp/securite-mcp" },
     ],
   },
   plugins: {
@@ -102,6 +103,9 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Guide complet des Skills", href: "/content/skills-guide" },
       { label: "Guide du prompting", href: "/content/prompting-guide" },
       { label: "Vision et tendances IA", href: "/content/future-vision" },
+      { label: "Coûts réels de Claude Code", href: "/content/couts-reels-claude-code" },
+      { label: "8 idées reçues sur Claude Code", href: "/content/mythes-claude-code" },
+      { label: "Guide de sécurité", href: "/content/bonnes-pratiques-securite" },
     ],
   },
 };

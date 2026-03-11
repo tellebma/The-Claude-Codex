@@ -2272,8 +2272,8 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 
 ## Epic 33 — Dangers, pieges et idees recues : MCP, Plugins, contexte et couts
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1
 - **Estimation** : M (5-8 jours)
 - **Dependances** : Epic 19 (audit credibilite) recommandee avant pour eviter de documenter des infos fictives
@@ -2404,9 +2404,9 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 30 | Enrichissement section Skills tous niveaux | P2 | S | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 31 | Enrichissement section Agents profils avances | P2 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 32 | Suivi d'usage et analytics (Matomo) | P2 | S | Toutes (ops) | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
-| 33 | Dangers, pieges et idees recues (MCP, contexte, couts) | P1 | M | Toutes | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
+| 33 | Dangers, pieges et idees recues (MCP, contexte, couts) | P1 | M | Toutes | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE UTILISATEUR |
 
-**Progression** : 4/15 terminee (27%)
+**Progression** : 5/15 terminee (33%)
 
 ---
 

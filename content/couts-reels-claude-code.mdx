@@ -1,0 +1,236 @@
+---
+title: "Coûts réels de Claude Code : tokens, MCP et abonnements"
+description: "Calcul concret des coûts Claude Code selon votre usage : prix Anthropic à jour, impact des MCP, comparatif des plans, et stratégies pour optimiser votre budget."
+badge: "Budget"
+section: "content"
+order: 6
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Tokens = argent : comprendre ce qui est facturé
+
+Chaque interaction avec Claude Code consomme des **tokens** — des unités de texte que le modèle traite. Tout est compté : votre prompt, le contexte de la conversation, les fichiers lus par Claude, les schémas des MCP, et bien sûr les réponses générées.
+
+<Callout type="info" title="Qu'est-ce qu'un token ?">
+Un token correspond environ à 4 caractères en anglais, ou 3 caractères en français (le français utilise plus de tokens par mot à cause des accents et des mots plus longs). "Claude Code est puissant" représente environ 7 tokens. Une page A4 de texte représente environ 500 à 700 tokens.
+</Callout>
+
+Il existe deux types de tokens, facturés différemment :
+
+- **Tokens d'entrée (input)** : tout ce que Claude reçoit — votre message, l'historique, les fichiers lus, les résultats MCP
+- **Tokens de sortie (output)** : les réponses générées par Claude — du code, des explications, des fichiers
+
+Les tokens de sortie coûtent généralement 3 à 5 fois plus cher que les tokens d'entrée.
+
+## Prix officiels Anthropic (mars 2026)
+
+<Callout type="warning" title="Prix susceptibles d'évoluer">
+Les prix Anthropic peuvent changer. Vérifiez toujours les tarifs actuels sur [anthropic.com/pricing](https://www.anthropic.com/pricing) avant de budgéter. Les chiffres ci-dessous sont ceux publiés lors de la rédaction de cet article.
+</Callout>
+
+### Tarifs par modèle via l'API directe
+
+| Modèle | Input (par million de tokens) | Output (par million de tokens) |
+|---|---|---|
+| Claude Haiku 4.5 | ~$0.80 | ~$4 |
+| Claude Sonnet 4.5 | ~$3 | ~$15 |
+| Claude Opus 4.5 | ~$15 | ~$75 |
+
+**Pour une session de développement typique** avec Sonnet (le modèle par défaut) :
+
+- Session légère (30 min, questions simples) : ~50 000 tokens → **~$0.30**
+- Session moyenne (2h, refactoring module) : ~200 000 tokens → **~$1.20**
+- Session intensive (full day, grand projet) : ~500 000 tokens → **~$3.00**
+
+## Impact des MCP sur les coûts : calculs concrets
+
+Les MCP ont un impact direct sur votre consommation de tokens, souvent ignoré. Voici des estimations basées sur l'architecture MCP réelle.
+
+### Coût de démarrage selon les MCP actifs
+
+Au démarrage de chaque session, Claude charge les schémas d'outils de tous les MCP configurés. Ce "coût fixe" est payé avant même votre premier message.
+
+| Configuration | MCP actifs | Tokens de démarrage | Coût de démarrage (Sonnet) |
+|---|---|---|---|
+| Sans MCP | 0 | ~500 (CLAUDE.md) | ~$0.002 |
+| Setup minimal | 3 MCP (filesystem, github, context7) | ~8 000 | ~$0.024 |
+| Setup standard | 10 MCP | ~25 000 | ~$0.075 |
+| Setup maximal | 20+ MCP | ~60 000+ | ~$0.18+ |
+
+<Callout type="tip" title="Le coût de démarrage s'accumule">
+Si vous démarrez 5 sessions par jour avec 10 MCP actifs, le coût de démarrage seul représente ~$0.375/jour, soit ~$11/mois — avant d'avoir tapé une seule ligne de code. Pour l'API directe, c'est non négligeable.
+</Callout>
+
+### Simulation : une session de 2h avec différentes configurations
+
+```
+# Session type : développement d'une feature (refactoring d'un module)
+
+SCÉNARIO A — Sans MCP
+  Démarrage           :    500 tokens input
+  Prompts utilisateur :  5 000 tokens input
+  Code lu par Claude  : 30 000 tokens input
+  Réponses Claude     : 15 000 tokens output
+  TOTAL               : 35 500 input + 15 000 output
+  COÛT (Sonnet)       : ~$0.11 + ~$0.23 = ~$0.34
+
+SCÉNARIO B — Avec 3 MCP (filesystem, github, context7)
+  Démarrage MCP       :  8 000 tokens input
+  Prompts utilisateur :  5 000 tokens input
+  Code lu par Claude  : 30 000 tokens input
+  Résultats MCP       :  8 000 tokens input (résultats des appels)
+  Réponses Claude     : 15 000 tokens output
+  TOTAL               : 51 000 input + 15 000 output
+  COÛT (Sonnet)       : ~$0.15 + ~$0.23 = ~$0.38
+
+SCÉNARIO C — Avec 10 MCP actifs
+  Démarrage MCP       : 25 000 tokens input
+  Prompts utilisateur :  5 000 tokens input
+  Code lu par Claude  : 30 000 tokens input
+  Résultats MCP       : 12 000 tokens input
+  Réponses Claude     : 15 000 tokens output
+  TOTAL               : 72 000 input + 15 000 output
+  COÛT (Sonnet)       : ~$0.22 + ~$0.23 = ~$0.45
+```
+
+La différence entre 0 et 10 MCP pour une même session est de **~$0.11** — ce qui peut paraître modeste à l'unité, mais représente $30/mois sur 5 sessions/jour.
+
+## Abonnements Claude Max : ce que vous achetez vraiment
+
+Claude Max (anciennement Claude Pro) est un abonnement à prix fixe qui semble illimité — mais ne l'est pas.
+
+### Ce que Claude Max inclut
+
+- **Accès prioritaire** à Claude sans file d'attente
+- **Limite de messages augmentée** (pas illimitée)
+- **Accès aux modèles les plus récents** incluant Opus
+
+### Les limites réelles
+
+L'abonnement Claude Max est soumis à des **limites de messages par tranche de temps** (généralement par heure ou par jour). Ces limites varient selon la charge des serveurs et ne sont pas publiées précisément. En pratique :
+
+- En usage léger (moins de 20 messages/heure) : vous ne verrez jamais la limite
+- En usage intensif (sessions continues de 4h+) : vous pouvez atteindre le **throttling** — Claude répond plus lentement ou vous demande d'attendre
+
+<Callout type="warning" title="Claude Max n'est pas illimité">
+"Illimité" dans le contexte de Claude Max signifie "pas de quota fixe en tokens facturé individuellement", pas "vous pouvez faire autant de requêtes que vous voulez à toute vitesse". Un usage professionnel intensif peut rencontrer des limitations de débit.
+</Callout>
+
+## Tableau comparatif des plans
+
+| | **Essai gratuit** | **Claude Pro** | **Claude Max** | **API directe** |
+|---|---|---|---|---|
+| **Coût mensuel** | Gratuit | ~$20/mois | ~$100/mois | Variable à l'usage |
+| **Modèles disponibles** | Haiku uniquement | Sonnet + Haiku | Sonnet + Opus | Tous |
+| **Limite de messages** | Très restrictive | ~1000/mois | Haute mais limitée | Illimitée (payant/token) |
+| **Priorité de débit** | Faible | Standard | Haute | Standard |
+| **MCP disponibles** | Non | Oui | Oui | Via SDK |
+| **Idéal pour** | Découverte | Usage régulier | Professionnel intensif | Dev/entreprise |
+| **Coût prévisible** | Oui | Oui | Oui | Non (variable) |
+
+### Quand choisir l'API directe vs un abonnement
+
+**Préférez un abonnement (Pro ou Max) si :**
+- Vous voulez des coûts prévisibles
+- Vous utilisez Claude Code quotidiennement pour du développement
+- Vous débutez et voulez explorer sans surprise de facture
+
+**Préférez l'API directe si :**
+- Vous avez un usage très variable (actif certains mois, pas d'autres)
+- Vous intégrez Claude dans vos propres outils
+- Vous voulez contrôler exactement quel modèle vous utilisez
+- Votre usage est faible (moins de 50$/mois d'API)
+
+## Coûts cachés des MCP tiers
+
+Certains MCP populaires s'appuient sur des **APIs payantes tierces** que vous devez également souscrire.
+
+| MCP | API tierce | Coût estimé |
+|---|---|---|
+| MCP Tavily (recherche web) | Tavily API | ~$0.01/recherche, 1000 gratuites/mois |
+| MCP Exa (recherche) | Exa API | $0.01/recherche, plan gratuit limité |
+| MCP Firecrawl (scraping) | Firecrawl | $0.0002/page, plan gratuit limité |
+| MCP Browserbase | Browserbase | Variable, plans à partir de $10/mois |
+| MCP Resend (emails) | Resend API | Gratuit jusqu'à 100 emails/mois |
+| MCP Stripe (paiements) | Stripe API | Gratuit (frais sur les transactions) |
+
+<Callout type="tip" title="Calculez le coût total de possession">
+Avant d'adopter un MCP, vérifiez s'il a des dépendances API payantes. Un MCP de recherche web "gratuit" peut vous coûter $20/mois en API tierce si vous l'utilisez intensivement.
+</Callout>
+
+## Stratégies d'optimisation coût/valeur
+
+### 1. Ne charger que les MCP nécessaires à la session
+
+Utilisez des fichiers `.mcp.json` par projet pour ne charger que les MCP pertinents :
+
+```json
+// Pour un projet frontend sans base de données
+// .mcp.json à la racine du projet
+{
+  "mcpServers": {
+    "filesystem": { ... },
+    "playwright": { ... }
+  }
+}
+// GitHub, PostgreSQL, Slack → non chargés = économie de contexte
+```
+
+### 2. Utiliser /cost pour monitorer sa consommation
+
+```bash
+# Dans une session Claude Code
+/cost
+# Affiche : tokens input, tokens output, coût estimé de la session
+```
+
+Utilisez cette commande régulièrement pour identifier les sessions coûteuses et ajuster vos prompts.
+
+### 3. Écrire des prompts précis
+
+Un prompt vague génère une réponse longue et souvent inadaptée — que vous devrez corriger avec un second prompt. Double coût pour un résultat inférieur.
+
+```markdown
+# Coûteux et inefficace
+"Améliore mon code"
+
+# Précis et économique
+"Dans src/auth/auth.service.ts, ligne 45-60 :
+optimise la requête SQL pour éviter le N+1 problem.
+Utilise eager loading avec Prisma. Garde les types TypeScript."
+```
+
+### 4. Préférer Sonnet à Opus sauf pour les tâches qui le justifient
+
+Opus coûte 5x plus cher que Sonnet. Pour la plupart des tâches de développement, Sonnet est suffisant. Réservez Opus pour :
+- L'architecture de systèmes complexes
+- L'analyse de sécurité approfondie
+- Les refactorings massifs nécessitant une vision globale
+
+### 5. Utiliser /compact proactivement
+
+Un contexte allégé = moins de tokens d'input à chaque message. `/compact` peut diviser par 2-3 le coût de la fin de session.
+
+## Estimer son budget mensuel
+
+```
+# Formule de calcul mensuel
+
+Sessions/jour × Jours/mois × Coût/session
+
+Exemple — Développeur indépendant, usage quotidien :
+3 sessions/jour × 20 jours/mois × $0.38/session
+= ~$23/mois via API directe
+
+→ Claude Pro (~$20/mois) serait plus économique et prévisible
+→ Claude Max (~$100/mois) n'est justifié qu'à partir de 5+ sessions intensives/jour
+```
+
+## Prochaines étapes
+
+- [Gestion du contexte](/prompting/context-management) — Comment le contexte impacte directement vos coûts
+- [Mythes sur Claude Code](/content/mythes-claude-code) — "Claude Code est gratuit avec Pro" — démystifié
+- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) — Sécurité et économies vont de pair
+- [Configurateur interactif](/configurator) — Générez une configuration optimisée pour votre usage
+- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) — Quand activer le thinking profond (et son coût)

@@ -230,6 +230,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-09",
   },
   {
+    path: "/mcp/securite-mcp",
+    title: "S\u00e9curit\u00e9 des MCP : dangers r\u00e9els et comment s\u2019en prot\u00e9ger",
+    description:
+      "Guide complet de s\u00e9curit\u00e9 pour les MCP Claude Code : prompt injection, exfiltration de donn\u00e9es, supply chain attacks, permissions et checklist de s\u00e9curit\u00e9.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
     path: "/skills",
     title: "Skills : Enseignez de nouveaux talents \u00e0 Claude Code",
     description:
@@ -507,5 +516,32 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+  },
+  {
+    path: "/content/couts-reels-claude-code",
+    title: "Co\u00fbts r\u00e9els de Claude Code : tokens, MCP et abonnements",
+    description:
+      "Calcul concret des co\u00fbts Claude Code selon votre usage : prix Anthropic \u00e0 jour, impact des MCP, comparatif des plans, et strat\u00e9gies pour optimiser votre budget.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/content/mythes-claude-code",
+    title: "8 id\u00e9es re\u00e7ues sur Claude Code \u2014 Mythes et r\u00e9alit\u00e9s",
+    description:
+      "Les 8 mythes les plus r\u00e9pandus sur Claude Code d\u00e9mystifi\u00e9s : s\u00e9curit\u00e9 des MCP, co\u00fbts, terminologie, risques du mode auto et limites du contexte.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/content/bonnes-pratiques-securite",
+    title: "Guide de s\u00e9curit\u00e9 Claude Code : bonnes pratiques",
+    description:
+      "Guide complet de s\u00e9curit\u00e9 pour Claude Code : principe du moindre privil\u00e8ge, audit des MCP, profils de configuration, monitoring et checklist copiable.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
   },
 ];

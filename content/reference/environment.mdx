@@ -1,5 +1,5 @@
 ---
-title: "Variables d'environnement — Référence complète"
+title: "Variables d'environnement : Référence complète"
 description: "Toutes les variables d'environnement reconnues par Claude Code : clé API, modèle, proxy, tokens et répertoire de config. Valeurs par défaut et exemples."
 badge: "Env"
 section: "reference"
@@ -70,9 +70,9 @@ CLAUDE_MODEL="claude-opus-4-5" claude --print "tâche complexe"
 ```
 
 Identifiants de modèles courants :
-- `claude-haiku-4-5` — Rapide et économique
-- `claude-sonnet-4-5` — Équilibre recommandé
-- `claude-opus-4-5` — Raisonnement le plus profond
+- `claude-haiku-4-5` : Rapide et économique
+- `claude-sonnet-4-5` : Équilibre recommandé
+- `claude-opus-4-5` : Raisonnement le plus profond
 
 ---
 
@@ -236,14 +236,14 @@ export CLAUDE_CONFIG_DIR="/tmp/claude-ci-config"
 
 | Variable | Requis | Défaut | Description |
 |----------|--------|--------|-------------|
-| `ANTHROPIC_API_KEY` | Oui* | — | Clé API Anthropic |
+| `ANTHROPIC_API_KEY` | Oui* | Aucun | Clé API Anthropic |
 | `CLAUDE_MODEL` | Non | `claude-sonnet-4-5` | Modèle par défaut |
 | `MAX_THINKING_TOKENS` | Non | `31999` | Budget Extended Thinking |
 | `ANTHROPIC_BASE_URL` | Non | `https://api.anthropic.com` | URL API personnalisée |
-| `HTTP_PROXY` | Non | — | Proxy HTTP |
-| `HTTPS_PROXY` | Non | — | Proxy HTTPS |
-| `NO_PROXY` | Non | — | Exclusions proxy |
-| `DISABLE_AUTOUPDATER` | Non | — | Désactive les mises à jour auto |
+| `HTTP_PROXY` | Non | Aucun | Proxy HTTP |
+| `HTTPS_PROXY` | Non | Aucun | Proxy HTTPS |
+| `NO_PROXY` | Non | Aucun | Exclusions proxy |
+| `DISABLE_AUTOUPDATER` | Non | Aucun | Désactive les mises à jour auto |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | Non | Limite modèle | Max tokens en sortie |
 | `CLAUDE_CONFIG_DIR` | Non | `~/.claude/` | Répertoire de config alternatif |
 
@@ -298,6 +298,6 @@ CLAUDE_CONFIG_DIR="/opt/claude-code/config"
 
 ## Prochaines étapes
 
-- [Cheatsheet — Référence rapide](/reference/cheatsheet) — Commandes slash et raccourcis clavier
-- [CLI — Référence complète](/reference/cli) — Tous les flags de la commande `claude`
-- [settings.json — Guide complet](/reference/settings) — Configuration avancée
+- [Cheatsheet : Référence rapide](/reference/cheatsheet) : Commandes slash et raccourcis clavier
+- [CLI : Référence complète](/reference/cli) : Tous les flags de la commande `claude`
+- [settings.json : Guide complet](/reference/settings) : Configuration avancée

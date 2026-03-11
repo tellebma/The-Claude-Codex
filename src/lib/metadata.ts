@@ -49,7 +49,7 @@ export function createPageMetadata({
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: `${title} — ${SITE_NAME}`,
+          alt: `${title} | ${SITE_NAME}`,
         },
       ],
       ...(publishedTime ? { publishedTime } : {}),
@@ -89,7 +89,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/",
     title: "Ma\u00eetrisez Claude Code",
     description:
-      "Le guide de r\u00e9f\u00e9rence gratuit pour ma\u00eetriser Claude Code. MCP, Skills, Prompting avanc\u00e9 \u2014 pour d\u00e9veloppeurs et non-d\u00e9veloppeurs.",
+      "Le guide de r\u00e9f\u00e9rence gratuit pour ma\u00eetriser Claude Code. MCP, Skills, Prompting avanc\u00e9, pour d\u00e9veloppeurs et non-d\u00e9veloppeurs.",
     priority: 1.0,
     changeFrequency: "weekly",
     lastModified: "2026-03-07",
@@ -150,7 +150,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/getting-started/faq-beginner",
-    title: "FAQ d\u00e9butants \u2014 Questions fr\u00e9quentes sur Claude Code",
+    title: "FAQ d\u00e9butants : Questions fr\u00e9quentes sur Claude Code",
     description:
       "R\u00e9ponses honn\u00eates aux questions les plus courantes des d\u00e9butants : s\u00e9curit\u00e9, vie priv\u00e9e, co\u00fbts, diff\u00e9rence avec ChatGPT, pr\u00e9requis techniques.",
     priority: 0.85,
@@ -159,7 +159,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/glossary",
-    title: "Glossaire \u2014 Termes techniques expliqu\u00e9s simplement",
+    title: "Glossaire : Termes techniques expliqu\u00e9s simplement",
     description:
       "Plus de 40 termes techniques de l\u2019IA et du d\u00e9veloppement web expliqu\u00e9s en langage humain, avec des analogies concr\u00e8tes. Terminal, API, Git, npm, Docker et bien plus.",
     priority: 0.8,
@@ -368,7 +368,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/plugins",
     title: "Plugins : Etendez les capacites de Claude Code",
     description:
-      "Decouvrez les plugins Claude Code pour enrichir votre assistant IA. Agents specialises, design, securite, qualite — installez les meilleurs plugins du marketplace.",
+      "Decouvrez les plugins Claude Code pour enrichir votre assistant IA. Agents specialises, design, securite, qualite, installez les meilleurs plugins du marketplace.",
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
@@ -509,8 +509,44 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-10",
   },
   {
+    path: "/advanced",
+    title: "Utilisation avanc\u00e9e de Claude Code",
+    description:
+      "Hooks, mode headless, int\u00e9gration CI/CD, multi-provider et configuration enterprise. Ma\u00eetrisez les fonctionnalit\u00e9s avanc\u00e9es de Claude Code.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/advanced/hooks",
+    title: "Syst\u00e8me de Hooks : Claude Code",
+    description:
+      "Automatisez vos workflows avec les hooks PreToolUse, PostToolUse et Stop. Auto-format avec Prettier, notifications Slack, rapports de session et patterns avanc\u00e9s.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/advanced/headless-ci",
+    title: "Mode Headless et CI/CD : Claude Code",
+    description:
+      "Utilisez Claude Code en mode non-interactif dans vos pipelines. GitHub Actions, GitLab CI, pre-commit hooks et bonnes pratiques de s\u00e9curit\u00e9.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/advanced/multi-provider",
+    title: "Multi-provider et Enterprise : Claude Code",
+    description:
+      "Configurez Claude Code avec AWS Bedrock, Google Vertex AI ou un proxy OpenAI-compatible. Gestion des credentials, s\u00e9lection de mod\u00e8le par t\u00e2che et configuration enterprise.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
     path: "/reference",
-    title: "R\u00e9f\u00e9rence technique \u2014 Claude Code",
+    title: "R\u00e9f\u00e9rence technique : Claude Code",
     description:
       "Documentation de r\u00e9f\u00e9rence compl\u00e8te pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d\u2019environnement.",
     priority: 0.85,
@@ -519,7 +555,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/reference/cheatsheet",
-    title: "Cheatsheet \u2014 R\u00e9f\u00e9rence rapide Claude Code",
+    title: "Cheatsheet : R\u00e9f\u00e9rence rapide Claude Code",
     description:
       "Toutes les slash commands, raccourcis clavier, fichiers de configuration et modes d\u2019ex\u00e9cution de Claude Code en un seul endroit. Format dense et copiable.",
     priority: 0.8,
@@ -528,7 +564,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/reference/cli",
-    title: "CLI \u2014 R\u00e9f\u00e9rence compl\u00e8te des commandes Claude Code",
+    title: "CLI : R\u00e9f\u00e9rence compl\u00e8te des commandes Claude Code",
     description:
       "R\u00e9f\u00e9rence exhaustive de la commande claude : tous les flags, sous-commandes mcp/config/doctor, modes d\u2019ex\u00e9cution et exemples concrets.",
     priority: 0.8,
@@ -537,7 +573,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/reference/settings",
-    title: "settings.json \u2014 R\u00e9f\u00e9rence de configuration Claude Code",
+    title: "settings.json : R\u00e9f\u00e9rence de configuration Claude Code",
     description:
       "Toutes les options du fichier settings.json : 3 niveaux de configuration, permissions, MCP, mod\u00e8les, outils et exemples complets.",
     priority: 0.8,
@@ -546,7 +582,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/reference/environment",
-    title: "Variables d\u2019environnement \u2014 R\u00e9f\u00e9rence Claude Code",
+    title: "Variables d\u2019environnement : R\u00e9f\u00e9rence Claude Code",
     description:
       "Toutes les variables d\u2019environnement reconnues par Claude Code : cl\u00e9 API, mod\u00e8le, proxy, tokens, r\u00e9pertoire de config et exemples CI/CD.",
     priority: 0.8,
@@ -557,7 +593,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/configurator",
     title: "Configurateur interactif Claude Code",
     description:
-      "Générez votre configuration Claude Code sur mesure. CLAUDE.md, settings.json, .mcp.json et agents — en quelques clics.",
+      "Générez votre configuration Claude Code sur mesure. CLAUDE.md, settings.json, .mcp.json et agents, en quelques clics.",
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
@@ -573,7 +609,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/content/mythes-claude-code",
-    title: "8 id\u00e9es re\u00e7ues sur Claude Code \u2014 Mythes et r\u00e9alit\u00e9s",
+    title: "8 id\u00e9es re\u00e7ues sur Claude Code : Mythes et r\u00e9alit\u00e9s",
     description:
       "Les 8 mythes les plus r\u00e9pandus sur Claude Code d\u00e9mystifi\u00e9s : s\u00e9curit\u00e9 des MCP, co\u00fbts, terminologie, risques du mode auto et limites du contexte.",
     priority: 0.75,

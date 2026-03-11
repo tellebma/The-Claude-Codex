@@ -35,7 +35,7 @@ type TerminalScreenshotProps = {
  * - text-cyan-300  (#67e8f9)  ~9.1:1 ✓
  */
 export function TerminalScreenshot({
-  title = "Terminal — zsh",
+  title = "Terminal : zsh",
   lines = [],
   className = "",
 }: TerminalScreenshotProps) {

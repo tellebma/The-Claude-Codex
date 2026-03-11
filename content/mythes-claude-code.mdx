@@ -1,5 +1,5 @@
 ---
-title: "8 idées reçues sur Claude Code — Mythes et réalités"
+title: "8 idées reçues sur Claude Code : Mythes et réalités"
 description: "Les 8 mythes les plus répandus sur Claude Code démystifiés : sécurité des MCP, coûts, terminologie, risques du mode auto et limites du contexte."
 badge: "Vérité"
 section: "content"
@@ -10,7 +10,7 @@ dateModified: "2026-03-11"
 
 ## Pourquoi démystifier ces idées reçues ?
 
-Claude Code est un outil récent, encore mal connu, qui génère beaucoup d'enthousiasme — et parfois des simplifications qui peuvent induire en erreur. Ce guide adopte un format **Mythe → Réalité → Source** pour clarifier les points les plus fréquemment mal compris.
+Claude Code est un outil récent, encore mal connu, qui génère beaucoup d'enthousiasme, et parfois des simplifications qui peuvent induire en erreur. Ce guide adopte un format **Mythe → Réalité → Source** pour clarifier les points les plus fréquemment mal compris.
 
 <Callout type="info" title="Un guide honnête, pas alarmiste">
 L'objectif n'est pas de vous décourager d'utiliser Claude Code. C'est un outil puissant et fiable pour beaucoup d'usages. L'objectif est de vous aider à l'utiliser avec des attentes réalistes et une compréhension correcte de ses limites.
@@ -26,11 +26,11 @@ L'objectif n'est pas de vous décourager d'utiliser Claude Code. C'est un outil 
 
 - Anthropic maintient ses propres MCP (sous `@modelcontextprotocol/`) avec des standards élevés
 - Les MCP communautaires listés n'ont pas tous été audités en profondeur
-- N'importe qui peut publier un MCP sur npm — la seule barrière est la liste de référence publique
+- N'importe qui peut publier un MCP sur npm. La seule barrière est la liste de référence publique
 
 **Ce que vous devez faire :** Vérifier le code source de tout MCP avant installation, quelle que soit sa provenance. Préférez les MCP maintenus par des organisations reconnues avec un code source lisible et une communauté active.
 
-**Source :** [Documentation MCP Anthropic](https://modelcontextprotocol.io) — la documentation ne mentionne pas de processus de certification.
+**Source :** [Documentation MCP Anthropic](https://modelcontextprotocol.io), la documentation ne mentionne pas de processus de certification.
 
 ---
 
@@ -47,11 +47,11 @@ L'objectif n'est pas de vous décourager d'utiliser Claude Code. C'est un outil 
 | 10 | ~25 000 | ~175 000 |
 | 20+ | ~60 000 | ~140 000 |
 
-Un contexte plus chargé = réponses de moins bonne qualité en fin de session, hallucinations plus fréquentes, coût plus élevé. La puissance vient de l'adéquation entre les MCP activés et la tâche du moment — pas de la quantité.
+Un contexte plus chargé = réponses de moins bonne qualité en fin de session, hallucinations plus fréquentes, coût plus élevé. La puissance vient de l'adéquation entre les MCP activés et la tâche du moment, pas de la quantité.
 
 **Ce que vous devez faire :** Configurer des profils `.mcp.json` par projet avec uniquement les MCP pertinents pour ce projet.
 
-**Source :** [Architecture MCP](/mcp/what-are-mcps) — les schémas d'outils sont chargés en contexte au démarrage.
+**Source :** [Architecture MCP](/mcp/what-are-mcps), les schémas d'outils sont chargés en contexte au démarrage.
 
 ---
 
@@ -59,7 +59,7 @@ Un contexte plus chargé = réponses de moins bonne qualité en fin de session, 
 
 **Le mythe :** En souscrivant à Claude Pro (ou Max), vous avez un accès illimité à Claude Code sans limitation.
 
-**La réalité :** Les abonnements Claude Pro et Max incluent des limites de messages. Ces limites ne sont pas exprimées en tokens facturés individuellement, mais en **nombre de messages par période** (heure ou jour). En usage intensif — plusieurs sessions longues par jour — vous pouvez rencontrer du **throttling** : Claude ralentit ses réponses ou vous invite à attendre.
+**La réalité :** Les abonnements Claude Pro et Max incluent des limites de messages. Ces limites ne sont pas exprimées en tokens facturés individuellement, mais en **nombre de messages par période** (heure ou jour). En usage intensif, plusieurs sessions longues par jour, vous pouvez rencontrer du **throttling** : Claude ralentit ses réponses ou vous invite à attendre.
 
 De plus, l'accès à Claude Code via l'abonnement Claude.ai est distinct de l'accès à Claude Code en tant qu'outil CLI, qui utilise l'API et est facturé à l'usage (sauf si vous utilisez votre abonnement Max pour authentifier l'API, dans ce cas les limites de l'abonnement s'appliquent).
 
@@ -71,7 +71,7 @@ De plus, l'accès à Claude Code via l'abonnement Claude.ai est distinct de l'ac
 
 ## Mythe n°4 : "Plugins et MCP, c'est la même chose"
 
-**Le mythe :** Les termes "plugin", "MCP", "extension" et "skill" sont des synonymes — ils désignent tous des façons d'étendre Claude Code.
+**Le mythe :** Les termes "plugin", "MCP", "extension" et "skill" sont des synonymes, ils désignent tous des façons d'étendre Claude Code.
 
 **La réalité :** Ces termes désignent des mécanismes **architecturalement distincts** :
 
@@ -86,7 +86,7 @@ Confondre ces concepts mène à de mauvaises décisions : essayer d'installer un
 
 **Ce que vous devez faire :** Lire notre [guide comparatif Skills vs MCP vs Plugins](/skills/comparison) pour choisir le bon outil selon votre besoin.
 
-**Source :** [Documentation Claude Code](https://docs.anthropic.com/claude-code) — architecture des extensions.
+**Source :** [Documentation Claude Code](https://docs.anthropic.com/claude-code), architecture des extensions.
 
 ---
 
@@ -107,7 +107,7 @@ Un MCP peut être légitime aujourd'hui et compromettre demain si :
 
 **Ce que vous devez faire :** Vérifier le code source, pas juste le nombre d'étoiles. Maintenir les packages à jour (les patches de sécurité sont inclus dans les mises à jour). Utiliser `npm audit` régulièrement.
 
-**Source :** [Guide de sécurité MCP](/mcp/securite-mcp) — supply chain attacks en détail.
+**Source :** [Guide de sécurité MCP](/mcp/securite-mcp), supply chain attacks en détail.
 
 ---
 
@@ -115,9 +115,9 @@ Un MCP peut être légitime aujourd'hui et compromettre demain si :
 
 **Le mythe :** Avec `--dangerously-skip-permissions`, Claude Code peut travailler de manière autonome et efficace. Si vous faites confiance à Claude, aucun risque.
 
-**La réalité :** Le flag `--dangerously-skip-permissions` ne désactive pas uniquement les confirmations pour les actions de Claude — il donne également **carte blanche aux résultats des MCP**. Toute prompt injection dans un fichier lu, une page web visitée, ou un message reçu via un MCP peut déclencher des actions exécutées sans aucune confirmation.
+**La réalité :** Le flag `--dangerously-skip-permissions` ne désactive pas uniquement les confirmations pour les actions de Claude, il donne également **carte blanche aux résultats des MCP**. Toute prompt injection dans un fichier lu, une page web visitée, ou un message reçu via un MCP peut déclencher des actions exécutées sans aucune confirmation.
 
-La confiance en Claude lui-même n'est pas le problème. Le problème vient des **données externes** que Claude traite. Claude n'est pas malveillant — mais il peut interpréter des instructions malveillantes contenues dans des données.
+La confiance en Claude lui-même n'est pas le problème. Le problème vient des **données externes** que Claude traite. Claude n'est pas malveillant, mais il peut interpréter des instructions malveillantes contenues dans des données.
 
 **Scénario concret :**
 1. Claude lit un fichier README d'un repo tiers (avec MCP filesystem)
@@ -126,7 +126,7 @@ La confiance en Claude lui-même n'est pas le problème. Le problème vient des 
 
 **Ce que vous devez faire :** Ne jamais utiliser `--dangerously-skip-permissions` avec des MCP actifs accédant à des données externes. En CI/CD, utilisez des environnements sandboxés.
 
-**Source :** [Documentation sécurité Claude Code](https://docs.anthropic.com/claude-code/security) — permissions et mode headless.
+**Source :** [Documentation sécurité Claude Code](https://docs.anthropic.com/claude-code/security), permissions et mode headless.
 
 ---
 
@@ -149,7 +149,7 @@ Si votre CLAUDE.md contient des informations sensibles (endpoints internes, noms
 - Ajouter CLAUDE.md au `.gitignore` si son contenu est confidentiel (mais vous perdez la persistance entre machines)
 - Utiliser des variables d'environnement pour les informations sensibles, référencées dans CLAUDE.md sans les valeurs
 
-**Source :** [Guide CLAUDE.md](/prompting/claude-md) — structure et bonnes pratiques.
+**Source :** [Guide CLAUDE.md](/prompting/claude-md), structure et bonnes pratiques.
 
 ---
 
@@ -157,22 +157,22 @@ Si votre CLAUDE.md contient des informations sensibles (endpoints internes, noms
 
 **Le mythe :** La commande `/compact` résout tous les problèmes de contexte. On peut travailler indéfiniment sur le même projet sans perdre d'information.
 
-**La réalité :** `/compact` **compresse** le contexte — elle ne le restaure pas. Lors d'un compact, Claude résume la conversation en conservant les informations qu'il juge importantes. Ce processus est imparfait :
+**La réalité :** `/compact` **compresse** le contexte, elle ne le restaure pas. Lors d'un compact, Claude résume la conversation en conservant les informations qu'il juge importantes. Ce processus est imparfait :
 
 - Des décisions techniques détaillées peuvent être résumées de manière trop vague
 - Des exemples de code concrets peuvent être perdus au profit d'une description abstraite
 - Des préférences de style ou des conventions spécifiques peuvent disparaître du résumé
 - Des décisions "non-options" (ce qu'on a décidé de NE PAS faire) sont souvent perdues
 
-Après un `/compact`, Claude travaille sur un résumé — non sur la conversation originale. La qualité du résumé dépend de la qualité du contexte au moment du compact.
+Après un `/compact`, Claude travaille sur un résumé, non sur la conversation originale. La qualité du résumé dépend de la qualité du contexte au moment du compact.
 
 **Ce que vous devez faire :**
 - Utiliser `/compact` proactivement avant la saturation (pas en urgence)
 - Vérifier après chaque compact que les décisions importantes sont bien dans le résumé
-- Documenter les décisions critiques dans le code et le CLAUDE.md — pas seulement dans la conversation
+- Documenter les décisions critiques dans le code et le CLAUDE.md, pas seulement dans la conversation
 - Démarrer une nouvelle session propre plutôt que de compacter une session très longue
 
-**Source :** [Gestion du contexte](/prompting/context-management) — fonctionnement de /compact en détail.
+**Source :** [Gestion du contexte](/prompting/context-management), fonctionnement de /compact en détail.
 
 ---
 
@@ -191,8 +191,8 @@ Après un `/compact`, Claude travaille sur un résumé — non sur la conversati
 
 ## Pour aller plus loin
 
-- [Sécurité des MCP](/mcp/securite-mcp) — Guide complet des risques et mitigations
-- [Gestion du contexte](/prompting/context-management) — Maîtriser la fenêtre de 200K tokens
-- [Coûts réels de Claude Code](/content/couts-reels-claude-code) — Ce que vous payez vraiment
-- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) — Checklist complète
-- [Comparatif Skills vs MCP vs Plugins](/skills/comparison) — Choisir le bon outil
+- [Sécurité des MCP](/mcp/securite-mcp) : Guide complet des risques et mitigations
+- [Gestion du contexte](/prompting/context-management) : Maîtriser la fenêtre de 200K tokens
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : Ce que vous payez vraiment
+- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) : Checklist complète
+- [Comparatif Skills vs MCP vs Plugins](/skills/comparison) : Choisir le bon outil

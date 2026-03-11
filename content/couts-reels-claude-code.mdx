@@ -10,7 +10,7 @@ dateModified: "2026-03-11"
 
 ## Tokens = argent : comprendre ce qui est facturé
 
-Chaque interaction avec Claude Code consomme des **tokens** — des unités de texte que le modèle traite. Tout est compté : votre prompt, le contexte de la conversation, les fichiers lus par Claude, les schémas des MCP, et bien sûr les réponses générées.
+Chaque interaction avec Claude Code consomme des **tokens**, des unités de texte que le modèle traite. Tout est compté : votre prompt, le contexte de la conversation, les fichiers lus par Claude, les schémas des MCP, et bien sûr les réponses générées.
 
 <Callout type="info" title="Qu'est-ce qu'un token ?">
 Un token correspond environ à 4 caractères en anglais, ou 3 caractères en français (le français utilise plus de tokens par mot à cause des accents et des mots plus longs). "Claude Code est puissant" représente environ 7 tokens. Une page A4 de texte représente environ 500 à 700 tokens.
@@ -18,8 +18,8 @@ Un token correspond environ à 4 caractères en anglais, ou 3 caractères en fra
 
 Il existe deux types de tokens, facturés différemment :
 
-- **Tokens d'entrée (input)** : tout ce que Claude reçoit — votre message, l'historique, les fichiers lus, les résultats MCP
-- **Tokens de sortie (output)** : les réponses générées par Claude — du code, des explications, des fichiers
+- **Tokens d'entrée (input)** : tout ce que Claude reçoit, votre message, l'historique, les fichiers lus, les résultats MCP
+- **Tokens de sortie (output)** : les réponses générées par Claude, du code, des explications, des fichiers
 
 Les tokens de sortie coûtent généralement 3 à 5 fois plus cher que les tokens d'entrée.
 
@@ -59,7 +59,7 @@ Au démarrage de chaque session, Claude charge les schémas d'outils de tous les
 | Setup maximal | 20+ MCP | ~60 000+ | ~$0.18+ |
 
 <Callout type="tip" title="Le coût de démarrage s'accumule">
-Si vous démarrez 5 sessions par jour avec 10 MCP actifs, le coût de démarrage seul représente ~$0.375/jour, soit ~$11/mois — avant d'avoir tapé une seule ligne de code. Pour l'API directe, c'est non négligeable.
+Si vous démarrez 5 sessions par jour avec 10 MCP actifs, le coût de démarrage seul représente ~$0.375/jour, soit ~$11/mois, avant d'avoir tapé une seule ligne de code. Pour l'API directe, c'est non négligeable.
 </Callout>
 
 ### Simulation : une session de 2h avec différentes configurations
@@ -67,7 +67,7 @@ Si vous démarrez 5 sessions par jour avec 10 MCP actifs, le coût de démarrage
 ```
 # Session type : développement d'une feature (refactoring d'un module)
 
-SCÉNARIO A — Sans MCP
+SCÉNARIO A : Sans MCP
   Démarrage           :    500 tokens input
   Prompts utilisateur :  5 000 tokens input
   Code lu par Claude  : 30 000 tokens input
@@ -75,7 +75,7 @@ SCÉNARIO A — Sans MCP
   TOTAL               : 35 500 input + 15 000 output
   COÛT (Sonnet)       : ~$0.11 + ~$0.23 = ~$0.34
 
-SCÉNARIO B — Avec 3 MCP (filesystem, github, context7)
+SCÉNARIO B : Avec 3 MCP (filesystem, github, context7)
   Démarrage MCP       :  8 000 tokens input
   Prompts utilisateur :  5 000 tokens input
   Code lu par Claude  : 30 000 tokens input
@@ -84,7 +84,7 @@ SCÉNARIO B — Avec 3 MCP (filesystem, github, context7)
   TOTAL               : 51 000 input + 15 000 output
   COÛT (Sonnet)       : ~$0.15 + ~$0.23 = ~$0.38
 
-SCÉNARIO C — Avec 10 MCP actifs
+SCÉNARIO C : Avec 10 MCP actifs
   Démarrage MCP       : 25 000 tokens input
   Prompts utilisateur :  5 000 tokens input
   Code lu par Claude  : 30 000 tokens input
@@ -94,11 +94,11 @@ SCÉNARIO C — Avec 10 MCP actifs
   COÛT (Sonnet)       : ~$0.22 + ~$0.23 = ~$0.45
 ```
 
-La différence entre 0 et 10 MCP pour une même session est de **~$0.11** — ce qui peut paraître modeste à l'unité, mais représente $30/mois sur 5 sessions/jour.
+La différence entre 0 et 10 MCP pour une même session est de **~$0.11**, ce qui peut paraître modeste à l'unité, mais représente $30/mois sur 5 sessions/jour.
 
 ## Abonnements Claude Max : ce que vous achetez vraiment
 
-Claude Max (anciennement Claude Pro) est un abonnement à prix fixe qui semble illimité — mais ne l'est pas.
+Claude Max (anciennement Claude Pro) est un abonnement à prix fixe qui semble illimité, mais ne l'est pas.
 
 ### Ce que Claude Max inclut
 
@@ -111,7 +111,7 @@ Claude Max (anciennement Claude Pro) est un abonnement à prix fixe qui semble i
 L'abonnement Claude Max est soumis à des **limites de messages par tranche de temps** (généralement par heure ou par jour). Ces limites varient selon la charge des serveurs et ne sont pas publiées précisément. En pratique :
 
 - En usage léger (moins de 20 messages/heure) : vous ne verrez jamais la limite
-- En usage intensif (sessions continues de 4h+) : vous pouvez atteindre le **throttling** — Claude répond plus lentement ou vous demande d'attendre
+- En usage intensif (sessions continues de 4h+) : vous pouvez atteindre le **throttling** : Claude répond plus lentement ou vous demande d'attendre
 
 <Callout type="warning" title="Claude Max n'est pas illimité">
 "Illimité" dans le contexte de Claude Max signifie "pas de quota fixe en tokens facturé individuellement", pas "vous pouvez faire autant de requêtes que vous voulez à toute vitesse". Un usage professionnel intensif peut rencontrer des limitations de débit.
@@ -189,7 +189,7 @@ Utilisez cette commande régulièrement pour identifier les sessions coûteuses 
 
 ### 3. Écrire des prompts précis
 
-Un prompt vague génère une réponse longue et souvent inadaptée — que vous devrez corriger avec un second prompt. Double coût pour un résultat inférieur.
+Un prompt vague génère une réponse longue et souvent inadaptée, que vous devrez corriger avec un second prompt. Double coût pour un résultat inférieur.
 
 ```markdown
 # Coûteux et inefficace
@@ -219,7 +219,7 @@ Un contexte allégé = moins de tokens d'input à chaque message. `/compact` peu
 
 Sessions/jour × Jours/mois × Coût/session
 
-Exemple — Développeur indépendant, usage quotidien :
+Exemple : Développeur indépendant, usage quotidien :
 3 sessions/jour × 20 jours/mois × $0.38/session
 = ~$23/mois via API directe
 
@@ -229,8 +229,8 @@ Exemple — Développeur indépendant, usage quotidien :
 
 ## Prochaines étapes
 
-- [Gestion du contexte](/prompting/context-management) — Comment le contexte impacte directement vos coûts
-- [Mythes sur Claude Code](/content/mythes-claude-code) — "Claude Code est gratuit avec Pro" — démystifié
-- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) — Sécurité et économies vont de pair
-- [Configurateur interactif](/configurator) — Générez une configuration optimisée pour votre usage
-- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) — Quand activer le thinking profond (et son coût)
+- [Gestion du contexte](/prompting/context-management) : Comment le contexte impacte directement vos coûts
+- [Mythes sur Claude Code](/content/mythes-claude-code) : "Claude Code est gratuit avec Pro", démystifié
+- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) : Sécurité et économies vont de pair
+- [Configurateur interactif](/configurator) : Générez une configuration optimisée pour votre usage
+- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) : Quand activer le thinking profond (et son coût)

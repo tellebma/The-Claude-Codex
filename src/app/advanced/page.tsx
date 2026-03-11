@@ -1,90 +1,66 @@
 import Link from "next/link";
 import {
   ArrowRight,
-  Bot,
-  HelpCircle,
-  Wrench,
-  Users,
-  Star,
-  Network,
-  Zap,
-  Shield,
-  Layers,
+  Settings2,
+  Webhook,
+  Terminal,
+  Cloud,
   ChevronRight,
-  Sparkles,
-  MessageSquare,
-  Puzzle,
+  Cpu,
+  GitBranch,
+  Shield,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Callout } from "@/components/ui/Callout";
 import { AnimateOnScroll, StaggerChildren } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "Agents & Subagents : Orchestrez des workflows complexes avec Claude Code",
+  title: "Utilisation avanc\u00e9e de Claude Code",
   description:
-    "D\u00e9couvrez les agents et subagents Claude Code. Cr\u00e9ez des agents sp\u00e9cialis\u00e9s, orchestrez des workflows multi-agents et automatisez vos processus de d\u00e9veloppement.",
-  path: "/agents",
+    "Hooks, mode headless, int\u00e9gration CI/CD, multi-provider et configuration enterprise. Ma\u00eetrisez les fonctionnalit\u00e9s avanc\u00e9es de Claude Code.",
+  path: "/advanced",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "Agents & Subagents : Orchestrez des workflows complexes avec Claude Code",
+  title: "Utilisation avanc\u00e9e de Claude Code",
   description:
-    "D\u00e9couvrez les agents et subagents Claude Code pour orchestrer des workflows complexes.",
-  url: `${SITE_URL}/agents`,
-  datePublished: "2026-03-10",
-  dateModified: "2026-03-10",
+    "Hooks, mode headless, CI/CD, multi-provider et configuration enterprise.",
+  url: `${SITE_URL}/advanced`,
+  datePublished: "2026-03-11",
+  dateModified: "2026-03-11",
 });
 
 /**
- * Sub-pages of the Agents section, displayed as clickable cards.
+ * Sub-pages of the Advanced section, displayed as clickable cards.
  */
 const SUB_PAGES = [
   {
-    href: "/agents/what-are-agents",
-    icon: HelpCircle,
+    href: "/advanced/hooks",
+    icon: Webhook,
     step: "01",
-    title: "Comprendre les agents et subagents",
+    title: "Syst\u00e8me de Hooks",
     description:
-      "Qu\u2019est-ce qu\u2019un agent ? Diff\u00e9rence avec un prompt classique, types d\u2019agents, fonctionnement des subagents et isolation via worktrees.",
+      "Automatisez vos workflows avec PreToolUse, PostToolUse et Stop. Auto-format, notifications Slack, rapports de session et patterns avanc\u00e9s.",
     color: "brand" as const,
   },
   {
-    href: "/agents/create-subagent",
-    icon: Wrench,
+    href: "/advanced/headless-ci",
+    icon: Terminal,
     step: "02",
-    title: "Cr\u00e9er un subagent sp\u00e9cialis\u00e9",
+    title: "Mode Headless et CI/CD",
     description:
-      "Guide complet pour cr\u00e9er des agents custom. Structure, exemples concrets (review, tests, documentation) et bonnes pratiques de prompts.",
+      "Utilisez Claude Code en mode non-interactif. GitHub Actions, GitLab CI, pre-commit hooks et bonnes pratiques de s\u00e9curit\u00e9 en pipeline.",
     color: "brand" as const,
   },
   {
-    href: "/agents/agent-teams",
-    icon: Users,
+    href: "/advanced/multi-provider",
+    icon: Cloud,
     step: "03",
-    title: "Agent Teams : le guide complet",
+    title: "Multi-provider et Enterprise",
     description:
-      "Faites collaborer plusieurs agents sur un m\u00eame projet. Configuration, cas d\u2019usage (review crois\u00e9e, d\u00e9veloppement parall\u00e8le) et limites.",
+      "AWS Bedrock, Google Vertex AI, proxy OpenAI-compatible. Changez de mod\u00e8le selon la t\u00e2che et g\u00e9rez vos credentials d\u2019entreprise.",
     color: "accent" as const,
-  },
-  {
-    href: "/agents/best-agents",
-    icon: Star,
-    step: "04",
-    title: "Top agents par cas d\u2019usage",
-    description:
-      "Les meilleurs agents class\u00e9s par cat\u00e9gorie : d\u00e9veloppement, architecture, s\u00e9curit\u00e9, tests et maintenance. Fiches d\u00e9taill\u00e9es et exemples.",
-    color: "accent" as const,
-  },
-  {
-    href: "/agents/orchestration",
-    icon: Network,
-    step: "05",
-    title: "Orchestration multi-agents avanc\u00e9e",
-    description:
-      "Patterns d\u2019orchestration : s\u00e9quentiel, parall\u00e8le, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
-    color: "brand" as const,
   },
 ] as const;
 
@@ -109,48 +85,48 @@ const colorStyles = {
 
 const benefits = [
   {
-    icon: Zap,
-    title: "Autonomie totale",
+    icon: Cpu,
+    title: "Automatisation totale",
     description:
-      "Les agents planifient, ex\u00e9cutent et v\u00e9rifient sans intervention humaine \u00e0 chaque \u00e9tape. Confiez une t\u00e2che complexe et r\u00e9cup\u00e9rez le r\u00e9sultat fini.",
+      "Les hooks transforment Claude Code en orchestrateur. Validez, formatez, notifiez, tout automatiquement \u00e0 chaque action.",
+  },
+  {
+    icon: GitBranch,
+    title: "Int\u00e9gration CI/CD",
+    description:
+      "Review de PR, g\u00e9n\u00e9ration de tests, audit de s\u00e9curit\u00e9 : int\u00e9grez Claude Code directement dans vos pipelines GitHub Actions ou GitLab.",
+  },
+  {
+    icon: Cloud,
+    title: "Flexibilit\u00e9 enterprise",
+    description:
+      "AWS Bedrock ou Google Vertex AI pour garder les donn\u00e9es dans votre infrastructure. Multi-provider selon les contraintes m\u00e9tier.",
   },
   {
     icon: Shield,
-    title: "Qualit\u00e9 syst\u00e9matique",
+    title: "S\u00e9curit\u00e9 renforc\u00e9e",
     description:
-      "Chaque agent suit un processus rigoureux et reproductible. Code review, tests, audit de s\u00e9curit\u00e9, rien n\u2019est oubli\u00e9.",
-  },
-  {
-    icon: Layers,
-    title: "Sp\u00e9cialisation",
-    description:
-      "Chaque agent est expert dans son domaine. Combinez-les pour couvrir tous les aspects d\u2019un workflow de d\u00e9veloppement.",
-  },
-  {
-    icon: Network,
-    title: "Parall\u00e9lisation",
-    description:
-      "Lancez plusieurs agents en parall\u00e8le pour acc\u00e9l\u00e9rer les workflows. Review, tests et s\u00e9curit\u00e9 en m\u00eame temps.",
+      "Hooks de validation avant ex\u00e9cution, pipelines sans secrets expos\u00e9s, gestion fine des permissions par environnement.",
   },
 ];
 
-export default function AgentsPage() {
+export default function AdvancedPage() {
   /*
-   * JSON-LD: safe — static schema from our own constants,
+   * JSON-LD: safe -- static schema from our own constants,
    * serialized via JSON.stringify. No user input.
    */
   const jsonLdHtml = serializeJsonLd(articleJsonLd);
 
   return (
     <>
-      {/* JSON-LD structured data — safe: static schema via JSON.stringify */}
+      {/* JSON-LD structured data -- safe: static schema via JSON.stringify */}
       <script
         type="application/ld+json"
         /* eslint-disable-next-line react/no-danger */
         dangerouslySetInnerHTML={{ __html: jsonLdHtml }}
       />
 
-      {/* ===== HERO ===== */}
+      {/* HERO */}
       <section className="relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
@@ -168,58 +144,54 @@ export default function AgentsPage() {
         <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 sm:pb-28 sm:pt-28 lg:px-8 lg:pb-32 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-              <Bot className="h-4 w-4" aria-hidden="true" />
-              Agents &amp; Subagents
+              <Settings2 className="h-4 w-4" aria-hidden="true" />
+              Utilisation avanc&eacute;e
             </div>
 
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Les <span className="text-gradient">Agents</span> : D&eacute;l&eacute;guez
-              <br />
-              vos workflows complexes
+              Claude Code <span className="text-gradient">en production</span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
-              Cr&eacute;ez des agents sp&eacute;cialis&eacute;s, orchestrez des
-              pipelines multi-agents et automatisez vos processus de
-              d&eacute;veloppement. Claude Code devient une &eacute;quipe
-              compl&egrave;te &agrave; votre service.
+              Hooks, mode headless, int&eacute;gration CI/CD, multi-provider
+              et configuration enterprise. Passez de l&apos;usage interactif
+              &agrave; l&apos;automatisation totale.
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
-                href="/agents/what-are-agents"
+                href="/advanced/hooks"
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
-                Comprendre les agents
+                D&eacute;couvrir les hooks
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <Link
-                href="/agents/best-agents"
+                href="/advanced/headless-ci"
                 className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-slate-200 transition-all hover:border-slate-500 hover:bg-white/5"
               >
-                Voir les agents recommand&eacute;s
+                Int&eacute;gration CI/CD
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===== SUB-PAGES CARDS ===== */}
+      {/* SUB-PAGES CARDS */}
       <section className="py-16 sm:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <div className="mb-12 text-center">
               <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
-                5 guides
+                3 guides
               </span>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Explorez les agents en profondeur
+                Explorez les fonctionnalit&eacute;s avanc&eacute;es
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
-                Des fondamentaux &agrave; l&apos;orchestration avanc&eacute;e, chaque guide
-                couvre un aspect essentiel des agents Claude Code.
-                Suivez-les dans l&apos;ordre ou piochez directement celui qui
-                vous int&eacute;resse.
+                Du syst&egrave;me de hooks &agrave; la configuration enterprise,
+                chaque guide couvre un aspect essentiel de l&apos;utilisation
+                avanc&eacute;e de Claude Code.
               </p>
             </div>
           </AnimateOnScroll>
@@ -272,14 +244,14 @@ export default function AgentsPage() {
         </div>
       </section>
 
-      {/* ===== POURQUOI UTILISER DES AGENTS ? ===== */}
+      {/* BENEFITS */}
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
         <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Avantages"
-              title="Pourquoi utiliser des agents ?"
-              description="Les agents transforment Claude Code d'un assistant passif en une \u00e9quipe de sp\u00e9cialistes autonomes."
+              badge="Pourquoi aller plus loin ?"
+              title="De l&apos;interactif &agrave; l&apos;autonome"
+              description="Les fonctionnalit&eacute;s avanc&eacute;es de Claude Code permettent d&apos;int&eacute;grer l&apos;IA directement dans vos processus de d&eacute;veloppement."
             />
           </AnimateOnScroll>
 
@@ -302,21 +274,10 @@ export default function AgentsPage() {
               );
             })}
           </StaggerChildren>
-
-          <Callout type="tip" title="Agent vs Skill vs MCP">
-            Les <strong>agents</strong> sont des processus autonomes qui
-            ex&eacute;cutent des t&acirc;ches complexes. Les{" "}
-            <a href="/skills" className="underline">Skills</a> sont des
-            recettes qui enseignent un comportement. Les{" "}
-            <a href="/mcp" className="underline">MCP</a> connectent Claude
-            Code &agrave; des services externes. Les trois se compl&egrave;tent
-            parfaitement : un agent peut utiliser des Skills et des MCP pour
-            accomplir sa mission.
-          </Callout>
         </div>
       </section>
 
-      {/* ===== NEXT STEPS ===== */}
+      {/* NEXT STEPS */}
       <section className="relative overflow-hidden py-20 sm:py-28">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
@@ -327,30 +288,51 @@ export default function AgentsPage() {
             <span className="text-gradient">apprentissage</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-            Les agents ne sont qu&apos;une partie de l&apos;&eacute;cosyst&egrave;me
-            Claude Code. D&eacute;couvrez les Skills pour enseigner des
-            comportements, les MCP pour connecter vos outils, et le prompting
-            pour communiquer efficacement.
+            Les fonctionnalit&eacute;s avanc&eacute;es compl&egrave;tent
+            parfaitement les agents, les MCP et le prompting pour
+            construire des workflows de d&eacute;veloppement complets.
           </p>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-3">
             <Link
-              href="/skills"
+              href="/agents"
               className="glass-card group flex items-start gap-4 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
-                <Sparkles className="h-6 w-6 text-accent-500" aria-hidden="true" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
+                <Cpu className="h-6 w-6 text-brand-400" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="mb-1 text-lg font-bold text-white">
-                  Les Skills
+                  Les Agents
                 </h3>
                 <p className="text-sm leading-relaxed text-slate-400">
-                  Enseignez des workflows et comportements r&eacute;utilisables
-                  &agrave; Claude Code.
+                  Orchestrez des workflows complexes avec des agents
+                  sp&eacute;cialis&eacute;s.
                 </p>
                 <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-400 transition-colors group-hover:text-brand-300">
                   D&eacute;couvrir
+                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </span>
+              </div>
+            </Link>
+
+            <Link
+              href="/reference/settings"
+              className="glass-card group flex items-start gap-4 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
+                <Settings2 className="h-6 w-6 text-accent-500" aria-hidden="true" />
+              </div>
+              <div>
+                <h3 className="mb-1 text-lg font-bold text-white">
+                  settings.json
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-400">
+                  R&eacute;f&eacute;rence compl&egrave;te de toutes les options
+                  de configuration.
+                </p>
+                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-400 transition-colors group-hover:text-brand-300">
+                  Consulter
                   <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>
               </div>
@@ -361,37 +343,15 @@ export default function AgentsPage() {
               className="glass-card group flex items-start gap-4 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-violet-500/5">
-                <Puzzle className="h-6 w-6 text-violet-500" aria-hidden="true" />
+                <Cloud className="h-6 w-6 text-violet-500" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="mb-1 text-lg font-bold text-white">
                   Les MCP
                 </h3>
                 <p className="text-sm leading-relaxed text-slate-400">
-                  Connectez Claude Code &agrave; GitHub, Slack, Gmail et vos
-                  outils favoris.
-                </p>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-400 transition-colors group-hover:text-brand-300">
-                  D&eacute;couvrir
-                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-                </span>
-              </div>
-            </Link>
-
-            <Link
-              href="/prompting"
-              className="glass-card group flex items-start gap-4 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5">
-                <MessageSquare className="h-6 w-6 text-emerald-500" aria-hidden="true" />
-              </div>
-              <div>
-                <h3 className="mb-1 text-lg font-bold text-white">
-                  Le Prompting
-                </h3>
-                <p className="text-sm leading-relaxed text-slate-400">
-                  Ma&icirc;trisez l&apos;art de communiquer avec Claude Code
-                  pour des r&eacute;sultats optimaux.
+                  Connectez Claude Code &agrave; vos outils et services
+                  externes.
                 </p>
                 <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-400 transition-colors group-hover:text-brand-300">
                   D&eacute;couvrir

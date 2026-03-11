@@ -37,7 +37,7 @@ export function generateShellScript(config: GeneratedConfig): string {
   const lines: string[] = [];
 
   lines.push("#!/bin/bash");
-  lines.push("# Script généré par The Claude Codex — https://claude-codex.fr/configurator");
+  lines.push("# Script généré par The Claude Codex | https://claude-codex.fr/configurator");
   lines.push("# Exécutez ce script à la racine de votre projet.");
   lines.push("");
 

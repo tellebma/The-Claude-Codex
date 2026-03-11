@@ -144,6 +144,14 @@ Chaque section l'utilise via son `layout.tsx` : `<SectionLayout>{children}</Sect
 - Utiliser des analogies concrètes pour chaque concept technique
 - Chaque page a une intro claire, un corps structuré, et un "Prochaines étapes" en conclusion
 - Les blocs de code doivent toujours avoir un langage spécifié pour le syntax highlighting
+- **Écriture humaine obligatoire** : le texte doit sonner naturel, comme écrit par un humain francophone. Éviter systématiquement les tics de langage typiques des IA :
+  - Pas de tiret cadratin "—" (utiliser ", " ou " : " selon le contexte)
+  - Pas de formules creuses type "Il est important de noter que", "Il convient de souligner", "Force est de constater"
+  - Pas d'abus de "permet de", "en effet", "ainsi", "notamment" en début de phrase
+  - Pas de listes à rallonge quand une phrase suffit
+  - Pas de ton excessivement enthousiaste ou promotionnel ("Plongez dans", "Découvrez la puissance de")
+  - Privilégier les phrases courtes et directes aux constructions alambiquées
+  - Si du texte existant sonne trop "IA", le reformuler pour qu'il paraisse naturel
 
 ## Design & UX
 

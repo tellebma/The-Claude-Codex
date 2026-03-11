@@ -38,7 +38,7 @@ export function Footer() {
             <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-400">
               Le guide de référence gratuit pour maîtriser Claude Code. Créé par
               la communauté, pour la communauté. Pas de paywall, pas de tracking
-              — juste du savoir partagé.
+              , juste du savoir partagé.
             </p>
           </div>
 

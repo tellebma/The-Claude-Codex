@@ -9,7 +9,7 @@ dateModified: "2026-03-11"
 
 ## Sécurisez et fiabilisez votre code
 
-La sécurité et la qualité du code ne sont pas des options — ce sont des fondamentaux. Les ressources présentées ici sont des **agents et skills communautaires** (fichiers Markdown à copier dans `.claude/`) qui intègrent les bonnes pratiques de sécurité et de qualité directement dans votre workflow Claude Code.
+La sécurité et la qualité du code ne sont pas des options, ce sont des fondamentaux. Les ressources présentées ici sont des **agents et skills communautaires** (fichiers Markdown à copier dans `.claude/`) qui intègrent les bonnes pratiques de sécurité et de qualité directement dans votre workflow Claude Code.
 
 <Callout type="warning" title="Outils d'aide, pas de substituts à une revue humaine">
 Ces ressources communautaires détectent les problèmes courants et appliquent les bonnes pratiques, mais elles ne remplacent pas une revue de sécurité humaine. Pour les applications critiques, un audit professionnel reste indispensable.
@@ -17,7 +17,7 @@ Ces ressources communautaires détectent les problèmes courants et appliquent l
 
 ---
 
-## Agent Security Reviewer — L'expert sécurité intégré
+## Agent Security Reviewer : L'expert sécurité intégré
 
 **Ressource communautaire** | Catégorie : Sécurité | Format : fichier Agent Markdown
 
@@ -79,7 +79,7 @@ Vous pouvez créer un skill `/security-review` qui invoque automatiquement l'age
 
 ---
 
-## Agent Code Reviewer — La revue automatisée
+## Agent Code Reviewer : La revue automatisée
 
 **Ressource communautaire** | Catégorie : Qualité | Format : fichier Agent Markdown
 
@@ -138,7 +138,7 @@ Utilisez l'agent **Security Reviewer** pour les aspects sécurité et l'agent **
 
 ---
 
-## Skill TDD Guide — Tests first, toujours
+## Skill TDD Guide : Tests first, toujours
 
 **Ressource communautaire** | Catégorie : Tests | Format : fichier Skill Markdown
 
@@ -164,13 +164,13 @@ Implémente cette fonctionnalité en suivant strictement le cycle TDD :
 
 ## Cycle RED → GREEN → REFACTOR
 
-**Étape 1 — RED** : Écris d'abord un test qui décrit le comportement attendu.
+**Étape 1 - RED** : Écris d'abord un test qui décrit le comportement attendu.
 Le test DOIT échouer au départ. S'il passe sans code, le test est mauvais.
 
-**Étape 2 — GREEN** : Écris le code MINIMAL pour faire passer le test.
+**Étape 2 - GREEN** : Écris le code MINIMAL pour faire passer le test.
 Pas d'optimisation prématurée. Le seul objectif est de passer le test.
 
-**Étape 3 — REFACTOR** : Nettoie le code tout en gardant les tests au vert.
+**Étape 3 - REFACTOR** : Nettoie le code tout en gardant les tests au vert.
 Améliore la lisibilité, supprime les duplications, respecte les conventions.
 
 **À chaque étape** : montre le résultat du test (FAIL/PASS) avant de continuer.
@@ -195,22 +195,22 @@ EOF
 - **Refactoring sûr** : `/tdd-guide refactorer ce module en s'assurant que les tests passent à chaque étape`
 
 <Steps>
-<Step title="RED — Écrire le test" stepNumber={1}>
-Le skill guide Claude Code pour écrire d'abord un test qui décrit le comportement attendu. Le test doit échouer — c'est normal et voulu.
+<Step title="RED - Écrire le test" stepNumber={1}>
+Le skill guide Claude Code pour écrire d'abord un test qui décrit le comportement attendu. Le test doit échouer, c'est normal et voulu.
 </Step>
 
-<Step title="GREEN — Implémenter" stepNumber={2}>
+<Step title="GREEN - Implémenter" stepNumber={2}>
 Claude Code écrit le code minimal pour faire passer le test. Pas de sur-ingénierie, juste ce qu'il faut pour passer au vert.
 </Step>
 
-<Step title="REFACTOR — Améliorer" stepNumber={3} isLast>
+<Step title="REFACTOR - Améliorer" stepNumber={3} isLast>
 Une fois le test au vert, Claude Code refactorise le code pour le rendre propre, lisible et performant. Les tests garantissent que rien n'est cassé.
 </Step>
 </Steps>
 
 ---
 
-## Audit de configuration — Bonnes pratiques manuelles
+## Audit de configuration : Bonnes pratiques manuelles
 
 Il n'existe pas de plugin « AgentShield » ou d'outil automatisé officiel pour auditer la configuration Claude Code. Voici les bonnes pratiques à appliquer manuellement.
 
@@ -272,7 +272,7 @@ Ne commitez **jamais** vos tokens dans un repository Git. Placez les configurati
 
 ## Prochaines étapes
 
-- [Comprendre les extensions communautaires](/plugins/what-are-plugins) — Revenez aux fondamentaux si besoin
-- [Installer et gérer ses extensions](/plugins/setup) — Guide d'installation et de configuration
-- [Top extensions essentielles 2026](/plugins/best-essential) — Les ressources fondamentales pour démarrer
-- [Top Skills recommandés](/skills/best-skills) — TDD Guide, Security Review et Code Reviewer en tant que Skills
+- [Comprendre les extensions communautaires](/plugins/what-are-plugins) : Revenez aux fondamentaux si besoin
+- [Installer et gérer ses extensions](/plugins/setup) : Guide d'installation et de configuration
+- [Top extensions essentielles 2026](/plugins/best-essential) : Les ressources fondamentales pour démarrer
+- [Top Skills recommandés](/skills/best-skills) : TDD Guide, Security Review et Code Reviewer en tant que Skills

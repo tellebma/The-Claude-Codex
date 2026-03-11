@@ -13,14 +13,14 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "R\u00e9f\u00e9rence technique — Claude Code",
+  title: "R\u00e9f\u00e9rence technique : Claude Code",
   description:
     "Documentation de r\u00e9f\u00e9rence compl\u00e8te pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d\u2019environnement.",
   path: "/reference",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "R\u00e9f\u00e9rence technique — Claude Code",
+  title: "R\u00e9f\u00e9rence technique : Claude Code",
   description:
     "Documentation de r\u00e9f\u00e9rence compl\u00e8te pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d\u2019environnement.",
   url: `${SITE_URL}/reference`,
@@ -33,7 +33,7 @@ const SUB_PAGES = [
     href: "/reference/cheatsheet",
     icon: Keyboard,
     step: "01",
-    title: "Cheatsheet — R\u00e9f\u00e9rence rapide",
+    title: "Cheatsheet : R\u00e9f\u00e9rence rapide",
     description:
       "Toutes les slash commands, raccourcis clavier, fichiers de configuration et modes d\u2019ex\u00e9cution en un seul endroit. Format dense, copiable.",
     color: "brand" as const,
@@ -43,7 +43,7 @@ const SUB_PAGES = [
     href: "/reference/cli",
     icon: Terminal,
     step: "02",
-    title: "CLI — Tous les flags",
+    title: "CLI : Tous les flags",
     description:
       "R\u00e9f\u00e9rence exhaustive de la commande claude : --print, --model, --max-turns, --output-format, mode pipe et sous-commandes mcp/config/doctor.",
     color: "brand" as const,
@@ -53,7 +53,7 @@ const SUB_PAGES = [
     href: "/reference/settings",
     icon: Settings,
     step: "03",
-    title: "settings.json — Configuration",
+    title: "settings.json : Configuration",
     description:
       "3 niveaux de configuration, permissions par outil, structure mcpServers, mod\u00e8les, variables d\u2019environnement inject\u00e9es et exemples complets.",
     color: "accent" as const,

@@ -47,13 +47,13 @@ Un team est un groupe d'agents qui travaillent ensemble sur un même projet. Cha
 Choisissez un nom de team descriptif. Tous les agents qui partagent ce nom pourront communiquer entre eux.
 
 ```bash
-# Terminal 1 — Agent de développement
+# Terminal 1 - Agent de développement
 claude --team_name "feature-auth"
 
-# Terminal 2 — Agent de tests
+# Terminal 2 - Agent de tests
 claude --team_name "feature-auth"
 
-# Terminal 3 — Agent de review
+# Terminal 3 - Agent de review
 claude --team_name "feature-auth"
 ```
 </Step>
@@ -62,17 +62,17 @@ claude --team_name "feature-auth"
 Donnez à chaque agent un rôle clair via son prompt initial. Les agents doivent savoir ce qu'ils font et ce que font les autres.
 
 ```bash
-# Terminal 1 — Agent de développement
+# Terminal 1 - Agent de développement
 > Tu es le développeur principal du team "feature-auth".
 > Ta mission : implémenter le module d'authentification JWT.
 > Un autre agent s'occupe des tests, un troisième fait la review.
 
-# Terminal 2 — Agent de tests
+# Terminal 2 - Agent de tests
 > Tu es le testeur du team "feature-auth".
 > Ta mission : écrire les tests pour le module d'authentification.
 > Attends que le développeur ait commencé avant d'écrire les tests.
 
-# Terminal 3 — Agent de review
+# Terminal 3 - Agent de review
 > Tu es le reviewer du team "feature-auth".
 > Ta mission : review le code produit par le développeur et le testeur.
 > Interviens quand du code est prêt à être reviewé.
@@ -147,7 +147,7 @@ Les agents d'un même team partagent un **contexte commun** qui leur permet de s
 | **Messages** | Les agents peuvent s'envoyer des messages via l'espace de communication du team |
 
 <Card title="Pas de mémoire partagée" variant="accent">
-Important : les agents ne partagent **pas** leur fenêtre de contexte. Chaque agent a son propre historique de conversation. La coordination passe par les fichiers, l'état Git et les messages du team — pas par un accès direct aux pensées des autres agents.
+Important : les agents ne partagent **pas** leur fenêtre de contexte. Chaque agent a son propre historique de conversation. La coordination passe par les fichiers, l'état Git et les messages du team, pas par un accès direct aux pensées des autres agents.
 </Card>
 
 ## Limites actuelles
@@ -208,6 +208,6 @@ Agent Teams est encore jeune, mais les possibilités sont prometteuses :
 
 Maintenant que vous comprenez les Agent Teams, explorez les agents individuels et l'orchestration.
 
-- [Top agents par cas d'usage](/agents/best-agents) — Les agents les plus utiles classés par catégorie
-- [Orchestration avancée](/agents/orchestration) — Patterns d'orchestration pour des workflows complexes
-- [Comprendre les agents](/agents/what-are-agents) — Revenir aux fondamentaux
+- [Top agents par cas d'usage](/agents/best-agents) : Les agents les plus utiles classés par catégorie
+- [Orchestration avancée](/agents/orchestration) : Patterns d'orchestration pour des workflows complexes
+- [Comprendre les agents](/agents/what-are-agents) : Revenir aux fondamentaux

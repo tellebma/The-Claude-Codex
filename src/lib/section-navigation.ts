@@ -94,13 +94,22 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Configurateur interactif", href: "/configurator" },
     ],
   },
+  advanced: {
+    title: "Avancé",
+    items: [
+      { label: "Vue d'ensemble", href: "/advanced" },
+      { label: "Système de Hooks", href: "/advanced/hooks" },
+      { label: "Mode Headless et CI/CD", href: "/advanced/headless-ci" },
+      { label: "Multi-provider et Enterprise", href: "/advanced/multi-provider" },
+    ],
+  },
   reference: {
     title: "Référence",
     items: [
       { label: "Vue d'ensemble", href: "/reference" },
-      { label: "Cheatsheet — Référence rapide", href: "/reference/cheatsheet" },
-      { label: "CLI — Tous les flags", href: "/reference/cli" },
-      { label: "settings.json — Configuration", href: "/reference/settings" },
+      { label: "Cheatsheet : Référence rapide", href: "/reference/cheatsheet" },
+      { label: "CLI : Tous les flags", href: "/reference/cli" },
+      { label: "settings.json : Configuration", href: "/reference/settings" },
       { label: "Variables d'environnement", href: "/reference/environment" },
     ],
   },

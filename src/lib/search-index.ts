@@ -52,7 +52,7 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
-    title: "FAQ debutants — Questions frequentes sur Claude Code",
+    title: "FAQ debutants : Questions frequentes sur Claude Code",
     description:
       "Reponses aux questions les plus courantes : securite, vie privee, couts, difference avec ChatGPT, prerequis techniques.",
     href: "/getting-started/faq-beginner",
@@ -78,7 +78,7 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
-    title: "Glossaire — Termes techniques expliques simplement",
+    title: "Glossaire : Termes techniques expliques simplement",
     description:
       "Plus de 40 termes techniques de l'IA et du developpement web expliques avec des analogies. Terminal, API, Git, npm, Docker et bien plus.",
     href: "/glossary",
@@ -309,9 +309,110 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
       "marketing",
     ],
   },
+  // Advanced
+  {
+    title: "Utilisation avancee de Claude Code",
+    description:
+      "Hooks, mode headless, CI/CD, multi-provider et configuration enterprise. Passez de l'interactif a l'automatisation totale.",
+    href: "/advanced",
+    section: "Avance",
+    keywords: [
+      "avance",
+      "hooks",
+      "headless",
+      "ci cd",
+      "github actions",
+      "bedrock",
+      "vertex",
+      "enterprise",
+      "pipeline",
+      "automatisation",
+      "non-interactif",
+    ],
+  },
+  {
+    title: "Systeme de Hooks",
+    description:
+      "PreToolUse, PostToolUse, Stop et Notification. Auto-format Prettier, notifications Slack, rapports de session et patterns avances.",
+    href: "/advanced/hooks",
+    section: "Avance",
+    keywords: [
+      "hooks",
+      "pretooluse",
+      "posttooluse",
+      "stop",
+      "notification",
+      "prettier",
+      "auto-format",
+      "slack",
+      "webhook",
+      "settings.json",
+      "exit code",
+      "validation",
+      "secrets",
+      "trigger",
+      "evenement",
+    ],
+  },
+  {
+    title: "Mode Headless et CI/CD",
+    description:
+      "--print, --dangerously-skip-permissions, --output-format json. GitHub Actions, GitLab CI, pre-commit hooks et securite pipeline.",
+    href: "/advanced/headless-ci",
+    section: "Avance",
+    keywords: [
+      "headless",
+      "--print",
+      "-p",
+      "--dangerously-skip-permissions",
+      "--output-format",
+      "--max-turns",
+      "json",
+      "github actions",
+      "gitlab ci",
+      "pre-commit",
+      "pipeline",
+      "workflow yaml",
+      "non-interactif",
+      "ci",
+      "cd",
+      "pipe",
+      "script",
+      "automation",
+    ],
+  },
+  {
+    title: "Multi-provider et Enterprise",
+    description:
+      "AWS Bedrock, Google Vertex AI, proxy OpenAI-compatible. Changer de modele selon la tache, Haiku Sonnet Opus, credentials IAM.",
+    href: "/advanced/multi-provider",
+    section: "Avance",
+    keywords: [
+      "bedrock",
+      "vertex",
+      "aws",
+      "gcp",
+      "google cloud",
+      "openai-compatible",
+      "proxy",
+      "apiProvider",
+      "customApiUrl",
+      "enterprise",
+      "credentials",
+      "iam",
+      "haiku",
+      "sonnet",
+      "opus",
+      "modele",
+      "region",
+      "facturation",
+      "conformite",
+      "rgpd",
+    ],
+  },
   // Reference
   {
-    title: "Reference technique — Claude Code",
+    title: "Reference technique : Claude Code",
     description:
       "Documentation de reference complete : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d'environnement.",
     href: "/reference",
@@ -331,7 +432,7 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
-    title: "Cheatsheet — Reference rapide Claude Code",
+    title: "Cheatsheet : Reference rapide Claude Code",
     description:
       "Slash commands, raccourcis clavier, fichiers de configuration et modes d'execution. /help, /compact, /clear, Ctrl+C, Alt+T.",
     href: "/reference/cheatsheet",
@@ -361,7 +462,7 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
-    title: "CLI — Reference complete des commandes Claude Code",
+    title: "CLI : Reference complete des commandes Claude Code",
     description:
       "Tous les flags : --print, --model, --max-turns, --output-format, --allowedTools, claude mcp add, claude config, claude doctor.",
     href: "/reference/cli",
@@ -389,7 +490,7 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
-    title: "settings.json — Reference de configuration Claude Code",
+    title: "settings.json : Reference de configuration Claude Code",
     description:
       "3 niveaux de configuration, permissions par outil, mcpServers, allowedTools, env, model, alwaysThinkingEnabled.",
     href: "/reference/settings",
@@ -415,7 +516,7 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
-    title: "Variables d'environnement — Reference Claude Code",
+    title: "Variables d'environnement : Reference Claude Code",
     description:
       "ANTHROPIC_API_KEY, CLAUDE_MODEL, MAX_THINKING_TOKENS, HTTPS_PROXY, DISABLE_AUTOUPDATER, CLAUDE_CONFIG_DIR.",
     href: "/reference/environment",

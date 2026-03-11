@@ -84,7 +84,7 @@ export default function HomePage() {
             >
               Le guide de référence pour exploiter toute la puissance de l&apos;IA
               dans votre quotidien. Que vous soyez développeur, entrepreneur ou
-              simplement curieux — tout commence ici.
+              simplement curieux, tout commence ici.
             </p>
 
             {/* CTA */}
@@ -180,7 +180,7 @@ export default function HomePage() {
             <FeatureCard
               icon={FileText}
               title="Générer des documents"
-              description="Rapports, présentations, documentation technique — laissez l'IA structurer et rédiger pour vous."
+              description="Rapports, présentations, documentation technique : laissez l'IA structurer et rédiger pour vous."
               gradient="amber"
             />
             <FeatureCard
@@ -216,7 +216,7 @@ export default function HomePage() {
             <FeatureCard
               icon={Rocket}
               title="Déployer en production"
-              description="Docker, CI/CD, monitoring — Claude Code gère votre infrastructure de A à Z."
+              description="Docker, CI/CD, monitoring : Claude Code gère votre infrastructure de A à Z."
               gradient="green"
             />
           </StaggerChildren>

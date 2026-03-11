@@ -19,7 +19,7 @@ import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 export const metadata = createPageMetadata({
   title: "Plugins : Etendez les capacites de Claude Code",
   description:
-    "Decouvrez les plugins Claude Code pour enrichir votre assistant IA. Agents specialises, design, securite, qualite — installez les meilleurs plugins du marketplace.",
+    "Decouvrez les plugins Claude Code pour enrichir votre assistant IA. Agents specialises, design, securite, qualite, installez les meilleurs plugins du marketplace.",
   path: "/plugins",
 });
 
@@ -60,7 +60,7 @@ const SUB_PAGES = [
     step: "03",
     title: "Top plugins essentiels 2026",
     description:
-      "Everything Claude Code, Context7, Prompt Improver, Repomix, Ralph Loop \u2014 les plugins fondamentaux pour tout le monde.",
+      "Everything Claude Code, Context7, Prompt Improver, Repomix, Ralph Loop : les plugins fondamentaux pour tout le monde.",
     color: "accent" as const,
   },
   {
@@ -69,7 +69,7 @@ const SUB_PAGES = [
     step: "04",
     title: "Plugins design & frontend",
     description:
-      "Frontend Design (96K installs), UI UX Pro Max, 21st Magic, Playwright \u2014 les plugins pour cr\u00e9er des interfaces professionnelles.",
+      "Frontend Design (96K installs), UI UX Pro Max, 21st Magic, Playwright : les plugins pour cr\u00e9er des interfaces professionnelles.",
     color: "accent" as const,
   },
   {
@@ -78,7 +78,7 @@ const SUB_PAGES = [
     step: "05",
     title: "Plugins s\u00e9curit\u00e9 & qualit\u00e9",
     description:
-      "Security Guidance, Code Review, AgentShield, TDD Guide \u2014 s\u00e9curisez et fiabilisez votre code automatiquement.",
+      "Security Guidance, Code Review, AgentShield, TDD Guide : s\u00e9curisez et fiabilisez votre code automatiquement.",
     color: "brand" as const,
   },
 ] as const;

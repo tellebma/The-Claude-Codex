@@ -1,6 +1,6 @@
 ---
 title: "Comprendre les extensions communautaires Claude Code"
-description: "Qu'est-ce qu'une extension communautaire Claude Code ? Skills, agents, règles et configurations — enrichir votre assistant sans marketplace officielle."
+description: "Qu'est-ce qu'une extension communautaire Claude Code ? Skills, agents, règles et configurations : enrichir votre assistant sans marketplace officielle."
 section: "plugins"
 order: 1
 datePublished: "2026-03-09"
@@ -10,7 +10,7 @@ dateModified: "2026-03-11"
 ## Ce qu'on appelle « plugins », c'est quoi exactement ?
 
 <Callout type="warning" title="Clarification terminologique importante">
-La section que vous lisez s'intitule « Plugins » par convention éditoriale, mais ce terme est **trompeur** : Claude Code ne dispose pas de système de plugins avec marketplace ou commandes `/plugin install`. Ce qui existe réellement, ce sont des **extensions communautaires** — fichiers de skills, règles, agents et configurations — qui s'installent manuellement. Cette page clarifie ce qui existe vraiment.
+La section que vous lisez s'intitule « Plugins » par convention éditoriale, mais ce terme est **trompeur** : Claude Code ne dispose pas de système de plugins avec marketplace ou commandes `/plugin install`. Ce qui existe réellement, ce sont des **extensions communautaires** (fichiers de skills, règles, agents et configurations) qui s'installent manuellement. Cette page clarifie ce qui existe vraiment.
 </Callout>
 
 Dans la communauté Claude Code, le mot « plugin » désigne informellement des **extensions qui enrichissent votre assistant**. En réalité, il s'agit de trois types de ressources distinctes :
@@ -19,10 +19,10 @@ Dans la communauté Claude Code, le mot « plugin » désigne informellement des
 2. **Les règles et agents** : fichiers `.md` ou `.mdc` dans `.claude/agents/` qui guident le comportement de Claude
 3. **Les configurations** : fichiers `CLAUDE.md`, `settings.json`, et structures de projet partagées
 
-Ces ressources sont créées par la **communauté**, hébergées sur GitHub, et s'installent **manuellement** — par copie de fichiers ou via la commande `/install-github` de Claude Code.
+Ces ressources sont créées par la **communauté**, hébergées sur GitHub, et s'installent **manuellement**, par copie de fichiers ou via la commande `/install-github` de Claude Code.
 
 <Callout type="info" title="L'analogie des fichiers de configuration">
-Imaginez que Claude Code est votre éditeur de code. Les extensions communautaires, ce sont comme des fichiers `.eslintrc`, des templates de projet, ou des snippets partagés. Vous les copiez dans votre projet, et ils changent le comportement de l'outil. Pas de store, pas d'installation automatique — mais une grande flexibilité.
+Imaginez que Claude Code est votre éditeur de code. Les extensions communautaires, ce sont comme des fichiers `.eslintrc`, des templates de projet, ou des snippets partagés. Vous les copiez dans votre projet, et ils changent le comportement de l'outil. Pas de store, pas d'installation automatique, mais une grande flexibilité.
 </Callout>
 
 ## Extension communautaire vs MCP vs Skill : les différences
@@ -39,7 +39,7 @@ Ces trois mécanismes d'extension sont **complémentaires**, mais ils intervienn
 | **Exemples** | everything-claude-code, collections de règles | GitHub, Playwright, Context7 | `review-pr`, `tdd-guide`, `deploy` |
 
 <Card title="En résumé">
-Les **MCP** donnent à Claude Code des **mains** pour toucher le monde extérieur. Les **Skills** lui donnent des **recettes** pour savoir quoi faire. Les **extensions communautaires** sont des **collections de fichiers de configuration** — agents, règles, templates — que la communauté partage et que vous adaptez à votre workflow.
+Les **MCP** donnent à Claude Code des **mains** pour toucher le monde extérieur. Les **Skills** lui donnent des **recettes** pour savoir quoi faire. Les **extensions communautaires** sont des **collections de fichiers de configuration** (agents, règles, templates) que la communauté partage et que vous adaptez à votre workflow.
 </Card>
 
 ## Comment s'installent les extensions communautaires ?
@@ -75,7 +75,7 @@ cp -r everything-claude-code/rules/ .claude/rules/
 Certains outils communautaires sont publiés sur npm et s'utilisent comme des utilitaires CLI :
 
 ```bash
-# repomix — outil pour analyser une codebase
+# repomix - outil pour analyser une codebase
 npx repomix
 
 # Génère un fichier de contexte pour Claude Code
@@ -112,6 +112,6 @@ Vous pouvez utiliser Claude Code avec ses extensions **en parallèle** de VS Cod
 
 Maintenant que vous comprenez ce qu'est une extension communautaire et comment elle s'intègre dans l'écosystème Claude Code, passons à la pratique.
 
-- [Installer et gérer ses extensions](/plugins/setup) — Comment installer, organiser et créer vos propres extensions
-- [Top extensions essentielles 2026](/plugins/best-essential) — Les ressources communautaires incontournables
-- [Extensions design & frontend](/plugins/best-design) — Les meilleures ressources pour le design et l'UI
+- [Installer et gérer ses extensions](/plugins/setup) : Comment installer, organiser et créer vos propres extensions
+- [Top extensions essentielles 2026](/plugins/best-essential) : Les ressources communautaires incontournables
+- [Extensions design & frontend](/plugins/best-design) : Les meilleures ressources pour le design et l'UI

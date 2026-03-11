@@ -24,7 +24,7 @@ export function generateClaudeMd(config: ConfigState): string {
   const sections: string[] = [];
 
   // Header
-  sections.push(`# Configuration Claude Code — ${profileLabel}`);
+  sections.push(`# Configuration Claude Code : ${profileLabel}`);
   sections.push("");
   sections.push(
     `Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.`
@@ -456,7 +456,7 @@ export function generateInstallGuide(config: ConfigState): string {
 
   lines.push("---");
   lines.push(
-    "Configuration générée par The Claude Codex — https://claude-codex.fr/configurator"
+    "Configuration générée par The Claude Codex | https://claude-codex.fr/configurator"
   );
 
   return lines.join("\n");

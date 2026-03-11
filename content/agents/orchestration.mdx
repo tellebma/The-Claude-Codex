@@ -9,7 +9,7 @@ dateModified: "2026-03-10"
 
 ## L'art de l'orchestration multi-agents
 
-L'orchestration multi-agents consiste à **combiner plusieurs agents** pour accomplir des tâches complexes qu'aucun agent seul ne pourrait réaliser efficacement. C'est le niveau avancé de l'utilisation de Claude Code — celui qui transforme un assistant intelligent en une véritable **équipe de développement automatisée**.
+L'orchestration multi-agents consiste à **combiner plusieurs agents** pour accomplir des tâches complexes qu'aucun agent seul ne pourrait réaliser efficacement. C'est le niveau avancé de l'utilisation de Claude Code, celui qui transforme un assistant intelligent en une véritable **équipe de développement automatisée**.
 
 <Callout type="info" title="L'analogie du chef d'orchestre">
 Un chef d'orchestre ne joue d'aucun instrument, mais il coordonne 80 musiciens pour produire une symphonie. De la même manière, l'orchestration multi-agents consiste à coordonner des agents spécialisés pour produire un résultat qu'aucun d'entre eux ne pourrait atteindre seul. Votre rôle est celui du chef d'orchestre : vous définissez la partition (les instructions), et Claude Code dirige l'exécution.
@@ -39,7 +39,7 @@ Utilisez ce pattern quand chaque étape dépend du résultat de la précédente.
 - Les erreurs sont facilement traçables
 
 **Inconvénients :**
-- Lent — les étapes ne peuvent pas être parallélisées
+- Lent : les étapes ne peuvent pas être parallélisées
 - Si une étape échoue, tout le pipeline s'arrête
 
 ### 2. Pattern parallèle
@@ -96,19 +96,19 @@ Un **pipeline** combine le séquentiel et le parallèle : certaines étapes sont
 ```
 
 <Steps>
-<Step title="Phase 1 — Vérifications parallèles" stepNumber={1}>
+<Step title="Phase 1 : Vérifications parallèles" stepNumber={1}>
 Les tests et l'audit de sécurité sont indépendants et peuvent s'exécuter en parallèle. Si l'un des deux échoue, le pipeline s'arrête.
 </Step>
 
-<Step title="Phase 2 — Review séquentielle" stepNumber={2}>
+<Step title="Phase 2 : Review séquentielle" stepNumber={2}>
 La review ne peut commencer qu'une fois les tests et la sécurité validés. Le reviewer a besoin de savoir que le code est fonctionnel et sûr.
 </Step>
 
-<Step title="Phase 3 — Documentation et E2E" stepNumber={3}>
+<Step title="Phase 3 : Documentation et E2E" stepNumber={3}>
 La documentation et les tests E2E sont indépendants. Ils peuvent s'exécuter en parallèle après la review.
 </Step>
 
-<Step title="Phase 4 — Release" stepNumber={4} isLast>
+<Step title="Phase 4 : Release" stepNumber={4} isLast>
 La préparation de la release n'est déclenchée que si toutes les étapes précédentes sont vertes.
 </Step>
 </Steps>
@@ -304,7 +304,7 @@ Ce pipeline combine les 4 patterns d'orchestration pour un processus de release 
 
 Vous maîtrisez maintenant l'orchestration multi-agents. Continuez votre apprentissage avec ces ressources complémentaires.
 
-- [Comprendre les agents](/agents/what-are-agents) — Revenir aux fondamentaux
-- [Créer un subagent](/agents/create-subagent) — Créez des agents sur mesure pour vos besoins
-- [Maîtriser le prompting](/prompting) — L'art de communiquer efficacement avec Claude Code
-- [Configurer votre environnement](/configurator) — Optimisez votre configuration Claude Code
+- [Comprendre les agents](/agents/what-are-agents) : Revenir aux fondamentaux
+- [Créer un subagent](/agents/create-subagent) : Créez des agents sur mesure pour vos besoins
+- [Maîtriser le prompting](/prompting) : L'art de communiquer efficacement avec Claude Code
+- [Configurer votre environnement](/configurator) : Optimisez votre configuration Claude Code

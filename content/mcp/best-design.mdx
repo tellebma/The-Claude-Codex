@@ -9,7 +9,7 @@ dateModified: "2026-03-11"
 
 ## Les MCP pour voir et interagir avec le web
 
-Les MCP de design et UI donnent à Claude Code des **yeux** et des **mains** pour interagir avec le web. Prendre des screenshots, cliquer sur des boutons, remplir des formulaires, auditer des pages, générer des composants UI — tout devient possible directement depuis le terminal.
+Les MCP de design et UI donnent à Claude Code des **yeux** et des **mains** pour interagir avec le web. Prendre des screenshots, cliquer sur des boutons, remplir des formulaires, auditer des pages, générer des composants UI, tout devient possible directement depuis le terminal.
 
 <Callout type="info" title="Pourquoi ces MCP sont révolutionnaires">
 Sans ces MCP, Claude Code travaille "à l'aveugle" sur le web. Il peut écrire du HTML/CSS, mais il ne peut pas **voir** le résultat. Les MCP de cette catégorie lui permettent de vérifier visuellement son travail, de tester des interactions et de déboguer des problèmes d'affichage.
@@ -17,7 +17,7 @@ Sans ces MCP, Claude Code travaille "à l'aveugle" sur le web. Il peut écrire d
 
 ---
 
-## Playwright — Tests E2E et automatisation web
+## Playwright : Tests E2E et automatisation web
 
 **Le couteau suisse de l'automatisation web.** Playwright permet à Claude Code de naviguer sur des pages web, prendre des screenshots, remplir des formulaires, cliquer sur des éléments et exécuter des tests end-to-end complets.
 
@@ -53,14 +53,14 @@ claude mcp add playwright -- npx -y @playwright/mcp
 
 Playwright expose une riche collection d'outils :
 
-- **`browser_navigate`** — Naviguer vers une URL
-- **`browser_take_screenshot`** — Prendre un screenshot de la page
-- **`browser_snapshot`** — Capturer le DOM accessible de la page
-- **`browser_click`** — Cliquer sur un élément
-- **`browser_fill_form`** — Remplir un formulaire
-- **`browser_evaluate`** — Exécuter du JavaScript dans la page
-- **`browser_wait_for`** — Attendre un élément ou une condition
-- **`browser_network_requests`** — Observer les requêtes réseau
+- **`browser_navigate`** : Naviguer vers une URL
+- **`browser_take_screenshot`** : Prendre un screenshot de la page
+- **`browser_snapshot`** : Capturer le DOM accessible de la page
+- **`browser_click`** : Cliquer sur un élément
+- **`browser_fill_form`** : Remplir un formulaire
+- **`browser_evaluate`** : Exécuter du JavaScript dans la page
+- **`browser_wait_for`** : Attendre un élément ou une condition
+- **`browser_network_requests`** : Observer les requêtes réseau
 
 ### Cas d'usage
 
@@ -75,9 +75,9 @@ Playwright est le successeur spirituel de Puppeteer, développé par la même é
 
 ---
 
-## Chrome DevTools — Debug web avancé
+## Chrome DevTools : Debug web avancé
 
-**Accédez aux Chrome DevTools directement depuis Claude Code.** Inspectez le DOM, analysez les performances, surveillez les requêtes réseau et déboguez le JavaScript — le tout sans quitter votre terminal.
+**Accédez aux Chrome DevTools directement depuis Claude Code.** Inspectez le DOM, analysez les performances, surveillez les requêtes réseau et déboguez le JavaScript, le tout sans quitter votre terminal.
 
 <Callout type="info" title="Package npm communautaire">
 Il n'existe pas de package `@anthropic/mcp-chrome-devtools`. Le MCP Chrome DevTools est un projet communautaire. Vérifiez les packages disponibles sur npm en cherchant « chrome devtools mcp ». Une alternative est d'utiliser Playwright qui intègre les DevTools nativement.
@@ -100,11 +100,11 @@ Le MCP Playwright couvre la majorité des cas d'usage de Chrome DevTools :
 
 Playwright expose des outils équivalents aux DevTools :
 
-- **`browser_evaluate`** — Exécuter du JavaScript dans le contexte de la page
-- **`browser_network_requests`** — Voir toutes les requêtes réseau
-- **`browser_console_messages`** — Lire les messages de la console
-- **`browser_take_screenshot`** — Capture d'écran
-- **`browser_resize`** — Simuler un appareil mobile (redimensionner le viewport)
+- **`browser_evaluate`** : Exécuter du JavaScript dans le contexte de la page
+- **`browser_network_requests`** : Voir toutes les requêtes réseau
+- **`browser_console_messages`** : Lire les messages de la console
+- **`browser_take_screenshot`** : Capture d'écran
+- **`browser_resize`** : Simuler un appareil mobile (redimensionner le viewport)
 
 ### Cas d'usage
 
@@ -114,12 +114,12 @@ Playwright expose des outils équivalents aux DevTools :
 
 ---
 
-## 21st.dev Magic — Composants UI modernes
+## 21st.dev Magic : Composants UI modernes
 
 **Générez des composants UI modernes et prêts à l'emploi directement depuis Claude Code.** 21st.dev Magic fournit des composants React inspirés par les meilleurs designs du web, avec support Tailwind CSS.
 
 <Callout type="info" title="Package npm officiel 21st.dev">
-Le package npm officiel est `@21st-dev/magic`, publié par 21st.dev. Il n'existe pas de package `@anthropic/mcp-21st-magic`. Une clé API est nécessaire — obtenez-la sur [21st.dev](https://21st.dev).
+Le package npm officiel est `@21st-dev/magic`, publié par 21st.dev. Il n'existe pas de package `@anthropic/mcp-21st-magic`. Une clé API est nécessaire, obtenez-la sur [21st.dev](https://21st.dev).
 </Callout>
 
 ### Installation
@@ -147,10 +147,10 @@ claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @21st-dev/magi
 
 ### Outils disponibles
 
-- **`21st_magic_component_builder`** — Générer un composant UI à partir d'une description
-- **`21st_magic_component_inspiration`** — Trouver de l'inspiration parmi des composants existants
-- **`21st_magic_component_refiner`** — Améliorer un composant existant
-- **`logo_search`** — Rechercher des logos de marques
+- **`21st_magic_component_builder`** : Générer un composant UI à partir d'une description
+- **`21st_magic_component_inspiration`** : Trouver de l'inspiration parmi des composants existants
+- **`21st_magic_component_refiner`** : Améliorer un composant existant
+- **`logo_search`** : Rechercher des logos de marques
 
 ### Cas d'usage
 
@@ -165,7 +165,7 @@ Combinez 21st.dev Magic + Playwright : générez un composant avec Magic, puis u
 
 ---
 
-## Puppeteer — Scraping et screenshots
+## Puppeteer : Scraping et screenshots
 
 **Automatisez Chrome pour le scraping, les screenshots et les tests.** Puppeteer est l'outil historique de Google pour contrôler Chrome programmatiquement.
 
@@ -195,13 +195,13 @@ claude mcp add puppeteer -- npx -y @modelcontextprotocol/server-puppeteer
 
 ### Outils disponibles
 
-- **`puppeteer_navigate`** — Naviguer vers une URL
-- **`puppeteer_screenshot`** — Prendre un screenshot
-- **`puppeteer_click`** — Cliquer sur un élément
-- **`puppeteer_fill`** — Remplir un champ de formulaire
-- **`puppeteer_evaluate`** — Exécuter du JavaScript
-- **`puppeteer_select`** — Sélectionner une option dans un menu déroulant
-- **`puppeteer_hover`** — Survoler un élément
+- **`puppeteer_navigate`** : Naviguer vers une URL
+- **`puppeteer_screenshot`** : Prendre un screenshot
+- **`puppeteer_click`** : Cliquer sur un élément
+- **`puppeteer_fill`** : Remplir un champ de formulaire
+- **`puppeteer_evaluate`** : Exécuter du JavaScript
+- **`puppeteer_select`** : Sélectionner une option dans un menu déroulant
+- **`puppeteer_hover`** : Survoler un élément
 
 ### Cas d'usage
 
@@ -227,6 +227,6 @@ Pour la plupart des projets, **Playwright + 21st.dev Magic** est la combinaison 
 
 ## Prochaines étapes
 
-- [Créer son premier workflow MCP](/mcp/first-workflow) — Combiner plusieurs MCP dans un flux de travail concret
-- [Top MCP productivité](/mcp/best-productivity) — Gmail, Slack, Calendar, Figma
-- [Installer et configurer un MCP](/mcp/setup) — Guide d'installation détaillé
+- [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner plusieurs MCP dans un flux de travail concret
+- [Top MCP productivité](/mcp/best-productivity) : Gmail, Slack, Calendar, Figma
+- [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé

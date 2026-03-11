@@ -22,7 +22,7 @@ La bonne nouvelle : les pratiques de sécurité décrites ici ne dégradent pas 
 
 ### La règle d'or
 
-Accordez à chaque composant (MCP, agent, script) **uniquement les permissions dont il a besoin** pour sa fonction — pas plus.
+Accordez à chaque composant (MCP, agent, script) **uniquement les permissions dont il a besoin** pour sa fonction, pas plus.
 
 Ce principe s'applique à plusieurs niveaux :
 
@@ -68,7 +68,7 @@ gh auth login  # Accorde tous les scopes
 
 Avant d'accorder une permission, posez-vous la question : "Ce composant a-t-il **réellement** besoin de cet accès pour sa fonction actuelle ?"
 
-Si la réponse est "peut-être" ou "au cas où" — refusez.
+Si la réponse est "peut-être" ou "au cas où", refusez.
 
 ## Principe 2 : Audit avant installation
 
@@ -138,7 +138,7 @@ projet-client-sensible/
 ### Exemple de profils
 
 ```json
-// .mcp.json — Projet frontend public
+// .mcp.json - Projet frontend public
 {
   "mcpServers": {
     "filesystem": {
@@ -154,7 +154,7 @@ projet-client-sensible/
 ```
 
 ```json
-// .mcp.json — Projet avec base de données (séparation des environnements)
+// .mcp.json - Projet avec base de données (séparation des environnements)
 {
   "mcpServers": {
     "filesystem": {
@@ -175,7 +175,7 @@ projet-client-sensible/
 
 ## Principe 4 : Monitoring du contexte avec /cost
 
-La commande `/cost` n'est pas seulement un outil budgétaire — c'est aussi un indicateur de sécurité.
+La commande `/cost` n'est pas seulement un outil budgétaire, c'est aussi un indicateur de sécurité.
 
 ```bash
 # Dans une session Claude Code
@@ -185,7 +185,7 @@ La commande `/cost` n'est pas seulement un outil budgétaire — c'est aussi un 
 Utilisez `/cost` pour :
 
 - **Détecter les anomalies** : si votre session consomme beaucoup plus de tokens que d'habitude sans raison apparente, peut-être que Claude lit des fichiers inattendus ou effectue des appels MCP anormaux
-- **Surveiller les appels MCP** : les résultats de MCP (surtout d'APIs externes) peuvent générer beaucoup de tokens d'input — examinez ce que Claude a lu
+- **Surveiller les appels MCP** : les résultats de MCP (surtout d'APIs externes) peuvent générer beaucoup de tokens d'input. Examinez ce que Claude a lu
 - **Calibrer vos profils** : identifier quels MCP consomment le plus de contexte au démarrage
 
 <Callout type="tip" title="Vérifier les appels MCP inhabituels">
@@ -219,7 +219,7 @@ Liste les conventions adoptées et les patterns utilisés.
 Je vais noter ceci dans le CLAUDE.md avant de fermer."
 ```
 
-Copiez ce résumé dans votre CLAUDE.md ou dans un fichier de notes — ce sera votre point de départ pour la prochaine session.
+Copiez ce résumé dans votre CLAUDE.md ou dans un fichier de notes. Ce sera votre point de départ pour la prochaine session.
 
 ## Principe 6 : Jamais dangerouslySkipPermissions en production
 
@@ -239,7 +239,7 @@ claude --dangerously-skip-permissions
 claude --dangerously-skip-permissions --print "Exécute les tests"
 ```
 
-Si vous ressentez le besoin d'utiliser ce flag pour un gain de productivité — c'est probablement un problème de workflow à résoudre autrement.
+Si vous ressentez le besoin d'utiliser ce flag pour un gain de productivité, c'est probablement un problème de workflow à résoudre autrement.
 
 ## Principe 7 : Review des résultats MCP suspects
 
@@ -256,10 +256,10 @@ Soyez attentif à ces comportements qui peuvent indiquer une prompt injection ou
 
 Si vous suspectez une prompt injection :
 
-1. **Arrêtez la session immédiatement** — ne continuez pas à interagir
-2. **Examinez les logs** — quels fichiers ont été lus ? Quels appels MCP ont été effectués ?
-3. **Vérifiez vos credentials** — aucun fichier sensible n'a-t-il été lu ?
-4. **Signalez le MCP suspect** — ouvrez une issue sur son repository GitHub
+1. **Arrêtez la session immédiatement** : ne continuez pas à interagir
+2. **Examinez les logs** : quels fichiers ont été lus ? Quels appels MCP ont été effectués ?
+3. **Vérifiez vos credentials** : aucun fichier sensible n'a-t-il été lu ?
+4. **Signalez le MCP suspect** : ouvrez une issue sur son repository GitHub
 
 ## Principe 8 : Séparation des environnements
 
@@ -339,9 +339,9 @@ Production
 
 ## Prochaines étapes
 
-- [Sécurité des MCP](/mcp/securite-mcp) — Les vecteurs d'attaque spécifiques aux MCP en détail
-- [Mythes sur Claude Code](/content/mythes-claude-code) — Démystifier les idées reçues sur la sécurité
-- [Coûts réels de Claude Code](/content/couts-reels-claude-code) — Sécurité et budget vont de pair
-- [Guide CLAUDE.md](/prompting/claude-md) — Comment structurer un CLAUDE.md sécurisé
-- [Configurateur interactif](/configurator) — Générez une configuration sécurisée adaptée à votre profil
-- [Installer et configurer un MCP](/mcp/setup) — Configuration sécurisée dès le départ
+- [Sécurité des MCP](/mcp/securite-mcp) : Les vecteurs d'attaque spécifiques aux MCP en détail
+- [Mythes sur Claude Code](/content/mythes-claude-code) : Démystifier les idées reçues sur la sécurité
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : Sécurité et budget vont de pair
+- [Guide CLAUDE.md](/prompting/claude-md) : Comment structurer un CLAUDE.md sécurisé
+- [Configurateur interactif](/configurator) : Générez une configuration sécurisée adaptée à votre profil
+- [Installer et configurer un MCP](/mcp/setup) : Configuration sécurisée dès le départ

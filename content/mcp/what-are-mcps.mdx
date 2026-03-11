@@ -12,7 +12,7 @@ dateModified: "2026-03-09"
 Le **Model Context Protocol** (MCP) est un protocole ouvert créé par Anthropic qui permet à Claude Code de communiquer avec des services externes. C'est le standard qui transforme Claude Code d'un assistant isolé en un assistant **connecté à votre environnement réel**.
 
 <Callout type="info" title="L'analogie des prises USB">
-Imaginez que Claude Code est un ordinateur portable ultra-puissant, mais sans aucun port. Il peut réfléchir, calculer, raisonner — mais il ne peut rien **toucher** à l'extérieur. Les MCP, ce sont des **prises USB universelles** que vous branchez sur cet ordinateur. Chaque prise ouvre une connexion vers un service : votre boîte mail, votre code source, votre base de données, votre navigateur web. Plus vous branchez de prises, plus votre assistant devient puissant.
+Imaginez que Claude Code est un ordinateur portable ultra-puissant, mais sans aucun port. Il peut réfléchir, calculer, raisonner, mais il ne peut rien **toucher** à l'extérieur. Les MCP, ce sont des **prises USB universelles** que vous branchez sur cet ordinateur. Chaque prise ouvre une connexion vers un service : votre boîte mail, votre code source, votre base de données, votre navigateur web. Plus vous branchez de prises, plus votre assistant devient puissant.
 </Callout>
 
 Sans MCP, Claude Code peut uniquement lire et écrire des fichiers locaux et exécuter des commandes shell. C'est déjà puissant, mais limité à votre machine. Avec les MCP, il peut :
@@ -50,7 +50,7 @@ Le MCP Server reçoit la réponse de l'API GitHub, la reformate, et la renvoie �
 
 ### Le protocole en détail
 
-Le MCP utilise **JSON-RPC 2.0** comme format de communication. C'est un standard bien établi, léger et facile à implémenter. La communication entre Claude Code (le client) et chaque MCP Server se fait via **stdin/stdout** — c'est-à-dire via des flux standard du système d'exploitation.
+Le MCP utilise **JSON-RPC 2.0** comme format de communication. C'est un standard bien établi, léger et facile à implémenter. La communication entre Claude Code (le client) et chaque MCP Server se fait via **stdin/stdout**, c'est-à-dire via des flux standard du système d'exploitation.
 
 ```bash
 # Schéma simplifié du flux MCP
@@ -86,9 +86,9 @@ Les **MCP** donnent à Claude Code des **mains** pour interagir avec le monde ex
 
 Chaque MCP Server expose une liste d'outils. Un outil est une fonction que Claude Code peut appeler. Par exemple :
 
-- `mcp__github__list_issues` — lister les issues d'un repo
-- `mcp__slack__send_message` — envoyer un message Slack
-- `mcp__filesystem__read_file` — lire un fichier
+- `mcp__github__list_issues` : lister les issues d'un repo
+- `mcp__slack__send_message` : envoyer un message Slack
+- `mcp__filesystem__read_file` : lire un fichier
 
 Claude Code connaît la signature de chaque outil (ses paramètres, ses types) et peut les appeler automatiquement en fonction de votre demande.
 
@@ -98,7 +98,7 @@ Certains MCP exposent aussi des **ressources** : des données que Claude Code pe
 
 ### Les prompts (Prompts)
 
-Un MCP peut également fournir des **prompts prédéfinis** — des modèles d'interaction optimisés pour des cas d'usage spécifiques.
+Un MCP peut également fournir des **prompts prédéfinis**, des modèles d'interaction optimisés pour des cas d'usage spécifiques.
 
 ## Sécurité et permissions
 
@@ -117,6 +117,6 @@ Voici les bonnes pratiques de sécurité pour les MCP :
 
 Maintenant que vous comprenez ce qu'est un MCP et comment il fonctionne, passons à la pratique.
 
-- [Installer et configurer un MCP](/mcp/setup) — Le guide étape par étape pour brancher votre premier MCP
-- [Top MCP productivité](/mcp/best-productivity) — Les meilleurs MCP pour Gmail, Slack, Calendar et plus
-- [Top MCP développement](/mcp/best-development) — GitHub, Context7, Sentry, bases de données
+- [Installer et configurer un MCP](/mcp/setup) : Le guide étape par étape pour brancher votre premier MCP
+- [Top MCP productivité](/mcp/best-productivity) : Les meilleurs MCP pour Gmail, Slack, Calendar et plus
+- [Top MCP développement](/mcp/best-development) : GitHub, Context7, Sentry, bases de données

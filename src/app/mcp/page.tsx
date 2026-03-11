@@ -138,7 +138,7 @@ const SUB_PAGES = [
     step: "03",
     title: "Top MCP productivit\u00e9",
     description:
-      "Figma, Lighthouse, Gmail, Slack, Google Calendar \u2014 les MCP qui transforment votre quotidien professionnel.",
+      "Figma, Lighthouse, Gmail, Slack, Google Calendar : les MCP qui transforment votre quotidien professionnel.",
     color: "accent" as const,
   },
   {
@@ -147,7 +147,7 @@ const SUB_PAGES = [
     step: "04",
     title: "Top MCP d\u00e9veloppement",
     description:
-      "Context7, Sentry, Linear, PostgreSQL, GitHub \u2014 les MCP essentiels pour les d\u00e9veloppeurs.",
+      "Context7, Sentry, Linear, PostgreSQL, GitHub : les MCP essentiels pour les d\u00e9veloppeurs.",
     color: "accent" as const,
   },
   {
@@ -156,7 +156,7 @@ const SUB_PAGES = [
     step: "05",
     title: "Top MCP design & UI",
     description:
-      "Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer \u2014 voir et interagir avec le web.",
+      "Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer : voir et interagir avec le web.",
     color: "brand" as const,
   },
   {
@@ -227,8 +227,8 @@ export default function McpPage() {
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
-              Connectez Claude Code &agrave; vos outils favoris — GitHub, Slack,
-              Gmail, bases de donn&eacute;es — et transformez-le en assistant
+              Connectez Claude Code &agrave; vos outils favoris (GitHub, Slack,
+              Gmail, bases de donn&eacute;es) et transformez-le en assistant
               tout-puissant qui agit dans votre environnement r&eacute;el.
             </p>
           </div>
@@ -330,7 +330,7 @@ export default function McpPage() {
                 Chaque MCP ouvre une nouvelle porte. Sans MCP, Claude Code
                 peut seulement lire et ecrire des fichiers locaux. Avec les
                 MCP, il peut envoyer un message Slack, creer une pull request
-                GitHub, lancer une requete SQL, et bien plus encore —{" "}
+                GitHub, lancer une requete SQL, et bien plus encore.{" "}
                 <strong>tout ca depuis le terminal</strong>.
               </p>
             </div>
@@ -448,7 +448,7 @@ export default function McpPage() {
               Le MCP est un protocole ouvert cree par Anthropic. Chaque MCP
               server expose un ensemble d&apos;outils (tools) que Claude Code
               peut appeler automatiquement. Vous n&apos;avez pas besoin
-              d&apos;ecrire du code — juste de configurer la connexion.
+              d&apos;ecrire du code, juste de configurer la connexion.
             </Callout>
           </div>
         </div>
@@ -760,7 +760,7 @@ claude
               <Callout type="tip" title="Workflow concret">
                 Essayez : &quot;Analyse les fichiers modifies cette semaine dans mon
                 projet, cree une pull request avec un resume des changements,
-                et envoie une notification Slack a l&apos;equipe.&quot; — Claude Code
+                et envoie une notification Slack a l&apos;equipe.&quot; Claude Code
                 enchainera les trois MCP automatiquement.
               </Callout>
             </div>

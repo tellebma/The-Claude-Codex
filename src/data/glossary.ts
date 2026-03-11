@@ -46,7 +46,7 @@ export const glossaryTerms: ReadonlyArray<GlossaryTerm> = [
     definition:
       "Application Programming Interface. Ensemble de règles et de protocoles permettant à deux logiciels de communiquer entre eux de manière standardisée.",
     analogy:
-      "Le menu d'un restaurant : il définit ce que vous pouvez commander et comment le demander. Vous ne pouvez pas entrer en cuisine demander n'importe quoi — vous passez par le menu.",
+      "Le menu d'un restaurant : il définit ce que vous pouvez commander et comment le demander. Vous ne pouvez pas entrer en cuisine demander n'importe quoi, vous passez par le menu.",
   },
   {
     term: "Clé API",
@@ -68,7 +68,7 @@ export const glossaryTerms: ReadonlyArray<GlossaryTerm> = [
     definition:
       "Système de contrôle de version distribué. Permet de suivre l'historique des modifications d'un projet, de collaborer à plusieurs et de revenir à des versions antérieures.",
     analogy:
-      "L'historique Ctrl+Z de votre traitement de texte, mais pour des projets entiers — avec la possibilité de créer des branches parallèles et de fusionner du travail.",
+      "L'historique Ctrl+Z de votre traitement de texte, mais pour des projets entiers, avec la possibilité de créer des branches parallèles et de fusionner du travail.",
   },
   {
     term: "GitHub",
@@ -193,7 +193,7 @@ export const glossaryTerms: ReadonlyArray<GlossaryTerm> = [
     definition:
       "Section de métadonnées au début d'un fichier Markdown ou MDX, délimitée par `---`. Contient des informations structurées comme le titre, la description, la date.",
     analogy:
-      "La couverture d'un livre : titre, auteur, date, résumé — toutes les infos clés avant même d'ouvrir le livre.",
+      "La couverture d'un livre : titre, auteur, date, résumé. Toutes les infos clés avant même d'ouvrir le livre.",
   },
   {
     term: "Markdown",
@@ -250,7 +250,7 @@ export const glossaryTerms: ReadonlyArray<GlossaryTerm> = [
     definition:
       "Dossier de projet versionné avec Git, contenant le code source, l'historique des modifications et les métadonnées du projet.",
     analogy:
-      "Un classeur avec toutes les versions d'un document et le journal de toutes les modifications — mais pour un projet entier.",
+      "Un classeur avec toutes les versions d'un document et le journal de toutes les modifications, mais pour un projet entier.",
   },
   {
     term: "Branche",
@@ -290,7 +290,7 @@ export const glossaryTerms: ReadonlyArray<GlossaryTerm> = [
   {
     term: "Lint",
     definition:
-      "Analyse statique du code pour détecter des erreurs potentielles, des mauvaises pratiques ou des violations de style — sans exécuter le code.",
+      "Analyse statique du code pour détecter des erreurs potentielles, des mauvaises pratiques ou des violations de style, sans exécuter le code.",
     analogy:
       "La correction automatique d'un traitement de texte, mais pour le code : il souligne les \"fautes de grammaire\" de programmation avant que vous n'envoyiez votre travail.",
   },

@@ -9,7 +9,7 @@ dateModified: "2026-03-11"
 
 ## Comment Claude interprète vos messages
 
-Quand vous écrivez un prompt à Claude Code, il ne se contente pas de lire vos mots — il analyse le **contexte**, la **structure** et l'**intention** derrière votre message. Comprendre ce mécanisme est la clé pour obtenir des résultats précis dès le premier essai.
+Quand vous écrivez un prompt à Claude Code, il ne se contente pas de lire vos mots, il analyse le **contexte**, la **structure** et l'**intention** derrière votre message. Comprendre ce mécanisme est la clé pour obtenir des résultats précis dès le premier essai.
 
 <Callout type="info" title="L'analogie du brief créatif">
 Imaginez que vous briefez un freelance talentueux mais qui ne connaît rien à votre projet. Plus votre brief est clair et structuré, plus le livrable sera conforme à vos attentes. Un brief vague produit un résultat vague. Un brief précis produit un résultat précis. Le prompting, c'est exactement ça : l'art de rédiger le brief parfait.
@@ -17,12 +17,12 @@ Imaginez que vous briefez un freelance talentueux mais qui ne connaît rien à v
 
 Claude Code prend en compte plusieurs couches d'information pour interpréter votre demande :
 
-1. **Le contexte du projet** — le fichier `CLAUDE.md`, les fichiers ouverts, le codebase
-2. **L'historique de la conversation** — les échanges précédents dans la session
-3. **Votre prompt actuel** — le message que vous venez d'écrire
-4. **Les instructions système** — les Skills et directives chargées
+1. **Le contexte du projet** : le fichier `CLAUDE.md`, les fichiers ouverts, le codebase
+2. **L'historique de la conversation** : les échanges précédents dans la session
+3. **Votre prompt actuel** : le message que vous venez d'écrire
+4. **Les instructions système** : les Skills et directives chargées
 
-Plus vous donnez de contexte explicite dans votre prompt, moins Claude doit deviner — et moins il fait d'erreurs.
+Plus vous donnez de contexte explicite dans votre prompt, moins Claude doit deviner, et moins il fait d'erreurs.
 
 ## Structure d'un bon prompt
 
@@ -257,9 +257,9 @@ avec le code de chaque fix. Priorise par impact."
 "Écris les tests unitaires pour UserService en approche TDD (Vitest + mocks).
 
 Méthodes à tester :
-1. createUser(data: CreateUserDto) — succès, email dupliqué, validation échoue
-2. findById(id: string) — trouvé, non trouvé, id invalide
-3. updatePassword(id, oldPwd, newPwd) — succès, mauvais ancien mot de passe, nouveau trop court
+1. createUser(data: CreateUserDto) : succès, email dupliqué, validation échoue
+2. findById(id: string) : trouvé, non trouvé, id invalide
+3. updatePassword(id, oldPwd, newPwd) : succès, mauvais ancien mot de passe, nouveau trop court
 
 Pour chaque test :
 - Arrange : setup des mocks nécessaires
@@ -389,7 +389,7 @@ Niveau : licence 2, examen de 3h. Concis et mémorisable."
 
 **Prompt optimisé** :
 ```markdown
-"Crée 5 posts Instagram pour @[compte] — compte d'un studio de yoga à Paris.
+"Crée 5 posts Instagram pour @[compte], compte d'un studio de yoga à Paris.
 
 Audience : femmes 25-40 ans, urbaines, actives, pratique yoga 1-2x par semaine.
 
@@ -417,7 +417,7 @@ Pour chaque post :
 ```markdown
 "Je développe un podcast sur l'histoire des jeux vidéo indépendants.
 
-Concept : raconter l'histoire méconnue derrière les jeux cultes — les galères,
+Concept : raconter l'histoire méconnue derrière les jeux cultes, les galères,
 les pivots, les histoires humaines des créateurs.
 
 Aide-moi à développer :
@@ -461,21 +461,21 @@ Ce tableau couvre les erreurs les plus fréquentes observées chez les utilisate
 Ces erreurs sont les plus fréquentes chez les débutants. Les éviter vous fera gagner des heures de travail.
 </Callout>
 
-1. **Être trop vague** — "Fais-moi un truc cool" ne produit jamais un résultat utile. Soyez spécifique.
-2. **Ne pas donner de contexte** — Claude ne peut pas deviner votre stack, votre architecture ou vos conventions.
-3. **Tout demander d'un coup** — Décomposez les gros projets en étapes gérables.
-4. **Ne pas itérer** — Si la première réponse n'est pas parfaite, affinez votre demande au lieu de recommencer à zéro.
-5. **Ignorer le format de sortie** — Si vous ne dites pas à Claude comment structurer sa réponse, il choisira un format par défaut qui ne correspondra pas forcément à vos besoins.
+1. **Être trop vague** : "Fais-moi un truc cool" ne produit jamais un résultat utile. Soyez spécifique.
+2. **Ne pas donner de contexte** : Claude ne peut pas deviner votre stack, votre architecture ou vos conventions.
+3. **Tout demander d'un coup** : Décomposez les gros projets en étapes gérables.
+4. **Ne pas itérer** : Si la première réponse n'est pas parfaite, affinez votre demande au lieu de recommencer à zéro.
+5. **Ignorer le format de sortie** : Si vous ne dites pas à Claude comment structurer sa réponse, il choisira un format par défaut qui ne correspondra pas forcément à vos besoins.
 
 ## Prochaines étapes
 
 Vous maîtrisez maintenant les fondamentaux du prompting. Pour aller plus loin :
 
-- [Les directives qui font la différence](/prompting/directives) — Apprenez à cadrer Claude avec des instructions avancées
-- [Templates de prompts par métier](/prompting/templates) — Des prompts prêts à l'emploi pour chaque type de tâche
-- [Gestion du contexte](/prompting/context-management) — Maîtrisez la fenêtre de 200K tokens et la commande /compact
-- [Le guide complet CLAUDE.md](/prompting/claude-md) — Automatisez votre contexte avec le fichier CLAUDE.md
-- [Premiers pas avec Claude Code](/getting-started) — Installez et configurez Claude Code pour démarrer
-- [Configurateur interactif](/configurator) — Générez votre configuration personnalisée en quelques clics
-- [Comprendre les agents](/agents/what-are-agents) — Étendez vos prompts avec des agents spécialisés
-- [MCP : les extensions de Claude](/mcp) — Connectez Claude à vos outils avec les Model Context Protocols
+- [Les directives qui font la différence](/prompting/directives) : Apprenez à cadrer Claude avec des instructions avancées
+- [Templates de prompts par métier](/prompting/templates) : Des prompts prêts à l'emploi pour chaque type de tâche
+- [Gestion du contexte](/prompting/context-management) : Maîtrisez la fenêtre de 200K tokens et la commande /compact
+- [Le guide complet CLAUDE.md](/prompting/claude-md) : Automatisez votre contexte avec le fichier CLAUDE.md
+- [Premiers pas avec Claude Code](/getting-started) : Installez et configurez Claude Code pour démarrer
+- [Configurateur interactif](/configurator) : Générez votre configuration personnalisée en quelques clics
+- [Comprendre les agents](/agents/what-are-agents) : Étendez vos prompts avec des agents spécialisés
+- [MCP : les extensions de Claude](/mcp) : Connectez Claude à vos outils avec les Model Context Protocols

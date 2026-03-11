@@ -28,7 +28,7 @@ const mono = JetBrains_Mono({
 });
 
 const siteDescription =
-  "Le guide de r\u00e9f\u00e9rence gratuit pour ma\u00eetriser Claude Code. MCP, Skills, Prompting avanc\u00e9 \u2014 pour d\u00e9veloppeurs et non-d\u00e9veloppeurs.";
+  "Le guide de r\u00e9f\u00e9rence gratuit pour ma\u00eetriser Claude Code. MCP, Skills, Prompting avanc\u00e9, pour d\u00e9veloppeurs et non-d\u00e9veloppeurs.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: `${SITE_NAME} \u2014 Guide de r\u00e9f\u00e9rence pour ma\u00eetriser Claude Code`,
+        alt: `${SITE_NAME} | Guide de r\u00e9f\u00e9rence pour ma\u00eetriser Claude Code`,
       },
     ],
   },

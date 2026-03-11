@@ -9,7 +9,7 @@ dateModified: "2026-03-11"
 
 ## Structure des dossiers d'extension
 
-Claude Code lit les extensions depuis deux emplacements — un dossier global (`~/.claude/`) pour tous vos projets, et un dossier local (`.claude/`) propre à chaque projet.
+Claude Code lit les extensions depuis deux emplacements : un dossier global (`~/.claude/`) pour tous vos projets, et un dossier local (`.claude/`) propre à chaque projet.
 
 <Callout type="warning" title="Pas de marketplace, pas de /plugin install">
 Claude Code ne dispose d'aucune commande `/plugin install`, `/plugin marketplace` ou `/plugin list`. Les extensions communautaires sont des **fichiers** (Markdown, JSON) que vous copiez dans des dossiers spécifiques. Ce guide vous montre comment procéder correctement.
@@ -44,7 +44,7 @@ Claude Code propose une commande native pour installer des ressources depuis Git
 ```
 
 <Callout type="info" title="Ce que fait /install-github">
-Cette commande clone le repo GitHub indiqué, détecte les fichiers `.md`/`.mdc` qui correspondent à des agents ou skills, et les copie dans les bons dossiers de votre projet. Elle ne télécharge pas un binaire — elle copie des fichiers texte.
+Cette commande clone le repo GitHub indiqué, détecte les fichiers `.md`/`.mdc` qui correspondent à des agents ou skills, et les copie dans les bons dossiers de votre projet. Elle ne télécharge pas un binaire, elle copie des fichiers texte.
 </Callout>
 
 ### Méthode 2 : installation manuelle (contrôle total)
@@ -54,7 +54,7 @@ La méthode la plus transparente. Vous voyez exactement ce qui est installé.
 <Steps>
 <Step title="Trouver une extension" stepNumber={1}>
 Cherchez sur GitHub des repos communautaires. Les bons endroits de départ :
-- [punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code) — collection complète d'agents et de rules
+- [punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code) : collection complète d'agents et de rules
 - La documentation officielle Anthropic : https://docs.anthropic.com/en/docs/claude-code
 </Step>
 
@@ -107,7 +107,7 @@ Dans une session Claude Code, vérifiez que vos skills sont disponibles :
 Certains outils communautaires sont des packages npm qui assistent Claude Code :
 
 ```bash
-# repomix — analyse et condense une codebase pour le contexte
+# repomix - analyse et condense une codebase pour le contexte
 npx repomix
 
 # Générer un fichier de contexte compressé
@@ -265,7 +265,7 @@ curl -o .claude/commands/tdd-guide.md \
 
 ## Bonnes pratiques
 
-- **Lisez le contenu avant d'installer** : les fichiers d'extension sont du texte lisible — vérifiez ce qu'ils font avant de les ajouter
+- **Lisez le contenu avant d'installer** : les fichiers d'extension sont du texte lisible, vérifiez ce qu'ils font avant de les ajouter
 - **N'installez que l'essentiel** : chaque agent et règle consomme du contexte. Gardez uniquement ce que vous utilisez
 - **Versionnez vos extensions** : commitez vos fichiers `.claude/` (hors `settings.json` s'il contient des tokens) dans Git pour que toute l'équipe ait le même environnement
 - **Testez dans un projet de test** : avant d'activer une nouvelle extension sur un projet critique, testez-la d'abord sur un projet exemple
@@ -276,6 +276,6 @@ La meilleure pratique pour partager une configuration d'équipe est de committer
 
 ## Prochaines étapes
 
-- [Top extensions essentielles 2026](/plugins/best-essential) — Les ressources communautaires incontournables
-- [Extensions design & frontend](/plugins/best-design) — Les meilleures ressources pour le design et l'UI
-- [Extensions sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez votre code
+- [Top extensions essentielles 2026](/plugins/best-essential) : Les ressources communautaires incontournables
+- [Extensions design & frontend](/plugins/best-design) : Les meilleures ressources pour le design et l'UI
+- [Extensions sécurité & qualité](/plugins/best-security) : Sécurisez et améliorez votre code

@@ -9,7 +9,7 @@ dateModified: "2026-03-11"
 
 ## Au-delà des bases
 
-Vous maîtrisez les [fondamentaux du prompting](/prompting/basics) et les [directives avancées](/prompting/directives). Il est temps d'explorer les techniques qui séparent les utilisateurs avancés des experts. Cette page présente d'abord les **patterns par use case** — des séquences de prompts éprouvées pour les situations les plus fréquentes — puis les techniques avancées de raisonnement et d'orchestration.
+Vous maîtrisez les [fondamentaux du prompting](/prompting/basics) et les [directives avancées](/prompting/directives). Il est temps d'explorer les techniques qui séparent les utilisateurs avancés des experts. Cette page présente d'abord les **patterns par use case**, des séquences de prompts éprouvées pour les situations les plus fréquentes, puis les techniques avancées de raisonnement et d'orchestration.
 
 <Callout type="info" title="Quand utiliser ces techniques">
 Les techniques avancées ne sont pas nécessaires pour des tâches simples. Utilisez-les quand :
@@ -97,22 +97,22 @@ Génère le code de cette étape uniquement."
 # Prompt complet pour une code review structurée
 "Tu es un développeur senior. Review ce code [coller] en 4 passes successives :
 
-Passe 1 — Structure :
+Passe 1 : Structure :
 - L'organisation des responsabilités est-elle claire ?
 - Les noms sont-ils expressifs et cohérents ?
 - La lisibilité est-elle bonne (nesting, longueur des fonctions) ?
 
-Passe 2 — Logique :
+Passe 2 : Logique :
 - Y a-t-il des bugs potentiels ?
 - Les edge cases sont-ils gérés (null, vide, limite) ?
 - La logique métier est-elle correcte ?
 
-Passe 3 — Sécurité :
+Passe 3 : Sécurité :
 - Y a-t-il des inputs non validés ?
 - Des données sensibles exposées ?
 - Des injections possibles ?
 
-Passe 4 — Performance :
+Passe 4 : Performance :
 - Y a-t-il des requêtes N+1 ?
 - Des calculs qui pourraient être mis en cache ?
 - Des opérations synchrones bloquantes évitables ?
@@ -305,7 +305,7 @@ Le prompting multi-agents est la technique la plus puissante pour les projets co
 
 ### Comment formuler des tâches pour les subagents
 
-Chaque subagent a besoin d'un prompt autonome et complet. Le subagent ne partage pas le contexte de la conversation principale — il démarre à froid.
+Chaque subagent a besoin d'un prompt autonome et complet. Le subagent ne partage pas le contexte de la conversation principale, il démarre à froid.
 
 ```markdown
 # Mauvais (suppose un contexte que le subagent n'a pas)
@@ -407,7 +407,7 @@ Pour les tâches les plus complexes, activez les deux en même temps. Extended T
 
 ## Debugging de prompts
 
-Quand Claude ne fait pas ce que vous attendez, le problème vient rarement de Claude — il vient presque toujours du prompt. Voici une méthode systématique pour diagnostiquer et corriger les problèmes.
+Quand Claude ne fait pas ce que vous attendez, le problème vient rarement de Claude, il vient presque toujours du prompt. Voici une méthode systématique pour diagnostiquer et corriger les problèmes.
 
 ### Étape 1 : Identifiez le type de problème
 
@@ -450,7 +450,7 @@ Si le résultat n'est pas satisfaisant, ne repartez pas de zéro. Identifiez pr�
 
 ## Le prompting contextuel
 
-Le **prompting contextuel** consiste à exploiter le codebase comme contexte implicite. Claude Code a accès à votre projet — utilisez cette capacité.
+Le **prompting contextuel** consiste à exploiter le codebase comme contexte implicite. Claude Code a accès à votre projet, utilisez cette capacité.
 
 ```markdown
 # Prompt classique (tout est explicite)
@@ -500,12 +500,12 @@ et une pagination cursor-based."
 
 Vous maîtrisez maintenant les techniques avancées de prompting. Explorez les sujets connexes pour devenir un expert complet.
 
-- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) — Activez le raisonnement profond pour les décisions complexes
-- [Prompt chaining et orchestration](/prompting/chaining-and-agents) — Pipelines complets et architectures fan-out/fan-in
-- [Gestion du contexte](/prompting/context-management) — Maîtrisez la fenêtre de 200K tokens
-- [Comprendre les agents](/agents/what-are-agents) — Plongez dans le fonctionnement des agents et subagents
-- [Orchestration multi-agents avancée](/agents/orchestration) — Patterns d'orchestration pour projets complexes
-- [Créer un Skill custom](/skills/create-custom) — Transformez vos techniques en workflows automatisés
-- [Installer les MCP essentiels](/mcp/setup) — Étendez Claude avec des outils externes via les MCP
-- [Top plugins pour le développement](/plugins/best-security) — Sécurité et qualité de code avec les plugins
-- [Configurateur interactif](/configurator) — Générez votre configuration optimale en quelques minutes
+- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) : Activez le raisonnement profond pour les décisions complexes
+- [Prompt chaining et orchestration](/prompting/chaining-and-agents) : Pipelines complets et architectures fan-out/fan-in
+- [Gestion du contexte](/prompting/context-management) : Maîtrisez la fenêtre de 200K tokens
+- [Comprendre les agents](/agents/what-are-agents) : Plongez dans le fonctionnement des agents et subagents
+- [Orchestration multi-agents avancée](/agents/orchestration) : Patterns d'orchestration pour projets complexes
+- [Créer un Skill custom](/skills/create-custom) : Transformez vos techniques en workflows automatisés
+- [Installer les MCP essentiels](/mcp/setup) : Étendez Claude avec des outils externes via les MCP
+- [Top plugins pour le développement](/plugins/best-security) : Sécurité et qualité de code avec les plugins
+- [Configurateur interactif](/configurator) : Générez votre configuration optimale en quelques minutes

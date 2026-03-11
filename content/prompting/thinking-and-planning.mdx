@@ -9,7 +9,7 @@ dateModified: "2026-03-11"
 
 ## Deux modes pour raisonner plus profondément
 
-Claude Code dispose de deux fonctionnalités qui amplifient considérablement la qualité du raisonnement sur les tâches complexes : l'**Extended Thinking** et le **Plan Mode**. Ce ne sont pas des gadgets — correctement utilisés, ils font la différence entre une solution à demi cohérente et une architecture solide.
+Claude Code dispose de deux fonctionnalités qui amplifient considérablement la qualité du raisonnement sur les tâches complexes : l'**Extended Thinking** et le **Plan Mode**. Ce ne sont pas des gadgets. Correctement utilisés, ils font la différence entre une solution à demi cohérente et une architecture solide.
 
 <Callout type="info" title="L'analogie du chirurgien">
 Un chirurgien qualifié n'opère pas à la va-vite. Il étudie les radiographies, planifie l'intervention, anticipe les complications. L'Extended Thinking et le Plan Mode donnent cette même discipline à Claude : le temps de réfléchir avant d'agir. Pour les coupures de papier, vous n'avez pas besoin d'un chirurgien. Mais pour une opération à cœur ouvert, vous voulez le meilleur niveau de préparation.
@@ -21,7 +21,7 @@ Un chirurgien qualifié n'opère pas à la va-vite. Il étudie les radiographies
 
 L'Extended Thinking alloue une partie de la fenêtre de contexte à un **raisonnement interne** avant de formuler la réponse. Ce raisonnement n'est pas visible par défaut, mais il structure la pensée de Claude de façon plus rigoureuse.
 
-Concrètement : au lieu de générer une réponse immédiate, Claude "réfléchit à voix basse" — considère les options, évalue les trade-offs, anticipe les problèmes — puis formule une réponse plus élaborée.
+Concrètement : au lieu de générer une réponse immédiate, Claude "réfléchit à voix basse", considère les options, évalue les trade-offs, anticipe les problèmes, puis formule une réponse plus élaborée.
 
 ### Activation et configuration
 
@@ -82,7 +82,7 @@ Propose une stratégie de migration progressive avec étapes, risques et métriq
 **Analyse de sécurité approfondie**
 ```markdown
 "Audite ce module d'authentification OAuth2 pour détecter toutes les vulnérabilités potentielles.
-Ne te contente pas de la liste OWASP Top 10 — analyse les timing attacks,
+Ne te contente pas de la liste OWASP Top 10, analyse les timing attacks,
 les problèmes de state management, les edge cases d'expiration de token."
 ```
 
@@ -236,7 +236,7 @@ requêtes de reporting hebdomadaire sur 2 ans d'historique).
 
 Raisonne étape par étape :
 1. Quels sont les patterns d'accès dominants (lecture/écriture, latence, volume) ?
-2. PostgreSQL vs MongoDB vs Redis vs TimescaleDB — évalue chacun sur nos critères
+2. PostgreSQL vs MongoDB vs Redis vs TimescaleDB : évalue chacun sur nos critères
 3. Quels sont les compromis du choix que tu recommanderai ?
 4. Y a-t-il des architectures hybrides à envisager (Redis + PostgreSQL) ?
 5. Qu'est-ce que je n'ai pas pensé à demander mais qui est critique pour ce choix ?"
@@ -250,9 +250,9 @@ Les hallucinations (informations inventées) sont moins fréquentes avec l'Exten
 
 ```markdown
 "Pour chaque affirmation technique que tu fais, indique si c'est :
-[CERTAIN] — tu en es sûr
-[PROBABLE] — tu penses que c'est vrai mais tu n'es pas certain
-[VÉRIFIER] — à vérifier dans la documentation officielle
+[CERTAIN] : tu en es sûr
+[PROBABLE] : tu penses que c'est vrai mais tu n'es pas certain
+[VÉRIFIER] : à vérifier dans la documentation officielle
 
 Si tu ne sais pas quelque chose, dis 'je ne sais pas' plutôt qu'inventer."
 ```
@@ -277,7 +277,7 @@ fonction existe si tu ne l'as pas vue dans le code."
 
 Le choix du modèle impacte directement la qualité du raisonnement, la latence et les coûts. Claude Code peut utiliser différents modèles selon les tâches.
 
-<Card title="Haiku 4.5 — Rapide et économique" variant="default">
+<Card title="Haiku 4.5 : Rapide et économique" variant="default">
 **Cas d'usage :**
 - Agents légers invoqués fréquemment
 - Génération de code boilerplate simple
@@ -295,7 +295,7 @@ Le choix du modèle impacte directement la qualité du raisonnement, la latence 
 - Analyse de sécurité approfondie
 </Card>
 
-<Card title="Sonnet 4.6 — Le meilleur pour le coding" variant="accent">
+<Card title="Sonnet 4.6 : Le meilleur pour le coding" variant="accent">
 **Cas d'usage :**
 - Développement quotidien (80% du temps)
 - Orchestration de workflows multi-agents
@@ -310,7 +310,7 @@ Le choix du modèle impacte directement la qualité du raisonnement, la latence 
 **Le choix par défaut recommandé**
 </Card>
 
-<Card title="Opus 4.5 — Raisonnement le plus profond" variant="default">
+<Card title="Opus 4.5 : Raisonnement le plus profond" variant="default">
 **Cas d'usage :**
 - Décisions d'architecture critiques
 - Analyse de sécurité exhaustive
@@ -386,10 +386,10 @@ Pour chaque problème : sévérité, explication, correction suggérée.
 
 Vous maîtrisez maintenant Extended Thinking et Plan Mode. Approfondissez avec :
 
-- [Prompt chaining et orchestration multi-agents](/prompting/chaining-and-agents) — Décomposez les grandes tâches en workflows maîtrisés
-- [Gestion du contexte](/prompting/context-management) — Optimisez l'utilisation de vos 200K tokens
-- [Prompting avancé et multi-agents](/prompting/advanced) — Chain-of-thought, few-shot et décomposition avancée
-- [Orchestration avancée des agents](/agents/orchestration) — Coordonnez des pipelines d'agents complexes avec Claude Code
-- [Premiers pas avec Claude Code](/getting-started) — Installez Claude Code et configurez votre environnement
-- [Top plugins sécurité et qualité](/plugins/best-security) — Renforcez la qualité de votre code avec les plugins essentiels
-- [Configurateur interactif](/configurator) — Paramétrez votre instance Claude Code selon vos besoins
+- [Prompt chaining et orchestration multi-agents](/prompting/chaining-and-agents) : Décomposez les grandes tâches en workflows maîtrisés
+- [Gestion du contexte](/prompting/context-management) : Optimisez l'utilisation de vos 200K tokens
+- [Prompting avancé et multi-agents](/prompting/advanced) : Chain-of-thought, few-shot et décomposition avancée
+- [Orchestration avancée des agents](/agents/orchestration) : Coordonnez des pipelines d'agents complexes avec Claude Code
+- [Premiers pas avec Claude Code](/getting-started) : Installez Claude Code et configurez votre environnement
+- [Top plugins sécurité et qualité](/plugins/best-security) : Renforcez la qualité de votre code avec les plugins essentiels
+- [Configurateur interactif](/configurator) : Paramétrez votre instance Claude Code selon vos besoins

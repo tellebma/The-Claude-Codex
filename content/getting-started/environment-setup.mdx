@@ -11,9 +11,9 @@ dateModified: "2026-03-09"
 
 Claude Code utilise trois niveaux de configuration, du plus global au plus spécifique :
 
-1. **La variable d'environnement** `ANTHROPIC_API_KEY` — votre identité
-2. **Le fichier `settings.json`** — vos préférences globales
-3. **Le fichier `CLAUDE.md`** — le contexte spécifique à chaque projet
+1. **La variable d'environnement** `ANTHROPIC_API_KEY` : votre identité
+2. **Le fichier `settings.json`** : vos préférences globales
+3. **Le fichier `CLAUDE.md`** : le contexte spécifique à chaque projet
 
 Chaque niveau enrichit le précédent. Ensemble, ils permettent à Claude Code de comprendre *qui* vous êtes, *comment* vous travaillez, et *sur quoi* vous travaillez.
 
@@ -21,7 +21,7 @@ Chaque niveau enrichit le précédent. Ensemble, ils permettent à Claude Code d
 
 Avant de configurer quoi que ce soit, un point important : **aujourd'hui, un abonnement Claude (Pro ou Max) est bien plus avantageux financièrement qu'une clé API** pour utiliser Claude Code.
 
-<Callout type="tip" title="Abonnement vs clé API — le calcul est vite fait">
+<Callout type="tip" title="Abonnement vs clé API, le calcul est vite fait">
 - **Abonnement Claude Pro** (20 $/mois) : accès à Claude Code avec un quota généreux de tokens inclus
 - **Abonnement Claude Max** (100 ou 200 $/mois) : usage intensif de Claude Code avec des limites très élevées
 - **Clé API** : facturation à l'usage, qui peut vite dépasser 100 $/mois pour un usage quotidien de Claude Code
@@ -29,7 +29,7 @@ Avant de configurer quoi que ce soit, un point important : **aujourd'hui, un abo
 Pour la plupart des utilisateurs, **l'abonnement Max à 100 $/mois offre le meilleur rapport qualité-prix**. Vous payez un montant fixe et prévisible, sans surprise en fin de mois. La clé API reste utile pour les cas d'usage programmatiques ou les équipes avec des besoins très spécifiques.
 </Callout>
 
-Si vous utilisez un abonnement Claude (Pro ou Max), sélectionnez simplement "Claude App" lors de l'authentification — aucune configuration supplémentaire n'est nécessaire.
+Si vous utilisez un abonnement Claude (Pro ou Max), sélectionnez simplement "Claude App" lors de l'authentification, aucune configuration supplémentaire n'est nécessaire.
 
 ## Configurer la clé API (si applicable)
 
@@ -106,11 +106,11 @@ Voici un exemple complet avec les options les plus utiles :
 
 Le système de permissions contrôle ce que Claude Code peut faire sans vous demander confirmation.
 
-<Card title="allow — Actions autorisées automatiquement" variant="accent">
+<Card title="allow - Actions autorisées automatiquement" variant="accent">
 Les outils listés dans `allow` seront exécutés sans demander votre accord. Utilisez des patterns avec `*` pour autoriser une famille de commandes. Par exemple, `Bash(git *)` autorise toutes les commandes git.
 </Card>
 
-<Card title="deny — Actions toujours bloquées" variant="highlight">
+<Card title="deny - Actions toujours bloquées" variant="highlight">
 Les outils listés dans `deny` seront **toujours refusés**, même si Claude Code les juge nécessaires. C'est votre filet de sécurité pour empêcher les commandes dangereuses comme `rm -rf` ou `sudo`.
 </Card>
 
@@ -163,16 +163,16 @@ Base de données PostgreSQL hébergée sur Supabase.
 - TypeScript strict, jamais de `any`
 
 ## Commandes utiles
-- `npm run dev` — Serveur de développement (port 3000)
-- `npm run test` — Lancer les tests
-- `npm run build` — Build de production
-- `npm run lint` — Vérifier le linting
+- `npm run dev` : Serveur de développement (port 3000)
+- `npm run test` : Lancer les tests
+- `npm run build` : Build de production
+- `npm run lint` : Vérifier le linting
 
 ## Structure du projet
-- src/app/ — Pages Next.js (App Router)
-- src/components/ — Composants réutilisables
-- src/lib/ — Utilitaires et configuration
-- prisma/ — Schéma et migrations de la BDD
+- src/app/ : Pages Next.js (App Router)
+- src/components/ : Composants réutilisables
+- src/lib/ : Utilitaires et configuration
+- prisma/ : Schéma et migrations de la BDD
 
 ## Règles importantes
 - Ne JAMAIS modifier les fichiers dans /generated/
@@ -226,15 +226,15 @@ Par défaut, Claude Code vous demande votre accord avant chaque action qui modif
 
 <Steps>
 <Step title="Actions en lecture seule" stepNumber={1}>
-Lire des fichiers, rechercher dans le code, analyser l'arborescence — ces actions sont généralement sûres et peuvent être autorisées automatiquement dans `settings.json`.
+Lire des fichiers, rechercher dans le code, analyser l'arborescence, ces actions sont généralement sûres et peuvent être autorisées automatiquement dans `settings.json`.
 </Step>
 
 <Step title="Actions d'écriture" stepNumber={2}>
-Créer ou modifier des fichiers, écrire dans Git — ces actions nécessitent votre validation par défaut. Autorisez-les progressivement pour les commandes que vous utilisez souvent.
+Créer ou modifier des fichiers, écrire dans Git, ces actions nécessitent votre validation par défaut. Autorisez-les progressivement pour les commandes que vous utilisez souvent.
 </Step>
 
 <Step title="Commandes système" stepNumber={3} isLast>
-Exécuter des scripts, installer des paquets, interagir avec des services — ces actions sont les plus sensibles. Gardez la validation manuelle pour les commandes que vous ne connaissez pas.
+Exécuter des scripts, installer des paquets, interagir avec des services, ces actions sont les plus sensibles. Gardez la validation manuelle pour les commandes que vous ne connaissez pas.
 </Step>
 </Steps>
 
@@ -247,13 +247,13 @@ Exécuter des scripts, installer des paquets, interagir avec des services — ce
 - Activez la rotation régulière de vos clés API
 
 <Callout type="warning" title="En cas de doute, refusez">
-Si Claude Code propose une action que vous ne comprenez pas, refusez-la et demandez une explication. Il n'y a aucun mal à dire "non" — Claude Code reformulera sa proposition.
+Si Claude Code propose une action que vous ne comprenez pas, refusez-la et demandez une explication. Il n'y a aucun mal à dire "non", Claude Code reformulera sa proposition.
 </Callout>
 
 ## Prochaines étapes
 
 Votre environnement est configuré. Il est temps de passer à la pratique et de créer votre premier projet avec Claude Code.
 
-- [Votre premier projet](/getting-started/first-project) — Créer un site web en 5 minutes
-- [Qu'est-ce que Claude Code ?](/getting-started/what-is-claude-code) — Revenir aux fondamentaux
-- [Retour à la vue d'ensemble](/getting-started) — Toutes les pages du guide
+- [Votre premier projet](/getting-started/first-project) : Créer un site web en 5 minutes
+- [Qu'est-ce que Claude Code ?](/getting-started/what-is-claude-code) : Revenir aux fondamentaux
+- [Retour à la vue d'ensemble](/getting-started) : Toutes les pages du guide

@@ -12,7 +12,7 @@ dateModified: "2026-03-10"
 Une **directive** est une instruction explicite qui cadre le comportement de Claude. Contrairement à une simple demande ("fais ceci"), une directive définit *comment* Claude doit travailler : son rôle, ses limites, ses priorités et son format de sortie.
 
 <Callout type="info" title="L'analogie du metteur en scène">
-Si le prompt est le scénario, les directives sont les indications de mise en scène. Elles disent à l'acteur (Claude) *comment* jouer son rôle : le ton, le rythme, les contraintes techniques. Un bon metteur en scène ne laisse rien au hasard — un bon prompteur non plus.
+Si le prompt est le scénario, les directives sont les indications de mise en scène. Elles disent à l'acteur (Claude) *comment* jouer son rôle : le ton, le rythme, les contraintes techniques. Un bon metteur en scène ne laisse rien au hasard, un bon prompteur non plus.
 </Callout>
 
 Les directives se répartissent en quatre catégories fondamentales que nous allons explorer en détail.
@@ -82,7 +82,7 @@ ALWAYS:
 NEVER:
 - Ne mute jamais un objet existant
 - Ne fais jamais de console.log en production (utilise un logger structuré)
-- N'utilise jamais de valeurs magiques (hardcodées) — utilise des constantes
+- N'utilise jamais de valeurs magiques (hardcodées), utilise des constantes
 - Ne crée jamais de fichier de plus de 400 lignes
 - Ne commite jamais de secrets ou de tokens dans le code
 ```
@@ -117,11 +117,11 @@ Le format de sortie contrôle la structure de la réponse de Claude. Sans direct
 
 Pour chaque composant React généré, fournis :
 
-1. **Le composant** — code complet avec types TypeScript
-2. **Les types** — interfaces et types exportés dans un fichier séparé
-3. **Les tests** — au minimum : rendu sans erreur, props obligatoires, interactions utilisateur
-4. **L'exemple d'utilisation** — un snippet montrant comment utiliser le composant
-5. **Les notes** — limites connues, améliorations possibles, dépendances requises
+1. **Le composant** : code complet avec types TypeScript
+2. **Les types** : interfaces et types exportés dans un fichier séparé
+3. **Les tests** : au minimum : rendu sans erreur, props obligatoires, interactions utilisateur
+4. **L'exemple d'utilisation** : un snippet montrant comment utiliser le composant
+5. **Les notes** : limites connues, améliorations possibles, dépendances requises
 ```
 
 ### Formats spécialisés
@@ -288,7 +288,7 @@ Tu es un data analyst senior. Pour chaque analyse :
 
 Maintenant que vous maîtrisez les directives, passez à la pratique avec des templates concrets.
 
-- [Templates de prompts par métier](/prompting/templates) — Des prompts complets prêts à l'emploi
-- [Erreurs courantes à éviter](/prompting/mistakes) — Les pièges les plus fréquents en prompting
-- [Le guide complet CLAUDE.md](/prompting/claude-md) — Automatisez vos directives avec le fichier de configuration
-- [Créer un Skill custom](/skills/create-custom) — Transformez vos directives en slash commands réutilisables
+- [Templates de prompts par métier](/prompting/templates) : Des prompts complets prêts à l'emploi
+- [Erreurs courantes à éviter](/prompting/mistakes) : Les pièges les plus fréquents en prompting
+- [Le guide complet CLAUDE.md](/prompting/claude-md) : Automatisez vos directives avec le fichier de configuration
+- [Créer un Skill custom](/skills/create-custom) : Transformez vos directives en slash commands réutilisables

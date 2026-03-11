@@ -5,7 +5,7 @@ import { ConfiguratorWizard } from "@/components/configurator/ConfiguratorWizard
 export const metadata = createPageMetadata({
   title: "Configurateur interactif Claude Code",
   description:
-    "Générez votre configuration Claude Code sur mesure. CLAUDE.md, settings.json, .mcp.json et agents — en quelques clics.",
+    "Générez votre configuration Claude Code sur mesure. CLAUDE.md, settings.json, .mcp.json et agents, en quelques clics.",
   path: "/configurator",
   type: "website",
 });

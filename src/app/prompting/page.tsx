@@ -690,26 +690,26 @@ Une fois les tests ecrits, implemente le code pour les faire passer."`}
               <CodeBlock
                 code={`# Workflow complet : nouvelle feature du planning a la production
 
-## Phase 1 — Recherche et planification
+## Phase 1 : Recherche et planification
 "Recherche les implementations existantes de [feature] sur GitHub.
 Evalue les 3 meilleures options selon : securite, extensibilite, pertinence.
 Genere un plan d'implementation detaille avec phases et risques."
 
-## Phase 2 — TDD (Test-Driven Development)
+## Phase 2 : TDD (Test-Driven Development)
 "En suivant le plan, ecris d'abord les tests (RED).
 Pour chaque module :
 1. Ecris le test → verifie qu'il echoue
 2. Ecris l'implementation minimale → verifie qu'il passe (GREEN)
 3. Refactorise → verifie que tout passe toujours (REFACTOR)"
 
-## Phase 3 — Revue et securite
+## Phase 3 : Revue et securite
 "Lance en parallele :
 - Code review : qualite, patterns, maintenabilite
 - Security review : injections, auth, secrets, XSS
 - Performance review : N+1, memory leaks, bundle size
 Corrige les issues CRITICAL et HIGH avant de continuer."
 
-## Phase 4 — Integration et deploiement
+## Phase 4 : Integration et deploiement
 "Cree la PR avec un resume complet des changements.
 Verifie que le CI passe. Deploie en staging pour validation."`}
                 language="markdown"
@@ -725,7 +725,7 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Secret weapon"
-            title="CLAUDE.md — Votre arme secrete"
+            title="CLAUDE.md : Votre arme secrete"
             description="Le fichier CLAUDE.md est le contexte persistant que Claude Code lit a chaque session. C'est la cle pour obtenir des resultats coherents et adaptes a votre projet."
           />
 
@@ -750,7 +750,7 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
                 code={`# CLAUDE.md
 
 ## Projet
-Nom : MonApp — Application SaaS de gestion de projet
+Nom : MonApp, Application SaaS de gestion de projet
 Stack : Next.js 14, TypeScript, Tailwind CSS, Prisma, PostgreSQL
 Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
 
@@ -777,7 +777,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
 - Jamais de push force sur main
 
 ## Securite
-- Pas de secrets en dur — utiliser .env
+- Pas de secrets en dur, utiliser .env
 - Validation des inputs a toutes les frontieres
 - Requetes parametrees (pas de concatenation SQL)
 

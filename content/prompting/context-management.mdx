@@ -12,10 +12,10 @@ dateModified: "2026-03-11"
 La fenêtre de contexte est la **mémoire active** de Claude pour une session donnée. Tout ce que Claude peut "voir" et utiliser pour répondre tient dans cette fenêtre : votre historique de conversation, les fichiers qu'il a lus, les réponses précédentes, les instructions du CLAUDE.md.
 
 <Callout type="info" title="L'analogie du bureau de travail">
-Imaginez un bureau physique. Vous pouvez étaler dessus une certaine quantité de documents, de notes et de références. Quand le bureau est plein, vous devez ranger certains documents pour faire de la place aux nouveaux. La fenêtre de contexte fonctionne exactement comme ça : c'est la surface de travail de Claude. Quand elle est saturée, les informations les plus anciennes disparaissent — et Claude "oublie" le début de la conversation.
+Imaginez un bureau physique. Vous pouvez étaler dessus une certaine quantité de documents, de notes et de références. Quand le bureau est plein, vous devez ranger certains documents pour faire de la place aux nouveaux. La fenêtre de contexte fonctionne exactement comme ça : c'est la surface de travail de Claude. Quand elle est saturée, les informations les plus anciennes disparaissent, et Claude "oublie" le début de la conversation.
 </Callout>
 
-Claude Code dispose d'une fenêtre de contexte de **200 000 tokens** — parmi les plus larges du marché. Pour vous donner une idée de ce que ça représente :
+Claude Code dispose d'une fenêtre de contexte de **200 000 tokens**, parmi les plus larges du marché. Pour vous donner une idée de ce que ça représente :
 
 - 200 000 tokens ≈ 150 000 mots ≈ un roman de 500 pages
 - Un fichier TypeScript de 300 lignes ≈ 1 000 à 2 000 tokens
@@ -65,10 +65,10 @@ La session continue comme si de rien n'était. Claude sait où vous en étiez et
 
 Utilisez `/compact` dans ces situations :
 
-- **Après une phase complète** — vous venez de terminer un module ou une fonctionnalité, et vous attaquez la suivante
-- **Avant une tâche complexe** — vous allez lancer un refactoring ou une migration qui touchera beaucoup de fichiers
-- **Quand la session est longue** — après 1 à 2 heures de travail intensif avec beaucoup d'échanges
-- **Quand vous sentez des incohérences** — Claude commence à "dériver" de vos conventions
+- **Après une phase complète** : vous venez de terminer un module ou une fonctionnalité, et vous attaquez la suivante
+- **Avant une tâche complexe** : vous allez lancer un refactoring ou une migration qui touchera beaucoup de fichiers
+- **Quand la session est longue** : après 1 à 2 heures de travail intensif avec beaucoup d'échanges
+- **Quand vous sentez des incohérences** : Claude commence à "dériver" de vos conventions
 
 <Callout type="tip" title="Compact proactif vs réactif">
 N'attendez pas d'avoir un problème pour utiliser `/compact`. Utilisez-le proactivement après chaque grande étape. C'est comme faire un point d'avancement en réunion : ça clarifie la situation pour tout le monde et permet de repartir sur des bases solides.
@@ -100,7 +100,7 @@ Objectif de la session : implémenter le refresh token
 avec rotation automatique et blacklisting Redis."
 ```
 
-Chaque session ciblée garde le contexte léger et pertinent. Quand la session est terminée, les décisions importantes sont dans le code — pas dans l'historique.
+Chaque session ciblée garde le contexte léger et pertinent. Quand la session est terminée, les décisions importantes sont dans le code, pas dans l'historique.
 
 ### Stratégie 2 : Cibler les fichiers explicitement
 
@@ -200,9 +200,9 @@ La commande `/cost` vous indique combien de tokens ont été consommés dans la 
 
 Cette commande est utile pour :
 
-- **Anticiper les fins de contexte** — si vous avez déjà consommé 150K tokens, il reste 50K pour continuer
-- **Calibrer les prompts** — identifier les prompts coûteux et les optimiser
-- **Budgéter** — suivre sa consommation mensuelle si vous utilisez l'API directe
+- **Anticiper les fins de contexte** : si vous avez déjà consommé 150K tokens, il reste 50K pour continuer
+- **Calibrer les prompts** : identifier les prompts coûteux et les optimiser
+- **Budgéter** : suivre sa consommation mensuelle si vous utilisez l'API directe
 
 <Callout type="tip" title="Décryptez votre /cost">
 La sortie de `/cost` indique le nombre de tokens d'entrée (input) et de sortie (output) séparément. Les tokens d'entrée coûtent moins cher que les tokens de sortie. Si vous voulez optimiser les coûts, concentrez-vous sur la réduction des outputs inutilement longs.
@@ -326,7 +326,7 @@ Charger 20 MCP ne rend pas Claude Code 20 fois plus capable. Au contraire, chaqu
 
 ### Les deferred tools : chargement différé pour économiser
 
-Claude Code propose un mécanisme de **deferred tools** (outils différés). Les outils marqués comme "deferred" ne sont pas chargés dans le contexte au démarrage — ils sont disponibles mais chargés seulement si Claude en a besoin.
+Claude Code propose un mécanisme de **deferred tools** (outils différés). Les outils marqués comme "deferred" ne sont pas chargés dans le contexte au démarrage, ils sont disponibles mais chargés seulement si Claude en a besoin.
 
 ```json
 // Dans .mcp.json, les outils disponibles mais non chargés par défaut
@@ -406,7 +406,7 @@ Qualité des réponses selon le remplissage du contexte
 **Causes :** Contexte saturé + Claude "comble les trous" à partir de ses connaissances générales plutôt que du code réel. Peut aussi indiquer une confusion entre plusieurs projets dans l'historique.
 
 **Solutions :**
-1. Démarrer une nouvelle session (ne pas compacter — reconstruire proprement)
+1. Démarrer une nouvelle session (ne pas compacter, reconstruire proprement)
 2. Explicitement fournir le code existant que Claude doit utiliser
 3. Demander à Claude de lire les fichiers sources avant de proposer une solution
 
@@ -425,11 +425,11 @@ Qualité des réponses selon le remplissage du contexte
 
 Vous maîtrisez maintenant la gestion du contexte. Explorez les techniques complémentaires.
 
-- [Extended thinking et plan mode](/prompting/thinking-and-planning) — Comment amplifier la qualité du raisonnement de Claude
-- [Guide complet CLAUDE.md](/prompting/claude-md) — Créez une mémoire persistante efficace pour votre projet
-- [Prompt chaining et orchestration](/prompting/chaining-and-agents) — Décomposez les grandes tâches en séquences maîtrisées
-- [Comprendre les agents Claude Code](/agents/what-are-agents) — Les agents utilisent intensivement le contexte : apprenez à les configurer
-- [Sécurité des MCP](/mcp/securite-mcp) — Comment les MCP peuvent affecter votre sécurité et vos données
-- [Coûts réels de Claude Code](/content/couts-reels-claude-code) — Comprendre ce que chaque token vous coûte vraiment
-- [Top Skills recommandés](/skills/best-skills) — Automatisez vos workflows récurrents avec des Skills
-- [Configurateur interactif](/configurator) — Optimisez votre setup Claude Code en quelques clics
+- [Extended thinking et plan mode](/prompting/thinking-and-planning) : Comment amplifier la qualité du raisonnement de Claude
+- [Guide complet CLAUDE.md](/prompting/claude-md) : Créez une mémoire persistante efficace pour votre projet
+- [Prompt chaining et orchestration](/prompting/chaining-and-agents) : Décomposez les grandes tâches en séquences maîtrisées
+- [Comprendre les agents Claude Code](/agents/what-are-agents) : Les agents utilisent intensivement le contexte : apprenez à les configurer
+- [Sécurité des MCP](/mcp/securite-mcp) : Comment les MCP peuvent affecter votre sécurité et vos données
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : Comprendre ce que chaque token vous coûte vraiment
+- [Top Skills recommandés](/skills/best-skills) : Automatisez vos workflows récurrents avec des Skills
+- [Configurateur interactif](/configurator) : Optimisez votre setup Claude Code en quelques clics

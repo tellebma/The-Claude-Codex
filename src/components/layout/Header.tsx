@@ -15,6 +15,7 @@ const navigation = [
   { name: "MCP", href: "/mcp" },
   { name: "Skills", href: "/skills" },
   { name: "Prompting", href: "/prompting" },
+  { name: "Avancé", href: "/advanced" },
   { name: "Référence", href: "/reference" },
   { name: "Configurateur", href: "/configurator" },
   { name: "Glossaire", href: "/glossary" },

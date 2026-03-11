@@ -56,7 +56,7 @@ const professions = [
     icon: Code2,
     title: "Developpement logiciel",
     description:
-      "Les agents autonomes ecrivent, testent et deployent du code. Le developpeur devient architecte et superviseur — sa valeur se deplace vers la vision, la revue et la strategie technique.",
+      "Les agents autonomes ecrivent, testent et deployent du code. Le developpeur devient architecte et superviseur, sa valeur se deplace vers la vision, la revue et la strategie technique.",
     gradient: "teal" as const,
   },
   {
@@ -77,7 +77,7 @@ const professions = [
     icon: TrendingUp,
     title: "Business & entrepreneuriat",
     description:
-      "De l'etude de marche au MVP, de l'automatisation comptable au service client intelligent — l'IA permet de lancer et scaler avec des equipes reduites.",
+      "De l'etude de marche au MVP, de l'automatisation comptable au service client intelligent, l'IA permet de lancer et scaler avec des equipes reduites.",
     gradient: "green" as const,
   },
 ];
@@ -106,7 +106,7 @@ const preparations = [
     icon: Users,
     title: "Rejoignez des communautes",
     description:
-      "Discord, GitHub, meetups locaux — entourez-vous de personnes qui partagent votre curiosite. L'intelligence collective accelere tout.",
+      "Discord, GitHub, meetups locaux : entourez-vous de personnes qui partagent votre curiosite. L'intelligence collective accelere tout.",
   },
 ];
 
@@ -143,7 +143,7 @@ const trends = [
     icon: Wrench,
     title: "Outils de dev AI-native",
     description:
-      "IDE, CI/CD, monitoring — tous les outils seront repenses autour de l'IA. Le terminal intelligent n'est que le debut.",
+      "IDE, CI/CD, monitoring : tous les outils seront repenses autour de l'IA. Le terminal intelligent n'est que le debut.",
     color: "brand" as const,
   },
 ];
@@ -272,7 +272,7 @@ export default function FuturePage() {
               L&apos;intelligence artificielle ne remplacera pas les humains.
               Elle amplifiera ceux qui apprendront a l&apos;utiliser. Ce qui
               etait de la science-fiction hier est votre outil de travail
-              aujourd&apos;hui — et ce n&apos;est que le debut.
+              aujourd&apos;hui, et ce n&apos;est que le debut.
             </p>
 
             {/* Decorative orbit rings */}
@@ -307,7 +307,7 @@ export default function FuturePage() {
             <SectionHeading
               badge="Transformation"
               title="Pourquoi l'IA va transformer chaque metier"
-              description="L'IA n'est pas un outil de plus. C'est un multiplicateur universel de capacites humaines — un changement de paradigme comparable a l'arrivee d'Internet."
+              description="L'IA n'est pas un outil de plus. C'est un multiplicateur universel de capacites humaines, un changement de paradigme comparable a l'arrivee d'Internet."
             />
           </AnimateOnScroll>
 
@@ -541,7 +541,7 @@ export default function FuturePage() {
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
             The Claude Codex est un projet open-source. Chaque contribution
-            compte — que ce soit une correction de faute, un nouveau tutoriel,
+            compte, que ce soit une correction de faute, un nouveau tutoriel,
             une traduction ou une idee. Rejoignez-nous et aidez des milliers de
             personnes a maitriser l&apos;IA.
           </p>
@@ -582,7 +582,7 @@ export default function FuturePage() {
           {/* CTA buttons */}
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
-              href="https://github.com/anthropics/claude-code"
+              href="https://github.com/tellebma/The-Claude-Codex"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:bg-slate-100"

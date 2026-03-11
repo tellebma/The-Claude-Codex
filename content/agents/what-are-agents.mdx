@@ -12,7 +12,7 @@ dateModified: "2026-03-10"
 Un **agent** Claude Code est un processus autonome capable d'exécuter une tâche complexe de bout en bout, sans intervention humaine à chaque étape. Contrairement à un simple prompt où vous posez une question et recevez une réponse, un agent **planifie**, **exécute**, **vérifie** et **itère** jusqu'à atteindre l'objectif.
 
 <Callout type="info" title="L'analogie de l'équipe de consultants">
-Imaginez que Claude Code est le directeur d'une équipe de consultants spécialisés. Quand vous lui confiez un projet complexe, il ne fait pas tout seul — il **délègue** à des spécialistes. Le consultant sécurité audite le code, le consultant tests écrit les tests, le consultant architecture valide les choix techniques. Chaque consultant (subagent) travaille de manière autonome dans son domaine, puis rend compte au directeur. C'est exactement ainsi que fonctionnent les agents et subagents de Claude Code.
+Imaginez que Claude Code est le directeur d'une équipe de consultants spécialisés. Quand vous lui confiez un projet complexe, il ne fait pas tout seul, il **délègue** à des spécialistes. Le consultant sécurité audite le code, le consultant tests écrit les tests, le consultant architecture valide les choix techniques. Chaque consultant (subagent) travaille de manière autonome dans son domaine, puis rend compte au directeur. C'est exactement ainsi que fonctionnent les agents et subagents de Claude Code.
 </Callout>
 
 ## Agent vs prompt classique
@@ -22,7 +22,7 @@ La différence fondamentale entre un agent et un prompt classique tient en trois
 | | **Prompt classique** | **Agent** |
 |---|---|---|
 | **Interaction** | Question → Réponse unique | Objectif → Planification → Exécution → Vérification |
-| **Autonomie** | Aucune — attend vos instructions | Prend des décisions, utilise des outils, itère |
+| **Autonomie** | Aucune, attend vos instructions | Prend des décisions, utilise des outils, itère |
 | **Portée** | Tâche simple et ponctuelle | Workflow complet multi-étapes |
 | **Outils** | Utilise les outils que vous demandez | Choisit et combine les outils nécessaires |
 | **Durée** | Quelques secondes | Peut durer plusieurs minutes |
@@ -41,7 +41,7 @@ Le subagent reçoit un **prompt spécialisé** qui décrit sa mission, ses contr
 </Step>
 
 <Step title="Exécution isolée" stepNumber={3}>
-Le subagent travaille de manière autonome dans son propre contexte. Il peut lire des fichiers, exécuter des commandes, et produire des modifications — le tout sans polluer le contexte de l'agent principal.
+Le subagent travaille de manière autonome dans son propre contexte. Il peut lire des fichiers, exécuter des commandes, et produire des modifications, le tout sans polluer le contexte de l'agent principal.
 </Step>
 
 <Step title="Rapport et intégration" stepNumber={4} isLast>
@@ -101,7 +101,7 @@ Tu es un expert en migrations de bases de données.
 
 ## Isolation et worktrees
 
-Un aspect crucial des subagents est leur **isolation**. Quand un subagent modifie du code, il peut travailler dans un **worktree Git** séparé — une copie de travail indépendante du répertoire principal.
+Un aspect crucial des subagents est leur **isolation**. Quand un subagent modifie du code, il peut travailler dans un **worktree Git** séparé, une copie de travail indépendante du répertoire principal.
 
 <Callout type="tip" title="Pourquoi l'isolation est importante">
 Sans isolation, deux subagents travaillant en parallèle pourraient modifier les mêmes fichiers et créer des conflits. Les worktrees garantissent que chaque subagent travaille dans un environnement propre. Une fois le travail terminé, les modifications sont fusionnées dans la branche principale.
@@ -146,12 +146,12 @@ Voici un scénario typique d'utilisation des agents :
 # 5. Produit un rapport consolidé avec priorités
 ```
 
-Le résultat est une review **multidimensionnelle** qui couvre la qualité du code, la sécurité et les tests — le tout en une seule commande.
+Le résultat est une review **multidimensionnelle** qui couvre la qualité du code, la sécurité et les tests, le tout en une seule commande.
 
 ## Prochaines étapes
 
 Maintenant que vous comprenez le concept des agents et subagents, passons à la pratique.
 
-- [Créer un subagent spécialisé](/agents/create-subagent) — Guide complet pour créer vos propres agents custom
-- [Agent Teams](/agents/agent-teams) — Faire collaborer plusieurs agents ensemble
-- [Top agents par cas d'usage](/agents/best-agents) — Les agents incontournables pour chaque situation
+- [Créer un subagent spécialisé](/agents/create-subagent) : Guide complet pour créer vos propres agents custom
+- [Agent Teams](/agents/agent-teams) : Faire collaborer plusieurs agents ensemble
+- [Top agents par cas d'usage](/agents/best-agents) : Les agents incontournables pour chaque situation

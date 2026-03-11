@@ -12,7 +12,7 @@ dateModified: "2026-03-11"
 Les MCP sont puissants précisément parce qu'ils permettent à Claude Code d'interagir avec votre système, vos services et vos données. Cette puissance a un revers : un MCP malveillant ou mal configuré peut compromettre votre environnement de travail, exposer vos secrets ou exécuter des actions non désirées.
 
 <Callout type="warning" title="Les MCP exécutent des actions réelles">
-Contrairement à un chatbot classique qui ne peut que répondre du texte, Claude Code avec des MCP peut lire vos fichiers, exécuter des commandes, envoyer des messages, modifier votre base de données. Les risques sont donc réels et tangibles. Ce guide vous aide à en prendre la mesure — sans alarmisme, mais avec lucidité.
+Contrairement à un chatbot classique qui ne peut que répondre du texte, Claude Code avec des MCP peut lire vos fichiers, exécuter des commandes, envoyer des messages, modifier votre base de données. Les risques sont donc réels et tangibles. Ce guide vous aide à en prendre la mesure, sans alarmisme, mais avec lucidité.
 </Callout>
 
 Ce guide ne cherche pas à vous décourager d'utiliser les MCP. Il cherche à vous aider à les utiliser de manière éclairée et sécurisée.
@@ -46,7 +46,7 @@ La **prompt injection** est l'attaque la plus subtile contre les systèmes basé
 
 <Steps>
 <Step title="Activer la vérification humaine" stepNumber={1}>
-Ne désactivez jamais le mode de confirmation des actions sensibles. Claude Code vous demande confirmation avant d'exécuter des actions destructrices ou de réseau — c'est votre première ligne de défense. Refusez si l'action vous semble suspecte.
+Ne désactivez jamais le mode de confirmation des actions sensibles. Claude Code vous demande confirmation avant d'exécuter des actions destructrices ou de réseau. C'est votre première ligne de défense. Refusez si l'action vous semble suspecte.
 </Step>
 
 <Step title="Limiter les outils d'écriture" stepNumber={2}>
@@ -85,7 +85,7 @@ secrets.json              # Secrets applicatifs
 Un MCP qui a accès au filesystem peut lire ces fichiers. Combiné à un outil de requête HTTP, il peut les envoyer vers un serveur externe. La prompt injection mentionnée ci-dessus est souvent le déclencheur.
 
 <Callout type="warning" title="Le filesystem MCP est particulièrement sensible">
-Le MCP `@modelcontextprotocol/server-filesystem` est très puissant. Par défaut, configurez-le avec un chemin restreint à votre dossier de projets — jamais sur `/` ou `~` en entier. Une injection dans un fichier lu via ce MCP pourrait permettre l'accès à tous vos secrets.
+Le MCP `@modelcontextprotocol/server-filesystem` est très puissant. Par défaut, configurez-le avec un chemin restreint à votre dossier de projets, jamais sur `/` ou `~` en entier. Une injection dans un fichier lu via ce MCP pourrait permettre l'accès à tous vos secrets.
 </Callout>
 
 ### Mitigation
@@ -117,7 +117,7 @@ Le MCP `@modelcontextprotocol/server-filesystem` est très puissant. Par défaut
 
 ### Le risque du MCP Bash/eval
 
-Certains MCP permettent d'exécuter du code shell ou d'évaluer des expressions. C'est extrêmement utile — et extrêmement dangereux si mal utilisé.
+Certains MCP permettent d'exécuter du code shell ou d'évaluer des expressions. C'est extrêmement utile, et extrêmement dangereux si mal utilisé.
 
 ```bash
 # Un MCP Bash exposant un outil "execute_command"
@@ -141,7 +141,7 @@ Le flag `--dangerously-skip-permissions` désactive toutes les confirmations. Co
 - Gardez le mode de confirmation activé (ne jamais utiliser `--dangerously-skip-permissions` avec ce type de MCP)
 - En CI/CD, utilisez des environnements isolés (sandbox, Docker) pour les MCP d'exécution
 
-## Vecteur 4 : Supply chain attacks — typosquatting et dépendances malveillantes
+## Vecteur 4 : Supply chain attacks, typosquatting et dépendances malveillantes
 
 ### Le problème du nom proche
 
@@ -183,7 +183,7 @@ npm show @modelcontextprotocol/server-filesystem dist-tags
 
 Même un MCP légitime peut avoir des dépendances compromises. En 2024, plusieurs incidents de supply chain ont touché l'écosystème npm (ex: event-stream, ua-parser-js). Un MCP bien intentionné peut embarquer une dépendance malveillante sans que son auteur le sache.
 
-## Vecteur 5 : Confusion de permissions — ce que vous approuvez vs ce qui est fait
+## Vecteur 5 : Confusion de permissions, ce que vous approuvez vs ce qui est fait
 
 ### La subtilité du problème
 
@@ -287,7 +287,7 @@ Voici une checklist que vous pouvez copier directement dans votre fichier `CLAUD
 Une bonne pratique est de définir des profils MCP différents selon vos contextes de travail. Utilisez le fichier `.mcp.json` à la racine de chaque projet :
 
 ```json
-// .mcp.json — projet avec données sensibles
+// .mcp.json - projet avec données sensibles
 // MCP limités, pas d'accès réseau non nécessaire
 {
   "mcpServers": {
@@ -300,7 +300,7 @@ Une bonne pratique est de définir des profils MCP différents selon vos context
 ```
 
 ```json
-// .mcp.json — projet open-source / public
+// .mcp.json - projet open-source / public
 // Plus de MCP autorisés car les données sont publiques
 {
   "mcpServers": {
@@ -325,8 +325,8 @@ Une bonne pratique est de définir des profils MCP différents selon vos context
 
 La sécurité des MCP est l'un des aspects de la sécurité globale de Claude Code.
 
-- [Installer et configurer un MCP](/mcp/setup) — Les bases de la configuration sécurisée dès le départ
-- [Comprendre les MCP](/mcp/what-are-mcps) — L'architecture et le fonctionnement en détail
-- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) — Guide complet de sécurité pour Claude Code
-- [Mythes sur Claude Code](/content/mythes-claude-code) — Démystifier les idées reçues sur la sécurité des MCP
-- [Gestion du contexte](/prompting/context-management) — Comment les MCP consomment du contexte
+- [Installer et configurer un MCP](/mcp/setup) : Les bases de la configuration sécurisée dès le départ
+- [Comprendre les MCP](/mcp/what-are-mcps) : L'architecture et le fonctionnement en détail
+- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) : Guide complet de sécurité pour Claude Code
+- [Mythes sur Claude Code](/content/mythes-claude-code) : Démystifier les idées reçues sur la sécurité des MCP
+- [Gestion du contexte](/prompting/context-management) : Comment les MCP consomment du contexte

@@ -17,9 +17,9 @@ Contrairement aux MCP de productivité, les MCP de développement sont souvent *
 
 ---
 
-## Context7 — Documentation à jour
+## Context7 : Documentation à jour
 
-**Accédez à la documentation officielle et à jour de n'importe quelle bibliothèque directement depuis Claude Code.** Fini les réponses basées sur des APIs obsolètes — Context7 fournit toujours la documentation la plus récente.
+**Accédez à la documentation officielle et à jour de n'importe quelle bibliothèque directement depuis Claude Code.** Fini les réponses basées sur des APIs obsolètes. Context7 fournit toujours la documentation la plus récente.
 
 <Callout type="info" title="Package npm vérifié">
 Context7 est développé par Upstash. Le package npm est `@upstash/context7-mcp`. Le repo source est sur [github.com/upstash/context7](https://github.com/upstash/context7). Aucune clé API n'est requise pour une utilisation de base.
@@ -57,7 +57,7 @@ Claude Code a une date de coupure de connaissances. Context7 compense cette limi
 
 ---
 
-## Sentry — Monitoring des erreurs
+## Sentry : Monitoring des erreurs
 
 **Surveillez et analysez les erreurs de production directement depuis Claude Code.** Consultez les stack traces, identifiez les patterns d'erreurs et corrigez les bugs plus rapidement.
 
@@ -102,7 +102,7 @@ Allez dans **Sentry > Settings > Auth Tokens** pour créer un token avec les sco
 
 ---
 
-## Linear — Gestion de projet
+## Linear : Gestion de projet
 
 **Gérez vos issues, sprints et projets Linear directement depuis Claude Code.** Créez des tickets, mettez à jour le statut et synchronisez votre code avec votre gestion de projet.
 
@@ -142,7 +142,7 @@ Combinez Linear + GitHub : quand vous créez une PR, Claude Code peut automatiqu
 
 ---
 
-## PostgreSQL / Supabase — Bases de données
+## PostgreSQL / Supabase : Bases de données
 
 **Interrogez vos bases de données directement depuis Claude Code.** Exécutez des requêtes SQL, analysez les schémas, exportez des résultats et optimisez vos requêtes.
 
@@ -193,7 +193,7 @@ claude mcp add postgres -e DATABASE_URL=postgresql://user:pass@host:5432/db -- n
 ```
 
 <Callout type="warning" title="Sécurité base de données">
-N'utilisez **jamais** les identifiants de production directement. Préférez un utilisateur en lecture seule ou une base de données de staging. Le MCP PostgreSQL peut exécuter des requêtes SQL arbitraires — soyez prudent avec les permissions.
+N'utilisez **jamais** les identifiants de production directement. Préférez un utilisateur en lecture seule ou une base de données de staging. Le MCP PostgreSQL peut exécuter des requêtes SQL arbitraires, soyez prudent avec les permissions.
 </Callout>
 
 ### Cas d'usage
@@ -205,7 +205,7 @@ N'utilisez **jamais** les identifiants de production directement. Préférez un 
 
 ---
 
-## GitHub — Gestion de code source
+## GitHub : Gestion de code source
 
 **Interagissez avec GitHub à un niveau avancé depuis Claude Code.** Claude Code a déjà une intégration Git native, mais le MCP GitHub ajoute l'accès aux issues, pull requests, reviews, workflows CI/CD et recherche de code à travers tous vos repos.
 
@@ -262,7 +262,7 @@ Créez un **Fine-grained Personal Access Token** avec les permissions minimales 
 
 ## Prochaines étapes
 
-- [Installer et configurer un MCP](/mcp/setup) — Guide d'installation détaillé et résolution des problèmes
-- [Top MCP design & UI](/mcp/best-design) — Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer
-- [Créer son premier workflow MCP](/mcp/first-workflow) — Combiner Context7 + GitHub + Playwright
-- [Comprendre les MCP](/mcp/what-are-mcps) — Revenir aux fondamentaux du protocole
+- [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé et résolution des problèmes
+- [Top MCP design & UI](/mcp/best-design) : Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer
+- [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner Context7 + GitHub + Playwright
+- [Comprendre les MCP](/mcp/what-are-mcps) : Revenir aux fondamentaux du protocole

@@ -1411,8 +1411,8 @@ Creer une section "Reference" avec une cheatsheet, une reference CLI complete, u
 
 ## Epic 24 — Hooks, mode headless et integration CI/CD
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1 (haute — sujet #2 pour experts, totalement absent)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Aucune
@@ -2395,7 +2395,7 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 21 | Parcours grand debutant et pre-requis zero | P0 | L | Novice, Debutant | `TERMINÉ` | `REVIEWÉ ✅` | AUDITS PERSONA |
 | 22 | Refonte majeure section Prompting | P0 | L | Toutes | `TERMINÉ` | `REVIEWÉ ✅` | AUDITS PERSONA |
 | 23 | Documentation de reference technique | P1 | M | Expert, Connaisseur, Experimente | `TERMINÉ` | `REVIEWÉ ✅` | AUDITS PERSONA |
-| 24 | Hooks, mode headless et CI/CD | P1 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 24 | Hooks, mode headless et CI/CD | P1 | M | Expert, Connaisseur | `TERMINÉ` | `REVIEWÉ ✅` | AUDITS PERSONA |
 | 25 | Creation MCP custom (tutoriel complet) | P1 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 26 | Parcours differencies et navigation par persona | P1 | M | Toutes | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 27 | Section Enterprise complete | P1 | L | Entreprise | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
@@ -2406,7 +2406,7 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 32 | Suivi d'usage et analytics (Matomo) | P2 | S | Toutes (ops) | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
 | 33 | Dangers, pieges et idees recues (MCP, contexte, couts) | P1 | M | Toutes | `TERMINÉ` | `REVIEWÉ ✅` | DEMANDE UTILISATEUR |
 
-**Progression** : 6/15 terminee (40%)
+**Progression** : 7/15 terminee (47%)
 
 ---
 

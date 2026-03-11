@@ -69,7 +69,7 @@ Cet agent diagnostique et corrige les erreurs de build de manière méthodique.
 |---|---|
 | **Quand l'utiliser** | Quand le build échoue et que l'erreur n'est pas évidente |
 | **Ce qu'il fait** | Analyse le message d'erreur, identifie la cause racine, propose et applique la correction |
-| **Avantage clé** | Résolution incrémentale — corrige une erreur à la fois et revérifie |
+| **Avantage clé** | Résolution incrémentale, corrige une erreur à la fois et revérifie |
 
 ```bash
 # Invocation explicite
@@ -94,7 +94,7 @@ L'agent de planification crée un plan d'implémentation structuré avant de tou
 |---|---|
 | **Quand l'utiliser** | Avant tout refactoring majeur ou nouvelle feature complexe |
 | **Ce qu'il fait** | Produit un plan avec PRD, architecture, design système, liste de tâches priorisées |
-| **Avantage clé** | Évite de coder trop vite sans réflexion — identifie les risques en amont |
+| **Avantage clé** | Évite de coder trop vite sans réflexion, identifie les risques en amont |
 
 ```bash
 # Invocation explicite
@@ -144,7 +144,7 @@ L'agent de sécurité effectue un audit systématique du code à la recherche de
 |---|---|
 | **Quand l'utiliser** | Avant chaque commit, et en profondeur avant chaque release |
 | **Ce qu'il fait** | Vérifie injection SQL, XSS, CSRF, secrets en clair, dépendances vulnérables |
-| **Avantage clé** | Checklist exhaustive — rien n'est oublié |
+| **Avantage clé** | Checklist exhaustive, rien n'est oublié |
 
 ```bash
 # Invocation explicite
@@ -206,10 +206,10 @@ L'agent de refactoring identifie et supprime le code mort, les dépendances inut
 > les fonctions jamais appelées.
 
 # Claude Code analyse :
-# - formatDate() — jamais importée (dead code)
-# - legacyParser.ts — tout le fichier est inutilisé
-# - import lodash — seul _.get est utilisé, remplacer par optional chaining
-# - calculateTax() — utilisée uniquement dans un test, à vérifier
+# - formatDate() - jamais importée (dead code)
+# - legacyParser.ts - tout le fichier est inutilisé
+# - import lodash - seul _.get est utilisé, remplacer par optional chaining
+# - calculateTax() - utilisée uniquement dans un test, à vérifier
 ```
 
 ### Doc Updater
@@ -253,6 +253,6 @@ L'agent de documentation maintient la documentation technique à jour en fonctio
 
 Maintenant que vous connaissez les agents disponibles, apprenez à les combiner efficacement.
 
-- [Orchestration avancée](/agents/orchestration) — Patterns pour combiner plusieurs agents
-- [Créer un subagent](/agents/create-subagent) — Créez vos propres agents spécialisés
-- [Comprendre les Skills](/skills/what-are-skills) — Les Skills complètent les agents pour un workflow complet
+- [Orchestration avancée](/agents/orchestration) : Patterns pour combiner plusieurs agents
+- [Créer un subagent](/agents/create-subagent) : Créez vos propres agents spécialisés
+- [Comprendre les Skills](/skills/what-are-skills) : Les Skills complètent les agents pour un workflow complet

@@ -53,7 +53,7 @@ Assurez-vous d'avoir les trois MCP configurés dans votre fichier `~/.claude/set
 Vérifiez que tout est connecté :
 
 <TerminalScreenshot
-  title="Terminal — vérification des MCP"
+  title="Terminal - vérification des MCP"
   lines={[
     { type: "command", content: "claude mcp list" },
     { type: "empty", content: "" },
@@ -67,7 +67,7 @@ Vérifiez que tout est connecté :
 
 ### Étape 1 : Formuler la demande
 
-La clé d'un bon workflow MCP est une demande **claire et complète**. Ne demandez pas chaque étape séparément — décrivez l'objectif final et laissez Claude Code orchestrer.
+La clé d'un bon workflow MCP est une demande **claire et complète**. Ne demandez pas chaque étape séparément, décrivez l'objectif final et laissez Claude Code orchestrer.
 
 <Steps>
 <Step title="La demande en une phrase" stepNumber={1}>
@@ -159,7 +159,7 @@ export default function NotFound() {
 ### 3. Test visuel (Playwright)
 
 <TerminalScreenshot
-  title="Terminal — MCP Playwright en action"
+  title="Terminal - MCP Playwright en action"
   lines={[
     { type: "comment", content: "# Claude Code appelle Playwright en interne :" },
     { type: "output", content: "  [playwright] browser_navigate(\"http://localhost:3000/page-inexistante\")" },
@@ -173,7 +173,7 @@ export default function NotFound() {
 ### 4. Création de la PR (GitHub)
 
 <TerminalScreenshot
-  title="Terminal — MCP GitHub en action"
+  title="Terminal - MCP GitHub en action"
   lines={[
     { type: "comment", content: "# Claude Code utilise Git + GitHub MCP :" },
     { type: "output", content: "  [git] checkout -b feat/custom-404-page" },
@@ -196,7 +196,7 @@ export default function NotFound() {
 </Card>
 
 <Card title="Demande trop vague" variant="default">
-*"Mets à jour la base de données."* — Claude Code ne sait pas quel changement faire, quelle table modifier, ni quel workflow enchaîner.
+*"Mets à jour la base de données."* Claude Code ne sait pas quel changement faire, quelle table modifier, ni quel workflow enchaîner.
 </Card>
 
 ### 2. Laissez Claude Code orchestrer
@@ -270,7 +270,7 @@ Vous pouvez créer des **Skills** (fichiers Markdown dans `.claude/commands/`) q
 
 Vous maîtrisez maintenant les bases des workflows MCP. Voici comment aller plus loin :
 
-- [Découvrir les Skills](/skills) — Créez des commandes réutilisables pour vos workflows
-- [Maîtriser le prompting](/prompting) — Techniques avancées pour des demandes plus efficaces
-- [Comprendre les MCP](/mcp/what-are-mcps) — Revenir aux fondamentaux du protocole
-- [Configurer le Claude Codex](/configurator) — Générez votre configuration idéale
+- [Découvrir les Skills](/skills) : Créez des commandes réutilisables pour vos workflows
+- [Maîtriser le prompting](/prompting) : Techniques avancées pour des demandes plus efficaces
+- [Comprendre les MCP](/mcp/what-are-mcps) : Revenir aux fondamentaux du protocole
+- [Configurer le Claude Codex](/configurator) : Générez votre configuration idéale

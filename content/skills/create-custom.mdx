@@ -111,7 +111,7 @@ Utilisez `$ARGUMENTS` pour rendre votre Skill dynamique et réutilisable.
 
 $ARGUMENTS : nom et description du composant à créer.
 
-Exemple : `/project:create-component Button — bouton principal avec
+Exemple : `/project:create-component Button - bouton principal avec
 variantes primary, secondary, danger`
 ```
 </Step>
@@ -121,7 +121,7 @@ variantes primary, secondary, danger`
 
 Mettons en pratique tout ce que nous avons appris avec un Skill complet et réaliste.
 
-### Étape 1 — Créer le fichier
+### Étape 1 : Créer le fichier
 
 ```bash
 # Créer le dossier commands s'il n'existe pas
@@ -131,7 +131,7 @@ mkdir -p .claude/commands
 touch .claude/commands/create-component.md
 ```
 
-### Étape 2 — Écrire le contenu
+### Étape 2 : Écrire le contenu
 
 Voici le contenu complet du Skill :
 
@@ -189,14 +189,14 @@ Tu créeras un composant Badge avec :
 - Tests complets
 ```
 
-### Étape 3 — Tester le Skill
+### Étape 3 : Tester le Skill
 
 ```bash
 # Lancer Claude Code
 claude
 
 # Invoquer le Skill
-/project:create-component Alert — composant d'alerte dismissible avec variantes info, success, warning, error
+/project:create-component Alert - composant d'alerte dismissible avec variantes info, success, warning, error
 ```
 
 Claude va suivre les instructions du Skill et produire un composant `Alert.tsx` complet avec ses tests.
@@ -218,11 +218,11 @@ API RESTful conformes aux conventions du projet.
 ## Architecture
 
 Le projet suit le pattern Repository :
-- `src/routes/` — Définition des routes (Express/Fastify)
-- `src/controllers/` — Logique de contrôle et validation
-- `src/services/` — Logique métier
-- `src/repositories/` — Accès aux données
-- `src/schemas/` — Schémas de validation (Zod)
+- `src/routes/` - Définition des routes (Express/Fastify)
+- `src/controllers/` - Logique de contrôle et validation
+- `src/services/` - Logique métier
+- `src/repositories/` - Accès aux données
+- `src/schemas/` - Schémas de validation (Zod)
 
 ## Conventions API
 
@@ -300,19 +300,19 @@ Vérifie chaque point et rapporte le statut :
 ## Bonnes pratiques d'écriture
 
 <Card title="Les 7 règles d'or" variant="highlight">
-1. **Soyez spécifique** — "Vérifie les injections SQL" est mieux que "Vérifie la sécurité"
-2. **Définissez un rôle** — "Tu es un expert sécurité" cadre le niveau d'exigence
-3. **Numérotez les étapes** — Claude suit mieux une liste ordonnée qu'un texte libre
-4. **Spécifiez le format de sortie** — Évitez les surprises sur le rendu final
-5. **Utilisez \$ARGUMENTS** — Rendez vos Skills dynamiques et réutilisables
-6. **Donnez un exemple** — Un exemple concret vaut mille mots d'instruction
-7. **Testez et itérez** — Un Skill s'affine avec l'usage, ajustez-le régulièrement
+1. **Soyez spécifique** : "Vérifie les injections SQL" est mieux que "Vérifie la sécurité"
+2. **Définissez un rôle** : "Tu es un expert sécurité" cadre le niveau d'exigence
+3. **Numérotez les étapes** : Claude suit mieux une liste ordonnée qu'un texte libre
+4. **Spécifiez le format de sortie** : Évitez les surprises sur le rendu final
+5. **Utilisez \$ARGUMENTS** : Rendez vos Skills dynamiques et réutilisables
+6. **Donnez un exemple** : Un exemple concret vaut mille mots d'instruction
+7. **Testez et itérez** : Un Skill s'affine avec l'usage, ajustez-le régulièrement
 </Card>
 
 ### Ce qu'il faut éviter
 
 <Callout type="warning" title="Pièges courants">
-- **Trop vague** : "Fais une bonne review" — Claude ne sait pas ce que "bonne" signifie pour vous
+- **Trop vague** : "Fais une bonne review", Claude ne sait pas ce que "bonne" signifie pour vous
 - **Trop long** : un Skill de 500+ lignes consomme trop de contexte. Découpez en plusieurs Skills
 - **Pas de format de sortie** : sans indication, Claude choisit un format aléatoire
 - **Pas de contexte projet** : sans connaître vos conventions, Claude utilise ses propres conventions par défaut
@@ -354,7 +354,7 @@ Les fichiers dans `.claude/commands/` font partie du repository. Traitez-les com
 
 Vous savez maintenant créer des Skills sur mesure. Découvrez comment ils se positionnent par rapport aux autres outils d'extension.
 
-- [Skills vs MCP vs Plugins](/skills/comparison) — Comprendre quand utiliser chaque outil
-- [Top Skills recommandés 2026](/skills/best-skills) — S'inspirer des meilleurs Skills existants
-- [Qu'est-ce qu'un Skill ?](/skills/what-are-skills) — Revenir aux fondamentaux
-- [Configurer Claude Code](/configurator) — Optimiser votre environnement global
+- [Skills vs MCP vs Plugins](/skills/comparison) : Comprendre quand utiliser chaque outil
+- [Top Skills recommandés 2026](/skills/best-skills) : S'inspirer des meilleurs Skills existants
+- [Qu'est-ce qu'un Skill ?](/skills/what-are-skills) : Revenir aux fondamentaux
+- [Configurer Claude Code](/configurator) : Optimiser votre environnement global

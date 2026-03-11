@@ -13,14 +13,14 @@ Si les mots "terminal", "Node.js" ou "clé API" vous semblent mystérieux, comme
 
 ## Prérequis
 
-Avant d'installer Claude Code, vérifiez que vous avez ces trois éléments. Si l'un d'entre eux vous manque, pas de panique — on vous explique tout juste en dessous.
+Avant d'installer Claude Code, vérifiez que vous avez ces trois éléments. Si l'un d'entre eux vous manque, pas de panique, on vous explique tout juste en dessous.
 
 <Card title="Node.js 18 ou supérieur" variant="accent">
 Claude Code fonctionne grâce à Node.js, le moteur JavaScript qui permet d'exécuter du code côté serveur. Vous avez besoin de la version 18 minimum (la version 22 LTS est recommandée).
 
 Téléchargez-le sur [nodejs.org](https://nodejs.org) ou utilisez un gestionnaire de versions comme `nvm`.
 
-<Screenshot src="/images/screenshots/nodejs-download.svg" alt="Page de téléchargement de Node.js — boutons LTS et Current" caption="La page nodejs.org propose deux versions : LTS (recommandée) et Current" />
+<Screenshot src="/images/screenshots/nodejs-download.svg" alt="Page de téléchargement de Node.js - boutons LTS et Current" caption="La page nodejs.org propose deux versions : LTS (recommandée) et Current" />
 </Card>
 
 <Card title="Un terminal" variant="accent">
@@ -32,7 +32,7 @@ Vous avez besoin soit d'une **clé API** (pay-as-you-go via la console Anthropic
 
 Créez votre compte sur [console.anthropic.com](https://console.anthropic.com).
 
-<Screenshot src="/images/screenshots/anthropic-console.svg" alt="Console Anthropic — section API Keys avec bouton Create Key" caption="La console Anthropic permet de créer et gérer vos clés API" />
+<Screenshot src="/images/screenshots/anthropic-console.svg" alt="Console Anthropic - section API Keys avec bouton Create Key" caption="La console Anthropic permet de créer et gérer vos clés API" />
 </Card>
 
 ### Vérifiez votre version de Node.js
@@ -40,7 +40,7 @@ Créez votre compte sur [console.anthropic.com](https://console.anthropic.com).
 Ouvrez votre terminal et tapez la commande suivante :
 
 <TerminalScreenshot
-  title="Terminal — zsh"
+  title="Terminal - zsh"
   lines={[
     { type: "command", content: "node --version" },
     { type: "highlight", content: "v22.4.0" },
@@ -57,7 +57,7 @@ Si vous voyez un numéro inférieur à v18.0.0, ou si la commande n'est pas reco
 L'installation se fait en une seule commande. Ouvrez votre terminal et exécutez :
 
 <TerminalScreenshot
-  title="Terminal — macOS (zsh)"
+  title="Terminal - macOS (zsh)"
   lines={[
     { type: "command", content: "npm install -g @anthropic-ai/claude-code" },
     { type: "empty", content: "" },
@@ -70,7 +70,7 @@ L'installation se fait en une seule commande. Ouvrez votre terminal et exécutez
 />
 
 <TerminalScreenshot
-  title="PowerShell — Windows"
+  title="PowerShell - Windows"
   lines={[
     { type: "command", content: "npm install -g @anthropic-ai/claude-code", promptSymbol: ">" },
     { type: "empty", content: "" },
@@ -93,7 +93,7 @@ Le flag `-g` signifie "global". Sans ce flag, le paquet serait installé uniquem
 Après l'installation, vérifiez que tout fonctionne :
 
 <TerminalScreenshot
-  title="Terminal — zsh"
+  title="Terminal - zsh"
   lines={[
     { type: "command", content: "claude --version" },
     { type: "highlight", content: "@anthropic-ai/claude-code 1.0.17" }
@@ -131,7 +131,7 @@ source ~/.bashrc  # ou source ~/.zshrc
 Placez-vous dans un dossier de projet et lancez la commande `claude`. L'authentification sera automatique grâce à la variable d'environnement.
 
 <TerminalScreenshot
-  title="Terminal — premier lancement"
+  title="Terminal - premier lancement"
   lines={[
     { type: "command", content: "cd ~/mon-projet && claude" },
     { type: "empty", content: "" },
@@ -179,12 +179,12 @@ Claude Code vous propose deux options. Sélectionnez **Claude App** :
 </Step>
 
 <Step title="Connectez-vous dans votre navigateur" stepNumber={3} isLast>
-Un navigateur s'ouvre automatiquement. Connectez-vous avec votre compte Claude. Une fois authentifié, retournez dans le terminal — Claude Code est prêt.
+Un navigateur s'ouvre automatiquement. Connectez-vous avec votre compte Claude. Une fois authentifié, retournez dans le terminal, Claude Code est prêt.
 </Step>
 </Steps>
 
 <Callout type="tip" title="Quel abonnement choisir ?">
-L'abonnement **Max** ($100/mois) offre une utilisation intensive de Claude Code. L'abonnement **Pro** ($20/mois) donne un accès limité. La clé API (pay-as-you-go) est idéale pour tester ou pour un usage ponctuel — comptez environ $5-15 par jour d'utilisation active.
+L'abonnement **Max** ($100/mois) offre une utilisation intensive de Claude Code. L'abonnement **Pro** ($20/mois) donne un accès limité. La clé API (pay-as-you-go) est idéale pour tester ou pour un usage ponctuel, comptez environ $5-15 par jour d'utilisation active.
 </Callout>
 
 ### Comparaison des offres
@@ -268,6 +268,6 @@ cat ~/.bashrc | grep ANTHROPIC
 
 Claude Code est installé et vous êtes authentifié. Passons à la configuration de votre environnement pour tirer le meilleur parti de l'outil.
 
-- [Configurer votre environnement](/getting-started/environment-setup) — API key, settings.json et CLAUDE.md
-- [Votre premier projet](/getting-started/first-project) — Créer un site web en 5 minutes
-- [Retour à la vue d'ensemble](/getting-started) — Toutes les pages du guide
+- [Configurer votre environnement](/getting-started/environment-setup) : API key, settings.json et CLAUDE.md
+- [Votre premier projet](/getting-started/first-project) : Créer un site web en 5 minutes
+- [Retour à la vue d'ensemble](/getting-started) : Toutes les pages du guide

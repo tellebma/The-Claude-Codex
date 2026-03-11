@@ -1,5 +1,5 @@
 ---
-title: "CLI — Référence complète des commandes Claude Code"
+title: "CLI : Référence complète des commandes Claude Code"
 description: "Référence exhaustive de la commande claude : tous les flags, sous-commandes, modes d'exécution et exemples. claude, claude config, claude mcp, claude doctor."
 badge: "CLI"
 section: "reference"
@@ -23,7 +23,7 @@ claude [OPTIONS] [PROMPT]
 | `--output-format <fmt>` | | string | Format de sortie : `text` (défaut), `json`, `stream-json` |
 | `--verbose` | | boolean | Affiche les appels d'outils et métadonnées (debug) |
 | `--no-cache` | | boolean | Désactive le cache de prompt (évite les résultats mis en cache) |
-| `--dangerously-skip-permissions` | | boolean | **Déconseillé** — ignore toutes les demandes de confirmation |
+| `--dangerously-skip-permissions` | | boolean | **Déconseillé** : ignore toutes les demandes de confirmation |
 | `--continue` | `-c` | boolean | Reprend la dernière session de la conversation |
 | `--resume <id>` | | string | Reprend une session spécifique par son identifiant |
 | `--max-turns <n>` | | number | Limite le nombre de tours d'échange (mode agentic) |
@@ -40,7 +40,7 @@ claude [OPTIONS] [PROMPT]
 Ce flag bypasse toutes les confirmations de Claude Code, y compris avant des actions destructives (suppression de fichiers, exécution de scripts, appels API). Ne l'utilisez qu'en environnement sandbox isolé, jamais en production.
 </Callout>
 
-### Exemples — Commande `claude`
+### Exemples : Commande `claude`
 
 ```bash
 # Session interactive standard
@@ -324,6 +324,6 @@ done
 
 ## Prochaines étapes
 
-- [Cheatsheet — Référence rapide](/reference/cheatsheet) — Commandes slash et raccourcis
-- [settings.json — Guide complet](/reference/settings) — Toutes les options de configuration
-- [Variables d'environnement](/reference/environment) — Variables reconnues par Claude Code
+- [Cheatsheet : Référence rapide](/reference/cheatsheet) : Commandes slash et raccourcis
+- [settings.json : Guide complet](/reference/settings) : Toutes les options de configuration
+- [Variables d'environnement](/reference/environment) : Variables reconnues par Claude Code

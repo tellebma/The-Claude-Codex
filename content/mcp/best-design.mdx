@@ -1,10 +1,10 @@
 ---
-title: "Top MCP design & UI"
-description: "Les meilleurs MCP pour le design et l'UI avec Claude Code : Playwright, Chrome DevTools, 21st.dev Magic et Puppeteer. Tests E2E, debug web, composants UI et scraping."
+title: "Top MCP design & UI Claude Code"
+description: "Les meilleurs MCP pour le design et l'UI avec Claude Code : Playwright, Chrome DevTools, 21st.dev Magic et Puppeteer. Tests E2E, debug web et composants UI."
 section: "mcp"
 order: 5
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-03-11"
 ---
 
 ## Les MCP pour voir et interagir avec le web
@@ -21,14 +21,19 @@ Sans ces MCP, Claude Code travaille "à l'aveugle" sur le web. Il peut écrire d
 
 **Le couteau suisse de l'automatisation web.** Playwright permet à Claude Code de naviguer sur des pages web, prendre des screenshots, remplir des formulaires, cliquer sur des éléments et exécuter des tests end-to-end complets.
 
+<Callout type="info" title="Package npm officiel Microsoft">
+Le MCP Playwright est publié par Microsoft sous `@playwright/mcp`. Son repo source est sur [github.com/microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp). Il s'agit d'un projet officiel Microsoft, pas `@anthropic/mcp-playwright`.
+</Callout>
+
 ### Installation
 
 ```bash
-# Via la commande Claude
-claude mcp add playwright -- npx -y @anthropic/mcp-playwright
-
-# Installer les navigateurs (nécessaire la première fois)
+# Installer Playwright si ce n'est pas déjà fait
+npm install -D @playwright/test
 npx playwright install
+
+# Ajouter le MCP
+claude mcp add playwright -- npx -y @playwright/mcp
 ```
 
 ### Configuration JSON
@@ -38,7 +43,7 @@ npx playwright install
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-playwright"]
+      "args": ["-y", "@playwright/mcp"]
     }
   }
 }
@@ -74,45 +79,38 @@ Playwright est le successeur spirituel de Puppeteer, développé par la même é
 
 **Accédez aux Chrome DevTools directement depuis Claude Code.** Inspectez le DOM, analysez les performances, surveillez les requêtes réseau et déboguez le JavaScript — le tout sans quitter votre terminal.
 
-### Installation
+<Callout type="info" title="Package npm communautaire">
+Il n'existe pas de package `@anthropic/mcp-chrome-devtools`. Le MCP Chrome DevTools est un projet communautaire. Vérifiez les packages disponibles sur npm en cherchant « chrome devtools mcp ». Une alternative est d'utiliser Playwright qui intègre les DevTools nativement.
+</Callout>
 
-```bash
-# Chrome DevTools MCP nécessite Chrome/Chromium installé
-claude mcp add chrome-devtools -- npx -y @anthropic/mcp-chrome-devtools
-```
+### Via le MCP Playwright (recommandé)
 
-### Configuration JSON
+Le MCP Playwright couvre la majorité des cas d'usage de Chrome DevTools :
 
 ```json
 {
   "mcpServers": {
-    "chrome-devtools": {
+    "playwright": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-chrome-devtools"]
+      "args": ["-y", "@playwright/mcp"]
     }
   }
 }
 ```
 
-### Outils disponibles
+Playwright expose des outils équivalents aux DevTools :
 
-Chrome DevTools expose des outils puissants pour le debug :
-
-- **`take_screenshot`** — Capture d'écran de la page
-- **`evaluate_script`** — Exécuter du JavaScript dans le contexte de la page
-- **`list_network_requests`** — Voir toutes les requêtes réseau
-- **`get_console_message`** — Lire les messages de la console
-- **`performance_start_trace`** / **`performance_stop_trace`** — Tracer les performances
-- **`lighthouse_audit`** — Lancer un audit Lighthouse intégré
-- **`take_memory_snapshot`** — Analyser l'utilisation mémoire
-- **`emulate`** — Simuler un appareil mobile
+- **`browser_evaluate`** — Exécuter du JavaScript dans le contexte de la page
+- **`browser_network_requests`** — Voir toutes les requêtes réseau
+- **`browser_console_messages`** — Lire les messages de la console
+- **`browser_take_screenshot`** — Capture d'écran
+- **`browser_resize`** — Simuler un appareil mobile (redimensionner le viewport)
 
 ### Cas d'usage
 
 - **Debug JavaScript** : *"Ouvre ma page, exécute un script de test et montre-moi les erreurs de la console"*
 - **Analyse réseau** : *"Liste toutes les requêtes réseau de ma page et identifie celles qui prennent plus de 500ms"*
-- **Performance** : *"Lance un trace de performance sur ma page d'accueil et analyse les goulots d'étranglement"*
-- **Debug mobile** : *"Émule un iPhone 14 Pro et prends un screenshot de ma page pour vérifier le rendu mobile"*
+- **Debug mobile** : *"Redimensionne le navigateur à 375px de large et prends un screenshot de ma page"*
 
 ---
 
@@ -120,11 +118,15 @@ Chrome DevTools expose des outils puissants pour le debug :
 
 **Générez des composants UI modernes et prêts à l'emploi directement depuis Claude Code.** 21st.dev Magic fournit des composants React inspirés par les meilleurs designs du web, avec support Tailwind CSS.
 
+<Callout type="info" title="Package npm officiel 21st.dev">
+Le package npm officiel est `@21st-dev/magic`, publié par 21st.dev. Il n'existe pas de package `@anthropic/mcp-21st-magic`. Une clé API est nécessaire — obtenez-la sur [21st.dev](https://21st.dev).
+</Callout>
+
 ### Installation
 
 ```bash
 # 21st.dev Magic nécessite une API key
-claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @anthropic/mcp-21st-magic
+claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @21st-dev/magic
 ```
 
 ### Configuration JSON
@@ -134,7 +136,7 @@ claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @anthropic/mcp
   "mcpServers": {
     "magic": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-21st-magic"],
+      "args": ["-y", "@21st-dev/magic"],
       "env": {
         "TWENTY_FIRST_API_KEY": "votre-clé-21st-dev"
       }
@@ -158,7 +160,7 @@ claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @anthropic/mcp
 - **Prototypage** : *"Génère une page de login complète avec formulaire, validation et gestion d'erreurs"*
 
 <Callout type="tip" title="Workflow design-to-code accéléré">
-Combinez 21st.dev Magic + Playwright : générez un composant, puis utilisez Playwright pour vérifier visuellement le rendu et itérer jusqu'au résultat parfait.
+Combinez 21st.dev Magic + Playwright : générez un composant avec Magic, puis utilisez Playwright pour vérifier visuellement le rendu et itérer jusqu'au résultat parfait.
 </Callout>
 
 ---
@@ -167,11 +169,15 @@ Combinez 21st.dev Magic + Playwright : générez un composant, puis utilisez Pla
 
 **Automatisez Chrome pour le scraping, les screenshots et les tests.** Puppeteer est l'outil historique de Google pour contrôler Chrome programmatiquement.
 
+<Callout type="info" title="Package npm officiel vérifié">
+Le MCP Puppeteer est disponible dans le repository officiel MCP d'Anthropic. Le package est `@modelcontextprotocol/server-puppeteer`, disponible sur [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers). Il n'existe pas de package `@anthropic/mcp-puppeteer`.
+</Callout>
+
 ### Installation
 
 ```bash
 # Via la commande Claude
-claude mcp add puppeteer -- npx -y @anthropic/mcp-puppeteer
+claude mcp add puppeteer -- npx -y @modelcontextprotocol/server-puppeteer
 ```
 
 ### Configuration JSON
@@ -181,7 +187,7 @@ claude mcp add puppeteer -- npx -y @anthropic/mcp-puppeteer
   "mcpServers": {
     "puppeteer": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-puppeteer"]
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
     }
   }
 }
@@ -201,23 +207,22 @@ claude mcp add puppeteer -- npx -y @anthropic/mcp-puppeteer
 
 - **Web scraping** : *"Navigue sur ce site, extrait tous les prix des produits et présente-les dans un tableau"*
 - **Screenshots comparatifs** : *"Prends un screenshot de la page avant et après mes changements CSS"*
-- **Automatisation** : *"Connecte-toi à cette interface d'admin, navigue jusqu'à la page de statistiques et exporte les données"*
 - **Tests visuels** : *"Vérifie que le bouton 'Ajouter au panier' est visible et cliquable sur la page produit"*
 
 ---
 
 ## Comparatif : quel MCP choisir ?
 
-| Critère | Playwright | Chrome DevTools | 21st.dev Magic | Puppeteer |
-|---------|-----------|----------------|---------------|-----------|
+| Critère | Playwright | Chrome DevTools (via PW) | 21st.dev Magic | Puppeteer |
+|---------|-----------|--------------------------|---------------|-----------|
 | **Type** | Automatisation web | Debug avancé | Génération UI | Automatisation Chrome |
-| **Navigateurs** | Chromium, Firefox, WebKit | Chrome uniquement | N/A | Chromium uniquement |
-| **Force** | Tests E2E, multi-navigateur | Traces perf, debug réseau | Composants design modernes | Scraping, simplicité |
-| **Difficulté** | Débutant | Intermédiaire | Débutant | Débutant |
-| **Idéal pour** | Tout projet web | Debug performance | Prototypage rapide | Scraping, screenshots simples |
+| **Navigateurs** | Chromium, Firefox, WebKit | Chrome / Chromium | N/A (API) | Chromium uniquement |
+| **Package vérifié** | `@playwright/mcp` | Via `@playwright/mcp` | `@21st-dev/magic` | `@modelcontextprotocol/server-puppeteer` |
+| **Force** | Tests E2E, multi-navigateur | Console, réseau | Composants design modernes | Scraping, simplicité |
+| **Difficulté** | Débutant | Intermédiaire | Débutant (clé API requise) | Débutant |
 
 <Callout type="info" title="Recommandation">
-Pour la plupart des projets, **Playwright + 21st.dev Magic** est la combinaison idéale. Playwright pour tester et vérifier visuellement, 21st.dev Magic pour générer des composants de qualité. Ajoutez Chrome DevTools si vous avez besoin de debug de performance avancé.
+Pour la plupart des projets, **Playwright + 21st.dev Magic** est la combinaison idéale. Playwright pour tester et vérifier visuellement, 21st.dev Magic pour générer des composants de qualité. Puppeteer reste utile pour des cas de scraping spécifiques où vous n'avez besoin que de Chromium.
 </Callout>
 
 ## Prochaines étapes

@@ -1,186 +1,229 @@
 ---
-title: "Plugins design & frontend"
-description: "Les meilleurs plugins Claude Code pour le design et le frontend : Frontend Design, UI UX Pro Max, 21st Magic et Playwright. Installation et cas d'usage."
+title: "Extensions design & frontend"
+description: "Extensions Claude Code pour le design et le frontend : agent Frontend Design, MCP Playwright, 21st.dev Magic et skills UI. Installation et cas d'usage."
 section: "plugins"
 order: 4
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-03-11"
 ---
 
-## Transformez Claude Code en expert design
+## Dotez Claude Code d'une expertise design
 
-Ces plugins spécialisés transforment Claude Code en un véritable assistant design et frontend. Que vous construisiez des interfaces utilisateur, des systèmes de design ou que vous testiez vos composants, ces outils vous feront gagner un temps considérable.
+Ces ressources spécialisées transforment Claude Code en un assistant design et frontend plus efficace. Certaines sont des MCP servers (qui connectent Claude à des services externes), d'autres sont des agents ou skills communautaires (fichiers Markdown à copier dans `.claude/`).
 
-<Callout type="tip" title="Complémentarité avec les MCP">
-Ces plugins s'utilisent idéalement **en combinaison avec les MCP design** (Playwright, Chrome DevTools, 21st.dev Magic en MCP). Le plugin fournit l'intelligence et les styles, le MCP fournit l'interaction avec le navigateur.
+<Callout type="info" title="Ressources communautaires et MCP, pas des plugins officiels">
+Les ressources présentées sur cette page sont soit des **projets communautaires** (agents, skills) soit des **MCP servers** légitimes. Il n'existe pas de plugin officiel « Frontend Design » ou « UI UX Pro Max » installable via une commande `/plugin install`.
+</Callout>
+
+<Callout type="tip" title="Complémentarité MCP et agents">
+Les MCP de cette page (Playwright, 21st.dev Magic) fournissent des **capacités d'action** — naviguer, prendre des screenshots, générer des composants via une API. Les agents et skills communautaires fournissent l'**intelligence de design** — les bonnes pratiques, les patterns, les conventions.
 </Callout>
 
 ---
 
-## Frontend Design — Le designer professionnel
+## Agent Frontend Design — L'expert design dans Claude Code
 
-**96 000+ installations** | Catégorie : Design | Auteur : Frontend Design Team
+**Ressource communautaire** | Catégorie : Agents | Source : Everything Claude Code
 
-Frontend Design est le plugin le plus installé de toute la catégorie design. Il transforme Claude Code en un expert capable de produire des interfaces **professionnelles et pixel-perfect**, en respectant les conventions modernes de design web.
+L'agent Frontend Design est un fichier Markdown qui configure Claude Code comme un expert en design et développement frontend. Il fait partie de collections communautaires comme [Everything Claude Code](https://github.com/punkpeye/everything-claude-code).
 
-### Ce qu'il apporte
+<Callout type="info" title="Un agent, pas un plugin">
+Il ne s'agit pas d'un logiciel à installer — c'est un fichier `.md` qui définit un persona et des instructions pour Claude Code. Vous le copiez dans `.claude/agents/` et il devient disponible dans vos sessions.
+</Callout>
 
-- **Design system automatique** : génère des tokens de design (couleurs, typographie, espacements, ombres) cohérents
-- **Composants production-ready** : produit des composants accessibles, responsive et animés
-- **Responsive intelligent** : adapte automatiquement les layouts pour mobile, tablette et desktop
-- **Patterns modernes** : maîtrise les patterns actuels (bento grids, glassmorphism, micro-interactions)
-- **Accessibilité native** : tous les composants générés respectent WCAG 2.1 AA
+### Installation depuis Everything Claude Code
+
+```bash
+# Installer via /install-github
+/install-github punkpeye/everything-claude-code
+
+# Ou manuellement : télécharger l'agent spécifique
+mkdir -p .claude/agents
+curl -o .claude/agents/frontend-design.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/agents/frontend-design.md
+```
+
+### Exemple de fichier agent frontend-design.md
+
+Vous pouvez aussi créer le vôtre :
+
+```markdown
+---
+name: frontend-design
+description: Expert en design et développement frontend, spécialisé React et Tailwind CSS
+---
+
+Tu es un expert en design et développement frontend avec une expertise en :
+- Design systems (tokens, composants, documentation)
+- React avec TypeScript et Tailwind CSS
+- Accessibilité web (WCAG 2.1 AA minimum)
+- Responsive design et mobile-first
+- Animations subtiles avec Framer Motion
+
+Pour chaque composant, tu produis :
+1. Le code TypeScript strict, sans `any`
+2. Les classes Tailwind responsive (mobile → desktop)
+3. Les attributs ARIA et le focus management
+4. Un exemple de dark mode si applicable
+```
+
+### Cas d'usage
+
+- **Landing page complète** : *"En tant qu'agent frontend-design, crée une landing page pour un SaaS avec hero, features, pricing et footer"*
+- **Design system** : *"Génère les tokens de design (couleurs, typographie, espacements) pour un design system cohérent"*
+- **Composant accessible** : *"Crée un composant Modal accessible avec focus trap, escape key, et aria-labels"*
+- **Dark mode** : *"Ajoute un dark mode complet à mon application avec des transitions fluides"*
+
+---
+
+## 21st.dev Magic — Composants UI modernes (MCP)
+
+**MCP Server officiel** | Catégorie : Génération UI | Auteur : [21st.dev](https://21st.dev)
+
+21st.dev Magic est un **vrai MCP server** qui donne accès à une bibliothèque de composants UI modernes directement depuis Claude Code. Contrairement aux agents, il s'agit d'un service externe connecté via le protocole MCP.
+
+<Callout type="info" title="MCP officiel de 21st.dev">
+Le package npm est `@21st-dev/magic`. Il nécessite une clé API obtenue sur [21st.dev](https://21st.dev). La documentation officielle est disponible sur le site de 21st.dev.
+</Callout>
 
 ### Installation
 
 ```bash
-/plugin install frontend-design
+# Via la commande Claude
+claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @21st-dev/magic
 ```
 
-### Configuration recommandée
+### Configuration JSON
 
 ```json
 {
-  "plugins": {
-    "frontend-design": {
-      "enabled": true,
-      "config": {
-        "framework": "react",
-        "cssFramework": "tailwind",
-        "designSystem": "shadcn",
-        "animations": "framer-motion",
-        "accessibilityLevel": "AA"
+  "mcpServers": {
+    "magic": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic"],
+      "env": {
+        "TWENTY_FIRST_API_KEY": "votre-clé-21st-dev"
       }
     }
   }
 }
 ```
 
-### Cas d'usage
+### Outils disponibles
 
-- **Landing page complète** : *"Crée une landing page professionnelle pour un SaaS avec hero, features, pricing et footer"*
-- **Système de design** : *"Génère un design system complet avec tokens, composants de base et documentation"*
-- **Redesign** : *"Modernise cette page en utilisant les tendances design 2026 : bento layout, glassmorphism subtil et micro-animations"*
-- **Dark mode** : *"Ajoute un dark mode complet à mon application avec des transitions fluides"*
-
-<Callout type="info" title="Détection automatique">
-Frontend Design détecte automatiquement votre stack (React/Vue/Svelte, Tailwind/CSS Modules, etc.) et adapte son output. Vous pouvez aussi forcer une configuration spécifique via les settings.
-</Callout>
-
----
-
-## UI UX Pro Max — 50 styles, 21 palettes
-
-**42 000+ installations** | Catégorie : Design | Auteur : UI UX Labs
-
-UI UX Pro Max est une bibliothèque de **styles prédéfinis et de palettes de couleurs** qui permet de changer radicalement l'apparence de vos interfaces en quelques commandes. Pensez-le comme un catalogue de thèmes professionnels.
-
-### Ce qu'il apporte
-
-- **50 styles de design** : minimaliste, brutalist, néomorphism, glassmorphism, retro, corporate, startup, luxe, etc.
-- **21 palettes de couleurs** : chaque palette est pensée pour l'accessibilité (contraste AA/AAA) et inclut les variantes light/dark
-- **Typography presets** : combinaisons de polices testées et harmonieuses
-- **Spacing systems** : systèmes d'espacement cohérents (4px, 8px, modular scale)
-- **Animation presets** : bibliothèque d'animations prêtes à l'emploi
-
-### Installation
-
-```bash
-/plugin install ui-ux-pro-max
-```
-
-### Cas d'usage
-
-- **Exploration de styles** : *"Montre-moi ce composant Card dans les styles minimaliste, brutalist et glassmorphism pour que je compare"*
-- **Palette personnalisée** : *"Applique la palette 'Ocean Breeze' à mon application avec les variantes dark mode"*
-- **Cohérence visuelle** : *"Uniformise tous les composants de mon app en utilisant le style 'Modern SaaS' et la palette 'Electric'"*
-- **Prototypage rapide** : *"Génère 3 variantes de cette page d'accueil avec 3 styles différents"*
-
-<Callout type="tip" title="Combinaison gagnante">
-Utilisez UI UX Pro Max pour choisir un style et une palette, puis Frontend Design pour l'implémentation production-ready. Les deux plugins sont conçus pour fonctionner ensemble.
-</Callout>
-
----
-
-## 21st Magic — Composants premium
-
-**31 000+ installations** | Catégorie : Composants | Auteur : 21st.dev
-
-21st Magic donne accès à une bibliothèque de **composants UI premium** directement dans Claude Code. Au lieu de coder chaque composant from scratch, Claude Code pioche dans un catalogue de composants testés et optimisés.
-
-### Ce qu'il apporte
-
-- **Bibliothèque de composants** : headers, heros, features, pricing tables, testimonials, footers, dashboards, etc.
-- **Variantes multiples** : chaque composant existe en plusieurs variantes (simple, détaillé, animé, compact)
-- **Source code complet** : vous obtenez le code source, pas des composants packagés — total contrôle
-- **Inspiration contextuelle** : suggère des composants pertinents en fonction de ce que vous construisez
-
-### Installation
-
-```bash
-/plugin install 21st-magic
-```
+- **`21st_magic_component_builder`** — Générer un composant UI à partir d'une description
+- **`21st_magic_component_inspiration`** — Trouver de l'inspiration parmi des composants existants
+- **`21st_magic_component_refiner`** — Améliorer un composant existant
+- **`logo_search`** — Rechercher des logos de marques
 
 ### Cas d'usage
 
 - **Composant complexe** : *"J'ai besoin d'une section pricing avec 3 tiers, toggle mensuel/annuel et feature comparison"*
-- **Inspiration** : *"Montre-moi 5 variantes de hero section pour un site de documentation technique"*
-- **Dashboard** : *"Construis un dashboard analytics avec sidebar, charts et data tables en utilisant les composants 21st Magic"*
-- **Personnalisation** : *"Prends le composant testimonials de 21st Magic et adapte-le à mon design system"*
-
-<Callout type="info" title="Aussi disponible en MCP">
-21st.dev propose aussi un MCP Server (`@21st-dev/magic`) qui fournit des composants via le protocole MCP. Le plugin offre une intégration plus riche avec des suggestions contextuelles et des variantes, tandis que le MCP est plus léger.
-</Callout>
+- **Inspiration** : *"Montre-moi des exemples de hero sections modernes pour un site de documentation"*
+- **Raffinement** : *"Prends ce composant Card et améliore-le avec des animations hover et un meilleur espacement"*
 
 ---
 
-## Playwright — Tests E2E visuels
+## Playwright — Tests E2E et vérification visuelle (MCP)
 
-**28 000+ installations** | Catégorie : Tests | Auteur : Microsoft Community
+**MCP Server officiel** | Catégorie : Tests & Automatisation | Auteur : [Microsoft / communauté](https://github.com/microsoft/playwright-mcp)
 
-Le plugin Playwright intègre les tests end-to-end directement dans le workflow de Claude Code. Il permet de **tester visuellement** vos interfaces, prendre des screenshots et valider les interactions utilisateur.
+Le MCP Playwright intègre les tests end-to-end directement dans le workflow de Claude Code. Il permet à Claude de naviguer sur des pages, prendre des screenshots et valider les interactions.
 
-### Ce qu'il apporte
-
-- **Tests E2E automatiques** : génère et exécute des tests Playwright basés sur votre description en langage naturel
-- **Captures d'écran** : prend des screenshots pour vérifier visuellement le rendu de vos pages
-- **Comparaison visuelle** : compare des screenshots avant/après pour détecter les régressions visuelles
-- **Multi-navigateur** : teste sur Chromium, Firefox et WebKit simultanément
-- **Rapports détaillés** : génère des rapports HTML avec captures d'écran et traces
+<Callout type="info" title="Package npm officiel">
+Le MCP Playwright est publié sous `@playwright/mcp` par Microsoft. Son repo source est sur [github.com/microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp). Il nécessite que Playwright soit installé dans votre projet.
+</Callout>
 
 ### Installation
 
 ```bash
-/plugin install playwright
-
-# Note : Playwright nécessite aussi les navigateurs
+# Installer Playwright si ce n'est pas déjà fait
+npm install -D @playwright/test
 npx playwright install
+
+# Ajouter le MCP
+claude mcp add playwright -- npx -y @playwright/mcp
 ```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    }
+  }
+}
+```
+
+### Outils disponibles
+
+- **`browser_navigate`** — Naviguer vers une URL
+- **`browser_take_screenshot`** — Prendre un screenshot de la page
+- **`browser_snapshot`** — Capturer le DOM accessible de la page
+- **`browser_click`** — Cliquer sur un élément
+- **`browser_fill_form`** — Remplir un formulaire
+- **`browser_evaluate`** — Exécuter du JavaScript dans la page
 
 ### Cas d'usage
 
-- **Test visuel** : *"Prends un screenshot de chaque page de mon site et vérifie qu'aucun élément ne déborde"*
-- **Test de parcours** : *"Teste le parcours complet d'inscription : landing → formulaire → confirmation → email"*
-- **Régression visuelle** : *"Compare le rendu de la page d'accueil avant et après mon refactoring CSS"*
-- **Responsive testing** : *"Teste cette page sur mobile (375px), tablette (768px) et desktop (1440px) et montre-moi les screenshots"*
+- **Vérification visuelle** : *"Ouvre ma page d'accueil en local et prends un screenshot pour vérifier le rendu"*
+- **Test E2E** : *"Teste le formulaire d'inscription : remplis les champs, soumets et vérifie le message de succès"*
+- **Debug responsive** : *"Prends un screenshot de ma page en mobile (375px) et en desktop (1440px)"*
 
-<Callout type="warning" title="Plugin vs MCP">
-Le plugin Playwright gère la **génération de tests** et l'analyse des résultats. Pour l'**interaction directe avec le navigateur** (navigation, clics, remplissage de formulaires), utilisez le MCP Playwright. Les deux sont complémentaires.
+<Callout type="tip" title="Workflow design-to-code accéléré">
+Combinez 21st.dev Magic + Playwright : générez un composant avec Magic, puis utilisez Playwright pour vérifier visuellement le rendu et itérer jusqu'au résultat souhaité.
 </Callout>
+
+---
+
+## Skill Frontend Design — Commande slash dédiée
+
+**Ressource communautaire** | Catégorie : Skills | Format : fichier Markdown
+
+En complément de l'agent, vous pouvez créer un **skill** (slash command) dédié au design frontend. Contrairement à l'agent qui est toujours actif, le skill s'invoque explicitement quand vous en avez besoin.
+
+### Créer un skill frontend-design.md
+
+```bash
+mkdir -p .claude/commands
+cat > .claude/commands/frontend-design.md << 'EOF'
+# Frontend Design
+
+Crée ou améliore un composant UI avec les contraintes suivantes :
+
+**Stack** : React 18+, TypeScript strict, Tailwind CSS v3
+**Accessibilité** : WCAG 2.1 AA minimum (aria-labels, focus visible, contraste 4.5:1)
+**Responsive** : mobile-first, breakpoints sm/md/lg/xl
+**Qualité** : pas de `any`, exports nommés, un composant par fichier
+
+Fournis toujours :
+1. Le composant TypeScript complet
+2. Un exemple d'utilisation
+3. Les props documentées avec JSDoc
+EOF
+```
+
+Utilisation :
+```bash
+/frontend-design créer un composant de carte produit avec image, titre, prix et bouton d'ajout au panier
+```
 
 ---
 
 ## Récapitulatif
 
-| Plugin | Installations | Spécialité | Meilleur pour |
-|--------|--------------|------------|---------------|
-| **Frontend Design** | 96K+ | Design system & UI | Interfaces production-ready |
-| **UI UX Pro Max** | 42K+ | Styles & palettes | Exploration visuelle, prototypage |
-| **21st Magic** | 31K+ | Composants premium | Composants complexes, inspiration |
-| **Playwright** | 28K+ | Tests E2E | Tests visuels, régression |
+| Ressource | Type | Source | Meilleur pour |
+|--------|------|---------|---------------|
+| **Agent Frontend Design** | Agent communautaire | [Everything Claude Code](https://github.com/punkpeye/everything-claude-code) | Persona design persistant |
+| **21st.dev Magic** | MCP Server | [21st.dev](https://21st.dev) | Génération de composants UI |
+| **Playwright MCP** | MCP Server | [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) | Tests E2E, vérification visuelle |
+| **Skill Frontend Design** | Skill (slash command) | À créer soi-même | Design à la demande |
 
 ## Prochaines étapes
 
-- [Plugins sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez la qualité de votre code
-- [Top plugins essentiels 2026](/plugins/best-essential) — Les plugins fondamentaux
-- [Installer et gérer ses plugins](/plugins/setup) — Guide d'installation et de configuration
+- [Extensions sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez la qualité de votre code
+- [Top extensions essentielles 2026](/plugins/best-essential) — Les ressources fondamentales
+- [Installer et gérer ses extensions](/plugins/setup) — Guide d'installation et de configuration

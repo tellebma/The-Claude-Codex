@@ -1,189 +1,188 @@
 ---
-title: "Top plugins essentiels 2026"
-description: "Les plugins Claude Code incontournables en 2026 : Everything Claude Code, Context7, Prompt Improver, Repomix et Ralph Loop. Installation, cas d'usage et comparatif."
+title: "Top extensions essentielles 2026"
+description: "Les ressources communautaires Claude Code incontournables : Everything Claude Code, Context7, Repomix et Prompt Improver. Installation et cas d'usage."
 section: "plugins"
 order: 3
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-03-11"
 ---
 
-## Les plugins que tout le monde devrait avoir
+## Les ressources que tout développeur Claude Code devrait connaître
 
-Ces plugins sont les **fondamentaux** de l'écosystème Claude Code. Que vous soyez développeur, designer ou product manager, ils enrichissent considérablement votre expérience quotidienne avec Claude Code.
+Ces ressources communautaires sont les **fondamentaux** de l'écosystème Claude Code. Elles enrichissent considérablement votre expérience quotidienne — agents spécialisés, documentation à jour, analyse de codebase et amélioration de prompts.
 
-<Callout type="tip" title="Installation rapide">
-Installez tous les plugins de cette page en une seule commande :
-`/plugin install everything-claude-code context7 prompt-improver repomix ralph-loop`
+<Callout type="info" title="Extensions communautaires, pas des plugins officiels">
+Les ressources présentées sur cette page sont des **projets communautaires**, non officiellement publiés par Anthropic. Elles s'installent manuellement (copie de fichiers, npm, ou `/install-github`). Il n'existe pas de commande `/plugin install` dans Claude Code.
 </Callout>
 
 ---
 
-## Everything Claude Code — Le couteau suisse
+## Everything Claude Code — La collection complète
 
-**57 000+ installations** | Catégorie : Agents & Skills | Auteur : Anthropic Community
+**Projet communautaire** | Catégorie : Agents, Rules & Skills | Auteur : [punkpeye](https://github.com/punkpeye)
 
-Everything Claude Code est le plugin le plus populaire de l'écosystème. Il regroupe une **collection d'agents spécialisés et de skills** prêts à l'emploi qui couvrent les cas d'usage les plus courants du développement.
+[Everything Claude Code](https://github.com/punkpeye/everything-claude-code) est l'une des collections communautaires les plus connues de l'écosystème. Elle regroupe une **collection d'agents spécialisés, de règles et de skills** prêts à l'emploi qui couvrent les cas d'usage les plus courants du développement.
+
+<Callout type="info" title="Projet communautaire open source">
+Everything Claude Code est hébergé sur GitHub à l'adresse [github.com/punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code). C'est un projet de la communauté, non affilié à Anthropic.
+</Callout>
 
 ### Ce qu'il apporte
 
 - **Agents spécialisés** : `senior-dev`, `architect`, `reviewer`, `debugger`, `optimizer` — chacun avec une expertise et un style de réponse adaptés
-- **Skills de workflow** : review de PR, refactoring guidé, génération de tests, documentation automatique
-- **Templates de prompting** : prompts optimisés pour les tâches courantes (debug, feature, migration)
-- **Configuration intelligente** : s'adapte automatiquement au langage et au framework détectés dans votre projet
+- **Rules de workflow** : conventions de code, bonnes pratiques, guidelines de revue de PR
+- **Skills** : commandes slash pour les tâches courantes (TDD, refactoring, documentation)
+- **Templates CLAUDE.md** : fichiers de configuration optimisés pour différents stacks
 
 ### Installation
 
 ```bash
-/plugin install everything-claude-code
+# Via /install-github (recommandé)
+/install-github punkpeye/everything-claude-code
+
+# Ou manuellement
+git clone https://github.com/punkpeye/everything-claude-code /tmp/ecc
+mkdir -p .claude/agents .claude/rules .claude/commands
+cp -r /tmp/ecc/agents/ .claude/
+cp -r /tmp/ecc/rules/ .claude/
+cp -r /tmp/ecc/commands/ .claude/
 ```
 
 ### Cas d'usage
 
-- **Revue de code complète** : *"Utilise l'agent reviewer pour analyser ma dernière PR et suggérer des améliorations"*
-- **Architecture d'un nouveau module** : *"Active l'agent architect pour m'aider à concevoir le système de notification"*
-- **Debugging avancé** : *"L'agent debugger m'aide à trouver pourquoi les tests E2E échouent sur CI mais passent en local"*
-- **Optimisation** : *"L'agent optimizer analyse les performances de mon API et propose des améliorations concrètes"*
+- **Revue de code complète** : *"En tant qu'agent reviewer, analyse ma dernière PR et suggère des améliorations"*
+- **Architecture d'un nouveau module** : *"En tant qu'architect, aide-moi à concevoir le système de notification"*
+- **Debugging avancé** : *"En tant que debugger, aide-moi à comprendre pourquoi les tests E2E échouent sur CI"*
+- **Optimisation** : *"En tant qu'optimizer, analyse les performances de mon API et propose des améliorations"*
 
-<Callout type="info" title="Agents à la demande">
-Vous n'avez pas besoin d'activer manuellement chaque agent. Claude Code sélectionne automatiquement l'agent le plus pertinent en fonction de votre demande. Vous pouvez aussi forcer un agent spécifique : *"En tant qu'architect, conçois le schéma de base de données pour..."*
+<Callout type="tip" title="Adapter les agents à votre projet">
+Les agents d'Everything Claude Code sont des fichiers Markdown — vous pouvez les modifier librement pour les adapter aux conventions de votre équipe. Forkez le repo et personnalisez selon vos besoins.
 </Callout>
 
 ---
 
 ## Context7 — La documentation toujours à jour
 
-**71 000+ installations** | Catégorie : Documentation | Auteur : Context7 Team
+**MCP Server** | Catégorie : Documentation | Auteur : [Upstash](https://upstash.com/)
 
-Context7 résout un problème majeur : les **connaissances obsolètes**. Claude Code a une date de coupure pour ses connaissances. Context7 lui permet d'accéder à la **documentation la plus récente** de n'importe quelle bibliothèque ou framework, en temps réel.
+Context7 résout un problème majeur : les **connaissances obsolètes**. Claude Code a une date de coupure pour ses connaissances. Context7 est un **MCP server** (pas un plugin) qui lui permet d'accéder à la **documentation la plus récente** de n'importe quelle bibliothèque ou framework, en temps réel.
 
-### Ce qu'il apporte
-
-- **Résolution automatique** : détecte les bibliothèques utilisées dans votre projet et récupère leur documentation actuelle
-- **Recherche contextuelle** : interroge la documentation en fonction de votre question, pas juste par mot-clé
-- **Cache intelligent** : stocke les résultats localement pour des réponses instantanées
-- **Support universel** : fonctionne avec npm, PyPI, crates.io, Go modules, et plus
+<Callout type="info" title="Context7 est un MCP, pas un plugin">
+Context7 s'installe comme un **serveur MCP** dans votre `settings.json`, pas comme un fichier Markdown. Son package npm est `@upstash/context7-mcp`. Il est développé par Upstash et est open source sur [github.com/upstash/context7](https://github.com/upstash/context7).
+</Callout>
 
 ### Installation
 
 ```bash
-/plugin install context7
+# Via la commande Claude
+claude mcp add context7 -- npx -y @upstash/context7-mcp
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
 ```
 
 ### Cas d'usage
 
-- **API inconnue** : *"Comment utiliser la nouvelle API `useOptimistic` de React 19 ? Montre-moi la doc officielle et un exemple"*
+- **API inconnue** : *"Utilise Context7 pour trouver comment utiliser useOptimistic de React 19"*
 - **Migration de version** : *"Quels breaking changes dans Next.js 15 par rapport à Next.js 14 ?"*
-- **Vérification de syntaxe** : *"Vérifie dans la doc Tailwind v4 si la classe `text-balance` existe et comment l'utiliser"*
-- **Recherche d'alternatives** : *"Quelle est la différence entre `zod` et `valibot` selon leurs docs officielles ?"*
-
-<Callout type="warning" title="Aussi disponible en MCP">
-Context7 existe aussi en tant que MCP Server. Le plugin offre une intégration plus transparente (résolution automatique des dépendances du projet), tandis que le MCP donne un contrôle plus granulaire. Vous pouvez utiliser l'un ou l'autre, mais pas les deux simultanément.
-</Callout>
-
----
-
-## Prompt Improver — Des prompts optimisés
-
-**23 000+ installations** | Catégorie : Prompting | Auteur : PromptEng Labs
-
-Prompt Improver analyse vos prompts et les enrichit automatiquement pour obtenir de **meilleurs résultats**. Il ajoute du contexte, de la structure et des contraintes que vous auriez oubliés.
-
-### Ce qu'il apporte
-
-- **Enrichissement automatique** : reformule vos prompts vagues en instructions précises et structurées
-- **Ajout de contraintes** : ajoute les bonnes pratiques manquantes (gestion d'erreurs, types, tests)
-- **Adaptation au contexte** : tient compte du langage, du framework et des conventions de votre projet
-- **Mode apprentissage** : explique pourquoi et comment le prompt a été amélioré
-
-### Installation
-
-```bash
-/plugin install prompt-improver
-```
-
-### Cas d'usage
-
-- **Prompt vague** : Vous écrivez *"Fais un formulaire de contact"*. Prompt Improver enrichit en : *"Crée un formulaire de contact React avec validation Zod, gestion des erreurs, états de chargement, feedback utilisateur, composants accessibles (WCAG AA), et tests unitaires"*
-- **Feature complexe** : *"Ajoute l'authentification"* devient un plan détaillé avec choix de stratégie, gestion des tokens, middleware, routes protégées et tests
-- **Refactoring** : *"Nettoie ce fichier"* devient une liste structurée de refactorings avec priorités et justifications
-
-<Callout type="tip" title="Mode transparent">
-Prompt Improver fonctionne en arrière-plan par défaut. Il enrichit silencieusement vos prompts avant qu'ils soient traités. Vous pouvez voir les enrichissements avec `/plugin config prompt-improver showEnhancements true`.
-</Callout>
+- **Vérification de syntaxe** : *"Vérifie dans la doc Tailwind si la classe text-balance est disponible en v3"*
 
 ---
 
 ## Repomix — Analyse complète de codebase
 
-**35 000+ installations** | Catégorie : Analyse | Auteur : Repomix Team
+**Outil CLI npm** | Catégorie : Analyse | Auteur : [yamadashy](https://github.com/yamadashy)
 
-Repomix permet à Claude Code d'ingérer et d'analyser une **codebase entière** de manière structurée. Au lieu de lire fichier par fichier, Claude Code obtient une vue d'ensemble complète et organisée de votre projet.
+[Repomix](https://github.com/yamadashy/repomix) est un **outil CLI** (pas un plugin) qui condense une codebase entière en un seul fichier structuré, optimisé pour être passé à Claude Code comme contexte. Au lieu de lire fichier par fichier, Claude Code obtient une vue d'ensemble complète et organisée de votre projet.
+
+<Callout type="info" title="Repomix sur npm">
+Repomix est disponible sur [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Son repo source est sur [github.com/yamadashy/repomix](https://github.com/yamadashy/repomix).
+</Callout>
 
 ### Ce qu'il apporte
 
-- **Vue d'ensemble structurée** : génère un résumé complet de votre codebase (architecture, dépendances, patterns)
-- **Analyse inter-fichiers** : comprend les relations entre les modules, les imports et les dépendances
-- **Détection de patterns** : identifie les design patterns utilisés, les conventions de nommage, les anti-patterns
-- **Contexte enrichi** : fournit à Claude Code un contexte complet pour des réponses plus pertinentes
+- **Condensation intelligente** : génère un fichier texte unique contenant tout votre code, dans un format optimisé pour les LLMs
+- **Filtrage configurable** : exclut `node_modules`, fichiers binaires, et tout ce que vous configurez
+- **Statistiques** : compte les tokens pour estimer l'utilisation du contexte
+- **Multiple formats** : sortie en texte brut, XML ou Markdown
 
-### Installation
+### Installation et utilisation
 
 ```bash
-/plugin install repomix
+# Utilisation sans installation (npx)
+npx repomix
+
+# Ou installation globale
+npm install -g repomix
+
+# Analyser le répertoire courant
+repomix
+
+# Analyser en excluant certains fichiers
+repomix --ignore "node_modules/**,*.lock,dist/**"
+
+# Sortie dans un fichier spécifique
+repomix --output context.txt
+
+# Passer le résultat à Claude Code :
+# "Voici ma codebase [colle le contenu de context.txt]. Explique l'architecture."
 ```
 
 ### Cas d'usage
 
 - **Onboarding** : *"Analyse cette codebase et donne-moi un résumé de l'architecture, des technologies et des conventions"*
-- **Impact analysis** : *"Si je modifie ce module, quels autres fichiers seront impactés ?"*
+- **Impact analysis** : *"Si je modifie ce module, quels autres fichiers seront probablement impactés ?"*
 - **Détection de dette technique** : *"Identifie les zones de dette technique dans ce projet et priorise les refactorings"*
-- **Documentation automatique** : *"Génère une documentation d'architecture basée sur l'analyse du code"*
+- **Documentation** : *"Génère une documentation d'architecture basée sur l'analyse du code"*
 
 ---
 
-## Ralph Loop — Boucles itératives
+## Prompt Improver — Des prompts optimisés
 
-**8 000+ installations** | Catégorie : Workflows | Auteur : Ralph AI
+**Projet Anthropic** | Catégorie : Prompting | Auteur : [Anthropic](https://github.com/anthropics)
 
-Ralph Loop introduit des **boucles d'amélioration itérative** dans Claude Code. Au lieu d'obtenir un résultat en une seule passe, Ralph Loop fait itérer Claude Code sur son propre output pour l'améliorer progressivement.
+[Prompt Improver](https://github.com/anthropics/prompt-improver) est un outil développé par Anthropic qui aide à rédiger de meilleurs prompts. Ce n'est pas un plugin au sens d'une extension installée dans Claude Code — c'est un outil web ou CLI qui analyse vos prompts et propose des améliorations.
+
+<Callout type="warning" title="Vérifiez l'existence du dépôt">
+Prompt Improver est un outil d'Anthropic. Le dépôt GitHub exact peut avoir changé de nom ou de structure. Vérifiez sur [github.com/anthropics](https://github.com/anthropics) avant de cloner. Anthropic propose également un outil d'amélioration de prompts intégré à la [Console Anthropic](https://console.anthropic.com).
+</Callout>
 
 ### Ce qu'il apporte
 
-- **Itérations automatiques** : Claude Code génère, évalue, améliore et re-évalue son travail en boucle
-- **Critères de qualité** : définissez des critères de sortie (couverture de tests, score de qualité, absence de warnings)
-- **Historique des itérations** : chaque itération est enregistrée pour que vous puissiez voir l'évolution
-- **Convergence intelligente** : la boucle s'arrête automatiquement quand les améliorations deviennent marginales
+- **Analyse de structure** : identifie si votre prompt manque de contexte, de contraintes ou de format cible
+- **Suggestions concrètes** : reformule les parties vagues en instructions précises et structurées
+- **Bonnes pratiques** : applique les techniques de prompting recommandées par Anthropic (XML tags, chain-of-thought, exemples)
 
-### Installation
+### Cas d'usage manuel
 
-```bash
-/plugin install ralph-loop
-```
+Même sans outil automatisé, vous pouvez améliorer vos prompts dans Claude Code en appliquant ces principes directement :
 
-### Cas d'usage
-
-- **Code de qualité** : *"Implémente cette feature avec Ralph Loop — itère jusqu'à 0 warning TypeScript et 90% de couverture de tests"*
-- **Optimisation progressive** : *"Optimise ce composant React en boucle jusqu'à ce qu'il score 95+ sur Lighthouse"*
-- **Écriture technique** : *"Rédige cette documentation technique et itère jusqu'à ce qu'elle soit claire, complète et sans ambiguïté"*
-
-<Callout type="warning" title="Coût en tokens">
-Les boucles itératives consomment plus de tokens qu'une exécution simple. Définissez toujours un nombre maximum d'itérations pour éviter les coûts excessifs. Par défaut, Ralph Loop est limité à 5 itérations.
-</Callout>
+- **Prompt vague** : *"Fais un formulaire de contact"*
+- **Prompt amélioré** : *"Crée un formulaire de contact React avec les champs nom, email et message. Validation Zod côté client. Gestion d'erreurs explicite. État de chargement pendant la soumission. Message de succès après envoi. Composants accessibles (WCAG AA) avec attributs aria appropriés. Tests unitaires avec React Testing Library."*
 
 ---
 
 ## Récapitulatif
 
-| Plugin | Installations | Catégorie | Meilleur pour |
-|--------|--------------|-----------|---------------|
-| **Everything Claude Code** | 57K+ | Agents & Skills | Workflow complet de développement |
-| **Context7** | 71K+ | Documentation | Documentation à jour, migration |
-| **Prompt Improver** | 23K+ | Prompting | Améliorer la qualité des résultats |
-| **Repomix** | 35K+ | Analyse | Comprendre et analyser une codebase |
-| **Ralph Loop** | 8K+ | Workflows | Amélioration itérative du code |
+| Ressource | Type | Source | Meilleur pour |
+|--------|------|---------|---------------|
+| **Everything Claude Code** | Agents, Rules, Skills | [GitHub](https://github.com/punkpeye/everything-claude-code) | Workflow complet de développement |
+| **Context7** | MCP Server | [GitHub](https://github.com/upstash/context7) | Documentation à jour, migration |
+| **Repomix** | CLI npm | [GitHub](https://github.com/yamadashy/repomix) | Analyser et comprendre une codebase |
+| **Prompt Improver** | Outil web/CLI | [GitHub](https://github.com/anthropics/prompt-improver) | Améliorer la qualité des prompts |
 
 ## Prochaines étapes
 
-- [Plugins design & frontend](/plugins/best-design) — Les meilleurs plugins pour le design et l'UI
-- [Plugins sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez la qualité de votre code
-- [Installer et gérer ses plugins](/plugins/setup) — Guide d'installation et de configuration
+- [Extensions design & frontend](/plugins/best-design) — Les meilleures ressources pour le design et l'UI
+- [Extensions sécurité & qualité](/plugins/best-security) — Sécurisez et améliorez la qualité de votre code
+- [Installer et gérer ses extensions](/plugins/setup) — Guide d'installation et de configuration

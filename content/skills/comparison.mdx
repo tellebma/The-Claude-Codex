@@ -9,29 +9,33 @@ dateModified: "2026-03-10"
 
 ## Trois mécanismes, trois missions
 
-Claude Code propose trois façons d'étendre ses capacités : les **Skills**, les **MCP** (Model Context Protocol) et les **Plugins**. Chacun répond à un besoin différent, et c'est en les **combinant** qu'on tire le meilleur de l'écosystème.
+Claude Code propose trois façons d'étendre ses capacités : les **Skills**, les **MCP** (Model Context Protocol) et les **Extensions communautaires** (souvent appelées « plugins » par abus de langage). Chacun répond à un besoin différent, et c'est en les **combinant** qu'on tire le meilleur de l'écosystème.
+
+<Callout type="warning" title="Les « plugins » n'existent pas comme décrit ailleurs">
+Claude Code ne dispose pas de commandes `/plugin install` ou d'un marketplace de plugins officiel. Ce que la communauté appelle « plugins » sont en réalité des **collections de fichiers** (agents, rules, skills) qui s'installent manuellement depuis GitHub ou via `/install-github`. Ce guide utilise le terme « extension communautaire » pour plus de précision.
+</Callout>
 
 <Callout type="info" title="L'analogie complète">
 Imaginez Claude Code comme un artisan dans son atelier.
 - Les **Skills** sont ses **recettes et procédures** — elles lui disent comment réaliser une tâche précise, étape par étape.
 - Les **MCP** sont ses **outils connectés** — une perceuse branchée au réseau électrique, un poste à souder relié au gaz. Ils donnent accès à des ressources externes.
-- Les **Plugins** sont des **extensions de son atelier** — un nouveau plan de travail, un bras robotisé, un système d'éclairage intelligent. Ils enrichissent les capacités internes de l'atelier lui-même.
+- Les **Extensions communautaires** sont des **configurations partagées** — des sets d'agents, règles et skills regroupés par la communauté pour un usage précis.
 </Callout>
 
 ## Le tableau comparatif
 
-| Critère | **Skill** | **MCP** | **Plugin** |
+| Critère | **Skill** | **MCP** | **Extension communautaire** |
 |---|---|---|---|
-| **Définition** | Fichier Markdown d'instructions | Serveur externe exposant des outils via JSON-RPC | Extension modulaire intégrée |
-| **Analogie** | Recette de cuisine | Prise USB vers un service | Application installée |
-| **Format** | Fichier `.md` | Serveur (Node.js, Python, etc.) | Package avec manifeste `plugin.json` |
-| **Installation** | Copier dans `.claude/commands/` | `claude mcp add` ou `settings.json` | `/plugin install` ou marketplace |
-| **Portée** | Projet ou utilisateur | Projet ou global | Global, activable par projet |
-| **Invocation** | Slash command (`/project:...`) | Automatique (Claude choisit l'outil) | Automatique ou via commande |
-| **Intelligence** | Instructions suivies par Claude | Outils appelés par Claude | Capacités intégrées dans Claude |
-| **Complexité** | Faible (juste du Markdown) | Moyenne (serveur à maintenir) | Moyenne (structure de package) |
-| **Partage** | Via git (`.claude/commands/`) | Via configuration partagée | Via marketplace ou git |
-| **Exemples** | Review PR, TDD Guide, Deploy | GitHub, Slack, PostgreSQL | Design system, agents spécialisés |
+| **Définition** | Fichier Markdown d'instructions | Serveur externe exposant des outils via JSON-RPC | Collection d'agents, rules et skills partagée |
+| **Analogie** | Recette de cuisine | Prise USB vers un service | Pack de configuration partagé |
+| **Format** | Fichier `.md` | Serveur (Node.js, Python, etc.) | Dossier de fichiers `.md` / `.mdc` |
+| **Installation** | Copier dans `.claude/commands/` | `claude mcp add` ou `settings.json` | `/install-github` ou copie manuelle |
+| **Portée** | Projet ou utilisateur | Projet ou global | Projet ou global |
+| **Invocation** | Slash command (`/project:...`) | Automatique (Claude choisit l'outil) | Automatique (agents actifs) ou slash command |
+| **Intelligence** | Instructions suivies par Claude | Outils appelés par Claude | Instructions interprétées par Claude |
+| **Complexité** | Faible (juste du Markdown) | Moyenne (serveur à maintenir) | Faible (fichiers texte) |
+| **Partage** | Via git (`.claude/commands/`) | Via configuration partagée | Via GitHub |
+| **Exemples** | Review PR, TDD Guide, Deploy | GitHub, Slack, PostgreSQL | everything-claude-code, collections de rules |
 
 ## Quand utiliser quoi ?
 
@@ -72,22 +76,25 @@ claude mcp add context7     # Accéder à la documentation à jour
 Consultez notre [guide complet sur les MCP](/mcp/what-are-mcps) pour comprendre leur fonctionnement en détail, et le [top MCP recommandés](/mcp/best-productivity) pour découvrir les plus utiles.
 </Card>
 
-### Utilisez un Plugin quand...
+### Utilisez une extension communautaire quand...
 
-- Vous voulez **enrichir les capacités internes** de Claude Code
-- Vous avez besoin d'un **package complet** (agents + skills + templates)
-- Vous voulez bénéficier d'un **écosystème maintenu** par la communauté
-- La fonctionnalité est **complexe** et nécessite plusieurs fichiers coordonnés
+- Vous voulez bénéficier d'un **pack complet** (agents + skills + templates) maintenu par la communauté
+- Vous ne voulez pas créer vos fichiers de zéro et préférez partir d'une **base éprouvée**
+- Vous voulez **partager une configuration** avec votre équipe ou la communauté
+- La configuration est **complexe** et nécessite plusieurs fichiers coordonnés
 
 ```bash
-# Exemples parfaits pour un Plugin
-/plugin install everything-claude-code   # Pack complet d'agents et skills
-/plugin install frontend-design          # Design system intégré
-/plugin install security-scanner         # Analyseur de sécurité avancé
+# Installer depuis GitHub via /install-github
+/install-github punkpeye/everything-claude-code   # Pack complet d'agents et skills
+
+# Ou manuellement
+git clone https://github.com/punkpeye/everything-claude-code
+cp -r everything-claude-code/agents/ .claude/agents/
+cp -r everything-claude-code/rules/ .claude/rules/
 ```
 
-<Card title="Pour approfondir les Plugins" variant="default">
-Consultez notre [guide complet sur les Plugins](/plugins/what-are-plugins) pour comprendre leur architecture, et le [top plugins essentiels](/plugins/best-essential) pour démarrer.
+<Card title="Pour approfondir les extensions communautaires" variant="default">
+Consultez notre [guide complet sur les extensions communautaires](/plugins/what-are-plugins) pour comprendre comment elles fonctionnent, et le [top extensions essentielles](/plugins/best-essential) pour démarrer.
 </Card>
 
 ## Les combinaisons gagnantes
@@ -101,46 +108,45 @@ La vraie puissance de Claude Code se révèle quand vous **combinez** ces trois 
 claude mcp add github          # Accès aux issues et PRs
 claude mcp add context7        # Documentation à jour des librairies
 
-# Plugin pour les capacités internes
-/plugin install everything-claude-code
+# Extension communautaire pour les agents
+/install-github punkpeye/everything-claude-code
 
 # Skills pour les workflows d'équipe
 /project:create-api            # Créer un endpoint selon vos conventions
 /project:review-pr             # Review standardisée
 ```
 
-**Résultat** : Claude accède aux issues GitHub (MCP), utilise les agents spécialisés du plugin, et suit vos conventions d'équipe (Skills).
+**Résultat** : Claude accède aux issues GitHub (MCP), utilise les agents spécialisés de la collection communautaire, et suit vos conventions d'équipe (Skills).
 
 ### Combo 2 : Workflow de sécurité
 
 ```bash
-# MCP pour scanner les dépendances
-claude mcp add npm-audit
+# Agent de sécurité depuis Everything Claude Code
+/install-github punkpeye/everything-claude-code
 
 # Skill pour l'audit complet
 /project:security-audit
 
-# Plugin pour l'analyse avancée
-/plugin install security-scanner
+# MCP GitHub pour créer les issues de suivi
+claude mcp add github
 ```
 
-**Résultat** : Le MCP remonte les CVE des dépendances, le Skill structure l'audit selon votre checklist, et le plugin enrichit l'analyse avec des patterns de détection avancés.
+**Résultat** : L'agent security-reviewer analyse le code, le Skill structure l'audit selon votre checklist, et le MCP GitHub crée automatiquement les issues pour les vulnérabilités trouvées.
 
 ### Combo 3 : Onboarding développeur
 
 ```bash
 # MCP pour accéder à la documentation
-claude mcp add confluence
 claude mcp add context7
 
 # Skill pour guider le nouvel arrivant
 /project:onboarding
 
-# Plugin pour la productivité
-/plugin install prompt-improver
+# Extension communautaire pour les agents spécialisés
+/install-github punkpeye/everything-claude-code
 ```
 
-**Résultat** : Le MCP donne accès à la documentation interne (Confluence), le Skill guide le nouveau développeur à travers les étapes d'onboarding, et le plugin l'aide à formuler ses demandes efficacement.
+**Résultat** : Le MCP donne accès à la documentation à jour (Context7), le Skill guide le nouveau développeur à travers les étapes d'onboarding, et les agents spécialisés l'assistent sur les tâches spécifiques.
 
 <Callout type="tip" title="Commencez simple, enrichissez progressivement">
 Pas besoin de tout installer d'un coup. Commencez par un ou deux Skills pour vos workflows quotidiens, ajoutez les MCP pour les services que vous utilisez, puis explorez les plugins quand vous serez à l'aise. L'écosystème est conçu pour une adoption progressive.
@@ -163,8 +169,8 @@ Vous ne savez pas quel mécanisme utiliser ? Suivez ce guide :
 **Non** → Passez à la question suivante.
 </Step>
 
-<Step title="Avez-vous besoin d'un package complet de fonctionnalités ?" stepNumber={3} isLast>
-**Oui** → Utilisez un **Plugin**. Les plugins regroupent agents, skills et templates dans un package cohérent, maintenu par un auteur ou la communauté.
+<Step title="Avez-vous besoin d'un pack complet d'agents et de règles ?" stepNumber={3} isLast>
+**Oui** → Utilisez une **extension communautaire** (comme [everything-claude-code](https://github.com/punkpeye/everything-claude-code)). Ces collections regroupent agents, skills et templates dans un dossier cohérent, maintenu par la communauté. Installez-les avec `/install-github` ou manuellement.
 
 **Non** → Un Skill simple suffit probablement. Commencez par là et évoluez si besoin.
 </Step>
@@ -174,15 +180,15 @@ Vous ne savez pas quel mécanisme utiliser ? Suivez ce guide :
 
 ### Puis-je utiliser les trois en même temps ?
 
-Absolument. Les trois mécanismes sont conçus pour être **complémentaires**. Un Plugin peut inclure des Skills, et ces Skills peuvent utiliser des outils exposés par des MCP. C'est la combinaison des trois qui donne les meilleurs résultats.
+Absolument. Les trois mécanismes sont conçus pour être **complémentaires**. Une extension communautaire peut inclure des Skills, et ces Skills peuvent être utilisés en parallèle d'outils MCP. C'est la combinaison des trois qui donne les meilleurs résultats.
 
 ### Un Skill peut-il appeler un MCP ?
 
 Pas directement. Un Skill donne des **instructions** à Claude, et Claude peut ensuite décider d'utiliser un outil MCP si c'est pertinent. Le Skill ne "connaît" pas les MCP, mais Claude fait le lien intelligemment.
 
-### Un Plugin remplace-t-il les Skills et les MCP ?
+### Une extension communautaire remplace-t-elle les Skills et les MCP ?
 
-Non. Un Plugin peut **inclure** des Skills (fichiers Markdown dans son dossier `skills/`), mais il ne remplace pas les MCP. Les MCP restent nécessaires pour la connexion aux services externes. Pensez au Plugin comme un **superset** des Skills avec des capacités supplémentaires.
+Non. Une extension communautaire **inclut** souvent des Skills (fichiers Markdown dans un dossier `commands/`), mais elle ne remplace pas les MCP. Les MCP restent nécessaires pour la connexion aux services externes. Pensez à une extension communautaire comme un **ensemble de fichiers de configuration** qui enrichit Claude Code sans nécessiter de serveur externe.
 
 ### Comment choisir entre un Skill de projet et un Skill personnel ?
 
@@ -201,13 +207,13 @@ Oui, un MCP est un serveur qui implémente le protocole JSON-RPC. Vous pouvez en
 
 - **Skills** : impact minimal (juste du texte injecté dans le contexte)
 - **MCP** : dépend du service externe (latence réseau, temps de réponse de l'API)
-- **Plugins** : impact variable selon le plugin (certains ajoutent des agents qui consomment du contexte)
+- **Extensions communautaires** : impact variable (les agents et rules ajoutés consomment du contexte à chaque session)
 
 ## Pour aller plus loin
 
 - [Qu'est-ce qu'un Skill ?](/skills/what-are-skills) — Comprendre le concept en profondeur
 - [Créer un Skill custom](/skills/create-custom) — Guide pas à pas pour écrire vos propres Skills
 - [Comprendre les MCP](/mcp/what-are-mcps) — Tout sur le Model Context Protocol
-- [Comprendre les Plugins](/plugins/what-are-plugins) — Architecture et marketplace des plugins
+- [Extensions communautaires](/plugins/what-are-plugins) — Comment fonctionnent et s'installent les collections communautaires
 - [Guide de prompting](/prompting) — Optimiser vos interactions avec Claude Code
 - [Configurer Claude Code](/configurator) — Personnaliser votre environnement

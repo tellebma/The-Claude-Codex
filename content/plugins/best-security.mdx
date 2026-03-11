@@ -1,239 +1,278 @@
 ---
-title: "Plugins sécurité & qualité"
-description: "Les meilleurs plugins Claude Code pour la sécurité et la qualité du code : Security Guidance, Code Review, AgentShield et TDD Guide. Installation et cas d'usage."
+title: "Extensions sécurité & qualité Claude Code"
+description: "Ressources communautaires Claude Code pour la sécurité : agents Security Reviewer, Code Reviewer, skill TDD Guide et checklist d'audit de configuration."
 section: "plugins"
 order: 5
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-03-11"
 ---
 
 ## Sécurisez et fiabilisez votre code
 
-La sécurité et la qualité du code ne sont pas des options — ce sont des fondamentaux. Ces plugins intègrent les **bonnes pratiques de sécurité et de qualité** directement dans votre workflow Claude Code, de manière proactive et automatisée.
+La sécurité et la qualité du code ne sont pas des options — ce sont des fondamentaux. Les ressources présentées ici sont des **agents et skills communautaires** (fichiers Markdown à copier dans `.claude/`) qui intègrent les bonnes pratiques de sécurité et de qualité directement dans votre workflow Claude Code.
 
-<Callout type="warning" title="Responsabilité partagée">
-Ces plugins sont des **outils d'aide**, pas des substituts à une revue de sécurité humaine. Ils détectent les problèmes courants et appliquent les bonnes pratiques, mais une expertise humaine reste nécessaire pour les aspects critiques de sécurité.
+<Callout type="warning" title="Outils d'aide, pas de substituts à une revue humaine">
+Ces ressources communautaires détectent les problèmes courants et appliquent les bonnes pratiques, mais elles ne remplacent pas une revue de sécurité humaine. Pour les applications critiques, un audit professionnel reste indispensable.
 </Callout>
 
 ---
 
-## Security Guidance — L'expert sécurité
+## Agent Security Reviewer — L'expert sécurité intégré
 
-**19 000+ installations** | Catégorie : Sécurité | Auteur : SecureCode Labs
+**Ressource communautaire** | Catégorie : Sécurité | Format : fichier Agent Markdown
 
-Security Guidance transforme Claude Code en un **auditeur de sécurité proactif**. Au lieu d'attendre qu'un problème soit découvert en production, ce plugin analyse votre code en continu et alerte sur les vulnérabilités avant qu'elles ne soient commitées.
-
-### Ce qu'il apporte
-
-- **Analyse en temps réel** : chaque modification de code est analysée pour détecter les vulnérabilités OWASP Top 10
-- **Suggestions proactives** : propose des corrections sécurisées au moment où vous écrivez le code
-- **Audit de dépendances** : vérifie les vulnérabilités connues (CVE) dans vos dépendances
-- **Conformité** : vérifie la conformité avec les standards de sécurité (OWASP, SANS, CIS)
-- **Checklists automatiques** : génère des checklists de sécurité adaptées à votre stack
+L'agent Security Reviewer configure Claude Code comme un **auditeur de sécurité proactif**. Il s'agit d'un fichier Markdown à placer dans `.claude/agents/` qui donne à Claude un persona d'expert sécurité.
 
 ### Installation
 
 ```bash
-/plugin install security-guidance
-```
+mkdir -p .claude/agents
 
-### Cas d'usage
-
-- **Revue de sécurité** : *"Fais un audit de sécurité complet de mon API d'authentification"*
-- **Prévention XSS** : *"Vérifie que tous les inputs utilisateur sont correctement sanitisés dans mon application React"*
-- **Gestion des secrets** : *"Scanne mon projet pour détecter les secrets hardcodés et propose une migration vers des variables d'environnement"*
-- **Sécurité des API** : *"Analyse mes endpoints REST et vérifie l'authentification, l'autorisation, la validation des inputs et le rate limiting"*
-
-<Callout type="info" title="Intégration au workflow">
-Security Guidance peut être configuré pour s'exécuter automatiquement avant chaque commit. Ajoutez `"preCommitScan": true` dans la configuration du plugin pour activer cette fonctionnalité.
-</Callout>
-
-### Configuration recommandée
-
-```json
-{
-  "plugins": {
-    "security-guidance": {
-      "enabled": true,
-      "config": {
-        "severity": "medium",
-        "preCommitScan": true,
-        "autoFix": false,
-        "standards": ["owasp-top-10", "sans-top-25"],
-        "ignorePaths": ["test/", "*.test.ts"]
-      }
-    }
-  }
-}
-```
-
+cat > .claude/agents/security-reviewer.md << 'EOF'
+---
+name: security-reviewer
+description: Expert sécurité qui analyse le code selon les standards OWASP Top 10
 ---
 
-## Code Review — La revue automatisée
+Tu es un expert en cybersécurité spécialisé dans la sécurité des applications web.
+Pour chaque analyse, tu cherches systématiquement :
 
-**45 000+ installations** | Catégorie : Qualité | Auteur : ReviewBot Team
+**OWASP Top 10** :
+- A01 : Broken Access Control (vérifications d'autorisation manquantes)
+- A02 : Cryptographic Failures (secrets hardcodés, chiffrement faible)
+- A03 : Injection (SQL, NoSQL, commande shell)
+- A07 : XSS (Cross-Site Scripting, injection HTML)
+- A08 : Software/Data Integrity (désérialisation non sécurisée)
 
-Code Review automatise le processus de **revue de code** avec une analyse approfondie de la qualité, de la lisibilité et des bonnes pratiques. C'est comme avoir un reviewer senior disponible 24h/24.
+**Pour chaque vulnérabilité trouvée** :
+1. Sévérité : CRITIQUE / HAUTE / MOYENNE / FAIBLE
+2. Localisation précise dans le code (fichier:ligne)
+3. Explication du risque concret
+4. Exemple de correction sécurisée avec code
 
-### Ce qu'il apporte
+Tu ne reportes que les vrais problèmes, pas de faux positifs.
+EOF
+```
 
-- **Analyse multi-dimensionnelle** : qualité, lisibilité, performance, sécurité, maintenabilité
-- **Suggestions concrètes** : chaque problème détecté est accompagné d'une suggestion de correction avec explication
-- **Scoring** : note globale de qualité avec détail par catégorie (A à F)
-- **Patterns et anti-patterns** : détecte les design patterns mal implémentés et les anti-patterns courants
-- **Conventions d'équipe** : s'adapte aux conventions de votre projet via la configuration
-
-### Installation
+### Utilisation
 
 ```bash
-/plugin install code-review
+# Analyser un fichier ou dossier
+"En tant qu'agent security-reviewer, audite src/auth/ et liste toutes les vulnérabilités"
+
+# Vérification avant commit
+"Security-reviewer : y a-t-il des secrets hardcodés ou des failles dans ces changements ?"
+
+# Audit d'un endpoint API
+"Analyse cet endpoint REST pour détecter les problèmes d'authentification, validation et rate limiting"
 ```
 
 ### Cas d'usage
 
-- **Review de PR** : *"Fais une review complète de tous les fichiers modifiés dans cette branche"*
-- **Qualité ciblée** : *"Analyse ce module et donne-moi un score de qualité avec les points à améliorer en priorité"*
-- **Standards d'équipe** : *"Vérifie que ce code respecte nos conventions : immutabilité, fonctions pures, gestion d'erreurs explicite"*
-- **Onboarding** : *"Analyse cette PR d'un nouveau développeur et prépare un feedback constructif avec des exemples"*
+- **Revue de code sécurisée** : *"Analyse mon module d'authentification selon OWASP"*
+- **Détection de secrets** : *"Scanne mon projet pour détecter les tokens et mots de passe en clair"*
+- **Audit d'API** : *"Analyse mes endpoints REST et vérifie l'authentification, la validation des inputs et le rate limiting"*
 
-<Callout type="tip" title="Review à plusieurs niveaux">
-Code Review propose trois niveaux de profondeur :
-- **Quick** : survol rapide, problèmes critiques uniquement (30 secondes)
-- **Standard** : analyse complète, suggestions détaillées (2-3 minutes)
-- **Deep** : analyse approfondie avec refactoring suggéré et comparaison avec les bonnes pratiques (5-10 minutes)
+<Callout type="tip" title="Intégrer au workflow de PR">
+Vous pouvez créer un skill `/security-review` qui invoque automatiquement l'agent sur le diff courant, avant chaque Pull Request.
 </Callout>
 
 ---
 
-## AgentShield — Scan de configuration
+## Agent Code Reviewer — La revue automatisée
 
-**12 000+ installations** | Catégorie : Sécurité | Auteur : ShieldAI Team
+**Ressource communautaire** | Catégorie : Qualité | Format : fichier Agent Markdown
 
-AgentShield est spécialisé dans l'**analyse des configurations** de Claude Code et de ses extensions. Il scanne vos fichiers de configuration (MCP, plugins, settings) pour détecter les problèmes de sécurité et les mauvaises pratiques.
-
-### Ce qu'il apporte
-
-- **Scan de configuration MCP** : vérifie que vos MCP ne demandent pas de permissions excessives
-- **Audit des plugins** : analyse les plugins installés pour détecter les risques potentiels
-- **Détection de secrets exposés** : scanne les fichiers de configuration pour les tokens, clés API et mots de passe en clair
-- **Recommandations de hardening** : propose des configurations plus sécurisées
-- **Rapport de conformité** : génère un rapport de sécurité complet de votre environnement Claude Code
+L'agent Code Reviewer simule une revue de code par un développeur senior. Il analyse le diff courant et produit un rapport structuré avec des suggestions concrètes.
 
 ### Installation
 
 ```bash
-/plugin install agentshield
+cat > .claude/agents/code-reviewer.md << 'EOF'
+---
+name: code-reviewer
+description: Développeur senior qui effectue des revues de code rigoureuses
+---
+
+Tu effectues des revues de code comme un développeur senior expérimenté.
+Pour chaque revue, tu analyses :
+
+**Qualité** :
+- Lisibilité et nommage (variables, fonctions, fichiers)
+- Fonctions trop longues (>50 lignes) ou fichiers trop grands (>800 lignes)
+- Imbrication excessive (>4 niveaux)
+- Code dupliqué et opportunités de refactorisation
+
+**Correctness** :
+- Bugs logiques et cas limites non gérés
+- Gestion d'erreurs manquante ou incomplète
+- Mutations d'objets non voulues
+
+**Performance** :
+- Boucles imbriquées évitables (complexité O(n²) ou plus)
+- Requêtes N+1 dans les appels de base de données
+- Re-renders React inutiles
+
+**Sécurité** :
+- Inputs non validés, injections possibles
+- Secrets ou données sensibles exposées
+
+Format de sortie : catégorise par CRITIQUE, HAUTE, MOYENNE, FAIBLE.
+Pour chaque problème : localisation + explication + suggestion de correction.
+EOF
 ```
 
-### Cas d'usage
-
-- **Audit complet** : *"Scanne toute ma configuration Claude Code et signale les problèmes de sécurité"*
-- **Vérification MCP** : *"Vérifie que mes MCP configurés utilisent le principe du moindre privilège"*
-- **Secrets exposés** : *"Y a-t-il des tokens ou des secrets en clair dans mes fichiers de configuration ?"*
-- **Hardening** : *"Comment sécuriser davantage ma configuration Claude Code ? Propose un plan de hardening"*
-
-<Callout type="warning" title="Exécution régulière">
-Lancez un scan AgentShield après chaque ajout de MCP ou de plugin, et au minimum une fois par mois. Les configurations évoluent et de nouvelles vulnérabilités sont découvertes régulièrement.
-</Callout>
-
-### Exemple de rapport
+### Utilisation
 
 ```bash
-# Lancer un scan complet
-> Utilise AgentShield pour scanner ma configuration
+# Reviewer le diff courant
+"En tant qu'agent code-reviewer, analyse tous les fichiers modifiés depuis main"
 
-# Rapport exemple :
-# ╔══════════════════════════════════════════╗
-# ║     AgentShield Security Report          ║
-# ╠══════════════════════════════════════════╣
-# ║ MCP Servers : 4 configurés               ║
-# ║ Plugins     : 7 installés                ║
-# ║ ──────────────────────────────────────── ║
-# ║ 🔴 CRITIQUE : Token GitHub dans .mcp.json║
-# ║ 🟡 MOYEN    : MCP Filesystem trop permissif║
-# ║ 🟢 INFO     : Plugin X non mis à jour    ║
-# ╚══════════════════════════════════════════╝
+# Review ciblée
+"Code-reviewer, concentre-toi sur src/api/auth.ts et liste les problèmes critiques"
 ```
+
+<Callout type="tip" title="Combinez les deux agents">
+Utilisez l'agent **Security Reviewer** pour les aspects sécurité et l'agent **Code Reviewer** pour la qualité. Cette combinaison couvre à la fois les vulnérabilités et la dette technique.
+</Callout>
 
 ---
 
-## TDD Guide — Tests first, toujours
+## Skill TDD Guide — Tests first, toujours
 
-**15 000+ installations** | Catégorie : Qualité | Auteur : TDD Community
+**Ressource communautaire** | Catégorie : Tests | Format : fichier Skill Markdown
 
-TDD Guide impose une discipline de **Test-Driven Development** dans Claude Code. Il force un workflow structuré : écrire le test d'abord, le voir échouer, implémenter le code, voir le test passer, refactorer.
+Le skill TDD Guide impose une discipline de **Test-Driven Development** dans Claude Code. Il s'installe comme un fichier Markdown dans `.claude/commands/` et s'invoque avec `/tdd-guide`.
 
-### Ce qu'il apporte
-
-- **Workflow TDD strict** : guide Claude Code à travers les étapes RED → GREEN → REFACTOR
-- **Génération de tests** : propose des tests pertinents avant l'implémentation
-- **Couverture de code** : surveille la couverture et alerte quand elle descend sous le seuil configuré
-- **Patterns de test** : connaît les meilleurs patterns pour chaque type de test (unit, integration, E2E)
-- **Multi-framework** : supporte Jest, Vitest, pytest, Go test, RSpec, etc.
-
-### Installation
+### Installation depuis Everything Claude Code
 
 ```bash
-/plugin install tdd-guide
+# Récupérer depuis le repo communautaire
+mkdir -p .claude/commands
+
+curl -o .claude/commands/tdd-guide.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
 ```
 
-### Configuration recommandée
+### Ou créer le vôtre
 
-```json
-{
-  "plugins": {
-    "tdd-guide": {
-      "enabled": true,
-      "config": {
-        "testRunner": "vitest",
-        "minCoverage": 80,
-        "strictMode": true,
-        "autoRunTests": true,
-        "generateMocks": true
-      }
-    }
-  }
-}
+```bash
+cat > .claude/commands/tdd-guide.md << 'EOF'
+# TDD Guide
+
+Implémente cette fonctionnalité en suivant strictement le cycle TDD :
+
+## Cycle RED → GREEN → REFACTOR
+
+**Étape 1 — RED** : Écris d'abord un test qui décrit le comportement attendu.
+Le test DOIT échouer au départ. S'il passe sans code, le test est mauvais.
+
+**Étape 2 — GREEN** : Écris le code MINIMAL pour faire passer le test.
+Pas d'optimisation prématurée. Le seul objectif est de passer le test.
+
+**Étape 3 — REFACTOR** : Nettoie le code tout en gardant les tests au vert.
+Améliore la lisibilité, supprime les duplications, respecte les conventions.
+
+**À chaque étape** : montre le résultat du test (FAIL/PASS) avant de continuer.
+**Objectif de couverture** : 80% minimum sur le code implémenté.
+EOF
+```
+
+### Configuration du framework de test (dans CLAUDE.md)
+
+```markdown
+## Tests
+- Framework : Vitest
+- Couverture minimale : 80%
+- Style : describe/it, expect assertions
+- Mocks : vi.mock() pour les dépendances externes
 ```
 
 ### Cas d'usage
 
-- **Nouvelle feature** : *"Implémente le système de pagination avec TDD — commence par les tests"*
-- **Bug fix** : *"Corrige ce bug en TDD : d'abord un test qui reproduit le bug, puis le fix"*
-- **Refactoring sûr** : *"Refactore ce module en s'assurant que tous les tests existants passent à chaque étape"*
-- **Couverture ciblée** : *"Ce fichier a 45% de couverture. Ajoute les tests manquants pour atteindre 80%"*
+- **Nouvelle feature** : `/tdd-guide implémenter le système de pagination avec offset/limit`
+- **Bug fix** : `/tdd-guide corriger ce bug en TDD : d'abord un test qui reproduit, puis le fix`
+- **Refactoring sûr** : `/tdd-guide refactorer ce module en s'assurant que les tests passent à chaque étape`
 
 <Steps>
 <Step title="RED — Écrire le test" stepNumber={1}>
-TDD Guide demande à Claude Code d'écrire d'abord un test qui décrit le comportement attendu. Le test doit échouer — c'est normal et voulu.
+Le skill guide Claude Code pour écrire d'abord un test qui décrit le comportement attendu. Le test doit échouer — c'est normal et voulu.
 </Step>
 
 <Step title="GREEN — Implémenter" stepNumber={2}>
-Claude Code écrit le code minimal pour faire passer le test. Pas de sur-ingénierie, juste ce qu'il faut pour le vert.
+Claude Code écrit le code minimal pour faire passer le test. Pas de sur-ingénierie, juste ce qu'il faut pour passer au vert.
 </Step>
 
 <Step title="REFACTOR — Améliorer" stepNumber={3} isLast>
-Une fois le test au vert, Claude Code refactore le code pour le rendre propre, lisible et performant. Les tests garantissent que rien n'est cassé.
+Une fois le test au vert, Claude Code refactorise le code pour le rendre propre, lisible et performant. Les tests garantissent que rien n'est cassé.
 </Step>
 </Steps>
 
-<Callout type="tip" title="Mode strict">
-En mode strict (`strictMode: true`), TDD Guide **refuse de générer du code** d'implémentation tant qu'un test correspondant n'existe pas. C'est la meilleure façon d'ancrer la discipline TDD dans votre workflow.
+---
+
+## Audit de configuration — Bonnes pratiques manuelles
+
+Il n'existe pas de plugin « AgentShield » ou d'outil automatisé officiel pour auditer la configuration Claude Code. Voici les bonnes pratiques à appliquer manuellement.
+
+### Vérification des MCP configurés
+
+```bash
+# Lister tous les MCP configurés
+claude mcp list
+
+# Vérifier le contenu du settings.json
+cat ~/.claude/settings.json
+cat .claude/settings.json  # si existant dans le projet
+```
+
+### Checklist de sécurité de configuration
+
+```bash
+# Vérifier qu'aucun token n'est hardcodé dans les fichiers versionnés
+git grep -l "GITHUB_TOKEN\|SLACK_BOT_TOKEN\|API_KEY" .
+
+# Vérifier que settings.json n'est pas commité (s'il contient des tokens)
+cat .gitignore | grep settings.json
+
+# Recommandation : utiliser des variables d'environnement système
+export GITHUB_TOKEN=ghp_votre-token
+# Puis dans settings.json, ne pas inclure la valeur directement
+```
+
+### Exemple de settings.json sécurisé
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Sécurité des tokens">
+Ne commitez **jamais** vos tokens dans un repository Git. Placez les configurations sensibles dans `~/.claude/settings.json` (global, hors contrôle de version) ou utilisez des variables d'environnement système.
 </Callout>
 
 ---
 
 ## Récapitulatif
 
-| Plugin | Installations | Spécialité | Meilleur pour |
-|--------|--------------|------------|---------------|
-| **Security Guidance** | 19K+ | Sécurité du code | Audits, prévention de vulnérabilités |
-| **Code Review** | 45K+ | Qualité du code | Revue automatisée, standards d'équipe |
-| **AgentShield** | 12K+ | Config sécurité | Audit des MCP et plugins, secrets |
-| **TDD Guide** | 15K+ | Tests | Discipline TDD, couverture de code |
+| Ressource | Type | Installation | Meilleur pour |
+|--------|------|-------------|---------------|
+| **Agent Security Reviewer** | Agent Markdown | Copie dans `.claude/agents/` | Audits sécurité, détection de vulnérabilités |
+| **Agent Code Reviewer** | Agent Markdown | Copie dans `.claude/agents/` | Revue de qualité, standards d'équipe |
+| **Skill TDD Guide** | Skill Markdown | Copie dans `.claude/commands/` | Discipline TDD, couverture de tests |
+| **Audit de config** | Bonnes pratiques | Manuel | Sécurité des tokens et permissions |
 
 ## Prochaines étapes
 
-- [Comprendre les plugins](/plugins/what-are-plugins) — Revenez aux fondamentaux si besoin
-- [Installer et gérer ses plugins](/plugins/setup) — Guide d'installation et de configuration
-- [Top plugins essentiels 2026](/plugins/best-essential) — Les plugins fondamentaux pour démarrer
+- [Comprendre les extensions communautaires](/plugins/what-are-plugins) — Revenez aux fondamentaux si besoin
+- [Installer et gérer ses extensions](/plugins/setup) — Guide d'installation et de configuration
+- [Top extensions essentielles 2026](/plugins/best-essential) — Les ressources fondamentales pour démarrer
+- [Top Skills recommandés](/skills/best-skills) — TDD Guide, Security Review et Code Reviewer en tant que Skills

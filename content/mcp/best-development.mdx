@@ -1,10 +1,10 @@
 ---
-title: "Top MCP développement"
+title: "Top MCP développement Claude Code"
 description: "Les meilleurs MCP pour le développement avec Claude Code : Context7, Sentry, Linear, PostgreSQL/Supabase et GitHub. Installation, configuration et cas d'usage."
 section: "mcp"
 order: 4
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-03-11"
 ---
 
 ## Les MCP essentiels pour les développeurs
@@ -21,11 +21,15 @@ Contrairement aux MCP de productivité, les MCP de développement sont souvent *
 
 **Accédez à la documentation officielle et à jour de n'importe quelle bibliothèque directement depuis Claude Code.** Fini les réponses basées sur des APIs obsolètes — Context7 fournit toujours la documentation la plus récente.
 
+<Callout type="info" title="Package npm vérifié">
+Context7 est développé par Upstash. Le package npm est `@upstash/context7-mcp`. Le repo source est sur [github.com/upstash/context7](https://github.com/upstash/context7). Aucune clé API n'est requise pour une utilisation de base.
+</Callout>
+
 ### Installation
 
 ```bash
 # Via la commande Claude
-claude mcp add context7 -- npx -y @upstreamapi/context7-mcp
+claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```
 
 ### Configuration JSON
@@ -35,7 +39,7 @@ claude mcp add context7 -- npx -y @upstreamapi/context7-mcp
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstreamapi/context7-mcp"]
+      "args": ["-y", "@upstash/context7-mcp"]
     }
   }
 }
@@ -56,6 +60,10 @@ Claude Code a une date de coupure de connaissances. Context7 compense cette limi
 ## Sentry — Monitoring des erreurs
 
 **Surveillez et analysez les erreurs de production directement depuis Claude Code.** Consultez les stack traces, identifiez les patterns d'erreurs et corrigez les bugs plus rapidement.
+
+<Callout type="info" title="Package npm officiel Sentry">
+Sentry publie son propre MCP officiel. Le package est `@sentry/mcp-server`. Vérifiez la documentation officielle Sentry pour les instructions d'installation à jour : [docs.sentry.io](https://docs.sentry.io).
+</Callout>
 
 ### Installation
 
@@ -91,7 +99,6 @@ Allez dans **Sentry > Settings > Auth Tokens** pour créer un token avec les sco
 - **Triage des erreurs** : *"Montre-moi les 10 erreurs les plus fréquentes en production cette semaine"*
 - **Analyse de bug** : *"Analyse cette erreur Sentry, retrouve le fichier concerné dans notre code et propose un fix"*
 - **Monitoring proactif** : *"Y a-t-il de nouvelles erreurs apparues depuis le dernier déploiement ?"*
-- **Fix automatique** : *"Prends cette erreur Sentry, trouve la cause dans le code et corrige-la"*
 
 ---
 
@@ -99,21 +106,18 @@ Allez dans **Sentry > Settings > Auth Tokens** pour créer un token avec les sco
 
 **Gérez vos issues, sprints et projets Linear directement depuis Claude Code.** Créez des tickets, mettez à jour le statut et synchronisez votre code avec votre gestion de projet.
 
-### Installation
+<Callout type="info" title="MCP Linear officiel">
+Linear publie son propre MCP officiel. Consultez la documentation de Linear ou cherchez le package officiel sur npm. Il n'existe pas de package `@anthropic/mcp-linear`.
+</Callout>
 
-```bash
-# Linear nécessite une API key
-claude mcp add linear -e LINEAR_API_KEY=lin_api_votre-clé -- npx -y @anthropic/mcp-linear
-```
-
-### Configuration JSON
+### Configuration JSON (exemple)
 
 ```json
 {
   "mcpServers": {
     "linear": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-linear"],
+      "args": ["-y", "@linear/mcp-server"],
       "env": {
         "LINEAR_API_KEY": "lin_api_votre-clé-linear"
       }
@@ -122,12 +126,15 @@ claude mcp add linear -e LINEAR_API_KEY=lin_api_votre-clé -- npx -y @anthropic/
 }
 ```
 
+<Callout type="warning" title="Vérifier le package Linear">
+Avant d'installer, vérifiez le nom exact du package MCP Linear sur [npmjs.com](https://www.npmjs.com) en cherchant « linear mcp ». Le nom peut différer selon la version officielle publiée par Linear.
+</Callout>
+
 ### Cas d'usage
 
 - **Workflow intégré** : *"Crée une issue Linear pour le bug que je viens de trouver, avec la stack trace et les étapes pour reproduire"*
 - **Suivi de sprint** : *"Montre-moi les issues assignées à moi dans le sprint en cours"*
 - **Mise à jour automatique** : *"Marque l'issue LIN-42 comme terminée et ajoute un commentaire avec le lien de la PR"*
-- **Planification** : *"Liste toutes les issues du backlog tagguées 'tech-debt' et estime la complexité de chacune"*
 
 <Callout type="tip" title="Automatisation du workflow">
 Combinez Linear + GitHub : quand vous créez une PR, Claude Code peut automatiquement mettre à jour le statut de l'issue Linear liée et ajouter le lien de la PR en commentaire.
@@ -138,6 +145,12 @@ Combinez Linear + GitHub : quand vous créez une PR, Claude Code peut automatiqu
 ## PostgreSQL / Supabase — Bases de données
 
 **Interrogez vos bases de données directement depuis Claude Code.** Exécutez des requêtes SQL, analysez les schémas, exportez des résultats et optimisez vos requêtes.
+
+<Callout type="info" title="Packages npm officiels vérifiés">
+Ces deux MCP sont disponibles dans le repository officiel MCP d'Anthropic :
+- PostgreSQL : `@modelcontextprotocol/server-postgres` sur [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)
+- Supabase : vérifiez la documentation officielle Supabase pour leur MCP officiel
+</Callout>
 
 ### Installation PostgreSQL
 
@@ -169,7 +182,7 @@ claude mcp add postgres -e DATABASE_URL=postgresql://user:pass@host:5432/db -- n
   "mcpServers": {
     "supabase": {
       "command": "npx",
-      "args": ["-y", "@supabase/mcp-server"],
+      "args": ["-y", "@supabase/mcp-server-supabase"],
       "env": {
         "SUPABASE_URL": "https://votre-projet.supabase.co",
         "SUPABASE_SERVICE_ROLE_KEY": "votre-service-role-key"
@@ -188,7 +201,6 @@ N'utilisez **jamais** les identifiants de production directement. Préférez un 
 - **Exploration de données** : *"Montre-moi le schéma de la table users et les 10 derniers enregistrements"*
 - **Analyse et statistiques** : *"Calcule le nombre d'inscriptions par mois sur les 6 derniers mois"*
 - **Génération de requêtes** : *"Écris une requête SQL pour trouver les utilisateurs inactifs depuis plus de 90 jours"*
-- **Migration** : *"Analyse le schéma actuel et génère une migration pour ajouter une table de notifications"*
 - **Optimisation** : *"Analyse cette requête lente et propose des index pour l'accélérer"*
 
 ---
@@ -196,6 +208,10 @@ N'utilisez **jamais** les identifiants de production directement. Préférez un 
 ## GitHub — Gestion de code source
 
 **Interagissez avec GitHub à un niveau avancé depuis Claude Code.** Claude Code a déjà une intégration Git native, mais le MCP GitHub ajoute l'accès aux issues, pull requests, reviews, workflows CI/CD et recherche de code à travers tous vos repos.
+
+<Callout type="info" title="Package npm officiel vérifié">
+Le MCP GitHub est disponible dans le repository officiel MCP d'Anthropic. Le package est `@modelcontextprotocol/server-github`, disponible sur [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers).
+</Callout>
 
 ### Installation
 
@@ -236,16 +252,17 @@ Créez un **Fine-grained Personal Access Token** avec les permissions minimales 
 
 ## Récapitulatif
 
-| MCP | Difficulté | Auth requise | Meilleur pour |
-|-----|-----------|-------------|---------------|
-| **Context7** | Débutant | Aucune | Documentation à jour, éviter les hallucinations |
-| **Sentry** | Intermédiaire | Auth Token | Monitoring erreurs, debug production |
-| **Linear** | Intermédiaire | API Key | Gestion de projet, suivi de sprint |
-| **PostgreSQL** | Intermédiaire | Connection string | Exploration et analyse de données |
-| **GitHub** | Intermédiaire | PAT Token | PRs, issues, code review, CI/CD |
+| MCP | Package vérifié | Auth requise | Meilleur pour |
+|-----|----------------|-------------|---------------|
+| **Context7** | `@upstash/context7-mcp` | Aucune | Documentation à jour, éviter les hallucinations |
+| **Sentry** | `@sentry/mcp-server` | Auth Token | Monitoring erreurs, debug production |
+| **Linear** | Officiel Linear (vérifier npm) | API Key | Gestion de projet, suivi de sprint |
+| **PostgreSQL** | `@modelcontextprotocol/server-postgres` | Connection string | Exploration et analyse de données |
+| **GitHub** | `@modelcontextprotocol/server-github` | PAT Token | PRs, issues, code review, CI/CD |
 
 ## Prochaines étapes
 
+- [Installer et configurer un MCP](/mcp/setup) — Guide d'installation détaillé et résolution des problèmes
 - [Top MCP design & UI](/mcp/best-design) — Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer
 - [Créer son premier workflow MCP](/mcp/first-workflow) — Combiner Context7 + GitHub + Playwright
 - [Comprendre les MCP](/mcp/what-are-mcps) — Revenir aux fondamentaux du protocole

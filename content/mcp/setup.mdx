@@ -4,12 +4,12 @@ description: "Guide complet pour installer, configurer et déboguer un MCP dans 
 section: "mcp"
 order: 2
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-03-11"
 ---
 
 ## Le fichier de configuration MCP
 
-Les MCP se configurent dans un fichier JSON qui indique à Claude Code quels serveurs MCP lancer et comment les connecter. Il existe deux niveaux de configuration :
+Les MCP se configurent dans un fichier JSON qui indique à Claude Code quels serveurs MCP lancer et comment les connecter. Il existe deux niveaux de configuration — **global** pour vos outils personnels, et **par projet** pour la stack technique de chaque dépôt.
 
 <Card title="Configuration globale" variant="accent">
 Le fichier `~/.claude/settings.json` contient les MCP disponibles dans **tous** vos projets. C'est ici que vous placez les MCP génériques (Gmail, Slack, Calendar) et les tokens personnels.
@@ -53,13 +53,13 @@ La façon la plus simple d'installer un MCP. Claude Code s'occupe de tout.
 claude mcp add <nom> -- <commande> <args...>
 
 # Exemple : ajouter Context7
-claude mcp add context7 -- npx -y @upstreamapi/context7-mcp
+claude mcp add context7 -- npx -y @upstash/context7-mcp
 
 # Exemple : ajouter GitHub avec un token
 claude mcp add github -- npx -y @modelcontextprotocol/server-github
 
 # Exemple : ajouter un MCP avec des variables d'environnement
-claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-votre-token -- npx -y @anthropic/mcp-slack
+claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-votre-token -- npx -y @modelcontextprotocol/server-slack
 ```
 
 </Step>
@@ -73,7 +73,7 @@ Pour un contrôle total, éditez directement le fichier de configuration.
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstreamapi/context7-mcp"]
+      "args": ["-y", "@upstash/context7-mcp"]
     },
     "github": {
       "command": "npx",
@@ -140,13 +140,13 @@ claude mcp get <nom>
 
 ```bash
 # Ajouter un MCP au niveau du projet (défaut)
-claude mcp add context7 -- npx -y @upstreamapi/context7-mcp
+claude mcp add context7 -- npx -y @upstash/context7-mcp
 
 # Ajouter un MCP au niveau global (tous les projets)
-claude mcp add context7 --scope global -- npx -y @upstreamapi/context7-mcp
+claude mcp add context7 --scope global -- npx -y @upstash/context7-mcp
 
 # Ajouter un MCP au niveau utilisateur (pour cet utilisateur)
-claude mcp add context7 --scope user -- npx -y @upstreamapi/context7-mcp
+claude mcp add context7 --scope user -- npx -y @upstash/context7-mcp
 ```
 
 <Callout type="tip" title="Bonne pratique : séparer global et projet">
@@ -165,7 +165,7 @@ Placez les MCP universels (Gmail, Slack, Calendar) en **global** et les MCP spé
 which npx
 
 # Vérifier que le package MCP existe
-npx -y @upstreamapi/context7-mcp --help
+npx -y @upstash/context7-mcp --help
 
 # Si vous utilisez uvx (Python)
 which uvx
@@ -205,7 +205,7 @@ Vous pouvez lancer le serveur MCP directement pour voir s'il démarre correcteme
 
 ```bash
 # Lancer le serveur MCP directement
-npx -y @upstreamapi/context7-mcp
+npx -y @upstash/context7-mcp
 
 # Si le serveur démarre et attend des entrées stdin, c'est bon
 # Ctrl+C pour quitter
@@ -237,11 +237,11 @@ Voici un exemple réaliste de configuration avec trois MCP pour un projet de dé
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstreamapi/context7-mcp"]
+      "args": ["-y", "@upstash/context7-mcp"]
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@anthropic/mcp-playwright"]
+      "args": ["-y", "@playwright/mcp"]
     },
     "github": {
       "command": "npx",
@@ -264,6 +264,7 @@ Claude Code enchaînera automatiquement Context7 (documentation), l'édition de 
 
 Votre premier MCP est configuré ? Découvrez maintenant les meilleurs MCP par catégorie.
 
+- [Comprendre les MCP](/mcp/what-are-mcps) — Le fonctionnement du protocole MCP expliqué
 - [Top MCP productivité](/mcp/best-productivity) — Gmail, Slack, Calendar, Figma, Lighthouse
 - [Top MCP développement](/mcp/best-development) — Context7, GitHub, Sentry, bases de données
 - [Top MCP design & UI](/mcp/best-design) — Playwright, Chrome DevTools, 21st.dev Magic

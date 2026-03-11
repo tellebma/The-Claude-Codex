@@ -267,12 +267,48 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/prompting/advanced",
-    title: "Prompting avanc\u00e9 et multi-agents",
+    title: "Prompting avancé et multi-agents",
     description:
-      "Techniques avanc\u00e9es de prompting : chain-of-thought, few-shot, d\u00e9composition, multi-agents, Extended Thinking, Plan Mode et debugging de prompts.",
+      "Techniques avancées de prompting : patterns par use case (debugging, refactoring, code review, migration, TDD), chain-of-thought, few-shot et orchestration multi-agents.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/prompting/context-management",
+    title: "Gestion du contexte et fenêtre de 200K tokens",
+    description:
+      "Maîtrisez la fenêtre de contexte de Claude Code : 200K tokens, commande /compact, stratégies pour les gros projets, CLAUDE.md comme mémoire persistante et suivi des coûts.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/prompting/thinking-and-planning",
+    title: "Extended Thinking et Plan Mode",
+    description:
+      "Maîtrisez l'Extended Thinking et le Plan Mode de Claude Code. Activation, cas d'usage, chain-of-thought, différences entre Haiku, Sonnet et Opus, impact sur les coûts.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/prompting/chaining-and-agents",
+    title: "Prompt chaining et orchestration multi-agents",
+    description:
+      "Maîtrisez le prompt chaining et l'orchestration multi-agents avec Claude Code. 3 exemples complets, architectures fan-out/fan-in, pipeline séquentiel et configuration d'agents.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/prompting/non-dev-prompting",
+    title: "Prompting pour non-développeurs",
+    description:
+      "20+ templates de prompts pour non-développeurs : communication professionnelle, analyse de documents, création de contenu, organisation. Copiez et utilisez directement.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
   },
   {
     path: "/future",

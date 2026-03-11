@@ -1,15 +1,15 @@
 ---
 title: "Prompting avancé et multi-agents"
-description: "Techniques avancées de prompting : chain-of-thought, few-shot, décomposition, multi-agents, Extended Thinking, Plan Mode et debugging de prompts."
+description: "Techniques avancées de prompting Claude Code : patterns debugging, refactoring, code review, TDD, chain-of-thought, few-shot et orchestration multi-agents."
 section: "prompting"
 order: 6
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-03-11"
 ---
 
 ## Au-delà des bases
 
-Vous maîtrisez les [fondamentaux du prompting](/prompting/basics) et les [directives avancées](/prompting/directives). Il est temps d'explorer les techniques qui séparent les utilisateurs avancés des experts. Ces méthodes exploitent les capacités profondes de Claude Code pour résoudre des problèmes complexes avec une précision remarquable.
+Vous maîtrisez les [fondamentaux du prompting](/prompting/basics) et les [directives avancées](/prompting/directives). Il est temps d'explorer les techniques qui séparent les utilisateurs avancés des experts. Cette page présente d'abord les **patterns par use case** — des séquences de prompts éprouvées pour les situations les plus fréquentes — puis les techniques avancées de raisonnement et d'orchestration.
 
 <Callout type="info" title="Quand utiliser ces techniques">
 Les techniques avancées ne sont pas nécessaires pour des tâches simples. Utilisez-les quand :
@@ -18,6 +18,192 @@ Les techniques avancées ne sont pas nécessaires pour des tâches simples. Util
 - Le résultat nécessite une réflexion approfondie
 - Vos prompts simples ne donnent pas le résultat attendu
 </Callout>
+
+## Patterns par use case
+
+Ces patterns sont des séquences de prompts éprouvées pour les situations les plus fréquentes en développement. Chaque pattern est une "recette" : suivez les étapes, adaptez le contexte, obtenez des résultats consistants.
+
+### Pattern debugging
+
+La principale erreur en debugging avec Claude : donner trop d'informations vagues sans structure. Ce pattern impose une discipline qui fonctionne.
+
+```markdown
+# Étape 1 : Reproduction du problème
+"Je rencontre ce problème : [description symptôme précis].
+Stack : [technologies]
+Erreur exacte : [message d'erreur complet]
+Code concerné : [coller le code minimal qui reproduit le problème]
+
+Ne propose pas encore de solution. Dis-moi d'abord :
+1. Ce que tu comprends du problème
+2. Quelles informations supplémentaires tu aurais besoin pour diagnostiquer"
+```
+
+```markdown
+# Étape 2 : Isolation
+"Voici les informations complémentaires : [répondre aux questions de Claude].
+Maintenant, liste les 3-5 causes possibles par ordre de probabilité.
+Pour chaque cause, comment la valider en 2 minutes ?"
+```
+
+```markdown
+# Étape 3 : Fix ciblé
+"La cause est confirmée : [cause identifiée].
+Génère uniquement le fix minimal pour ce problème précis.
+Ne refactorise pas le reste du code.
+Explique pourquoi ce fix résout le problème."
+```
+
+```markdown
+# Étape 4 : Test de régression
+"Fix appliqué et validé. Génère un test qui aurait détecté ce bug
+avant qu'il arrive en production. Le test doit reproduire exactement
+les conditions qui déclenchaient le bug."
+```
+
+**Résultat attendu** : un diagnostic précis, un fix chirurgical, un test de régression. Pas de "j'ai réécrit tout le module".
+
+### Pattern refactoring
+
+```markdown
+# Étape 1 : Analyse d'impact
+"Analyse ce code [coller] et évalue son état actuel :
+1. Quels sont les problèmes de lisibilité, testabilité et maintenabilité ?
+2. Quels fichiers seraient impactés par un refactoring ?
+3. Quels risques de régression existe-t-il ?
+4. Propose un plan de refactoring en étapes indépendantes (chacune déployable séparément)"
+```
+
+```markdown
+# Étape 2 : Migration progressive (pour chaque étape du plan)
+"Étape 1 du refactoring : [titre de l'étape].
+Contraintes :
+- Conserve le même comportement observable (les tests doivent passer)
+- Chaque étape doit être indépendamment déployable
+- Pas de changement de logique métier dans cette étape, uniquement la structure
+Génère le code de cette étape uniquement."
+```
+
+```markdown
+# Étape 3 : Validation
+"Étape 1 déployée. Avant de passer à l'étape 2 :
+1. Quels tests dois-je lancer pour valider que rien n'a régressé ?
+2. Y a-t-il des edge cases dans l'étape 1 que je devrais vérifier manuellement ?"
+```
+
+### Pattern code review
+
+```markdown
+# Prompt complet pour une code review structurée
+"Tu es un développeur senior. Review ce code [coller] en 4 passes successives :
+
+Passe 1 — Structure :
+- L'organisation des responsabilités est-elle claire ?
+- Les noms sont-ils expressifs et cohérents ?
+- La lisibilité est-elle bonne (nesting, longueur des fonctions) ?
+
+Passe 2 — Logique :
+- Y a-t-il des bugs potentiels ?
+- Les edge cases sont-ils gérés (null, vide, limite) ?
+- La logique métier est-elle correcte ?
+
+Passe 3 — Sécurité :
+- Y a-t-il des inputs non validés ?
+- Des données sensibles exposées ?
+- Des injections possibles ?
+
+Passe 4 — Performance :
+- Y a-t-il des requêtes N+1 ?
+- Des calculs qui pourraient être mis en cache ?
+- Des opérations synchrones bloquantes évitables ?
+
+Pour chaque issue : sévérité (CRITICAL/HIGH/MEDIUM/LOW), description, correction suggérée."
+```
+
+**Résultat attendu** : un rapport structuré par catégorie, priorisé par sévérité, avec des corrections actionnables.
+
+### Pattern migration
+
+```markdown
+# Étape 1 : Inventaire complet
+"Analyse le codebase pour établir l'inventaire de migration [technologie A] → [technologie B].
+
+Pour chaque fichier/module :
+- Nom et chemin
+- Complexité de migration estimée (1 = trivial, 5 = complexe)
+- Dépendances qui bloquent la migration
+- Risques spécifiques
+
+Génère un tableau trié : d'abord les quick wins (complexité 1-2), puis les complexes."
+```
+
+```markdown
+# Étape 2 : Plan par phases
+"Sur la base de l'inventaire, génère un plan de migration en phases.
+Contraintes :
+- Chaque phase doit laisser le projet en état déployable
+- Les dépendances circulaires doivent être identifiées et résolues
+- Estimation de durée par phase pour une équipe de [X] développeurs
+- Définir les critères de succès (métriques) pour chaque phase"
+```
+
+```markdown
+# Étape 3 : Exécution module par module
+"Phase 1 validée. Commence la migration de [module spécifique].
+Règles :
+- Coexistence avec l'ancienne version pendant la transition
+- Feature flag pour basculer progressivement
+- Tests de parité : vérifier que le comportement est identique avant/après"
+```
+
+```markdown
+# Étape 4 : Vérification post-migration
+"Migration de [module] terminée.
+Génère :
+1. Les tests de smoke pour valider le module migré
+2. La checklist de vérification manuelle
+3. Le plan de rollback si un problème est détecté en production"
+```
+
+### Pattern tests TDD
+
+```markdown
+# Étape 1 : Identification des cas de test
+"Avant d'écrire une ligne d'implémentation, identifie tous les cas de test
+pour cette fonctionnalité : [description de la feature].
+
+Classe-les en :
+- Cas nominaux (happy path)
+- Cas d'erreur (inputs invalides, ressource inexistante)
+- Edge cases (vide, limite, concurrence)
+- Cas de régression (bugs connus à ne pas réintroduire)
+
+Pour chaque cas : description, input, output attendu."
+```
+
+```markdown
+# Étape 2 : Écriture des tests (RED)
+"Sur la base des cas identifiés, écris les tests avec [Vitest/Jest/pytest].
+Les tests doivent échouer pour l'instant (RED).
+Utilise des noms de test descriptifs : 'should [expected behavior] when [condition]'
+Mock uniquement les dépendances externes (base de données, API)."
+```
+
+```markdown
+# Étape 3 : Implémentation minimale (GREEN)
+"Tests écrits. Maintenant implémente le minimum de code pour faire passer ces tests.
+Pas d'optimisation prématurée, pas de features non testées.
+Le code peut être 'moche' tant qu'il est correct."
+```
+
+```markdown
+# Étape 4 : Refactoring (IMPROVE)
+"Tous les tests passent. Phase de refactoring :
+1. Nettoie le code sans changer le comportement
+2. Extrais les duplications
+3. Améliore les noms
+4. Vérifie que les tests passent toujours après chaque changement"
+```
 
 ## Chain-of-thought : forcer le raisonnement
 
@@ -299,20 +485,27 @@ et une pagination cursor-based."
 
 | Technique | Cas d'usage | Complexité |
 |-----------|------------|------------|
+| Pattern debugging | Bug difficile à localiser | Faible à utiliser |
+| Pattern refactoring | Code legacy à améliorer | Moyenne |
+| Pattern code review | Revue structurée en 4 passes | Faible |
+| Pattern migration | Changement de technologie | Élevée |
+| Pattern TDD | Toute nouvelle fonctionnalité | Faible à utiliser |
 | Chain-of-thought | Analyse, décision, architecture | Moyenne |
 | Few-shot avancé | Format de sortie précis, style de code | Moyenne |
-| Décomposition | Features complexes, migrations | Faible à utiliser, forte en impact |
+| Décomposition | Features complexes, migrations | Forte en impact |
 | Multi-agents | Revue de code, audits, gros projets | Élevée |
-| Extended Thinking | Raisonnement profond, debugging difficile | Faible à activer |
-| Plan Mode | Refactoring, migrations, features multi-fichiers | Faible à activer |
 | Prompting contextuel | Respect des patterns du projet | Faible |
 
 ## Prochaines étapes
 
 Vous maîtrisez maintenant les techniques avancées de prompting. Explorez les sujets connexes pour devenir un expert complet.
 
+- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) — Activez le raisonnement profond pour les décisions complexes
+- [Prompt chaining et orchestration](/prompting/chaining-and-agents) — Pipelines complets et architectures fan-out/fan-in
+- [Gestion du contexte](/prompting/context-management) — Maîtrisez la fenêtre de 200K tokens
 - [Comprendre les agents](/agents/what-are-agents) — Plongez dans le fonctionnement des agents et subagents
 - [Orchestration multi-agents avancée](/agents/orchestration) — Patterns d'orchestration pour projets complexes
 - [Créer un Skill custom](/skills/create-custom) — Transformez vos techniques en workflows automatisés
-- [Les MCP en détail](/mcp/what-are-mcps) — Connectez Claude Code à vos outils externes
-- [Le configurateur Claude Code](/configurator) — Configurez votre environnement de manière interactive
+- [Installer les MCP essentiels](/mcp/setup) — Étendez Claude avec des outils externes via les MCP
+- [Top plugins pour le développement](/plugins/best-security) — Sécurité et qualité de code avec les plugins
+- [Configurateur interactif](/configurator) — Générez votre configuration optimale en quelques minutes

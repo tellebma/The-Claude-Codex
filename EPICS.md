@@ -1194,8 +1194,8 @@ Creer un "sas d'entree" pour les grands debutants : une page pre-requis, un parc
 
 ## Epic 22 — Refonte majeure de la section Prompting
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `TERMINÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P0 (bloquant — la page la plus attendue est la plus vide)
 - **Estimation** : L (2-4 semaines)
 - **Dependances** : Epic 7 (pipeline MDX)
@@ -2393,7 +2393,7 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 19 | Audit credibilite et corrections fictives | P0 | M | Expert, Connaisseur, Experimente | `TERMINÉ` | `REVIEWÉ ✅` | AUDITS PERSONA |
 | 20 | Contenu visuel (screenshots, GIFs, video) | P0 | L | Novice, Debutant, Experimente | `TERMINÉ` | `REVIEWÉ ✅` | AUDITS PERSONA |
 | 21 | Parcours grand debutant et pre-requis zero | P0 | L | Novice, Debutant | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
-| 22 | Refonte majeure section Prompting | P0 | L | Toutes | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
+| 22 | Refonte majeure section Prompting | P0 | L | Toutes | `TERMINÉ` | `REVIEWÉ ✅` | AUDITS PERSONA |
 | 23 | Documentation de reference technique | P1 | M | Expert, Connaisseur, Experimente | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 24 | Hooks, mode headless et CI/CD | P1 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
 | 25 | Creation MCP custom (tutoriel complet) | P1 | M | Expert, Connaisseur | `TODO` | `NON REVIEWE` | AUDITS PERSONA |
@@ -2406,7 +2406,7 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 | 32 | Suivi d'usage et analytics (Matomo) | P2 | S | Toutes (ops) | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
 | 33 | Dangers, pieges et idees recues (MCP, contexte, couts) | P1 | M | Toutes | `TODO` | `NON REVIEWE` | DEMANDE UTILISATEUR |
 
-**Progression** : 2/15 terminee (13%)
+**Progression** : 3/15 terminee (20%)
 
 ---
 

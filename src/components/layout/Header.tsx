@@ -15,6 +15,7 @@ const navigation = [
   { name: "MCP", href: "/mcp" },
   { name: "Skills", href: "/skills" },
   { name: "Prompting", href: "/prompting" },
+  { name: "Référence", href: "/reference" },
   { name: "Configurateur", href: "/configurator" },
   { name: "Glossaire", href: "/glossary" },
   { name: "Vision", href: "/future" },
@@ -83,7 +84,7 @@ export function Header() {
         id={MOBILE_MENU_ID}
         className={clsx(
           "overflow-hidden border-t border-slate-200/50 transition-all duration-300 dark:border-slate-700/50 md:hidden",
-          mobileOpen ? "max-h-80" : "max-h-0"
+          mobileOpen ? "max-h-[30rem]" : "max-h-0"
         )}
         inert={!mobileOpen || undefined}
         aria-hidden={!mobileOpen}

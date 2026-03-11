@@ -94,6 +94,16 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Configurateur interactif", href: "/configurator" },
     ],
   },
+  reference: {
+    title: "Référence",
+    items: [
+      { label: "Vue d'ensemble", href: "/reference" },
+      { label: "Cheatsheet — Référence rapide", href: "/reference/cheatsheet" },
+      { label: "CLI — Tous les flags", href: "/reference/cli" },
+      { label: "settings.json — Configuration", href: "/reference/settings" },
+      { label: "Variables d'environnement", href: "/reference/environment" },
+    ],
+  },
   content: {
     title: "Contenus",
     items: [

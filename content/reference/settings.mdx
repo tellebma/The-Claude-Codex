@@ -1,0 +1,402 @@
+---
+title: "settings.json — Référence complète de la configuration"
+description: "Toutes les options du fichier settings.json de Claude Code : 3 niveaux de configuration, permissions, MCP, modèles, outils et exemples complets."
+badge: "Config"
+section: "reference"
+order: 3
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Les 3 niveaux de configuration
+
+Claude Code fusionne les fichiers de configuration dans cet ordre de précédence (du plus prioritaire au moins prioritaire) :
+
+| Niveau | Fichier | Portée |
+|--------|---------|--------|
+| **1. Projet local** | `.claude/settings.local.json` | Ce projet uniquement (non commité, gitignored) |
+| **2. Projet** | `.claude/settings.json` | Ce projet (commitable, partageable avec l'équipe) |
+| **3. Utilisateur** | `~/.claude/settings.json` | Tous les projets de l'utilisateur |
+
+<Callout type="info" title="Précédence">
+Les options définies au niveau projet surchargent celles du niveau utilisateur. Le fichier local (`.local.json`) surcharge les deux autres. C'est le mécanisme qui permet de partager une configuration de base via Git tout en autorisant des surcharges personnelles.
+</Callout>
+
+---
+
+## Structure complète annotée
+
+```json
+{
+  // Modèle par défaut pour toutes les sessions
+  "model": "claude-sonnet-4-5",
+
+  // Activation de l'Extended Thinking
+  "alwaysThinkingEnabled": false,
+
+  // Compactage automatique du contexte
+  "autoCompact": true,
+
+  // Fournisseur d'API (anthropic par défaut)
+  "apiProvider": "anthropic",
+
+  // URL d'API personnalisée (proxies, bedrock, vertex)
+  "customApiUrl": "https://api.anthropic.com",
+
+  // Permissions globales par outil
+  "permissions": {
+    "allow": ["Bash(git:*)", "Read"],
+    "deny": ["Bash(rm -rf:*)"]
+  },
+
+  // Liste des outils autorisés
+  "allowedTools": ["Read", "Write", "Bash", "Glob", "Grep"],
+
+  // Liste des outils désactivés
+  "disabledTools": [],
+
+  // Variables d'environnement injectées dans chaque session
+  "env": {
+    "NODE_ENV": "development",
+    "MY_VAR": "valeur"
+  },
+
+  // Configuration des serveurs MCP
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "~/projets"],
+      "env": {}
+    }
+  }
+}
+```
+
+---
+
+## Option : `model`
+
+Le modèle Claude à utiliser par défaut pour toutes les sessions.
+
+| Valeur | Description |
+|--------|-------------|
+| `claude-haiku-4-5` | Rapide et économique, 90% des capacités de Sonnet |
+| `claude-sonnet-4-5` | Meilleur équilibre qualité/coût (recommandé) |
+| `claude-opus-4-5` | Raisonnement le plus profond, plus lent |
+
+```json
+{
+  "model": "claude-sonnet-4-5"
+}
+```
+
+Peut être surchargé en session avec `/model` ou `--model` en CLI.
+
+---
+
+## Option : `alwaysThinkingEnabled`
+
+Active l'Extended Thinking par défaut. Claude réserve des tokens pour son raisonnement interne avant de répondre.
+
+```json
+{
+  "alwaysThinkingEnabled": true
+}
+```
+
+- **Défaut** : `false`
+- **Toggle en session** : `Alt+T` (Windows/Linux) ou `Option+T` (macOS)
+- **Budget** : contrôlé par `MAX_THINKING_TOKENS` (variable d'environnement)
+
+---
+
+## Option : `autoCompact`
+
+Compacte automatiquement le contexte quand la fenêtre de tokens approche la limite. Claude génère un résumé des échanges précédents.
+
+```json
+{
+  "autoCompact": true
+}
+```
+
+- **Défaut** : `true`
+- **Manuel** : commande `/compact` en session
+
+---
+
+## Option : `permissions`
+
+Contrôle fin des autorisations par outil. Deux listes : `allow` (autorisations explicites) et `deny` (interdictions).
+
+### Syntaxe des permissions
+
+```
+Outil(filtre)
+```
+
+| Exemple | Signification |
+|---------|---------------|
+| `"Read"` | Autorise toutes les lectures de fichiers |
+| `"Bash(git:*)"` | Autorise toutes les commandes git |
+| `"Bash(npm run:*)"` | Autorise tous les scripts npm |
+| `"Bash(rm -rf:*)"` | Autorise `rm -rf` (ou l'interdit si dans deny) |
+| `"Write(src/**)"` | Autorise l'écriture dans `src/` uniquement |
+| `"WebFetch"` | Autorise les requêtes HTTP sortantes |
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(git:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "WebFetch"
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="Ordre de priorité des permissions">
+Les règles `deny` ont priorité sur les règles `allow`. Si un outil est dans les deux listes, il sera interdit. Testez vos règles avec `claude config list` pour vérifier la configuration fusionnée.
+</Callout>
+
+---
+
+## Option : `allowedTools`
+
+Liste blanche des outils que Claude Code peut utiliser. Si définie, seuls les outils listés sont disponibles.
+
+### Outils disponibles
+
+| Outil | Description |
+|-------|-------------|
+| `Read` | Lecture de fichiers |
+| `Write` | Écriture de fichiers |
+| `Edit` | Modification partielle de fichiers |
+| `MultiEdit` | Modifications multiples en une opération |
+| `Bash` | Exécution de commandes shell |
+| `Glob` | Recherche de fichiers par pattern |
+| `Grep` | Recherche de contenu dans les fichiers |
+| `LS` | Liste de répertoires |
+| `WebFetch` | Requêtes HTTP |
+| `WebSearch` | Recherche web |
+| `Task` | Lancement de sous-agents (mode agentic) |
+| `TodoRead` | Lecture de la liste de tâches |
+| `TodoWrite` | Écriture de la liste de tâches |
+| `NotebookRead` | Lecture de notebooks Jupyter |
+| `NotebookEdit` | Modification de notebooks Jupyter |
+
+```json
+{
+  "allowedTools": ["Read", "Bash", "Glob", "Grep"]
+}
+```
+
+---
+
+## Option : `disabledTools`
+
+Liste des outils explicitement désactivés (blacklist). Complément de `allowedTools`.
+
+```json
+{
+  "disabledTools": ["WebFetch", "WebSearch"]
+}
+```
+
+---
+
+## Option : `env`
+
+Variables d'environnement injectées automatiquement dans toutes les sessions Claude Code et les sous-processus qu'elles lancent.
+
+```json
+{
+  "env": {
+    "NODE_ENV": "development",
+    "DATABASE_URL": "postgresql://localhost/myapp",
+    "LOG_LEVEL": "debug"
+  }
+}
+```
+
+<Callout type="warning" title="Secrets dans env">
+Ne committez jamais de secrets (mots de passe, tokens API) dans `.claude/settings.json` versionné. Utilisez `.claude/settings.local.json` (gitignored) ou des variables d'environnement système pour les valeurs sensibles.
+</Callout>
+
+---
+
+## Option : `apiProvider`
+
+Fournisseur d'API à utiliser. Utile pour les proxies d'entreprise ou les déploiements via Amazon Bedrock / Google Vertex.
+
+| Valeur | Description |
+|--------|-------------|
+| `"anthropic"` | API Anthropic directe (défaut) |
+| `"bedrock"` | Amazon Bedrock (nécessite AWS credentials) |
+| `"vertex"` | Google Vertex AI |
+
+```json
+{
+  "apiProvider": "anthropic",
+  "customApiUrl": "https://mon-proxy.entreprise.com/anthropic"
+}
+```
+
+---
+
+## Option : `customApiUrl`
+
+URL de base personnalisée pour les appels API. Utile pour les proxies d'entreprise, les gateways ou les déploiements auto-hébergés.
+
+```json
+{
+  "customApiUrl": "https://api-proxy.mon-entreprise.com"
+}
+```
+
+La clé API (`ANTHROPIC_API_KEY`) reste nécessaire même avec une URL personnalisée.
+
+---
+
+## Option : `mcpServers`
+
+Configuration des serveurs MCP. Chaque entrée est un serveur MCP nommé.
+
+### Structure d'un serveur MCP
+
+```json
+{
+  "mcpServers": {
+    "<nom-du-mcp>": {
+      "command": "<exécutable>",
+      "args": ["<arg1>", "<arg2>"],
+      "env": {
+        "VAR": "valeur"
+      },
+      "transport": "stdio"
+    }
+  }
+}
+```
+
+| Champ | Type | Requis | Description |
+|-------|------|--------|-------------|
+| `command` | string | Oui (stdio) | Commande pour démarrer le serveur |
+| `args` | string[] | Non | Arguments passés à la commande |
+| `env` | object | Non | Variables d'environnement pour le processus MCP |
+| `transport` | string | Non | `"stdio"` (défaut) ou `"sse"` |
+| `url` | string | Oui (SSE) | URL du serveur SSE (si `transport: "sse"`) |
+
+### Exemples de configuration MCP
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/projets",
+        "/tmp"
+      ]
+    },
+
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_votre_token"
+      }
+    },
+
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://localhost:5432/mydb"
+      ]
+    },
+
+    "mon-api-sse": {
+      "transport": "sse",
+      "url": "https://mon-serveur.com/mcp"
+    }
+  }
+}
+```
+
+---
+
+## Exemples de configurations complètes
+
+### Configuration développeur solo
+
+```json
+// ~/.claude/settings.json
+{
+  "model": "claude-sonnet-4-5",
+  "alwaysThinkingEnabled": false,
+  "autoCompact": true,
+  "permissions": {
+    "allow": ["Read", "Write", "Bash(git:*)", "Bash(npm:*)"],
+    "deny": ["Bash(sudo:*)"]
+  },
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "~/projets"]
+    }
+  }
+}
+```
+
+### Configuration équipe (commitée dans le repo)
+
+```json
+// .claude/settings.json
+{
+  "model": "claude-sonnet-4-5",
+  "allowedTools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
+  "permissions": {
+    "deny": ["Bash(rm -rf:*)", "Bash(sudo:*)", "WebFetch"]
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./"]
+    }
+  }
+}
+```
+
+### Configuration sécurisée (lecture seule)
+
+```json
+// Pour les audits ou environnements sensibles
+{
+  "allowedTools": ["Read", "Glob", "Grep", "LS"],
+  "permissions": {
+    "deny": ["Write", "Edit", "Bash", "WebFetch", "WebSearch"]
+  }
+}
+```
+
+---
+
+## Prochaines étapes
+
+- [Cheatsheet — Référence rapide](/reference/cheatsheet) — Vue d'ensemble de toutes les commandes
+- [CLI — Référence complète](/reference/cli) — Tous les flags de la commande `claude`
+- [Variables d'environnement](/reference/environment) — Variables reconnues par Claude Code

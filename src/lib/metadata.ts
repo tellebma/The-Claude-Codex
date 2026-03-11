@@ -509,6 +509,51 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-10",
   },
   {
+    path: "/reference",
+    title: "R\u00e9f\u00e9rence technique \u2014 Claude Code",
+    description:
+      "Documentation de r\u00e9f\u00e9rence compl\u00e8te pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d\u2019environnement.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/reference/cheatsheet",
+    title: "Cheatsheet \u2014 R\u00e9f\u00e9rence rapide Claude Code",
+    description:
+      "Toutes les slash commands, raccourcis clavier, fichiers de configuration et modes d\u2019ex\u00e9cution de Claude Code en un seul endroit. Format dense et copiable.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/reference/cli",
+    title: "CLI \u2014 R\u00e9f\u00e9rence compl\u00e8te des commandes Claude Code",
+    description:
+      "R\u00e9f\u00e9rence exhaustive de la commande claude : tous les flags, sous-commandes mcp/config/doctor, modes d\u2019ex\u00e9cution et exemples concrets.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/reference/settings",
+    title: "settings.json \u2014 R\u00e9f\u00e9rence de configuration Claude Code",
+    description:
+      "Toutes les options du fichier settings.json : 3 niveaux de configuration, permissions, MCP, mod\u00e8les, outils et exemples complets.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/reference/environment",
+    title: "Variables d\u2019environnement \u2014 R\u00e9f\u00e9rence Claude Code",
+    description:
+      "Toutes les variables d\u2019environnement reconnues par Claude Code : cl\u00e9 API, mod\u00e8le, proxy, tokens, r\u00e9pertoire de config et exemples CI/CD.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
     path: "/configurator",
     title: "Configurateur interactif Claude Code",
     description:

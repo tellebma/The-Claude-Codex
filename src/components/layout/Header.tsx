@@ -10,12 +10,13 @@ import { SearchDialog } from "@/components/ui/SearchDialog";
 import clsx from "clsx";
 
 const navigation = [
-  { name: "Demarrer", href: "/getting-started" },
+  { name: "Démarrer", href: "/getting-started" },
   { name: "Contenus", href: "/content" },
   { name: "MCP", href: "/mcp" },
   { name: "Skills", href: "/skills" },
   { name: "Prompting", href: "/prompting" },
   { name: "Configurateur", href: "/configurator" },
+  { name: "Glossaire", href: "/glossary" },
   { name: "Vision", href: "/future" },
 ];
 

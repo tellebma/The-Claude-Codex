@@ -9,11 +9,75 @@ dateModified: "2026-03-09"
 
 ## Ce que vous allez créer
 
-Dans ce tutoriel, vous allez créer une **page web complète** en partant d'un dossier vide. En 5 minutes, vous aurez un site fonctionnel avec un design moderne, du contenu dynamique et des animations — le tout sans écrire une seule ligne de code vous-même.
+Dans ce tutoriel, vous allez créer non pas un, mais **deux projets** : d'abord une page ultra-simple (5 minutes), puis un site web complet avec design moderne. Commençons par le plus accessible.
 
 <Callout type="info" title="Prérequis">
 Avant de commencer, assurez-vous que Claude Code est installé et authentifié. Si ce n'est pas fait, suivez d'abord le guide [Prérequis et installation](/getting-started/installation).
 </Callout>
+
+## Premier projet : votre page de présentation (5 min)
+
+Ce premier projet est volontairement très simple. Pas de framework, pas de configuration — juste un fichier HTML que vous pourrez ouvrir directement dans votre navigateur.
+
+**Objectif** : créer une page web qui dit "Bonjour, je m'appelle [votre prénom]" avec un fond bleu et du texte blanc.
+
+### Étape 1 : Créer un dossier et lancer Claude Code
+
+<TerminalScreenshot
+  title="Terminal — démarrage du premier projet"
+  lines={[
+    { type: "command", content: "mkdir ~/ma-premiere-page && cd ~/ma-premiere-page && claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Analysing project structure..." },
+    { type: "output", content: "  ✓ Empty project — ready to start" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> " }
+  ]}
+/>
+
+### Étape 2 : Demander votre page
+
+Tapez cette demande, en remplaçant "Marie" par votre prénom :
+
+```text
+> Crée une page HTML avec un seul fichier (index.html).
+> La page doit dire "Bonjour, je m'appelle Marie" au centre de l'écran.
+> Fond bleu (#1e40af), texte blanc, police grande et lisible.
+> Pas de dépendances externes, tout dans un seul fichier.
+```
+
+Claude Code va créer le fichier `index.html`. Tapez `y` pour accepter.
+
+### Étape 3 : Voir le résultat dans votre navigateur
+
+La façon la plus simple : **glissez le fichier `index.html`** depuis votre dossier directement dans votre navigateur (Chrome, Firefox, Safari). Votre page s'affiche instantanément !
+
+Ou via le terminal :
+
+```bash
+# Sur macOS
+open index.html
+
+# Sur Linux
+xdg-open index.html
+
+# Sur Windows
+start index.html
+```
+
+<Callout type="tip" title="Bravo ! Vous venez de créer votre première page web.">
+C'est aussi simple que ça. Claude Code a écrit tout le HTML et CSS pour vous. Vous pouvez maintenant demander des modifications : "Change la couleur de fond en vert", "Ajoute une photo de profil", "Mets le texte en plus grand"...
+</Callout>
+
+---
+
+## Deuxième projet : un site web complet avec design moderne
+
+Prêt(e) pour quelque chose de plus ambitieux ? Passons à un portfolio complet avec navigation, sections et animations.
 
 ## Étape 1 : Préparer le terrain
 

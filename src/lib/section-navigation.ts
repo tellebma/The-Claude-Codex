@@ -13,10 +13,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Démarrer",
     items: [
       { label: "Vue d'ensemble", href: "/getting-started" },
+      { label: "Pré-requis pour grands débutants", href: "/getting-started/prerequisites-zero" },
       { label: "Qu'est-ce que Claude Code ?", href: "/getting-started/what-is-claude-code" },
       { label: "Prérequis et installation", href: "/getting-started/installation" },
       { label: "Configuration de l'environnement", href: "/getting-started/environment-setup" },
       { label: "Premier projet pas à pas", href: "/getting-started/first-project" },
+      { label: "FAQ débutants", href: "/getting-started/faq-beginner" },
     ],
   },
   mcp: {

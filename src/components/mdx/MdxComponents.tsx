@@ -5,6 +5,8 @@ import { CodeBlock } from "@/components/ui/CodeBlock";
 import { TerminalScreenshot } from "@/components/ui/TerminalScreenshot";
 import { Screenshot } from "@/components/ui/Screenshot";
 import { VideoEmbed } from "@/components/ui/VideoEmbed";
+import { GlossaryTooltip } from "@/components/ui/GlossaryTooltip";
+import { PricingTable } from "@/components/ui/PricingTable";
 import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
 import { Card } from "@/components/mdx/Card";
@@ -45,6 +47,8 @@ export const mdxComponents: MDXComponents = {
   TerminalScreenshot,
   Screenshot,
   VideoEmbed,
+  GlossaryTooltip,
+  PricingTable,
   Tabs,
   Steps,
   Step,

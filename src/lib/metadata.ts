@@ -104,6 +104,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-09",
   },
   {
+    path: "/getting-started/prerequisites-zero",
+    title: "Pr\u00e9-requis pour grands d\u00e9butants",
+    description:
+      "Vous n\u2019avez jamais utilis\u00e9 un terminal ? Cette page explique en langage humain : terminal, Node.js, cl\u00e9 API, npm et intelligence artificielle.",
+    priority: 0.9,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
     path: "/getting-started/what-is-claude-code",
     title: "Qu\u2019est-ce que Claude Code ?",
     description:
@@ -137,7 +146,25 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Tutoriel concret : cr\u00e9ez votre premier site web avec Claude Code en 5 minutes. Exemples de prompts et bonnes pratiques.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/getting-started/faq-beginner",
+    title: "FAQ d\u00e9butants \u2014 Questions fr\u00e9quentes sur Claude Code",
+    description:
+      "R\u00e9ponses honn\u00eates aux questions les plus courantes des d\u00e9butants : s\u00e9curit\u00e9, vie priv\u00e9e, co\u00fbts, diff\u00e9rence avec ChatGPT, pr\u00e9requis techniques.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
+  },
+  {
+    path: "/glossary",
+    title: "Glossaire \u2014 Termes techniques expliqu\u00e9s simplement",
+    description:
+      "Plus de 40 termes techniques de l\u2019IA et du d\u00e9veloppement web expliqu\u00e9s en langage humain, avec des analogies concr\u00e8tes. Terminal, API, Git, npm, Docker et bien plus.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-11",
   },
   {
     path: "/mcp",

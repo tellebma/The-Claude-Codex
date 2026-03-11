@@ -1,0 +1,143 @@
+---
+title: "Pré-requis pour grands débutants"
+description: "Vous n'avez jamais utilisé un terminal de votre vie ? Pas de panique. Cette page vous explique tout ce que vous devez savoir avant d'installer Claude Code — en langage humain."
+section: "getting-started"
+order: 0
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+Bienvenue ! Si vous lisez cette page, c'est que les mots "terminal", "Node.js" ou "clé API" vous semblent mystérieux. C'est tout à fait normal — tout le monde est passé par là. On va démystifier tout ça ensemble, pas à pas.
+
+<Callout type="tip" title="Vous n'êtes pas seul(e)">
+Des millions de personnes utilisent Claude Code sans avoir jamais programmé de leur vie. Des avocats, des journalistes, des enseignants, des artistes, des chefs de projet... Ce guide est fait pour vous.
+</Callout>
+
+## Qu'est-ce qu'un terminal ?
+
+Un terminal (aussi appelé "invite de commandes" ou "console"), c'est comme parler à votre ordinateur en tapant des phrases au lieu de cliquer.
+
+Imaginez que votre ordinateur est un assistant très obéissant. Quand vous utilisez la souris pour ouvrir des fichiers, vous lui faites des gestes. Le terminal, c'est la même chose, mais vous lui parlez directement. Vous tapez une phrase comme `node --version`, vous appuyez sur Entrée, et l'ordinateur vous répond.
+
+C'est plus puissant que de cliquer, parce que vous pouvez donner des instructions très précises — et c'est là que vivent la plupart des outils de développement modernes, dont Claude Code.
+
+### Comment ouvrir un terminal
+
+Choisissez votre système d'exploitation :
+
+**Sur macOS (Apple)**
+
+La façon la plus simple : appuyez simultanément sur les touches `Cmd` + `Espace` pour ouvrir Spotlight, tapez `Terminal`, puis appuyez sur Entrée. Une fenêtre noire ou blanche s'ouvre — c'est votre terminal.
+
+<TerminalScreenshot
+  title="Terminal — macOS"
+  lines={[
+    { type: "output", content: "Dernière connexion : mar 11 mar 10:23:14 sur ttys001" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "utilisateur@MacBook ~ % " }
+  ]}
+/>
+
+**Sur Windows**
+
+Appuyez sur la touche `Windows` + `R`, tapez `powershell`, puis Entrée. Ou bien cherchez "PowerShell" dans le menu Démarrer. Une fenêtre bleue s'ouvre.
+
+<TerminalScreenshot
+  title="PowerShell — Windows"
+  lines={[
+    { type: "output", content: "Windows PowerShell" },
+    { type: "output", content: "Copyright (C) Microsoft Corporation. Tous droits réservés." },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "PS C:\\Users\\Utilisateur> " }
+  ]}
+/>
+
+**Sur Linux (Ubuntu, Debian, etc.)**
+
+Appuyez sur `Ctrl` + `Alt` + `T`. Un terminal s'ouvre immédiatement.
+
+<Callout type="info" title="Le terminal fait peur au début — c'est normal">
+La première fois qu'on ouvre un terminal, ça peut sembler intimidant. Il n'y a pas de boutons, juste du texte. Mais rassurez-vous : si vous tapez quelque chose d'incorrect, au pire vous aurez un message d'erreur. Vous ne pouvez pas "casser" votre ordinateur en tapant une mauvaise commande dans le terminal (sauf si on vous demande d'utiliser des commandes très spécifiques comme `rm -rf /`, que personne ne vous demandera de faire ici).
+</Callout>
+
+## Qu'est-ce qu'une commande ?
+
+Une commande, c'est une instruction que vous tapez dans le terminal. La recette est simple :
+
+1. Vous tapez du texte (la commande)
+2. Vous appuyez sur la touche `Entrée`
+3. L'ordinateur exécute l'instruction et affiche le résultat
+
+### Mini-exercice : votre première commande
+
+Essayez ! Ouvrez votre terminal, tapez exactement ce qui est écrit ci-dessous, et appuyez sur `Entrée` :
+
+<TerminalScreenshot
+  title="Terminal — votre première commande"
+  lines={[
+    { type: "command", content: "echo bonjour" },
+    { type: "output", content: "bonjour" }
+  ]}
+/>
+
+Vous devriez voir le mot `bonjour` s'afficher. Félicitations — vous venez d'exécuter votre première commande ! La commande `echo` demande à l'ordinateur de "répéter" ce que vous lui avez dit.
+
+<Callout type="tip" title="Astuce : les majuscules et espaces comptent">
+Les commandes sont sensibles aux majuscules et aux espaces. `echo bonjour` fonctionne, mais `Echo Bonjour` pourrait ne pas fonctionner. Copiez-collez toujours les commandes exactement comme elles sont écrites.
+</Callout>
+
+## Qu'est-ce que Node.js ?
+
+Node.js, c'est un moteur qui permet à votre ordinateur d'exécuter du code JavaScript en dehors d'un navigateur web. Imaginez JavaScript comme une langue — et Node.js comme le traducteur qui permet à votre ordinateur de comprendre cette langue.
+
+Claude Code est écrit en JavaScript, donc il a besoin de Node.js pour fonctionner. C'est comme avoir besoin d'installer un lecteur PDF pour ouvrir un fichier PDF.
+
+La bonne nouvelle : l'installation est automatique et ne prend que quelques minutes.
+
+## Qu'est-ce qu'une clé API ?
+
+Une clé API, c'est comme un **badge d'accès** à un bâtiment sécurisé.
+
+Imaginez que les serveurs d'Anthropic sont un immeuble de bureaux ultra-sécurisé où vit l'intelligence artificielle Claude. Pour entrer dans cet immeuble et "parler" à Claude, vous avez besoin d'un badge. Ce badge, c'est votre clé API.
+
+Chaque clé API est unique, associée à votre compte, et permet à Anthropic de savoir qui utilise leurs services (pour la facturation, la sécurité, etc.). Elle ressemble à quelque chose comme `sk-ant-api03-...` — une longue suite de caractères.
+
+<Callout type="warning" title="Votre clé API est comme un mot de passe">
+Ne partagez jamais votre clé API avec quelqu'un d'autre. Ne la copiez pas dans un email ou un document partagé. Si quelqu'un obtient votre clé API, il peut utiliser Claude à votre place (et sur votre facture). Si vous pensez qu'elle a été compromise, vous pouvez en créer une nouvelle depuis votre espace Anthropic.
+</Callout>
+
+## Qu'est-ce que l'intelligence artificielle ?
+
+L'intelligence artificielle (IA) est un logiciel entraîné sur d'énormes quantités de texte — des livres, des articles, des sites web, du code — pour apprendre à comprendre et générer du langage humain.
+
+Claude Code n'est pas "intelligent" comme un être humain. Il ne comprend pas vraiment ce qu'il fait, ne ressent rien, et ne se souvient pas de vous d'une session à l'autre. Mais il est très bon pour reconnaître des patterns dans le texte et générer des réponses cohérentes et utiles.
+
+Pensez à lui comme un **assistant très rapide et polyvalent** qui a lu tout ce qui a été publié sur internet, et qui peut vous aider à écrire, coder, analyser des documents, organiser des idées, et bien plus encore — à condition que vous lui donnez des instructions claires.
+
+La qualité de votre résultat dépend directement de la qualité de vos instructions. C'est pour ça qu'une grande partie de ce guide est consacrée à l'art de bien "parler" à Claude.
+
+## Qu'est-ce que npm ?
+
+npm (Node Package Manager) est un outil qui s'installe automatiquement avec Node.js. C'est comme un **magasin d'applications** pour développeurs, mais en ligne de commande.
+
+Quand vous tapez `npm install -g @anthropic-ai/claude-code`, vous demandez à npm de télécharger et d'installer Claude Code depuis ce magasin. Le flag `-g` signifie "global" : Claude Code sera disponible partout sur votre ordinateur, pas seulement dans un dossier spécifique.
+
+## Récapitulatif visuel
+
+| Terme | Analogie simple |
+|-------|-----------------|
+| Terminal | Parler à l'ordinateur par écrit (au lieu de cliquer) |
+| Commande | Une phrase tapée dans le terminal + Entrée |
+| Node.js | Le moteur qui fait tourner Claude Code |
+| npm | Le magasin d'applications pour développeurs |
+| Clé API | Votre badge d'accès personnel aux serveurs Claude |
+| IA | Un assistant très cultivé qui suit vos instructions |
+
+## Vous êtes prêt(e) !
+
+Vous connaissez maintenant les concepts essentiels pour démarrer. Vous n'avez pas besoin de les maîtriser parfaitement — juste de les avoir en tête pour la suite.
+
+La prochaine étape : installer Node.js et Claude Code sur votre machine.
+
+- [Prérequis et installation](/getting-started/installation) — Installer Claude Code pas à pas
+- [Questions fréquentes des débutants](/getting-started/faq-beginner) — Réponses à vos questions les plus courantes

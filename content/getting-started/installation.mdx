@@ -15,6 +15,8 @@ Avant d'installer Claude Code, vérifiez que vous avez ces trois éléments. Si 
 Claude Code fonctionne grâce à Node.js, le moteur JavaScript qui permet d'exécuter du code côté serveur. Vous avez besoin de la version 18 minimum (la version 22 LTS est recommandée).
 
 Téléchargez-le sur [nodejs.org](https://nodejs.org) ou utilisez un gestionnaire de versions comme `nvm`.
+
+<Screenshot src="/images/screenshots/nodejs-download.svg" alt="Page de téléchargement de Node.js — boutons LTS et Current" caption="La page nodejs.org propose deux versions : LTS (recommandée) et Current" />
 </Card>
 
 <Card title="Un terminal" variant="accent">
@@ -25,16 +27,22 @@ Claude Code vit dans le terminal. Sur **macOS**, utilisez Terminal ou iTerm2. Su
 Vous avez besoin soit d'une **clé API** (pay-as-you-go via la console Anthropic), soit d'un **abonnement Claude Max/Pro/Team** qui inclut l'accès à Claude Code.
 
 Créez votre compte sur [console.anthropic.com](https://console.anthropic.com).
+
+<Screenshot src="/images/screenshots/anthropic-console.svg" alt="Console Anthropic — section API Keys avec bouton Create Key" caption="La console Anthropic permet de créer et gérer vos clés API" />
 </Card>
 
 ### Vérifiez votre version de Node.js
 
 Ouvrez votre terminal et tapez la commande suivante :
 
-```bash
-node --version
-# v22.4.0  ← Parfait, vous êtes prêt !
-```
+<TerminalScreenshot
+  title="Terminal — zsh"
+  lines={[
+    { type: "command", content: "node --version" },
+    { type: "highlight", content: "v22.4.0" },
+    { type: "comment", content: "# Parfait, vous êtes prêt !" }
+  ]}
+/>
 
 <Callout type="warning" title="Version trop ancienne ?">
 Si vous voyez un numéro inférieur à v18.0.0, ou si la commande n'est pas reconnue, vous devez installer ou mettre à jour Node.js. Consultez la section Troubleshooting en bas de cette page.
@@ -44,9 +52,31 @@ Si vous voyez un numéro inférieur à v18.0.0, ou si la commande n'est pas reco
 
 L'installation se fait en une seule commande. Ouvrez votre terminal et exécutez :
 
-```bash
-npm install -g @anthropic-ai/claude-code
-```
+<TerminalScreenshot
+  title="Terminal — macOS (zsh)"
+  lines={[
+    { type: "command", content: "npm install -g @anthropic-ai/claude-code" },
+    { type: "empty", content: "" },
+    { type: "output", content: "added 1 package, and audited 1 package in 3s" },
+    { type: "output", content: "" },
+    { type: "output", content: "found 0 vulnerabilities" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "+ @anthropic-ai/claude-code@1.0.17" }
+  ]}
+/>
+
+<TerminalScreenshot
+  title="PowerShell — Windows"
+  lines={[
+    { type: "command", content: "npm install -g @anthropic-ai/claude-code", promptSymbol: ">" },
+    { type: "empty", content: "" },
+    { type: "output", content: "added 1 package, and audited 1 package in 4s" },
+    { type: "output", content: "" },
+    { type: "output", content: "found 0 vulnerabilities" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "+ @anthropic-ai/claude-code@1.0.17" }
+  ]}
+/>
 
 Cette commande installe Claude Code **globalement** sur votre machine. Cela signifie que la commande `claude` sera disponible depuis n'importe quel dossier de votre système.
 
@@ -58,10 +88,13 @@ Le flag `-g` signifie "global". Sans ce flag, le paquet serait installé uniquem
 
 Après l'installation, vérifiez que tout fonctionne :
 
-```bash
-claude --version
-# @anthropic-ai/claude-code v1.x.x
-```
+<TerminalScreenshot
+  title="Terminal — zsh"
+  lines={[
+    { type: "command", content: "claude --version" },
+    { type: "highlight", content: "@anthropic-ai/claude-code 1.0.17" }
+  ]}
+/>
 
 Si la commande est reconnue et affiche un numéro de version, l'installation est réussie.
 
@@ -93,10 +126,24 @@ source ~/.bashrc  # ou source ~/.zshrc
 <Step title="Lancez Claude Code" stepNumber={3} isLast>
 Placez-vous dans un dossier de projet et lancez la commande `claude`. L'authentification sera automatique grâce à la variable d'environnement.
 
-```bash
-cd ~/mon-projet
-claude
-```
+<TerminalScreenshot
+  title="Terminal — premier lancement"
+  lines={[
+    { type: "command", content: "cd ~/mon-projet && claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Analysing project structure..." },
+    { type: "output", content: "  ✓ Found CLAUDE.md" },
+    { type: "output", content: "  ✓ Authenticated via API key" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Type your request or /help for commands" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> " }
+  ]}
+/>
 </Step>
 </Steps>
 

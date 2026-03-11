@@ -26,7 +26,7 @@ Dans ce tutoriel, nous allons créer un workflow complet qui :
 
 ### Prérequis
 
-Assurez-vous d'avoir les trois MCP configurés :
+Assurez-vous d'avoir les trois MCP configurés dans votre fichier `~/.claude/settings.json` :
 
 ```json
 {
@@ -52,14 +52,18 @@ Assurez-vous d'avoir les trois MCP configurés :
 
 Vérifiez que tout est connecté :
 
-```bash
-claude mcp list
-
-# Résultat attendu :
-# context7: connected
-# playwright: connected
-# github: connected
-```
+<TerminalScreenshot
+  title="Terminal — vérification des MCP"
+  lines={[
+    { type: "command", content: "claude mcp list" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  context7    ✓ connected" },
+    { type: "highlight", content: "  playwright  ✓ connected" },
+    { type: "highlight", content: "  github      ✓ connected" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  3 MCP servers active" }
+  ]}
+/>
 
 ### Étape 1 : Formuler la demande
 
@@ -154,25 +158,34 @@ export default function NotFound() {
 
 ### 3. Test visuel (Playwright)
 
-```bash
-# Claude Code utilise Playwright en interne :
-# -> browser_navigate("http://localhost:3000/page-inexistante")
-# -> browser_take_screenshot()
-#
-# Le screenshot montre la page 404 avec le design moderne
-# Claude Code analyse visuellement le résultat
-```
+<TerminalScreenshot
+  title="Terminal — MCP Playwright en action"
+  lines={[
+    { type: "comment", content: "# Claude Code appelle Playwright en interne :" },
+    { type: "output", content: "  [playwright] browser_navigate(\"http://localhost:3000/page-inexistante\")" },
+    { type: "output", content: "  [playwright] browser_take_screenshot()" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Screenshot capturé : not-found-page.png" },
+    { type: "output", content: "  Page 404 : titre visible, bouton retour centré, design cohérent." }
+  ]}
+/>
 
 ### 4. Création de la PR (GitHub)
 
-```bash
-# Claude Code utilise GitHub en interne :
-# -> git checkout -b feat/custom-404-page
-# -> git add app/not-found.tsx
-# -> git commit -m "feat: add custom 404 page"
-# -> git push -u origin feat/custom-404-page
-# -> create_pull_request(title, body, screenshots)
-```
+<TerminalScreenshot
+  title="Terminal — MCP GitHub en action"
+  lines={[
+    { type: "comment", content: "# Claude Code utilise Git + GitHub MCP :" },
+    { type: "output", content: "  [git] checkout -b feat/custom-404-page" },
+    { type: "output", content: "  [git] add app/not-found.tsx" },
+    { type: "output", content: "  [git] commit -m \"feat: add custom 404 page\"" },
+    { type: "output", content: "  [git] push -u origin feat/custom-404-page" },
+    { type: "output", content: "  [github] create_pull_request(...)" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ PR créée : feat/custom-404-page → main" },
+    { type: "highlight", content: "  https://github.com/you/repo/pull/42" }
+  ]}
+/>
 
 ## Bonnes pratiques pour les workflows MCP
 

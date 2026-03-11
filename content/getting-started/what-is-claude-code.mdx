@@ -13,6 +13,30 @@ Claude Code est un **assistant IA en ligne de commande** développé par Anthrop
 
 Imaginez un collègue développeur senior qui connaît votre codebase sur le bout des doigts, qui ne dort jamais, et qui est toujours prêt à vous aider. C'est Claude Code.
 
+<TerminalScreenshot
+  title="Terminal — Claude Code en action"
+  lines={[
+    { type: "command", content: "claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ✓ Project: my-app (Next.js + TypeScript)" },
+    { type: "output", content: "  ✓ Files indexed: 47 fichiers" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> Ajoute une page de contact avec validation de formulaire" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Je vais créer la page de contact avec React Hook Form." },
+    { type: "output", content: "  Validation : nom (requis), email (format), message (min 10 chars)." },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ● Créer src/app/contact/page.tsx" },
+    { type: "output", content: "    Voulez-vous que je procède ? (y/n)" },
+    { type: "command", content: "y" },
+    { type: "output", content: "  ✓ src/app/contact/page.tsx créé (89 lignes)" }
+  ]}
+/>
+
 <Callout type="info" title="Terminal = Superpouvoir">
 Contrairement aux chatbots classiques qui ne peuvent que répondre à des questions, Claude Code **agit** dans votre environnement réel. Il crée des fichiers, exécute des commandes, analyse votre arborescence et interagit avec Git. C'est la différence fondamentale.
 </Callout>

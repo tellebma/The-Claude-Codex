@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" fill="none">
+  <!-- Window background — PowerShell dark blue -->
+  <rect width="480" height="300" rx="4" fill="#012456"/>
+  <!-- Title bar (Windows style) -->
+  <rect width="480" height="32" fill="#012456"/>
+  <!-- PowerShell icon placeholder -->
+  <rect x="10" y="8" width="16" height="16" rx="2" fill="#0078d4"/>
+  <!-- Title text bar -->
+  <rect x="34" y="12" width="140" height="10" rx="2" fill="#2d5fa3"/>
+  <!-- Window controls (Windows style) -->
+  <rect x="400" y="0" width="40" height="32" fill="#2d5fa3" opacity="0.5"/>
+  <rect x="440" y="0" width="40" height="32" fill="#e81123" rx="0"/>
+  <!-- Minimize / Maximize / Close symbols -->
+  <rect x="415" y="15" width="10" height="2" fill="#ffffff"/>
+  <rect x="453" y="9" width="10" height="2" fill="#ffffff"/>
+  <rect x="453" y="11" width="2" height="10" fill="#ffffff"/>
+  <rect x="461" y="11" width="2" height="10" fill="#ffffff"/>
+  <rect x="453" y="19" width="10" height="2" fill="#ffffff"/>
+  <!-- Divider -->
+  <rect y="32" width="480" height="1" fill="#0078d4"/>
+  <!-- Terminal content -->
+  <!-- PS prompt 1 -->
+  <rect x="16" y="50" width="32" height="10" rx="2" fill="#ffff00" opacity="0.9"/>
+  <rect x="54" y="50" width="10" height="10" rx="2" fill="#cccccc"/>
+  <rect x="70" y="50" width="180" height="10" rx="2" fill="#f0f0f0"/>
+  <!-- Output lines -->
+  <rect x="16" y="74" width="440" height="10" rx="2" fill="#808080"/>
+  <rect x="16" y="92" width="380" height="10" rx="2" fill="#808080"/>
+  <rect x="16" y="110" width="300" height="10" rx="2" fill="#808080"/>
+  <!-- Success highlight — brand cyan instead of neon green -->
+  <rect x="16" y="132" width="6" height="10" rx="2" fill="#06b6d4"/>
+  <rect x="30" y="132" width="260" height="10" rx="2" fill="#06b6d4"/>
+  <!-- PS prompt 2 -->
+  <rect x="16" y="154" width="32" height="10" rx="2" fill="#ffff00" opacity="0.9"/>
+  <rect x="54" y="154" width="10" height="10" rx="2" fill="#cccccc"/>
+  <rect x="70" y="154" width="120" height="10" rx="2" fill="#f0f0f0"/>
+  <!-- Output — brand cyan instead of neon deepskyblue -->
+  <rect x="16" y="178" width="6" height="10" rx="2" fill="#22d3ee"/>
+  <rect x="30" y="178" width="220" height="10" rx="2" fill="#22d3ee"/>
+  <!-- PS prompt 3 -->
+  <rect x="16" y="200" width="32" height="10" rx="2" fill="#ffff00" opacity="0.9"/>
+  <rect x="54" y="200" width="10" height="10" rx="2" fill="#cccccc"/>
+  <rect x="70" y="200" width="60" height="10" rx="2" fill="#f0f0f0"/>
+  <!-- Cursor -->
+  <rect x="138" y="200" width="8" height="10" rx="1" fill="#f0f0f0" opacity="0.9"/>
+</svg>

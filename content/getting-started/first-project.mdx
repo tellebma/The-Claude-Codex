@@ -19,13 +19,23 @@ Avant de commencer, assurez-vous que Claude Code est installé et authentifié. 
 
 Créez un nouveau dossier pour votre projet et lancez Claude Code à l'intérieur.
 
-```bash
-# Créez un dossier vide
-mkdir ~/mon-premier-site && cd ~/mon-premier-site
-
-# Lancez Claude Code
-claude
-```
+<TerminalScreenshot
+  title="Terminal — démarrage du projet"
+  lines={[
+    { type: "command", content: "mkdir ~/mon-premier-site && cd ~/mon-premier-site && claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Analysing project structure..." },
+    { type: "output", content: "  ✓ Empty project — ready to start" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Type your request or /help for commands" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> " }
+  ]}
+/>
 
 Claude Code va s'initialiser et analyser le dossier (vide pour l'instant). Vous êtes prêt à lui parler.
 
@@ -57,17 +67,26 @@ Après avoir envoyé votre prompt, Claude Code va :
 2. **Vous montrer** ce qu'il va faire avant de le faire
 3. **Demander votre accord** pour créer le fichier
 
-```text
-Claude > Je vais créer votre page portfolio. Voici mon plan :
-
-  1. Créer index.html avec la structure HTML sémantique
-  2. Intégrer le CSS avec votre palette de couleurs
-  3. Ajouter les animations CSS au survol
-  4. Rendre le design responsive avec des media queries
-
-Claude > Je vais créer le fichier index.html.
-         Voulez-vous que je procède ? (y/n)
-```
+<TerminalScreenshot
+  title="Terminal — Claude Code en action"
+  lines={[
+    { type: "prompt", content: "> Crée-moi une page web HTML/CSS moderne avec un header, une section hero et 3 cartes de projets. Design sombre, accents cyan, responsive." },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Claude > Je vais créer votre page portfolio. Voici mon plan :" },
+    { type: "output", content: "" },
+    { type: "output", content: "    1. Créer index.html avec la structure HTML sémantique" },
+    { type: "output", content: "    2. Intégrer le CSS avec votre palette de couleurs" },
+    { type: "output", content: "    3. Ajouter les animations CSS au survol des cartes" },
+    { type: "output", content: "    4. Rendre le design responsive (mobile, tablette, desktop)" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ● Créer le fichier index.html (1 fichier)" },
+    { type: "output", content: "    Voulez-vous que je procède ? (y/n)" },
+    { type: "empty", content: "" },
+    { type: "command", content: "y" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ✓ index.html créé (247 lignes)" }
+  ]}
+/>
 
 Tapez `y` (ou appuyez sur Entrée) pour accepter. Claude Code va générer le fichier complet.
 
@@ -126,17 +145,32 @@ Ne cherchez pas à tout décrire parfaitement du premier coup. Commencez simple,
 
 Prêt pour quelque chose de plus ambitieux ? Demandez à Claude Code de créer un projet complet avec un framework.
 
-```text
-> Initialise un projet Next.js 14 avec TypeScript et Tailwind CSS.
-> Crée une landing page pour une app de productivité avec :
-> - Header avec navigation
-> - Hero section avec titre, sous-titre et CTA
-> - Section fonctionnalités (3 colonnes avec icônes)
-> - Section témoignages
-> - Footer
-> - Dark mode par défaut
-> - Design minimaliste et professionnel
-```
+<TerminalScreenshot
+  title="Terminal — projet Next.js"
+  lines={[
+    { type: "prompt", content: "> Initialise un projet Next.js 14 avec TypeScript et Tailwind. Landing page pour une app de productivité. Dark mode, design minimaliste." },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Claude > Je vais initialiser le projet et créer la landing page." },
+    { type: "output", content: "    1. npx create-next-app@14 --typescript --tailwind" },
+    { type: "output", content: "    2. Créer les composants (Header, Hero, Features, Footer)" },
+    { type: "output", content: "    3. Configurer le dark mode" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ● Exécuter : npx create-next-app@14 mon-app --typescript --tailwind" },
+    { type: "output", content: "    Voulez-vous que je procède ? (y/n)" },
+    { type: "command", content: "y" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Creating a new Next.js app in ~/mon-premier-site/mon-app..." },
+    { type: "output", content: "  Installing dependencies..." },
+    { type: "output", content: "  ✓ Project initialized successfully!" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ✓ src/components/Header.tsx créé" },
+    { type: "output", content: "  ✓ src/components/Hero.tsx créé" },
+    { type: "output", content: "  ✓ src/components/Features.tsx créé (3 colonnes)" },
+    { type: "output", content: "  ✓ src/app/page.tsx mis à jour" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Projet prêt ! Lancez : npm run dev" }
+  ]}
+/>
 
 Claude Code va :
 - Initialiser le projet (`npx create-next-app`)
@@ -145,12 +179,18 @@ Claude Code va :
 - Structurer les fichiers correctement
 - Tout connecter pour que le projet fonctionne du premier coup
 
-```bash
-# Après la génération, lancez le serveur de développement
-npm run dev
-
-# Ouvrez http://localhost:3000 dans votre navigateur
-```
+<TerminalScreenshot
+  title="Terminal — serveur de développement"
+  lines={[
+    { type: "command", content: "cd mon-app && npm run dev" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ▲ Next.js 14.2.3" },
+    { type: "output", content: "  - Local:   http://localhost:3000" },
+    { type: "output", content: "  - Network: http://192.168.1.42:3000" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Ready in 1.8s" }
+  ]}
+/>
 
 ## Bonnes pratiques pour vos premiers projets
 

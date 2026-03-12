@@ -1,0 +1,259 @@
+---
+title: "Cas d'usage business : 8 exemples concrets"
+description: "8 cas d'usage professionnels de Claude Code pour non-developpeurs : email, resume, analyse de donnees, presentation, planning, post LinkedIn, rapport et veille."
+order: 1
+section: "use-cases"
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Pourquoi cette page existe
+
+Vous n'avez pas besoin de savoir coder pour tirer parti de Claude Code. Cette page regroupe 8 situations professionnelles courantes avec, pour chacune, le prompt exact a copier et le type de resultat que vous obtiendrez.
+
+<Callout type="tip" title="Comment utiliser ces exemples">
+Ouvrez Claude Code dans votre terminal, collez le prompt tel quel, puis adaptez les details entre crochets `[...]` a votre situation. Les resultats apparaissent directement dans le terminal.
+</Callout>
+
+---
+
+## 1. Rediger un email professionnel
+
+Ecrire un email clair et adapte au bon ton prend du temps. Claude Code le fait en quelques secondes.
+
+**Le prompt :**
+
+```text
+Je dois envoyer un email professionnel.
+Contexte : [je relance un client qui n'a pas repondu a mon devis depuis 10 jours]
+Ton : professionnel mais pas froid, direct sans etre insistant
+Longueur : 5-8 lignes maximum
+Langue : francais
+
+Genere l'objet et le corps de l'email. Propose aussi une variante plus courte.
+```
+
+**Ce que vous obtenez :** deux versions de l'email avec objet, pret a copier dans votre messagerie. La version longue et la version courte vous permettent de choisir selon le contexte.
+
+**Variantes utiles :**
+- Remplacez le contexte par "je refuse poliment une proposition commerciale"
+- Ou par "je demande un delai supplementaire a mon manager"
+- Ou par "je remercie un prestataire apres un projet reussi"
+
+---
+
+## 2. Resumer un document long
+
+Lire un rapport de 40 pages prend une heure. Claude Code vous en donne l'essentiel en 30 secondes.
+
+**Le prompt :**
+
+```text
+Lis le fichier [rapport-annuel-2025.pdf] et produis :
+1. Un resume executif en 5 lignes
+2. Les 3 chiffres cles a retenir
+3. Les 2 risques mentionnes
+4. Une recommandation d'action en une phrase
+
+Format : bullet points, pas de jargon.
+```
+
+**Ce que vous obtenez :** un resume structure que vous pouvez envoyer a votre equipe ou coller dans un compte-rendu. Les chiffres cles sont extraits et mis en evidence.
+
+<Callout type="info" title="Astuce fichier">
+Placez le fichier dans le meme dossier ou Claude Code est lance, ou indiquez le chemin complet. Claude Code sait lire les fichiers texte, Markdown, et la plupart des formats courants.
+</Callout>
+
+---
+
+## 3. Analyser des donnees simples
+
+Vous avez un fichier CSV ou un tableau, et vous voulez en tirer des conclusions sans ouvrir Excel.
+
+**Le prompt :**
+
+```text
+Analyse le fichier [ventes-q4-2025.csv] et donne-moi :
+1. Le chiffre d'affaires total
+2. Le produit le plus vendu (en volume et en valeur)
+3. Le mois le plus performant
+4. La tendance generale (en hausse, stable ou en baisse)
+5. Une anomalie eventuelle dans les donnees
+
+Presente les resultats sous forme de tableau lisible.
+```
+
+**Ce que vous obtenez :** un tableau avec les chiffres cles, des observations sur les tendances, et des alertes si quelque chose semble anormal dans vos donnees.
+
+**Variantes utiles :**
+- "Compare ces ventes avec le fichier [ventes-q3-2025.csv]"
+- "Genere un graphique ASCII montrant l'evolution mois par mois"
+- "Identifie les 3 clients qui representent le plus de chiffre d'affaires"
+
+---
+
+## 4. Preparer une presentation
+
+Structurer une presentation prend souvent plus de temps que de la presenter. Claude Code vous donne un plan detaille en quelques secondes.
+
+**Le prompt :**
+
+```text
+Prepare le plan d'une presentation de 15 minutes.
+Sujet : [bilan du projet de migration CRM, a presenter au comite de direction]
+Public : [directeurs non-techniques, ils veulent des resultats et des chiffres]
+
+Pour chaque slide, indique :
+- Le titre
+- Les 2-3 points cles (bullet points)
+- Une suggestion de visuel ou graphique
+
+Nombre de slides : 10-12 maximum.
+Ton : factuel, oriente resultats.
+```
+
+**Ce que vous obtenez :** un plan slide par slide avec des titres percutants, des points cles synthetiques et des suggestions de visuels. Vous n'avez plus qu'a ouvrir PowerPoint ou Google Slides et remplir.
+
+---
+
+## 5. Organiser un planning d'equipe
+
+Coordonner des reunions, des deadlines et des disponibilites, c'est un casse-tete. Claude Code peut vous proposer une structure claire.
+
+**Le prompt :**
+
+```text
+Je dois organiser le planning de mon equipe de [6 personnes] pour [le lancement produit du 15 avril].
+
+Voici les etapes du projet :
+- Finalisation du contenu marketing : 5 jours
+- Tests utilisateurs : 3 jours
+- Corrections post-tests : 2 jours
+- Preparation du communique de presse : 2 jours
+- Briefing equipe commerciale : 1 jour
+- Lancement : jour J
+
+Contraintes :
+- Marie est en conge du 1er au 5 avril
+- Le design doit etre valide avant les tests
+
+Genere un retroplanning a partir de la date de lancement, avec les dates de debut et fin de chaque etape, et les responsables a assigner.
+```
+
+**Ce que vous obtenez :** un retroplanning complet avec les dates calculees automatiquement, les dependances entre taches, et des suggestions d'attribution. Vous pouvez le copier dans un tableur ou un outil de gestion de projet.
+
+---
+
+## 6. Rediger un post LinkedIn
+
+Un bon post LinkedIn, c'est un equilibre entre valeur, authenticite et format adapte a la plateforme. Claude Code vous aide a trouver cet equilibre.
+
+**Le prompt :**
+
+```text
+Ecris un post LinkedIn sur [comment notre equipe a reduit de 30% le temps de traitement des reclamations clients grace a l'automatisation].
+
+Contraintes :
+- Ton : professionnel mais humain, partage d'experience (pas de lecon)
+- Structure : accroche forte, 3-4 paragraphes courts, conclusion avec question ouverte
+- Longueur : 800-1200 caracteres
+- Pas de hashtags excessifs (3 maximum)
+- Pas de emojis en debut de ligne
+- Inclure un chiffre concret
+
+Propose 2 versions : une version "recit" et une version "liste de conseils".
+```
+
+**Ce que vous obtenez :** deux versions du post, chacune avec une accroche pensee pour le fil LinkedIn. La version recit raconte une histoire, la version liste donne des conseils actionnables.
+
+---
+
+## 7. Produire un rapport d'activite
+
+Le rapport hebdomadaire ou mensuel est une corvee pour beaucoup de managers. Claude Code peut le structurer a partir de vos notes brutes.
+
+**Le prompt :**
+
+```text
+Transforme mes notes brutes en rapport d'activite mensuel.
+
+Mes notes (en vrac) :
+- 3 nouveaux clients signes (Dupont SA, Martin et Co, Groupe Leroy)
+- CA mars : 145K, objectif etait 130K
+- 2 demissions dans l'equipe support (remplacement en cours)
+- Lancement de la v2 du site le 18 mars, 0 bug critique
+- Formation Claude Code pour 12 personnes
+- Retard de 1 semaine sur le projet facturation (dependance fournisseur)
+
+Format du rapport :
+1. Faits marquants (3-4 lignes)
+2. Resultats chiffres (tableau)
+3. Points de vigilance
+4. Priorites du mois prochain
+Ton : factuel, synthetique, adapte a un comite de direction.
+```
+
+**Ce que vous obtenez :** un rapport structure et professionnel a partir de vos notes en vrac. Les chiffres sont mis en valeur, les alertes sont identifiees clairement, et les priorites sont formulees en actions.
+
+---
+
+## 8. Faire une veille concurrentielle
+
+Synthetiser des informations sur vos concurrents prend des heures. Claude Code peut structurer l'analyse a partir des donnees que vous lui fournissez.
+
+**Le prompt :**
+
+```text
+Je te donne des notes sur 3 concurrents. Structure une analyse concurrentielle.
+
+Concurrent A - TechnoPlus :
+- Prix : 49 euros/mois, pas d'offre gratuite
+- Force : interface tres intuitive
+- Faiblesse : pas d'API, integration limitee
+
+Concurrent B - DataFlow :
+- Prix : 29 euros/mois, version gratuite limitee
+- Force : excellent support client, communaute active
+- Faiblesse : lent sur les gros volumes
+
+Concurrent C - SmartSync :
+- Prix : 79 euros/mois, essai 14 jours
+- Force : fonctionnalites avancees, IA integree
+- Faiblesse : complexe a prendre en main
+
+Notre produit : [CloudManager, 39 euros/mois, bon rapport qualite/prix mais UI a ameliorer]
+
+Genere :
+1. Un tableau comparatif (prix, forces, faiblesses)
+2. Notre positionnement par rapport a chacun
+3. 3 recommandations strategiques
+```
+
+**Ce que vous obtenez :** un tableau comparatif clair, une analyse de positionnement et des recommandations concretes. Le tout est pret a integrer dans une presentation ou un document strategique.
+
+---
+
+## Conseils pour de meilleurs resultats
+
+Quel que soit le cas d'usage, ces principes ameliorent la qualite des reponses :
+
+<Steps>
+<Step title="Donnez du contexte" stepNumber={1}>
+Plus Claude Code comprend votre situation (qui vous etes, a qui vous vous adressez, dans quel cadre), plus la reponse sera pertinente. Ne sautez jamais la ligne "contexte" du prompt.
+</Step>
+<Step title="Precisez le format de sortie" stepNumber={2}>
+"Fais un tableau", "bullet points", "5 lignes maximum" : ces contraintes evitent des reponses trop longues ou mal structurees.
+</Step>
+<Step title="Demandez des variantes" stepNumber={3}>
+"Propose 2 versions" ou "donne une alternative plus courte" vous permet de choisir sans avoir a reformuler.
+</Step>
+<Step title="Iterez" stepNumber={4}>
+Si le premier resultat n'est pas parfait, dites simplement "rends le ton plus formel" ou "raccourcis la partie 3". Claude Code garde le contexte de votre conversation.
+</Step>
+</Steps>
+
+## Prochaines etapes
+
+- Consultez les [histoires de reussite](/use-cases/success-stories) pour voir comment d'autres professionnels utilisent Claude Code au quotidien
+- Explorez les [tutoriels sans code](/use-cases/no-code) pour automatiser des taches repetitives
+- Retrouvez nos [templates de prompts pour non-developpeurs](/prompting/non-dev-prompting) pour aller plus loin

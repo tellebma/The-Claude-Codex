@@ -14,6 +14,7 @@ const primaryNav = [
   { name: "MCP", href: "/mcp" },
   { name: "Skills", href: "/skills" },
   { name: "Prompting", href: "/prompting" },
+  { name: "Cas d'usage", href: "/use-cases" },
   { name: "Parcours", href: "/personas" },
   { name: "Entreprise", href: "/enterprise" },
   { name: "Avancé", href: "/advanced" },

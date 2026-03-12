@@ -637,8 +637,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 17 — Page 404 et finitions UX
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P3 (basse)
 - **Estimation** : XS (1-2 jours)
 - **Dependances** : Epic 4 (design system corrige)
@@ -661,8 +661,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 18 — Tests, CI/CD et assurance qualite
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P1 (haute)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 2, Epic 3 (composants a tester)
@@ -1500,8 +1500,8 @@ Creer le contenu documentant les Hooks de Claude Code, le mode headless/non-inte
 
 ## Epic 25 — Creation de MCP custom (tutoriel complet)
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P1 (haute — sujet #1 pour connaisseurs et experts, totalement absent)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 19 (corrections de credibilite MCP)
@@ -1692,8 +1692,8 @@ Implementer un systeme de parcours differencies par persona avec des badges de n
 
 ## Epic 27 — Section Enterprise complete
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P1 (haute — score 3/10, le segment le plus faible)
 - **Estimation** : L (2-4 semaines)
 - **Dependances** : Aucune (peut commencer immediatement)

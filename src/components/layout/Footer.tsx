@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Terminal, Github, ExternalLink } from "lucide-react";
+import { CopyrightYear } from "@/components/ui/CopyrightYear";
 
 const footerLinks = {
   guides: [
@@ -92,9 +93,14 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200/50 pt-8 dark:border-slate-800 sm:flex-row">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {new Date().getFullYear()} The Claude Codex. Projet open-source.
-          </p>
+          <div className="flex flex-col gap-1 text-center sm:text-left">
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              <CopyrightYear /> The Claude Codex. Projet open-source.
+            </p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">
+              Les t\u00e9moignages pr\u00e9sent\u00e9s sur ce site sont des exemples illustratifs.
+            </p>
+          </div>
           <a
             href="https://github.com/tellebma/The-Claude-Codex"
             target="_blank"

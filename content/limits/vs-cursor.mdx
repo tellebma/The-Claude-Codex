@@ -1,0 +1,104 @@
+---
+title: "Claude Code vs Cursor : comparaison honnete"
+description: "Comparaison equilibree entre Claude Code et Cursor. Deux approches agent de l'assistance au code, avec des forces et faiblesses differentes. Guide pour choisir selon votre profil."
+section: "limits"
+order: 3
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+Cursor et Claude Code sont plus proches qu'on pourrait le croire. Les deux adoptent une approche agent : ils lisent votre code, comprennent le contexte, et peuvent modifier plusieurs fichiers. La difference principale, c'est l'interface. Cursor est un IDE complet (fork de VS Code), Claude Code est un outil en ligne de commande.
+
+## Deux interfaces, une philosophie similaire
+
+**Cursor** est un editeur de code qui integre l'IA nativement. Il propose a la fois de l'autocompletion (comme Copilot), un chat contextuel, et un mode agent capable de modifier plusieurs fichiers. Tout se passe dans l'IDE, avec des diffs visuels et un systeme d'acceptation des modifications.
+
+**Claude Code** vit dans le terminal. Pas d'interface graphique, pas de diffs visuels integres. Vous decrivez ce que vous voulez, Claude Code execute. C'est plus brut, mais aussi plus flexible : il peut faire tout ce que votre terminal peut faire.
+
+## Comparaison point par point
+
+| Critere | Claude Code | Cursor |
+|---------|-------------|--------|
+| **Interface** | Terminal (CLI) | IDE (fork VS Code) |
+| **Autocompletion** | Non | Oui (Tab) |
+| **Mode agent** | Natif, principal | Oui (Composer Agent) |
+| **Diffs visuels** | Via git diff | Integres dans l'IDE |
+| **Modeles disponibles** | Claude uniquement | Claude, GPT-4o, Gemini, etc. |
+| **Choix du modele** | Sonnet/Opus/Haiku | Multi-provider flexible |
+| **Fenetre de contexte** | 200K tokens | Variable selon le modele |
+| **MCP / outils** | Ecosysteme riche | Support MCP en beta |
+| **Execution de commandes** | Oui (shell natif) | Oui (terminal integre) |
+| **Agents custom** | Oui (fichiers markdown) | .cursorrules (plus limite) |
+| **Hooks et automatisation** | Oui | Non |
+| **Mode headless / CI** | Oui (--print) | Non |
+| **Prix** | 20 a 200$/mois | 20 a 40$/mois (+ couts API) |
+| **Acces hors ligne** | Non | Non |
+
+## Ou Cursor fait mieux
+
+**L'experience visuelle.** Cursor affiche les modifications proposees sous forme de diffs colores dans l'IDE. Vous voyez exactement ce qui va changer avant d'accepter. Claude Code modifie les fichiers directement, et c'est a vous de verifier avec `git diff`.
+
+**L'autocompletion.** Cursor propose des completions Tab pendant que vous tapez, comme Copilot. Claude Code n'offre pas cette fonctionnalite. Si vous alternez entre l'ecriture manuelle et l'assistance IA, Cursor est plus fluide.
+
+**Le multi-modele.** Cursor vous laisse choisir entre Claude, GPT-4o, Gemini et d'autres modeles selon la tache. Claude Code est restreint aux modeles Anthropic (Claude). Si un modele est meilleur qu'un autre pour un langage specifique, Cursor vous donne cette flexibilite.
+
+**La courbe d'apprentissage.** Si vous utilisez deja VS Code, passer a Cursor est quasi transparent. Claude Code demande d'etre a l'aise avec le terminal et d'apprendre les commandes et les conventions.
+
+**Le prix d'entree.** Cursor Pro coute 20$/mois et inclut l'autocompletion + le mode agent. Le plan Pro de Claude Code coute aussi 20$/mois, mais avec un throttling plus rapide et sans autocompletion.
+
+## Ou Claude Code fait mieux
+
+**L'autonomie d'execution.** Claude Code peut enchainer des dizaines d'actions sans intervention : lire des fichiers, executer des tests, corriger le code, relancer les tests, committer. Cursor attend generalement votre validation a chaque etape.
+
+**Les MCP et l'ecosysteme d'outils.** Claude Code peut interroger GitHub, Slack, une base de donnees, un navigateur, des API externes via les MCP. L'ecosysteme est mature et en pleine expansion. Cursor commence a supporter les MCP, mais c'est encore en beta.
+
+**Le mode headless et CI/CD.** Claude Code peut tourner dans un pipeline GitHub Actions ou GitLab CI sans interface graphique. Generez des revues de code automatiques, des changelogs, ou des correctifs sur chaque pull request. Cursor est un outil de bureau uniquement.
+
+**Les hooks et l'automatisation.** Les hooks PreToolUse et PostToolUse de Claude Code permettent d'automatiser des actions (formater avec Prettier apres chaque modification, notifier Slack, verifier les permissions). Cursor n'offre pas ce niveau d'automatisation.
+
+**Les agents custom et la personnalisation.** Le fichier CLAUDE.md, les agents en markdown, les skills : Claude Code s'adapte profondement a vos conventions. Cursor propose `.cursorrules`, qui est plus limite en portee et en expressivite.
+
+**Le travail sur de gros projets.** Claude Code peut indexer et naviguer dans des codebases de plusieurs centaines de milliers de lignes en utilisant des strategies de lecture selective. Cursor charge le contexte differemment, et les limites de contexte se font sentir plus vite sur les tres gros projets.
+
+## Ce que les deux font bien
+
+- **Comprehension du code :** les deux lisent votre projet et comprennent l'architecture
+- **Modification multi-fichiers :** les deux peuvent refactorer sur plusieurs fichiers
+- **Debugging :** les deux peuvent analyser des erreurs et proposer des corrections
+- **Generation de tests :** les deux produisent des tests de qualite correcte
+- **Support des langages populaires :** Python, TypeScript, JavaScript, Go, Rust, etc.
+
+## Peut-on utiliser les deux ?
+
+Oui, mais c'est moins complementaire qu'avec Copilot. Cursor et Claude Code couvrent des territoires qui se chevauchent davantage. Le scenario le plus courant :
+
+- **Cursor** pour le travail quotidien dans l'IDE (codage, completions, modifications rapides)
+- **Claude Code** pour les taches de fond, l'automatisation, les workflows CI/CD, et les refactorings massifs que vous lancez depuis le terminal
+
+<Callout type="info" title="Point budget">
+Cursor Pro (20$/mois) + Claude Code Max 5x (100$/mois) = 120$/mois. C'est un investissement significant. Evaluez d'abord chaque outil separement pendant un mois avant de les combiner.
+</Callout>
+
+## Comment choisir
+
+**Choisissez Cursor si :**
+- Vous voulez un IDE tout-en-un avec IA integree
+- L'autocompletion Tab est essentielle pour votre workflow
+- Vous aimez valider chaque modification visuellement
+- Vous voulez basculer entre differents modeles (Claude, GPT-4o, Gemini)
+- Vous preferez une interface graphique au terminal
+
+**Choisissez Claude Code si :**
+- Vous etes a l'aise dans le terminal et voulez un agent autonome
+- Vous avez besoin d'automatiser des workflows complexes (MCP, hooks, CI/CD)
+- Vous travaillez sur de gros projets avec beaucoup de fichiers
+- La personnalisation poussee (CLAUDE.md, agents custom) vous interesse
+- Vous voulez integrer l'IA dans vos pipelines CI/CD
+
+**Le bon reflexe :** essayez les deux pendant une semaine sur votre projet reel. Les comparaisons theoriques ont leurs limites, rien ne vaut l'experience directe.
+
+## Prochaines etapes
+
+- Comparez aussi avec Copilot : [Claude Code vs GitHub Copilot](/limits/vs-copilot)
+- Decouvrez quand Claude Code n'est pas le bon choix : [Quand ne PAS utiliser Claude Code](/limits/when-not-to-use)
+- Consultez les limites techniques : [Limites connues](/limits/known-limitations)

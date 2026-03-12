@@ -1,0 +1,98 @@
+---
+title: "Claude Code vs GitHub Copilot : comparaison honnete"
+description: "Comparaison equilibree entre Claude Code et GitHub Copilot. Approche agent vs autocompletion, forces et faiblesses de chacun, et cas d'usage ou choisir l'un ou l'autre."
+section: "limits"
+order: 2
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+Claude Code et GitHub Copilot ne jouent pas dans la meme categorie. L'un est un agent en ligne de commande, l'autre une extension d'IDE qui complete votre code pendant la frappe. Les comparer directement n'a de sens que si on comprend ces differences fondamentales.
+
+## Deux philosophies differentes
+
+**GitHub Copilot** est un outil d'autocompletion integre a votre editeur. Vous tapez du code, Copilot propose la suite. C'est rapide, fluide, presque invisible. Depuis 2025, Copilot propose aussi un mode agent (Copilot Workspace, Copilot Chat), mais son coeur reste l'autocompletion en temps reel.
+
+**Claude Code** est un agent autonome en ligne de commande. Vous lui decrivez une tache en langage naturel, il lit vos fichiers, reflechit, et execute. Il peut modifier plusieurs fichiers, lancer des commandes, utiliser des outils externes via les MCP. C'est plus lent, mais la portee d'action est bien plus large.
+
+## Comparaison point par point
+
+| Critere | Claude Code | GitHub Copilot |
+|---------|-------------|----------------|
+| **Type d'outil** | Agent CLI autonome | Extension IDE + chat |
+| **Mode principal** | Conversation, taches complexes | Autocompletion en temps reel |
+| **Vitesse** | 2 a 60 secondes par reponse | Quasi instantane (< 1s) |
+| **Portee d'action** | Multi-fichiers, shell, MCP | Fichier courant (principalement) |
+| **Integration IDE** | Terminal, pas d'IDE natif | VS Code, JetBrains, Neovim |
+| **Modele sous-jacent** | Claude (Anthropic) | GPT-4o, Claude (via options) |
+| **Fenetre de contexte** | 200K tokens | Variable (plus limitee en inline) |
+| **Acces fichiers** | Lit tout le projet | Fichier ouvert + contexte proche |
+| **Execution de commandes** | Oui (shell, git, npm...) | Non (sauf Copilot Workspace) |
+| **MCP / outils externes** | Oui (ecosysteme riche) | Non |
+| **Prix individuel** | 20 a 200$/mois (ou API) | 10 a 39$/mois |
+| **Plan gratuit** | Non | Oui (limite) |
+
+## Ou Copilot fait mieux
+
+Soyons honnetes : Copilot est superieur a Claude Code dans plusieurs scenarios.
+
+**L'autocompletion pendant la frappe.** C'est le point fort historique de Copilot, et Claude Code ne propose tout simplement pas cette fonctionnalite. Quand vous ecrivez du code ligne par ligne et que vous voulez des suggestions instantanees, Copilot est imbattable.
+
+**L'integration IDE.** Copilot vit dans votre editeur. Pas besoin de changer de fenetre, pas besoin de taper une commande. L'experience est fluide et ne casse pas votre flux de travail.
+
+**Le prix d'entree.** Copilot Individual coute 10$/mois (et il existe un plan gratuit). Claude Code demande au minimum 20$/mois sur le plan Pro, et le plan confortable (Max 5x) coute 100$/mois. Pour un developpeur occasionnel, la difference est significative.
+
+**L'adoption en equipe.** Copilot Business et Enterprise sont deployes dans des milliers d'organisations. Les outils de gestion, les politiques de securite et le support sont matures.
+
+**Les micro-taches.** Pour completer une fonction, ecrire un test rapide ou generer un bloc repetitif, Copilot est plus efficace parce que plus rapide.
+
+## Ou Claude Code fait mieux
+
+**Les taches multi-fichiers.** Refactorer un composant utilise dans 15 fichiers, migrer une API, restructurer un module : Claude Code lit le projet dans son ensemble et modifie tout de maniere coherente. Copilot travaille principalement sur le fichier courant.
+
+**Le raisonnement complexe.** Claude Code peut analyser un bug en remontant la chaine d'appels sur plusieurs fichiers, comprendre l'architecture d'un projet, ou proposer une solution qui tient compte de contraintes multiples. Copilot genere du code localement sans cette vision globale.
+
+**L'automatisation de workflows.** Grace aux MCP, Claude Code peut lire vos issues GitHub, interroger une base de donnees, lancer des tests, et generer un rapport. Copilot ne sort pas de l'IDE.
+
+**La creation de projets from scratch.** Demander "cree-moi une API REST avec authentification JWT, tests et documentation" a Claude Code produit un projet complet et fonctionnel. Copilot vous aidera fichier par fichier, mais ne generera pas la structure globale seul.
+
+**La personnalisation profonde.** Le fichier CLAUDE.md, les agents custom, les hooks : Claude Code s'adapte a vos conventions et workflows specifiques. Copilot offre moins de personnalisation.
+
+## Les deux ensemble
+
+La bonne nouvelle : ces outils ne sont pas exclusifs. Beaucoup de developpeurs utilisent les deux.
+
+**Le workflow combine typique :**
+1. **Claude Code** pour les taches de fond : creation de fonctionnalites, refactoring, debugging complexe, generation de tests
+2. **Copilot** pour les micro-taches pendant le codage : completions, snippets, petites corrections
+
+C'est comme utiliser une perceuse et un tournevis. La perceuse est plus puissante, le tournevis est plus precis pour les petites vis. Vous n'avez pas a choisir.
+
+<Callout type="info" title="Cout combine">
+Utiliser les deux coute entre 30$/mois (Copilot Individual + Claude Pro) et 139$/mois (Copilot Individual + Claude Max 5x). Evaluez si le gain de productivite justifie l'investissement pour votre situation.
+</Callout>
+
+## Comment choisir
+
+**Choisissez Copilot seul si :**
+- Votre budget est serre (< 20$/mois)
+- Vous travaillez principalement sur des taches de codage standard
+- Vous voulez une experience zero-friction dans votre IDE
+- Votre equipe a deja Copilot et vous voulez un outil unique
+
+**Choisissez Claude Code seul si :**
+- Vous faites beaucoup de refactoring, de debugging ou de creation de projets
+- Vous avez besoin d'automatiser des workflows complexes (MCP, agents)
+- Vous voulez un outil qui comprend votre projet dans sa globalite
+- Vous etes a l'aise dans le terminal
+
+**Utilisez les deux si :**
+- Votre budget le permet
+- Vous alternez entre des taches de fond (Claude Code) et du codage en continu (Copilot)
+- Vous voulez le meilleur des deux mondes
+
+## Prochaines etapes
+
+- Comparez aussi avec Cursor : [Claude Code vs Cursor](/limits/vs-cursor)
+- Decouvrez les limites techniques de Claude Code : [Limites connues](/limits/known-limitations)
+- Evaluez les couts en detail : [Couts reels de Claude Code](/content/couts-reels-claude-code)

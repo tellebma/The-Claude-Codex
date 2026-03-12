@@ -1,0 +1,165 @@
+---
+title: "Limites connues de Claude Code"
+description: "Les contraintes reelles de Claude Code en 2026 : fenetre de contexte, hallucinations, execution de code, latence, couts et support des langages. Analyse honnete avec des strategies pour chaque limite."
+section: "limits"
+order: 1
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+Claude Code est un outil puissant, mais il a des limites reelles. Les connaitre vous evitera des frustrations et vous aidera a tirer le meilleur de chaque session.
+
+## Fenetre de contexte
+
+Claude Code utilise une fenetre de contexte de 200 000 tokens (environ 150 000 mots). Ca semble enorme, mais en pratique, cette fenetre se remplit vite.
+
+**Ce qui consomme du contexte :**
+- Le contenu des fichiers lus par Claude
+- L'historique de la conversation
+- Les reponses generees par Claude lui-meme
+- Les outils MCP appeles et leurs resultats
+
+**Le probleme concret :** sur un projet de plus de 50 fichiers, Claude ne peut pas tout garder en memoire. En fin de session longue, il "oublie" ce qu'il a lu au debut.
+
+<Callout type="tip" title="Comment contourner cette limite">
+Utilisez `/compact` regulierement pour resumer la conversation et liberer du contexte. Structurez votre CLAUDE.md pour que les informations critiques soient toujours presentes. Decoupez les grosses taches en sessions courtes et focalisees.
+
+Pour aller plus loin : [Gestion du contexte et fenetre de 200K tokens](/prompting/context-management).
+</Callout>
+
+## Hallucinations
+
+Claude peut inventer des informations avec aplomb. C'est le probleme le plus serieux de tout modele de langage, et Claude Code n'y echappe pas.
+
+**Exemples concrets :**
+- Inventer une API ou une methode qui n'existe pas dans une bibliotheque
+- Generer du code qui reference un package npm inexistant
+- Affirmer qu'un fichier contient telle fonction alors que ce n'est pas le cas
+- Citer une documentation officielle avec des informations incorrectes
+
+**Le risque :** si vous acceptez le code genere sans le verifier, vous introduisez des bugs subtils qui peuvent passer les tests unitaires (parce que les tests aussi peuvent etre hallucines).
+
+<Callout type="warning" title="Regle d'or">
+Ne faites jamais confiance aveugle au code genere. Relisez chaque modification, verifiez les imports, testez les fonctions. Claude Code est un assistant, pas un remplacement de votre jugement technique.
+</Callout>
+
+## Execution de code et acces systeme
+
+Claude Code peut lire et ecrire des fichiers, executer des commandes shell et interagir avec votre systeme. Mais il y a des limites importantes.
+
+**Ce que Claude Code ne peut pas faire :**
+- Acceder a Internet directement (sans MCP dedie)
+- Interagir avec des interfaces graphiques (cliquer, scroller)
+- Lancer des processus longs en arriere-plan de maniere fiable
+- Gerer des sessions interactives (comme `vim` ou `less`)
+- Acceder a des fichiers en dehors du repertoire de travail (sauf configuration explicite)
+
+**Ce qui peut mal tourner :**
+- Une commande destructrice (`rm -rf`, `git reset --hard`) executee trop vite si vous avez active le mode auto-accept
+- Des modifications de fichiers en cascade qui brisent la coherence du projet
+- Des commandes shell qui echouent silencieusement, et Claude continue sur une base fausse
+
+<Callout type="tip" title="Protegez-vous">
+Travaillez toujours sur une branche Git dediee. Evitez `--dangerously-skip-permissions` en local. Utilisez le systeme de permissions pour limiter les outils accessibles.
+</Callout>
+
+## Latence et vitesse
+
+Claude Code n'est pas instantane. Chaque requete fait un aller-retour vers les serveurs d'Anthropic, et les reponses longues prennent du temps a generer.
+
+**Temps typiques observes :**
+
+| Action | Duree estimee |
+|--------|--------------|
+| Question simple | 2 a 5 secondes |
+| Generation d'un fichier | 5 a 15 secondes |
+| Refactoring multi-fichiers | 15 a 60 secondes |
+| Tache complexe (agent, MCP) | 1 a 5 minutes |
+
+**Facteurs aggravants :**
+- L'Extended Thinking ajoute un temps de reflexion avant la reponse
+- Les modeles plus puissants (Opus) sont plus lents que Sonnet ou Haiku
+- Les MCP ajoutent des appels reseau supplementaires
+- Le throttling sur les plans Pro et Max limite le nombre de requetes par periode
+
+<Callout type="info" title="A noter">
+La latence est un compromis delibere. Claude Code privilegie la qualite et la profondeur d'analyse a la vitesse brute. Si vous avez besoin de completions instantanees pendant la frappe, GitHub Copilot est plus adapte a ce besoin precis.
+</Callout>
+
+## Couts
+
+Claude Code n'est pas gratuit, et les couts peuvent grimper vite si on n'y fait pas attention.
+
+**Structure de prix (mars 2026) :**
+
+| Plan | Prix | Ce que vous obtenez |
+|------|------|-------------------|
+| API (pay-as-you-go) | Variable | Sonnet : ~3$/M tokens input, ~15$/M output |
+| Pro (20$/mois) | Forfait | Acces limite, throttling rapide |
+| Max 5x (100$/mois) | Forfait | Usage confortable pour un dev actif |
+| Max 20x (200$/mois) | Forfait | Usage intensif, peu de throttling |
+
+**Ce qui coute cher :**
+- Les sessions longues (le contexte accumule = plus de tokens)
+- L'Extended Thinking (tokens de reflexion factures comme de l'output)
+- Les modeles haut de gamme (Opus coute 5x plus que Sonnet)
+- Les MCP qui injectent beaucoup de donnees dans le contexte
+
+<Callout type="tip" title="Optimiser ses couts">
+Utilisez `/cost` pour suivre votre consommation en temps reel. Privilegiez Sonnet pour les taches courantes et reservez Opus aux problemes complexes. Compactez souvent avec `/compact`. Pour un calcul detaille : [Couts reels de Claude Code](/content/couts-reels-claude-code).
+</Callout>
+
+## Support des langages
+
+Claude Code comprend la plupart des langages de programmation populaires, mais son niveau de competence varie.
+
+**Excellent (comparable a un dev senior) :**
+- Python, TypeScript, JavaScript
+- HTML, CSS, SQL
+- Bash, shell scripting
+
+**Bon (comparable a un dev intermediaire) :**
+- Java, C#, Go, Rust, C/C++
+- Ruby, PHP, Swift, Kotlin
+
+**Correct mais limite :**
+- Langages plus rares (Haskell, Erlang, Elixir, Clojure)
+- Frameworks tres recents ou de niche
+- DSL proprietaires
+
+**Le probleme :** Claude Code a ete entraine sur des donnees jusqu'a une certaine date. Les bibliotheques, frameworks ou API sorties apres cette date sont mal connues ou inconnues. C'est la que les hallucinations sont les plus frequentes.
+
+<Callout type="tip" title="Astuce pour les frameworks recents">
+Utilisez le MCP Context7 pour injecter la documentation a jour directement dans le contexte. Ca reduit les hallucinations sur les API recentes de maniere significative.
+</Callout>
+
+## Limites de raisonnement
+
+Claude Code peut resoudre des problemes complexes, mais il a des angles morts.
+
+**Ou il peut echouer :**
+- Bugs subtils impliquant des race conditions ou du parallelisme
+- Optimisations de performance qui necessitent un profilage reel
+- Decisions architecturales qui dependent de contraintes business non explicites
+- Refactoring massif ou il perd le fil de la coherence globale
+- Mathematiques complexes ou calculs numeriques de precision
+
+**Le pattern classique :** Claude Code excelle sur les 80 premiers pourcents d'une tache. Les 20 derniers pourcents, ceux qui demandent du jugement, de l'experience ou une comprehension du contexte business, restent votre responsabilite.
+
+## En resume
+
+| Limite | Severite | Contournement |
+|--------|----------|---------------|
+| Fenetre de contexte | Moyenne | `/compact`, sessions courtes, CLAUDE.md |
+| Hallucinations | Haute | Relecture systematique, Context7, tests |
+| Execution systeme | Moyenne | Permissions, branche Git, mode prudent |
+| Latence | Basse | Modele adapte a la tache, patience |
+| Couts | Variable | `/cost`, Sonnet par defaut, compactage |
+| Langages de niche | Moyenne | Context7, documentation en contexte |
+| Raisonnement complexe | Moyenne | Extended Thinking, decomposition en sous-taches |
+
+## Prochaines etapes
+
+- Comparez Claude Code a ses alternatives : [vs GitHub Copilot](/limits/vs-copilot) et [vs Cursor](/limits/vs-cursor)
+- Decouvrez les situations ou un autre outil serait plus adapte : [Quand ne PAS utiliser Claude Code](/limits/when-not-to-use)
+- Apprenez a contourner les limites avec de meilleurs prompts : [Les bases du prompting](/prompting/basics)

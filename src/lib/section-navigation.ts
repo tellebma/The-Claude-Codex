@@ -127,6 +127,27 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Variables d'environnement", href: "/reference/environment" },
     ],
   },
+  limits: {
+    title: "Limites",
+    items: [
+      { label: "Vue d'ensemble", href: "/limits" },
+      { label: "Limites connues", href: "/limits/known-limitations" },
+      { label: "Claude Code vs Copilot", href: "/limits/vs-copilot" },
+      { label: "Claude Code vs Cursor", href: "/limits/vs-cursor" },
+      { label: "Quand ne PAS utiliser Claude Code", href: "/limits/when-not-to-use" },
+    ],
+  },
+  personas: {
+    title: "Parcours",
+    items: [
+      { label: "Vue d'ensemble", href: "/personas" },
+      { label: "Parcours d\u00e9veloppeur", href: "/personas/developer" },
+      { label: "Parcours lead technique", href: "/personas/team-lead" },
+      { label: "Parcours non-d\u00e9veloppeur", href: "/personas/non-dev" },
+      { label: "Parcours freelance", href: "/personas/freelance" },
+      { label: "Parcours \u00e9tudiant", href: "/personas/student" },
+    ],
+  },
   content: {
     title: "Contenus",
     items: [

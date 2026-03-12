@@ -680,6 +680,105 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-10",
   },
   {
+    path: "/personas",
+    title: "Parcours personas : trouvez votre chemin",
+    description:
+      "Cinq parcours de lecture adapt\u00e9s \u00e0 votre profil. D\u00e9veloppeur, lead technique, non-d\u00e9veloppeur, freelance ou \u00e9tudiant : suivez le guide qui vous correspond.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/personas/developer",
+    title: "Parcours d\u00e9veloppeur",
+    description:
+      "Itin\u00e9raire de lecture pour les d\u00e9veloppeurs qui veulent coder plus vite avec Claude Code. Installation, prompting, MCP, agents et techniques avanc\u00e9es.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/personas/team-lead",
+    title: "Parcours lead technique",
+    description:
+      "Itin\u00e9raire pour les leads techniques et managers qui d\u00e9ploient Claude Code dans leur \u00e9quipe. Adoption, gouvernance, s\u00e9curit\u00e9, CI/CD et bonnes pratiques.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/personas/non-dev",
+    title: "Parcours non-d\u00e9veloppeur",
+    description:
+      "Itin\u00e9raire pour les non-d\u00e9veloppeurs qui d\u00e9couvrent Claude Code. Pr\u00e9-requis, premiers pas, cas d\u2019usage concrets et prompting adapt\u00e9.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/personas/freelance",
+    title: "Parcours freelance",
+    description:
+      "Itin\u00e9raire pour les freelances et ind\u00e9pendants qui veulent maximiser leur productivit\u00e9 avec Claude Code. Plugins, automatisation, MCP et workflows optimis\u00e9s.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/personas/student",
+    title: "Parcours \u00e9tudiant",
+    description:
+      "Itin\u00e9raire pour les \u00e9tudiants qui apprennent \u00e0 coder avec Claude Code. Fondamentaux, projets pratiques, bonnes pratiques et pr\u00e9paration professionnelle.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/limits",
+    title: "Limites et comparaisons : Claude Code en toute honn\u00eatet\u00e9",
+    description:
+      "Un tour d'horizon honn\u00eate des limites de Claude Code, des comparaisons \u00e9quilibr\u00e9es avec Copilot et Cursor, et un guide pour savoir quand ne PAS utiliser cet outil.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/limits/known-limitations",
+    title: "Limites connues de Claude Code",
+    description:
+      "Les contraintes r\u00e9elles de Claude Code en 2026 : fen\u00eatre de contexte, hallucinations, ex\u00e9cution de code, latence, co\u00fbts et support des langages.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/limits/vs-copilot",
+    title: "Claude Code vs GitHub Copilot : comparaison honn\u00eate",
+    description:
+      "Comparaison \u00e9quilibr\u00e9e entre Claude Code et GitHub Copilot. Approche agent vs autocompl\u00e9tion, forces et faiblesses de chacun, cas d'usage.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/limits/vs-cursor",
+    title: "Claude Code vs Cursor : comparaison honn\u00eate",
+    description:
+      "Comparaison \u00e9quilibr\u00e9e entre Claude Code et Cursor. Deux approches agent, terminal vs IDE, MCP vs multi-mod\u00e8le.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/limits/when-not-to-use",
+    title: "Quand ne PAS utiliser Claude Code",
+    description:
+      "Les situations o\u00f9 Claude Code n'est pas le bon choix : syst\u00e8mes temps r\u00e9el, industries r\u00e9glement\u00e9es, code critique sans revue, prototypage UI.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
     path: "/content/couts-reels-claude-code",
     title: "Co\u00fbts r\u00e9els de Claude Code : tokens, MCP et abonnements",
     description:

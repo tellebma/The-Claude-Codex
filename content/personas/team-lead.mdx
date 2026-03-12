@@ -1,0 +1,95 @@
+---
+title: "Parcours lead technique"
+description: "Itineraire pour les leads techniques et managers qui deploient Claude Code dans leur equipe. Adoption, gouvernance, securite, CI/CD et bonnes pratiques."
+order: 2
+section: "personas"
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Votre profil
+
+Vous encadrez une equipe de developpeurs. Vous evaluez les outils, definissez les standards et gerez les budgets. Avant de deployer Claude Code a grande echelle, vous avez besoin de reponses claires sur la securite, les couts et la gouvernance.
+
+Ce parcours combine les aspects techniques et organisationnels pour que vous puissiez prendre des decisions eclairees et accompagner votre equipe.
+
+<Callout type="info" title="Temps estime">
+Comptez 3 a 4 heures pour l'ensemble. Les etapes 1 a 4 peuvent etre lues en une heure pour un apercu rapide.
+</Callout>
+
+## Votre itineraire
+
+<Steps>
+<Step title="Comprendre l'outil" stepNumber={1}>
+
+Commencez par une vue d'ensemble de Claude Code : ce qu'il fait, comment il se compare aux alternatives, et pourquoi il merite votre attention.
+
+**Lire** : [Qu'est-ce que Claude Code ?](/getting-started/what-is-claude-code)
+
+</Step>
+
+<Step title="Evaluer les couts" stepNumber={2}>
+
+Avant toute decision, chiffrez. Cette page detaille les plans disponibles, le calcul par token et les strategies d'optimisation. Le calculateur TCO vous donne une estimation pour votre equipe.
+
+**Lire** : [Couts reels de Claude Code](/content/couts-reels-claude-code), puis [Calculateur TCO](/enterprise/tco-calculator)
+
+</Step>
+
+<Step title="Verifier la securite et la conformite" stepNumber={3}>
+
+RGPD, AI Act, protection des donnees, retention : toutes les questions qu'un DSI ou un DPO vous posera, avec des reponses factuelles.
+
+**Lire** : [Securite et conformite](/enterprise/security-compliance), puis [Guide de securite](/content/bonnes-pratiques-securite)
+
+</Step>
+
+<Step title="Planifier l'adoption" stepNumber={4}>
+
+Un plan en 4 phases teste sur le terrain : preparation, pilote avec des champions, deploiement progressif et optimisation continue.
+
+**Lire** : [Guide d'adoption d'equipe](/enterprise/team-adoption)
+
+</Step>
+
+<Step title="Definir la gouvernance" stepNumber={5}>
+
+Permissions par role, allow-list des MCP, gestion centralisee des configs, politique de mise a jour. Tout ce qu'il faut pour garder le controle a l'echelle.
+
+**Lire** : [Gouvernance et roles](/enterprise/governance)
+
+</Step>
+
+<Step title="Standardiser le CLAUDE.md d'equipe" stepNumber={6}>
+
+Le CLAUDE.md est le point central de la configuration par projet. Un CLAUDE.md bien ecrit garantit que tous les membres de l'equipe obtiennent des resultats coherents.
+
+**Lire** : [Guide CLAUDE.md](/prompting/claude-md)
+
+</Step>
+
+<Step title="Integrer dans le CI/CD" stepNumber={7}>
+
+Claude Code fonctionne en mode headless dans vos pipelines. Code review automatique, generation de tests, documentation : les possibilites sont larges.
+
+**Lire** : [Mode Headless et CI/CD](/advanced/headless-ci), puis [Systeme de Hooks](/advanced/hooks)
+
+</Step>
+
+<Step title="Former l'equipe aux Skills et agents" stepNumber={8}>
+
+Les Skills et les agents standardisent les workflows de l'equipe. Un agent de code review partage, par exemple, applique les memes regles pour tout le monde.
+
+**Lire** : [Qu'est-ce qu'un Skill ?](/skills/what-are-skills), puis [Creer un subagent](/agents/create-subagent), puis [Orchestration avancee](/agents/orchestration)
+
+</Step>
+</Steps>
+
+## Prochaines etapes
+
+Votre parcours lead technique est termine. Pour approfondir :
+
+- **Securite des MCP** : si votre equipe utilise des MCP, lisez [Securite des MCP](/mcp/securite-mcp) pour connaitre les risques et les parades
+- **Mythes a deconstruire** : partagez [8 idees recues sur Claude Code](/content/mythes-claude-code) avec votre equipe pour eviter les malentendus
+- **FAQ Enterprise** : la [FAQ Enterprise](/enterprise/faq) repond aux questions les plus frequentes des organisations
+- **Multi-provider** : si vous utilisez AWS ou GCP, consultez [Multi-provider et Enterprise](/advanced/multi-provider)

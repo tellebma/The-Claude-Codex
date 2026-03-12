@@ -80,6 +80,24 @@ const websiteJsonLd = createWebSiteSchema({
   description: siteDescription,
 });
 
+const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "/analytics";
+const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "1";
+
+const matomoTrackingScript = `
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['disableCookies']);
+  _paq.push(['setDoNotTrack', true]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u = '${MATOMO_URL}/';
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+    _paq.push(['setSiteId', '${MATOMO_SITE_ID}']);
+    var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+  })();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -92,6 +110,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: serializeJsonLd(websiteJsonLd),
+          }}
+        />
+        {/* Matomo cookieless analytics — no user data stored, respects Do Not Track */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: matomoTrackingScript,
           }}
         />
       </head>

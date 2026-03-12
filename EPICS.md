@@ -1591,8 +1591,8 @@ Creer un tutoriel complet de creation de MCP Server, de la specification au depl
 
 ## Epic 26 — Parcours differencies et navigation par persona
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P1 (haute — tous les audits identifient l'absence de differenciation)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 21 (contenu debutant), Epic 22 (contenu prompting)
@@ -1938,8 +1938,8 @@ Creer du contenu non-technique : Skills pour le quotidien, cas d'usage business,
 
 ## Epic 29 — Limites, comparaisons objectives et couts reels
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P2 (moyenne — renforce la credibilite pour experts et connaisseurs)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Aucune

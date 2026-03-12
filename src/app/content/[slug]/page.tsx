@@ -40,7 +40,7 @@ function getAdjacentArticles(currentSlug: string) {
 
   return {
     prev: currentIndex > 0 ? allFiles[currentIndex - 1] : null,
-    next: currentIndex < allFiles.length - 1 ? allFiles[currentIndex + 1] : null,
+    next: currentIndex !== -1 && currentIndex < allFiles.length - 1 ? allFiles[currentIndex + 1] : null,
   };
 }
 

@@ -283,6 +283,135 @@ Le **Frontend Design** aide à concevoir et implémenter des interfaces utilisat
 
 ---
 
+## Skills non-techniques
+
+Claude Code n'est pas réservé aux développeurs. Ces Skills transforment Claude en assistant spécialisé pour des tâches du quotidien : rédaction, organisation, communication. Aucune compétence technique requise.
+
+### Email Professionnel
+
+Rédige des emails adaptés au destinataire et au contexte. Le Skill identifie le ton juste (formel, semi-formel, décontracté) et propose systématiquement une version concise et une version détaillée.
+
+```bash
+/user:email-pro relancer un client qui n'a pas répondu à mon devis depuis 10 jours
+```
+
+**Cas d'usage :**
+- Relances clients et fournisseurs
+- Réponses diplomatiques à des demandes difficiles
+- Emails de prospection ou de suivi commercial
+- Communication interne (annonces, demandes d'information)
+
+[Télécharger ce skill](/skills/email-pro.md)
+
+---
+
+### Résumé de document
+
+Produit un résumé structuré de n'importe quel document : compte-rendu de réunion, rapport, article, spécification technique. Le résumé inclut les points clés, les décisions, les actions à mener et les zones floues.
+
+```bash
+/user:resume-document [coller le texte ou indiquer le chemin du fichier]
+```
+
+**Cas d'usage :**
+- Synthétiser un compte-rendu de réunion de 2 heures en 10 lignes
+- Extraire les décisions et les actions d'un long email thread
+- Résumer un article ou un rapport pour le partager à l'équipe
+- Préparer un brief à partir de plusieurs documents
+
+[Télécharger ce skill](/skills/resume-document.md)
+
+---
+
+### Planning de projet
+
+Décompose un projet en phases, tâches et jalons. Chaque tâche est estimée en effort (S/M/L/XL) avec ses dépendances. Le Skill identifie aussi les risques et le chemin critique.
+
+```bash
+/user:planning-project organiser le lancement d'un nouveau produit, équipe de 5, deadline fin juin
+```
+
+**Cas d'usage :**
+- Planifier un sprint ou un trimestre
+- Décomposer un projet complexe avant de l'estimer
+- Préparer une roadmap pour la direction
+- Organiser un événement ou un lancement
+
+[Télécharger ce skill](/skills/planning-project.md)
+
+---
+
+### Création de présentations
+
+Crée le contenu structuré d'un slide deck : titres accrocheurs, messages clés par slide, visuels suggérés et notes speaker. Le Skill adapte la longueur au temps de présentation.
+
+```bash
+/user:presentation-slides pitch de 15 min pour la direction sur les résultats Q1
+```
+
+**Cas d'usage :**
+- Présentations de résultats pour le comité de direction
+- Pitchs produit pour des clients ou investisseurs
+- Formations internes pour les équipes
+- Présentations en conférence
+
+[Télécharger ce skill](/skills/presentation-slides.md)
+
+---
+
+### Publication LinkedIn
+
+Un Skill bonus pour ceux qui animent une présence sur LinkedIn. Claude structure le post avec un hook d'accroche, un développement en points courts et un call-to-action adapté.
+
+```bash
+/user:linkedin-post partage d'expérience sur l'adoption de l'IA dans mon équipe de 10 personnes
+```
+
+**Cas d'usage :**
+- Partage de retours d'expérience professionnels
+- Annonces de recrutement ou de nouveaux projets
+- Réactions à des actualités du secteur
+- Personal branding et positionnement d'expertise
+
+<Callout type="tip" title="Créez votre propre Skill LinkedIn">
+Le Skill LinkedIn n'est pas inclus dans les fichiers téléchargeables car chaque personne a un style et un ton différents. Partez du [guide de création de Skills](/skills/create-custom) et ajoutez vos propres contraintes : ton, longueur, hashtags, type de post.
+</Callout>
+
+---
+
+## Fichiers de Skills téléchargeables
+
+Tous les Skills présentés sur cette page sont disponibles en téléchargement direct. Copiez-les dans `.claude/commands/` (projet) ou `~/.claude/commands/` (personnel) et ils sont immédiatement utilisables.
+
+### Skills techniques
+
+| Skill | Description | Télécharger |
+|---|---|---|
+| React Component | Crée des composants React accessibles et testés | [react-component.md](/skills/react-component.md) |
+| API Pattern | Génère des endpoints API REST complets | [api-pattern.md](/skills/api-pattern.md) |
+| Deploy Checklist | Guide le déploiement en production | [deploy-checklist.md](/skills/deploy-checklist.md) |
+| TDD Guide | Impose le cycle RED-GREEN-REFACTOR | [tdd-guide.md](/skills/tdd-guide.md) |
+| Code Reviewer | Revue de code structurée par sévérité | [code-reviewer.md](/skills/code-reviewer.md) |
+| Debug Systématique | Méthode de debug sans tâtonnement | [debug-systematic.md](/skills/debug-systematic.md) |
+
+### Skills non-techniques
+
+| Skill | Description | Télécharger |
+|---|---|---|
+| Email Pro | Emails professionnels adaptés au contexte | [email-pro.md](/skills/email-pro.md) |
+| Résumé Document | Synthèse structurée de documents | [resume-document.md](/skills/resume-document.md) |
+| Planning Projet | Décomposition en phases et tâches | [planning-project.md](/skills/planning-project.md) |
+| Présentation Slides | Contenu structuré pour slide deck | [presentation-slides.md](/skills/presentation-slides.md) |
+
+<Callout type="info" title="Comment utiliser ces fichiers ?">
+1. Téléchargez le fichier `.md` souhaité
+2. Placez-le dans `~/.claude/commands/` pour un accès global, ou `.claude/commands/` pour un projet spécifique
+3. Relancez Claude Code
+4. Tapez `/user:nom-du-skill` ou `/project:nom-du-skill` suivi de vos arguments
+</Callout>
+
+---
+
 ## Récapitulatif
 
 | Skill | Catégorie | Commande | Idéal pour |
@@ -290,11 +419,19 @@ Le **Frontend Design** aide à concevoir et implémenter des interfaces utilisat
 | TDD Guide | Développement | `/user:tdd-guide` | Nouvelles fonctionnalités |
 | Code Reviewer | Qualité | `/user:code-reviewer` | Avant une PR |
 | Debugging | Développement | `/user:debugging` | Résolution de bugs |
+| Debug Systématique | Développement | `/user:debug-systematic` | Bugs complexes |
 | Plan | Planification | `/user:plan` | Features complexes |
 | Brainstorming | Planification | `/user:brainstorm` | Exploration de solutions |
 | E2E Testing | Tests | `/user:e2e-testing` | Parcours critiques |
 | Security Review | Sécurité | `/user:security-review` | Avant un déploiement |
 | Frontend Design | Design | `/user:frontend-design` | Composants UI |
+| React Component | Développement | `/project:react-component` | Composants React |
+| API Pattern | Développement | `/project:api-pattern` | Endpoints REST |
+| Deploy Checklist | Ops | `/project:deploy-checklist` | Mise en production |
+| Email Pro | Communication | `/user:email-pro` | Emails professionnels |
+| Résumé Document | Productivité | `/user:resume-document` | Synthèse de documents |
+| Planning Projet | Organisation | `/user:planning-project` | Planification |
+| Présentation | Communication | `/user:presentation-slides` | Slide decks |
 
 ---
 

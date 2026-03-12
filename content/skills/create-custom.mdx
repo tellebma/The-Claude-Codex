@@ -319,6 +319,203 @@ Vérifie chaque point et rapporte le statut :
 - **Instructions contradictoires** : relisez votre Skill pour vérifier la cohérence
 </Callout>
 
+## Patterns avancés
+
+Les Skills simples couvrent 80% des besoins. Pour les 20% restants, voici des techniques qui rendent vos Skills plus puissants.
+
+### Skills conditionnels (if/else)
+
+Un Skill peut adapter son comportement selon le contexte. Utilisez des instructions conditionnelles en langage naturel pour que Claude choisisse le bon chemin.
+
+```markdown
+# Review intelligente
+
+## Mode de fonctionnement
+
+Analyse le diff fourni dans $ARGUMENTS.
+
+Si le diff contient des fichiers de test uniquement :
+- Fais une review focalisée sur la qualité des tests
+- Vérifie la couverture des cas limites
+- Ignore les règles de style du code de production
+
+Si le diff contient des fichiers de migration de base de données :
+- Vérifie que la migration est réversible
+- Vérifie les index et les contraintes
+- Alerte sur tout risque de perte de données
+
+Si le diff contient des fichiers de configuration (env, yaml, json) :
+- Vérifie qu'aucun secret n'est exposé
+- Compare avec les fichiers d'exemple (.env.example)
+- Vérifie la cohérence entre environnements
+
+Sinon :
+- Fais une review standard complète
+```
+
+Claude interprète ces conditions et adapte son analyse automatiquement. Pas besoin de syntaxe spéciale : des instructions claires suffisent.
+
+### Skills multi-étapes avec checkpoints
+
+Pour les workflows longs, découpez en étapes numérotées avec des points de validation. Claude avance étape par étape et s'arrête si un checkpoint échoue.
+
+```markdown
+# Migration de composant
+
+## Étapes
+
+### Étape 1 : Audit
+- Liste toutes les utilisations du composant dans le projet
+- Identifie les props utilisées et leurs variantes
+- CHECKPOINT : montre la liste et attends confirmation avant de continuer
+
+### Étape 2 : Nouveau composant
+- Crée le nouveau composant avec les mêmes props
+- Ajoute les tests du nouveau composant
+- CHECKPOINT : les tests doivent passer avant l'étape suivante
+
+### Étape 3 : Migration progressive
+- Remplace les imports un par un
+- Après chaque remplacement, vérifie que le build passe
+- CHECKPOINT : tous les fichiers migrés, tous les tests verts
+
+### Étape 4 : Nettoyage
+- Supprime l'ancien composant
+- Mets à jour le barrel file
+- Vérifie qu'aucune référence à l'ancien composant ne reste
+```
+
+### Orchestration de sous-skills
+
+Un Skill peut appeler d'autres Skills pour créer des workflows composites.
+
+```markdown
+# Feature complète
+
+Pour la fonctionnalité décrite dans $ARGUMENTS :
+
+1. Utilise /project:plan pour créer le plan d'implémentation
+2. Pour chaque tâche du plan, utilise /user:tdd-guide pour l'implémenter
+3. Une fois tout implémenté, utilise /user:code-reviewer pour vérifier
+4. Corrige les problèmes identifiés par le reviewer
+5. Utilise /project:deploy-checklist pour valider le déploiement
+```
+
+<Callout type="warning" title="Attention au contexte">
+L'orchestration de Skills consomme beaucoup de contexte. Chaque sous-skill ajoute ses instructions au prompt. Pour les workflows longs, préférez lancer les Skills un par un en sessions séparées.
+</Callout>
+
+## Variables de templating
+
+### $ARGUMENTS : le paramètre universel
+
+`$ARGUMENTS` capture tout le texte tapé après la commande du Skill. C'est votre outil principal pour rendre un Skill dynamique.
+
+```bash
+/project:create-component Button primaire avec icône et loading state
+#                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#                        Tout ceci devient $ARGUMENTS
+```
+
+Dans le Skill, utilisez `$ARGUMENTS` comme un placeholder :
+
+```markdown
+Crée le composant décrit par l'utilisateur : $ARGUMENTS
+```
+
+### Variables d'environnement
+
+Les Skills peuvent référencer des variables d'environnement pour s'adapter au contexte d'exécution.
+
+```markdown
+## Contexte
+
+- Environnement courant : utilise les variables d'env disponibles
+- Si NODE_ENV est "production", applique des contraintes strictes
+- Si CI est "true", formate la sortie en JSON pour le pipeline
+```
+
+<Callout type="tip" title="Variables disponibles">
+Les Skills ont accès aux variables d'environnement du shell. Vous pouvez les exploiter pour adapter le comportement selon l'environnement (dev, staging, production) ou le système (OS, shell, éditeur).
+</Callout>
+
+### Exemple : Skill avec variable dynamique
+
+```markdown
+# Créer un composant pour $PROJECT_TYPE
+
+Si le projet utilise React (détecté via package.json) :
+- Composant fonctionnel avec hooks
+- Tests avec Testing Library
+
+Si le projet utilise Vue (détecté via package.json) :
+- Composant SFC avec Composition API
+- Tests avec Vue Test Utils
+
+Si le projet utilise Svelte (détecté via package.json) :
+- Composant .svelte
+- Tests avec Svelte Testing Library
+```
+
+## Estimation de tokens et bonnes pratiques
+
+Un Skill consomme des tokens à chaque invocation. Son contenu est injecté intégralement dans le prompt, ce qui réduit d'autant la fenêtre disponible pour la conversation et le code.
+
+### Combien de tokens consomme un Skill ?
+
+| Taille du Skill | Lignes | Tokens (approx.) | Impact sur le contexte |
+|---|---|---|---|
+| Léger | 20-40 | 300-600 | Négligeable |
+| Standard | 40-80 | 600-1 200 | Faible |
+| Lourd | 80-150 | 1 200-2 500 | Modéré |
+| Trop lourd | 150+ | 2 500+ | Significatif, à découper |
+
+<Callout type="warning" title="Règle pratique">
+Visez 40-80 lignes par Skill. Au-delà de 150 lignes, découpez en plusieurs Skills spécialisés. Un Skill de 500 lignes consomme environ 8 000 tokens, soit 4% de la fenêtre de contexte, avant même d'avoir commencé à travailler.
+</Callout>
+
+### Optimiser la consommation
+
+- **Soyez concis** : "Vérifie les injections SQL" vaut mieux que "Il est nécessaire de procéder à une vérification exhaustive des potentielles vulnérabilités liées aux injections SQL"
+- **Évitez les exemples trop longs** : un exemple de 5 lignes suffit, pas besoin de 50 lignes
+- **Externalisez le contexte** : mettez les conventions du projet dans CLAUDE.md plutôt que dans chaque Skill
+- **Utilisez des références** : "Suis les conventions de CLAUDE.md" au lieu de copier les conventions
+
+## Versionner ses Skills
+
+Les Skills vivent dans le code. Traitez-les avec la même rigueur que votre code source.
+
+### Bonnes pratiques de versioning
+
+```bash
+# Les Skills de projet sont dans le repo
+git add .claude/commands/create-component.md
+git commit -m "feat: add create-component skill with accessibility checks"
+```
+
+**Ce qu'il faut versionner :**
+- Le contenu du Skill (le fichier Markdown)
+- Les modifications avec des commits explicites
+- Un CHANGELOG si le Skill évolue souvent
+
+**Ce qu'il ne faut PAS faire :**
+- Modifier un Skill sans prévenir l'équipe
+- Supprimer un Skill utilisé par d'autres sans migration
+- Avoir des Skills en conflit (deux Skills qui font la même chose différemment)
+
+### Convention de commits pour les Skills
+
+```bash
+feat: add deploy-checklist skill          # nouveau skill
+fix: fix tdd-guide missing edge cases     # correction
+refactor: simplify code-reviewer criteria # amélioration
+docs: update create-api skill examples    # documentation
+```
+
+<Callout type="tip" title="Revue de Skills">
+Incluez les modifications de Skills dans vos Pull Requests. Un changement de Skill peut avoir autant d'impact qu'un changement de code, surtout s'il modifie un workflow utilisé par toute l'équipe.
+</Callout>
+
 ## Organiser ses Skills en équipe
 
 Pour les équipes qui utilisent Claude Code, voici une structure recommandée :

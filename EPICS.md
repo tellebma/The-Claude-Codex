@@ -610,8 +610,8 @@ Le site dispose de **6 pages** (Landing, Getting Started, MCP, Skills, Prompting
 
 ### Epic 16 — Section Vision & Futur (3 pages)
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P3 (basse)
 - **Estimation** : S (3-5 jours)
 - **Dependances** : Epic 3, Epic 5, Epic 7
@@ -1842,8 +1842,8 @@ Creer une section Enterprise complete avec une page d'accueil, une page securite
 
 ## Epic 28 — Contenu non-developpeur et cas d'usage universels
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P2 (moyenne — aligne la promesse de la landing page)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 22 (prompting non-dev)
@@ -2099,8 +2099,8 @@ Publier les Skills dans un repository telechargeable, documenter exhaustivement 
 
 ## Epic 31 — Enrichissement de la section Agents pour profils avances
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P2 (moyenne)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 13 (section Agents de base), Epic 24 (hooks et mode avance)

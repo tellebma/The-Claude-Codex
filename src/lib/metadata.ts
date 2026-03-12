@@ -239,6 +239,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-11",
   },
   {
+    path: "/mcp/create-mcp-typescript",
+    title: "Cr\u00e9er un MCP Server en TypeScript",
+    description:
+      "Tutoriel complet pour cr\u00e9er votre propre MCP Server avec le SDK TypeScript : tools, resources, prompts, test local et int\u00e9gration Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/mcp/create-mcp-python",
+    title: "Cr\u00e9er un MCP Server en Python",
+    description:
+      "Tutoriel pour cr\u00e9er un MCP Server avec le SDK Python : d\u00e9corateurs, tools, resources et test avec uvx.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/mcp/advanced-protocol",
+    title: "Protocole MCP avanc\u00e9 : transports et architecture",
+    description:
+      "Sp\u00e9cification JSON-RPC 2.0, transports stdio/SSE/HTTP, capabilities negotiation, s\u00e9curit\u00e9 et debugging des MCP.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
     path: "/skills",
     title: "Skills : Enseignez de nouveaux talents \u00e0 Claude Code",
     description:
@@ -507,6 +534,60 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+  },
+  {
+    path: "/enterprise",
+    title: "Claude Code en entreprise : s\u00e9curit\u00e9, adoption et gouvernance",
+    description:
+      "D\u00e9ployer Claude Code dans votre organisation : s\u00e9curit\u00e9, conformit\u00e9 RGPD, plan d\u2019adoption, calculateur TCO, gouvernance et FAQ enterprise.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/enterprise/security-compliance",
+    title: "S\u00e9curit\u00e9 et conformit\u00e9 : Claude Code en entreprise",
+    description:
+      "Protection des donn\u00e9es, RGPD, AI Act europ\u00e9en, certifications Anthropic et bonnes pratiques de s\u00e9curit\u00e9 pour d\u00e9ployer Claude Code en entreprise.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/enterprise/team-adoption",
+    title: "Guide d\u2019adoption d\u2019\u00e9quipe : Claude Code en entreprise",
+    description:
+      "Plan en 4 phases pour d\u00e9ployer Claude Code dans votre organisation : pr\u00e9paration, pilote, d\u00e9ploiement et optimisation continue.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/enterprise/tco-calculator",
+    title: "Calculateur de co\u00fbt total (TCO) : Claude Code en entreprise",
+    description:
+      "Estimez le co\u00fbt de Claude Code pour votre \u00e9quipe : comparatif des plans, ROI, et comparaison avec Copilot Enterprise et Cursor Business.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/enterprise/faq",
+    title: "FAQ Enterprise : Claude Code",
+    description:
+      "R\u00e9ponses aux questions fr\u00e9quentes sur le d\u00e9ploiement de Claude Code en entreprise : donn\u00e9es, conformit\u00e9, co\u00fbts, formation, propri\u00e9t\u00e9 intellectuelle et support.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/enterprise/governance",
+    title: "Gouvernance et r\u00f4les : Claude Code en entreprise",
+    description:
+      "D\u00e9finissez les permissions, les r\u00f4les et les r\u00e8gles pour un d\u00e9ploiement Claude Code structur\u00e9 : audit, gestion centralis\u00e9e des configs et politiques de mise \u00e0 jour.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
   },
   {
     path: "/advanced",

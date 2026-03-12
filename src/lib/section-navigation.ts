@@ -32,6 +32,9 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Top MCP design & UI", href: "/mcp/best-design" },
       { label: "Premier workflow MCP", href: "/mcp/first-workflow" },
       { label: "Sécurité des MCP", href: "/mcp/securite-mcp" },
+      { label: "Créer un MCP en TypeScript", href: "/mcp/create-mcp-typescript" },
+      { label: "Créer un MCP en Python", href: "/mcp/create-mcp-python" },
+      { label: "Protocole MCP avancé", href: "/mcp/advanced-protocol" },
     ],
   },
   plugins: {
@@ -92,6 +95,17 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Configurateur",
     items: [
       { label: "Configurateur interactif", href: "/configurator" },
+    ],
+  },
+  enterprise: {
+    title: "Entreprise",
+    items: [
+      { label: "Vue d'ensemble", href: "/enterprise" },
+      { label: "S\u00e9curit\u00e9 et conformit\u00e9", href: "/enterprise/security-compliance" },
+      { label: "Guide d'adoption d'\u00e9quipe", href: "/enterprise/team-adoption" },
+      { label: "Calculateur TCO", href: "/enterprise/tco-calculator" },
+      { label: "FAQ Enterprise", href: "/enterprise/faq" },
+      { label: "Gouvernance et r\u00f4les", href: "/enterprise/governance" },
     ],
   },
   advanced: {

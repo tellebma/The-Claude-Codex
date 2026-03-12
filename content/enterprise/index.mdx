@@ -1,0 +1,91 @@
+---
+title: "Claude Code pour votre organisation"
+description: "Pourquoi et comment deployer Claude Code en entreprise. Productivite, securite, gouvernance et adoption : les 4 piliers pour reussir."
+section: "enterprise"
+order: 1
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Pourquoi Claude Code en entreprise ?
+
+Les equipes de developpement qui adoptent un assistant IA gagnent du temps sur les taches repetitives : scaffolding, ecriture de tests, documentation, code review. Ce temps libere se reporte sur l'architecture, la reflexion produit et la qualite.
+
+Claude Code se distingue des alternatives par trois caracteristiques :
+
+- **Acces direct au systeme de fichiers et au terminal** : pas besoin de copier-coller du code dans un chat. Claude Code lit votre projet, execute des commandes et modifie vos fichiers.
+- **Extensibilite via MCP, Skills et Plugins** : chaque equipe peut connecter ses outils internes (Jira, Slack, base de donnees, CI/CD).
+- **Transparence** : chaque action est visible, chaque modification est demandee avant execution. Pas de boite noire.
+
+## Les 4 piliers d'un deploiement reussi
+
+### 1. Productivite
+
+Les etudes convergent sur un constat clair. GitHub a mesure une hausse de 55 % de la vitesse de completion des taches avec Copilot. McKinsey estime un gain de productivite de 20 a 45 % sur les taches de codage assistees par IA. Avec Claude Code, les gains sont comparables, parfois superieurs sur les taches complexes grace a la fenetre de contexte de 200K tokens et au raisonnement avance.
+
+**Ou le gain est le plus visible :**
+
+- Ecriture de tests unitaires et d'integration
+- Generation de boilerplate et scaffolding
+- Refactoring de code legacy
+- Documentation technique
+- Revue de code automatisee (premier passage)
+
+### 2. Securite
+
+Anthropic propose des garanties solides : chiffrement en transit et au repos, retention configurable, certifications SOC 2 Type II. Claude Code ne stocke pas votre code sur les serveurs Anthropic au-dela de la session (sauf si vous utilisez l'API avec retention activee).
+
+Pour aller plus loin : [Securite et conformite](/enterprise/security-compliance)
+
+### 3. Gouvernance
+
+Qui a le droit d'utiliser quels outils ? Quels MCP sont autorises ? Comment auditer l'usage ? Un deploiement enterprise necessite des regles claires, des roles definis et une configuration centralisee.
+
+Pour aller plus loin : [Gouvernance et roles](/enterprise/governance)
+
+### 4. Adoption
+
+La technologie ne sert a rien si personne ne l'utilise. Un plan d'adoption progressif, avec des champions internes, des formations et un suivi des metriques, fait la difference entre un outil adopte et un abonnement gaspille.
+
+Pour aller plus loin : [Guide d'adoption d'equipe](/enterprise/team-adoption)
+
+## Chiffres cles
+
+| Metrique | Source | Resultat |
+|---|---|---|
+| Vitesse de completion des taches | GitHub (2024) | +55 % |
+| Productivite sur le codage assiste IA | McKinsey (2024) | +20 a 45 % |
+| Temps moyen de revue de code | Etudes internes Anthropic | -40 % |
+| Satisfaction developpeur | Stack Overflow Survey 2025 | 72 % des utilisateurs d'IA satisfaits |
+
+<Callout type="info" title="Ces chiffres varient selon le contexte">
+Les gains dependent du type de projet, de la seniorite de l'equipe et de la qualite du prompting. Un pilote de 4 a 6 semaines sur un projet reel donne des chiffres bien plus fiables que les moyennes generales.
+</Callout>
+
+## Par ou commencer ?
+
+<Steps>
+<Step title="Evaluer les couts" stepNumber={1}>
+Utilisez le [calculateur TCO](/enterprise/tco-calculator) pour estimer le budget selon votre taille d'equipe et le plan choisi. Comparez avec les alternatives (Copilot, Cursor).
+</Step>
+
+<Step title="Lancer un pilote" stepNumber={2}>
+Selectionnez une equipe de 3 a 5 developpeurs motives. Suivez le [guide d'adoption](/enterprise/team-adoption) pour structurer le pilote sur 4 a 6 semaines.
+</Step>
+
+<Step title="Cadrer la securite et la gouvernance" stepNumber={3}>
+Definissez les regles du jeu avant le deploiement large. Consultez [securite et conformite](/enterprise/security-compliance) et [gouvernance](/enterprise/governance).
+</Step>
+
+<Step title="Deployer par vagues" stepNumber={4} isLast>
+Etendez progressivement a d'autres equipes, en capitalisant sur les retours du pilote et les bonnes pratiques documentees.
+</Step>
+</Steps>
+
+## Explorer la section Enterprise
+
+- [Securite et conformite](/enterprise/security-compliance) : RGPD, AI Act, protection des donnees, certifications
+- [Guide d'adoption d'equipe](/enterprise/team-adoption) : plan en 4 phases, change management, metriques
+- [Calculateur TCO](/enterprise/tco-calculator) : couts par plan, comparatif avec Copilot et Cursor, ROI
+- [FAQ Enterprise](/enterprise/faq) : 15+ reponses sur les donnees, la conformite, le deploiement, la PI
+- [Gouvernance et roles](/enterprise/governance) : permissions, audit, gestion centralisee des configs

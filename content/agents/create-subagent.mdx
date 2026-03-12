@@ -277,6 +277,159 @@ Sans contraintes explicites, un agent peut prendre des initiatives non souhaité
 - Réponds toujours en français
 ```
 
+## Patterns avancés de subagents
+
+Au-delà des agents simples, plusieurs patterns permettent de résoudre des problèmes complexes en combinant les subagents de manière structurée.
+
+### Pattern fan-out/fan-in
+
+Le fan-out/fan-in lance plusieurs subagents en parallèle sur des sous-tâches indépendantes, puis un agent synthétiseur rassemble les résultats.
+
+```markdown
+# Fan-out/Fan-in : Review multi-perspective
+
+## Phase fan-out (parallèle)
+Prompt agent orchestrateur :
+> Lance 3 subagents en parallèle :
+> 1. Agent qualité : analyse la lisibilité et les patterns
+> 2. Agent sécurité : cherche les vulnérabilités
+> 3. Agent performance : identifie les goulots d'étranglement
+
+## Phase fan-in (synthèse)
+> Consolide les 3 rapports en un seul document.
+> Déduplique les problèmes signalés par plusieurs agents.
+> Trie par sévérité décroissante.
+```
+
+Ce pattern est idéal pour les reviews de code, les audits et les analyses multi-critères. Le temps total est celui de l'agent le plus lent (pas la somme).
+
+### Pattern pipeline
+
+Le pipeline passe le résultat de chaque agent au suivant, comme une chaîne de montage.
+
+```markdown
+# Pipeline : Feature complète
+
+Agent 1 (planner) → produit un plan
+Agent 2 (coder)   → implémente selon le plan
+Agent 3 (tester)  → écrit et exécute les tests
+Agent 4 (reviewer) → valide le tout
+
+Chaque agent reçoit le résultat du précédent comme contexte.
+```
+
+```bash
+# En pratique, vous formulez la demande ainsi :
+> Implémente la feature "export PDF" en suivant ce pipeline :
+> 1. D'abord, planifie l'architecture avec l'agent planner
+> 2. Ensuite, implémente avec l'agent tdd-guide (tests d'abord)
+> 3. Enfin, fais une review avec l'agent code-reviewer
+> Chaque étape utilise le résultat de la précédente.
+```
+
+### Pattern reviewer chain
+
+Plusieurs agents reviewent le même travail séquentiellement, chacun se concentrant sur un aspect différent. Chaque reviewer a accès aux commentaires des précédents.
+
+```markdown
+# Reviewer Chain : 3 passes de review
+
+## Pass 1 : Correctness
+L'agent vérifie que le code fait ce qu'il doit faire.
+Résultat : liste de bugs potentiels.
+
+## Pass 2 : Security (voit les résultats de Pass 1)
+L'agent vérifie les failles, en tenant compte des bugs déjà signalés.
+Résultat : liste de vulnérabilités.
+
+## Pass 3 : Maintainability (voit Pass 1 + Pass 2)
+L'agent évalue la qualité à long terme du code.
+Résultat : suggestions de refactoring.
+
+## Synthèse finale
+Un dernier agent produit le rapport consolidé avec priorités.
+```
+
+## Gestion du contexte entre agents
+
+Le contexte (les informations disponibles) ne se transmet pas automatiquement entre les agents. Vous devez choisir une stratégie explicite.
+
+### Stratégie fichier (recommandée pour les résultats volumineux)
+
+L'agent A écrit son résultat dans un fichier. L'agent B le lit au début de sa mission.
+
+```bash
+# Agent A : Review
+> Fais une review du module auth.
+> Écris le résultat dans /tmp/review-auth.md
+
+# Agent B : Correction
+> Lis le fichier /tmp/review-auth.md et corrige
+> les problèmes signalés par sévérité décroissante.
+```
+
+### Stratégie prompt (recommandée pour les résultats courts)
+
+L'agent orchestrateur résume le résultat de l'agent A et l'inclut dans le prompt de l'agent B.
+
+```bash
+# L'orchestrateur transmet un résumé concis
+> L'agent de review a trouvé 3 problèmes :
+> 1. CRITICAL : injection SQL dans users.ts:42
+> 2. HIGH : pas de rate limiting sur /api/login
+> 3. MEDIUM : variable non utilisée dans utils.ts:15
+>
+> Corrige ces 3 problèmes dans l'ordre de priorité.
+```
+
+### Stratégie Git (recommandée pour les modifications de code)
+
+L'agent A fait un commit de ses changements. L'agent B travaille sur la même branche et voit les modifications.
+
+```bash
+# Agent A modifie le code et commite
+# Agent B voit les changements via git diff
+# Pas besoin de transmettre de contexte explicite
+```
+
+<Callout type="tip" title="Combinez les stratégies">
+Pour un pipeline complet, utilisez Git pour les modifications de code et le prompt pour les métadonnées ("l'agent précédent a trouvé 2 bugs critiques"). Les deux approches se complètent.
+</Callout>
+
+## Stratégies de parallélisme
+
+Les subagents peuvent s'exécuter en parallèle pour accélérer les workflows. Voici les règles à suivre.
+
+### Quand paralléliser
+
+- Les tâches sont **indépendantes** (pas de dépendance de données)
+- Les agents travaillent sur des **fichiers différents**
+- Le résultat d'un agent **n'influence pas** les autres
+
+### Quand rester séquentiel
+
+- Un agent a besoin du résultat du précédent
+- Les agents modifient les **mêmes fichiers**
+- L'ordre d'exécution **change le résultat**
+
+```bash
+# BON : parallèle (tâches indépendantes)
+> Lance en parallèle :
+> - Agent security : audite le module auth
+> - Agent tests : vérifie la couverture du module billing
+> - Agent docs : met à jour le README
+
+# MAUVAIS : parallèle sur les mêmes fichiers
+> Lance en parallèle :
+> - Agent A : refactore auth.ts
+> - Agent B : ajoute des tests dans auth.ts
+# → Conflit garanti !
+```
+
+<Callout type="warning" title="Worktrees pour la parallélisation sûre">
+Si vous devez absolument paralléliser des agents qui modifient du code, utilisez des worktrees Git pour isoler chaque agent. Voir la page [Orchestration avancée](/agents/orchestration) pour les détails.
+</Callout>
+
 ## Tester votre agent
 
 Une fois votre agent créé, testez-le sur un cas concret.

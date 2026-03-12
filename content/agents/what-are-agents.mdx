@@ -118,6 +118,63 @@ git worktree add /tmp/agent-security-review feature/security-audit
 # Une fois terminé, les changements sont fusionnés
 ```
 
+## Configuration des agents
+
+Les agents se configurent à deux niveaux : le répertoire `~/.claude/agents/` pour vos agents personnels, et `.claude/agents/` dans votre projet pour les agents partagés avec l'équipe.
+
+### Le répertoire `~/.claude/agents/`
+
+Ce dossier contient vos agents disponibles dans **tous vos projets**. Chaque fichier `.md` définit un agent.
+
+```bash
+~/.claude/
+  agents/
+    code-reviewer.md      # Review de code automatique
+    tdd-guide.md          # Workflow TDD
+    security-reviewer.md  # Audit de sécurité
+    planner.md            # Planification de features
+```
+
+Claude Code détecte automatiquement ces fichiers. Quand vous mentionnez "utilise l'agent code-reviewer" dans une conversation, Claude Code charge le fichier correspondant et crée un subagent avec ces instructions.
+
+### Le répertoire `.claude/agents/` (projet)
+
+Les agents dans ce répertoire sont **versionnés avec Git** et partagés entre les membres de l'équipe. C'est l'endroit idéal pour les agents spécifiques à un projet.
+
+```bash
+mon-projet/
+  .claude/
+    agents/
+      db-migration.md     # Spécifique au projet
+      api-reviewer.md     # Conventions API de l'équipe
+      release-manager.md  # Processus de release
+```
+
+<Callout type="tip" title="Priorité des agents">
+Si un agent du même nom existe aux deux niveaux, l'agent du projet (`.claude/agents/`) a la priorité sur l'agent global (`~/.claude/agents/`). Votre équipe peut surcharger un agent personnel avec une version adaptée au projet.
+</Callout>
+
+### Le fichier AGENTS.md
+
+Le fichier `AGENTS.md` (à la racine du projet ou dans un sous-répertoire) fournit du contexte global à tous les agents. Son rôle est similaire à `CLAUDE.md`, mais focalisé sur le comportement des agents.
+
+```markdown
+# AGENTS.md
+
+## Conventions pour tous les agents
+- Les rapports doivent être en français
+- Les niveaux de sévérité : CRITICAL, HIGH, MEDIUM, LOW
+- Les fichiers de test suivent le pattern *.test.ts
+- Ne jamais modifier directement les fichiers de configuration
+
+## Agents disponibles dans ce projet
+- **db-migration** : gère les migrations Prisma
+- **api-reviewer** : vérifie les conventions REST de l'équipe
+- **release-manager** : orchestre le processus de release
+```
+
+Les agents créés par Claude Code héritent automatiquement du contenu de `AGENTS.md`, en plus de `CLAUDE.md`. C'est un bon endroit pour centraliser les conventions qui s'appliquent à tous les agents du projet.
+
 ## L'outil Task (Agent)
 
 Claude Code utilise l'outil **Task** pour créer et gérer les subagents. Voici les paramètres clés :
@@ -129,6 +186,21 @@ Claude Code utilise l'outil **Task** pour créer et gérer les subagents. Voici 
 <Card title="Bon à savoir" variant="highlight">
 Vous n'avez pas besoin de manipuler l'outil Task directement. Claude Code l'utilise automatiquement quand il juge qu'une délégation est pertinente. Votre rôle est de configurer les agents disponibles et de donner des instructions claires à Claude Code pour qu'il sache quand les utiliser.
 </Card>
+
+### Task pour le suivi multi-étapes
+
+L'outil Task ne sert pas qu'à lancer des subagents. Il permet aussi de **suivre la progression** d'un workflow complexe en créant des tâches intermédiaires. Claude Code découpe un objectif en sous-tâches, marque chacune comme en cours ou terminée, et vous montre l'avancement global.
+
+```bash
+# Quand vous demandez un refactoring complexe, Claude Code crée :
+# ┌─ Task 1: Analyser le code existant          ✅ Done
+# ├─ Task 2: Écrire les tests manquants         ✅ Done
+# ├─ Task 3: Refactorer le module auth          🔄 In progress
+# ├─ Task 4: Mettre à jour les imports          ⬜ Pending
+# └─ Task 5: Vérifier que les tests passent     ⬜ Pending
+```
+
+Ce suivi est visible dans la conversation. Vous pouvez intervenir à tout moment : "arrête la tâche 3" ou "saute directement à la tâche 5".
 
 ## Exemple concret : review de code avec agents
 

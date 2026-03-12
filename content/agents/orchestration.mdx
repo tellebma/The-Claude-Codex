@@ -300,11 +300,201 @@ Voici un prompt qui orchestre un pipeline complet de release en utilisant tous l
 
 Ce pipeline combine les 4 patterns d'orchestration pour un processus de release robuste et automatisé.
 
+## Comparaison avec d'autres outils multi-agents
+
+Claude Code n'est pas le seul outil à proposer des agents. Voici comment il se positionne face aux principales alternatives.
+
+### Claude Code vs Devin
+
+**Devin** (Cognition AI) est un agent de développement autonome qui fonctionne dans un environnement cloud complet (navigateur, terminal, éditeur).
+
+| Critère | Claude Code | Devin |
+|---|---|---|
+| **Environnement** | Votre terminal local | Cloud (VM dédiée) |
+| **Contrôle** | Total, vous voyez chaque action | Autonome, résultat final |
+| **Coût** | Pay-as-you-go (tokens) | Abonnement mensuel |
+| **Personnalisation** | Agents custom, MCP, Skills | Limité aux capacités built-in |
+| **Collaboration** | Vous restez dans la boucle | L'agent travaille seul |
+| **Intégration** | Terminal, SDK, CI/CD | Interface web + PR GitHub |
+
+Claude Code privilégie le **contrôle et la personnalisation**. Devin privilégie l'**autonomie totale**. Pour les tâches bien définies et répétitives, Devin peut être plus pratique. Pour le développement au quotidien avec un contrôle fin, Claude Code a l'avantage.
+
+### Claude Code vs Aider
+
+**Aider** est un outil open-source de pair-programming avec LLM, compatible avec plusieurs modèles (GPT-4, Claude, etc.).
+
+| Critère | Claude Code | Aider |
+|---|---|---|
+| **Modèles** | Claude uniquement (Haiku, Sonnet, Opus) | Multi-modèles (GPT-4, Claude, Gemini...) |
+| **Agents** | Subagents, orchestration, SDK | Pas de système d'agents |
+| **Écosystème** | MCP, Skills, Plugins | Limité au code editing |
+| **Mode** | Terminal interactif + headless | Terminal interactif |
+| **Prix** | Inclus dans l'abonnement Max/Pro ou API | Gratuit (vous payez l'API) |
+
+Aider est excellent pour le pair-programming simple (modifier du code fichier par fichier). Claude Code va plus loin avec l'orchestration multi-agents, les MCP pour connecter des services externes, et le SDK pour l'automatisation.
+
+### Claude Code vs CrewAI
+
+**CrewAI** est un framework Python pour orchestrer des agents IA spécialisés.
+
+| Critère | Claude Code | CrewAI |
+|---|---|---|
+| **Nature** | Outil complet (terminal + SDK) | Framework de code Python |
+| **Agents** | Intégrés, prêts à l'emploi | À construire entièrement |
+| **Modèles** | Claude (optimisé) | Multi-modèles |
+| **Setup** | `npm install` et c'est parti | Projet Python, code à écrire |
+| **Outils** | Bash, Read, Edit, Grep, MCP... | À intégrer manuellement |
+| **Cas d'usage** | Développement logiciel | Tout type d'agent (marketing, recherche...) |
+
+CrewAI offre plus de flexibilité pour construire des systèmes multi-agents sur mesure dans n'importe quel domaine. Claude Code est optimisé pour le développement logiciel avec des outils prêts à l'emploi. Si votre besoin est 100% développement, Claude Code est plus productif. Si vous construisez des agents hors du développement, CrewAI offre plus de liberté.
+
+## Architectures multi-agents
+
+Au-delà des patterns d'orchestration, deux grandes architectures structurent les systèmes multi-agents.
+
+### Architecture leader/worker
+
+Un agent principal (leader) coordonne plusieurs agents spécialisés (workers). Le leader reçoit la demande, la décompose en sous-tâches, et les distribue.
+
+```bash
+# Leader : l'agent orchestrateur
+> Tu coordonnes 3 workers pour la feature "export CSV".
+> Décompose la tâche et assigne chaque partie.
+
+# Worker 1 : Backend
+# → Implémente l'endpoint /api/export
+# Worker 2 : Frontend
+# → Ajoute le bouton d'export dans l'UI
+# Worker 3 : Tests
+# → Écrit les tests E2E du parcours export
+```
+
+C'est l'architecture par défaut de Claude Code quand il utilise des subagents : l'agent principal est le leader, les subagents sont les workers.
+
+**Forces** : coordination centralisée, vision globale claire, facile à débugger.
+**Faiblesses** : le leader est un point de défaillance unique, il consomme beaucoup de contexte.
+
+### Architecture peer-to-peer
+
+Les agents communiquent directement entre eux sans coordinateur central. Chaque agent connaît son rôle et sait quand passer le relais.
+
+```bash
+# Agent Teams en mode peer-to-peer
+# Chaque agent travaille et signale quand il a fini
+# Les autres agents réagissent aux changements
+
+# Agent développeur : code → signale "code prêt"
+# Agent testeur : détecte "code prêt" → écrit les tests
+# Agent reviewer : détecte "tests écrits" → review le tout
+```
+
+Cette architecture correspond au mode **Agent Teams** de Claude Code (voir [Agent Teams](/agents/agent-teams)). Chaque agent a sa propre session et communique via les fichiers et l'état Git.
+
+**Forces** : pas de goulot d'étranglement central, plus résilient.
+**Faiblesses** : coordination plus complexe, risque de conflits, debugging difficile.
+
+## Intégration CI/CD avec agents
+
+Les agents s'intègrent dans vos pipelines CI/CD pour automatiser les vérifications avant merge.
+
+### GitHub Actions
+
+```yaml
+# .github/workflows/agent-review.yml
+name: Agent Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Agent Review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude --print --max-turns 15 \
+            "Fais une review complète de cette PR.
+             Analyse le diff avec git diff origin/main...HEAD.
+             Produis un rapport avec les problèmes par sévérité.
+             Si tu trouves un CRITICAL, termine par EXIT_CODE=1."
+```
+
+### GitLab CI
+
+```yaml
+# .gitlab-ci.yml
+agent-security-audit:
+  stage: review
+  image: node:20-alpine
+  before_script:
+    - npm install -g @anthropic-ai/claude-code
+  script:
+    - |
+      claude --print --max-turns 10 \
+        "Audit de sécurité sur le diff de cette MR.
+         Cherche : injections SQL, XSS, secrets en dur,
+         dépendances vulnérables. Format JSON."
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+```
+
+<Callout type="warning" title="Sécurité des secrets en CI">
+Ne stockez jamais votre clé API Anthropic en clair dans le fichier YAML. Utilisez les secrets du CI (GitHub Secrets, GitLab Variables) et vérifiez que l'agent ne peut pas exfiltrer ces valeurs. Le flag `--dangerously-skip-permissions` est nécessaire en CI mais doit être utilisé avec un `--allowedTools` restrictif.
+</Callout>
+
+### Pipeline complet avec le SDK
+
+Pour un contrôle plus fin, utilisez le SDK dans un script Node.js appelé par votre CI.
+
+```typescript
+// scripts/ci-review.ts
+import { claude } from "@anthropic-ai/claude-code-sdk";
+
+async function ciReview() {
+  // Phase 1 : Security
+  const security = await claude({
+    prompt: "Audit de sécurité du diff par rapport à main",
+    options: { maxTurns: 10, allowedTools: ["Bash", "Read", "Grep"] },
+  });
+
+  // Phase 2 : Tests
+  const tests = await claude({
+    prompt: "Vérifie que la couverture de tests est > 80%",
+    options: { maxTurns: 8, allowedTools: ["Bash", "Read"] },
+  });
+
+  // Résultat consolidé
+  const hasCritical = security.text.includes("CRITICAL");
+  const lowCoverage = tests.text.includes("< 80%");
+
+  if (hasCritical || lowCoverage) {
+    console.error("Review échouée :");
+    if (hasCritical) console.error("- Problème de sécurité CRITICAL");
+    if (lowCoverage) console.error("- Couverture insuffisante");
+    process.exit(1);
+  }
+
+  console.log("Review OK");
+}
+
+ciReview();
+```
+
 ## Prochaines étapes
 
 Vous maîtrisez maintenant l'orchestration multi-agents. Continuez votre apprentissage avec ces ressources complémentaires.
 
+- [Claude Agent SDK](/agents/agent-sdk) : Créez des agents programmatiques en TypeScript et Python
+- [Performance et limites](/agents/performance-limits) : Coûts, profondeur de récursion et bonnes pratiques
 - [Comprendre les agents](/agents/what-are-agents) : Revenir aux fondamentaux
 - [Créer un subagent](/agents/create-subagent) : Créez des agents sur mesure pour vos besoins
-- [Maîtriser le prompting](/prompting) : L'art de communiquer efficacement avec Claude Code
-- [Configurer votre environnement](/configurator) : Optimisez votre configuration Claude Code
+- [Mode Headless et CI/CD](/advanced/headless-ci) : Intégrer Claude Code dans vos pipelines

@@ -14,6 +14,8 @@ import {
   Sparkles,
   MessageSquare,
   Puzzle,
+  Code2,
+  Gauge,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Callout } from "@/components/ui/Callout";
@@ -85,6 +87,24 @@ const SUB_PAGES = [
     description:
       "Patterns d\u2019orchestration : s\u00e9quentiel, parall\u00e8le, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
     color: "brand" as const,
+  },
+  {
+    href: "/agents/agent-sdk",
+    icon: Code2,
+    step: "06",
+    title: "Claude Agent SDK",
+    description:
+      "Construisez des agents programmatiques en TypeScript et Python. Outils custom, monitoring automatis\u00e9 et int\u00e9gration dans vos pipelines.",
+    color: "accent" as const,
+  },
+  {
+    href: "/agents/performance-limits",
+    icon: Gauge,
+    step: "07",
+    title: "Performance et limites",
+    description:
+      "Co\u00fbts en tokens, profondeur de r\u00e9cursion, timeouts, strat\u00e9gies de retry et bonnes pratiques pour la production.",
+    color: "accent" as const,
   },
 ] as const;
 
@@ -210,7 +230,7 @@ export default function AgentsPage() {
           <AnimateOnScroll preset="fade-up">
             <div className="mb-12 text-center">
               <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
-                5 guides
+                7 guides
               </span>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Explorez les agents en profondeur

@@ -147,7 +147,7 @@ export function getSectionMdxSlugs(
 
   return fs
     .readdirSync(sectionDir)
-    .filter((filename) => filename.endsWith(".mdx"))
+    .filter((filename) => filename.endsWith(".mdx") && filename !== "index.mdx")
     .map((filename) => filename.replace(/\.mdx$/, ""));
 }
 

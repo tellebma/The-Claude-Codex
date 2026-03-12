@@ -1,31 +1,95 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { Logo } from "./Logo";
 import { SearchDialog } from "@/components/ui/SearchDialog";
 import clsx from "clsx";
 
-const navigation = [
+const primaryNav = [
   { name: "Démarrer", href: "/getting-started" },
-  { name: "Contenus", href: "/content" },
   { name: "MCP", href: "/mcp" },
   { name: "Skills", href: "/skills" },
   { name: "Prompting", href: "/prompting" },
   { name: "Parcours", href: "/personas" },
   { name: "Entreprise", href: "/enterprise" },
-  { name: "Limites", href: "/limits" },
   { name: "Avancé", href: "/advanced" },
+];
+
+const secondaryNav = [
+  { name: "Contenus", href: "/content" },
+  { name: "Limites", href: "/limits" },
   { name: "Référence", href: "/reference" },
   { name: "Configurateur", href: "/configurator" },
   { name: "Glossaire", href: "/glossary" },
   { name: "Vision", href: "/future" },
 ];
 
+const navigation = [...primaryNav, ...secondaryNav];
+
 const MOBILE_MENU_ID = "mobile-nav-menu";
+
+function MoreDropdown({ pathname }: { readonly pathname: string }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const isSecondaryActive = secondaryNav.some(
+    (item) => pathname === item.href || pathname.startsWith(item.href + "/")
+  );
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className={clsx(
+          "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+          isSecondaryActive
+            ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
+            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+        )}
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        Plus
+        <ChevronDown className={clsx("h-3.5 w-3.5 transition-transform", open && "rotate-180")} aria-hidden="true" />
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-slate-200/60 bg-white/95 py-1 shadow-lg backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/95">
+          {secondaryNav.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className={clsx(
+                  "block px-4 py-2 text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                )}
+              >
+                {item.name}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,8 +108,8 @@ export function Header() {
           </span>
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
-          {navigation.map((item) => {
+        <div className="hidden items-center gap-1 lg:flex">
+          {primaryNav.map((item) => {
             const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <Link
@@ -63,6 +127,7 @@ export function Header() {
               </Link>
             );
           })}
+          <MoreDropdown pathname={pathname} />
         </div>
 
         <div className="flex items-center gap-2">
@@ -70,7 +135,7 @@ export function Header() {
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700 md:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700 lg:hidden"
             aria-label="Menu de navigation"
             aria-expanded={mobileOpen}
             aria-controls={MOBILE_MENU_ID}
@@ -87,7 +152,7 @@ export function Header() {
       <div
         id={MOBILE_MENU_ID}
         className={clsx(
-          "overflow-hidden border-t border-slate-200/50 transition-all duration-300 dark:border-slate-700/50 md:hidden",
+          "overflow-hidden border-t border-slate-200/50 transition-all duration-300 dark:border-slate-700/50 lg:hidden",
           mobileOpen ? "max-h-[30rem]" : "max-h-0"
         )}
         inert={!mobileOpen || undefined}

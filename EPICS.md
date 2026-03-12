@@ -2030,8 +2030,8 @@ Creer une page "Limites et workarounds", une comparaison honnete avec les concur
 
 ## Epic 30 — Enrichissement de la section Skills pour tous niveaux
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWE`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P2 (moyenne)
 - **Estimation** : S (3-5 jours)
 - **Dependances** : Epic 28 (Skills non-dev)

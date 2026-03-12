@@ -35,8 +35,8 @@ test.describe("Theme Toggle", () => {
     });
     await button.click();
 
-    // Wait for theme change to apply
-    await page.waitForTimeout(500);
+    // Wait for theme change to apply deterministically
+    await expect(html).not.toHaveClass(initialClass ?? "", { timeout: 2000 });
 
     const newClass = await html.getAttribute("class");
     // The class should have changed
@@ -55,9 +55,10 @@ test.describe("Theme Toggle", () => {
 
     // Toggle twice
     await button.click();
-    await page.waitForTimeout(300);
+    await expect(html).not.toHaveClass(initialClass ?? "", { timeout: 2000 });
+
     await button.click();
-    await page.waitForTimeout(300);
+    await expect(html).toHaveClass(initialClass ?? "", { timeout: 2000 });
 
     const finalClass = await html.getAttribute("class");
     expect(finalClass).toEqual(initialClass);

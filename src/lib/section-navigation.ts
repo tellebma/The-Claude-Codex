@@ -67,6 +67,8 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { label: "Agent Teams", href: "/agents/agent-teams" },
       { label: "Top agents par cas d'usage", href: "/agents/best-agents" },
       { label: "Orchestration avancée", href: "/agents/orchestration" },
+      { label: "Claude Agent SDK", href: "/agents/agent-sdk" },
+      { label: "Performance et limites", href: "/agents/performance-limits" },
     ],
   },
   prompting: {
@@ -89,12 +91,24 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Vision",
     items: [
       { label: "Vue d'ensemble", href: "/future" },
+      { label: "L'IA et les m\u00e9tiers du dev", href: "/future/why-ai-matters" },
+      { label: "Tendances IA 2026", href: "/future/trends-2026" },
+      { label: "Roadmap du projet", href: "/future/roadmap" },
     ],
   },
   configurator: {
     title: "Configurateur",
     items: [
       { label: "Configurateur interactif", href: "/configurator" },
+    ],
+  },
+  "use-cases": {
+    title: "Cas d\u2019usage",
+    items: [
+      { label: "Vue d'ensemble", href: "/use-cases" },
+      { label: "8 cas d\u2019usage business", href: "/use-cases/business" },
+      { label: "Histoires de r\u00e9ussite", href: "/use-cases/success-stories" },
+      { label: "Tutoriels sans code", href: "/use-cases/no-code" },
     ],
   },
   enterprise: {

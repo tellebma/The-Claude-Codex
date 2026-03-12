@@ -380,7 +380,34 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "L'avenir de l'IA est deja la. Decouvrez comment vous preparer, les tendances a suivre, et la roadmap de The Claude Codex.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-03-07",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/future/why-ai-matters",
+    title: "L'IA et les m\u00e9tiers du d\u00e9veloppement",
+    description:
+      "Comment l'intelligence artificielle transforme concr\u00e8tement le quotidien des d\u00e9veloppeurs. Opportunit\u00e9s par profil, exemples avant/apr\u00e8s, et ce qui ne changera pas.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/future/trends-2026",
+    title: "Tendances IA 2026",
+    description:
+      "Agents autonomes, MCP comme standard, multimodalit\u00e9, \u00e9volution des IDE IA et impact sur les m\u00e9thodologies de d\u00e9veloppement. Les tendances qui fa\u00e7onnent 2026.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/future/roadmap",
+    title: "Roadmap du projet The Claude Codex",
+    description:
+      "Ce qui a \u00e9t\u00e9 fait, ce qui arrive, et comment contribuer. La feuille de route du guide de r\u00e9f\u00e9rence francophone pour Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
   },
   {
     path: "/content",
@@ -533,7 +560,61 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Patterns d\u2019orchestration pour combiner plusieurs agents Claude Code : s\u00e9quentiel, parall\u00e8le, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/agents/agent-sdk",
+    title: "Claude Agent SDK : construire des agents programmatiques",
+    description:
+      "Utilisez le Claude Agent SDK pour cr\u00e9er des agents en TypeScript et Python. Int\u00e9gration d\u2019outils, monitoring automatis\u00e9, pipelines de d\u00e9ploiement et comparaison avec les subagents natifs.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/agents/performance-limits",
+    title: "Performance et limites des agents",
+    description:
+      "Co\u00fbts en tokens, profondeur de r\u00e9cursion, gestion d\u2019erreurs et timeouts. Strat\u00e9gies de retry et bonnes pratiques production pour les agents Claude Code.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/use-cases",
+    title: "Claude Code pour tous : cas d\u2019usage concrets",
+    description:
+      "Des exemples pratiques de Claude Code pour non-d\u00e9veloppeurs. Cas d\u2019usage business, histoires de r\u00e9ussite et tutoriels sans code.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/use-cases/business",
+    title: "Cas d\u2019usage business : 8 exemples concrets",
+    description:
+      "8 cas d\u2019usage professionnels de Claude Code pour non-d\u00e9veloppeurs : email, r\u00e9sum\u00e9, analyse de donn\u00e9es, pr\u00e9sentation, planning, post LinkedIn, rapport et veille.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/use-cases/success-stories",
+    title: "Histoires de r\u00e9ussite : des non-d\u00e9veloppeurs racontent",
+    description:
+      "4 professionnels non-d\u00e9veloppeurs partagent comment Claude Code a transform\u00e9 leur quotidien. Marketing, RH, finance et gestion de projet.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
+  },
+  {
+    path: "/use-cases/no-code",
+    title: "Tutoriels sans code : automatiser ses t\u00e2ches courantes",
+    description:
+      "3 tutoriels pas \u00e0 pas pour automatiser un rapport, cr\u00e9er un template email et g\u00e9n\u00e9rer une pr\u00e9sentation, le tout sans \u00e9crire une seule ligne de code.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-12",
   },
   {
     path: "/enterprise",

@@ -225,8 +225,44 @@ claude mcp add puppeteer -- npx -y @modelcontextprotocol/server-puppeteer
 Pour la plupart des projets, **Playwright + 21st.dev Magic** est la combinaison idéale. Playwright pour tester et vérifier visuellement, 21st.dev Magic pour générer des composants de qualité. Puppeteer reste utile pour des cas de scraping spécifiques où vous n'avez besoin que de Chromium.
 </Callout>
 
+## Limites et gotchas
+
+Ces MCP interagissent avec des navigateurs et des services externes. Voici les limites à connaître.
+
+### Quotas et ressources
+
+- **Playwright et Puppeteer** : pas de quotas API, mais chaque instance de navigateur consomme 200-500 MB de RAM. Si vous lancez plusieurs tests en parallèle, la mémoire peut saturer.
+- **21st.dev Magic** : soumis aux limites de votre plan (nombre de requêtes/mois). Les composants complexes consomment plus de crédits.
+- **Chrome DevTools** : même limite mémoire que Playwright, puisqu'il utilise un navigateur.
+
+### Latence et fiabilité
+
+- **Screenshots** : prendre un screenshot nécessite le rendu complet de la page. Les pages lourdes (SPA avec beaucoup de JS) peuvent prendre 3 à 10 secondes.
+- **Navigateurs headless** : certains sites bloquent les navigateurs headless (anti-bot). Les tests peuvent échouer sur des sites tiers protégés.
+- **21st.dev Magic** : la génération de composants passe par une API cloud. La latence dépend de la complexité du composant demandé (1 à 15 secondes).
+
+### Cas de panne courants
+
+- **Playwright non installé** : le MCP nécessite que les navigateurs soient installés localement. Exécutez `npx playwright install` si les tests échouent avec "browser not found".
+- **Port occupé** : Playwright et Puppeteer tentent d'ouvrir un port pour le navigateur. Si le port est déjà pris, le MCP plante.
+- **Clé 21st.dev expirée** : le MCP démarre mais chaque appel retourne une erreur 401.
+
+### Évaluer un MCP tiers
+
+| Critère | Ce qu'il faut regarder |
+|---------|----------------------|
+| **Maintenance** | Compatibilité avec les dernières versions des navigateurs, mises à jour régulières |
+| **Sécurité** | Pas d'accès réseau non déclaré, exécution sandboxée si possible |
+| **Performance** | Gestion propre des instances de navigateur (ouverture/fermeture), pas de fuites mémoire |
+| **Documentation** | Liste complète des tools, captures d'écran d'exemple, prérequis système |
+
+<Callout type="tip" title="Registres MCP communautaires">
+Pour trouver des MCP design et UI supplémentaires, consultez [smithery.ai](https://smithery.ai) ou [glama.ai/mcp/servers](https://glama.ai/mcp/servers). Vous y trouverez des alternatives et des MCP spécialisés (Storybook, Chromatic, etc.).
+</Callout>
+
 ## Prochaines étapes
 
 - [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner plusieurs MCP dans un flux de travail concret
 - [Top MCP productivité](/mcp/best-productivity) : Gmail, Slack, Calendar, Figma
 - [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé
+- [Créer un MCP custom en TypeScript](/mcp/create-mcp-typescript) : Construisez votre propre MCP

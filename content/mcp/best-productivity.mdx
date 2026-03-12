@@ -222,9 +222,46 @@ Puis dans Claude Code :
 | **Figma** | Officiel Figma (vérifier developer.figma.com) | Token personnel | Design-to-code, analyse de maquettes |
 | **Lighthouse** | Via Playwright MCP (`@playwright/mcp`) | Aucune | Audits web, optimisation performance |
 
+## Limites et gotchas
+
+Avant de brancher ces MCP en production, gardez en tête leurs limites réelles.
+
+### Quotas API et rate limiting
+
+- **Gmail** : l'API Google impose des quotas quotidiens (250 requêtes/seconde par défaut). Un usage intensif du triage automatique peut les atteindre.
+- **Slack** : les rate limits varient selon le type d'endpoint (Tier 1 à 4). L'envoi de messages est limité à environ 1 requête par seconde.
+- **Google Calendar** : mêmes quotas Google que Gmail. Les lectures sont plus permissives que les écritures.
+- **Figma** : le token personnel a des limites de requêtes. Les fichiers volumineux prennent du temps à analyser.
+
+### Latence et fiabilité
+
+Les MCP de productivité dépendent d'APIs tierces. Si Slack est en panne, le MCP Slack aussi. Prévoyez des messages d'erreur clairs et ne comptez pas sur ces MCP pour des workflows critiques en temps réel.
+
+### Cas de panne courants
+
+- **Token expiré** : les tokens OAuth Google expirent régulièrement. Configurez un refresh token valide.
+- **Permissions insuffisantes** : un Bot Slack sans le scope `chat:write` ne pourra pas envoyer de messages, même si le MCP démarre correctement.
+- **Changement d'API** : les APIs tierces évoluent. Un MCP communautaire peut devenir incompatible du jour au lendemain.
+
+### Évaluer un MCP tiers
+
+Avant d'installer un MCP communautaire, vérifiez ces critères :
+
+| Critère | Ce qu'il faut regarder |
+|---------|----------------------|
+| **Maintenance** | Dernier commit récent, issues traitées, contributeurs actifs |
+| **Sécurité** | Audit du code source, pas de permissions excessives, pas de dépendances suspectes |
+| **Performance** | Temps de démarrage raisonnable, pas de fuites mémoire connues |
+| **Documentation** | README clair, exemples de configuration, changelog maintenu |
+
+<Callout type="tip" title="Registres MCP communautaires">
+Pour trouver et comparer des MCP, consultez [smithery.ai](https://smithery.ai) ou [glama.ai/mcp/servers](https://glama.ai/mcp/servers). Ces registres référencent les MCP disponibles avec leurs évaluations et statistiques d'utilisation.
+</Callout>
+
 ## Prochaines étapes
 
 - [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé et résolution des problèmes
 - [Top MCP développement](/mcp/best-development) : Context7, GitHub, Sentry, bases de données
 - [Top MCP design & UI](/mcp/best-design) : Playwright, Chrome DevTools, 21st.dev Magic
 - [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner plusieurs MCP dans un flux de travail
+- [Créer un MCP custom en TypeScript](/mcp/create-mcp-typescript) : Construisez votre propre MCP

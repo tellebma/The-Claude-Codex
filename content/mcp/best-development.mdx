@@ -260,9 +260,48 @@ Créez un **Fine-grained Personal Access Token** avec les permissions minimales 
 | **PostgreSQL** | `@modelcontextprotocol/server-postgres` | Connection string | Exploration et analyse de données |
 | **GitHub** | `@modelcontextprotocol/server-github` | PAT Token | PRs, issues, code review, CI/CD |
 
+## Limites et gotchas
+
+Ces MCP sont puissants, mais ils ont des limites concrètes à connaître.
+
+### Quotas API et rate limiting
+
+- **GitHub** : l'API REST limite à 5 000 requêtes/heure avec un token. Les recherches de code sont encore plus limitées (30 requêtes/minute). Un workflow intensif peut atteindre ces limites.
+- **Sentry** : les limites dépendent de votre plan. Le plan gratuit est restrictif sur le volume de requêtes API.
+- **Linear** : environ 100 requêtes/minute. Suffisant pour un usage normal, mais un script de migration peut bloquer.
+- **PostgreSQL** : pas de rate limit réseau, mais les requêtes lourdes sur une base de production peuvent impacter les performances.
+
+### Latence et fiabilité
+
+- **Context7** : dépend de l'indexation d'Upstash. Si une bibliothèque vient de publier une version, il peut y avoir un délai de quelques heures avant que la doc soit à jour.
+- **Sentry** : les événements récents peuvent ne pas apparaître immédiatement (indexation en cours).
+- **GitHub** : les recherches de code cross-repo sont lentes par nature (indexation GitHub).
+
+### Cas de panne courants
+
+- **Token GitHub avec scopes insuffisants** : un Fine-grained token sans le scope `workflow` ne pourra pas lire les GitHub Actions. L'erreur n'est pas toujours explicite.
+- **Connection string PostgreSQL** : une faute dans l'URL de connexion fait planter le MCP silencieusement. Testez-la d'abord avec `psql`.
+- **Sentry org/project mal configuré** : le MCP démarre mais ne retourne rien si l'organisation ou le projet ne correspondent pas.
+
+### Évaluer un MCP tiers
+
+Avant d'installer un MCP de développement communautaire, vérifiez :
+
+| Critère | Ce qu'il faut regarder |
+|---------|----------------------|
+| **Maintenance** | Dernier commit récent, issues traitées, release régulières |
+| **Sécurité** | Pas d'envoi de données vers des serveurs inconnus, permissions minimales |
+| **Performance** | Temps de démarrage, consommation mémoire, gestion des timeouts |
+| **Documentation** | Installation claire, liste des tools exposés, exemples d'utilisation |
+
+<Callout type="tip" title="Registres MCP communautaires">
+Pour découvrir de nouveaux MCP et vérifier la réputation d'un package, consultez [smithery.ai](https://smithery.ai) ou [glama.ai/mcp/servers](https://glama.ai/mcp/servers). Ces registres centralisent les évaluations de la communauté.
+</Callout>
+
 ## Prochaines étapes
 
 - [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé et résolution des problèmes
 - [Top MCP design & UI](/mcp/best-design) : Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer
 - [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner Context7 + GitHub + Playwright
+- [Créer un MCP custom en TypeScript](/mcp/create-mcp-typescript) : Construisez votre propre serveur MCP
 - [Comprendre les MCP](/mcp/what-are-mcps) : Revenir aux fondamentaux du protocole

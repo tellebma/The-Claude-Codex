@@ -257,7 +257,7 @@ export default function FuturePage() {
           <div className="mx-auto max-w-4xl text-center">
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
               Vision & Futur
             </div>
 
@@ -287,7 +287,7 @@ export default function FuturePage() {
                 {/* Center icon */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 shadow-lg shadow-brand-500/25 sm:h-20 sm:w-20">
-                    <BrainCircuit className="h-8 w-8 text-white sm:h-10 sm:w-10" />
+                    <BrainCircuit className="h-8 w-8 text-white sm:h-10 sm:w-10" aria-hidden="true" />
                   </div>
                 </div>
                 {/* Orbit dots */}
@@ -324,6 +324,7 @@ export default function FuturePage() {
                   >
                     <Icon
                       className={`h-6 w-6 ${professionIconColors[item.gradient]}`}
+                      aria-hidden="true"
                     />
                   </div>
                   <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
@@ -374,7 +375,7 @@ export default function FuturePage() {
                   {/* Content */}
                   <div className="pb-8">
                     <div className="mb-1 flex items-center gap-2">
-                      <Icon className="h-4 w-4 text-brand-700 dark:text-brand-400" />
+                      <Icon className="h-4 w-4 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                       <h3 className="text-lg font-semibold">{item.title}</h3>
                     </div>
                     <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
@@ -386,7 +387,7 @@ export default function FuturePage() {
                         className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brand-700 dark:text-brand-400 transition-colors hover:text-brand-700 dark:hover:text-brand-300"
                       >
                         {item.link.label}
-                        <ArrowRight className="h-3 w-3" />
+                        <ArrowRight className="h-3 w-3" aria-hidden="true" />
                       </Link>
                     )}
                   </div>
@@ -426,7 +427,7 @@ export default function FuturePage() {
                     <div
                       className={`flex h-10 w-10 items-center justify-center rounded-lg ${colors.bg}`}
                     >
-                      <Icon className={`h-5 w-5 ${colors.icon}`} />
+                      <Icon className={`h-5 w-5 ${colors.icon}`} aria-hidden="true" />
                     </div>
                     <div
                       className={`h-2 w-2 rounded-full ${colors.dot} animate-pulse`}
@@ -492,6 +493,7 @@ export default function FuturePage() {
                           className={`h-5 w-5 sm:h-6 sm:w-6 ${
                             isFirst ? "text-white" : "text-slate-500 dark:text-slate-400"
                           }`}
+                          aria-hidden="true"
                         />
                       </div>
                     </div>
@@ -530,7 +532,7 @@ export default function FuturePage() {
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-            <Heart className="h-4 w-4" />
+            <Heart className="h-4 w-4" aria-hidden="true" />
             Open-source
           </div>
 
@@ -549,7 +551,7 @@ export default function FuturePage() {
           {/* Contribution cards */}
           <div className="mx-auto mt-12 grid max-w-2xl gap-4 text-left sm:grid-cols-3">
             <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur">
-              <GitBranch className="mb-2 h-5 w-5 text-brand-400" />
+              <GitBranch className="mb-2 h-5 w-5 text-brand-400" aria-hidden="true" />
               <h3 className="mb-1 text-sm font-semibold text-white">
                 Fork & PR
               </h3>
@@ -558,7 +560,7 @@ export default function FuturePage() {
               </p>
             </div>
             <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur">
-              <Lightbulb className="mb-2 h-5 w-5 text-accent-400" />
+              <Lightbulb className="mb-2 h-5 w-5 text-accent-400" aria-hidden="true" />
               <h3 className="mb-1 text-sm font-semibold text-white">
                 Issues & Idees
               </h3>
@@ -568,7 +570,7 @@ export default function FuturePage() {
               </p>
             </div>
             <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur">
-              <Mic className="mb-2 h-5 w-5 text-violet-400" />
+              <Mic className="mb-2 h-5 w-5 text-violet-400" aria-hidden="true" />
               <h3 className="mb-1 text-sm font-semibold text-white">
                 Partagez
               </h3>
@@ -587,17 +589,17 @@ export default function FuturePage() {
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:bg-slate-100"
             >
-              <GitBranch className="h-4 w-4" />
+              <GitBranch className="h-4 w-4" aria-hidden="true" />
               Voir sur GitHub
-              <ExternalLink className="h-3 w-3 opacity-50" />
+              <ExternalLink className="h-3 w-3 opacity-50" aria-hidden="true" />
             </Link>
             <Link
               href="/getting-started"
               className="group inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:border-slate-500 hover:bg-white/5"
             >
-              <Rocket className="h-4 w-4" />
+              <Rocket className="h-4 w-4" aria-hidden="true" />
               Commencer le guide
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
           </div>
         </div>

@@ -2178,8 +2178,8 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 
 ## Epic 32 — Suivi d'usage et analytics respectueux de la vie privee
 
-- **Statut** : `TODO`
-- **Review** : `NON REVIEWÉ`
+- **Statut** : `DONE`
+- **Review** : `REVIEWÉ`
 - **Priorite** : P2
 - **Estimation** : S (2-3 jours)
 - **Dependances** : Aucune (peut etre fait a tout moment)

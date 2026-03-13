@@ -1501,7 +1501,7 @@ Creer le contenu documentant les Hooks de Claude Code, le mode headless/non-inte
 ## Epic 25 — Creation de MCP custom (tutoriel complet)
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1 (haute — sujet #1 pour connaisseurs et experts, totalement absent)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 19 (corrections de credibilite MCP)
@@ -1592,7 +1592,7 @@ Creer un tutoriel complet de creation de MCP Server, de la specification au depl
 ## Epic 26 — Parcours differencies et navigation par persona
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1 (haute — tous les audits identifient l'absence de differenciation)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 21 (contenu debutant), Epic 22 (contenu prompting)
@@ -1693,7 +1693,7 @@ Implementer un systeme de parcours differencies par persona avec des badges de n
 ## Epic 27 — Section Enterprise complete
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P1 (haute — score 3/10, le segment le plus faible)
 - **Estimation** : L (2-4 semaines)
 - **Dependances** : Aucune (peut commencer immediatement)
@@ -1843,7 +1843,7 @@ Creer une section Enterprise complete avec une page d'accueil, une page securite
 ## Epic 28 — Contenu non-developpeur et cas d'usage universels
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2 (moyenne — aligne la promesse de la landing page)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 22 (prompting non-dev)
@@ -1939,7 +1939,7 @@ Creer du contenu non-technique : Skills pour le quotidien, cas d'usage business,
 ## Epic 29 — Limites, comparaisons objectives et couts reels
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2 (moyenne — renforce la credibilite pour experts et connaisseurs)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Aucune
@@ -2031,7 +2031,7 @@ Creer une page "Limites et workarounds", une comparaison honnete avec les concur
 ## Epic 30 — Enrichissement de la section Skills pour tous niveaux
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2 (moyenne)
 - **Estimation** : S (3-5 jours)
 - **Dependances** : Epic 28 (Skills non-dev)
@@ -2100,7 +2100,7 @@ Publier les Skills dans un repository telechargeable, documenter exhaustivement 
 ## Epic 31 — Enrichissement de la section Agents pour profils avances
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2 (moyenne)
 - **Estimation** : M (1-2 semaines)
 - **Dependances** : Epic 13 (section Agents de base), Epic 24 (hooks et mode avance)
@@ -2179,7 +2179,7 @@ S'assurer que la section Agents (Epic 13) inclut du contenu avance : Agent SDK, 
 ## Epic 32 — Suivi d'usage et analytics respectueux de la vie privee
 
 - **Statut** : `DONE`
-- **Review** : `REVIEWÉ`
+- **Review** : `REVIEWÉ ✅`
 - **Priorite** : P2
 - **Estimation** : S (2-3 jours)
 - **Dependances** : Aucune (peut etre fait a tout moment)

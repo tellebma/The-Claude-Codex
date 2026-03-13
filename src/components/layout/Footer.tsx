@@ -97,9 +97,6 @@ export function Footer() {
             <p className="text-sm text-slate-500 dark:text-slate-400">
               <CopyrightYear /> The Claude Codex. Projet open-source.
             </p>
-            <p className="text-xs text-slate-400 dark:text-slate-500">
-              Les t\u00e9moignages pr\u00e9sent\u00e9s sur ce site sont des exemples illustratifs.
-            </p>
           </div>
           <a
             href="https://github.com/tellebma/The-Claude-Codex"

@@ -80,7 +80,7 @@ const websiteJsonLd = createWebSiteSchema({
   description: siteDescription,
 });
 
-const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "/analytics";
+const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "https://matomo.tellebma.fr";
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "1";
 
 const matomoTrackingScript = `

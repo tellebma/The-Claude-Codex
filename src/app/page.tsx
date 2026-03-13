@@ -20,7 +20,6 @@ import {
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { PathCard } from "@/components/ui/PathCard";
-import { TestimonialCard } from "@/components/ui/TestimonialCard";
 import { AudienceCard } from "@/components/ui/AudienceCard";
 import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
@@ -341,43 +340,6 @@ export default function HomePage() {
           <AnimateOnScroll preset="scale" delay={0.2} className="mt-12">
             <ConfiguratorTeaser />
           </AnimateOnScroll>
-        </div>
-      </section>
-
-      {/* ===== TÉMOIGNAGES ===== */}
-      <section className="py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimateOnScroll preset="fade-up">
-            <SectionHeading
-              badge="Témoignages"
-              title="Ils ont transformé leur quotidien"
-              description="Découvrez comment des personnes de tous horizons utilisent Claude Code pour créer, apprendre et innover."
-            />
-          </AnimateOnScroll>
-
-          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
-            <TestimonialCard
-              quote="Je n'avais jamais écrit une ligne de code. En une semaine avec Claude Code, j'ai lancé le site de mon restaurant avec réservation en ligne. Mes clients n'en reviennent pas."
-              author="Marie L."
-              role="Restauratrice, Lyon"
-              result="Site web lancé en 7 jours"
-              avatarColor="teal"
-            />
-            <TestimonialCard
-              quote="En connectant le MCP GitHub et le MCP PostgreSQL, j'ai automatisé tout le pipeline de review de mon équipe. On gagne 3 heures par jour, facile."
-              author="Thomas K."
-              role="Lead Developer, Paris"
-              result="3h gagnées par jour"
-              avatarColor="amber"
-            />
-            <TestimonialCard
-              quote="Pour mon mémoire de master, Claude Code m'a aidé à analyser 500 articles scientifiques et à structurer ma revue de littérature. Mon directeur était impressionné."
-              author="Amina B."
-              role="Étudiante en sociologie, Bordeaux"
-              result="Mémoire terminé 2 mois en avance"
-              avatarColor="purple"
-            />
-          </StaggerChildren>
         </div>
       </section>
 

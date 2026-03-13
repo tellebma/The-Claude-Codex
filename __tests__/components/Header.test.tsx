@@ -44,24 +44,42 @@ describe("Header", () => {
 
   it("renders all navigation items by their href", () => {
     render(<Header />);
-    const expectedHrefs = [
+    // primaryNav items are always visible in desktop nav
+    const primaryHrefs = [
       "/getting-started",
-      "/content",
       "/mcp",
       "/skills",
       "/prompting",
+      "/use-cases",
+      "/personas",
+      "/enterprise",
       "/advanced",
+    ];
+
+    for (const href of primaryHrefs) {
+      const links = screen
+        .getAllByRole("link")
+        .filter((link) => link.getAttribute("href") === href);
+      // Desktop nav always visible; mobile nav may be inert
+      expect(links.length).toBeGreaterThanOrEqual(1);
+    }
+
+    // secondaryNav items are inside a closed dropdown (not rendered until opened)
+    const secondaryHrefs = [
+      "/content",
+      "/limits",
       "/reference",
       "/configurator",
       "/glossary",
       "/future",
     ];
-
-    for (const href of expectedHrefs) {
+    // Open the "Plus" dropdown
+    const plusButton = screen.getByRole("button", { name: /Plus/ });
+    fireEvent.click(plusButton);
+    for (const href of secondaryHrefs) {
       const links = screen
         .getAllByRole("link")
         .filter((link) => link.getAttribute("href") === href);
-      // Desktop nav always visible; mobile nav may be inert
       expect(links.length).toBeGreaterThanOrEqual(1);
     }
   });

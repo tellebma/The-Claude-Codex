@@ -156,7 +156,7 @@ export function Header() {
           "overflow-hidden border-t border-slate-200/50 transition-all duration-300 dark:border-slate-700/50 lg:hidden",
           mobileOpen ? "max-h-[30rem]" : "max-h-0"
         )}
-        inert={!mobileOpen || undefined}
+        {...(!mobileOpen ? { inert: "" as unknown as boolean } : {})}
         aria-hidden={!mobileOpen}
       >
         <div className="space-y-1 px-4 py-3">

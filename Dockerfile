@@ -33,15 +33,16 @@ RUN find ./out -type f \( \
   ' \;
 
 # Stage 4: Production
-FROM nginx:1.27-alpine AS runner
+FROM nginx:1.28-alpine AS runner
 LABEL maintainer="The Claude Codex Team"
 LABEL description="The Claude Codex - Guide de reference pour maitriser Claude Code"
 
 # Remove default nginx config and content
 RUN rm -rf /etc/nginx/conf.d/default.conf /usr/share/nginx/html/*
 
-# Copy custom nginx config
+# Copy custom nginx config and security headers snippet
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/security-headers.conf /etc/nginx/security-headers.conf
 
 # Copy pre-compressed static output from Next.js build
 COPY --from=compressor /app/out /usr/share/nginx/html

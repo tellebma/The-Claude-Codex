@@ -120,7 +120,7 @@ const SUB_PAGES = [
     step: "01",
     title: "Comprendre les MCP en 5 minutes",
     description:
-      "Le protocole MCP expliqu\u00e9 simplement : architecture client-serveur, JSON-RPC, diff\u00e9rences avec les plugins et skills.",
+      "Le protocole MCP expliqué simplement : architecture client-serveur, JSON-RPC, différences avec les plugins et skills.",
     color: "brand" as const,
   },
   {
@@ -129,14 +129,14 @@ const SUB_PAGES = [
     step: "02",
     title: "Installer et configurer un MCP",
     description:
-      "Le fichier .mcp.json, la commande claude mcp add, les trois m\u00e9thodes d\u2019installation et le debug des probl\u00e8mes courants.",
+      "Le fichier .mcp.json, la commande claude mcp add, les trois méthodes d’installation et le debug des problèmes courants.",
     color: "brand" as const,
   },
   {
     href: "/mcp/best-productivity",
     icon: Briefcase,
     step: "03",
-    title: "Top MCP productivit\u00e9",
+    title: "Top MCP productivité",
     description:
       "Figma, Lighthouse, Gmail, Slack, Google Calendar : les MCP qui transforment votre quotidien professionnel.",
     color: "accent" as const,
@@ -145,9 +145,9 @@ const SUB_PAGES = [
     href: "/mcp/best-development",
     icon: Code2,
     step: "04",
-    title: "Top MCP d\u00e9veloppement",
+    title: "Top MCP développement",
     description:
-      "Context7, Sentry, Linear, PostgreSQL, GitHub : les MCP essentiels pour les d\u00e9veloppeurs.",
+      "Context7, Sentry, Linear, PostgreSQL, GitHub : les MCP essentiels pour les développeurs.",
     color: "accent" as const,
   },
   {
@@ -163,7 +163,7 @@ const SUB_PAGES = [
     href: "/mcp/first-workflow",
     icon: Route,
     step: "06",
-    title: "Cr\u00e9er son premier workflow MCP",
+    title: "Créer son premier workflow MCP",
     description:
       "Tutoriel concret : combinez Context7 + GitHub + Playwright dans un flux de travail complet.",
     color: "accent" as const,

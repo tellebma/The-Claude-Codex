@@ -14,7 +14,7 @@ import { NotFoundAnimation } from "@/components/ui/NotFoundAnimation";
 export const metadata: Metadata = createPageMetadata({
   title: "Page introuvable",
   description:
-    "La page que vous cherchez n'existe pas ou a \u00e9t\u00e9 d\u00e9plac\u00e9e. Retrouvez votre chemin gr\u00e2ce aux liens ci-dessous.",
+    "La page que vous cherchez n'existe pas ou a été déplacée. Retrouvez votre chemin grâce aux liens ci-dessous.",
   path: "/404",
 });
 
@@ -23,13 +23,13 @@ const suggestedLinks = [
     name: "Accueil",
     href: "/",
     icon: Home,
-    description: "Retour \u00e0 la page d'accueil",
+    description: "Retour à la page d'accueil",
   },
   {
-    name: "D\u00e9marrer",
+    name: "Démarrer",
     href: "/getting-started",
     icon: BookOpen,
-    description: "Guide d'installation pas \u00e0 pas",
+    description: "Guide d'installation pas à pas",
   },
   {
     name: "MCP",
@@ -96,7 +96,7 @@ export default function NotFound() {
           Page introuvable
         </h1>
         <p className="mx-auto mt-4 max-w-lg text-base text-slate-600 dark:text-slate-400 sm:text-lg">
-          Cette page n&apos;existe pas ou a \u00e9t\u00e9 d\u00e9plac\u00e9e. Pas de panique, voici
+          Cette page n&apos;existe pas ou a été déplacée. Pas de panique, voici
           quelques liens pour retrouver votre chemin.
         </p>
 
@@ -114,7 +114,7 @@ export default function NotFound() {
 
         {/* Navigation cards */}
         <nav
-          aria-label="Pages sugg\u00e9r\u00e9es"
+          aria-label="Pages suggérées"
           className="mx-auto mt-12 grid max-w-2xl gap-4 sm:grid-cols-2"
         >
           {suggestedLinks.map((link) => (
@@ -145,7 +145,7 @@ export default function NotFound() {
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
           >
             <Home className="h-4 w-4" aria-hidden="true" />
-            Retour \u00e0 l&apos;accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>

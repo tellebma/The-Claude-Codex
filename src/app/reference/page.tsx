@@ -13,16 +13,16 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "R\u00e9f\u00e9rence technique : Claude Code",
+  title: "Référence technique : Claude Code",
   description:
-    "Documentation de r\u00e9f\u00e9rence compl\u00e8te pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d\u2019environnement.",
+    "Documentation de référence complète pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d’environnement.",
   path: "/reference",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "R\u00e9f\u00e9rence technique : Claude Code",
+  title: "Référence technique : Claude Code",
   description:
-    "Documentation de r\u00e9f\u00e9rence compl\u00e8te pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d\u2019environnement.",
+    "Documentation de référence complète pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d’environnement.",
   url: `${SITE_URL}/reference`,
   datePublished: "2026-03-11",
   dateModified: "2026-03-11",
@@ -33,9 +33,9 @@ const SUB_PAGES = [
     href: "/reference/cheatsheet",
     icon: Keyboard,
     step: "01",
-    title: "Cheatsheet : R\u00e9f\u00e9rence rapide",
+    title: "Cheatsheet : Référence rapide",
     description:
-      "Toutes les slash commands, raccourcis clavier, fichiers de configuration et modes d\u2019ex\u00e9cution en un seul endroit. Format dense, copiable.",
+      "Toutes les slash commands, raccourcis clavier, fichiers de configuration et modes d’exécution en un seul endroit. Format dense, copiable.",
     color: "brand" as const,
     tags: ["/help", "/compact", "Ctrl+C", "Alt+T"],
   },
@@ -45,7 +45,7 @@ const SUB_PAGES = [
     step: "02",
     title: "CLI : Tous les flags",
     description:
-      "R\u00e9f\u00e9rence exhaustive de la commande claude : --print, --model, --max-turns, --output-format, mode pipe et sous-commandes mcp/config/doctor.",
+      "Référence exhaustive de la commande claude : --print, --model, --max-turns, --output-format, mode pipe et sous-commandes mcp/config/doctor.",
     color: "brand" as const,
     tags: ["--print", "--model", "claude mcp add", "stream-json"],
   },
@@ -55,7 +55,7 @@ const SUB_PAGES = [
     step: "03",
     title: "settings.json : Configuration",
     description:
-      "3 niveaux de configuration, permissions par outil, structure mcpServers, mod\u00e8les, variables d\u2019environnement inject\u00e9es et exemples complets.",
+      "3 niveaux de configuration, permissions par outil, structure mcpServers, modèles, variables d’environnement injectées et exemples complets.",
     color: "accent" as const,
     tags: ["permissions", "mcpServers", "allowedTools", "env"],
   },
@@ -63,9 +63,9 @@ const SUB_PAGES = [
     href: "/reference/environment",
     icon: Variable,
     step: "04",
-    title: "Variables d\u2019environnement",
+    title: "Variables d’environnement",
     description:
-      "Toutes les variables reconnues par Claude Code : cl\u00e9 API, mod\u00e8le, proxy, tokens de thinking, r\u00e9pertoire de config et d\u00e9sactivation des mises \u00e0 jour.",
+      "Toutes les variables reconnues par Claude Code : clé API, modèle, proxy, tokens de thinking, répertoire de config et désactivation des mises à jour.",
     color: "accent" as const,
     tags: [
       "ANTHROPIC_API_KEY",
@@ -224,20 +224,20 @@ export default function ReferencePage() {
       <section className="bg-slate-50/50 py-16 dark:bg-slate-900/50 sm:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="Acc\u00e8s rapide"
-            title="Questions fr\u00e9quentes"
-            description="Les informations les plus recherch\u00e9es."
+            badge="Accès rapide"
+            title="Questions fréquentes"
+            description="Les informations les plus recherchées."
           />
 
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               {
-                q: "Changer de mod\u00e8le",
+                q: "Changer de modèle",
                 a: "claude --model claude-opus-4-5",
                 href: "/reference/cli",
               },
               {
-                q: "Ex\u00e9cuter sans interaction",
+                q: "Exécuter sans interaction",
                 a: "claude --print \"prompt\"",
                 href: "/reference/cli",
               },
@@ -257,7 +257,7 @@ export default function ReferencePage() {
                 href: "/reference/settings",
               },
               {
-                q: "D\u00e9finir la cl\u00e9 API",
+                q: "Définir la clé API",
                 a: "export ANTHROPIC_API_KEY=sk-ant-...",
                 href: "/reference/environment",
               },

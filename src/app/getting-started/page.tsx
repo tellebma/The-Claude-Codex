@@ -20,7 +20,7 @@ import {
 export const metadata = createPageMetadata({
   title: "Premiers pas avec Claude Code",
   description:
-    "Guide complet pour installer, configurer et utiliser Claude Code. De z\u00e9ro \u00e0 votre premier projet en quelques minutes.",
+    "Guide complet pour installer, configurer et utiliser Claude Code. De zéro à votre premier projet en quelques minutes.",
   path: "/getting-started",
 });
 
@@ -31,20 +31,20 @@ const howToJsonLd = createHowToSchema({
   url: `${SITE_URL}/getting-started`,
   steps: [
     {
-      name: "D\u00e9couvrir Claude Code",
-      text: "Comprendre ce qu\u2019est Claude Code, \u00e0 qui il s\u2019adresse et ce qui le diff\u00e9rencie des autres outils.",
+      name: "Découvrir Claude Code",
+      text: "Comprendre ce qu’est Claude Code, à qui il s’adresse et ce qui le différencie des autres outils.",
     },
     {
-      name: "Installer les pr\u00e9requis et Claude Code",
-      text: "Installer Node.js et ex\u00e9cuter la commande npm install -g @anthropic-ai/claude-code.",
+      name: "Installer les prérequis et Claude Code",
+      text: "Installer Node.js et exécuter la commande npm install -g @anthropic-ai/claude-code.",
     },
     {
       name: "Configurer votre environnement",
-      text: "Configurer votre cl\u00e9 API, le fichier settings.json et le fichier CLAUDE.md.",
+      text: "Configurer votre clé API, le fichier settings.json et le fichier CLAUDE.md.",
     },
     {
-      name: "Cr\u00e9er votre premier projet",
-      text: "Lancer Claude Code dans un dossier et cr\u00e9er un site web complet en 5 minutes.",
+      name: "Créer votre premier projet",
+      text: "Lancer Claude Code dans un dossier et créer un site web complet en 5 minutes.",
     },
   ],
 });
@@ -64,36 +64,36 @@ const SUB_PAGES = [
     href: "/getting-started/what-is-claude-code",
     icon: Terminal,
     step: "01",
-    title: "Qu\u2019est-ce que Claude Code ?",
+    title: "Qu’est-ce que Claude Code ?",
     description:
-      "D\u00e9couvrez ce qui rend Claude Code unique, comparez-le aux autres outils (Copilot, Cursor) et explorez les cas d\u2019usage concrets.",
+      "Découvrez ce qui rend Claude Code unique, comparez-le aux autres outils (Copilot, Cursor) et explorez les cas d’usage concrets.",
     color: "brand" as const,
   },
   {
     href: "/getting-started/installation",
     icon: Download,
     step: "02",
-    title: "Pr\u00e9requis et installation",
+    title: "Prérequis et installation",
     description:
-      "Installez Claude Code en quelques minutes : Node.js 18+, la commande npm, l\u2019authentification API key ou Max.",
+      "Installez Claude Code en quelques minutes : Node.js 18+, la commande npm, l’authentification API key ou Max.",
     color: "brand" as const,
   },
   {
     href: "/getting-started/environment-setup",
     icon: Settings,
     step: "03",
-    title: "Configuration de l\u2019environnement",
+    title: "Configuration de l’environnement",
     description:
-      "Configurez la cl\u00e9 API, le fichier settings.json, le puissant CLAUDE.md et les permissions de s\u00e9curit\u00e9.",
+      "Configurez la clé API, le fichier settings.json, le puissant CLAUDE.md et les permissions de sécurité.",
     color: "accent" as const,
   },
   {
     href: "/getting-started/first-project",
     icon: Rocket,
     step: "04",
-    title: "Premier projet pas \u00e0 pas",
+    title: "Premier projet pas à pas",
     description:
-      "Tutoriel concret : cr\u00e9ez un site web complet en 5 minutes, it\u00e9rez sur le r\u00e9sultat et d\u00e9couvrez les bonnes pratiques.",
+      "Tutoriel concret : créez un site web complet en 5 minutes, itérez sur le résultat et découvrez les bonnes pratiques.",
     color: "accent" as const,
   },
 ] as const;

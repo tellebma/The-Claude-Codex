@@ -91,7 +91,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Vision",
     items: [
       { label: "Vue d'ensemble", href: "/future" },
-      { label: "L'IA et les m\u00e9tiers du dev", href: "/future/why-ai-matters" },
+      { label: "L'IA et les métiers du dev", href: "/future/why-ai-matters" },
       { label: "Tendances IA 2026", href: "/future/trends-2026" },
       { label: "Roadmap du projet", href: "/future/roadmap" },
     ],
@@ -103,11 +103,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     ],
   },
   "use-cases": {
-    title: "Cas d\u2019usage",
+    title: "Cas d’usage",
     items: [
       { label: "Vue d'ensemble", href: "/use-cases" },
-      { label: "8 cas d\u2019usage business", href: "/use-cases/business" },
-      { label: "Histoires de r\u00e9ussite", href: "/use-cases/success-stories" },
+      { label: "8 cas d’usage business", href: "/use-cases/business" },
+      { label: "Histoires de réussite", href: "/use-cases/success-stories" },
       { label: "Tutoriels sans code", href: "/use-cases/no-code" },
     ],
   },
@@ -115,11 +115,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Entreprise",
     items: [
       { label: "Vue d'ensemble", href: "/enterprise" },
-      { label: "S\u00e9curit\u00e9 et conformit\u00e9", href: "/enterprise/security-compliance" },
-      { label: "Guide d'adoption d'\u00e9quipe", href: "/enterprise/team-adoption" },
+      { label: "Sécurité et conformité", href: "/enterprise/security-compliance" },
+      { label: "Guide d'adoption d'équipe", href: "/enterprise/team-adoption" },
       { label: "Calculateur TCO", href: "/enterprise/tco-calculator" },
       { label: "FAQ Enterprise", href: "/enterprise/faq" },
-      { label: "Gouvernance et r\u00f4les", href: "/enterprise/governance" },
+      { label: "Gouvernance et rôles", href: "/enterprise/governance" },
     ],
   },
   advanced: {
@@ -155,11 +155,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     title: "Parcours",
     items: [
       { label: "Vue d'ensemble", href: "/personas" },
-      { label: "Parcours d\u00e9veloppeur", href: "/personas/developer" },
+      { label: "Parcours développeur", href: "/personas/developer" },
       { label: "Parcours lead technique", href: "/personas/team-lead" },
-      { label: "Parcours non-d\u00e9veloppeur", href: "/personas/non-dev" },
+      { label: "Parcours non-développeur", href: "/personas/non-dev" },
       { label: "Parcours freelance", href: "/personas/freelance" },
-      { label: "Parcours \u00e9tudiant", href: "/personas/student" },
+      { label: "Parcours étudiant", href: "/personas/student" },
     ],
   },
   content: {

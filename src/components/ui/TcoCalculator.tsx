@@ -38,7 +38,7 @@ function formatCurrency(value: number, currency: string = "$"): string {
 }
 
 function formatEuro(value: number): string {
-  return `${Math.round(value).toLocaleString("fr-FR")} \u20AC`;
+  return `${Math.round(value).toLocaleString("fr-FR")} €`;
 }
 
 export function TcoCalculator() {
@@ -264,7 +264,7 @@ export function TcoCalculator() {
                 aria-describedby={`${inputIdPrefix}-salary-desc`}
               />
               <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">
-                {"\u20AC"}
+                {"€"}
               </span>
             </div>
             <p

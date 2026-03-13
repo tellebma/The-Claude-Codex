@@ -89,7 +89,7 @@ export default function UseCasesSlugPage({
 
   const breadcrumbJsonLd = createBreadcrumbSchema([
     { name: "Accueil", href: "/" },
-    { name: "Cas d\u2019usage", href: `/${SECTION}` },
+    { name: "Cas d’usage", href: `/${SECTION}` },
     { name: frontmatter.title, href: `/${SECTION}/${params.slug}` },
   ]);
 

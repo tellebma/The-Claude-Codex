@@ -1042,7 +1042,7 @@ export const searchIndex: ReadonlyArray<SearchEntry> = [
   },
   // Content (MDX)
   {
-    title: "Contenus \u00e9ditoriaux",
+    title: "Contenus éditoriaux",
     description:
       "Articles et guides au format MDX. Explorez nos contenus sur Claude Code, les MCP, les Skills et le prompting.",
     href: "/content",
@@ -1477,7 +1477,7 @@ export function searchEntries(
   const normalizedQuery = query
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .trim();
 
   if (normalizedQuery.length === 0) {
@@ -1491,17 +1491,17 @@ export function searchEntries(
       const titleNorm = entry.title
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(/[̀-ͯ]/g, "");
       const descNorm = entry.description
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(/[̀-ͯ]/g, "");
       const keywordsNorm = entry.keywords
         .map((k) =>
           k
             .toLowerCase()
             .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[̀-ͯ]/g, "")
         )
         .join(" ");
 

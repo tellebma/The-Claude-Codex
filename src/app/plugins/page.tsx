@@ -42,16 +42,16 @@ const SUB_PAGES = [
     step: "01",
     title: "Comprendre les plugins Claude Code",
     description:
-      "Qu\u2019est-ce qu\u2019un plugin ? Diff\u00e9rences avec les MCP et Skills, architecture, marketplace et comparaison avec les extensions VS Code.",
+      "Qu’est-ce qu’un plugin ? Différences avec les MCP et Skills, architecture, marketplace et comparaison avec les extensions VS Code.",
     color: "brand" as const,
   },
   {
     href: "/plugins/setup",
     icon: Wrench,
     step: "02",
-    title: "Installer et g\u00e9rer ses plugins",
+    title: "Installer et gérer ses plugins",
     description:
-      "Commandes /plugin marketplace, install, list, remove. Configuration dans settings et cr\u00e9ation de plugins custom.",
+      "Commandes /plugin marketplace, install, list, remove. Configuration dans settings et création de plugins custom.",
     color: "brand" as const,
   },
   {
@@ -69,16 +69,16 @@ const SUB_PAGES = [
     step: "04",
     title: "Plugins design & frontend",
     description:
-      "Frontend Design (96K installs), UI UX Pro Max, 21st Magic, Playwright : les plugins pour cr\u00e9er des interfaces professionnelles.",
+      "Frontend Design (96K installs), UI UX Pro Max, 21st Magic, Playwright : les plugins pour créer des interfaces professionnelles.",
     color: "accent" as const,
   },
   {
     href: "/plugins/best-security",
     icon: Shield,
     step: "05",
-    title: "Plugins s\u00e9curit\u00e9 & qualit\u00e9",
+    title: "Plugins sécurité & qualité",
     description:
-      "Security Guidance, Code Review, AgentShield, TDD Guide : s\u00e9curisez et fiabilisez votre code automatiquement.",
+      "Security Guidance, Code Review, AgentShield, TDD Guide : sécurisez et fiabilisez votre code automatiquement.",
     color: "brand" as const,
   },
 ] as const;

@@ -45,18 +45,18 @@ const SUB_PAGES = [
     href: "/use-cases/business",
     icon: Briefcase,
     step: "01",
-    title: "8 cas d\u2019usage business",
+    title: "8 cas d’usage business",
     description:
-      "Email professionnel, resum\u00e9 de document, analyse de donn\u00e9es, pr\u00e9sentation, planning, post LinkedIn : des prompts exacts \u00e0 copier.",
+      "Email professionnel, resumé de document, analyse de données, présentation, planning, post LinkedIn : des prompts exacts à copier.",
     color: "brand" as const,
   },
   {
     href: "/use-cases/success-stories",
     icon: Users,
     step: "02",
-    title: "Histoires de r\u00e9ussite",
+    title: "Histoires de réussite",
     description:
-      "4 professionnels non-d\u00e9veloppeurs racontent comment Claude Code a transform\u00e9 leur quotidien. Marketing, RH, finance et gestion de projet.",
+      "4 professionnels non-développeurs racontent comment Claude Code a transformé leur quotidien. Marketing, RH, finance et gestion de projet.",
     color: "accent" as const,
   },
   {
@@ -65,7 +65,7 @@ const SUB_PAGES = [
     step: "03",
     title: "Tutoriels sans code",
     description:
-      "Automatiser un rapport, cr\u00e9er un syst\u00e8me de templates email, g\u00e9n\u00e9rer une pr\u00e9sentation : pas \u00e0 pas, z\u00e9ro code.",
+      "Automatiser un rapport, créer un système de templates email, générer une présentation : pas à pas, zéro code.",
     color: "brand" as const,
   },
 ] as const;

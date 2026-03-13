@@ -39,27 +39,27 @@ const SUB_PAGES = [
     href: "/enterprise/security-compliance",
     icon: Shield,
     step: "01",
-    title: "S\u00e9curit\u00e9 et conformit\u00e9",
+    title: "Sécurité et conformité",
     description:
-      "RGPD, AI Act, protection des donn\u00e9es, certifications Anthropic, audit trail et bonnes pratiques de s\u00e9curit\u00e9 pour les \u00e9quipes.",
+      "RGPD, AI Act, protection des données, certifications Anthropic, audit trail et bonnes pratiques de sécurité pour les équipes.",
     color: "brand" as const,
   },
   {
     href: "/enterprise/team-adoption",
     icon: Users,
     step: "02",
-    title: "Guide d\u2019adoption d\u2019\u00e9quipe",
+    title: "Guide d’adoption d’équipe",
     description:
-      "Plan en 4 phases : pr\u00e9paration, pilote, d\u00e9ploiement et optimisation. Change management et templates de communication.",
+      "Plan en 4 phases : préparation, pilote, déploiement et optimisation. Change management et templates de communication.",
     color: "brand" as const,
   },
   {
     href: "/enterprise/tco-calculator",
     icon: Calculator,
     step: "03",
-    title: "Calculateur de co\u00fbt total (TCO)",
+    title: "Calculateur de coût total (TCO)",
     description:
-      "Estimez le budget par plan, comparez avec Copilot et Cursor, et calculez le retour sur investissement pour votre \u00e9quipe.",
+      "Estimez le budget par plan, comparez avec Copilot et Cursor, et calculez le retour sur investissement pour votre équipe.",
     color: "accent" as const,
   },
   {
@@ -68,16 +68,16 @@ const SUB_PAGES = [
     step: "04",
     title: "FAQ Enterprise",
     description:
-      "15+ r\u00e9ponses sur les donn\u00e9es, la conformit\u00e9, les co\u00fbts, le d\u00e9ploiement, la propri\u00e9t\u00e9 intellectuelle et le support.",
+      "15+ réponses sur les données, la conformité, les coûts, le déploiement, la propriété intellectuelle et le support.",
     color: "accent" as const,
   },
   {
     href: "/enterprise/governance",
     icon: Settings,
     step: "05",
-    title: "Gouvernance et r\u00f4les",
+    title: "Gouvernance et rôles",
     description:
-      "Permissions par r\u00f4le, gestion centralis\u00e9e des configs, allow list MCP, audit et politique de mise \u00e0 jour.",
+      "Permissions par rôle, gestion centralisée des configs, allow list MCP, audit et politique de mise à jour.",
     color: "brand" as const,
   },
 ] as const;

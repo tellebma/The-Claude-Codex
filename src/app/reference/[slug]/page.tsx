@@ -89,7 +89,7 @@ export default function ReferenceSlugPage({
 
   const breadcrumbJsonLd = createBreadcrumbSchema([
     { name: "Accueil", href: "/" },
-    { name: "R\u00e9f\u00e9rence", href: `/${SECTION}` },
+    { name: "Référence", href: `/${SECTION}` },
     { name: frontmatter.title, href: `/${SECTION}/${params.slug}` },
   ]);
 

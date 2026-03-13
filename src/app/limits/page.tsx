@@ -38,7 +38,7 @@ const SUB_PAGES = [
     step: "01",
     title: "Limites connues",
     description:
-      "Fen\u00eatre de contexte, hallucinations, latence, co\u00fbts et support des langages. Les contraintes r\u00e9elles avec des strat\u00e9gies pour chacune.",
+      "Fenêtre de contexte, hallucinations, latence, coûts et support des langages. Les contraintes réelles avec des stratégies pour chacune.",
     color: "brand" as const,
   },
   {
@@ -47,7 +47,7 @@ const SUB_PAGES = [
     step: "02",
     title: "Claude Code vs GitHub Copilot",
     description:
-      "Agent CLI vs autocompl\u00e9tion IDE. Deux philosophies diff\u00e9rentes, chacune avec ses forces. Comparaison \u00e9quilibr\u00e9e.",
+      "Agent CLI vs autocomplétion IDE. Deux philosophies différentes, chacune avec ses forces. Comparaison équilibrée.",
     color: "brand" as const,
   },
   {
@@ -56,7 +56,7 @@ const SUB_PAGES = [
     step: "03",
     title: "Claude Code vs Cursor",
     description:
-      "Deux approches agent, deux interfaces. Terminal vs IDE int\u00e9gr\u00e9, MCP vs multi-mod\u00e8le, personnalisation vs exp\u00e9rience visuelle.",
+      "Deux approches agent, deux interfaces. Terminal vs IDE intégré, MCP vs multi-modèle, personnalisation vs expérience visuelle.",
     color: "accent" as const,
   },
   {
@@ -65,7 +65,7 @@ const SUB_PAGES = [
     step: "04",
     title: "Quand ne PAS utiliser Claude Code",
     description:
-      "Syst\u00e8mes temps r\u00e9el, industries r\u00e9glement\u00e9es, code critique sans revue. Les situations o\u00f9 un autre outil serait plus adapt\u00e9.",
+      "Systèmes temps réel, industries réglementées, code critique sans revue. Les situations où un autre outil serait plus adapté.",
     color: "accent" as const,
   },
 ] as const;

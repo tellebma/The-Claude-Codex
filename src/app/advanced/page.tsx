@@ -16,14 +16,14 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "Utilisation avanc\u00e9e de Claude Code",
+  title: "Utilisation avancée de Claude Code",
   description:
-    "Hooks, mode headless, int\u00e9gration CI/CD, multi-provider et configuration enterprise. Ma\u00eetrisez les fonctionnalit\u00e9s avanc\u00e9es de Claude Code.",
+    "Hooks, mode headless, intégration CI/CD, multi-provider et configuration enterprise. Maîtrisez les fonctionnalités avancées de Claude Code.",
   path: "/advanced",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "Utilisation avanc\u00e9e de Claude Code",
+  title: "Utilisation avancée de Claude Code",
   description:
     "Hooks, mode headless, CI/CD, multi-provider et configuration enterprise.",
   url: `${SITE_URL}/advanced`,
@@ -39,9 +39,9 @@ const SUB_PAGES = [
     href: "/advanced/hooks",
     icon: Webhook,
     step: "01",
-    title: "Syst\u00e8me de Hooks",
+    title: "Système de Hooks",
     description:
-      "Automatisez vos workflows avec PreToolUse, PostToolUse et Stop. Auto-format, notifications Slack, rapports de session et patterns avanc\u00e9s.",
+      "Automatisez vos workflows avec PreToolUse, PostToolUse et Stop. Auto-format, notifications Slack, rapports de session et patterns avancés.",
     color: "brand" as const,
   },
   {
@@ -50,7 +50,7 @@ const SUB_PAGES = [
     step: "02",
     title: "Mode Headless et CI/CD",
     description:
-      "Utilisez Claude Code en mode non-interactif. GitHub Actions, GitLab CI, pre-commit hooks et bonnes pratiques de s\u00e9curit\u00e9 en pipeline.",
+      "Utilisez Claude Code en mode non-interactif. GitHub Actions, GitLab CI, pre-commit hooks et bonnes pratiques de sécurité en pipeline.",
     color: "brand" as const,
   },
   {
@@ -59,7 +59,7 @@ const SUB_PAGES = [
     step: "03",
     title: "Multi-provider et Enterprise",
     description:
-      "AWS Bedrock, Google Vertex AI, proxy OpenAI-compatible. Changez de mod\u00e8le selon la t\u00e2che et g\u00e9rez vos credentials d\u2019entreprise.",
+      "AWS Bedrock, Google Vertex AI, proxy OpenAI-compatible. Changez de modèle selon la tâche et gérez vos credentials d’entreprise.",
     color: "accent" as const,
   },
 ] as const;
@@ -88,25 +88,25 @@ const benefits = [
     icon: Cpu,
     title: "Automatisation totale",
     description:
-      "Les hooks transforment Claude Code en orchestrateur. Validez, formatez, notifiez, tout automatiquement \u00e0 chaque action.",
+      "Les hooks transforment Claude Code en orchestrateur. Validez, formatez, notifiez, tout automatiquement à chaque action.",
   },
   {
     icon: GitBranch,
-    title: "Int\u00e9gration CI/CD",
+    title: "Intégration CI/CD",
     description:
-      "Review de PR, g\u00e9n\u00e9ration de tests, audit de s\u00e9curit\u00e9 : int\u00e9grez Claude Code directement dans vos pipelines GitHub Actions ou GitLab.",
+      "Review de PR, génération de tests, audit de sécurité : intégrez Claude Code directement dans vos pipelines GitHub Actions ou GitLab.",
   },
   {
     icon: Cloud,
-    title: "Flexibilit\u00e9 enterprise",
+    title: "Flexibilité enterprise",
     description:
-      "AWS Bedrock ou Google Vertex AI pour garder les donn\u00e9es dans votre infrastructure. Multi-provider selon les contraintes m\u00e9tier.",
+      "AWS Bedrock ou Google Vertex AI pour garder les données dans votre infrastructure. Multi-provider selon les contraintes métier.",
   },
   {
     icon: Shield,
-    title: "S\u00e9curit\u00e9 renforc\u00e9e",
+    title: "Sécurité renforcée",
     description:
-      "Hooks de validation avant ex\u00e9cution, pipelines sans secrets expos\u00e9s, gestion fine des permissions par environnement.",
+      "Hooks de validation avant exécution, pipelines sans secrets exposés, gestion fine des permissions par environnement.",
   },
 ];
 

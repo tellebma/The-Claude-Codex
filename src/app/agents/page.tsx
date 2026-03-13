@@ -26,14 +26,14 @@ import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 export const metadata = createPageMetadata({
   title: "Agents & Subagents : Orchestrez des workflows complexes avec Claude Code",
   description:
-    "D\u00e9couvrez les agents et subagents Claude Code. Cr\u00e9ez des agents sp\u00e9cialis\u00e9s, orchestrez des workflows multi-agents et automatisez vos processus de d\u00e9veloppement.",
+    "Découvrez les agents et subagents Claude Code. Créez des agents spécialisés, orchestrez des workflows multi-agents et automatisez vos processus de développement.",
   path: "/agents",
 });
 
 const articleJsonLd = createArticleSchema({
   title: "Agents & Subagents : Orchestrez des workflows complexes avec Claude Code",
   description:
-    "D\u00e9couvrez les agents et subagents Claude Code pour orchestrer des workflows complexes.",
+    "Découvrez les agents et subagents Claude Code pour orchestrer des workflows complexes.",
   url: `${SITE_URL}/agents`,
   datePublished: "2026-03-10",
   dateModified: "2026-03-10",
@@ -49,16 +49,16 @@ const SUB_PAGES = [
     step: "01",
     title: "Comprendre les agents et subagents",
     description:
-      "Qu\u2019est-ce qu\u2019un agent ? Diff\u00e9rence avec un prompt classique, types d\u2019agents, fonctionnement des subagents et isolation via worktrees.",
+      "Qu’est-ce qu’un agent ? Différence avec un prompt classique, types d’agents, fonctionnement des subagents et isolation via worktrees.",
     color: "brand" as const,
   },
   {
     href: "/agents/create-subagent",
     icon: Wrench,
     step: "02",
-    title: "Cr\u00e9er un subagent sp\u00e9cialis\u00e9",
+    title: "Créer un subagent spécialisé",
     description:
-      "Guide complet pour cr\u00e9er des agents custom. Structure, exemples concrets (review, tests, documentation) et bonnes pratiques de prompts.",
+      "Guide complet pour créer des agents custom. Structure, exemples concrets (review, tests, documentation) et bonnes pratiques de prompts.",
     color: "brand" as const,
   },
   {
@@ -67,25 +67,25 @@ const SUB_PAGES = [
     step: "03",
     title: "Agent Teams : le guide complet",
     description:
-      "Faites collaborer plusieurs agents sur un m\u00eame projet. Configuration, cas d\u2019usage (review crois\u00e9e, d\u00e9veloppement parall\u00e8le) et limites.",
+      "Faites collaborer plusieurs agents sur un même projet. Configuration, cas d’usage (review croisée, développement parallèle) et limites.",
     color: "accent" as const,
   },
   {
     href: "/agents/best-agents",
     icon: Star,
     step: "04",
-    title: "Top agents par cas d\u2019usage",
+    title: "Top agents par cas d’usage",
     description:
-      "Les meilleurs agents class\u00e9s par cat\u00e9gorie : d\u00e9veloppement, architecture, s\u00e9curit\u00e9, tests et maintenance. Fiches d\u00e9taill\u00e9es et exemples.",
+      "Les meilleurs agents classés par catégorie : développement, architecture, sécurité, tests et maintenance. Fiches détaillées et exemples.",
     color: "accent" as const,
   },
   {
     href: "/agents/orchestration",
     icon: Network,
     step: "05",
-    title: "Orchestration multi-agents avanc\u00e9e",
+    title: "Orchestration multi-agents avancée",
     description:
-      "Patterns d\u2019orchestration : s\u00e9quentiel, parall\u00e8le, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
+      "Patterns d’orchestration : séquentiel, parallèle, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
     color: "brand" as const,
   },
   {
@@ -94,7 +94,7 @@ const SUB_PAGES = [
     step: "06",
     title: "Claude Agent SDK",
     description:
-      "Construisez des agents programmatiques en TypeScript et Python. Outils custom, monitoring automatis\u00e9 et int\u00e9gration dans vos pipelines.",
+      "Construisez des agents programmatiques en TypeScript et Python. Outils custom, monitoring automatisé et intégration dans vos pipelines.",
     color: "accent" as const,
   },
   {
@@ -103,7 +103,7 @@ const SUB_PAGES = [
     step: "07",
     title: "Performance et limites",
     description:
-      "Co\u00fbts en tokens, profondeur de r\u00e9cursion, timeouts, strat\u00e9gies de retry et bonnes pratiques pour la production.",
+      "Coûts en tokens, profondeur de récursion, timeouts, stratégies de retry et bonnes pratiques pour la production.",
     color: "accent" as const,
   },
 ] as const;
@@ -132,25 +132,25 @@ const benefits = [
     icon: Zap,
     title: "Autonomie totale",
     description:
-      "Les agents planifient, ex\u00e9cutent et v\u00e9rifient sans intervention humaine \u00e0 chaque \u00e9tape. Confiez une t\u00e2che complexe et r\u00e9cup\u00e9rez le r\u00e9sultat fini.",
+      "Les agents planifient, exécutent et vérifient sans intervention humaine à chaque étape. Confiez une tâche complexe et récupérez le résultat fini.",
   },
   {
     icon: Shield,
-    title: "Qualit\u00e9 syst\u00e9matique",
+    title: "Qualité systématique",
     description:
-      "Chaque agent suit un processus rigoureux et reproductible. Code review, tests, audit de s\u00e9curit\u00e9, rien n\u2019est oubli\u00e9.",
+      "Chaque agent suit un processus rigoureux et reproductible. Code review, tests, audit de sécurité, rien n’est oublié.",
   },
   {
     icon: Layers,
-    title: "Sp\u00e9cialisation",
+    title: "Spécialisation",
     description:
-      "Chaque agent est expert dans son domaine. Combinez-les pour couvrir tous les aspects d\u2019un workflow de d\u00e9veloppement.",
+      "Chaque agent est expert dans son domaine. Combinez-les pour couvrir tous les aspects d’un workflow de développement.",
   },
   {
     icon: Network,
-    title: "Parall\u00e9lisation",
+    title: "Parallélisation",
     description:
-      "Lancez plusieurs agents en parall\u00e8le pour acc\u00e9l\u00e9rer les workflows. Review, tests et s\u00e9curit\u00e9 en m\u00eame temps.",
+      "Lancez plusieurs agents en parallèle pour accélérer les workflows. Review, tests et sécurité en même temps.",
   },
 ];
 
@@ -299,7 +299,7 @@ export default function AgentsPage() {
             <SectionHeading
               badge="Avantages"
               title="Pourquoi utiliser des agents ?"
-              description="Les agents transforment Claude Code d'un assistant passif en une \u00e9quipe de sp\u00e9cialistes autonomes."
+              description="Les agents transforment Claude Code d'un assistant passif en une équipe de spécialistes autonomes."
             />
           </AnimateOnScroll>
 

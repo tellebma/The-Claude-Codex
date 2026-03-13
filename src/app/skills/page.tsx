@@ -30,16 +30,16 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "Skills : Enseignez de nouveaux talents \u00e0 Claude Code",
+  title: "Skills : Enseignez de nouveaux talents à Claude Code",
   description:
-    "Apprenez \u00e0 utiliser et cr\u00e9er des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacit\u00e9s et enseignez de nouveaux talents \u00e0 votre assistant IA.",
+    "Apprenez à utiliser et créer des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacités et enseignez de nouveaux talents à votre assistant IA.",
   path: "/skills",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "Skills : Enseignez de nouveaux talents \u00e0 Claude Code",
+  title: "Skills : Enseignez de nouveaux talents à Claude Code",
   description:
-    "Apprenez \u00e0 utiliser et cr\u00e9er des Skills pour Claude Code.",
+    "Apprenez à utiliser et créer des Skills pour Claude Code.",
   url: `${SITE_URL}/skills`,
   datePublished: "2026-03-07",
   dateModified: "2026-03-10",

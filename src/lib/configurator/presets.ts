@@ -280,9 +280,9 @@ export const SUBSCRIPTIONS: ReadonlyArray<SubscriptionInfo> = [
     price: "Gratuit",
     description: "Inclus avec un compte claude.ai gratuit, usage limité.",
     features: [
-      "Acc\u00e8s \u00e0 Claude Code via compte claude.ai",
-      "Usage limit\u00e9 (quelques requ\u00eates/jour)",
-      "Mod\u00e8le Sonnet",
+      "Accès à Claude Code via compte claude.ai",
+      "Usage limité (quelques requêtes/jour)",
+      "Modèle Sonnet",
     ],
   },
   {
@@ -291,8 +291,8 @@ export const SUBSCRIPTIONS: ReadonlyArray<SubscriptionInfo> = [
     price: "20 $/mois",
     description: "Pour un usage régulier avec plus de capacité.",
     features: [
-      "Usage \u00e9tendu de Claude Code",
-      "Acc\u00e8s \u00e0 Sonnet et Haiku",
+      "Usage étendu de Claude Code",
+      "Accès à Sonnet et Haiku",
       "Extended Thinking disponible",
       "MCP, Skills et Hooks",
     ],
@@ -303,10 +303,10 @@ export const SUBSCRIPTIONS: ReadonlyArray<SubscriptionInfo> = [
     price: "100 $/mois",
     description: "Pour les professionnels avec Agent Teams et Opus.",
     features: [
-      "5x plus d\u2019usage que Pro",
-      "Acc\u00e8s \u00e0 Opus, Sonnet, Haiku",
-      "Extended Thinking avanc\u00e9",
-      "Agent Teams (exp\u00e9rimental)",
+      "5x plus d’usage que Pro",
+      "Accès à Opus, Sonnet, Haiku",
+      "Extended Thinking avancé",
+      "Agent Teams (expérimental)",
       "Tous les MCP, Skills et Hooks",
     ],
   },
@@ -316,11 +316,11 @@ export const SUBSCRIPTIONS: ReadonlyArray<SubscriptionInfo> = [
     price: "200 $/mois",
     description: "Usage intensif sans limites pour les équipes.",
     features: [
-      "20x plus d\u2019usage que Pro",
-      "Acc\u00e8s \u00e0 tous les mod\u00e8les",
-      "Extended Thinking avanc\u00e9",
+      "20x plus d’usage que Pro",
+      "Accès à tous les modèles",
+      "Extended Thinking avancé",
       "Agent Teams multi-worktrees",
-      "Usage intensif pour les \u00e9quipes",
+      "Usage intensif pour les équipes",
     ],
   },
   {
@@ -329,11 +329,11 @@ export const SUBSCRIPTIONS: ReadonlyArray<SubscriptionInfo> = [
     price: "À l'usage",
     description: "Clé API Anthropic, vous payez selon votre consommation.",
     features: [
-      "Contr\u00f4le total des co\u00fbts",
-      "Tous les mod\u00e8les disponibles",
+      "Contrôle total des coûts",
+      "Tous les modèles disponibles",
       "Extended Thinking configurable",
-      "Limites bas\u00e9es sur votre tier API",
-      "Facturation \u00e0 l\u2019usage",
+      "Limites basées sur votre tier API",
+      "Facturation à l’usage",
     ],
   },
 ];
@@ -342,9 +342,9 @@ export const SUBSCRIPTIONS: ReadonlyArray<SubscriptionInfo> = [
 export const FEATURES: ReadonlyArray<FeatureInfo> = [
   {
     id: "agent-teams",
-    label: "Agent Teams (exp\u00e9rimental)",
+    label: "Agent Teams (expérimental)",
     description:
-      "Lancez plusieurs agents en parall\u00e8le sur des worktrees s\u00e9par\u00e9s. Feature en research preview.",
+      "Lancez plusieurs agents en parallèle sur des worktrees séparés. Feature en research preview.",
     requiresSubscription: "max-100",
   },
   {

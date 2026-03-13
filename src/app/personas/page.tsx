@@ -47,9 +47,9 @@ const SUB_PAGES = [
     href: "/personas/developer",
     icon: Code,
     step: "01",
-    title: "Le d\u00e9veloppeur",
+    title: "Le développeur",
     description:
-      "Installation, prompting, MCP, agents et techniques avanc\u00e9es. Le parcours complet pour coder plus vite avec Claude Code.",
+      "Installation, prompting, MCP, agents et techniques avancées. Le parcours complet pour coder plus vite avec Claude Code.",
     color: "brand" as const,
   },
   {
@@ -58,16 +58,16 @@ const SUB_PAGES = [
     step: "02",
     title: "Le lead technique",
     description:
-      "Adoption d\u2019\u00e9quipe, gouvernance, s\u00e9curit\u00e9, CI/CD et Skills. Tout pour d\u00e9ployer Claude Code dans votre organisation.",
+      "Adoption d’équipe, gouvernance, sécurité, CI/CD et Skills. Tout pour déployer Claude Code dans votre organisation.",
     color: "brand" as const,
   },
   {
     href: "/personas/non-dev",
     icon: UserCircle,
     step: "03",
-    title: "Le non-d\u00e9veloppeur",
+    title: "Le non-développeur",
     description:
-      "Pr\u00e9-requis, premiers pas, FAQ et templates de prompting. Un parcours progressif pour ceux qui partent de z\u00e9ro.",
+      "Pré-requis, premiers pas, FAQ et templates de prompting. Un parcours progressif pour ceux qui partent de zéro.",
     color: "accent" as const,
   },
   {
@@ -76,16 +76,16 @@ const SUB_PAGES = [
     step: "04",
     title: "Le freelance",
     description:
-      "Productivit\u00e9, plugins, automatisation et workflows MCP. Chaque heure \u00e9conomis\u00e9e est une heure gagn\u00e9e.",
+      "Productivité, plugins, automatisation et workflows MCP. Chaque heure économisée est une heure gagnée.",
     color: "accent" as const,
   },
   {
     href: "/personas/student",
     icon: GraduationCap,
     step: "05",
-    title: "L\u2019\u00e9tudiant",
+    title: "L’étudiant",
     description:
-      "Fondamentaux, projets pratiques et bonnes pratiques professionnelles. Apprenez \u00e0 coder avec un tuteur IA.",
+      "Fondamentaux, projets pratiques et bonnes pratiques professionnelles. Apprenez à coder avec un tuteur IA.",
     color: "brand" as const,
   },
 ] as const;

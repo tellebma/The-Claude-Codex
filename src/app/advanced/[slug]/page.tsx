@@ -89,7 +89,7 @@ export default function AdvancedSlugPage({
 
   const breadcrumbJsonLd = createBreadcrumbSchema([
     { name: "Accueil", href: "/" },
-    { name: "Avanc\u00e9", href: `/${SECTION}` },
+    { name: "Avancé", href: `/${SECTION}` },
     { name: frontmatter.title, href: `/${SECTION}/${params.slug}` },
   ]);
 

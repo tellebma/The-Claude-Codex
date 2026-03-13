@@ -81,7 +81,7 @@ const websiteJsonLd = createWebSiteSchema({
 });
 
 const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "https://matomo.tellebma.fr";
-const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "1";
+const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "3";
 
 const matomoTrackingScript = `
   var _paq = window._paq = window._paq || [];

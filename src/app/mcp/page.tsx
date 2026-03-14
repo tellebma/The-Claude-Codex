@@ -339,7 +339,7 @@ export default function McpPage() {
             <div className="mt-12 grid gap-6 sm:grid-cols-3">
               <div className="glass-card p-6 text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <Terminal className="h-7 w-7 text-brand-700 dark:text-brand-400" />
+                  <Terminal className="h-7 w-7 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <h4 className="mb-2 font-semibold">Sans MCP</h4>
                 <p className="text-sm text-slate-500 dark:text-slate-300">
@@ -349,7 +349,7 @@ export default function McpPage() {
               </div>
               <div className="glass-card p-6 text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
-                  <Plug className="h-7 w-7 text-accent-500" />
+                  <Plug className="h-7 w-7 text-accent-500" aria-hidden="true" />
                 </div>
                 <h4 className="mb-2 font-semibold">+ MCP</h4>
                 <p className="text-sm text-slate-500 dark:text-slate-300">
@@ -359,7 +359,7 @@ export default function McpPage() {
               </div>
               <div className="glass-card p-6 text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5">
-                  <Sparkles className="h-7 w-7 text-emerald-500" />
+                  <Sparkles className="h-7 w-7 text-emerald-500" aria-hidden="true" />
                 </div>
                 <h4 className="mb-2 font-semibold">Resultat</h4>
                 <p className="text-sm text-slate-500 dark:text-slate-300">
@@ -387,7 +387,7 @@ export default function McpPage() {
               {/* User */}
               <div className="glass-card flex-1 p-5 text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" />
+                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">Vous</p>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
@@ -397,13 +397,13 @@ export default function McpPage() {
 
               {/* Arrow */}
               <div className="flex items-center justify-center sm:px-2">
-                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" />
+                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
               </div>
 
               {/* Claude Code */}
               <div className="glass-card flex-1 border-brand-500/30 p-5 text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <Terminal className="h-6 w-6 text-brand-700 dark:text-brand-400" />
+                  <Terminal className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">Claude Code</p>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
@@ -413,13 +413,13 @@ export default function McpPage() {
 
               {/* Arrow */}
               <div className="flex items-center justify-center sm:px-2">
-                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" />
+                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
               </div>
 
               {/* MCP Server */}
               <div className="glass-card flex-1 border-accent-500/30 p-5 text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
-                  <Plug className="h-6 w-6 text-accent-500" />
+                  <Plug className="h-6 w-6 text-accent-500" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">MCP Server</p>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
@@ -429,13 +429,13 @@ export default function McpPage() {
 
               {/* Arrow */}
               <div className="flex items-center justify-center sm:px-2">
-                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" />
+                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
               </div>
 
               {/* External Service */}
               <div className="glass-card flex-1 border-emerald-500/30 p-5 text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5">
-                  <Globe className="h-6 w-6 text-emerald-500" />
+                  <Globe className="h-6 w-6 text-emerald-500" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">Service externe</p>
                 <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
@@ -837,15 +837,15 @@ claude
               href="/skills"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:bg-slate-100"
             >
-              <Sparkles className="h-4 w-4" />
+              <Sparkles className="h-4 w-4" aria-hidden="true" />
               Decouvrir les Skills
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
             <Link
               href="/prompting"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:border-slate-500 hover:bg-white/5"
             >
-              <MessageSquare className="h-4 w-4" />
+              <MessageSquare className="h-4 w-4" aria-hidden="true" />
               Maitriser le prompting
             </Link>
           </div>

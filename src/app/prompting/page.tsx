@@ -356,7 +356,7 @@ export default function PromptingPage() {
         <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 sm:pb-28 sm:pt-28 lg:px-8 lg:pb-36 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-              <MessageSquare className="h-4 w-4" />
+              <MessageSquare className="h-4 w-4" aria-hidden="true" />
               Guide du prompting
             </div>
 
@@ -379,7 +379,7 @@ export default function PromptingPage() {
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
                 Decouvrir les fondamentaux
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </a>
               <a
                 href="#templates"
@@ -416,7 +416,7 @@ export default function PromptingPage() {
                     <div className="flex flex-col justify-center p-6 sm:p-8 lg:w-2/5">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                          <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400" />
+                          <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                         </div>
                         <span className="text-sm font-semibold text-brand-700 dark:text-brand-400">
                           Principe {index + 1}
@@ -526,7 +526,7 @@ export default function PromptingPage() {
                   {/* Bad example */}
                   <div>
                     <div className="mb-3 flex items-center gap-2">
-                      <XCircle className="h-5 w-5 text-red-500" />
+                      <XCircle className="h-5 w-5 text-red-500" aria-hidden="true" />
                       <span className="text-sm font-semibold text-red-500">
                         A ne pas faire
                       </span>
@@ -541,7 +541,7 @@ export default function PromptingPage() {
                   {/* Good example */}
                   <div>
                     <div className="mb-3 flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5 text-emerald-500" />
+                      <CheckCircle className="h-5 w-5 text-emerald-500" aria-hidden="true" />
                       <span className="text-sm font-semibold text-emerald-500">
                         A faire
                       </span>
@@ -580,7 +580,7 @@ export default function PromptingPage() {
             <div className="glass-card p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10">
-                  <Link2 className="h-6 w-6 text-brand-700 dark:text-brand-400" />
+                  <Link2 className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
@@ -624,7 +624,7 @@ et que les tests passent. Suggere des ameliorations supplementaires si pertinent
             <div className="glass-card p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/10">
-                  <Bot className="h-6 w-6 text-violet-500" />
+                  <Bot className="h-6 w-6 text-violet-500" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
@@ -674,7 +674,7 @@ Une fois les tests ecrits, implemente le code pour les faire passer."`}
             <div className="glass-card p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent-500/10">
-                  <Layers className="h-6 w-6 text-accent-500" />
+                  <Layers className="h-6 w-6 text-accent-500" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
@@ -733,7 +733,7 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
             <div className="glass-card p-6 sm:p-8">
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-500/10">
-                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" />
+                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
@@ -814,7 +814,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-xl border border-slate-200/40 p-5 dark:border-slate-700/40">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500/10">
-                    <Sparkles className="h-5 w-5 text-brand-700 dark:text-brand-400" />
+                    <Sparkles className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                   </div>
                   <h4 className="mb-1 font-semibold">Global</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
@@ -829,7 +829,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
 
                 <div className="rounded-xl border border-slate-200/40 p-5 dark:border-slate-700/40">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-accent-500/10">
-                    <BrainCircuit className="h-5 w-5 text-accent-500" />
+                    <BrainCircuit className="h-5 w-5 text-accent-500" aria-hidden="true" />
                   </div>
                   <h4 className="mb-1 font-semibold">Projet</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
@@ -844,7 +844,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
 
                 <div className="rounded-xl border border-slate-200/40 p-5 dark:border-slate-700/40">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10">
-                    <Layers className="h-5 w-5 text-violet-500" />
+                    <Layers className="h-5 w-5 text-violet-500" aria-hidden="true" />
                   </div>
                   <h4 className="mb-1 font-semibold">Module</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
@@ -888,7 +888,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               </p>
               <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
                 Lire le guide
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
 
@@ -905,7 +905,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               </p>
               <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
                 Explorer les MCP
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
 
@@ -922,7 +922,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               </p>
               <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
                 Decouvrir les Skills
-                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
           </div>

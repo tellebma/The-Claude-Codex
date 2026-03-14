@@ -171,7 +171,7 @@ export default function SkillsPage() {
         <div className="relative mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 sm:pb-24 sm:pt-28 lg:px-8 lg:pb-28 lg:pt-32">
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-              <Wand2 className="h-4 w-4" />
+              <Wand2 className="h-4 w-4" aria-hidden="true" />
               Guide Skills
             </div>
 
@@ -194,7 +194,7 @@ export default function SkillsPage() {
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
                 Creer votre premier Skill
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </a>
               <a
                 href="#top-skills"
@@ -222,7 +222,7 @@ export default function SkillsPage() {
             <div className="glass-card p-8 sm:p-10">
               <div className="flex items-start gap-4">
                 <div className="hidden shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5 p-3 sm:flex">
-                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" />
+                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold sm:text-2xl">
@@ -283,7 +283,7 @@ export default function SkillsPage() {
             {/* Built-in Skills */}
             <div className="glass-card p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                <Users className="h-6 w-6 text-brand-700 dark:text-brand-400" />
+                <Users className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
               </div>
               <h3 className="mb-2 text-xl font-bold">Built-in Skills</h3>
               <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
@@ -300,7 +300,7 @@ export default function SkillsPage() {
                 filename="terminal"
               />
               <div className="mt-4 flex items-center gap-2 text-sm text-brand-700 dark:text-brand-400">
-                <Boxes className="h-4 w-4" />
+                <Boxes className="h-4 w-4" aria-hidden="true" />
                 <span>Prets a l&apos;emploi, maintenus par la communaute</span>
               </div>
             </div>
@@ -308,7 +308,7 @@ export default function SkillsPage() {
             {/* Custom Skills */}
             <div className="glass-card p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
-                <FolderCog className="h-6 w-6 text-accent-500" />
+                <FolderCog className="h-6 w-6 text-accent-500" aria-hidden="true" />
               </div>
               <h3 className="mb-2 text-xl font-bold">Custom Skills</h3>
               <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
@@ -330,7 +330,7 @@ export default function SkillsPage() {
                 filename="structure"
               />
               <div className="mt-4 flex items-center gap-2 text-sm text-accent-500">
-                <Lightbulb className="h-4 w-4" />
+                <Lightbulb className="h-4 w-4" aria-hidden="true" />
                 <span>Personnels, disponibles partout</span>
               </div>
             </div>
@@ -338,7 +338,7 @@ export default function SkillsPage() {
             {/* Project Skills */}
             <div className="glass-card p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-violet-500/5">
-                <FileCode2 className="h-6 w-6 text-violet-500" />
+                <FileCode2 className="h-6 w-6 text-violet-500" aria-hidden="true" />
               </div>
               <h3 className="mb-2 text-xl font-bold">Project Skills</h3>
               <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
@@ -364,7 +364,7 @@ mon-projet/
                 filename="structure"
               />
               <div className="mt-4 flex items-center gap-2 text-sm text-violet-500">
-                <Users className="h-4 w-4" />
+                <Users className="h-4 w-4" aria-hidden="true" />
                 <span>Partages en equipe, specifiques au projet</span>
               </div>
             </div>
@@ -393,7 +393,7 @@ mon-projet/
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <Terminal className="h-4 w-4 text-brand-700 dark:text-brand-400" />
+                  <Terminal className="h-4 w-4 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold">
                   Invocation explicite avec{" "}
@@ -434,7 +434,7 @@ mon-projet/
             <div>
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-accent-500/20 to-accent-500/5">
-                  <Sparkles className="h-4 w-4 text-accent-500" />
+                  <Sparkles className="h-4 w-4 text-accent-500" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold">Activation automatique</h3>
               </div>
@@ -529,7 +529,7 @@ mon-projet/
                   </p>
                   <div className="rounded-lg border border-slate-200/60 bg-slate-50/80 p-3 dark:border-slate-700/60 dark:bg-slate-800/50">
                     <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                      <Play className="h-3 w-3" />
+                      <Play className="h-3 w-3" aria-hidden="true" />
                       Exemple d&apos;utilisation
                     </div>
                     <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
@@ -778,7 +778,7 @@ $ claude
                   className="glass-card flex flex-col p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                    <Icon className="h-6 w-6 text-brand-700 dark:text-brand-400" />
+                    <Icon className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                   </div>
                   <h3 className="mb-3 text-lg font-bold">{useCase.title}</h3>
                   <p className="mb-6 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
@@ -827,7 +827,7 @@ $ claude
               className="glass-card group flex items-start gap-4 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
-                <MessageSquare className="h-6 w-6 text-accent-500" />
+                <MessageSquare className="h-6 w-6 text-accent-500" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="mb-1 text-lg font-bold text-white">
@@ -840,7 +840,7 @@ $ claude
                 </p>
                 <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-400 transition-colors group-hover:text-brand-300">
                   Decouvrir
-                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>
               </div>
             </Link>
@@ -850,7 +850,7 @@ $ claude
               className="glass-card group flex items-start gap-4 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-violet-500/5">
-                <Boxes className="h-6 w-6 text-violet-500" />
+                <Boxes className="h-6 w-6 text-violet-500" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="mb-1 text-lg font-bold text-white">
@@ -862,7 +862,7 @@ $ claude
                 </p>
                 <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-400 transition-colors group-hover:text-brand-300">
                   Decouvrir
-                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
                 </span>
               </div>
             </Link>

@@ -59,7 +59,7 @@ export default function ContentPage({ params }: ContentPageProps) {
           <div className="text-center">
             {frontmatter.badge && (
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-                <BookOpen className="h-4 w-4" />
+                <BookOpen className="h-4 w-4" aria-hidden="true" />
                 {frontmatter.badge}
               </div>
             )}
@@ -91,7 +91,7 @@ export default function ContentPage({ params }: ContentPageProps) {
                 href={`/content/${prev.slug}`}
                 className="group flex items-center gap-2 rounded-xl border border-slate-200/50 px-6 py-4 transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
-                <ArrowLeft className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-x-1" />
+                <ArrowLeft className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                 <div>
                   <p className="text-xs text-slate-400">Precedent</p>
                   <p className="text-sm font-semibold">{prev.frontmatter.title}</p>
@@ -109,7 +109,7 @@ export default function ContentPage({ params }: ContentPageProps) {
                   <p className="text-xs text-slate-400">Suivant</p>
                   <p className="text-sm font-semibold">{next.frontmatter.title}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
             ) : (
               <div />

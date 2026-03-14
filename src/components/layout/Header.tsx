@@ -55,7 +55,7 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
       <button
         onClick={() => setOpen(!open)}
         className={clsx(
-          "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+          "inline-flex min-h-[44px] items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
           isSecondaryActive
             ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
             : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
@@ -101,10 +101,11 @@ export function Header() {
       <nav aria-label="Navigation principale" className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
         <Link
           href="/"
+          aria-label="The Claude Codex - Accueil"
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
           <Logo />
-          <span className="hidden sm:inline">
+          <span className="hidden sm:inline" aria-hidden="true">
             The Claude <span className="text-gradient">Codex</span>
           </span>
         </Link>
@@ -118,7 +119,7 @@ export function Header() {
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
                 className={clsx(
-                  "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"

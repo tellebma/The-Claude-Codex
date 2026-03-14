@@ -1,0 +1,182 @@
+{
+  "common": {
+    "skipToContent": "Aller au contenu principal",
+    "home": "Accueil",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "back": "Retour",
+    "overview": "Vue d'ensemble",
+    "readGuide": "Lire le guide",
+    "openSource": "Projet open-source.",
+    "copiedCode": "Code copié",
+    "copyCode": "Copier le code",
+    "scrollToTop": "Retour en haut de la page",
+    "lightMode": "Passer en mode clair",
+    "darkMode": "Passer en mode sombre",
+    "tableOfContents": "Table des matières",
+    "onThisPage": "Sur cette page",
+    "guides": "Guides",
+    "resources": "Ressources",
+    "pageNotFound": "Page introuvable",
+    "pageNotFoundDescription": "La page que vous cherchez n'existe pas ou a été déplacée.",
+    "backToHome": "Retour à l'accueil"
+  },
+  "navigation": {
+    "mainNav": "Navigation principale",
+    "menuToggle": "Menu de navigation",
+    "gettingStarted": "Démarrer",
+    "mcp": "MCP",
+    "skills": "Skills",
+    "prompting": "Prompting",
+    "useCases": "Cas d'usage",
+    "personas": "Parcours",
+    "enterprise": "Entreprise",
+    "advanced": "Avancé",
+    "content": "Contenus",
+    "limits": "Limites",
+    "reference": "Référence",
+    "configurator": "Configurateur",
+    "glossary": "Glossaire",
+    "future": "Vision",
+    "more": "Plus"
+  },
+  "footer": {
+    "description": "Le guide de référence gratuit pour maîtriser Claude Code. Créé par la communauté, pour la communauté. Pas de paywall, pas de tracking, juste du savoir partagé.",
+    "visionFuture": "Vision & Futur",
+    "claudeCodeOfficial": "Claude Code (officiel)",
+    "anthropicDocs": "Documentation Anthropic"
+  },
+  "search": {
+    "trigger": "Rechercher...",
+    "dialogTitle": "Recherche globale",
+    "placeholder": "Rechercher un sujet, une page...",
+    "inputLabel": "Rechercher",
+    "close": "Fermer la recherche",
+    "noResults": "Aucun resultat pour \"{query}\"",
+    "typeToSearch": "Tapez un mot-cle pour rechercher dans le site",
+    "resultsLabel": "Resultats de recherche",
+    "escToClose": "pour fermer",
+    "arrowsToNavigate": "naviguer",
+    "enterToOpen": "ouvrir"
+  },
+  "breadcrumb": {
+    "ariaLabel": "Fil d'Ariane",
+    "home": "Accueil",
+    "sections": {
+      "getting-started": "Demarrer",
+      "mcp": "MCP",
+      "plugins": "Plugins",
+      "skills": "Skills",
+      "agents": "Agents",
+      "prompting": "Prompting",
+      "future": "Vision",
+      "configurator": "Configurateur",
+      "content": "Contenus",
+      "use-cases": "Cas d'usage",
+      "enterprise": "Entreprise",
+      "advanced": "Avancé",
+      "reference": "Référence",
+      "limits": "Limites",
+      "personas": "Parcours",
+      "glossary": "Glossaire"
+    }
+  },
+  "callout": {
+    "info": "Information",
+    "tip": "Astuce",
+    "warning": "Attention"
+  },
+  "hero": {
+    "badge": "Guide gratuit & open-source",
+    "title": "Maîtrisez",
+    "titleHighlight": "Claude Code",
+    "titleEnd": "en partant de zéro",
+    "subtitle": "Le guide de référence pour exploiter toute la puissance de l'IA dans votre quotidien. Que vous soyez développeur, entrepreneur ou simplement curieux, tout commence ici.",
+    "ctaPrimary": "Commencer le guide",
+    "ctaSecondary": "Découvrir les MCP",
+    "terminalPrompt": "Crée-moi un site web moderne avec une landing page,",
+    "terminalPrompt2": "un système d'authentification et un dashboard admin.",
+    "terminalResponse": "Bien sûr ! Je vais créer votre projet étape par étape...",
+    "terminalStep1": "Analyse des besoins...",
+    "terminalStep2": "Création de l'architecture...",
+    "terminalStep3": "Génération du code...",
+    "terminalDone": "fait",
+    "terminalInProgress": "en cours"
+  },
+  "sections": {
+    "features": {
+      "badge": "Possibilités",
+      "title": "Ce que vous pouvez faire avec Claude Code",
+      "description": "Claude Code n'est pas un simple chatbot. C'est un partenaire de création qui comprend votre contexte et agit dans votre environnement."
+    },
+    "audience": {
+      "badge": "Pour tous",
+      "title": "Peu importe votre profil, Claude Code est fait pour vous",
+      "description": "L'IA n'est plus réservée aux ingénieurs. Chaque personne créative, ambitieuse ou simplement curieuse peut en tirer parti."
+    },
+    "paths": {
+      "badge": "Parcours",
+      "title": "Choisissez votre chemin",
+      "description": "Trois parcours adaptés à votre niveau. Commencez là où vous êtes, progressez à votre rythme."
+    },
+    "configurator": {
+      "badge": "Configurateur",
+      "title": "Votre configuration sur mesure en 2 minutes",
+      "description": "Pas besoin de tout lire. Répondez à quelques questions et recevez une configuration personnalisée, prête à l'emploi."
+    },
+    "cta": {
+      "title": "Prêt à transformer votre façon de",
+      "titleHighlight": "travailler",
+      "description": "Le guide est gratuit, open-source et fait pour durer. Commencez maintenant et rejoignez une communauté qui repousse les limites du possible.",
+      "ctaPrimary": "Commencer maintenant",
+      "ctaSecondary": "Voir la vision"
+    }
+  },
+  "features": {
+    "createWebsite": { "title": "Créer un site web", "description": "De la landing page au e-commerce complet, Claude Code génère, structure et déploie vos projets web." },
+    "generateDocs": { "title": "Générer des documents", "description": "Rapports, présentations, documentation technique : laissez l'IA structurer et rédiger pour vous." },
+    "automate": { "title": "Automatiser vos tâches", "description": "Scripts, pipelines CI/CD, migrations de données. Transformez des heures de travail en quelques minutes." },
+    "analyzeData": { "title": "Analyser des données", "description": "Connectez vos sources, explorez vos datasets et obtenez des insights en langage naturel." },
+    "codeNoDev": { "title": "Coder sans être dev", "description": "Décrivez ce que vous voulez en français. Claude Code traduit vos idées en code fonctionnel." },
+    "designUI": { "title": "Designer des interfaces", "description": "Créez des interfaces modernes et accessibles en décrivant simplement votre vision." },
+    "connectTools": { "title": "Connecter vos outils", "description": "Grâce aux MCP, intégrez Gmail, Slack, GitHub, bases de données et bien plus encore." },
+    "deploy": { "title": "Déployer en production", "description": "Docker, CI/CD, monitoring : Claude Code gère votre infrastructure de A à Z." }
+  },
+  "audience": {
+    "developers": { "title": "Développeurs", "description": "Accélérez votre workflow x10. Code review, refactoring, tests automatisés, debugging assisté. Votre copilote ultime." },
+    "entrepreneurs": { "title": "Entrepreneurs", "description": "Lancez votre MVP en jours au lieu de semaines. Prototypez, itérez et déployez sans équipe technique." },
+    "creatives": { "title": "Créatifs & Designers", "description": "Transformez vos maquettes en sites vivants. Générez des animations, des composants UI sur mesure." },
+    "students": { "title": "Étudiants", "description": "Apprenez en faisant. Claude Code explique chaque concept, corrige vos erreurs et vous guide pas à pas." },
+    "curious": { "title": "Curieux & Autodidactes", "description": "Explorez le monde du code sans prérequis. Posez vos questions, expérimentez, créez vos premiers projets." },
+    "teams": { "title": "Équipes & Managers", "description": "Standardisez vos workflows, documentez automatiquement, et donnez des super-pouvoirs à toute votre équipe." }
+  },
+  "paths": {
+    "beginner": {
+      "level": "Débutant",
+      "title": "Les fondamentaux",
+      "description": "Vous n'avez jamais utilisé Claude Code ? Parfait. On part de zéro, ensemble.",
+      "items": ["Installer Claude Code en 5 minutes", "Comprendre le terminal et les bases", "Votre premier projet guidé pas à pas", "Les commandes essentielles à connaître"]
+    },
+    "intermediate": {
+      "level": "Intermédiaire",
+      "title": "Maîtrise des outils",
+      "description": "Vous savez utiliser Claude Code ? Découvrez les MCP, les Skills et le prompting avancé.",
+      "items": ["Connecter vos outils favoris via les MCP", "Créer et utiliser des Skills personnalisés", "Techniques de prompting qui font la différence", "Automatiser vos workflows quotidiens"]
+    },
+    "advanced": {
+      "level": "Avancé",
+      "title": "Expert & Architecte",
+      "description": "Poussez Claude Code dans ses retranchements. Multi-agents, workflows complexes, déploiements.",
+      "items": ["Orchestration multi-agents", "Workflows complexes et chaînage de prompts", "CI/CD et déploiement automatisé", "Créer vos propres MCP servers"]
+    }
+  },
+  "metadata": {
+    "siteTitle": "Maîtrisez Claude Code",
+    "siteDescription": "Le guide de référence gratuit pour maîtriser Claude Code. MCP, Skills, Prompting avancé, pour développeurs et non-développeurs."
+  },
+  "languageSwitcher": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "English"
+  }
+}

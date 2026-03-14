@@ -1,6 +1,13 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Terminal, Github, ExternalLink } from "lucide-react";
 import { CopyrightYear } from "@/components/ui/CopyrightYear";
+import {
+  getLocaleFromPathname,
+  prefixWithLocale,
+} from "@/lib/locale-utils";
 
 const footerLinks = {
   guides: [
@@ -25,21 +32,30 @@ const footerLinks = {
 };
 
 export function Footer() {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+
   return (
     <footer className="border-t border-slate-200/50 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 text-lg font-bold">
+            <Link
+              href={prefixWithLocale("/", locale)}
+              className="flex items-center gap-2 text-lg font-bold"
+            >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500">
-                <Terminal className="h-4 w-4 text-white" aria-hidden="true" />
+                <Terminal
+                  className="h-4 w-4 text-white"
+                  aria-hidden="true"
+                />
               </div>
               The Claude <span className="text-gradient">Codex</span>
             </Link>
             <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-300">
-              Le guide de référence gratuit pour maîtriser Claude Code. Créé par
-              la communauté, pour la communauté. Pas de paywall, pas de tracking
-              , juste du savoir partagé.
+              Le guide de référence gratuit pour maîtriser Claude Code. Créé
+              par la communauté, pour la communauté. Pas de paywall, pas de
+              tracking , juste du savoir partagé.
             </p>
           </div>
 
@@ -51,7 +67,7 @@ export function Footer() {
               {footerLinks.guides.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={prefixWithLocale(link.href, locale)}
                     className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
                     {link.name}
@@ -76,11 +92,14 @@ export function Footer() {
                       className="inline-flex min-h-[44px] items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                     >
                       {link.name}
-                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                      <ExternalLink
+                        className="h-3 w-3"
+                        aria-hidden="true"
+                      />
                     </a>
                   ) : (
                     <Link
-                      href={link.href}
+                      href={prefixWithLocale(link.href, locale)}
                       className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                     >
                       {link.name}

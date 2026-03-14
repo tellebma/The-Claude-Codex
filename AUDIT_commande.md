@@ -1,0 +1,2 @@
+J'aimmerai que tu oublie tout ce que tu sais sur cette page, ce site. J'aimerai que tu réalise un audit complet sur la SEO du site. Pour cela       
+  consulte des expert SEO et tu peux également utiliser des MCP playwright et lighthouse et fais moi un rapport complet.

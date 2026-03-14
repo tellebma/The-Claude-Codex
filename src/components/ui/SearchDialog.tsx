@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Search, X, ArrowRight, FileText } from "lucide-react";
 import { searchEntries, type SearchEntry } from "@/lib/search-index";
+import { getLocaleFromPathname, prefixWithLocale } from "@/lib/locale-utils";
 
 const RESULTS_LISTBOX_ID = "search-results-listbox";
 
@@ -18,6 +19,8 @@ export function SearchDialog() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
 
   const openDialog = useCallback(() => {
     setOpen(true);
@@ -36,9 +39,9 @@ export function SearchDialog() {
   const navigateTo = useCallback(
     (href: string) => {
       closeDialog();
-      router.push(href);
+      router.push(prefixWithLocale(href, locale));
     },
-    [closeDialog, router]
+    [closeDialog, router, locale]
   );
 
   // Keyboard shortcut: Ctrl+K or Cmd+K

@@ -8,6 +8,11 @@ import {
   createBreadcrumbSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
+import {
+  getLocaleFromPathname,
+  stripLocaleFromPathname,
+  prefixWithLocale,
+} from "@/lib/locale-utils";
 
 interface BreadcrumbSegment {
   readonly label: string;
@@ -25,8 +30,12 @@ const SECTION_LABELS: Readonly<Record<string, string>> = {
   configurator: "Configurateur",
 };
 
-function buildBreadcrumbs(pathname: string): ReadonlyArray<BreadcrumbSegment> {
-  const segments = pathname.split("/").filter(Boolean);
+function buildBreadcrumbs(
+  pathname: string,
+  locale: string
+): ReadonlyArray<BreadcrumbSegment> {
+  const strippedPathname = stripLocaleFromPathname(pathname);
+  const segments = strippedPathname.split("/").filter(Boolean);
   const breadcrumbs: BreadcrumbSegment[] = [];
 
   let currentPath = "";
@@ -37,7 +46,10 @@ function buildBreadcrumbs(pathname: string): ReadonlyArray<BreadcrumbSegment> {
       segment
         .replace(/-/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
-    breadcrumbs.push({ label, href: currentPath });
+    breadcrumbs.push({
+      label,
+      href: prefixWithLocale(currentPath, locale),
+    });
   }
 
   return breadcrumbs;
@@ -45,22 +57,27 @@ function buildBreadcrumbs(pathname: string): ReadonlyArray<BreadcrumbSegment> {
 
 /**
  * Renders a breadcrumb navigation with schema.org BreadcrumbList JSON-LD.
- * The JSON-LD content is safe: it is built from our own static labels
- * serialized via JSON.stringify — no user-supplied HTML is involved.
+ *
+ * Security: The dangerouslySetInnerHTML usage below is safe because the
+ * content is built from our own static labels, serialized via JSON.stringify.
+ * No user-supplied HTML is involved.
  */
 export function Breadcrumb() {
   const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const strippedPathname = stripLocaleFromPathname(pathname);
 
   const breadcrumbs = useMemo(
-    () => (pathname === "/" ? [] : buildBreadcrumbs(pathname)),
-    [pathname]
+    () =>
+      strippedPathname === "/" ? [] : buildBreadcrumbs(pathname, locale),
+    [pathname, locale, strippedPathname]
   );
 
   const breadcrumbJsonLd = useMemo(() => {
     if (breadcrumbs.length === 0) return null;
 
     const items = [
-      { name: "Accueil", href: "/" },
+      { name: "Accueil", href: prefixWithLocale("/", locale) },
       ...breadcrumbs.map((crumb) => ({
         name: crumb.label,
         href: crumb.href,
@@ -68,15 +85,15 @@ export function Breadcrumb() {
     ];
 
     return serializeJsonLd(createBreadcrumbSchema(items));
-  }, [breadcrumbs]);
+  }, [breadcrumbs, locale]);
 
-  if (pathname === "/" || breadcrumbs.length === 0) {
+  if (strippedPathname === "/" || breadcrumbs.length === 0) {
     return null;
   }
 
   return (
     <>
-      {/* JSON-LD: content is safe — serialized from static schema, no user HTML */}
+      {/* JSON-LD: safe — serialized from static schema via JSON.stringify, no user HTML */}
       {breadcrumbJsonLd !== null && (
         <script
           type="application/ld+json"
@@ -88,7 +105,7 @@ export function Breadcrumb() {
         <ol className="flex flex-wrap items-center gap-1 text-sm">
           <li>
             <Link
-              href="/"
+              href={prefixWithLocale("/", locale)}
               className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
               aria-label="Accueil"
             >

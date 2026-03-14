@@ -9,6 +9,7 @@ interface PageMetadataOptions {
   readonly title: string;
   readonly description: string;
   readonly path: string;
+  readonly locale?: string;
   readonly ogImage?: string;
   readonly type?: "website" | "article";
   readonly publishedTime?: string;
@@ -17,12 +18,13 @@ interface PageMetadataOptions {
 
 /**
  * Generates complete metadata for a page including OpenGraph, Twitter,
- * canonical URL, and all required meta tags.
+ * canonical URL, hreflang alternates, and all required meta tags.
  */
 export function createPageMetadata({
   title,
   description,
   path,
+  locale = "fr",
   ogImage,
   type = "article",
   publishedTime,
@@ -30,18 +32,29 @@ export function createPageMetadata({
 }: PageMetadataOptions): Metadata {
   const canonicalUrl = `${SITE_URL}${path}`;
   const imageUrl = ogImage ?? DEFAULT_OG_IMAGE;
+  const ogLocale = locale === "en" ? "en_US" : "fr_FR";
+
+  // Build alternate path by swapping locale prefix
+  const altLocale = locale === "en" ? "fr" : "en";
+  const pathWithoutLocale = path.replace(/^\/(fr|en)/, "");
+  const altUrl = `${SITE_URL}/${altLocale}${pathWithoutLocale}`;
 
   return {
     title,
     description,
     alternates: {
       canonical: canonicalUrl,
+      languages: {
+        fr: locale === "fr" ? canonicalUrl : altUrl,
+        en: locale === "en" ? canonicalUrl : altUrl,
+        "x-default": `${SITE_URL}/fr${pathWithoutLocale}`,
+      },
     },
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
       description,
       type,
-      locale: SITE_LOCALE,
+      locale: ogLocale,
       url: canonicalUrl,
       siteName: SITE_NAME,
       images: [

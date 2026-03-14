@@ -181,6 +181,21 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
 export function getSectionFromPathname(pathname: string): string | null {
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length === 0) return null;
+
+  // With i18n, the first segment is the locale (e.g., "fr", "en").
+  // The section is the second segment.
   const firstSegment = segments[0];
-  return firstSegment in sectionNavigation ? firstSegment : null;
+  if (firstSegment in sectionNavigation) {
+    return firstSegment;
+  }
+
+  // If first segment is a locale prefix, check the second segment
+  if (segments.length > 1) {
+    const secondSegment = segments[1];
+    if (secondSegment in sectionNavigation) {
+      return secondSegment;
+    }
+  }
+
+  return null;
 }

@@ -7,6 +7,11 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { Logo } from "./Logo";
 import { SearchDialog } from "@/components/ui/SearchDialog";
+import {
+  getLocaleFromPathname,
+  stripLocaleFromPathname,
+  prefixWithLocale,
+} from "@/lib/locale-utils";
 import clsx from "clsx";
 
 const primaryNav = [
@@ -33,11 +38,20 @@ const navigation = [...primaryNav, ...secondaryNav];
 
 const MOBILE_MENU_ID = "mobile-nav-menu";
 
-function MoreDropdown({ pathname }: { readonly pathname: string }) {
+function MoreDropdown({
+  pathname,
+  locale,
+}: {
+  readonly pathname: string;
+  readonly locale: string;
+}) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const strippedPathname = stripLocaleFromPathname(pathname);
   const isSecondaryActive = secondaryNav.some(
-    (item) => pathname === item.href || pathname.startsWith(item.href + "/")
+    (item) =>
+      strippedPathname === item.href ||
+      strippedPathname.startsWith(item.href + "/")
   );
 
   useEffect(() => {
@@ -64,16 +78,24 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
         aria-haspopup="true"
       >
         Plus
-        <ChevronDown className={clsx("h-3.5 w-3.5 transition-transform", open && "rotate-180")} aria-hidden="true" />
+        <ChevronDown
+          className={clsx(
+            "h-3.5 w-3.5 transition-transform",
+            open && "rotate-180"
+          )}
+          aria-hidden="true"
+        />
       </button>
       {open && (
         <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-slate-200/60 bg-white/95 py-1 shadow-lg backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/95">
           {secondaryNav.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive =
+              strippedPathname === item.href ||
+              strippedPathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={prefixWithLocale(item.href, locale)}
                 onClick={() => setOpen(false)}
                 className={clsx(
                   "block px-4 py-2 text-sm font-medium transition-colors",
@@ -95,12 +117,17 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+  const strippedPathname = stripLocaleFromPathname(pathname);
 
   return (
     <header className="glass sticky top-0 z-50">
-      <nav aria-label="Navigation principale" className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
+      <nav
+        aria-label="Navigation principale"
+        className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]"
+      >
         <Link
-          href="/"
+          href={prefixWithLocale("/", locale)}
           aria-label="The Claude Codex - Accueil"
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
@@ -112,11 +139,13 @@ export function Header() {
 
         <div className="hidden items-center gap-1 lg:flex">
           {primaryNav.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive =
+              strippedPathname === item.href ||
+              strippedPathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={prefixWithLocale(item.href, locale)}
                 aria-current={isActive ? "page" : undefined}
                 className={clsx(
                   "inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
@@ -129,7 +158,7 @@ export function Header() {
               </Link>
             );
           })}
-          <MoreDropdown pathname={pathname} />
+          <MoreDropdown pathname={pathname} locale={locale} />
         </div>
 
         <div className="flex items-center gap-2">
@@ -162,11 +191,13 @@ export function Header() {
       >
         <div className="space-y-1 px-4 py-3">
           {navigation.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+            const isActive =
+              strippedPathname === item.href ||
+              strippedPathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={prefixWithLocale(item.href, locale)}
                 onClick={() => setMobileOpen(false)}
                 aria-current={isActive ? "page" : undefined}
                 className={clsx(

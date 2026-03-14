@@ -188,7 +188,7 @@ export default function AdvancedPage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Explorez les fonctionnalit&eacute;s avanc&eacute;es
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 Du syst&egrave;me de hooks &agrave; la configuration enterprise,
                 chaque guide couvre un aspect essentiel de l&apos;utilisation
                 avanc&eacute;e de Claude Code.
@@ -226,7 +226,7 @@ export default function AdvancedPage() {
                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
                       {page.title}
                     </h3>
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {page.description}
                     </p>
 
@@ -267,7 +267,7 @@ export default function AdvancedPage() {
                     <Icon className="h-7 w-7 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                   </div>
                   <h3 className="mb-2 text-lg font-bold">{benefit.title}</h3>
-                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                     {benefit.description}
                   </p>
                 </div>

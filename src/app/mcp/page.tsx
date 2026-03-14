@@ -246,7 +246,7 @@ export default function McpPage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Explorez les MCP en profondeur
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 De la th&eacute;orie &agrave; la pratique, chaque guide couvre un aspect
                 essentiel des MCP. Suivez-les dans l&apos;ordre ou piochez
                 directement celui qui vous int&eacute;resse.
@@ -284,7 +284,7 @@ export default function McpPage() {
                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
                       {page.title}
                     </h3>
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {page.description}
                     </p>
 
@@ -342,7 +342,7 @@ export default function McpPage() {
                   <Terminal className="h-7 w-7 text-brand-700 dark:text-brand-400" />
                 </div>
                 <h4 className="mb-2 font-semibold">Sans MCP</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   Claude Code lit et ecrit des fichiers locaux. Puissant, mais
                   isole.
                 </p>
@@ -352,7 +352,7 @@ export default function McpPage() {
                   <Plug className="h-7 w-7 text-accent-500" />
                 </div>
                 <h4 className="mb-2 font-semibold">+ MCP</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   Vous branchez des adaptateurs qui connectent Claude a vos
                   services.
                 </p>
@@ -362,7 +362,7 @@ export default function McpPage() {
                   <Sparkles className="h-7 w-7 text-emerald-500" />
                 </div>
                 <h4 className="mb-2 font-semibold">Resultat</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   Un assistant qui agit dans votre environnement reel, pas
                   juste dans un chat.
                 </p>
@@ -390,7 +390,7 @@ export default function McpPage() {
                   <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                 </div>
                 <p className="text-sm font-semibold">Vous</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   &quot;Montre-moi les issues GitHub ouvertes&quot;
                 </p>
               </div>
@@ -406,7 +406,7 @@ export default function McpPage() {
                   <Terminal className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                 </div>
                 <p className="text-sm font-semibold">Claude Code</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   Comprend votre demande et appelle le bon MCP
                 </p>
               </div>
@@ -422,7 +422,7 @@ export default function McpPage() {
                   <Plug className="h-6 w-6 text-accent-500" />
                 </div>
                 <p className="text-sm font-semibold">MCP Server</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   Traduit la requete en appels API
                 </p>
               </div>
@@ -438,7 +438,7 @@ export default function McpPage() {
                   <Globe className="h-6 w-6 text-emerald-500" />
                 </div>
                 <p className="text-sm font-semibold">Service externe</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   GitHub, Slack, Gmail, BDD...
                 </p>
               </div>
@@ -607,7 +607,7 @@ claude "Liste les fichiers dans mon dossier projet"`}
                   </span>
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">{mcp.name}</h3>
-                <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                   {mcp.description}
                 </p>
                 <div className="rounded-lg bg-slate-100/80 px-3 py-2 dark:bg-slate-800/80">

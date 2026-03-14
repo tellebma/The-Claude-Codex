@@ -95,13 +95,13 @@ export default function NotFound() {
         <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
           Page introuvable
         </h1>
-        <p className="mx-auto mt-4 max-w-lg text-base text-slate-600 dark:text-slate-400 sm:text-lg">
+        <p className="mx-auto mt-4 max-w-lg text-base text-slate-600 dark:text-slate-300 sm:text-lg">
           Cette page n&apos;existe pas ou a été déplacée. Pas de panique, voici
           quelques liens pour retrouver votre chemin.
         </p>
 
         {/* Search hint */}
-        <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-2 rounded-xl border border-slate-200/60 bg-white/60 px-4 py-3 text-sm text-slate-500 backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/40 dark:text-slate-400">
+        <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-2 rounded-xl border border-slate-200/60 bg-white/60 px-4 py-3 text-sm text-slate-500 backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/40 dark:text-slate-300">
           <Search className="h-4 w-4 shrink-0" aria-hidden="true" />
           <span>
             Utilisez{" "}
@@ -130,7 +130,7 @@ export default function NotFound() {
                 <p className="font-semibold text-slate-900 dark:text-white">
                   {link.name}
                 </p>
-                <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+                <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-300">
                   {link.description}
                 </p>
               </div>

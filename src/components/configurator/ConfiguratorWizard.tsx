@@ -192,7 +192,7 @@ export function ConfiguratorWizard() {
         <h2 className="mb-2 text-2xl font-bold tracking-tight sm:text-3xl">
           Presets rapides
         </h2>
-        <p className="mb-6 text-slate-600 dark:text-slate-400">
+        <p className="mb-6 text-slate-600 dark:text-slate-300">
           Choisissez un preset pour démarrer instantanément avec une
           configuration optimisée.
         </p>
@@ -211,7 +211,7 @@ export function ConfiguratorWizard() {
       {/* Séparateur */}
       <div className="mb-12 flex items-center gap-4 sm:mb-16">
         <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-        <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+        <span className="text-sm font-medium text-slate-500 dark:text-slate-300">
           ou configurez pas à pas
         </span>
         <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
@@ -227,7 +227,7 @@ export function ConfiguratorWizard() {
             type="button"
             onClick={handleReset}
             aria-label="Réinitialiser la configuration"
-            className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+            className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-100 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             Réinitialiser
@@ -266,7 +266,7 @@ export function ConfiguratorWizard() {
                     ? "bg-brand-500 text-white"
                     : s < step
                       ? "bg-emerald-500 text-white"
-                      : "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-400"
+                      : "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-300"
                 )}
               >
                 {s < step ? (

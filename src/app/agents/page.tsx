@@ -235,7 +235,7 @@ export default function AgentsPage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Explorez les agents en profondeur
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 Des fondamentaux &agrave; l&apos;orchestration avanc&eacute;e, chaque guide
                 couvre un aspect essentiel des agents Claude Code.
                 Suivez-les dans l&apos;ordre ou piochez directement celui qui
@@ -274,7 +274,7 @@ export default function AgentsPage() {
                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
                       {page.title}
                     </h3>
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {page.description}
                     </p>
 
@@ -315,7 +315,7 @@ export default function AgentsPage() {
                     <Icon className="h-7 w-7 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                   </div>
                   <h3 className="mb-2 text-lg font-bold">{benefit.title}</h3>
-                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                     {benefit.description}
                   </p>
                 </div>

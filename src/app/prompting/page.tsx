@@ -425,7 +425,7 @@ export default function PromptingPage() {
                       <h3 className="mb-3 text-xl font-bold sm:text-2xl">
                         {principle.title}
                       </h3>
-                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                         {principle.description}
                       </p>
                     </div>
@@ -482,7 +482,7 @@ export default function PromptingPage() {
                       <h3 className="text-lg font-bold sm:text-xl">
                         {template.category}
                       </h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
+                      <p className="text-sm text-slate-500 dark:text-slate-300">
                         {template.description}
                       </p>
                     </div>
@@ -586,7 +586,7 @@ export default function PromptingPage() {
                   <h3 className="text-lg font-bold sm:text-xl">
                     Prompt chaining (chainage multi-etapes)
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     Decomposez une tache complexe en une sequence de prompts ou
                     chaque etape alimente la suivante.
                   </p>
@@ -630,7 +630,7 @@ et que les tests passent. Suggere des ameliorations supplementaires si pertinent
                   <h3 className="text-lg font-bold sm:text-xl">
                     Orchestration multi-agents
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     Utilisez plusieurs agents specialises qui travaillent en
                     parallele sur differents aspects d&apos;un probleme.
                   </p>
@@ -680,7 +680,7 @@ Une fois les tests ecrits, implemente le code pour les faire passer."`}
                   <h3 className="text-lg font-bold sm:text-xl">
                     Workflows complexes avec agents
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     Combinez chainage, multi-agents et contexte persistant pour des
                     workflows de production.
                   </p>
@@ -739,7 +739,7 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
                   <h3 className="text-lg font-bold sm:text-xl">
                     Structure d&apos;un CLAUDE.md efficace
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     Un bon CLAUDE.md transforme Claude en un membre de votre equipe
                     qui connait votre projet sur le bout des doigts.
                   </p>
@@ -817,7 +817,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                     <Sparkles className="h-5 w-5 text-brand-700 dark:text-brand-400" />
                   </div>
                   <h4 className="mb-1 font-semibold">Global</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ~/.claude/CLAUDE.md
                     </code>
@@ -832,7 +832,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                     <BrainCircuit className="h-5 w-5 text-accent-500" />
                   </div>
                   <h4 className="mb-1 font-semibold">Projet</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ./CLAUDE.md
                     </code>
@@ -847,7 +847,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                     <Layers className="h-5 w-5 text-violet-500" />
                   </div>
                   <h4 className="mb-1 font-semibold">Module</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ./src/features/auth/CLAUDE.md
                     </code>

@@ -43,7 +43,7 @@ export function StepFeatures({
   return (
     <div>
       <h3 className="mb-2 text-xl font-bold">Activez les features</h3>
-      <p className="mb-6 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mb-6 text-sm text-slate-600 dark:text-slate-300">
         Sélectionnez les fonctionnalités avancées à inclure dans votre
         configuration.
       </p>
@@ -115,7 +115,7 @@ export function StepFeatures({
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">{feature.label}</span>
                   {locked && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-200 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-400">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-200 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
                       <Lock className="h-3 w-3" aria-hidden="true" />
                       {requiredSubInfo
                         ? `Nécessite ${requiredSubInfo.label}`
@@ -123,7 +123,7 @@ export function StepFeatures({
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   {feature.description}
                 </p>
               </div>

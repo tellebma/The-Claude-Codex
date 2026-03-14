@@ -286,7 +286,7 @@ export default function SkillsPage() {
                 <Users className="h-6 w-6 text-brand-700 dark:text-brand-400" />
               </div>
               <h3 className="mb-2 text-xl font-bold">Built-in Skills</h3>
-              <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                 Fournis par la communaute et les outils, ces Skills sont
                 disponibles immediatement. Ils couvrent les workflows les plus
                 courants : TDD, code review, planning, etc.
@@ -311,7 +311,7 @@ export default function SkillsPage() {
                 <FolderCog className="h-6 w-6 text-accent-500" />
               </div>
               <h3 className="mb-2 text-xl font-bold">Custom Skills</h3>
-              <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                 Crees par vous dans le dossier{" "}
                 <code className="rounded bg-slate-200/80 px-1.5 py-0.5 text-xs font-mono dark:bg-slate-700/80">
                   ~/.claude/commands/
@@ -341,7 +341,7 @@ export default function SkillsPage() {
                 <FileCode2 className="h-6 w-6 text-violet-500" />
               </div>
               <h3 className="mb-2 text-xl font-bold">Project Skills</h3>
-              <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+              <p className="mb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                 Definis dans le fichier{" "}
                 <code className="rounded bg-slate-200/80 px-1.5 py-0.5 text-xs font-mono dark:bg-slate-700/80">
                   CLAUDE.md
@@ -524,7 +524,7 @@ mon-projet/
                     </span>
                   </div>
                   <h3 className="mb-2 text-lg font-bold">{skill.name}</h3>
-                  <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                     {skill.description}
                   </p>
                   <div className="rounded-lg border border-slate-200/60 bg-slate-50/80 p-3 dark:border-slate-700/60 dark:bg-slate-800/50">
@@ -781,7 +781,7 @@ $ claude
                     <Icon className="h-6 w-6 text-brand-700 dark:text-brand-400" />
                   </div>
                   <h3 className="mb-3 text-lg font-bold">{useCase.title}</h3>
-                  <p className="mb-6 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="mb-6 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                     {useCase.description}
                   </p>
                   <div className="flex flex-wrap gap-2">

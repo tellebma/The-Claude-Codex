@@ -143,7 +143,7 @@ export function PricingTable() {
                 >
                   {plan.price}
                 </span>
-                <span className="text-sm text-slate-500 dark:text-slate-400">
+                <span className="text-sm text-slate-500 dark:text-slate-300">
                   {plan.priceDetail}
                 </span>
               </div>

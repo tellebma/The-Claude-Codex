@@ -155,7 +155,7 @@ export default function ReferencePage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Trouvez ce dont vous avez besoin
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 Chaque page couvre un aspect sp&eacute;cifique de la
                 configuration et de l&apos;utilisation de Claude Code. Utilisez
                 la recherche ou naviguez directement.
@@ -191,7 +191,7 @@ export default function ReferencePage() {
                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
                       {page.title}
                     </h3>
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {page.description}
                     </p>
 

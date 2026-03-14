@@ -19,7 +19,7 @@ export function StepSubscription({
   return (
     <div>
       <h3 className="mb-2 text-xl font-bold">Choisissez votre abonnement</h3>
-      <p className="mb-6 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mb-6 text-sm text-slate-600 dark:text-slate-300">
         Sélectionnez le niveau d&apos;abonnement qui correspond à vos besoins.
       </p>
 
@@ -58,14 +58,14 @@ export function StepSubscription({
                     "text-sm font-semibold",
                     isSelected
                       ? "text-brand-600 dark:text-brand-400"
-                      : "text-slate-500 dark:text-slate-400"
+                      : "text-slate-500 dark:text-slate-300"
                   )}
                 >
                   {sub.price}
                 </span>
               </div>
 
-              <p className="mb-3 text-xs text-slate-600 dark:text-slate-400">
+              <p className="mb-3 text-xs text-slate-600 dark:text-slate-300">
                 {sub.description}
               </p>
 
@@ -73,7 +73,7 @@ export function StepSubscription({
                 {sub.features.map((feature) => (
                   <li
                     key={feature}
-                    className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400"
+                    className="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-300"
                   >
                     <Check
                       className={clsx(

@@ -132,7 +132,7 @@ export function TcoCalculator() {
             />
             <p
               id={`${inputIdPrefix}-devcount-desc`}
-              className="mt-1 text-xs text-slate-500 dark:text-slate-400"
+              className="mt-1 text-xs text-slate-500 dark:text-slate-300"
             >
               De 1 a 1 000 developpeurs
             </p>
@@ -217,7 +217,7 @@ export function TcoCalculator() {
               </span>
             </div>
             <div className="flex items-center justify-between rounded-lg bg-slate-50 px-4 py-2.5 dark:bg-slate-700/50">
-              <span className="text-sm text-slate-600 dark:text-slate-400">
+              <span className="text-sm text-slate-600 dark:text-slate-300">
                 {COMPETITORS[0].name} (39 $/dev)
               </span>
               <span className="text-sm text-slate-700 dark:text-slate-300">
@@ -225,7 +225,7 @@ export function TcoCalculator() {
               </span>
             </div>
             <div className="flex items-center justify-between rounded-lg bg-slate-50 px-4 py-2.5 dark:bg-slate-700/50">
-              <span className="text-sm text-slate-600 dark:text-slate-400">
+              <span className="text-sm text-slate-600 dark:text-slate-300">
                 {COMPETITORS[1].name} (40 $/dev)
               </span>
               <span className="text-sm text-slate-700 dark:text-slate-300">
@@ -269,7 +269,7 @@ export function TcoCalculator() {
             </div>
             <p
               id={`${inputIdPrefix}-salary-desc`}
-              className="mt-1 text-xs text-slate-500 dark:text-slate-400"
+              className="mt-1 text-xs text-slate-500 dark:text-slate-300"
             >
               Cout employeur annuel moyen par developpeur
             </p>
@@ -297,7 +297,7 @@ export function TcoCalculator() {
               aria-valuenow={hoursGainedPerWeek}
               aria-valuetext={`${hoursGainedPerWeek} heures par semaine`}
             />
-            <div className="mt-1 flex justify-between text-xs text-slate-500 dark:text-slate-400">
+            <div className="mt-1 flex justify-between text-xs text-slate-500 dark:text-slate-300">
               <span>1h</span>
               <span
                 id={`${inputIdPrefix}-hours-desc`}
@@ -349,7 +349,7 @@ export function TcoCalculator() {
           </div>
         </div>
 
-        <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
+        <p className="mt-4 text-xs text-slate-500 dark:text-slate-300">
           Estimation basee sur {hoursGainedPerWeek}h gagnees/semaine/dev, un cout
           horaire de {formatEuro(hourlyRate)}/h (salaire charge de{" "}
           {formatEuro(annualSalary)} / 1 900h), et le plan{" "}

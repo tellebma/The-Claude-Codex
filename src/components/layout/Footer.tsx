@@ -36,7 +36,7 @@ export function Footer() {
               </div>
               The Claude <span className="text-gradient">Codex</span>
             </Link>
-            <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-300">
               Le guide de référence gratuit pour maîtriser Claude Code. Créé par
               la communauté, pour la communauté. Pas de paywall, pas de tracking
               , juste du savoir partagé.
@@ -52,7 +52,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
+                    className="text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
                     {link.name}
                   </Link>
@@ -73,7 +73,7 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
+                      className="inline-flex items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                     >
                       {link.name}
                       <ExternalLink className="h-3 w-3" aria-hidden="true" />
@@ -81,7 +81,7 @@ export function Footer() {
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
+                      className="text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                     >
                       {link.name}
                     </Link>
@@ -94,7 +94,7 @@ export function Footer() {
 
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200/50 pt-8 dark:border-slate-800 sm:flex-row">
           <div className="flex flex-col gap-1 text-center sm:text-left">
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="text-sm text-slate-500 dark:text-slate-300">
               <CopyrightYear /> The Claude Codex. Projet open-source.
             </p>
           </div>
@@ -102,7 +102,7 @@ export function Footer() {
             href="https://github.com/tellebma/The-Claude-Codex"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
+            className="flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
           >
             <Github className="h-4 w-4" aria-hidden="true" />
             GitHub

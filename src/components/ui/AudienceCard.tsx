@@ -8,13 +8,13 @@ interface AudienceCardProps {
 
 export function AudienceCard({ icon: Icon, title, description }: AudienceCardProps) {
   return (
-    <div className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-brand-500/30 hover:shadow-md dark:border-slate-700/50 dark:bg-slate-800/50 dark:shadow-none">
+    <div className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:border-brand-500/30 hover:shadow-md dark:border-slate-700/50 dark:bg-slate-800/50 dark:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500/20 to-accent-500/10">
         <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
       </div>
       <div>
         <h3 className="font-semibold">{title}</h3>
-        <p className="mt-1 text-base text-slate-600 dark:text-slate-400">
+        <p className="mt-1 text-base text-slate-600 dark:text-slate-300">
           {description}
         </p>
       </div>

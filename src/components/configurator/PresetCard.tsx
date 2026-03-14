@@ -62,7 +62,7 @@ export function PresetCard({ preset, onSelect }: PresetCardProps) {
         <h4 className="font-semibold text-slate-900 dark:text-slate-100">
           {preset.name}
         </h4>
-        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
           {preset.description}
         </p>
       </div>
@@ -71,13 +71,13 @@ export function PresetCard({ preset, onSelect }: PresetCardProps) {
         {preset.stacks.slice(0, 4).map((stack) => (
           <span
             key={stack}
-            className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-400"
+            className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300"
           >
             {stack}
           </span>
         ))}
         {preset.stacks.length > 4 && (
-          <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-400">
+          <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-300">
             +{preset.stacks.length - 4}
           </span>
         )}

@@ -328,7 +328,7 @@ export default function FuturePage() {
                     />
                   </div>
                   <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                     {item.description}
                   </p>
                 </div>
@@ -378,7 +378,7 @@ export default function FuturePage() {
                       <Icon className="h-4 w-4 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                       <h3 className="text-lg font-semibold">{item.title}</h3>
                     </div>
-                    <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {item.description}
                     </p>
                     {item.link && (
@@ -435,7 +435,7 @@ export default function FuturePage() {
                   </div>
 
                   <h3 className="mb-2 text-lg font-semibold">{trend.title}</h3>
-                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                     {trend.description}
                   </p>
                 </div>
@@ -491,7 +491,7 @@ export default function FuturePage() {
                       >
                         <Icon
                           className={`h-5 w-5 sm:h-6 sm:w-6 ${
-                            isFirst ? "text-white" : "text-slate-500 dark:text-slate-400"
+                            isFirst ? "text-white" : "text-slate-500 dark:text-slate-300"
                           }`}
                           aria-hidden="true"
                         />
@@ -506,13 +506,13 @@ export default function FuturePage() {
                           className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
                             isFirst
                               ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
-                              : "bg-slate-100 text-slate-500 dark:bg-slate-700/50 dark:text-slate-400"
+                              : "bg-slate-100 text-slate-500 dark:bg-slate-700/50 dark:text-slate-300"
                           }`}
                         >
                           {item.status}
                         </span>
                       </div>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">
+                      <p className="text-sm text-slate-500 dark:text-slate-300">
                         {item.description}
                       </p>
                     </div>

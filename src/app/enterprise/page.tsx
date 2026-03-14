@@ -202,7 +202,7 @@ export default function EnterprisePage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Explorez la section Enterprise
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 De la s&eacute;curit&eacute; au calcul de ROI, chaque guide couvre
                 un aspect concret du d&eacute;ploiement en organisation.
               </p>
@@ -239,7 +239,7 @@ export default function EnterprisePage() {
                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
                       {page.title}
                     </h3>
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {page.description}
                     </p>
 
@@ -272,7 +272,7 @@ export default function EnterprisePage() {
               <p className="text-4xl font-extrabold text-brand-600 dark:text-brand-400">
                 +55%
               </p>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 Vitesse de completion des taches
               </p>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
@@ -283,7 +283,7 @@ export default function EnterprisePage() {
               <p className="text-4xl font-extrabold text-brand-600 dark:text-brand-400">
                 5-10h
               </p>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 Gagnees par dev par semaine
               </p>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
@@ -294,7 +294,7 @@ export default function EnterprisePage() {
               <p className="text-4xl font-extrabold text-accent-600 dark:text-accent-400">
                 -40%
               </p>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 Temps de revue de code
               </p>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
@@ -305,7 +305,7 @@ export default function EnterprisePage() {
               <p className="text-4xl font-extrabold text-accent-600 dark:text-accent-400">
                 12x
               </p>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 ROI moyen de l&apos;outil
               </p>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
@@ -331,7 +331,7 @@ export default function EnterprisePage() {
                   <Calculator className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">1. Estimez les couts</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   <Link href="/enterprise/tco-calculator" className="text-brand-600 underline dark:text-brand-400">
                     Calculateur TCO
                   </Link>
@@ -345,7 +345,7 @@ export default function EnterprisePage() {
                   <Users className="h-6 w-6 text-accent-600 dark:text-accent-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">2. Lancez un pilote</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   <Link href="/enterprise/team-adoption" className="text-brand-600 underline dark:text-brand-400">
                     Guide d&apos;adoption
                   </Link>
@@ -359,7 +359,7 @@ export default function EnterprisePage() {
                   <Shield className="h-6 w-6 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">3. Cadrez la securite</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   <Link href="/enterprise/security-compliance" className="text-brand-600 underline dark:text-brand-400">
                     Securite et conformite
                   </Link>

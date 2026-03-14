@@ -110,7 +110,7 @@ export const mdxComponents: MDXComponents = {
   ),
   blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
     <blockquote
-      className="my-6 border-l-4 border-brand-500/30 pl-4 italic text-slate-500 dark:text-slate-400"
+      className="my-6 border-l-4 border-brand-500/30 pl-4 italic text-slate-500 dark:text-slate-300"
       {...props}
     />
   ),

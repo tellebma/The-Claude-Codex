@@ -165,7 +165,7 @@ export default function PluginsPage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Explorez les plugins en profondeur
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 Des fondamentaux aux plugins sp&eacute;cialis&eacute;s, chaque guide
                 couvre un aspect essentiel de l&apos;&eacute;cosyst&egrave;me plugins.
                 Suivez-les dans l&apos;ordre ou piochez directement celui qui
@@ -204,7 +204,7 @@ export default function PluginsPage() {
                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
                       {page.title}
                     </h3>
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {page.description}
                     </p>
 
@@ -240,7 +240,7 @@ export default function PluginsPage() {
                   <Puzzle className="h-7 w-7 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <h4 className="mb-2 font-semibold">Plugins</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   Des <strong>applications</strong> install&eacute;es depuis un
                   marketplace. Elles ajoutent des capacit&eacute;s internes :
                   agents, styles, analyseurs.
@@ -251,7 +251,7 @@ export default function PluginsPage() {
                   <Cable className="h-7 w-7 text-accent-500" aria-hidden="true" />
                 </div>
                 <h4 className="mb-2 font-semibold">MCP</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   Des <strong>prises USB</strong> vers le monde ext&eacute;rieur.
                   Elles connectent Claude Code &agrave; GitHub, Slack, Gmail,
                   bases de donn&eacute;es.
@@ -262,7 +262,7 @@ export default function PluginsPage() {
                   <Sparkles className="h-7 w-7 text-emerald-500" aria-hidden="true" />
                 </div>
                 <h4 className="mb-2 font-semibold">Skills</h4>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   Des <strong>recettes</strong> m&eacute;moris&eacute;es. Des
                   instructions Markdown qui enseignent des comportements et
                   workflows &agrave; Claude Code.

@@ -103,7 +103,7 @@ export default function GlossaryPage() {
           </div>
           {query.trim().length > 0 && (
             <p
-              className="mt-2 text-sm text-slate-500 dark:text-slate-400"
+              className="mt-2 text-sm text-slate-500 dark:text-slate-300"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -134,7 +134,7 @@ export default function GlossaryPage() {
                         "flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg",
                         "text-sm font-semibold transition-colors",
                         "text-slate-600 hover:bg-brand-500/10 hover:text-brand-700",
-                        "dark:text-slate-400 dark:hover:bg-brand-500/20 dark:hover:text-brand-300",
+                        "dark:text-slate-300 dark:hover:bg-brand-500/20 dark:hover:text-brand-300",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                       )}
                     >
@@ -153,7 +153,7 @@ export default function GlossaryPage() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           {filteredTerms.length === 0 ? (
             <div className="py-16 text-center">
-              <p className="text-lg text-slate-500 dark:text-slate-400">
+              <p className="text-lg text-slate-500 dark:text-slate-300">
                 Aucun terme trouvé pour &ldquo;{query}&rdquo;
               </p>
               <button

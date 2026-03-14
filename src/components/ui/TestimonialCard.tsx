@@ -55,7 +55,7 @@ export function TestimonialCard({
           </div>
           <div>
             <p className="font-semibold">{author}</p>
-            <p className="text-sm text-slate-500 dark:text-slate-400">{role}</p>
+            <p className="text-sm text-slate-500 dark:text-slate-300">{role}</p>
           </div>
         </div>
         <p className="mt-3 inline-block rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-400">

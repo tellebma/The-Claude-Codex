@@ -81,7 +81,7 @@ export default function ContentIndexPage() {
                   <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
                     {file.frontmatter.title}
                   </h2>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
                     {file.frontmatter.description}
                   </p>
                 </div>

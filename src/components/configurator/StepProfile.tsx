@@ -35,7 +35,7 @@ export function StepProfile({ selected, onSelect }: StepProfileProps) {
   return (
     <div>
       <h3 className="mb-2 text-xl font-bold">Choisissez votre profil</h3>
-      <p className="mb-6 text-sm text-slate-600 dark:text-slate-400">
+      <p className="mb-6 text-sm text-slate-600 dark:text-slate-300">
         Sélectionnez le profil qui correspond le mieux à votre activité
         principale.
       </p>
@@ -64,7 +64,7 @@ export function StepProfile({ selected, onSelect }: StepProfileProps) {
                   "flex h-10 w-10 items-center justify-center rounded-lg transition-colors",
                   isSelected
                     ? "bg-brand-500/20 text-brand-600 dark:text-brand-400"
-                    : "bg-slate-100 text-slate-500 group-hover:bg-brand-500/10 group-hover:text-brand-500 dark:bg-slate-700 dark:text-slate-400"
+                    : "bg-slate-100 text-slate-500 group-hover:bg-brand-500/10 group-hover:text-brand-500 dark:bg-slate-700 dark:text-slate-300"
                 )}
               >
                 <Icon className="h-5 w-5" aria-hidden="true" />
@@ -72,7 +72,7 @@ export function StepProfile({ selected, onSelect }: StepProfileProps) {
 
               <div>
                 <div className="font-semibold">{profile.label}</div>
-                <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                <div className="mt-1 text-xs text-slate-500 dark:text-slate-300">
                   {profile.description}
                 </div>
               </div>

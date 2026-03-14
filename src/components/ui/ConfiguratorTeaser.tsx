@@ -31,7 +31,7 @@ export function ConfiguratorTeaser() {
             Configurez votre{" "}
             <span className="text-gradient">environnement idéal</span>
           </h3>
-          <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-400 sm:text-lg">
+          <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300 sm:text-lg">
             Répondez à quelques questions simples et obtenez une configuration
             Claude Code personnalisée : MCP recommandés, fichier CLAUDE.md
             généré, et conseils adaptés à votre profil.

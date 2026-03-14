@@ -107,7 +107,7 @@ export function TableOfContents() {
       className="hidden xl:block"
     >
       <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
           <List className="h-3.5 w-3.5" aria-hidden="true" />
           Sur cette page
         </div>
@@ -133,7 +133,7 @@ export function TableOfContents() {
                   } ${
                     isActive
                       ? "-ml-px border-brand-500 font-medium text-brand-700 dark:text-brand-400"
-                      : "-ml-px border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-200"
+                      : "-ml-px border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-200"
                   }`}
                 >
                   {heading.text}

@@ -89,7 +89,7 @@ export function Breadcrumb() {
           <li>
             <Link
               href="/"
-              className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
+              className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
               aria-label="Accueil"
             >
               <Home className="h-3.5 w-3.5" aria-hidden="true" />
@@ -113,7 +113,7 @@ export function Breadcrumb() {
                 ) : (
                   <Link
                     href={crumb.href}
-                    className="text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400"
+                    className="text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
                     {crumb.label}
                   </Link>

@@ -138,7 +138,7 @@ export default function UseCasesPage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Ce que Claude Code fait pour les non-dev
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 Trois familles de t&acirc;ches o&ugrave; Claude Code fait gagner
                 des heures chaque semaine, sans &eacute;crire une ligne de code.
               </p>
@@ -152,7 +152,7 @@ export default function UseCasesPage() {
                   <Mail className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">R&eacute;daction</h3>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   Emails, newsletters, posts LinkedIn, comptes-rendus, fiches de poste :
                   gagnez 70% du temps de r&eacute;daction.
                 </p>
@@ -165,7 +165,7 @@ export default function UseCasesPage() {
                   <BarChart3 className="h-6 w-6 text-accent-600 dark:text-accent-400" aria-hidden="true" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">Analyse</h3>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   R&eacute;sum&eacute;s de documents, analyse de donn&eacute;es CSV,
                   veille concurrentielle, tableaux comparatifs.
                 </p>
@@ -178,7 +178,7 @@ export default function UseCasesPage() {
                   <FileText className="h-6 w-6 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">Organisation</h3>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   Plannings, pr&eacute;sentations, templates r&eacute;utilisables,
                   rapports automatis&eacute;s.
                 </p>
@@ -199,7 +199,7 @@ export default function UseCasesPage() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Explorez les cas d&apos;usage
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-400">
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
                 Des prompts pr&ecirc;ts &agrave; copier, des t&eacute;moignages r&eacute;alistes
                 et des tutoriels pas &agrave; pas.
               </p>
@@ -236,7 +236,7 @@ export default function UseCasesPage() {
                     <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
                       {page.title}
                     </h3>
-                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                    <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {page.description}
                     </p>
 

@@ -104,7 +104,7 @@ export function Screenshot({
           />
         </button>
         {caption && (
-          <figcaption className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+          <figcaption className="mt-2 text-center text-sm text-slate-500 dark:text-slate-300">
             {caption}
           </figcaption>
         )}

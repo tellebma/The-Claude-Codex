@@ -67,7 +67,7 @@ export default function HomePage() {
 
             {/* Title */}
             <h1
-              className="text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl"
+              className="text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.1]"
               style={{ color: "var(--hero-text-primary)" }}
             >
               Maîtrisez{" "}

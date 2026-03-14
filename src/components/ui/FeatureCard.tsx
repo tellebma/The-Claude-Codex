@@ -31,7 +31,7 @@ export function FeatureCard({
   gradient = "teal",
   href,
 }: FeatureCardProps) {
-  const sharedClassName = "glass-card group h-full p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg";
+  const sharedClassName = "glass-card group h-full p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950 active:scale-[0.98]";
 
   const content = (
     <>
@@ -44,7 +44,7 @@ export function FeatureCard({
         <Icon className={clsx("h-6 w-6", iconColors[gradient])} aria-hidden="true" />
       </div>
       <h3 className="mb-2 text-lg font-semibold">{title}</h3>
-      <p className="text-base leading-relaxed text-slate-600 dark:text-slate-400">
+      <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
         {description}
       </p>
     </>

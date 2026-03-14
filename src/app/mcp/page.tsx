@@ -764,8 +764,8 @@ claude
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            Continuez votre{" "}
-            <span className="text-gradient">apprentissage</span>
+            Les MCP, ce n&apos;est que le{" "}
+            <span className="text-gradient">début</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
             Les MCP ne sont qu&apos;une piece du puzzle. Decouvrez les Skills

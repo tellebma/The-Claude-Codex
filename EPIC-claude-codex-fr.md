@@ -793,5 +793,5 @@ Liste consolidee de TOUS les quick wins des deux audits, tries par ROI (impact /
 | EPIC 5 — Composants UI & Animations | 9 | 9 | 100% |
 | EPIC 6 — Accessibilite WCAG 2.1 AA | 6 | 6 | 100% |
 | EPIC 7 — Responsive & Mobile | 3 | 3 | 100% |
-| EPIC 8 — Contenu & Semantique SEO | 6 | 0 | 0% |
-| **TOTAL** | **42** | **36** | **86%** |
+| EPIC 8 — Contenu & Semantique SEO | 6 | 6 | 100% |
+| **TOTAL** | **42** | **42** | **100%** |

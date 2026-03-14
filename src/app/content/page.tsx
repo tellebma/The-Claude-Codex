@@ -56,8 +56,31 @@ export default function ContentIndexPage() {
         </div>
       </section>
 
-      {/* Articles list */}
+      {/* Introduction */}
       <section className="py-16 sm:py-20">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-0">
+          <div className="space-y-6 text-lg text-slate-600 dark:text-slate-300">
+            <p>
+              Les articles &eacute;ditoriaux du Claude Codex sont des guides
+              autonomes qui traitent chacun d&apos;un sujet pr&eacute;cis. Contrairement
+              aux pages de documentation structur&eacute;es par section (MCP, Skills,
+              Prompting), ces contenus abordent des th&egrave;mes transversaux :
+              s&eacute;curit&eacute;, co&ucirc;ts r&eacute;els, bonnes pratiques
+              et mythes &agrave; d&eacute;construire.
+            </p>
+            <p>
+              Chaque article est r&eacute;dig&eacute; pour &ecirc;tre lu en 5 &agrave;
+              15 minutes. Vous pouvez les lire dans n&apos;importe quel ordre.
+              Si vous d&eacute;butez, commencez par &quot;Qu&apos;est-ce que Claude
+              Code&quot; dans la section D&eacute;marrer, puis revenez ici pour approfondir
+              les sujets qui vous int&eacute;ressent.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Articles list */}
+      <section className="bg-slate-50/50 py-16 dark:bg-slate-900/50 sm:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
             badge="Articles"

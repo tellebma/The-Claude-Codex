@@ -399,7 +399,7 @@ export default function PromptingPage() {
             <SectionHeading
               badge="Fondamentaux"
               title="Les 5 principes du bon prompting"
-              description="Ces principes sont la base de toute interaction efficace avec Claude Code. Maitrisez-les et vous obtiendrez des resultats 10x meilleurs."
+              description="Ces principes sont la base de toute interaction efficace avec Claude Code. Maitrisez-les pour obtenir des resultats radicalement meilleurs."
             />
           </AnimateOnScroll>
 
@@ -870,8 +870,8 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <SectionHeading
             badge="Et maintenant ?"
-            title="Continuez votre apprentissage"
-            description="Le prompting est une competence qui s'ameliore avec la pratique. Explorez les autres guides pour devenir un expert de Claude Code."
+            title="Le prompting, c'est fait. La suite ?"
+            description="Vos prompts sont maintenant plus precis. Combinez-les avec les MCP pour agir sur vos outils, et les Skills pour automatiser vos workflows."
             centered
           />
 

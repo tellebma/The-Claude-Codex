@@ -233,8 +233,8 @@ export default function GettingStartedPage() {
               Et ensuite ?
             </span>
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Vous &ecirc;tes pr&ecirc;t. Continuez votre{" "}
-              <span className="text-gradient">apprentissage</span>.
+              Vous &ecirc;tes pr&ecirc;t. Passons aux{" "}
+              <span className="text-gradient">choses s&eacute;rieuses</span>.
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
               Maintenant que Claude Code est install&eacute; et configur&eacute;, explorez les

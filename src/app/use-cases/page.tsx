@@ -154,7 +154,7 @@ export default function UseCasesPage() {
                 <h3 className="mb-2 text-lg font-semibold">R&eacute;daction</h3>
                 <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
                   Emails, newsletters, posts LinkedIn, comptes-rendus, fiches de poste :
-                  gagnez 70% du temps de r&eacute;daction.
+                  r&eacute;duisez consid&eacute;rablement le temps de r&eacute;daction.
                 </p>
               </div>
             </AnimateOnScroll>

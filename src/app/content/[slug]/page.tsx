@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
 import { getMdxBySlug, getAllMdxSlugs, getAllMdxFiles } from "@/lib/mdx";
 import { MdxRenderer } from "@/components/mdx/MdxRenderer";
+import { ArticleDates } from "@/components/ui/ArticleDates";
 import { createPageMetadata } from "@/lib/metadata";
 
 interface ContentPageProps {
@@ -71,6 +72,12 @@ export default function ContentPage({ params }: ContentPageProps) {
                 {frontmatter.description}
               </p>
             )}
+            <div className="mx-auto mt-4 max-w-2xl">
+              <ArticleDates
+                datePublished={frontmatter.datePublished}
+                dateModified={frontmatter.dateModified}
+              />
+            </div>
           </div>
         </div>
       </section>

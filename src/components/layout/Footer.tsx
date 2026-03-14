@@ -18,6 +18,7 @@ const footerLinks = {
     { name: "Cas d'usage", href: "/use-cases" },
     { name: "Contenus", href: "/content" },
     { name: "Vision & Futur", href: "/future" },
+    { name: "À propos", href: "/about" },
   ],
   resources: [
     {

@@ -7,6 +7,7 @@ import {
   getAllSectionMdxFiles,
 } from "@/lib/mdx";
 import { MdxRenderer } from "@/components/mdx/MdxRenderer";
+import { ArticleDates } from "@/components/ui/ArticleDates";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
   createArticleSchema,
@@ -155,6 +156,12 @@ export default function AgentsSlugPage({
                 {frontmatter.description}
               </p>
             )}
+            <div className="mx-auto mt-4 max-w-2xl">
+              <ArticleDates
+                datePublished={frontmatter.datePublished}
+                dateModified={frontmatter.dateModified}
+              />
+            </div>
           </div>
         </div>
       </section>

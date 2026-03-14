@@ -275,9 +275,14 @@ export default function EnterprisePage() {
               <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 Vitesse de completion des taches
               </p>
-              <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-                Source : GitHub (2024)
-              </p>
+              <a
+                href="https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-in-the-enterprise-with-accenture/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 block text-xs text-brand-600 underline dark:text-brand-400"
+              >
+                Source : GitHub Research (2024)
+              </a>
             </div>
             <div className="glass-card p-6 text-center">
               <p className="text-4xl font-extrabold text-brand-600 dark:text-brand-400">
@@ -309,7 +314,7 @@ export default function EnterprisePage() {
                 ROI moyen de l&apos;outil
               </p>
               <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-                Estimation sur gain de 7h/semaine
+                Estimation basée sur un gain de 7h/semaine à 50€/h
               </p>
             </div>
           </StaggerChildren>

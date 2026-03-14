@@ -36,6 +36,9 @@ export function createPageMetadata({
     description,
     alternates: {
       canonical: canonicalUrl,
+      languages: {
+        "fr": canonicalUrl,
+      },
     },
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
@@ -885,5 +888,14 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-11",
+  },
+  {
+    path: "/about",
+    title: "À propos du Claude Codex",
+    description:
+      "Qui sommes-nous, pourquoi ce guide existe, et comment contribuer au projet open-source The Claude Codex.",
+    priority: 0.5,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-14",
   },
 ];

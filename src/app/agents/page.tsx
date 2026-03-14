@@ -343,14 +343,13 @@ export default function AgentsPage() {
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            Continuez votre{" "}
-            <span className="text-gradient">apprentissage</span>
+            Vos agents ont besoin{" "}
+            <span className="text-gradient">d&apos;outils</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-            Les agents ne sont qu&apos;une partie de l&apos;&eacute;cosyst&egrave;me
-            Claude Code. D&eacute;couvrez les Skills pour enseigner des
-            comportements, les MCP pour connecter vos outils, et le prompting
-            pour communiquer efficacement.
+            Un agent sans connexions reste limit&eacute;. Branchez les MCP
+            pour donner acc&egrave;s &agrave; GitHub, Slack et vos BDD, puis
+            utilisez les Skills pour formaliser les workflows de vos agents.
           </p>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-3">

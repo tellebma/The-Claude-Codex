@@ -816,8 +816,8 @@ $ claude
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <SectionHeading
             badge="Etapes suivantes"
-            title="Continuez votre apprentissage"
-            description="Maintenant que vous maitrisez les Skills, explorez les deux autres piliers de Claude Code."
+            title="Skills maitrisés. Et maintenant ?"
+            description="Combinez vos Skills avec les MCP pour connecter Claude Code a vos outils, et affinez vos prompts pour tirer le maximum de chaque interaction."
             centered
           />
 

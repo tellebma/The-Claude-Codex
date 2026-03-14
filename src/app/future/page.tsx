@@ -63,7 +63,7 @@ const professions = [
     icon: Palette,
     title: "Industries creatives",
     description:
-      "Du design generatif au montage video assiste, l'IA amplifie la creativite humaine. Les creatifs qui maitrisent ces outils produisent 10x plus, sans sacrifier la qualite.",
+      "Du design generatif au montage video assiste, l'IA amplifie la creativite humaine. Les creatifs qui maitrisent ces outils gagnent en productivite sans sacrifier la qualite.",
     gradient: "amber" as const,
   },
   {

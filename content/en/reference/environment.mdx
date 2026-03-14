@@ -1,0 +1,303 @@
+---
+title: "Environment variables reference"
+description: "Complete reference of all Claude Code environment variables: configuration, API keys, debugging, and advanced settings."
+badge: "Env"
+section: "reference"
+order: 4
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Overview
+
+Claude Code lit plusieurs variables d'environnement au démarrage. Elles permettent de configurer l'outil sans modifier les fichiers `settings.json`, ce qui est idéal pour les environnements CI/CD et les déploiements automatisés.
+
+<Callout type="info" title="Priorité des variables d'environnement">
+Les variables d'environnement ont généralement une priorité **égale ou inférieure** aux options explicitement définies dans `settings.json`. Consultez la documentation de chaque option pour connaître sa précédence exacte.
+</Callout>
+
+---
+
+## Variables essentielles
+
+### `ANTHROPIC_API_KEY`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Clé API Anthropic pour l'authentification |
+| **Requis** | Oui (sauf si connecté via `claude login`) |
+| **Défaut** | Aucun |
+| **Format** | `sk-ant-api03-...` |
+
+```bash
+# Dans votre ~/.bashrc, ~/.zshrc ou ~/.profile
+export ANTHROPIC_API_KEY="sk-ant-api03-xxxxxxxxxxxx"
+
+# Pour une session unique
+ANTHROPIC_API_KEY="sk-ant-..." claude --print "bonjour"
+
+# En CI/CD (GitHub Actions)
+# Définir dans Settings > Secrets > ANTHROPIC_API_KEY
+# Puis dans le workflow :
+env:
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+```
+
+<Callout type="warning" title="Sécurité de la clé API">
+Ne committez jamais `ANTHROPIC_API_KEY` dans un fichier versionné. Utilisez un gestionnaire de secrets (AWS Secrets Manager, HashiCorp Vault, GitHub Secrets) en production. Faites une rotation de la clé immédiatement si elle est exposée.
+</Callout>
+
+---
+
+### `CLAUDE_MODEL`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Modèle Claude à utiliser par défaut |
+| **Requis** | Non |
+| **Défaut** | `claude-sonnet-4-5` |
+| **Format** | Identifiant de modèle Anthropic |
+
+```bash
+# Utiliser Haiku pour les sessions rapides (3x moins cher)
+export CLAUDE_MODEL="claude-haiku-4-5"
+
+# Utiliser Opus pour les tâches complexes
+export CLAUDE_MODEL="claude-opus-4-5"
+
+# Surcharger pour une commande unique
+CLAUDE_MODEL="claude-opus-4-5" claude --print "tâche complexe"
+```
+
+Identifiants de modèles courants :
+- `claude-haiku-4-5` : Rapide et économique
+- `claude-sonnet-4-5` : Équilibre recommandé
+- `claude-opus-4-5` : Raisonnement le plus profond
+
+---
+
+### `MAX_THINKING_TOKENS`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Budget de tokens alloués au raisonnement interne (Extended Thinking) |
+| **Requis** | Non |
+| **Défaut** | `31999` (quand l'Extended Thinking est activé) |
+| **Format** | Nombre entier |
+
+```bash
+# Réduire le budget pour limiter les coûts
+export MAX_THINKING_TOKENS=10000
+
+# Budget maximum pour les tâches complexes
+export MAX_THINKING_TOKENS=31999
+
+# Désactiver le thinking pour une session (valeur minimale)
+export MAX_THINKING_TOKENS=1000
+```
+
+Réduire cette valeur diminue la profondeur du raisonnement et les coûts associés. Pertinent uniquement quand `alwaysThinkingEnabled: true` ou quand Extended Thinking est activé manuellement.
+
+---
+
+## Variables réseau et proxy
+
+### `ANTHROPIC_BASE_URL`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | URL de base personnalisée pour les appels API Anthropic |
+| **Requis** | Non |
+| **Défaut** | `https://api.anthropic.com` |
+| **Format** | URL complète |
+
+```bash
+# Proxy d'entreprise
+export ANTHROPIC_BASE_URL="https://proxy.mon-entreprise.com/anthropic"
+
+# Serveur local (développement/test)
+export ANTHROPIC_BASE_URL="http://localhost:8080"
+
+# Compatible avec les variables du settings.json
+# (ANTHROPIC_BASE_URL surcharge customApiUrl)
+```
+
+---
+
+### `HTTP_PROXY` / `HTTPS_PROXY`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Proxy HTTP/HTTPS pour toutes les connexions sortantes |
+| **Requis** | Non |
+| **Défaut** | Aucun |
+| **Format** | `http://[user:pass@]host:port` |
+
+```bash
+# Proxy sans authentification
+export HTTP_PROXY="http://proxy.entreprise.com:8080"
+export HTTPS_PROXY="http://proxy.entreprise.com:8080"
+
+# Proxy avec authentification
+export HTTPS_PROXY="http://utilisateur:motdepasse@proxy.entreprise.com:8080"
+
+# Proxy SOCKS5
+export HTTPS_PROXY="socks5://proxy.entreprise.com:1080"
+```
+
+---
+
+### `NO_PROXY`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Domaines exclus du proxy (liste séparée par virgules) |
+| **Requis** | Non |
+| **Défaut** | Aucun |
+| **Format** | Liste de domaines séparés par virgules |
+
+```bash
+# Exclure le réseau local du proxy
+export NO_PROXY="localhost,127.0.0.1,*.intranet.entreprise.com"
+
+# Combiner avec HTTPS_PROXY
+export HTTPS_PROXY="http://proxy.entreprise.com:8080"
+export NO_PROXY="localhost,127.0.0.1"
+```
+
+---
+
+## Variables de comportement
+
+### `DISABLE_AUTOUPDATER`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Désactive la vérification et l'installation automatique des mises à jour |
+| **Requis** | Non |
+| **Défaut** | Non défini (mise à jour auto activée) |
+| **Format** | `1` ou `true` pour désactiver |
+
+```bash
+# Désactiver les mises à jour automatiques
+export DISABLE_AUTOUPDATER=1
+
+# Utile en CI/CD pour figer la version de Claude Code
+# et éviter les mises à jour non souhaitées en production
+```
+
+Recommandé en CI/CD pour la reproductibilité des builds. Utilisez une version fixe de Claude Code dans vos pipelines.
+
+---
+
+### `CLAUDE_CODE_MAX_OUTPUT_TOKENS`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Nombre maximum de tokens dans la réponse générée |
+| **Requis** | Non |
+| **Défaut** | Limite du modèle (variable selon le modèle) |
+| **Format** | Nombre entier |
+
+```bash
+# Limiter les réponses longues
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
+
+# Maximum pour les tâches nécessitant de longues réponses
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=16000
+```
+
+---
+
+### `CLAUDE_CONFIG_DIR`
+
+| Champ | Valeur |
+|-------|--------|
+| **Description** | Répertoire alternatif pour les fichiers de configuration Claude Code |
+| **Requis** | Non |
+| **Défaut** | `~/.claude/` |
+| **Format** | Chemin absolu vers un répertoire |
+
+```bash
+# Utiliser un répertoire de configuration alternatif
+export CLAUDE_CONFIG_DIR="/opt/claude-config"
+
+# Utile pour les environnements multi-utilisateurs
+# ou les configurations isolées par projet
+export CLAUDE_CONFIG_DIR="$(pwd)/.claude-config"
+
+# En CI/CD, pour une configuration complètement isolée
+export CLAUDE_CONFIG_DIR="/tmp/claude-ci-config"
+```
+
+---
+
+## Tableau récapitulatif
+
+| Variable | Requis | Défaut | Description |
+|----------|--------|--------|-------------|
+| `ANTHROPIC_API_KEY` | Oui* | Aucun | Clé API Anthropic |
+| `CLAUDE_MODEL` | Non | `claude-sonnet-4-5` | Modèle par défaut |
+| `MAX_THINKING_TOKENS` | Non | `31999` | Budget Extended Thinking |
+| `ANTHROPIC_BASE_URL` | Non | `https://api.anthropic.com` | URL API personnalisée |
+| `HTTP_PROXY` | Non | Aucun | Proxy HTTP |
+| `HTTPS_PROXY` | Non | Aucun | Proxy HTTPS |
+| `NO_PROXY` | Non | Aucun | Exclusions proxy |
+| `DISABLE_AUTOUPDATER` | Non | Aucun | Désactive les mises à jour auto |
+| `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | Non | Limite modèle | Max tokens en sortie |
+| `CLAUDE_CONFIG_DIR` | Non | `~/.claude/` | Répertoire de config alternatif |
+
+*Sauf si authentifié via `claude login` (compte Claude.ai Max)
+
+---
+
+## Examples de configuration par contexte
+
+### Développement local
+
+```bash
+# ~/.zshrc ou ~/.bashrc
+export ANTHROPIC_API_KEY="sk-ant-api03-..."
+export CLAUDE_MODEL="claude-sonnet-4-5"
+
+# Optionnel : Extended Thinking avec budget réduit
+export MAX_THINKING_TOKENS=10000
+```
+
+### CI/CD (GitHub Actions)
+
+```yaml
+# .github/workflows/claude.yml
+jobs:
+  claude-task:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CLAUDE_MODEL: claude-haiku-4-5
+      DISABLE_AUTOUPDATER: "1"
+      CLAUDE_CODE_MAX_OUTPUT_TOKENS: "4096"
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install -g @anthropic-ai/claude-code
+      - run: claude --print --max-turns 5 "Vérifie la qualité du code"
+```
+
+### Environnement d'entreprise avec proxy
+
+```bash
+# /etc/environment ou profil système
+ANTHROPIC_API_KEY="sk-ant-..."
+ANTHROPIC_BASE_URL="https://proxy-ia.mon-entreprise.com"
+HTTPS_PROXY="http://proxy-web.mon-entreprise.com:8080"
+NO_PROXY="localhost,127.0.0.1,*.interne.mon-entreprise.com"
+DISABLE_AUTOUPDATER=1
+CLAUDE_CONFIG_DIR="/opt/claude-code/config"
+```
+
+---
+
+## Next steps
+
+- [Cheatsheet : Référence rapide](/reference/cheatsheet) : Commandes slash et raccourcis clavier
+- [CLI : Référence complète](/reference/cli) : Tous les flags de la commande `claude`
+- [settings.json : Guide complet](/reference/settings) : Configuration avancée

@@ -38,7 +38,7 @@ export async function generateMetadata({
   params,
 }: EnterpriseSlugPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const { frontmatter } = getSectionMdxBySlug(SECTION, resolvedParams.slug);
+  const { frontmatter } = getSectionMdxBySlug(SECTION, resolvedParams.slug, resolvedParams.locale);
 
   return createPageMetadata({
     title: frontmatter.title,
@@ -53,8 +53,8 @@ export async function generateMetadata({
 /**
  * Resolve previous and next articles within the Enterprise section.
  */
-function getAdjacentPages(currentSlug: string) {
-  const allFiles = getAllSectionMdxFiles(SECTION);
+function getAdjacentPages(currentSlug: string, locale: string) {
+  const allFiles = getAllSectionMdxFiles(SECTION, locale);
   const currentIndex = allFiles.findIndex(
     (f) => f.slug === `${SECTION}/${currentSlug}`
   );
@@ -82,8 +82,8 @@ export default async function EnterpriseSlugPage({
 }: EnterpriseSlugPageProps) {
   const resolvedParams = await params;
   setRequestLocale(resolvedParams.locale);
-  const { frontmatter, content } = getSectionMdxBySlug(SECTION, resolvedParams.slug);
-  const { prev, next } = getAdjacentPages(resolvedParams.slug);
+  const { frontmatter, content } = getSectionMdxBySlug(SECTION, resolvedParams.slug, resolvedParams.locale);
+  const { prev, next } = getAdjacentPages(resolvedParams.slug, resolvedParams.locale);
   const tCommon = await getTranslations("common");
   const tBreadcrumb = await getTranslations("breadcrumb");
 

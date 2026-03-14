@@ -38,7 +38,7 @@ export default async function ContentIndexPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const allFiles = getAllMdxFiles();
+  const allFiles = getAllMdxFiles(locale);
 
   return (
     <>

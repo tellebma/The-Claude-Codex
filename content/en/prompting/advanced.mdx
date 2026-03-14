@@ -1,0 +1,511 @@
+---
+title: "Advanced prompting techniques"
+description: "Advanced prompting techniques for Claude Code: chain-of-thought, few-shot examples, system prompts, and complex task decomposition."
+section: "prompting"
+order: 6
+datePublished: "2026-03-10"
+dateModified: "2026-03-11"
+---
+
+## Au-delà des bases
+
+Vous maîtrisez les [fondamentaux du prompting](/prompting/basics) et les [directives avancées](/prompting/directives). Il est temps d'explorer les techniques qui séparent les utilisateurs avancés des experts. Cette page présente d'abord les **patterns par use case**, des séquences de prompts éprouvées pour les situations les plus fréquentes, puis les techniques avancées de raisonnement et d'orchestration.
+
+<Callout type="info" title="Quand utiliser ces techniques">
+Les techniques avancées ne sont pas nécessaires pour des tâches simples. Utilisez-les quand :
+- La tâche implique un raisonnement multi-étapes
+- Vous orchestrez plusieurs agents
+- Le résultat nécessite une réflexion approfondie
+- Vos prompts simples ne donnent pas le résultat attendu
+</Callout>
+
+## Patterns par use case
+
+Ces patterns sont des séquences de prompts éprouvées pour les situations les plus fréquentes en développement. Chaque pattern est une "recette" : suivez les étapes, adaptez le contexte, obtenez des résultats consistants.
+
+### Pattern debugging
+
+La principale erreur en debugging avec Claude : donner trop d'informations vagues sans structure. Ce pattern impose une discipline qui fonctionne.
+
+```markdown
+# Étape 1 : Reproduction du problème
+"Je rencontre ce problème : [description symptôme précis].
+Stack : [technologies]
+Erreur exacte : [message d'erreur complet]
+Code concerné : [coller le code minimal qui reproduit le problème]
+
+Ne propose pas encore de solution. Dis-moi d'abord :
+1. Ce que tu comprends du problème
+2. Quelles informations supplémentaires tu aurais besoin pour diagnostiquer"
+```
+
+```markdown
+# Étape 2 : Isolation
+"Voici les informations complémentaires : [répondre aux questions de Claude].
+Maintenant, liste les 3-5 causes possibles par ordre de probabilité.
+Pour chaque cause, comment la valider en 2 minutes ?"
+```
+
+```markdown
+# Étape 3 : Fix ciblé
+"La cause est confirmée : [cause identifiée].
+Génère uniquement le fix minimal pour ce problème précis.
+Ne refactorise pas le reste du code.
+Explique pourquoi ce fix résout le problème."
+```
+
+```markdown
+# Étape 4 : Test de régression
+"Fix appliqué et validé. Génère un test qui aurait détecté ce bug
+avant qu'il arrive en production. Le test doit reproduire exactement
+les conditions qui déclenchaient le bug."
+```
+
+**Résultat attendu** : un diagnostic précis, un fix chirurgical, un test de régression. Pas de "j'ai réécrit tout le module".
+
+### Pattern refactoring
+
+```markdown
+# Étape 1 : Analyse d'impact
+"Analyse ce code [coller] et évalue son état actuel :
+1. Quels sont les problèmes de lisibilité, testabilité et maintenabilité ?
+2. Quels fichiers seraient impactés par un refactoring ?
+3. Quels risques de régression existe-t-il ?
+4. Propose un plan de refactoring en étapes indépendantes (chacune déployable séparément)"
+```
+
+```markdown
+# Étape 2 : Migration progressive (pour chaque étape du plan)
+"Étape 1 du refactoring : [titre de l'étape].
+Contraintes :
+- Conserve le même comportement observable (les tests doivent passer)
+- Chaque étape doit être indépendamment déployable
+- Pas de changement de logique métier dans cette étape, uniquement la structure
+Génère le code de cette étape uniquement."
+```
+
+```markdown
+# Étape 3 : Validation
+"Étape 1 déployée. Avant de passer à l'étape 2 :
+1. Quels tests dois-je lancer pour valider que rien n'a régressé ?
+2. Y a-t-il des edge cases dans l'étape 1 que je devrais vérifier manuellement ?"
+```
+
+### Pattern code review
+
+```markdown
+# Prompt complet pour une code review structurée
+"Tu es un développeur senior. Review ce code [coller] en 4 passes successives :
+
+Passe 1 : Structure :
+- L'organisation des responsabilités est-elle claire ?
+- Les noms sont-ils expressifs et cohérents ?
+- La lisibilité est-elle bonne (nesting, longueur des fonctions) ?
+
+Passe 2 : Logique :
+- Y a-t-il des bugs potentiels ?
+- Les edge cases sont-ils gérés (null, vide, limite) ?
+- La logique métier est-elle correcte ?
+
+Passe 3 : Sécurité :
+- Y a-t-il des inputs non validés ?
+- Des données sensibles exposées ?
+- Des injections possibles ?
+
+Passe 4 : Performance :
+- Y a-t-il des requêtes N+1 ?
+- Des calculs qui pourraient être mis en cache ?
+- Des opérations synchrones bloquantes évitables ?
+
+Pour chaque issue : sévérité (CRITICAL/HIGH/MEDIUM/LOW), description, correction suggérée."
+```
+
+**Résultat attendu** : un rapport structuré par catégorie, priorisé par sévérité, avec des corrections actionnables.
+
+### Pattern migration
+
+```markdown
+# Étape 1 : Inventaire complet
+"Analyse le codebase pour établir l'inventaire de migration [technologie A] → [technologie B].
+
+Pour chaque fichier/module :
+- Nom et chemin
+- Complexité de migration estimée (1 = trivial, 5 = complexe)
+- Dépendances qui bloquent la migration
+- Risques spécifiques
+
+Génère un tableau trié : d'abord les quick wins (complexité 1-2), puis les complexes."
+```
+
+```markdown
+# Étape 2 : Plan par phases
+"Sur la base de l'inventaire, génère un plan de migration en phases.
+Contraintes :
+- Chaque phase doit laisser le projet en état déployable
+- Les dépendances circulaires doivent être identifiées et résolues
+- Estimation de durée par phase pour une équipe de [X] développeurs
+- Définir les critères de succès (métriques) pour chaque phase"
+```
+
+```markdown
+# Étape 3 : Exécution module par module
+"Phase 1 validée. Commence la migration de [module spécifique].
+Règles :
+- Coexistence avec l'ancienne version pendant la transition
+- Feature flag pour basculer progressivement
+- Tests de parité : vérifier que le comportement est identique avant/après"
+```
+
+```markdown
+# Étape 4 : Vérification post-migration
+"Migration de [module] terminée.
+Génère :
+1. Les tests de smoke pour valider le module migré
+2. La checklist de vérification manuelle
+3. Le plan de rollback si un problème est détecté en production"
+```
+
+### Pattern tests TDD
+
+```markdown
+# Étape 1 : Identification des cas de test
+"Avant d'écrire une ligne d'implémentation, identifie tous les cas de test
+pour cette fonctionnalité : [description de la feature].
+
+Classe-les en :
+- Cas nominaux (happy path)
+- Cas d'erreur (inputs invalides, ressource inexistante)
+- Edge cases (vide, limite, concurrence)
+- Cas de régression (bugs connus à ne pas réintroduire)
+
+Pour chaque cas : description, input, output attendu."
+```
+
+```markdown
+# Étape 2 : Écriture des tests (RED)
+"Sur la base des cas identifiés, écris les tests avec [Vitest/Jest/pytest].
+Les tests doivent échouer pour l'instant (RED).
+Utilise des noms de test descriptifs : 'should [expected behavior] when [condition]'
+Mock uniquement les dépendances externes (base de données, API)."
+```
+
+```markdown
+# Étape 3 : Implémentation minimale (GREEN)
+"Tests écrits. Maintenant implémente le minimum de code pour faire passer ces tests.
+Pas d'optimisation prématurée, pas de features non testées.
+Le code peut être 'moche' tant qu'il est correct."
+```
+
+```markdown
+# Étape 4 : Refactoring (IMPROVE)
+"Tous les tests passent. Phase de refactoring :
+1. Nettoie le code sans changer le comportement
+2. Extrais les duplications
+3. Améliore les noms
+4. Vérifie que les tests passent toujours après chaque changement"
+```
+
+## Chain-of-thought : forcer le raisonnement
+
+La technique du **chain-of-thought** (chaîne de pensée) demande à Claude de détailler son raisonnement step by step avant de donner sa réponse finale. Cela améliore considérablement la qualité des réponses pour les tâches qui nécessitent de l'analyse ou de la logique.
+
+```markdown
+# Sans chain-of-thought (résultat médiocre)
+"Quelle est la meilleure architecture pour notre API ?"
+
+# Avec chain-of-thought (résultat approfondi)
+"Analyse notre besoin d'architecture API. Raisonne step by step :
+
+1. Identifie les contraintes actuelles (volume, latence, coût)
+2. Liste les options viables (REST, GraphQL, tRPC, gRPC)
+3. Pour chaque option, évalue :
+   - Performance avec notre volume de données
+   - Complexité d'implémentation pour l'équipe
+   - Compatibilité avec notre stack Next.js/TypeScript
+   - Facilité de testing et de documentation
+4. Compare les trade-offs dans un tableau
+5. Formule ta recommandation avec les arguments clés
+
+Montre ton raisonnement à chaque étape."
+```
+
+<Card title="Pourquoi ça marche" variant="highlight">
+Le chain-of-thought force Claude à considérer tous les aspects d'un problème avant de conclure. Sans cette directive, Claude peut sauter directement à une conclusion sans analyser toutes les options. C'est l'équivalent de la différence entre répondre "sur le fil" et prendre le temps de réfléchir.
+</Card>
+
+## Few-shot avancé : apprendre par l'exemple
+
+Le **few-shot prompting** va au-delà de simples exemples de format. En fournissant des exemples qui montrent le *raisonnement* attendu, vous enseignez à Claude votre logique de décision.
+
+```markdown
+Analyse les composants React pour identifier les problèmes de performance.
+Here's how je veux que tu raisonnes :
+
+## Example 1
+Composant : un UserList qui fait un fetch à chaque re-render
+Analyse : Le composant n'a pas de dépendances stables pour son useEffect.
+À chaque re-render du parent, le fetch se relance inutilement.
+Impact : requêtes réseau excessives, flickering de l'UI, charge serveur.
+Solution : extraire le fetch dans useSWR ou React Query avec une clé
+de cache stable. Ajouter un staleTime de 5 minutes.
+
+## Example 2
+Composant : un Dashboard qui rend 50 composants enfants
+Analyse : Chaque changement de state dans le Dashboard provoque
+le re-render des 50 enfants, même ceux qui n'ont pas changé.
+Impact : lag perceptible, surtout sur mobile.
+Solution : React.memo sur les enfants stables, useCallback sur
+les handlers passés en props, virtualisation pour les listes longues.
+
+## Maintenant, analyse ce composant :
+[Copiez votre composant ici]
+```
+
+## Step-by-step decomposition
+
+La **décomposition step by step** est la technique la plus fiable pour les tâches complexes. Au lieu de donner toute la tâche en un prompt, vous guidez Claude à travers chaque étape avec des checkpoints de validation.
+
+<Steps>
+<Step title="Définir le plan" stepNumber={1}>
+```markdown
+"Je veux implémenter un système d'authentification JWT complet.
+Avant de coder, propose-moi un plan d'implémentation en phases.
+Pour chaque phase : nom, description, fichiers à créer, dépendances."
+```
+</Step>
+
+<Step title="Valider le plan" stepNumber={2}>
+```markdown
+"Le plan est bon. Ajuste la Phase 2 pour utiliser des refresh tokens
+avec rotation (pas de refresh token statique). Lance la Phase 1."
+```
+</Step>
+
+<Step title="Exécuter phase par phase" stepNumber={3}>
+```markdown
+"Phase 1 terminée et validée. Passe à la Phase 2.
+Rappel : utilise le pattern repository qu'on a mis en place
+dans le service User à la phase 1."
+```
+</Step>
+
+<Step title="Valider et itérer" stepNumber={4} isLast>
+```markdown
+"Avant de passer à la Phase 3, vérifie :
+- Les tests de la Phase 2 passent-ils ?
+- Le refresh token rotation est-il implémenté correctement ?
+- Y a-t-il des failles de sécurité ?"
+```
+</Step>
+</Steps>
+
+## Prompting multi-agents
+
+Le prompting multi-agents est la technique la plus puissante pour les projets complexes. Au lieu de tout faire dans une seule conversation, vous orchestrez plusieurs [agents spécialisés](/agents/what-are-agents) qui travaillent en parallèle sur différents aspects du problème.
+
+### Comment formuler des tâches pour les subagents
+
+Chaque subagent a besoin d'un prompt autonome et complet. Le subagent ne partage pas le contexte de la conversation principale, il démarre à froid.
+
+```markdown
+# Mauvais (suppose un contexte que le subagent n'a pas)
+"Vérifie la sécurité du code qu'on vient d'écrire"
+
+# Bon (prompt autonome pour un subagent)
+"Tu es un expert en sécurité applicative (OWASP Top 10).
+Analyse les fichiers suivants pour détecter des vulnérabilités :
+- src/controllers/auth.controller.ts
+- src/services/auth.service.ts
+- src/middlewares/auth.middleware.ts
+
+Vérifie spécifiquement :
+1. Injection (SQL, NoSQL, command injection)
+2. Authentification cassée (tokens prédictibles, pas de rate limiting)
+3. Exposition de données sensibles (password hash dans les réponses)
+4. XSS (sanitization des inputs, CSP headers)
+
+Format de sortie :
+| Sévérité | Fichier | Ligne | Vulnérabilité | Correction |
+|----------|---------|-------|---------------|------------|"
+```
+
+### Orchestration parallèle
+
+Lancez plusieurs agents en parallèle quand leurs tâches sont indépendantes.
+
+```markdown
+# Dans votre prompt principal, demandez à Claude de lancer en parallèle :
+
+"Lance 3 analyses en parallèle sur le module d'authentification :
+
+Agent 1 (code-reviewer) :
+- Qualité du code, patterns, maintenabilité
+- Respect des conventions du projet (CLAUDE.md)
+- Suggestions d'amélioration
+
+Agent 2 (security-reviewer) :
+- Analyse OWASP Top 10
+- Vérification des secrets et tokens
+- Surface d'attaque de chaque endpoint
+
+Agent 3 (tdd-guide) :
+- Couverture de tests actuelle
+- Tests manquants critiques
+- Cas limites non couverts
+
+Synthétise les résultats des 3 agents dans un rapport unifié."
+```
+
+<Callout type="tip" title="Parallélisme efficace">
+Les agents indépendants peuvent travailler simultanément, ce qui divise le temps de travail. Utilisez cette technique pour les revues de code, les analyses de sécurité et les audits de performance. Consultez le guide sur l'[orchestration avancée](/agents/orchestration) pour plus de détails.
+</Callout>
+
+## Extended Thinking et Plan Mode
+
+Claude Code dispose de deux fonctionnalités qui amplifient la qualité du raisonnement pour les tâches complexes.
+
+### Extended Thinking
+
+L'Extended Thinking permet à Claude de réfléchir en profondeur avant de répondre. Il réserve de l'espace dans sa fenêtre de contexte pour un raisonnement interne plus élaboré.
+
+```bash
+# Activer/désactiver Extended Thinking
+Alt+T (Linux/Windows) ou Option+T (macOS)
+
+# Configurer via variable d'environnement
+export MAX_THINKING_TOKENS=10000
+
+# Voir la pensée de Claude
+Ctrl+O (mode verbose)
+```
+
+**Quand l'utiliser** :
+- Décisions d'architecture complexes
+- Debugging de problèmes difficiles à reproduire
+- Analyse de code avec de multiples interactions
+- Refactoring de grande envergure
+
+### Plan Mode
+
+Le Plan Mode demande à Claude de proposer un plan structuré avant d'agir. C'est particulièrement utile pour les tâches qui touchent plusieurs fichiers ou modules.
+
+```markdown
+# Activez le Plan Mode puis demandez :
+"Je veux migrer notre state management de Redux vers Zustand.
+Propose un plan de migration détaillé avant de commencer.
+
+Pour chaque étape du plan, indique :
+- Les fichiers impactés
+- Les changements à effectuer
+- Les risques de régression
+- L'estimation de complexité (simple/moyen/complexe)"
+```
+
+<Card title="Extended Thinking + Plan Mode = combo gagnant" variant="accent">
+Pour les tâches les plus complexes, activez les deux en même temps. Extended Thinking améliore la qualité de l'analyse, et Plan Mode structure l'exécution. C'est le duo idéal pour les refactorings majeurs, les migrations de stack ou les choix d'architecture.
+</Card>
+
+## Debugging de prompts
+
+Quand Claude ne fait pas ce que vous attendez, le problème vient rarement de Claude, il vient presque toujours du prompt. Voici une méthode systématique pour diagnostiquer et corriger les problèmes.
+
+### Étape 1 : Identifiez le type de problème
+
+| Symptôme | Cause probable | Solution |
+|----------|---------------|----------|
+| Résultat trop vague | Prompt trop vague | Ajoutez des détails et contraintes |
+| Mauvaise stack/format | Pas de contexte technique | Précisez la stack ou utilisez CLAUDE.md |
+| Code incomplet | Tâche trop grosse | Décomposez en étapes |
+| Ignore vos contraintes | Contraintes noyées dans le texte | Utilisez ALWAYS/NEVER en début de prompt |
+| Résultat incohérent | Contraintes contradictoires | Vérifiez la cohérence de vos instructions |
+
+### Étape 2 : La technique du "montre-moi ta compréhension"
+
+Quand vous n'êtes pas sûr que Claude a bien compris votre demande, demandez-lui de reformuler avant d'agir.
+
+```markdown
+"Avant de coder, reformule ce que tu as compris de ma demande :
+- Quel est l'objectif principal ?
+- Quelles sont les contraintes techniques ?
+- Quel format de sortie est attendu ?
+- Quels sont les edge cases à gérer ?
+
+Si ta compréhension est correcte, proceed. Sinon, dis-moi ce qui n'est pas clair."
+```
+
+### Étape 3 : L'itération ciblée
+
+Si le résultat n'est pas satisfaisant, ne repartez pas de zéro. Identifiez précisément ce qui ne va pas et demandez une correction ciblée.
+
+```markdown
+# Mauvais (repartir de zéro)
+"Non, ce n'est pas ce que je voulais. Recommence."
+
+# Bon (correction ciblée)
+"Le composant est bien structuré. Voici 2 corrections :
+1. Le state loading doit être géré avec un skeleton, pas un spinner
+2. La pagination doit être cursor-based (pas offset-based) car la liste
+   peut être modifiée pendant la navigation"
+```
+
+## Le prompting contextuel
+
+Le **prompting contextuel** consiste à exploiter le codebase comme contexte implicite. Claude Code a accès à votre projet, utilisez cette capacité.
+
+```markdown
+# Prompt classique (tout est explicite)
+"Crée un composant Card en React avec TypeScript, Tailwind CSS,
+qui accepte les props : title, description, icon, variant..."
+
+# Prompt contextuel (s'appuie sur le codebase)
+"Crée un composant Card qui suit les mêmes patterns que
+src/components/ui/Callout.tsx (même structure de props, même style
+Tailwind, même gestion des variantes avec CVA).
+Variantes : default, accent, highlight.
+Utilise le design system existant dans globals.css."
+```
+
+<Callout type="tip" title="Le pouvoir du 'comme dans...'">
+La formule "comme dans [fichier existant]" est extrêmement puissante. Elle dit à Claude d'aller lire un fichier de référence et de reproduire le même pattern. C'est plus fiable que de décrire le pattern vous-même, car Claude voit directement le code source.
+</Callout>
+
+### Prompting avec référence croisée
+
+```markdown
+"Crée le endpoint GET /api/projects/:id/tasks en suivant :
+- Le pattern du controller dans src/controllers/user.controller.ts
+- La validation Zod comme dans src/schemas/user.schema.ts
+- Les tests comme dans src/controllers/__tests__/user.controller.test.ts
+
+La seule différence : ajoute un filtre par statut (query param ?status=todo)
+et une pagination cursor-based."
+```
+
+## Summary des techniques avancées
+
+| Technique | Use cases | Complexité |
+|-----------|------------|------------|
+| Pattern debugging | Bug difficile à localiser | Faible à utiliser |
+| Pattern refactoring | Code legacy à améliorer | Moyenne |
+| Pattern code review | Revue structurée en 4 passes | Faible |
+| Pattern migration | Changement de technologie | Élevée |
+| Pattern TDD | Toute nouvelle fonctionnalité | Faible à utiliser |
+| Chain-of-thought | Analyse, décision, architecture | Moyenne |
+| Few-shot avancé | Format de sortie précis, style de code | Moyenne |
+| Décomposition | Features complexes, migrations | Forte en impact |
+| Multi-agents | Revue de code, audits, gros projets | Élevée |
+| Prompting contextuel | Respect des patterns du projet | Faible |
+
+## Next steps
+
+Vous maîtrisez maintenant les techniques avancées de prompting. Explorez les sujets connexes pour devenir un expert complet.
+
+- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) : Activez le raisonnement profond pour les décisions complexes
+- [Prompt chaining et orchestration](/prompting/chaining-and-agents) : Pipelines complets et architectures fan-out/fan-in
+- [Gestion du contexte](/prompting/context-management) : Maîtrisez la fenêtre de 200K tokens
+- [Comprendre les agents](/agents/what-are-agents) : Plongez dans le fonctionnement des agents et subagents
+- [Orchestration multi-agents avancée](/agents/orchestration) : Patterns d'orchestration pour projets complexes
+- [Créer un Skill custom](/skills/create-custom) : Transformez vos techniques en workflows automatisés
+- [Installer les MCP essentiels](/mcp/setup) : Étendez Claude avec des outils externes via les MCP
+- [Top plugins pour le développement](/plugins/best-security) : Sécurité et qualité de code avec les plugins
+- [Configurateur interactif](/configurator) : Générez votre configuration optimale en quelques minutes

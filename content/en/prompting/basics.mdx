@@ -1,0 +1,481 @@
+---
+title: "Prompting basics"
+description: "Learn the fundamentals of prompting with Claude Code: structure, clarity, context, and how to get the results you want from AI."
+section: "prompting"
+order: 1
+datePublished: "2026-03-10"
+dateModified: "2026-03-11"
+---
+
+## Comment Claude interprète vos messages
+
+Quand vous écrivez un prompt à Claude Code, il ne se contente pas de lire vos mots, il analyse le **contexte**, la **structure** et l'**intention** derrière votre message. Comprendre ce mécanisme est la clé pour obtenir des résultats précis dès le premier essai.
+
+<Callout type="info" title="L'analogie du brief créatif">
+Imaginez que vous briefez un freelance talentueux mais qui ne connaît rien à votre projet. Plus votre brief est clair et structuré, plus le livrable sera conforme à vos attentes. Un brief vague produit un résultat vague. Un brief précis produit un résultat précis. Le prompting, c'est exactement ça : l'art de rédiger le brief parfait.
+</Callout>
+
+Claude Code prend en compte plusieurs couches d'information pour interpréter votre demande :
+
+1. **Le contexte du projet** : le fichier `CLAUDE.md`, les fichiers ouverts, le codebase
+2. **L'historique de la conversation** : les échanges précédents dans la session
+3. **Votre prompt actuel** : le message que vous venez d'écrire
+4. **Les instructions système** : les Skills et directives chargées
+
+Plus vous donnez de contexte explicite dans votre prompt, moins Claude doit deviner, et moins il fait d'erreurs.
+
+## Structure d'un bon prompt
+
+Un prompt efficace suit une structure en 4 parties. You don't need de toutes les utiliser à chaque fois, mais les connaître vous permet de les activer quand la situation l'exige.
+
+<Steps>
+<Step title="Le contexte" stepNumber={1}>
+Décrivez la situation : quel projet, quelle technologie, quel problème. Claude a besoin de comprendre *où* il intervient.
+
+```markdown
+Je travaille sur une API REST en Node.js/Express avec TypeScript.
+La base de données est PostgreSQL via Prisma.
+Le module d'authentification utilise JWT avec refresh tokens.
+```
+</Step>
+
+<Step title="La tâche" stepNumber={2}>
+Décrivez précisément ce que vous attendez. Utilisez des verbes d'action : "crée", "corrige", "analyse", "refactorise", "explique".
+
+```markdown
+Crée un middleware Express qui vérifie le JWT dans le header Authorization,
+extrait l'utilisateur et l'attache à req.user.
+```
+</Step>
+
+<Step title="Les contraintes" stepNumber={3}>
+Spécifiez les règles, limites et exigences non fonctionnelles. C'est ce qui transforme une réponse générique en solution adaptée à *votre* projet.
+
+```markdown
+Contraintes :
+- Gestion des erreurs : retourne 401 si token absent, 403 si token invalide/expiré
+- TypeScript strict (pas de any)
+- Le middleware doit être testable unitairement (injection du service JWT)
+- Log les tentatives d'accès invalides avec le timestamp et l'IP
+```
+</Step>
+
+<Step title="Le format de sortie" stepNumber={4} isLast>
+Dites à Claude comment structurer sa réponse. Code seul ? Avec explications ? En plusieurs fichiers ?
+
+```markdown
+Génère :
+1. Le middleware dans src/middlewares/auth.middleware.ts
+2. Les types dans src/types/auth.types.ts
+3. Les tests unitaires dans src/middlewares/__tests__/auth.middleware.test.ts
+4. Un exemple d'utilisation dans une route protégée
+```
+</Step>
+</Steps>
+
+## Les 5 principes clés du prompting
+
+Ces principes sont la base de toute interaction efficace avec Claude Code. Maîtrisez-les et vous obtiendrez des résultats considérablement meilleurs.
+
+### Principe 1 : Soyez précis
+
+La précision est le facteur numéro un de la qualité d'une réponse. Chaque détail que vous ajoutez élimine une ambiguïté.
+
+```markdown
+# Vague (mauvais)
+"Fais-moi un formulaire"
+
+# Précis (bon)
+"Crée un formulaire d'inscription en React avec TypeScript.
+Champs : email (requis, format validé), mot de passe (requis, min 8 caractères,
+1 majuscule, 1 chiffre), confirmation du mot de passe.
+Utilise react-hook-form avec validation Zod.
+Style avec Tailwind CSS, responsive mobile-first.
+Affiche les erreurs inline sous chaque champ."
+```
+
+### Principe 2 : Donnez du contexte
+
+Claude ne voit pas votre écran et ne connaît pas votre historique. Partagez le contexte pertinent : la stack, l'architecture, les conventions, le problème rencontré.
+
+```markdown
+# Sans contexte (mauvais)
+"Corrige ce bug"
+
+# Avec contexte (bon)
+"J'ai une erreur TypeError: Cannot read property 'map' of undefined
+dans mon composant ProductList.tsx à la ligne 42.
+Ce composant reçoit un prop 'products' depuis une API REST via useSWR.
+L'erreur apparaît au premier rendu, avant que l'API réponde.
+Le composant n'a pas de gestion de l'état de chargement."
+```
+
+### Principe 3 : Spécifiez le format
+
+Indiquez clairement la structure de la réponse souhaitée. Cela évite les allers-retours et vous fait gagner du temps.
+
+```markdown
+"Génère la réponse au format suivant :
+1. Un résumé en 2-3 phrases
+2. Le code complet avec commentaires inline
+3. Un tableau des dépendances nécessaires (nom | version | usage)
+4. Les instructions d'installation step by step"
+```
+
+### Principe 4 : Itérez progressivement
+
+Ne demandez pas tout d'un coup. Construisez votre solution step by step, en vérifiant chaque étape avant de passer à la suivante.
+
+```markdown
+# Itération 1
+"Crée un composant Button avec les props : label, onClick, disabled"
+
+# Itération 2
+"Ajoute les variantes de couleur : primary, secondary, danger, ghost"
+
+# Itération 3
+"Ajoute le support des icônes (à gauche et à droite) et un état loading"
+
+# Itération 4
+"Écris les tests unitaires avec Testing Library"
+```
+
+### Principe 5 : Vérifiez les résultats
+
+Demandez à Claude de vérifier son propre travail, d'expliquer ses choix ou de signaler les risques potentiels.
+
+```markdown
+"Après avoir généré le code, vérifie :
+- Qu'il compile sans erreur TypeScript
+- Que tous les cas limites sont gérés (null, undefined, tableau vide)
+- Qu'il n'y a pas de faille de sécurité évidente
+- Que les performances sont acceptables pour une liste de 10 000 éléments"
+```
+
+## Examples avant/après : de débutant à optimisé
+
+Voici des transformations concrètes qui montrent comment un prompt médiocre devient excellent.
+
+<Card title="Exemple 1 : Créer un composant" variant="accent">
+
+**Avant** (prompt débutant) :
+```markdown
+"Fais-moi un composant de navigation"
+```
+
+**Après** (prompt optimisé) :
+```markdown
+"Crée un composant Navbar responsive en React/TypeScript avec Tailwind CSS.
+- Desktop : logo à gauche, liens de navigation au centre, bouton CTA à droite
+- Mobile : burger menu avec sidebar animée (framer-motion)
+- Dark mode toggle avec next-themes
+- Lien actif mis en surbrillance selon le pathname (usePathname de Next.js)
+- Accessible : aria-labels, focus visible, navigation au clavier
+- Les liens : Accueil, Fonctionnalités, Tarifs, Blog, Contact"
+```
+</Card>
+
+<Card title="Exemple 2 : Débugger une erreur" variant="accent">
+
+**Avant** (prompt débutant) :
+```markdown
+"Ça marche pas, aide-moi"
+```
+
+**Après** (prompt optimisé) :
+```markdown
+"Mon formulaire de connexion ne soumet pas les données.
+Comportement attendu : au clic sur 'Connexion', les données sont envoyées à POST /api/auth/login.
+Comportement observé : rien ne se passe, pas de requête réseau dans l'onglet Network.
+Stack : React 18, react-hook-form, axios.
+J'ai vérifié : le handleSubmit est bien attaché au form, pas d'erreur console.
+Voici le composant LoginForm.tsx : [code]"
+```
+</Card>
+
+## Examples par profil : développeur, entrepreneur, étudiant, créatif
+
+Le prompting efficace s'adapte à votre contexte. Voici des exemples concrets par type de tâche et de profil.
+
+### Profil développeur
+
+<Card title="Refactoring de code" variant="default">
+
+**Prompt vague** :
+```markdown
+"Améliore ce code"
+```
+
+**Prompt optimisé** :
+```markdown
+"Refactorise cette fonction calculateDiscount() dans src/pricing/discount.service.ts.
+Problèmes actuels :
+- Trop longue (120 lignes), difficile à tester
+- 4 niveaux d'imbrication de if/else
+- Logique de calcul mélangée avec la logique de validation
+
+Critères de refactoring :
+- Extrais les règles de validation dans une fonction validateDiscountInput()
+- Extrais le calcul par type de remise dans des fonctions séparées
+- Utilise des early returns pour réduire l'imbrication
+- TypeScript strict, pas de any
+- Conserve exactement le même comportement (les tests doivent passer)"
+```
+</Card>
+
+<Card title="Debugging d'un problème de performance" variant="default">
+
+**Prompt vague** :
+```markdown
+"Mon app est lente"
+```
+
+**Prompt optimisé** :
+```markdown
+"Notre page ProductList est lente au premier chargement (4-6 secondes).
+Observations :
+- Waterfall de requêtes dans l'onglet Network : 3 appels API séquentiels
+- 847ms de JavaScript à parser au démarrage (bundle.js 2.3MB non minifié)
+- Pas de lazy loading sur les images produits
+
+Stack : Next.js 14 App Router, React Query, 200 produits chargés au départ.
+
+Analyse les 3 problèmes identifiés et propose des corrections concrètes
+avec le code de chaque fix. Priorise par impact."
+```
+</Card>
+
+<Card title="Écriture de tests TDD" variant="default">
+
+**Prompt vague** :
+```markdown
+"Écris des tests pour ce service"
+```
+
+**Prompt optimisé** :
+```markdown
+"Écris les tests unitaires pour UserService en approche TDD (Vitest + mocks).
+
+Méthodes à tester :
+1. createUser(data: CreateUserDto) : succès, email dupliqué, validation échoue
+2. findById(id: string) : trouvé, non trouvé, id invalide
+3. updatePassword(id, oldPwd, newPwd) : succès, mauvais ancien mot de passe, nouveau trop court
+
+Pour chaque test :
+- Arrange : setup des mocks nécessaires
+- Act : appel de la méthode
+- Assert : vérification du résultat ET des side effects (logs, événements émis)
+
+Mock le UserRepository complet. TypeScript strict."
+```
+</Card>
+
+### Profil entrepreneur / manager
+
+<Card title="Rédiger un email commercial" variant="default">
+
+**Prompt vague** :
+```markdown
+"Rédige un email pour vendre mon produit"
+```
+
+**Prompt optimisé** :
+```markdown
+"Rédige un email de prospection B2B pour [Prénom] [Nom], DRH de [Entreprise, 500 salariés].
+
+Mon produit : plateforme de onboarding RH qui réduit le temps d'intégration
+des nouveaux employés de 3 semaines à 5 jours.
+
+Problème qu'il résout probablement : turnover élevé dans les 6 premiers mois,
+onboarding manuel chronophage pour les équipes RH.
+
+L'email doit :
+- Commencer par un hook qui montre que j'ai fait des recherches sur son entreprise
+- Présenter un bénéfice concret (pas une feature) en une phrase
+- Inclure une preuve sociale (client similaire)
+- Terminer par une proposition de valeur claire et un CTA simple
+
+Ton : direct et respectueux du temps, pas de jargon commercial.
+Longueur : 150 mots maximum."
+```
+</Card>
+
+<Card title="Préparer un rapport stratégique" variant="default">
+
+**Prompt vague** :
+```markdown
+"Aide-moi avec mon rapport"
+```
+
+**Prompt optimisé** :
+```markdown
+"Je prépare un rapport pour le CODIR de mardi sur nos résultats Q1 2026.
+
+Données disponibles :
+- CA Q1 : 842K€ (objectif : 800K€, +5.25%)
+- Nouveaux clients : 23 (objectif : 20)
+- Taux de churn : 3.2% (objectif : < 3%, légèrement au-dessus)
+- NPS : 67 (stable vs Q4 2025)
+
+Contrainte : le CODIR attend des préconisations pour Q2, pas juste des constats.
+
+Génère la structure du rapport avec :
+1. Un résumé exécutif en 5 bullets (positifs et points d'attention)
+2. Une analyse du dépassement sur le CA
+3. Un plan d'action sur le churn (2-3 actions concrètes)
+4. Les 3 métriques prioritaires à surveiller en Q2"
+```
+</Card>
+
+### Profil étudiant
+
+<Card title="Comprendre un concept complexe" variant="default">
+
+**Prompt vague** :
+```markdown
+"Explique-moi les réseaux de neurones"
+```
+
+**Prompt optimisé** :
+```markdown
+"Explique-moi les réseaux de neurones convolutionnels (CNN) pour la vision par ordinateur.
+
+Mon niveau : j'ai des bases en Python et en algèbre linéaire, mais pas d'expérience
+en deep learning. J'ai fait un cours introductif sur les réseaux de neurones classiques.
+
+Ce que je veux comprendre :
+1. Pourquoi les CNN sont meilleurs que les réseaux classiques pour les images
+2. Ce qu'est une convolution (intuition visuelle, pas juste la formule)
+3. Comment les filtres 'apprennent' à détecter des features (bords, formes, visages)
+4. Architecture typique : convolution → pooling → fully connected → softmax
+
+Utilise des analogies concrètes. Évite le jargon sans l'expliquer.
+Si possible, montre comment ça s'implémente en 10 lignes de PyTorch."
+```
+</Card>
+
+<Card title="Résumer et synthétiser un cours" variant="default">
+
+**Prompt vague** :
+```markdown
+"Résume ce cours"
+```
+
+**Prompt optimisé** :
+```markdown
+"Crée une fiche de révision pour l'examen de macroéconomie du 20 mars.
+
+Chapitres à couvrir : [coller la table des matières ou les points clés]
+
+Format souhaité :
+1. Définitions clés (terme : définition en 1-2 phrases)
+2. Schémas importants à mémoriser (description textuelle)
+3. Les 5 formules incontournables avec leur signification intuitive
+4. Liens entre les concepts (ex: comment la politique monétaire affecte l'inflation)
+5. Questions types d'examen + approche de réponse
+
+Niveau : licence 2, examen de 3h. Concis et mémorisable."
+```
+</Card>
+
+### Profil créatif
+
+<Card title="Créer du contenu pour les réseaux sociaux" variant="default">
+
+**Prompt vague** :
+```markdown
+"Écris des posts pour mon Instagram"
+```
+
+**Prompt optimisé** :
+```markdown
+"Crée 5 posts Instagram pour @[compte], compte d'un studio de yoga à Paris.
+
+Audience : femmes 25-40 ans, urbaines, actives, pratique yoga 1-2x par semaine.
+
+Thème de la semaine : yoga et gestion du stress au travail.
+
+Pour chaque post :
+- Caption principal (150 mots max) avec ton chaleureux et bienveillant
+- 3 variantes de hooks différents pour A/B tester
+- 15 hashtags pertinents (mix niche + généralistes)
+- Idée visuelle pour la photo ou le reel
+- Heure de publication optimale recommandée
+
+Évite le jargon yoga trop technique. Parle des bénéfices ressentis, pas des poses."
+```
+</Card>
+
+<Card title="Développer un concept créatif" variant="default">
+
+**Prompt vague** :
+```markdown
+"Aide-moi pour mon projet créatif"
+```
+
+**Prompt optimisé** :
+```markdown
+"Je développe un podcast sur l'histoire des jeux vidéo indépendants.
+
+Concept : raconter l'histoire méconnue derrière les jeux cultes, les galères,
+les pivots, les histoires humaines des créateurs.
+
+Aide-moi à développer :
+1. Un format d'épisode (durée, structure, type d'interviews)
+2. 10 idées d'épisodes pour la saison 1 (titre accrocheur + angle unique)
+3. Un nom de podcast mémorable et son positionnement
+4. Le profil des 3 premiers invités idéaux (avec justification)
+5. Une intro de 30 secondes pour le premier épisode
+
+Références que j'aime : 99% Invisible, Comment c'est fait, Binge Audio."
+```
+</Card>
+
+## Tableau des 15 erreurs courantes avec corrections
+
+<Callout type="warning" title="Reconnaissez-vous ces erreurs ?">
+Ce tableau couvre les erreurs les plus fréquentes observées chez les utilisateurs de Claude Code, du débutant à l'utilisateur intermédiaire. Pour chaque erreur : le symptôme, la cause et la correction.
+</Callout>
+
+| # | Erreur | Symptôme | Correction |
+|---|--------|----------|-----------|
+| 1 | Prompt trop vague | Résultat générique inutilisable | Ajoutez : stack, contexte, contraintes, format attendu |
+| 2 | Pas de contexte technique | Mauvaise stack ou mauvais pattern | Précisez toujours votre stack et vos conventions |
+| 3 | Tout demander d'un coup | Code superficiel, incomplet | Décomposez en étapes de 1-2 responsabilités chacune |
+| 4 | Repartir de zéro à chaque itération | Perte de contexte, résultats incohérents | Affinez la réponse existante avec des corrections ciblées |
+| 5 | Ignorer les edge cases | Code qui plante en production | Listez explicitement les cas limites et erreurs à gérer |
+| 6 | Ne pas demander les tests | Code sans couverture, bugs non détectés | Incluez "génère les tests" dans chaque prompt de feature |
+| 7 | Pas de CLAUDE.md | Répétition du contexte à chaque session | Centralisez le contexte dans CLAUDE.md une bonne fois |
+| 8 | Format de sortie non spécifié | Structure de réponse inadaptée | Précisez toujours le format : fichiers, commentaires, tests |
+| 9 | Instructions contradictoires | Comportement imprévisible | Vérifiez la cohérence de vos contraintes avant d'envoyer |
+| 10 | Contraintes noyées dans le texte | Claude ignore vos règles | Utilisez ALWAYS/NEVER en section dédiée, pas dans le texte |
+| 11 | Ne pas vérifier les résultats | Bugs ou failles passés inaperçus | Demandez une auto-review avant d'accepter le code |
+| 12 | Prompts sans rôle défini | Réponses trop génériques | Commencez par "Tu es un expert en [domaine]..." |
+| 13 | Demander sans montrer d'exemple | Format de sortie inattendu | Fournissez 1-2 exemples du résultat attendu (few-shot) |
+| 14 | Copier-coller sans adapter | Code inadapté au projet | Personnalisez chaque template avec votre contexte spécifique |
+| 15 | Session trop longue sans /compact | Claude "oublie" le début | Utilisez /compact après chaque phase importante |
+
+## Les erreurs de débutants à éviter
+
+<Callout type="warning" title="Les 5 erreurs fatales">
+Ces erreurs sont les plus fréquentes chez les débutants. Les éviter vous fera gagner des heures de travail.
+</Callout>
+
+1. **Être trop vague** : "Fais-moi un truc cool" ne produit jamais un résultat utile. Soyez spécifique.
+2. **Ne pas donner de contexte** : Claude ne peut pas deviner votre stack, votre architecture ou vos conventions.
+3. **Tout demander d'un coup** : Décomposez les gros projets en étapes gérables.
+4. **Ne pas itérer** : Si la première réponse n'est pas parfaite, affinez votre demande au lieu de recommencer à zéro.
+5. **Ignorer le format de sortie** : Si vous ne dites pas à Claude comment structurer sa réponse, il choisira un format par défaut qui ne correspondra pas forcément à vos besoins.
+
+## Next steps
+
+Vous maîtrisez maintenant les fondamentaux du prompting. Going further :
+
+- [Les directives qui font la différence](/prompting/directives) : Apprenez à cadrer Claude avec des instructions avancées
+- [Templates de prompts par métier](/prompting/templates) : Des prompts prêts à l'emploi pour chaque type de tâche
+- [Gestion du contexte](/prompting/context-management) : Maîtrisez la fenêtre de 200K tokens et la commande /compact
+- [Le guide complet CLAUDE.md](/prompting/claude-md) : Automatisez votre contexte avec le fichier CLAUDE.md
+- [Premiers pas avec Claude Code](/getting-started) : Installez et configurez Claude Code pour démarrer
+- [Configurateur interactif](/configurator) : Générez votre configuration personnalisée en quelques clics
+- [Comprendre les agents](/agents/what-are-agents) : Étendez vos prompts avec des agents spécialisés
+- [MCP : les extensions de Claude](/mcp) : Connectez Claude à vos outils avec les Model Context Protocols

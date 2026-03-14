@@ -1,0 +1,386 @@
+---
+title: "Agent performance and limits"
+description: "Understanding Claude Code agent performance characteristics: token limits, context windows, timeouts, and optimization strategies."
+section: "agents"
+order: 7
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Les agents ne sont pas gratuits
+
+Les agents Claude Code consomment des tokens à chaque itération. Plus un agent est complexe (profondeur de récursion élevée, outils nombreux, contexte volumineux), plus il coûte cher. Ce guide vous donne les clés pour estimer, contrôler et optimiser ces coûts.
+
+<Callout type="warning" title="Les agents multiplient la consommation">
+Un prompt classique consomme quelques milliers de tokens. Un agent qui planifie, exécute et vérifie peut en consommer **10 à 50 fois plus**. Avec des subagents en parallèle, la facture monte vite. Lisez ce guide avant de lancer des agents en production.
+</Callout>
+
+## Coût en tokens par profondeur
+
+Chaque "tour" d'un agent (une itération de la boucle plan-exécute-vérifie) consomme des tokens en entrée et en sortie. Voici des estimations moyennes selon le type de tâche.
+
+| Profondeur | Use cases | Tokens entrée | Tokens sortie | Coût estimé (Sonnet) |
+|---|---|---|---|---|
+| 1 à 3 tours | Lecture simple, question/réponse | 5K à 15K | 1K à 3K | 0,02 $ à 0,08 $ |
+| 5 à 10 tours | Review de code, analyse de fichiers | 20K à 80K | 5K à 15K | 0,10 $ à 0,40 $ |
+| 10 à 20 tours | Refactoring, écriture de tests | 50K à 150K | 10K à 30K | 0,30 $ à 1,00 $ |
+| 20 à 30 tours | Pipeline complet (plan + code + review) | 100K à 200K+ | 20K à 50K | 0,80 $ à 2,50 $ |
+
+<Callout type="info" title="Ces chiffres varient">
+Les coûts dépendent du modèle utilisé (Haiku est 10x moins cher que Opus), de la taille des fichiers lus, et du nombre d'outils appelés par tour. Utilisez `/cost` dans Claude Code pour suivre votre consommation réelle.
+</Callout>
+
+### Facteurs qui gonflent les coûts
+
+Plusieurs facteurs multiplient la consommation de tokens.
+
+**Les fichiers lus sont injectés dans le contexte.** Un agent qui lit 10 fichiers de 500 lignes ajoute environ 50K tokens d'entrée. Préférez des lectures ciblées (`Grep` pour trouver, puis `Read` sur les lignes pertinentes) plutôt que de lire des fichiers entiers.
+
+**Chaque tour hérite du contexte des tours précédents.** Au tour 15, l'agent traîne l'historique des 14 tours précédents. C'est pourquoi les derniers tours coûtent beaucoup plus cher que les premiers.
+
+**Les subagents multiplient la base.** Si vous lancez 3 subagents de 10 tours chacun, l'agent orchestrateur consomme aussi ses propres tokens pour lire et synthétiser leurs résultats.
+
+## Profondeur de récursion : limites et contrôle
+
+### La limite maxTurns
+
+Le paramètre `maxTurns` (ou `--max-turns` en CLI) contrôle le nombre maximum d'itérations d'un agent. C'est votre **garde-fou principal** contre les agents qui tournent en boucle.
+
+```bash
+# En CLI : limiter à 15 tours
+claude --print --max-turns 15 "Refactore le module auth"
+
+# En SDK TypeScript
+const result = await claude({
+  prompt: "Refactore le module auth",
+  options: { maxTurns: 15 },
+});
+```
+
+### Recommandations par cas d'usage
+
+| Use cases | maxTurns recommandé | Raison |
+|---|---|---|
+| Question simple | 3 à 5 | Une ou deux lectures + réponse |
+| Code review | 8 à 12 | Lecture du diff + analyse + rapport |
+| Écriture de tests | 10 à 15 | Lecture du code + écriture + exécution |
+| Refactoring | 15 à 25 | Planification + modifications + vérification |
+| Pipeline complet | 20 à 30 | Plusieurs phases séquentielles |
+
+<Callout type="tip" title="Commencez bas, augmentez si besoin">
+Commencez toujours avec un `maxTurns` bas. Si l'agent s'arrête avec un message du type "J'aurais besoin de plus d'itérations pour terminer", augmentez progressivement. C'est plus sûr que de mettre 50 tours et de se retrouver avec une facture surprise.
+</Callout>
+
+### Profondeur de récursion des subagents
+
+Un agent principal peut lancer des subagents, qui peuvent eux-mêmes lancer des subagents. La profondeur de récursion est limitée pour éviter des cascades incontrôlées.
+
+```markdown
+Agent principal (30 tours max)
+  └── Subagent review (10 tours max)
+  └── Subagent tests (15 tours max)
+       └── Sub-subagent? Non recommandé.
+```
+
+In practice, **deux niveaux de profondeur suffisent** (agent principal + subagents). Aller au-delà complique le debugging et multiplie les coûts sans gain proportionnel.
+
+## Gestion d'erreurs et timeouts
+
+### Types d'erreurs des agents
+
+Les agents peuvent échouer de plusieurs manières.
+
+| Type d'erreur | Cause | Solution |
+|---|---|---|
+| **Timeout** | L'agent met trop de temps | Augmenter le timeout ou réduire la portée |
+| **maxTurns atteint** | Tâche trop complexe pour le budget | Augmenter maxTurns ou découper la tâche |
+| **Erreur d'outil** | Un Bash échoue, un fichier n'existe pas | Ajouter des instructions de fallback |
+| **Context overflow** | Le contexte dépasse 200K tokens | Utiliser `/compact` ou réduire les lectures |
+| **Rate limit** | Trop de requêtes API simultanées | Espacer les agents ou utiliser un plan supérieur |
+| **Boucle infinie** | L'agent répète la même action | Ajouter des contraintes dans le prompt |
+
+### Timeouts
+
+Par défaut, les commandes Bash lancées par Claude Code ont un timeout de 120 secondes. Pour les agents qui exécutent des tâches longues (build, tests E2E), ce timeout peut être insuffisant.
+
+```bash
+# En CLI : timeout global de la session
+claude --max-turns 20 "Lance les tests E2E"
+
+# En SDK : le timeout se gère au niveau application
+const result = await claude({
+  prompt: "Lance les tests E2E complets",
+  options: {
+    maxTurns: 20,
+    // Le SDK attend la fin de l'agent
+    // Gérez le timeout côté application si nécessaire
+  },
+});
+```
+
+<Callout type="warning" title="Timeout des commandes Bash">
+Si un agent lance un `npm run test` qui prend 5 minutes, la commande risque de timeout. Dans les instructions de l'agent, précisez d'utiliser des sous-ensembles de tests ou d'augmenter le timeout Bash avec l'option appropriée.
+</Callout>
+
+### Détecter les boucles infinies
+
+Un agent en boucle infinie répète la même action sans progresser. Voici les signes :
+
+- Le même outil est appelé avec les mêmes paramètres 3 fois de suite
+- L'agent relit un fichier qu'il vient de modifier sans raison
+- Les messages de l'agent tournent en rond ("Je vais essayer une autre approche... Je vais essayer une autre approche...")
+
+La solution : ajoutez des **critères d'arrêt** dans le prompt de l'agent.
+
+```markdown
+## Critères d'arrêt
+- Si tu as essayé 3 approches différentes sans succès, arrête-toi
+  et explique ce qui bloque
+- Si tu relis le même fichier plus de 2 fois, change de stratégie
+- Si le même test échoue 3 fois, signale-le comme problème bloquant
+```
+
+## Stratégies de retry
+
+Quand un agent échoue, la bonne stratégie de retry dépend du type d'erreur.
+
+### Retry simple (erreurs transitoires)
+
+Pour les erreurs réseau, rate limits ou timeouts ponctuels.
+
+```typescript
+async function withRetry<T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delayMs: number = 2000,
+): Promise<T> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (attempt === maxRetries) throw error;
+      console.log(`Tentative ${attempt}/${maxRetries} échouée, retry...`);
+      await new Promise((r) => setTimeout(r, delayMs * attempt));
+    }
+  }
+  throw new Error("Unreachable");
+}
+
+// Utilisation
+const result = await withRetry(() =>
+  claude({
+    prompt: "Analyse les logs des dernières 24h",
+    options: { maxTurns: 10 },
+  })
+);
+```
+
+### Retry avec reformulation (erreurs de compréhension)
+
+Si l'agent ne comprend pas la tâche ou produit un mauvais résultat, reformulez le prompt.
+
+```typescript
+async function smartRetry(originalPrompt: string): Promise<string> {
+  // Première tentative avec le prompt original
+  const first = await claude({
+    prompt: originalPrompt,
+    options: { maxTurns: 10 },
+  });
+
+  // Vérifier le résultat
+  if (isValidResult(first.text)) {
+    return first.text;
+  }
+
+  // Deuxième tentative avec un prompt plus détaillé
+  const second = await claude({
+    prompt: `Le résultat précédent n'était pas satisfaisant.
+      Voici ce qui manquait : ${identifyGaps(first.text)}.
+      Reprends depuis le début avec plus de rigueur.
+      Mission originale : ${originalPrompt}`,
+    options: { maxTurns: 15 },
+  });
+
+  return second.text;
+}
+```
+
+### Backoff exponentiel (rate limits)
+
+Pour les rate limits API, espacez les tentatives de manière exponentielle.
+
+```python
+import asyncio
+import random
+from claude_code_sdk import claude, ClaudeOptions
+
+async def with_backoff(prompt: str, max_retries: int = 5) -> str:
+    """Retry avec backoff exponentiel et jitter."""
+    for attempt in range(max_retries):
+        try:
+            result = await claude(
+                prompt=prompt,
+                options=ClaudeOptions(max_turns=10),
+            )
+            return result.text
+        except Exception as e:
+            if "rate_limit" not in str(e) or attempt == max_retries - 1:
+                raise
+            delay = (2 ** attempt) + random.uniform(0, 1)
+            print(f"Rate limit, retry dans {delay:.1f}s...")
+            await asyncio.sleep(delay)
+    raise RuntimeError("Nombre maximum de tentatives atteint")
+```
+
+## Best practices production
+
+### 1. Rate limiting : contrôlez le débit
+
+Si vous lancez des agents en parallèle (triage de bugs, monitoring multi-serveurs), limitez le nombre d'agents simultanés.
+
+```typescript
+import pLimit from "p-limit";
+
+// Maximum 3 agents en parallèle
+const limit = pLimit(3);
+
+const issues = await getOpenIssues();
+const results = await Promise.all(
+  issues.map((issue) =>
+    limit(() =>
+      claude({
+        prompt: `Triage l'issue #${issue.number}: ${issue.title}`,
+        options: { maxTurns: 5 },
+      })
+    )
+  )
+);
+```
+
+### 2. Budgets : fixez des limites de coût
+
+Définissez un budget maximum par agent et par jour pour éviter les surprises.
+
+```typescript
+// Budget par exécution d'agent
+const MAX_TOKENS_PER_AGENT = 100_000; // ~0.50$ en Sonnet
+
+// Budget quotidien
+const DAILY_TOKEN_BUDGET = 1_000_000; // ~5.00$ en Sonnet
+
+let dailyTokensUsed = 0;
+
+async function budgetedAgent(prompt: string): Promise<string> {
+  if (dailyTokensUsed >= DAILY_TOKEN_BUDGET) {
+    throw new Error("Budget quotidien épuisé");
+  }
+
+  const result = await claude({
+    prompt,
+    options: { maxTurns: 10 },
+  });
+
+  dailyTokensUsed += result.tokensUsed ?? 0;
+  return result.text;
+}
+```
+
+### 3. Logs : tracez tout
+
+En production, chaque exécution d'agent doit être tracée pour le debugging et l'audit.
+
+```typescript
+interface AgentLog {
+  readonly id: string;
+  readonly prompt: string;
+  readonly startedAt: Date;
+  readonly completedAt: Date;
+  readonly tokensUsed: number;
+  readonly turnsUsed: number;
+  readonly result: "success" | "error" | "timeout";
+  readonly output: string;
+}
+
+async function loggedAgent(prompt: string): Promise<string> {
+  const startedAt = new Date();
+  const id = crypto.randomUUID();
+
+  try {
+    const result = await claude({
+      prompt,
+      options: { maxTurns: 15 },
+    });
+
+    const log: AgentLog = {
+      id,
+      prompt,
+      startedAt,
+      completedAt: new Date(),
+      tokensUsed: result.tokensUsed ?? 0,
+      turnsUsed: result.turnsUsed ?? 0,
+      result: "success",
+      output: result.text,
+    };
+
+    await saveLog(log); // Votre système de logging
+    return result.text;
+  } catch (error) {
+    const log: AgentLog = {
+      id,
+      prompt,
+      startedAt,
+      completedAt: new Date(),
+      tokensUsed: 0,
+      turnsUsed: 0,
+      result: "error",
+      output: String(error),
+    };
+    await saveLog(log);
+    throw error;
+  }
+}
+```
+
+### 4. Alertes : réagissez aux anomalies
+
+Configurez des alertes quand un agent dépasse un seuil de coût ou d'erreurs.
+
+```typescript
+// Alerter si un agent coûte plus de 2$
+if ((result.tokensUsed ?? 0) > 200_000) {
+  await notifySlack(
+    "#alerts",
+    `Agent coûteux détecté : ${result.tokensUsed} tokens `
+    + `pour "${prompt.substring(0, 50)}..."`
+  );
+}
+
+// Alerter si plus de 3 échecs en 1 heure
+const recentErrors = await getRecentErrors(60 * 60 * 1000);
+if (recentErrors.length > 3) {
+  await notifySlack(
+    "#alerts",
+    `${recentErrors.length} erreurs d'agents en 1h. Vérifiez les logs.`
+  );
+}
+```
+
+## Résumé des recommandations
+
+| Aspect | Recommandation |
+|---|---|
+| **maxTurns** | Commencer à 10, augmenter si besoin |
+| **Profondeur de récursion** | 2 niveaux max (principal + subagents) |
+| **Modèle** | Haiku pour les tâches simples, Sonnet pour le dev, Opus pour l'architecture |
+| **Retry** | Backoff exponentiel pour les rate limits, reformulation pour les erreurs logiques |
+| **Budget** | Fixer un plafond par agent et par jour |
+| **Logs** | Tracer chaque exécution (prompt, tokens, résultat) |
+| **Agents parallèles** | Maximum 3 à 5 simultanés selon votre plan |
+| **Timeouts** | Adapter selon la durée attendue de la tâche |
+
+## Next steps
+
+- [Claude Agent SDK](/agents/agent-sdk) : Créer des agents programmatiques en TypeScript et Python
+- [Orchestration multi-agents](/agents/orchestration) : Combiner les agents efficacement
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : Comprendre la facturation en détail
+- [Mode Headless et CI/CD](/advanced/headless-ci) : Intégrer dans vos pipelines

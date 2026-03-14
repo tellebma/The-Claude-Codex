@@ -1,0 +1,213 @@
+---
+title: "Agent teams and collaboration"
+description: "Build collaborative agent teams with Claude Code: role assignment, communication patterns, and coordinated workflows."
+section: "agents"
+order: 3
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Qu'est-ce que Agent Teams ?
+
+**Agent Teams** est une fonctionnalité expérimentale de Claude Code qui permet à plusieurs sessions d'agents de **collaborer sur un même projet** en partageant des informations et en coordonnant leurs actions. C'est comme passer d'un développeur solo à une équipe de développeurs spécialisés.
+
+<Callout type="warning" title="Fonctionnalité expérimentale (Research Preview)">
+Agent Teams est actuellement en **research preview**. Cela signifie que la fonctionnalité est disponible pour les utilisateurs avancés mais peut évoluer significativement. Activez-la avec la variable d'environnement `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Attendez-vous à des changements dans les futures versions.
+</Callout>
+
+<Callout type="info" title="L'analogie de l'open space">
+Imaginez un open space où chaque développeur travaille sur sa tâche, mais tous peuvent se parler, partager leurs avancées et se coordonner. Agent Teams fonctionne de la même façon : chaque agent a sa propre session Claude Code, mais ils partagent un espace de communication commun pour éviter les conflits et les doublons.
+</Callout>
+
+## Activer Agent Teams
+
+Pour activer cette fonctionnalité, définissez la variable d'environnement avant de lancer Claude Code.
+
+```bash
+# Activer Agent Teams
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+
+# Puis lancer Claude Code normalement
+claude
+```
+
+Vous pouvez aussi l'ajouter à votre fichier de configuration shell pour une activation permanente.
+
+```bash
+# Dans ~/.bashrc ou ~/.zshrc
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+```
+
+## Comment configurer un team
+
+Un team est un groupe d'agents qui travaillent ensemble sur un même projet. Chaque agent est identifié par un **`team_name`** commun qui permet la coordination.
+
+<Steps>
+<Step title="Définir le team" stepNumber={1}>
+Choisissez un nom de team descriptif. Tous les agents qui partagent ce nom pourront communiquer entre eux.
+
+```bash
+# Terminal 1 - Agent de développement
+claude --team_name "feature-auth"
+
+# Terminal 2 - Agent de tests
+claude --team_name "feature-auth"
+
+# Terminal 3 - Agent de review
+claude --team_name "feature-auth"
+```
+</Step>
+
+<Step title="Assigner les rôles" stepNumber={2}>
+Donnez à chaque agent un rôle clair via son prompt initial. Les agents doivent savoir ce qu'ils font et ce que font les autres.
+
+```bash
+# Terminal 1 - Agent de développement
+> Tu es le développeur principal du team "feature-auth".
+> Ta mission : implémenter le module d'authentification JWT.
+> Un autre agent s'occupe des tests, un troisième fait la review.
+
+# Terminal 2 - Agent de tests
+> Tu es le testeur du team "feature-auth".
+> Ta mission : écrire les tests pour le module d'authentification.
+> Attends que le développeur ait commencé avant d'écrire les tests.
+
+# Terminal 3 - Agent de review
+> Tu es le reviewer du team "feature-auth".
+> Ta mission : review le code produit par le développeur et le testeur.
+> Interviens quand du code est prêt à être reviewé.
+```
+</Step>
+
+<Step title="Laisser les agents collaborer" stepNumber={3} isLast>
+Les agents communiquent via un espace partagé. Ils peuvent voir les fichiers modifiés par les autres agents et coordonner leurs actions pour éviter les conflits.
+</Step>
+</Steps>
+
+## Use cases
+
+### 1. Review croisée
+
+Deux agents travaillent en tandem : l'un écrit le code, l'autre le review en temps réel.
+
+```bash
+# Agent 1 : Développeur
+> Implémente un système de cache Redis pour les sessions utilisateur.
+> Quand tu as terminé un module, signale-le pour review.
+
+# Agent 2 : Reviewer
+> Tu es le reviewer. Analyse chaque module produit par le développeur.
+> Signale les problèmes de sécurité, performance et maintenabilité.
+> Le développeur corrigera ensuite tes remarques.
+```
+
+Ce pattern crée une **boucle de feedback** continue : le développeur code, le reviewer identifie les problèmes, le développeur corrige, et ainsi de suite.
+
+### 2. Développement parallèle
+
+Plusieurs agents travaillent sur des modules indépendants du même projet.
+
+```bash
+# Agent 1 : Module API
+> Implémente les endpoints REST pour /users et /products.
+> Utilise Express.js avec validation Zod.
+
+# Agent 2 : Module Frontend
+> Implémente les pages React pour la liste des produits
+> et le profil utilisateur. Consomme l'API REST.
+
+# Agent 3 : Module Base de données
+> Crée les migrations Prisma pour les tables users et products.
+> Ajoute les seeds de développement.
+```
+
+Chaque agent travaille dans son domaine, mais ils restent coordonnés pour assurer la cohérence des interfaces.
+
+### 3. Orchestration de pipeline
+
+Un agent orchestre une séquence de tâches en déléguant à des agents spécialisés.
+
+```bash
+# Agent orchestrateur
+> Tu coordonnes le pipeline de release.
+> Étape 1 : Demande à l'agent tests de vérifier la couverture
+> Étape 2 : Demande à l'agent security de faire un audit
+> Étape 3 : Demande à l'agent docs de mettre à jour le changelog
+> Étape 4 : Si tout est vert, prépare le tag de release
+```
+
+## Communication entre agents
+
+Les agents d'un même team partagent un **contexte commun** qui leur permet de se coordonner.
+
+| Mécanisme | Description |
+|---|---|
+| **Fichiers partagés** | Les agents voient les modifications de fichiers des autres en temps réel |
+| **État du projet** | Chaque agent accède à l'état Git courant (branches, commits, diffs) |
+| **Messages** | Les agents peuvent s'envoyer des messages via l'espace de communication du team |
+
+<Card title="Pas de mémoire partagée" variant="accent">
+Important : les agents ne partagent **pas** leur fenêtre de contexte. Chaque agent a son propre historique de conversation. La coordination passe par les fichiers, l'état Git et les messages du team, pas par un accès direct aux pensées des autres agents.
+</Card>
+
+## Limites actuelles
+
+Agent Teams étant en research preview, plusieurs limitations existent.
+
+<Callout type="warning" title="Limites à connaître">
+- **Pas de gestion automatique des conflits** : si deux agents modifient le même fichier, vous devrez résoudre les conflits manuellement
+- **Consommation de tokens élevée** : chaque agent consomme ses propres tokens, les coûts sont multipliés par le nombre d'agents
+- **Coordination imparfaite** : les agents ne se synchronisent pas toujours parfaitement, des doublons peuvent survenir
+- **Pas de persistence entre sessions** : quand une session se termine, le contexte de l'agent est perdu
+- **Support limité aux worktrees** : l'isolation via worktrees n'est pas encore parfaitement intégrée aux teams
+</Callout>
+
+## Best practices
+
+### 1. Limitez le nombre d'agents
+
+Deux à trois agents bien configurés valent mieux que cinq agents mal coordonnés. Commencez petit.
+
+```bash
+# BON : 2 agents complémentaires
+# Développeur + Reviewer
+
+# À ÉVITER : trop d'agents
+# Développeur + Testeur + Reviewer + Doc + Security + Perf
+# → Trop de coordination nécessaire, résultats imprévisibles
+```
+
+### 2. Définissez des responsabilités claires
+
+Chaque agent doit avoir un périmètre bien défini. Évitez les chevauchements de responsabilités.
+
+### 3. Utilisez des branches séparées
+
+Pour éviter les conflits de fichiers, assignez une branche Git par agent quand c'est possible.
+
+```bash
+# Agent 1 travaille sur feat/auth-api
+# Agent 2 travaille sur feat/auth-frontend
+# Agent 3 fait la review sur les deux branches
+```
+
+### 4. Surveillez la consommation
+
+Avec plusieurs agents actifs, la consommation de tokens peut grimper rapidement. Surveillez votre utilisation et fixez des limites.
+
+## Perspectives
+
+Agent Teams est encore jeune, mais les possibilités sont prometteuses :
+
+- **Gestion automatique des conflits** : résolution intelligente des modifications concurrentes
+- **Orchestration déclarative** : décrire un pipeline d'agents dans un fichier de configuration
+- **Mémoire partagée** : un espace commun où les agents peuvent stocker et récupérer des informations
+- **Monitoring intégré** : tableau de bord pour suivre l'activité de chaque agent en temps réel
+
+## Next steps
+
+Now that you comprenez les Agent Teams, explorez les agents individuels et l'orchestration.
+
+- [Top agents par cas d'usage](/agents/best-agents) : Les agents les plus utiles classés par catégorie
+- [Orchestration avancée](/agents/orchestration) : Patterns d'orchestration pour des workflows complexes
+- [Comprendre les agents](/agents/what-are-agents) : Revenir aux fondamentaux

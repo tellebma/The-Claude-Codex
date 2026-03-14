@@ -24,7 +24,7 @@ export function generateStaticParams(): Array<{ slug: string }> {
  */
 export async function generateMetadata({ params }: ContentPageProps): Promise<Metadata> {
   const resolvedParams = await params;
-  const { frontmatter } = getMdxBySlug(resolvedParams.slug);
+  const { frontmatter } = getMdxBySlug(resolvedParams.slug, resolvedParams.locale);
 
   return createPageMetadata({
     title: frontmatter.title,
@@ -37,8 +37,8 @@ export async function generateMetadata({ params }: ContentPageProps): Promise<Me
 /**
  * Resolve previous and next articles for navigation.
  */
-function getAdjacentArticles(currentSlug: string) {
-  const allFiles = getAllMdxFiles();
+function getAdjacentArticles(currentSlug: string, locale: string) {
+  const allFiles = getAllMdxFiles(locale);
   const currentIndex = allFiles.findIndex((f) => f.slug === currentSlug);
 
   return {
@@ -50,8 +50,8 @@ function getAdjacentArticles(currentSlug: string) {
 export default async function ContentPage({ params }: ContentPageProps) {
   const resolvedParams = await params;
   setRequestLocale(resolvedParams.locale);
-  const { frontmatter, content } = getMdxBySlug(resolvedParams.slug);
-  const { prev, next } = getAdjacentArticles(resolvedParams.slug);
+  const { frontmatter, content } = getMdxBySlug(resolvedParams.slug, resolvedParams.locale);
+  const { prev, next } = getAdjacentArticles(resolvedParams.slug, resolvedParams.locale);
   const tCommon = await getTranslations("common");
 
   return (

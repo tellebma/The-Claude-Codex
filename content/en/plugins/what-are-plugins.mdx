@@ -1,0 +1,119 @@
+---
+title: "Understanding Claude Code plugins"
+description: "Discover Claude Code plugins (hooks): what they are, how they differ from MCPs and Skills, and how they extend Claude Code's behavior."
+section: "plugins"
+order: 1
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+<Callout type="tip" title="Just getting started?">Si les concepts techniques vous semblent complexes, commencez par nos [cas d'usage concrets](/use-cases) pour voir Claude Code en action sans ecrire de code.</Callout>
+
+## Ce qu'on appelle « plugins », c'est quoi exactement ?
+
+<Callout type="warning" title="Clarification terminologique importante">
+La section que vous lisez s'intitule « Plugins » par convention éditoriale, mais ce terme est **trompeur** : Claude Code ne dispose pas de système de plugins avec marketplace ou commandes `/plugin install`. Ce qui existe réellement, ce sont des **extensions communautaires** (fichiers de skills, règles, agents et configurations) qui s'installent manuellement. Cette page clarifie ce qui existe vraiment.
+</Callout>
+
+Dans la communauté Claude Code, le mot « plugin » désigne informellement des **extensions qui enrichissent votre assistant**. En réalité, il s'agit de trois types de ressources distinctes :
+
+1. **Les Skills** (ou commandes custom) : fichiers Markdown dans `.claude/commands/` qui s'invoquent avec `/nom-du-skill`
+2. **Les règles et agents** : fichiers `.md` ou `.mdc` dans `.claude/agents/` qui guident le comportement de Claude
+3. **Les configurations** : fichiers `CLAUDE.md`, `settings.json`, et structures de projet partagées
+
+Ces ressources sont créées par la **communauté**, hébergées sur GitHub, et s'installent **manuellement**, par copie de fichiers ou via la commande `/install-github` de Claude Code.
+
+<Callout type="info" title="L'analogie des fichiers de configuration">
+Imaginez que Claude Code est votre éditeur de code. Les extensions communautaires, ce sont comme des fichiers `.eslintrc`, des templates de projet, ou des snippets partagés. Vous les copiez dans votre projet, et ils changent le comportement de l'outil. Pas de store, pas d'installation automatique, mais une grande flexibilité.
+</Callout>
+
+## Extension communautaire vs MCP vs Skill : les différences
+
+Ces trois mécanismes d'extension sont **complémentaires**, mais ils interviennent à des niveaux différents.
+
+| | **Extension communautaire** | **MCP** | **Skill** |
+|---|---|---|---|
+| **Rôle** | Fichiers de configuration, agents, règles partagés | Connecter Claude Code à un service externe | Enseigner un comportement ou workflow via slash command |
+| **Analogie** | Fichier de configuration partagé | Prise USB vers un service externe | Recette ou tutoriel mémorisé |
+| **Installation** | Copie manuelle ou `/install-github` | `claude mcp add` ou `settings.json` | Fichier Markdown dans `.claude/commands/` |
+| **Exécution** | Interprété par Claude Code à chaque session | Serveur externe (processus séparé via JSON-RPC) | Instructions interprétées par Claude Code |
+| **Persistance** | Par projet ou global selon le dossier | Configuré par projet ou globalement | Par projet (`.claude/commands/`) ou global (`~/.claude/commands/`) |
+| **Exemples** | everything-claude-code, collections de règles | GitHub, Playwright, Context7 | `review-pr`, `tdd-guide`, `deploy` |
+
+<Card title="In summary">
+Les **MCP** donnent à Claude Code des **mains** pour toucher le monde extérieur. Les **Skills** lui donnent des **recettes** pour savoir quoi faire. Les **extensions communautaires** sont des **collections de fichiers de configuration** (agents, règles, templates) que la communauté partage et que vous adaptez à votre workflow.
+</Card>
+
+## Comment s'installent les extensions communautaires ?
+
+Il n'existe pas de marketplace officielle ni de commande `/plugin install`. Les extensions communautaires s'installent de plusieurs façons :
+
+### Via `/install-github` (recommandé)
+
+Claude Code propose une commande pour installer des skills et agents depuis GitHub :
+
+```bash
+# Installer un skill ou agent depuis un repo GitHub
+/install-github punkpeye/everything-claude-code
+```
+
+### Manuellement par copie de fichiers
+
+La méthode la plus courante reste la copie manuelle :
+
+```bash
+# Cloner un repo communautaire
+git clone https://github.com/punkpeye/everything-claude-code
+
+# Copier les agents dans votre projet
+cp -r everything-claude-code/agents/ .claude/agents/
+
+# Copier les règles
+cp -r everything-claude-code/rules/ .claude/rules/
+```
+
+### Via npm (pour les outils CLI)
+
+Certains outils communautaires sont publiés sur npm et s'utilisent comme des utilitaires CLI :
+
+```bash
+# repomix - outil pour analyser une codebase
+npx repomix
+
+# Génère un fichier de contexte pour Claude Code
+npx repomix --output repomix-output.txt
+```
+
+## Types d'extensions communautaires
+
+Les extensions se répartissent en plusieurs catégories :
+
+- **Collections d'agents** : fichiers `.md` dans `.claude/agents/` avec des personas spécialisés (reviewer, architect, debugger)
+- **Règles de projet** : fichiers dans `.claude/rules/` qui définissent les conventions et bonnes pratiques
+- **Skills** : commandes slash dans `.claude/commands/` pour des workflows récurrents
+- **Templates CLAUDE.md** : fichiers de configuration de projet optimisés pour des stacks spécifiques
+- **Outils CLI** : packages npm qui préparent le contexte pour Claude Code (ex : repomix)
+
+## Différences avec les extensions VS Code
+
+Si vous utilisez VS Code avec des extensions comme GitHub Copilot, vous pourriez vous demander en quoi les extensions Claude Code diffèrent.
+
+| | **Extensions communautaires Claude Code** | **Extensions VS Code** |
+|---|---|---|
+| **Environnement** | Terminal (CLI) | IDE graphique |
+| **Interaction** | Langage naturel | Interface graphique / raccourcis |
+| **Format** | Fichiers Markdown et JSON | Packages VS Code compilés |
+| **Distribution** | GitHub (copie manuelle) | VS Code Marketplace (installation en 1 clic) |
+| **Intelligence** | L'IA interprète les instructions | L'extension est passive ou réactive |
+
+<Callout type="tip" title="Complémentaire, pas concurrent">
+Vous pouvez utiliser Claude Code avec ses extensions **en parallèle** de VS Code et ses extensions. Les deux écosystèmes sont complémentaires. Claude Code excelle dans les tâches complexes et multi-fichiers, tandis que VS Code reste idéal pour l'édition fine et le debugging visuel.
+</Callout>
+
+## Next steps
+
+Now that you comprenez ce qu'est une extension communautaire et comment elle s'intègre dans l'écosystème Claude Code, let's get hands-on.
+
+- [Installer et gérer ses extensions](/plugins/setup) : Comment installer, organiser et créer vos propres extensions
+- [Top extensions essentielles 2026](/plugins/best-essential) : Les ressources communautaires incontournables
+- [Extensions design & frontend](/plugins/best-design) : Les meilleures ressources pour le design et l'UI

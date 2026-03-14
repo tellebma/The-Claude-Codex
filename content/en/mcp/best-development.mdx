@@ -1,0 +1,307 @@
+---
+title: "Top development MCPs for Claude Code"
+description: "The best MCPs for development with Claude Code: Context7, Sentry, Linear, PostgreSQL/Supabase, and GitHub. Installation, configuration, and use cases."
+section: "mcp"
+order: 4
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## Les MCP essentiels pour les développeurs
+
+Les MCP de développement connectent Claude Code à votre stack technique : documentation, monitoring, gestion de projet, bases de données et gestion de code source. Ils transforment Claude Code en véritable membre de votre équipe de développement.
+
+<Callout type="info" title="Configuration par projet">
+Contrairement aux MCP de productivité, les MCP de développement sont souvent **spécifiques à un projet**. Configurez-les dans le fichier `.mcp.json` à la racine de votre projet pour que chaque projet ait sa propre configuration.
+</Callout>
+
+---
+
+## Context7 : Documentation à jour
+
+**Accédez à la documentation officielle et à jour de n'importe quelle bibliothèque directement depuis Claude Code.** Fini les réponses basées sur des APIs obsolètes. Context7 fournit toujours la documentation la plus récente.
+
+<Callout type="info" title="Package npm vérifié">
+Context7 est développé par Upstash. Le package npm est `@upstash/context7-mcp`. Le repo source est sur [github.com/upstash/context7](https://github.com/upstash/context7). Aucune clé API n'est requise pour une utilisation de base.
+</Callout>
+
+### Installation
+
+```bash
+# Via la commande Claude
+claude mcp add context7 -- npx -y @upstash/context7-mcp
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
+```
+
+### Use cases
+
+- **Documentation précise** : *"Utilise Context7 pour consulter la doc de Next.js 14 App Router et montre-moi comment configurer les metadata"*
+- **Migration guidée** : *"Consulte la doc de React 19 et aide-moi à migrer ce composant de useEffect vers les Server Actions"*
+- **Résolution de bugs** : *"Vérifie dans la doc de Prisma si cette erreur est un bug connu et quelle est la solution"*
+
+<Callout type="tip" title="Pourquoi Context7 est indispensable">
+Claude Code a une date de coupure de connaissances. Context7 compense cette limitation en fournissant la documentation **en temps réel**. C'est le MCP le plus utile pour éviter les hallucinations sur les APIs récentes.
+</Callout>
+
+---
+
+## Sentry : Monitoring des erreurs
+
+**Surveillez et analysez les erreurs de production directement depuis Claude Code.** Consultez les stack traces, identifiez les patterns d'erreurs et corrigez les bugs plus rapidement.
+
+<Callout type="info" title="Package npm officiel Sentry">
+Sentry publie son propre MCP officiel. Le package est `@sentry/mcp-server`. Vérifiez la documentation officielle Sentry pour les instructions d'installation à jour : [docs.sentry.io](https://docs.sentry.io).
+</Callout>
+
+### Installation
+
+```bash
+# Sentry nécessite un auth token
+claude mcp add sentry -e SENTRY_AUTH_TOKEN=sntrys_votre-token -- npx -y @sentry/mcp-server
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "sentry": {
+      "command": "npx",
+      "args": ["-y", "@sentry/mcp-server"],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "sntrys_votre-auth-token",
+        "SENTRY_ORG": "votre-organisation",
+        "SENTRY_PROJECT": "votre-projet"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info" title="Obtenir un token Sentry">
+Allez dans **Sentry > Settings > Auth Tokens** pour créer un token avec les scopes `project:read`, `event:read` et `issue:read`.
+</Callout>
+
+### Use cases
+
+- **Triage des erreurs** : *"Montre-moi les 10 erreurs les plus fréquentes en production cette semaine"*
+- **Analyse de bug** : *"Analyse cette erreur Sentry, retrouve le fichier concerné dans notre code et propose un fix"*
+- **Monitoring proactif** : *"Y a-t-il de nouvelles erreurs apparues depuis le dernier déploiement ?"*
+
+---
+
+## Linear : Gestion de projet
+
+**Gérez vos issues, sprints et projets Linear directement depuis Claude Code.** Créez des tickets, mettez à jour le statut et synchronisez votre code avec votre gestion de projet.
+
+<Callout type="info" title="MCP Linear officiel">
+Linear publie son propre MCP officiel. Consultez la documentation de Linear ou cherchez le package officiel sur npm. Il n'existe pas de package `@anthropic/mcp-linear`.
+</Callout>
+
+### Configuration JSON (exemple)
+
+```json
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": ["-y", "@linear/mcp-server"],
+      "env": {
+        "LINEAR_API_KEY": "lin_api_votre-clé-linear"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Vérifier le package Linear">
+Avant d'installer, vérifiez le nom exact du package MCP Linear sur [npmjs.com](https://www.npmjs.com) en cherchant « linear mcp ». Le nom peut différer selon la version officielle publiée par Linear.
+</Callout>
+
+### Use cases
+
+- **Workflow intégré** : *"Crée une issue Linear pour le bug que je viens de trouver, avec la stack trace et les étapes pour reproduire"*
+- **Suivi de sprint** : *"Montre-moi les issues assignées à moi dans le sprint en cours"*
+- **Mise à jour automatique** : *"Marque l'issue LIN-42 comme terminée et ajoute un commentaire avec le lien de la PR"*
+
+<Callout type="tip" title="Automatisation du workflow">
+Combinez Linear + GitHub : quand vous créez une PR, Claude Code peut automatiquement mettre à jour le statut de l'issue Linear liée et ajouter le lien de la PR en commentaire.
+</Callout>
+
+---
+
+## PostgreSQL / Supabase : Bases de données
+
+**Interrogez vos bases de données directement depuis Claude Code.** Exécutez des requêtes SQL, analysez les schémas, exportez des résultats et optimisez vos requêtes.
+
+<Callout type="info" title="Packages npm officiels vérifiés">
+Ces deux MCP sont disponibles dans le repository officiel MCP d'Anthropic :
+- PostgreSQL : `@modelcontextprotocol/server-postgres` sur [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers)
+- Supabase : vérifiez la documentation officielle Supabase pour leur MCP officiel
+</Callout>
+
+### Installation PostgreSQL
+
+```bash
+# PostgreSQL natif
+claude mcp add postgres -e DATABASE_URL=postgresql://user:pass@host:5432/db -- npx -y @modelcontextprotocol/server-postgres
+```
+
+### Configuration JSON PostgreSQL
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "DATABASE_URL": "postgresql://user:password@localhost:5432/ma-base"
+      }
+    }
+  }
+}
+```
+
+### Configuration Supabase
+
+```json
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase"],
+      "env": {
+        "SUPABASE_URL": "https://votre-projet.supabase.co",
+        "SUPABASE_SERVICE_ROLE_KEY": "votre-service-role-key"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Sécurité base de données">
+N'utilisez **jamais** les identifiants de production directement. Préférez un utilisateur en lecture seule ou une base de données de staging. Le MCP PostgreSQL peut exécuter des requêtes SQL arbitraires, soyez prudent avec les permissions.
+</Callout>
+
+### Use cases
+
+- **Exploration de données** : *"Montre-moi le schéma de la table users et les 10 derniers enregistrements"*
+- **Analyse et statistiques** : *"Calcule le nombre d'inscriptions par mois sur les 6 derniers mois"*
+- **Génération de requêtes** : *"Écris une requête SQL pour trouver les utilisateurs inactifs depuis plus de 90 jours"*
+- **Optimisation** : *"Analyse cette requête lente et propose des index pour l'accélérer"*
+
+---
+
+## GitHub : Gestion de code source
+
+**Interagissez avec GitHub à un niveau avancé depuis Claude Code.** Claude Code a déjà une intégration Git native, mais le MCP GitHub ajoute l'accès aux issues, pull requests, reviews, workflows CI/CD et recherche de code à travers tous vos repos.
+
+<Callout type="info" title="Package npm officiel vérifié">
+Le MCP GitHub est disponible dans le repository officiel MCP d'Anthropic. Le package est `@modelcontextprotocol/server-github`, disponible sur [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers).
+</Callout>
+
+### Installation
+
+```bash
+# GitHub nécessite un Personal Access Token
+claude mcp add github -e GITHUB_PERSONAL_ACCESS_TOKEN=ghp_votre-token -- npx -y @modelcontextprotocol/server-github
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_votre-token-github"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info" title="Scopes du token GitHub">
+Créez un **Fine-grained Personal Access Token** avec les permissions minimales nécessaires : `repo` (pour les repos privés), `read:org` (si besoin), et `workflow` (pour les CI/CD). Allez dans **GitHub > Settings > Developer settings > Personal access tokens**.
+</Callout>
+
+### Use cases
+
+- **Gestion des PRs** : *"Crée une pull request pour la branche courante avec un résumé des changements"*
+- **Code review** : *"Montre-moi les commentaires de review sur la PR #42 et aide-moi à y répondre"*
+- **Recherche de code** : *"Cherche dans tous nos repos où on utilise la fonction deprecated calculateTotal"*
+- **Issues** : *"Crée une issue pour le bug qu'on vient de trouver avec les étapes de reproduction et les logs"*
+- **CI/CD** : *"Montre-moi le statut du dernier workflow GitHub Actions et pourquoi il a échoué"*
+
+---
+
+## Summary
+
+| MCP | Package vérifié | Auth requise | Meilleur pour |
+|-----|----------------|-------------|---------------|
+| **Context7** | `@upstash/context7-mcp` | Aucune | Documentation à jour, éviter les hallucinations |
+| **Sentry** | `@sentry/mcp-server` | Auth Token | Monitoring erreurs, debug production |
+| **Linear** | Officiel Linear (vérifier npm) | API Key | Gestion de projet, suivi de sprint |
+| **PostgreSQL** | `@modelcontextprotocol/server-postgres` | Connection string | Exploration et analyse de données |
+| **GitHub** | `@modelcontextprotocol/server-github` | PAT Token | PRs, issues, code review, CI/CD |
+
+## Limites et gotchas
+
+Ces MCP sont puissants, mais ils ont des limites concrètes à connaître.
+
+### Quotas API et rate limiting
+
+- **GitHub** : l'API REST limite à 5 000 requêtes/heure avec un token. Les recherches de code sont encore plus limitées (30 requêtes/minute). Un workflow intensif peut atteindre ces limites.
+- **Sentry** : les limites dépendent de votre plan. Le plan gratuit est restrictif sur le volume de requêtes API.
+- **Linear** : environ 100 requêtes/minute. Suffisant pour un usage normal, mais un script de migration peut bloquer.
+- **PostgreSQL** : pas de rate limit réseau, mais les requêtes lourdes sur une base de production peuvent impacter les performances.
+
+### Latence et fiabilité
+
+- **Context7** : dépend de l'indexation d'Upstash. Si une bibliothèque vient de publier une version, il peut y avoir un délai de quelques heures avant que la doc soit à jour.
+- **Sentry** : les événements récents peuvent ne pas apparaître immédiatement (indexation en cours).
+- **GitHub** : les recherches de code cross-repo sont lentes par nature (indexation GitHub).
+
+### Cas de panne courants
+
+- **Token GitHub avec scopes insuffisants** : un Fine-grained token sans le scope `workflow` ne pourra pas lire les GitHub Actions. L'erreur n'est pas toujours explicite.
+- **Connection string PostgreSQL** : une faute dans l'URL de connexion fait planter le MCP silencieusement. Testez-la d'abord avec `psql`.
+- **Sentry org/project mal configuré** : le MCP démarre mais ne retourne rien si l'organisation ou le projet ne correspondent pas.
+
+### Évaluer un MCP tiers
+
+Avant d'installer un MCP de développement communautaire, vérifiez :
+
+| Critère | Ce qu'il faut regarder |
+|---------|----------------------|
+| **Maintenance** | Dernier commit récent, issues traitées, release régulières |
+| **Sécurité** | Pas d'envoi de données vers des serveurs inconnus, permissions minimales |
+| **Performance** | Temps de démarrage, consommation mémoire, gestion des timeouts |
+| **Documentation** | Installation claire, liste des tools exposés, exemples d'utilisation |
+
+<Callout type="tip" title="Registres MCP communautaires">
+Pour découvrir de nouveaux MCP et vérifier la réputation d'un package, consultez [smithery.ai](https://smithery.ai) ou [glama.ai/mcp/servers](https://glama.ai/mcp/servers). Ces registres centralisent les évaluations de la communauté.
+</Callout>
+
+## Next steps
+
+- [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé et résolution des problèmes
+- [Top MCP design & UI](/mcp/best-design) : Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer
+- [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner Context7 + GitHub + Playwright
+- [Créer un MCP custom en TypeScript](/mcp/create-mcp-typescript) : Construisez votre propre serveur MCP
+- [Comprendre les MCP](/mcp/what-are-mcps) : Revenir aux fondamentaux du protocole

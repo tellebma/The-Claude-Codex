@@ -1,0 +1,177 @@
+---
+title: "Claude Code cheatsheet"
+description: "Quick reference card for Claude Code: all commands, shortcuts, and tips in one page."
+badge: "Référence"
+section: "reference"
+order: 1
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Commandes slash (slash commands)
+
+Tapez ces commandes directement dans le prompt Claude Code (session interactive).
+
+| Commande | Description |
+|----------|-------------|
+| `/help` | Affiche l'aide et la liste des commandes disponibles |
+| `/clear` | Vide l'historique de la conversation en cours |
+| `/compact` | Compresse le contexte (résumé automatique des échanges précédents) |
+| `/cost` | Affiche le coût en tokens de la session courante |
+| `/doctor` | Diagnostics système : réseau, MCP, permissions, version |
+| `/init` | Génère un fichier `CLAUDE.md` dans le répertoire courant |
+| `/review` | Demande une revue de code sur les fichiers modifiés |
+| `/memory` | Affiche ou modifie la mémoire persistante (fichier CLAUDE.md actif) |
+| `/model` | Affiche ou change le modèle en cours (`haiku`, `sonnet`, `opus`) |
+| `/permissions` | Affiche et gère les permissions accordées aux outils |
+| `/bug` | Ouvre un rapport de bug vers Anthropic |
+| `/config` | Affiche la configuration active (settings.json fusionné) |
+| `/login` | Authentification via navigateur (Claude.ai Max) |
+| `/logout` | Déconnexion du compte Claude.ai |
+| `/status` | Affiche l'état du compte, des quotas et des MCP connectés |
+| `/mcp` | Gère les MCP : liste, activation, désactivation |
+| `/install-github` | Installe le MCP GitHub officiel |
+| `/terminal-setup` | Configure l'intégration terminal (shell hooks) |
+| `/vim` | Active le mode de saisie vi/vim dans le terminal |
+| `/resume` | Reprend la dernière session interrompue |
+
+<Callout type="tip" title="Autocomplétion des slash commands">
+Dans une session interactive, tapez `/` puis appuyez sur `Tab` pour voir toutes les commandes disponibles avec une description courte.
+</Callout>
+
+---
+
+## Raccourcis clavier
+
+| Raccourci | Action |
+|-----------|--------|
+| `Escape` | Annule la génération en cours (sans quitter) |
+| `Ctrl+C` | Interrompt la génération ou quitte le prompt actuel |
+| `Ctrl+D` | Quitte Claude Code proprement |
+| `Ctrl+L` | Efface l'affichage du terminal (pas le contexte) |
+| `Shift+Tab` | Insère un saut de ligne dans le prompt (multilignes) |
+| `Alt+T` / `Option+T` | Active/désactive l'Extended Thinking |
+| `Ctrl+O` | Affiche le détail du raisonnement (thinking verbose) |
+| `Flèche Haut` | Rappelle la commande précédente dans l'historique |
+| `Flèche Bas` | Avance dans l'historique des commandes |
+| `Tab` | Autocomplétion (fichiers, commandes slash) |
+
+<Callout type="info" title="Raccourcis selon l'OS">
+`Alt+T` fonctionne sous Windows/Linux. `Option+T` est l'équivalent macOS. Les deux activent ou désactivent l'Extended Thinking.
+</Callout>
+
+---
+
+## Fichiers de configuration
+
+Les fichiers sont lus dans cet ordre, du plus prioritaire au moins prioritaire.
+
+| Fichier | Portée | Description |
+|---------|--------|-------------|
+| `.claude/settings.json` | Projet | Configuration locale au projet (commitée ou non) |
+| `.claude/settings.local.json` | Projet (local) | Surcharges locales non-commitées (gitignored) |
+| `~/.claude/settings.json` | Utilisateur | Configuration globale pour tous les projets |
+| `CLAUDE.md` | Projet | Instructions en langage naturel lues au démarrage |
+| `.claude/CLAUDE.md` | Projet (caché) | Variante alternative du fichier CLAUDE.md |
+| `~/.claude/CLAUDE.md` | Global | Instructions globales appliquées à tous les projets |
+| `.claude/agents/` | Projet | Fichiers `.md` définissant les agents personnalisés |
+| `~/.claude/agents/` | Global | Agents globaux disponibles dans tous les projets |
+| `.claude/skills/` | Projet | Skills (slash commands) personnalisés au projet |
+| `~/.claude/skills/` | Global | Skills globaux disponibles partout |
+
+---
+
+## 3 modes d'exécution
+
+### Mode interactif (défaut)
+
+```bash
+# Lance une session REPL interactive
+claude
+
+# Lance avec un projet spécifique
+claude --model claude-sonnet-4-5
+```
+
+Utilisé pour le développement au quotidien. Claude maintient le contexte entre les échanges.
+
+### Mode print (`--print` / `-p`)
+
+```bash
+# Exécute une tâche et affiche le résultat, puis quitte
+claude --print "Explique ce que fait ce fichier"
+
+# Alias court
+claude -p "Résume le contenu de README.md"
+
+# Avec format JSON
+claude --print --output-format json "Liste les fonctions de src/utils.ts"
+
+# Mode pipe (stdin → stdout)
+echo "Corrige les fautes dans ce texte" | claude --print
+cat fichier.ts | claude --print "Ajoute des commentaires JSDoc"
+```
+
+### Mode headless / SDK
+
+```bash
+# Pour l'automatisation et CI/CD
+claude --print --max-turns 1 --output-format stream-json "prompt"
+
+# Variables d'environnement pour le mode non-interactif
+ANTHROPIC_API_KEY=sk-ant-... claude --print "prompt"
+```
+
+---
+
+## Commandes MCP
+
+| Commande | Description |
+|----------|-------------|
+| `claude mcp add <nom> -- <cmd> <args>` | Ajoute un MCP en stdio (scope global par défaut) |
+| `claude mcp add --scope project <nom> -- <cmd>` | Ajoute un MCP au niveau projet |
+| `claude mcp add --transport sse <nom> <url>` | Ajoute un MCP via transport SSE |
+| `claude mcp remove <nom>` | Supprime un MCP configuré |
+| `claude mcp list` | Liste tous les MCP configurés avec leur statut |
+| `claude mcp logs <nom>` | Affiche les logs d'un MCP spécifique |
+| `claude mcp get <nom>` | Affiche la configuration détaillée d'un MCP |
+
+```bash
+# Exemples concrets
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/projets
+claude mcp add github -- npx -y @modelcontextprotocol/server-github
+claude mcp add --scope project postgres -- npx -y @modelcontextprotocol/server-postgres $DATABASE_URL
+claude mcp list
+claude mcp logs github
+```
+
+<Callout type="warning" title="Scope global vs projet">
+Le scope `global` (défaut) configure le MCP dans `~/.claude/settings.json`. Le scope `project` l'ajoute dans `.claude/settings.json` du répertoire courant. Préférez `project` pour les tokens d'accès sensibles.
+</Callout>
+
+---
+
+## Commandes `claude config`
+
+| Commande | Description |
+|----------|-------------|
+| `claude config list` | Liste toutes les options de configuration actives |
+| `claude config get <clé>` | Affiche la valeur d'une option |
+| `claude config set <clé> <valeur>` | Définit une option de configuration |
+| `claude config add <clé> <valeur>` | Ajoute une valeur à une liste |
+| `claude config remove <clé> <valeur>` | Retire une valeur d'une liste |
+
+```bash
+# Exemples
+claude config set model claude-sonnet-4-5
+claude config get model
+claude config list
+```
+
+---
+
+## Next steps
+
+- [CLI : Référence complète des flags](/reference/cli) : Tous les flags de la commande `claude`
+- [settings.json : Guide complet](/reference/settings) : Options de configuration détaillées
+- [Variables d'environnement](/reference/environment) : Toutes les variables reconnues

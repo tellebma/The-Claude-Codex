@@ -1,0 +1,133 @@
+---
+title: "When not to use Claude Code"
+description: "Situations where Claude Code isn't the best choice: alternatives to consider and how to make the right tool selection."
+section: "limits"
+order: 4
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+Claude Code est excellent pour beaucoup de taches. Mais pas toutes. Cette page liste les situations ou vous devriez soit choisir un autre outil, soit ajouter des garde-fous serieux.
+
+L'objectif n'est pas de decourager l'utilisation de Claude Code. C'est de vous eviter de perdre du temps ou de prendre des risques inutiles.
+
+## Systemes temps reel et embarques
+
+Si votre code doit repondre en microsecondes (controleurs industriels, systemes embarques, trading haute frequence), Claude Code n'est pas le bon outil de generation.
+
+**Pourquoi :** Claude Code genere du code idiomatique et lisible, mais pas forcement optimal en termes de performance brute. Il n'a pas acces aux specs hardware, aux contraintes de memoire ou aux timings specifiques de votre plateforme. Le code genere pourrait fonctionner en tests mais echouer sous contraintes reelles.
+
+**Alternative :** utilisez Claude Code pour la documentation, les tests ou le scaffolding de ces projets, mais ecrivez le code critique a la main avec un profilage reel.
+
+## Code de securite critique sans revue humaine
+
+Si personne ne relit le code genere avant qu'il ne touche la production, Claude Code peut introduire des vulnerabilites.
+
+**Exemples de risques :**
+- Validation d'entree incomplete ou contournable
+- Gestion d'authentification avec des failles subtiles
+- Injection SQL dans des requetes mal parametrees
+- Secrets codes en dur dans des fichiers de configuration
+- Dependances npm/pip avec des vulnerabilites connues
+
+<Callout type="warning" title="Regle non negociable">
+Tout code genere par une IA, y compris Claude Code, doit passer par une revue humaine et un scan de securite avant le deploiement en production. Sans exception.
+</Callout>
+
+**Le bon usage :** Claude Code peut generer une premiere version du code de securite, mais un expert securite doit toujours valider. Utilisez le [systeme de hooks](/advanced/hooks) pour declencher un linter de securite apres chaque modification.
+
+## Industries fortement reglementees
+
+Sante (HDS, HIPAA), finance (PCI-DSS), defense, aviation : ces secteurs ont des exigences strictes sur la tracabilite, la certification et l'origine du code.
+
+**Les problemes :**
+- Le code genere par IA n'est pas certifiable au sens reglementaire dans la plupart des juridictions
+- La propriete intellectuelle du code genere est encore juridiquement floue
+- Les auditeurs peuvent exiger la preuve que le code a ete ecrit par un humain identifie
+- Les donnees envoyees a l'API Anthropic peuvent poser des problemes de conformite
+
+**Ce qui est possible :** utilisez Claude Code pour le code non soumis a certification (outils internes, scripts d'automatisation, documentation). Pour le code reglemente, utilisez-le comme assistant de revue, pas comme generateur principal.
+
+<Callout type="tip" title="Pour les entreprises reglementees">
+Si la conformite est un enjeu, consultez notre section [Securite et conformite en entreprise](/enterprise/security-compliance). Les providers comme AWS Bedrock offrent du zero data retention et un hebergement en region.
+</Callout>
+
+## Prototypage UI rapide en mode visuel
+
+Si votre objectif est de maquetter une interface utilisateur visuellement, Claude Code est limite par son absence d'interface graphique.
+
+**Ce que Claude Code peut faire :** generer du code React, Vue ou HTML/CSS correct. Mais vous ne verrez le resultat qu'en lancant un serveur de dev et en ouvrant le navigateur.
+
+**Ce qui est mieux adapte :**
+- **Cursor** pour voir les modifications en temps reel dans l'editeur
+- **v0.dev (Vercel)** pour generer des composants UI a partir de descriptions
+- **Figma + MCP** pour travailler a partir de maquettes existantes
+
+**Le bon usage :** Claude Code est efficace pour generer la logique derriere l'UI (state management, appels API, formulaires). Pour le rendu visuel pixel-perfect, combinez-le avec un outil visuel.
+
+## Taches repetitives simples et rapides
+
+Pour des micro-taches qui prennent 5 secondes a la main, Claude Code est un overhead inutile.
+
+**Exemples :**
+- Renommer une variable dans un fichier
+- Ajouter un import manquant
+- Corriger une typo
+- Changer la valeur d'une constante
+
+Pour ces taches, votre editeur (avec ou sans Copilot) est plus rapide. Claude Code est fait pour les taches qui prennent 5 minutes ou plus, pas 5 secondes.
+
+## Quand vous ne comprenez pas le code genere
+
+C'est peut-etre la regle la plus importante. Si Claude Code genere du code que vous ne comprenez pas, ne l'utilisez pas tel quel.
+
+**Pourquoi c'est risque :**
+- Vous ne pourrez pas debugger si ca casse
+- Vous ne saurez pas si le code est correct ou hallucine
+- Vous creez une dette technique invisible
+- Vous perdez le controle de votre codebase
+
+<Callout type="warning" title="Le test du 'je peux l'expliquer'">
+Avant d'accepter du code genere, posez-vous la question : "Est-ce que je pourrais expliquer ce code a un collegue ?" Si la reponse est non, demandez a Claude Code de l'expliquer, ou simplifiez.
+</Callout>
+
+## Projets sans controle de version
+
+Si vous ne travaillez pas avec Git (ou un equivalent), utiliser Claude Code est risque.
+
+**Le probleme :** Claude Code modifie des fichiers directement. Sans Git, il n'y a pas de filet de securite. Une mauvaise modification est irreversible.
+
+**La regle :** initialisez toujours un repo Git avant de lancer Claude Code sur un projet. Meme un simple `git init` + `git add .` + `git commit -m "avant claude"` suffit.
+
+## Situations avec bande passante limitee
+
+Claude Code necessite une connexion Internet stable. Chaque requete fait un aller-retour vers les serveurs d'Anthropic.
+
+**Ou ca pose probleme :**
+- En avion ou en zone blanche
+- Sur des connexions instables (trains, conferences bondees)
+- Dans des environnements air-gapped (securite militaire, certaines banques)
+
+**Alternatives hors ligne :** des modeles locaux comme Codestral ou des outils IDE avec cache local. La qualite sera inferieure, mais au moins ca fonctionne sans connexion.
+
+## Resume : le bon outil au bon moment
+
+| Situation | Claude Code ? | Alternative |
+|-----------|:------------:|-------------|
+| Refactoring multi-fichiers | Oui | - |
+| Autocompletion en temps reel | Non | Copilot, Cursor |
+| Code de securite critique | Avec revue | Expert humain |
+| Industrie reglementee | Assistance | Codage manuel certifie |
+| Maquettage UI visuel | Partiel | Cursor, v0.dev |
+| Micro-taches (< 5 sec) | Non | IDE + raccourcis |
+| Code incompris | Non | Apprendre d'abord |
+| Sans Git | Non | Initialiser Git d'abord |
+| Sans Internet | Non | Modeles locaux |
+| Pipeline CI/CD | Oui | - |
+| Creation de projet complet | Oui | - |
+
+## Next steps
+
+- Decouvrez les limites techniques en detail : [Limites connues](/limits/known-limitations)
+- Comparez avec les alternatives : [vs Copilot](/limits/vs-copilot) et [vs Cursor](/limits/vs-cursor)
+- Si vous etes convaincu, debutez avec les [premiers pas](/getting-started)

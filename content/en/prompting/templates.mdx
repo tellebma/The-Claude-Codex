@@ -1,0 +1,348 @@
+---
+title: "Prompt templates"
+description: "Ready-to-use prompt templates for Claude Code: code generation, debugging, refactoring, testing, documentation, and more."
+section: "prompting"
+order: 3
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Des prompts prêts à l'emploi
+
+Chaque template below a été conçu pour produire des résultats de qualité professionnelle avec Claude Code. Ils suivent les [5 principes du prompting](/prompting/basics) et intègrent les [directives avancées](/prompting/directives) pour cadrer efficacement les réponses.
+
+<Callout type="tip" title="Comment utiliser ces templates">
+1. Copiez le template qui correspond à votre besoin
+2. Remplacez les éléments entre `[CROCHETS]` par vos propres valeurs
+3. Ajoutez ou retirez des sections selon votre contexte
+4. Affinez le résultat par itérations successives
+</Callout>
+
+## Développeur web frontend
+
+### Création de composant React
+
+```markdown
+Tu es un développeur frontend senior React/Next.js/TypeScript.
+
+Crée un composant React pour [DESCRIPTION DU COMPOSANT].
+
+Contexte technique :
+- Framework : Next.js 14 (App Router)
+- Langage : TypeScript strict (pas de any)
+- Style : Tailwind CSS (utility classes uniquement)
+- State : [zustand / React state / aucun]
+
+Spécifications fonctionnelles :
+- [Fonctionnalité 1 avec détails]
+- [Fonctionnalité 2 avec détails]
+- [Fonctionnalité 3 avec détails]
+
+Contraintes :
+- Responsive mobile-first
+- Accessible WCAG 2.1 AA (aria-labels, focus visible, contrastes)
+- Performance optimisée (React.memo si pertinent, lazy loading)
+- Gestion des états : loading, erreur, vide, succès
+- Dark mode supporté
+
+Génère :
+1. Le composant principal dans src/components/[Nom].tsx
+2. Les types/interfaces dans src/types/[nom].types.ts
+3. Un exemple d'utilisation
+4. Les tests unitaires (Vitest + Testing Library)
+```
+
+**Résultat attendu** : un composant production-ready avec types, accessibilité, responsive design et tests.
+
+### Intégration d'une maquette
+
+```markdown
+Tu es un intégrateur web expert en Tailwind CSS et React.
+
+Intègre la maquette suivante en composant React/TypeScript :
+[Décris la maquette ou colle un lien vers un screenshot]
+
+Spécifications :
+- Reproduis fidèlement le design (espacements, couleurs, typographie)
+- Mobile : [description du layout mobile]
+- Tablette : [description du layout tablette]
+- Desktop : [description du layout desktop]
+
+Palette de couleurs :
+- Primaire : [code hex]
+- Secondaire : [code hex]
+- Fond : [code hex]
+- Texte : [code hex]
+
+ALWAYS:
+- Utilise les classes Tailwind existantes du design system
+- Optimise les images avec next/image (WebP, lazy loading)
+- Ajoute les animations d'apparition au scroll avec framer-motion
+```
+
+## Développeur mobile
+
+### Composant React Native
+
+```markdown
+Tu es un développeur mobile senior React Native/TypeScript.
+
+Crée un écran [NOM DE L'ÉCRAN] pour une application [TYPE D'APP].
+
+Contexte technique :
+- React Native 0.74+ avec Expo
+- Navigation : expo-router (file-based routing)
+- Style : NativeWind (Tailwind pour React Native)
+- State : [Zustand / React Query / Context]
+
+Spécifications de l'écran :
+- Layout : [description du layout]
+- Interactions : [gestes, animations, transitions]
+- Données : [source des données, format]
+
+Contraintes mobile :
+- Support iOS et Android
+- Gestion du clavier (KeyboardAvoidingView)
+- Support des encoches (SafeAreaView)
+- Performance : FlatList pour les listes, pas de ScrollView
+- Accessibilité : accessibilityLabel, accessibilityRole
+
+Génère :
+1. Le composant écran dans app/[nom].tsx
+2. Les hooks custom nécessaires
+3. Les types dans types/[nom].types.ts
+4. Un mock de données pour le développement
+```
+
+## Développeur backend
+
+### Endpoint API REST
+
+```markdown
+Tu es un développeur backend senior Node.js/Express/TypeScript.
+
+Crée un endpoint [MÉTHODE] [ROUTE] pour [DESCRIPTION].
+
+Contexte technique :
+- Runtime : Node.js 20 avec Express 4
+- ORM : Prisma avec PostgreSQL
+- Validation : Zod
+- Auth : JWT (middleware déjà en place)
+- Logging : Winston
+
+Schéma de données :
+- Input (body/params/query) : [description des champs]
+- Output : [description de la réponse attendue]
+
+Business rules :
+- [Règle 1]
+- [Règle 2]
+- [Règle 3]
+
+ALWAYS:
+- Valide tous les inputs avec un schéma Zod
+- Retourne le format { success, data, error, meta }
+- Gère les erreurs avec try/catch et codes HTTP sémantiques
+- Log chaque requête (succès et échec)
+- Utilise des requêtes paramétrées (jamais de concaténation SQL)
+
+NEVER:
+- Ne retourne jamais de données sensibles (password, tokens internes)
+- N'expose jamais les erreurs Prisma brutes au client
+- N'utilise pas de any TypeScript
+
+Génère :
+1. Le controller dans src/controllers/[nom].controller.ts
+2. Le service dans src/services/[nom].service.ts
+3. Le schéma Zod dans src/schemas/[nom].schema.ts
+4. Les tests unitaires du service
+5. Un exemple de requête curl
+```
+
+### Migration de base de données
+
+```markdown
+Tu es un DBA/développeur backend expert en PostgreSQL et Prisma.
+
+Crée une migration pour [DESCRIPTION DU CHANGEMENT].
+
+État actuel du schéma :
+[Colle le schema.prisma pertinent ou décris les tables existantes]
+
+Changements demandés :
+- [Ajout/modification/suppression de table ou colonne]
+- [Relations à créer ou modifier]
+- [Index à ajouter]
+
+Contraintes :
+- La migration doit être réversible (up et down)
+- Pas de perte de données sur les tables existantes
+- Gestion des valeurs par défaut pour les nouvelles colonnes NOT NULL
+- Performance : ajouter les index pertinents
+
+Génère :
+1. La mise à jour du schema.prisma
+2. La commande Prisma à exécuter
+3. Un script de seed pour les données de test
+4. Les vérifications post-migration
+```
+
+## DevOps / SRE
+
+### Pipeline CI/CD
+
+```markdown
+Tu es un ingénieur DevOps senior.
+
+Crée un pipeline CI/CD avec [GitHub Actions / GitLab CI] pour [TYPE DE PROJET].
+
+Contexte :
+- Repo : [monorepo / single app]
+- Langage : [Node.js / Python / Go / etc.]
+- Déploiement cible : [Vercel / AWS / GCP / Docker]
+- Environnements : [dev, staging, production]
+
+Pipeline requis :
+1. Lint et type-check sur chaque PR
+2. Tests unitaires et d'intégration
+3. Build de l'application
+4. Déploiement automatique sur [cible]
+
+Contraintes :
+- Cache des dépendances pour accélérer les builds
+- Variables d'environnement via secrets (jamais en dur)
+- Notifications Slack en cas d'échec
+- Rollback automatique si le health check échoue
+- Temps de build cible : < 5 minutes
+
+Génère :
+1. Le fichier de workflow complet (.github/workflows/ci-cd.yml)
+2. Le Dockerfile optimisé (multi-stage)
+3. Le docker-compose.yml pour le dev local
+4. La documentation de déploiement
+```
+
+### Script d'automatisation
+
+```markdown
+Tu es un ingénieur DevOps/SRE senior.
+
+Crée un script [Bash/Python] qui automatise [DESCRIPTION DE LA TÂCHE].
+
+Environnement :
+- OS : [Linux Ubuntu 22.04 / macOS]
+- Prérequis : [outils nécessaires]
+- Fréquence d'exécution : [manuel / cron / CI]
+
+Fonctionnement :
+1. [Étape 1]
+2. [Étape 2]
+3. [Étape 3]
+
+Exigences :
+- Gestion d'erreurs robuste (exit codes, trap)
+- Logging avec niveaux (INFO, WARN, ERROR)
+- Mode dry-run pour tester sans exécuter
+- Variables configurables via .env ou arguments
+- Idempotent (relançable sans effet de bord)
+
+Génère :
+1. Le script complet et commenté
+2. Le fichier .env.example
+3. Les instructions d'utilisation
+```
+
+## Designer / Intégrateur
+
+### Design system
+
+```markdown
+Tu es un designer/développeur frontend expert en design systems.
+
+Crée les composants de base d'un design system pour [TYPE DE PROJET].
+
+Stack :
+- React/TypeScript
+- Tailwind CSS
+- Storybook pour la documentation
+- CVA (class-variance-authority) pour les variantes
+
+Composants à créer :
+1. Button (primary, secondary, ghost, danger | sm, md, lg | avec icône)
+2. Input (text, email, password, number | avec label, erreur, helper)
+3. Card (default, elevated, outlined | avec header, body, footer)
+4. Badge (info, success, warning, error | sm, md)
+5. Modal (avec overlay, animation, focus trap)
+
+Pour chaque composant :
+- Code TypeScript avec toutes les variantes
+- Props typées avec des union types (pas d'enums)
+- Support du dark mode
+- Accessibilité complète
+- Story Storybook avec tous les états
+- Tests unitaires
+```
+
+## Rédacteur technique
+
+### Documentation d'API
+
+```markdown
+Tu es un rédacteur technique senior spécialisé en documentation d'API.
+
+Rédige la documentation pour l'API [NOM DE L'API].
+
+Public cible : [développeurs juniors / équipe interne / développeurs tiers]
+
+Structure :
+1. Overview (description, base URL, authentification)
+2. Authentification (méthode, obtention des clés, exemples)
+3. Endpoints par ressource :
+   - Méthode + URL
+   - Description
+   - Paramètres (path, query, body) avec types et required
+   - Réponses (succès + erreurs) avec exemples JSON
+   - Exemple de requête (curl, JavaScript, Python)
+4. Codes d'erreur (tableau avec code, message, résolution)
+5. Rate limiting (limites, headers, bonnes pratiques)
+6. Changelog et versioning
+
+Conventions :
+- Exemples de code fonctionnels et copiables
+- Utilise des admonitions (Note, Warning, Tip)
+- Inclus un sommaire navigable
+- Tous les exemples JSON doivent être valides
+```
+
+## Comment adapter un template à son projet
+
+<Steps>
+<Step title="Identifiez votre besoin" stepNumber={1}>
+Choisissez le template le plus proche de votre tâche. Ne cherchez pas un match parfait, un template à 70% pertinent vaut mieux qu'un prompt écrit de zéro.
+</Step>
+
+<Step title="Personnalisez le contexte" stepNumber={2}>
+Remplacez les valeurs entre `[CROCHETS]` par les spécificités de votre projet : stack technique, conventions, contraintes métier.
+</Step>
+
+<Step title="Ajoutez vos contraintes" stepNumber={3}>
+Ajoutez les règles propres à votre projet dans les blocs ALWAYS/NEVER. Référez votre [CLAUDE.md](/prompting/claude-md) si vous en avez un.
+</Step>
+
+<Step title="Itérez sur le résultat" stepNumber={4} isLast>
+Le premier résultat sera bon mais pas parfait. Utilisez des prompts de suivi pour affiner : "Ajoute la gestion des erreurs", "Rends-le accessible", "Optimise les performances".
+</Step>
+</Steps>
+
+<Callout type="tip" title="Transformez vos templates en Skills">
+Si vous utilisez un template régulièrement, transformez-le en [Skill Claude Code](/skills/create-custom). Créez un fichier `.claude/commands/mon-template.md` et vous pourrez l'invoquer avec `/project:mon-template` à chaque fois. Plus de copier-coller, plus d'oublis.
+</Callout>
+
+## Next steps
+
+Vous avez maintenant une bibliothèque de templates prêts à l'emploi. Going further :
+
+- [Common mistakes à éviter](/prompting/mistakes) : Les pièges qui ruinent même les meilleurs templates
+- [Le guide complet CLAUDE.md](/prompting/claude-md) : Intégrez vos templates dans le contexte permanent du projet
+- [Prompting avancé et multi-agents](/prompting/advanced) : Techniques de chaînage et orchestration d'agents
+- [Top Skills recommandés](/skills/best-skills) : Les Skills qui automatisent les tâches récurrentes

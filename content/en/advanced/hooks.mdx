@@ -1,0 +1,376 @@
+---
+title: "Hooks system"
+description: "Master Claude Code hooks: PreToolUse, PostToolUse, and Stop hooks for automated formatting, validation, and custom workflows."
+section: "advanced"
+order: 1
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Qu'est-ce qu'un hook ?
+
+Les hooks sont des **commandes shell déclenchées automatiquement** par Claude Code à des moments précis du cycle d'exécution. Pensez-y comme des écouteurs d'événements au niveau du terminal : Claude effectue une action, votre hook réagit.
+
+Contrairement aux MCP (qui étendent les capacités de Claude) ou aux Skills (qui définissent des comportements), les hooks **interceptent le flux d'exécution** pour y injecter une logique externe.
+
+<Callout type="info" title="Depuis quelle version ?">
+Les hooks sont disponibles depuis Claude Code 1.x. Vérifiez votre version avec `claude --version` et mettez à jour via `npm update -g @anthropic-ai/claude-code`.
+</Callout>
+
+## Les 4 types de hooks
+
+Claude Code expose quatre points d'ancrage dans son cycle de vie :
+
+| Type | Déclenchement | Usage typique |
+|------|--------------|---------------|
+| `PreToolUse` | Avant l'exécution d'un outil | Valider les paramètres, bloquer des actions |
+| `PostToolUse` | Après l'exécution d'un outil | Auto-format, notifications, logs |
+| `Stop` | Quand Claude termine la session | Rapport de session, nettoyage |
+| `Notification` | Quand Claude envoie une notification | Alertes Slack, emails |
+
+## Configuration dans settings.json
+
+Les hooks se déclarent dans votre fichier `settings.json` (`~/.claude/settings.json` pour global, ou `.claude/settings.json` pour un projet) :
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Validation avant bash...' && exit 0"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prettier --write \"$CLAUDE_TOOL_OUTPUT_FILE\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Session terminée' >> ~/.claude/session.log"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Structure d'un hook
+
+```
+hooks:
+  <TypeDeHook>:           # PreToolUse | PostToolUse | Stop | Notification
+    - matcher: "<outil>"  # Nom de l'outil à intercepter (optionnel pour Stop/Notification)
+      hooks:
+        - type: "command" # Seul type disponible actuellement
+          command: "..."  # Commande shell exécutée
+```
+
+Le **matcher** accepte le nom exact d'un outil Claude Code : `Bash`, `Write`, `Edit`, `Read`, `WebFetch`, etc. Il est omis pour `Stop` et `Notification`.
+
+## Variables d'environnement disponibles
+
+Vos commandes de hook reçoivent plusieurs variables d'environnement injectées par Claude Code :
+
+| Variable | Disponible dans | Contenu |
+|----------|----------------|---------|
+| `CLAUDE_TOOL_NAME` | PreToolUse, PostToolUse | Nom de l'outil (`Bash`, `Write`, etc.) |
+| `CLAUDE_TOOL_INPUT` | PreToolUse | Paramètres JSON de l'outil |
+| `CLAUDE_TOOL_OUTPUT` | PostToolUse | Résultat de l'outil (stdout) |
+| `CLAUDE_TOOL_OUTPUT_FILE` | PostToolUse (Write, Edit) | Chemin du fichier écrit ou modifié |
+| `CLAUDE_SESSION_ID` | Tous | Identifiant unique de la session |
+
+## Examples concrets
+
+### PreToolUse : valider les paramètres d'une commande shell
+
+Ce hook bloque toute commande `rm -rf` sur des chemins dangereux :
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo $CLAUDE_TOOL_INPUT | python3 -c \"import sys, json; cmd = json.load(sys.stdin).get('command', ''); exit(1 if 'rm -rf /' in cmd else 0)\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="Codes de sortie">
+Si votre hook retourne un code de sortie **non nul** (`exit 1`), Claude Code **interrompt l'action** et signale l'erreur à l'utilisateur. Utilisez `exit 0` pour laisser l'action se poursuivre.
+</Callout>
+
+### PostToolUse : auto-format avec Prettier
+
+Formate automatiquement chaque fichier écrit par Claude Code :
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f \"$CLAUDE_TOOL_OUTPUT_FILE\" ] && npx prettier --write \"$CLAUDE_TOOL_OUTPUT_FILE\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f \"$CLAUDE_TOOL_OUTPUT_FILE\" ] && npx prettier --write \"$CLAUDE_TOOL_OUTPUT_FILE\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### PostToolUse : notification Slack après un commit
+
+Créez d'abord le script de notification :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/notify-slack.sh
+
+TOOL_INPUT=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "import sys, json; d = json.load(sys.stdin); print(d.get('command', ''))")
+
+# Déclenche uniquement sur git commit
+if echo "$TOOL_INPUT" | grep -q "git commit"; then
+  COMMIT_MSG=$(git log --oneline -1 2>/dev/null || echo "Commit créé")
+  
+  curl -s -X POST "$SLACK_WEBHOOK_URL" \
+    -H 'Content-type: application/json' \
+    -d "{\"text\": \":white_check_mark: Claude Code a créé un commit : \`$COMMIT_MSG\`\"}" > /dev/null
+fi
+
+exit 0
+```
+
+Puis configurez le hook dans `settings.json` :
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/notify-slack.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="Sécurité des webhooks">
+Ne mettez jamais l'URL du webhook Slack directement dans `settings.json`. Utilisez une variable d'environnement : `export SLACK_WEBHOOK_URL="https://hooks.slack.com/..."` dans votre `~/.bashrc` ou `~/.zshrc`.
+</Callout>
+
+### Stop : générer un rapport de session
+
+Créez le script de rapport :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/session-report.sh
+
+LOG_FILE=~/.claude/sessions/$(date +%Y-%m-%d).log
+mkdir -p ~/.claude/sessions
+
+{
+  echo "=== Session $(date '+%Y-%m-%d %H:%M:%S') ==="
+  echo "Session ID: $CLAUDE_SESSION_ID"
+  echo "Répertoire: $(pwd)"
+  echo "Branche Git: $(git branch --show-current 2>/dev/null || echo 'N/A')"
+  echo ""
+} >> "$LOG_FILE"
+
+exit 0
+```
+
+Puis dans `settings.json` :
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-report.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+## Patterns avancés
+
+### Hooks conditionnels par type de fichier
+
+N'appliquer Prettier que sur les fichiers TypeScript et JavaScript :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/format-if-ts.sh
+
+FILE="$CLAUDE_TOOL_OUTPUT_FILE"
+
+if [[ "$FILE" =~ \.(ts|tsx|js|jsx|json|css|scss)$ ]]; then
+  npx prettier --write "$FILE" 2>/dev/null
+fi
+
+exit 0
+```
+
+### Hooks chaînés : lint + format + test
+
+Exécute une chaîne de vérifications après chaque écriture de fichier :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/quality-chain.sh
+
+FILE="$CLAUDE_TOOL_OUTPUT_FILE"
+
+if [[ -z "$FILE" ]] || [[ ! -f "$FILE" ]]; then
+  exit 0
+fi
+
+# Étape 1 : Format
+npx prettier --write "$FILE" 2>/dev/null || true
+
+# Étape 2 : Lint (sans bloquer)
+npx eslint --fix "$FILE" 2>/dev/null || true
+
+# Étape 3 : Vérification TypeScript (sans bloquer)
+if [[ "$FILE" =~ \.(ts|tsx)$ ]]; then
+  npx tsc --noEmit 2>/dev/null || true
+fi
+
+exit 0
+```
+
+### Hook de validation de secrets
+
+Bloque toute écriture contenant des patterns de secrets :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/check-secrets.sh
+# Hook PreToolUse sur Write/Edit
+
+FILE_CONTENT=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('content', '') + d.get('new_string', ''))
+" 2>/dev/null)
+
+# Patterns à bloquer (clés API courantes)
+PATTERNS=(
+  "sk-[a-zA-Z0-9]{48}"
+  "AKIA[0-9A-Z]{16}"
+  "AIza[0-9A-Za-z-_]{35}"
+  "ghp_[a-zA-Z0-9]{36}"
+)
+
+for pattern in "${PATTERNS[@]}"; do
+  if echo "$FILE_CONTENT" | grep -qE "$pattern"; then
+    echo "ERREUR : Secret détecté dans le contenu (pattern: $pattern)" >&2
+    exit 1
+  fi
+done
+
+exit 0
+```
+
+## Troubleshooting
+
+### Mon hook ne se déclenche pas
+
+1. Vérifiez le nom exact du matcher (sensible à la casse : `Bash`, pas `bash`)
+2. Rechargez Claude Code : fermez et rouvrez la session
+3. Validez le JSON de votre `settings.json` :
+
+```bash
+cat ~/.claude/settings.json | python3 -m json.tool
+```
+
+### Mon hook bloque toutes les actions
+
+Un `exit 1` inattendu peut bloquer Claude. Ajoutez un `|| true` sur les commandes non critiques :
+
+```bash
+# Mauvais : peut bloquer si npx n'est pas installé
+npx prettier --write "$FILE"
+
+# Bon : ne bloque pas même en cas d'erreur
+npx prettier --write "$FILE" 2>/dev/null || true
+```
+
+### Déboguer un hook
+
+Loggez la sortie de votre hook pour analyser son comportement :
+
+```bash
+#!/bin/bash
+# Ajoutez ces lignes en début de script pour le debug
+exec 2>> ~/.claude/hooks.log
+set -x  # Active le mode trace (chaque commande est loggée)
+
+# Votre code de hook...
+```
+
+### Le hook est trop lent
+
+Les hooks bloquent l'exécution de Claude Code. Pour des opérations longues, utilisez l'exécution en arrière-plan :
+
+```bash
+#!/bin/bash
+# Lance la notification de manière asynchrone
+(curl -s -X POST "$SLACK_WEBHOOK_URL" -d '{"text":"Done!"}' > /dev/null 2>&1) &
+
+exit 0  # Retourne immédiatement
+```
+
+## Next steps
+
+Les hooks sont puissants en autonome, mais atteignent leur plein potentiel combinés au mode headless pour les pipelines CI/CD.

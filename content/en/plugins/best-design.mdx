@@ -1,0 +1,229 @@
+---
+title: "Best design plugins for Claude Code"
+description: "The best plugins for design and UI work with Claude Code: component libraries, design systems, and visual tools."
+section: "plugins"
+order: 4
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## Dotez Claude Code d'une expertise design
+
+Ces ressources spécialisées transforment Claude Code en un assistant design et frontend plus efficace. Certaines sont des MCP servers (qui connectent Claude à des services externes), d'autres sont des agents ou skills communautaires (fichiers Markdown à copier dans `.claude/`).
+
+<Callout type="info" title="Ressources communautaires et MCP, pas des plugins officiels">
+Les ressources présentées sur cette page sont soit des **projets communautaires** (agents, skills) soit des **MCP servers** légitimes. Il n'existe pas de plugin officiel « Frontend Design » ou « UI UX Pro Max » installable via une commande `/plugin install`.
+</Callout>
+
+<Callout type="tip" title="Complémentarité MCP et agents">
+Les MCP de cette page (Playwright, 21st.dev Magic) fournissent des **capacités d'action** : naviguer, prendre des screenshots, générer des composants via une API. Les agents et skills communautaires fournissent l'**intelligence de design** : les bonnes pratiques, les patterns, les conventions.
+</Callout>
+
+---
+
+## Agent Frontend Design : L'expert design dans Claude Code
+
+**Ressource communautaire** | Catégorie : Agents | Source : Everything Claude Code
+
+L'agent Frontend Design est un fichier Markdown qui configure Claude Code comme un expert en design et développement frontend. Il fait partie de collections communautaires comme [Everything Claude Code](https://github.com/punkpeye/everything-claude-code).
+
+<Callout type="info" title="Un agent, pas un plugin">
+Il ne s'agit pas d'un logiciel à installer, c'est un fichier `.md` qui définit un persona et des instructions pour Claude Code. Vous le copiez dans `.claude/agents/` et il devient disponible dans vos sessions.
+</Callout>
+
+### Installation depuis Everything Claude Code
+
+```bash
+# Installer via /install-github
+/install-github punkpeye/everything-claude-code
+
+# Ou manuellement : télécharger l'agent spécifique
+mkdir -p .claude/agents
+curl -o .claude/agents/frontend-design.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/agents/frontend-design.md
+```
+
+### Example de fichier agent frontend-design.md
+
+Vous pouvez aussi créer le vôtre :
+
+```markdown
+---
+name: frontend-design
+description: Expert en design et développement frontend, spécialisé React et Tailwind CSS
+---
+
+Tu es un expert en design et développement frontend avec une expertise en :
+- Design systems (tokens, composants, documentation)
+- React avec TypeScript et Tailwind CSS
+- Accessibilité web (WCAG 2.1 AA minimum)
+- Responsive design et mobile-first
+- Animations subtiles avec Framer Motion
+
+Pour chaque composant, tu produis :
+1. Le code TypeScript strict, sans `any`
+2. Les classes Tailwind responsive (mobile → desktop)
+3. Les attributs ARIA et le focus management
+4. Un exemple de dark mode si applicable
+```
+
+### Use cases
+
+- **Landing page complète** : *"En tant qu'agent frontend-design, crée une landing page pour un SaaS avec hero, features, pricing et footer"*
+- **Design system** : *"Génère les tokens de design (couleurs, typographie, espacements) pour un design system cohérent"*
+- **Composant accessible** : *"Crée un composant Modal accessible avec focus trap, escape key, et aria-labels"*
+- **Dark mode** : *"Ajoute un dark mode complet à mon application avec des transitions fluides"*
+
+---
+
+## 21st.dev Magic : Composants UI modernes (MCP)
+
+**MCP Server officiel** | Catégorie : Génération UI | Auteur : [21st.dev](https://21st.dev)
+
+21st.dev Magic est un **vrai MCP server** qui donne accès à une bibliothèque de composants UI modernes directement depuis Claude Code. Contrairement aux agents, il s'agit d'un service externe connecté via le protocole MCP.
+
+<Callout type="info" title="MCP officiel de 21st.dev">
+Le package npm est `@21st-dev/magic`. Il nécessite une clé API obtenue sur [21st.dev](https://21st.dev). La documentation officielle est disponible sur le site de 21st.dev.
+</Callout>
+
+### Installation
+
+```bash
+# Via la commande Claude
+claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @21st-dev/magic
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "magic": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic"],
+      "env": {
+        "TWENTY_FIRST_API_KEY": "votre-clé-21st-dev"
+      }
+    }
+  }
+}
+```
+
+### Outils disponibles
+
+- **`21st_magic_component_builder`** : Générer un composant UI à partir d'une description
+- **`21st_magic_component_inspiration`** : Trouver de l'inspiration parmi des composants existants
+- **`21st_magic_component_refiner`** : Améliorer un composant existant
+- **`logo_search`** : Rechercher des logos de marques
+
+### Use cases
+
+- **Composant complexe** : *"J'ai besoin d'une section pricing avec 3 tiers, toggle mensuel/annuel et feature comparison"*
+- **Inspiration** : *"Montre-moi des exemples de hero sections modernes pour un site de documentation"*
+- **Raffinement** : *"Prends ce composant Card et améliore-le avec des animations hover et un meilleur espacement"*
+
+---
+
+## Playwright : Tests E2E et vérification visuelle (MCP)
+
+**MCP Server officiel** | Catégorie : Tests & Automatisation | Auteur : [Microsoft / communauté](https://github.com/microsoft/playwright-mcp)
+
+Le MCP Playwright intègre les tests end-to-end directement dans le workflow de Claude Code. Il permet à Claude de naviguer sur des pages, prendre des screenshots et valider les interactions.
+
+<Callout type="info" title="Package npm officiel">
+Le MCP Playwright est publié sous `@playwright/mcp` par Microsoft. Son repo source est sur [github.com/microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp). Il nécessite que Playwright soit installé dans votre projet.
+</Callout>
+
+### Installation
+
+```bash
+# Installer Playwright si ce n'est pas déjà fait
+npm install -D @playwright/test
+npx playwright install
+
+# Ajouter le MCP
+claude mcp add playwright -- npx -y @playwright/mcp
+```
+
+### Configuration JSON
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    }
+  }
+}
+```
+
+### Outils disponibles
+
+- **`browser_navigate`** : Naviguer vers une URL
+- **`browser_take_screenshot`** : Prendre un screenshot de la page
+- **`browser_snapshot`** : Capturer le DOM accessible de la page
+- **`browser_click`** : Cliquer sur un élément
+- **`browser_fill_form`** : Remplir un formulaire
+- **`browser_evaluate`** : Exécuter du JavaScript dans la page
+
+### Use cases
+
+- **Vérification visuelle** : *"Ouvre ma page d'accueil en local et prends un screenshot pour vérifier le rendu"*
+- **Test E2E** : *"Teste le formulaire d'inscription : remplis les champs, soumets et vérifie le message de succès"*
+- **Debug responsive** : *"Prends un screenshot de ma page en mobile (375px) et en desktop (1440px)"*
+
+<Callout type="tip" title="Workflow design-to-code accéléré">
+Combinez 21st.dev Magic + Playwright : générez un composant avec Magic, puis utilisez Playwright pour vérifier visuellement le rendu et itérer jusqu'au résultat souhaité.
+</Callout>
+
+---
+
+## Skill Frontend Design : Commande slash dédiée
+
+**Ressource communautaire** | Catégorie : Skills | Format : fichier Markdown
+
+En complément de l'agent, vous pouvez créer un **skill** (slash command) dédié au design frontend. Contrairement à l'agent qui est toujours actif, le skill s'invoque explicitement quand vous en avez besoin.
+
+### Créer un skill frontend-design.md
+
+```bash
+mkdir -p .claude/commands
+cat > .claude/commands/frontend-design.md << 'EOF'
+# Frontend Design
+
+Crée ou améliore un composant UI avec les contraintes suivantes :
+
+**Stack** : React 18+, TypeScript strict, Tailwind CSS v3
+**Accessibilité** : WCAG 2.1 AA minimum (aria-labels, focus visible, contraste 4.5:1)
+**Responsive** : mobile-first, breakpoints sm/md/lg/xl
+**Qualité** : pas de `any`, exports nommés, un composant par fichier
+
+Fournis toujours :
+1. Le composant TypeScript complet
+2. Un exemple d'utilisation
+3. Les props documentées avec JSDoc
+EOF
+```
+
+Utilisation :
+```bash
+/frontend-design créer un composant de carte produit avec image, titre, prix et bouton d'ajout au panier
+```
+
+---
+
+## Summary
+
+| Ressource | Type | Source | Meilleur pour |
+|--------|------|---------|---------------|
+| **Agent Frontend Design** | Agent communautaire | [Everything Claude Code](https://github.com/punkpeye/everything-claude-code) | Persona design persistant |
+| **21st.dev Magic** | MCP Server | [21st.dev](https://21st.dev) | Génération de composants UI |
+| **Playwright MCP** | MCP Server | [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) | Tests E2E, vérification visuelle |
+| **Skill Frontend Design** | Skill (slash command) | À créer soi-même | Design à la demande |
+
+## Next steps
+
+- [Extensions sécurité & qualité](/plugins/best-security) : Sécurisez et améliorez la qualité de votre code
+- [Top extensions essentielles 2026](/plugins/best-essential) : Les ressources fondamentales
+- [Installer et gérer ses extensions](/plugins/setup) : Guide d'installation et de configuration

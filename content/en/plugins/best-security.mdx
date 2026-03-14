@@ -1,0 +1,278 @@
+---
+title: "Best security plugins for Claude Code"
+description: "The best security plugins for Claude Code: vulnerability scanning, dependency auditing, and code security analysis."
+section: "plugins"
+order: 5
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## Sécurisez et fiabilisez votre code
+
+La sécurité et la qualité du code ne sont pas des options, ce sont des fondamentaux. Les ressources présentées ici sont des **agents et skills communautaires** (fichiers Markdown à copier dans `.claude/`) qui intègrent les bonnes pratiques de sécurité et de qualité directement dans votre workflow Claude Code.
+
+<Callout type="warning" title="Outils d'aide, pas de substituts à une revue humaine">
+Ces ressources communautaires détectent les problèmes courants et appliquent les bonnes pratiques, mais elles ne remplacent pas une revue de sécurité humaine. Pour les applications critiques, un audit professionnel reste indispensable.
+</Callout>
+
+---
+
+## Agent Security Reviewer : L'expert sécurité intégré
+
+**Ressource communautaire** | Catégorie : Sécurité | Format : fichier Agent Markdown
+
+L'agent Security Reviewer configure Claude Code comme un **auditeur de sécurité proactif**. Il s'agit d'un fichier Markdown à placer dans `.claude/agents/` qui donne à Claude un persona d'expert sécurité.
+
+### Installation
+
+```bash
+mkdir -p .claude/agents
+
+cat > .claude/agents/security-reviewer.md << 'EOF'
+---
+name: security-reviewer
+description: Expert sécurité qui analyse le code selon les standards OWASP Top 10
+---
+
+Tu es un expert en cybersécurité spécialisé dans la sécurité des applications web.
+Pour chaque analyse, tu cherches systématiquement :
+
+**OWASP Top 10** :
+- A01 : Broken Access Control (vérifications d'autorisation manquantes)
+- A02 : Cryptographic Failures (secrets hardcodés, chiffrement faible)
+- A03 : Injection (SQL, NoSQL, commande shell)
+- A07 : XSS (Cross-Site Scripting, injection HTML)
+- A08 : Software/Data Integrity (désérialisation non sécurisée)
+
+**Pour chaque vulnérabilité trouvée** :
+1. Sévérité : CRITIQUE / HAUTE / MOYENNE / FAIBLE
+2. Localisation précise dans le code (fichier:ligne)
+3. Explication du risque concret
+4. Exemple de correction sécurisée avec code
+
+Tu ne reportes que les vrais problèmes, pas de faux positifs.
+EOF
+```
+
+### Usage
+
+```bash
+# Analyser un fichier ou dossier
+"En tant qu'agent security-reviewer, audite src/auth/ et liste toutes les vulnérabilités"
+
+# Vérification avant commit
+"Security-reviewer : y a-t-il des secrets hardcodés ou des failles dans ces changements ?"
+
+# Audit d'un endpoint API
+"Analyse cet endpoint REST pour détecter les problèmes d'authentification, validation et rate limiting"
+```
+
+### Use cases
+
+- **Revue de code sécurisée** : *"Analyse mon module d'authentification selon OWASP"*
+- **Détection de secrets** : *"Scanne mon projet pour détecter les tokens et mots de passe en clair"*
+- **Audit d'API** : *"Analyse mes endpoints REST et vérifie l'authentification, la validation des inputs et le rate limiting"*
+
+<Callout type="tip" title="Intégrer au workflow de PR">
+Vous pouvez créer un skill `/security-review` qui invoque automatiquement l'agent sur le diff courant, avant chaque Pull Request.
+</Callout>
+
+---
+
+## Agent Code Reviewer : La revue automatisée
+
+**Ressource communautaire** | Catégorie : Qualité | Format : fichier Agent Markdown
+
+L'agent Code Reviewer simule une revue de code par un développeur senior. Il analyse le diff courant et produit un rapport structuré avec des suggestions concrètes.
+
+### Installation
+
+```bash
+cat > .claude/agents/code-reviewer.md << 'EOF'
+---
+name: code-reviewer
+description: Développeur senior qui effectue des revues de code rigoureuses
+---
+
+Tu effectues des revues de code comme un développeur senior expérimenté.
+Pour chaque revue, tu analyses :
+
+**Qualité** :
+- Lisibilité et nommage (variables, fonctions, fichiers)
+- Fonctions trop longues (>50 lignes) ou fichiers trop grands (>800 lignes)
+- Imbrication excessive (>4 niveaux)
+- Code dupliqué et opportunités de refactorisation
+
+**Correctness** :
+- Bugs logiques et cas limites non gérés
+- Gestion d'erreurs manquante ou incomplète
+- Mutations d'objets non voulues
+
+**Performance** :
+- Boucles imbriquées évitables (complexité O(n²) ou plus)
+- Requêtes N+1 dans les appels de base de données
+- Re-renders React inutiles
+
+**Sécurité** :
+- Inputs non validés, injections possibles
+- Secrets ou données sensibles exposées
+
+Format de sortie : catégorise par CRITIQUE, HAUTE, MOYENNE, FAIBLE.
+Pour chaque problème : localisation + explication + suggestion de correction.
+EOF
+```
+
+### Usage
+
+```bash
+# Reviewer le diff courant
+"En tant qu'agent code-reviewer, analyse tous les fichiers modifiés depuis main"
+
+# Review ciblée
+"Code-reviewer, concentre-toi sur src/api/auth.ts et liste les problèmes critiques"
+```
+
+<Callout type="tip" title="Combinez les deux agents">
+Utilisez l'agent **Security Reviewer** pour les aspects sécurité et l'agent **Code Reviewer** pour la qualité. Cette combinaison couvre à la fois les vulnérabilités et la dette technique.
+</Callout>
+
+---
+
+## Skill TDD Guide : Tests first, toujours
+
+**Ressource communautaire** | Catégorie : Tests | Format : fichier Skill Markdown
+
+Le skill TDD Guide impose une discipline de **Test-Driven Development** dans Claude Code. Il s'installe comme un fichier Markdown dans `.claude/commands/` et s'invoque avec `/tdd-guide`.
+
+### Installation depuis Everything Claude Code
+
+```bash
+# Récupérer depuis le repo communautaire
+mkdir -p .claude/commands
+
+curl -o .claude/commands/tdd-guide.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
+```
+
+### Ou créer le vôtre
+
+```bash
+cat > .claude/commands/tdd-guide.md << 'EOF'
+# TDD Guide
+
+Implémente cette fonctionnalité en suivant strictement le cycle TDD :
+
+## Cycle RED → GREEN → REFACTOR
+
+**Étape 1 - RED** : Écris d'abord un test qui décrit le comportement attendu.
+Le test DOIT échouer au départ. S'il passe sans code, le test est mauvais.
+
+**Étape 2 - GREEN** : Écris le code MINIMAL pour faire passer le test.
+Pas d'optimisation prématurée. Le seul objectif est de passer le test.
+
+**Étape 3 - REFACTOR** : Nettoie le code tout en gardant les tests au vert.
+Améliore la lisibilité, supprime les duplications, respecte les conventions.
+
+**À chaque étape** : montre le résultat du test (FAIL/PASS) avant de continuer.
+**Objectif de couverture** : 80% minimum sur le code implémenté.
+EOF
+```
+
+### Configuration du framework de test (dans CLAUDE.md)
+
+```markdown
+## Tests
+- Framework : Vitest
+- Couverture minimale : 80%
+- Style : describe/it, expect assertions
+- Mocks : vi.mock() pour les dépendances externes
+```
+
+### Use cases
+
+- **Nouvelle feature** : `/tdd-guide implémenter le système de pagination avec offset/limit`
+- **Bug fix** : `/tdd-guide corriger ce bug en TDD : d'abord un test qui reproduit, puis le fix`
+- **Refactoring sûr** : `/tdd-guide refactorer ce module en s'assurant que les tests passent à chaque étape`
+
+<Steps>
+<Step title="RED - Écrire le test" stepNumber={1}>
+Le skill guide Claude Code pour écrire d'abord un test qui décrit le comportement attendu. Le test doit échouer, c'est normal et voulu.
+</Step>
+
+<Step title="GREEN - Implémenter" stepNumber={2}>
+Claude Code écrit le code minimal pour faire passer le test. Pas de sur-ingénierie, juste ce qu'il faut pour passer au vert.
+</Step>
+
+<Step title="REFACTOR - Améliorer" stepNumber={3} isLast>
+Une fois le test au vert, Claude Code refactorise le code pour le rendre propre, lisible et performant. Les tests garantissent que rien n'est cassé.
+</Step>
+</Steps>
+
+---
+
+## Audit de configuration : Best practices manuelles
+
+Il n'existe pas de plugin « AgentShield » ou d'outil automatisé officiel pour auditer la configuration Claude Code. Here are the best practices à appliquer manuellement.
+
+### Vérification des MCP configurés
+
+```bash
+# Lister tous les MCP configurés
+claude mcp list
+
+# Vérifier le contenu du settings.json
+cat ~/.claude/settings.json
+cat .claude/settings.json  # si existant dans le projet
+```
+
+### Checklist de sécurité de configuration
+
+```bash
+# Vérifier qu'aucun token n'est hardcodé dans les fichiers versionnés
+git grep -l "GITHUB_TOKEN\|SLACK_BOT_TOKEN\|API_KEY" .
+
+# Vérifier que settings.json n'est pas commité (s'il contient des tokens)
+cat .gitignore | grep settings.json
+
+# Recommandation : utiliser des variables d'environnement système
+export GITHUB_TOKEN=ghp_votre-token
+# Puis dans settings.json, ne pas inclure la valeur directement
+```
+
+### Example de settings.json sécurisé
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Token security">
+Ne commitez **jamais** vos tokens dans un repository Git. Placez les configurations sensibles dans `~/.claude/settings.json` (global, hors contrôle de version) ou utilisez des variables d'environnement système.
+</Callout>
+
+---
+
+## Summary
+
+| Ressource | Type | Installation | Meilleur pour |
+|--------|------|-------------|---------------|
+| **Agent Security Reviewer** | Agent Markdown | Copie dans `.claude/agents/` | Audits sécurité, détection de vulnérabilités |
+| **Agent Code Reviewer** | Agent Markdown | Copie dans `.claude/agents/` | Revue de qualité, standards d'équipe |
+| **Skill TDD Guide** | Skill Markdown | Copie dans `.claude/commands/` | Discipline TDD, couverture de tests |
+| **Audit de config** | Best practices | Manuel | Sécurité des tokens et permissions |
+
+## Next steps
+
+- [Comprendre les extensions communautaires](/plugins/what-are-plugins) : Revenez aux fondamentaux si besoin
+- [Installer et gérer ses extensions](/plugins/setup) : Guide d'installation et de configuration
+- [Top extensions essentielles 2026](/plugins/best-essential) : Les ressources fondamentales pour démarrer
+- [Top Skills recommandés](/skills/best-skills) : TDD Guide, Security Review et Code Reviewer en tant que Skills

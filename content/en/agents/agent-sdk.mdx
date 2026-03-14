@@ -1,0 +1,421 @@
+---
+title: "Agent SDK and programmatic usage"
+description: "Use the Claude Code Agent SDK for programmatic agent creation: API reference, TypeScript integration, and advanced patterns."
+section: "agents"
+order: 6
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Qu'est-ce que le Claude Agent SDK ?
+
+Le **Claude Agent SDK** est un kit de développement officiel d'Anthropic qui permet de créer des **agents programmatiques** directement dans votre code TypeScript ou Python. Contrairement aux subagents natifs de Claude Code (qui vivent dans le terminal), les agents SDK s'intègrent dans vos applications, scripts et pipelines.
+
+<Callout type="info" title="L'analogie de la télécommande vs la domotique">
+Les subagents natifs de Claude Code, c'est comme une télécommande : vous appuyez sur un bouton et l'agent exécute une action prédéfinie. Le Claude Agent SDK, c'est la domotique complète : vous programmez des scénarios complexes qui se déclenchent automatiquement selon des conditions, avec un contrôle total sur chaque étape.
+</Callout>
+
+## Why use le SDK plutôt que les subagents natifs ?
+
+| Critère | Subagents natifs | Agent SDK |
+|---|---|---|
+| **Environnement** | Terminal Claude Code | Votre application (serveur, script, CI) |
+| **Langage** | Prompts en Markdown | TypeScript ou Python |
+| **Contrôle** | Délégation au modèle | Contrôle programmatique total |
+| **Intégration** | Outils Claude Code (Bash, Read, Edit...) | Outils custom que vous définissez |
+| **Déclenchement** | Manuel via le terminal | Automatique (webhook, cron, événement) |
+| **Persistance** | Durée de la session | Votre choix (base de données, fichier...) |
+| **Scalabilité** | Une session à la fois | Plusieurs agents en parallèle |
+
+In summary : les subagents natifs sont parfaits pour le travail interactif dans le terminal, le SDK est fait pour l'automatisation et l'intégration dans vos systèmes.
+
+## Installation
+
+<Steps>
+<Step title="TypeScript" stepNumber={1}>
+
+```bash
+# Installation du SDK TypeScript
+npm install @anthropic-ai/claude-code-sdk
+
+# Prérequis : Claude Code doit être installé globalement
+npm install -g @anthropic-ai/claude-code
+```
+
+Le SDK TypeScript utilise Claude Code en sous-jacent. Assurez-vous que Claude Code est installé et authentifié.
+
+</Step>
+
+<Step title="Python" stepNumber={2} isLast>
+
+```bash
+# Installation du SDK Python
+pip install claude-code-sdk
+
+# Prérequis : Claude Code accessible dans le PATH
+npm install -g @anthropic-ai/claude-code
+```
+
+Le SDK Python fonctionne de la même manière : il orchestre Claude Code via un processus enfant.
+
+</Step>
+</Steps>
+
+## Premier agent en TypeScript
+
+Voici un agent minimal qui analyse un fichier et produit un rapport.
+
+```typescript
+import { claude } from "@anthropic-ai/claude-code-sdk";
+
+async function analyzeFile(filePath: string): Promise<string> {
+  // Lancer un agent avec un prompt et des options
+  const result = await claude({
+    prompt: `Analyse le fichier ${filePath} et produis un rapport
+             avec : nombre de lignes, fonctions exportées,
+             complexité cyclomatique estimée et suggestions.`,
+    options: {
+      maxTurns: 10,
+      allowedTools: ["Read", "Bash", "Grep"],
+    },
+  });
+
+  // Le résultat contient le texte de réponse
+  return result.text;
+}
+
+// Utilisation
+const report = await analyzeFile("src/lib/utils.ts");
+console.log(report);
+```
+
+<Callout type="tip" title="maxTurns contrôle la profondeur">
+Le paramètre `maxTurns` limite le nombre d'itérations de l'agent. Un agent de review simple a besoin de 5 à 10 tours. Un agent de refactoring complexe peut en nécessiter 20 à 30. Commencez bas et augmentez si l'agent s'arrête trop tôt.
+</Callout>
+
+## Premier agent en Python
+
+Le même agent en Python, avec une syntaxe similaire.
+
+```python
+import asyncio
+from claude_code_sdk import claude, ClaudeOptions
+
+async def analyze_file(file_path: str) -> str:
+    """Analyse un fichier et produit un rapport structuré."""
+    result = await claude(
+        prompt=f"Analyse le fichier {file_path} et produis un rapport "
+               f"avec : nombre de lignes, fonctions exportées, "
+               f"complexité cyclomatique estimée et suggestions.",
+        options=ClaudeOptions(
+            max_turns=10,
+            allowed_tools=["Read", "Bash", "Grep"],
+        ),
+    )
+    return result.text
+
+# Utilisation
+report = asyncio.run(analyze_file("src/lib/utils.ts"))
+print(report)
+```
+
+## Intégration d'outils externes
+
+Le vrai pouvoir du SDK réside dans la possibilité d'ajouter vos **propres outils**. L'agent peut appeler des fonctions de votre codebase, des API, des bases de données, tout ce que vous pouvez coder.
+
+```typescript
+import { claude, Tool } from "@anthropic-ai/claude-code-sdk";
+
+// Définir un outil custom
+const slackNotifier: Tool = {
+  name: "notify_slack",
+  description: "Envoie une notification sur un channel Slack",
+  parameters: {
+    type: "object",
+    properties: {
+      channel: { type: "string", description: "Le channel Slack" },
+      message: { type: "string", description: "Le message à envoyer" },
+    },
+    required: ["channel", "message"],
+  },
+  // L'implémentation de l'outil
+  async execute({ channel, message }) {
+    const response = await fetch(SLACK_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ channel, text: message }),
+    });
+    return { success: response.ok };
+  },
+};
+
+// Utiliser l'agent avec l'outil custom
+const result = await claude({
+  prompt: "Vérifie que tous les tests passent. Si un test échoue, "
+        + "notifie le channel #dev sur Slack avec le détail de l'erreur.",
+  options: {
+    maxTurns: 15,
+    allowedTools: ["Bash", "Read"],
+    customTools: [slackNotifier],
+  },
+});
+```
+
+## Examples concrets
+
+### 1. Monitoring automatisé
+
+Un agent qui tourne en cron et surveille la santé de votre application.
+
+```typescript
+import { claude } from "@anthropic-ai/claude-code-sdk";
+
+async function healthCheck() {
+  const result = await claude({
+    prompt: `Tu es un agent de monitoring. Vérifie :
+      1. Que le serveur répond sur http://localhost:3000/health
+      2. Que la base de données est accessible
+      3. Que l'espace disque est suffisant (> 20% libre)
+      4. Que les logs récents ne contiennent pas d'erreurs critiques
+
+      Produis un rapport JSON avec le statut de chaque vérification.
+      Si un problème est détecté, utilise notify_slack pour alerter.`,
+    options: {
+      maxTurns: 10,
+      allowedTools: ["Bash"],
+      customTools: [slackNotifier],
+    },
+  });
+
+  return JSON.parse(result.text);
+}
+
+// Lancer toutes les 5 minutes via un cron ou un scheduler
+```
+
+### 2. Pipeline de déploiement
+
+Un agent qui orchestre un déploiement complet.
+
+```python
+import asyncio
+from claude_code_sdk import claude, ClaudeOptions
+
+async def deploy_pipeline(version: str) -> dict:
+    """Pipeline de déploiement en 4 étapes."""
+
+    # Étape 1 : Vérifications pré-déploiement
+    pre_check = await claude(
+        prompt=f"Vérifie que la branche main est propre, "
+               f"que tous les tests passent et que le build "
+               f"de la version {version} est OK.",
+        options=ClaudeOptions(
+            max_turns=10,
+            allowed_tools=["Bash", "Read"],
+        ),
+    )
+
+    if "ÉCHEC" in pre_check.text:
+        return {"status": "blocked", "reason": pre_check.text}
+
+    # Étape 2 : Build et tag
+    build = await claude(
+        prompt=f"Crée le tag v{version}, build l'image Docker "
+               f"et pousse-la sur le registry.",
+        options=ClaudeOptions(
+            max_turns=15,
+            allowed_tools=["Bash"],
+        ),
+    )
+
+    # Étape 3 : Déploiement
+    deploy = await claude(
+        prompt="Déploie la nouvelle image sur l'environnement staging. "
+               "Vérifie que le health check passe.",
+        options=ClaudeOptions(
+            max_turns=10,
+            allowed_tools=["Bash"],
+        ),
+    )
+
+    return {
+        "status": "success",
+        "version": version,
+        "pre_check": pre_check.text,
+        "build": build.text,
+        "deploy": deploy.text,
+    }
+```
+
+### 3. Triage automatique de bugs
+
+Un agent qui lit les nouvelles issues GitHub et les catégorise automatiquement.
+
+```typescript
+import { claude, Tool } from "@anthropic-ai/claude-code-sdk";
+
+const githubTool: Tool = {
+  name: "github_api",
+  description: "Interagit avec l'API GitHub",
+  parameters: {
+    type: "object",
+    properties: {
+      action: { type: "string", enum: ["list_issues", "add_labels", "add_comment"] },
+      repo: { type: "string" },
+      issueNumber: { type: "number" },
+      labels: { type: "array", items: { type: "string" } },
+      comment: { type: "string" },
+    },
+    required: ["action", "repo"],
+  },
+  async execute(params) {
+    // Implémentation avec l'API GitHub (Octokit, gh CLI, etc.)
+    // ...
+    return { success: true };
+  },
+};
+
+async function triageNewIssues() {
+  const result = await claude({
+    prompt: `Tu es un agent de triage de bugs. Pour chaque nouvelle
+      issue non-triée dans le repo "mon-org/mon-app" :
+
+      1. Lis le titre et la description
+      2. Catégorise : bug, feature-request, question, documentation
+      3. Estime la priorité : P0 (critique), P1 (haute), P2 (moyenne), P3 (basse)
+      4. Ajoute les labels appropriés
+      5. Si c'est un P0, ajoute un commentaire pour alerter l'équipe
+
+      Traite toutes les issues créées dans les dernières 24h.`,
+    options: {
+      maxTurns: 30,
+      customTools: [githubTool],
+    },
+  });
+
+  return result.text;
+}
+```
+
+## Options de configuration du SDK
+
+Les principales options pour contrôler le comportement de l'agent :
+
+| Option | Type | Description |
+|---|---|---|
+| `prompt` | `string` | La mission de l'agent |
+| `maxTurns` | `number` | Nombre maximum d'itérations (défaut : 10) |
+| `allowedTools` | `string[]` | Outils Claude Code autorisés |
+| `customTools` | `Tool[]` | Vos outils custom |
+| `cwd` | `string` | Répertoire de travail de l'agent |
+| `model` | `string` | Modèle à utiliser (sonnet, opus, haiku) |
+| `outputFormat` | `string` | Format de sortie (`text`, `json`, `stream-json`) |
+| `systemPrompt` | `string` | Instructions système additionnelles |
+
+```typescript
+// Exemple avec toutes les options
+const result = await claude({
+  prompt: "Refactore le module auth pour utiliser des tokens JWT",
+  options: {
+    maxTurns: 25,
+    allowedTools: ["Read", "Edit", "Bash", "Grep", "Glob"],
+    cwd: "/home/user/mon-projet",
+    model: "sonnet",
+    outputFormat: "json",
+    systemPrompt: "Tu es un expert en sécurité. "
+                 + "Privilégie toujours la sécurité sur la performance.",
+  },
+});
+```
+
+## Comparison détaillée avec les subagents natifs
+
+<Callout type="tip" title="Quand choisir quoi ?">
+Utilisez les **subagents natifs** pour le développement interactif au quotidien : review, debug, refactoring pendant que vous codez. Utilisez le **SDK** quand vous avez besoin d'automatisation sans intervention humaine : CI/CD, monitoring, triage, pipelines nocturnes.
+</Callout>
+
+### Subagents natifs : les forces
+
+- Configuration simple (fichier Markdown)
+- Accès complet aux outils Claude Code
+- Intégration naturelle dans le workflow terminal
+- Pas de code à écrire ni à maintenir
+- Idéal pour l'exploration et le prototypage
+
+### Agent SDK : les forces
+
+- Contrôle programmatique total (conditions, boucles, erreurs)
+- Intégration dans vos applications et pipelines existants
+- Outils custom illimités (API, bases de données, services)
+- Exécution automatique (cron, webhooks, événements)
+- Gestion fine des erreurs et des retries
+- Logging et observabilité intégrés
+
+## Best practices
+
+### 1. Limitez la portée de chaque agent
+
+Un agent doit avoir une mission claire et délimitée. Si la tâche est trop large, découpez-la en plusieurs agents coordonnés.
+
+```typescript
+// MAUVAIS : un agent qui fait tout
+const result = await claude({
+  prompt: "Refactore le projet, écris les tests, fais la review, "
+        + "mets à jour la doc et déploie en production",
+});
+
+// BON : des agents spécialisés et coordonnés
+const refactorResult = await claude({
+  prompt: "Refactore le module auth selon le plan fourni",
+  options: { maxTurns: 20 },
+});
+
+const testResult = await claude({
+  prompt: "Écris les tests pour le module auth refactoré",
+  options: { maxTurns: 15 },
+});
+```
+
+### 2. Gérez les erreurs explicitement
+
+```typescript
+try {
+  const result = await claude({
+    prompt: "Exécute les migrations de base de données",
+    options: { maxTurns: 10 },
+  });
+
+  if (result.text.includes("ERROR")) {
+    // Rollback ou notification
+    await notifyTeam("Migration échouée", result.text);
+  }
+} catch (error) {
+  // Timeout, erreur réseau, etc.
+  console.error("Agent SDK error:", error);
+  await notifyTeam("Agent indisponible", String(error));
+}
+```
+
+### 3. Utilisez le format JSON pour les résultats structurés
+
+```typescript
+const result = await claude({
+  prompt: "Analyse les dépendances du projet et produis un rapport "
+        + "au format JSON avec : total, outdated, vulnerable, suggestions.",
+  options: {
+    maxTurns: 10,
+    outputFormat: "json",
+  },
+});
+
+const report = JSON.parse(result.text);
+console.log(`${report.vulnerable} vulnérabilités trouvées`);
+```
+
+## Next steps
+
+Now that you connaissez le Claude Agent SDK, explorez les sujets connexes.
+
+- [Performance et limites des agents](/agents/performance-limits) : Coûts, profondeur de récursion et bonnes pratiques production
+- [Orchestration multi-agents](/agents/orchestration) : Patterns pour combiner plusieurs agents
+- [Mode Headless et CI/CD](/advanced/headless-ci) : Intégrer Claude Code dans vos pipelines

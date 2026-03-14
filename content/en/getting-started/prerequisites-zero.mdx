@@ -1,0 +1,143 @@
+---
+title: "Prerequisites for complete beginners"
+description: "Never used a terminal in your life? No worries. This page explains everything you need to know before installing Claude Code, in plain language."
+section: "getting-started"
+order: 0
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+Welcome! If you're reading this page, words like "terminal," "Node.js," or "API key" probably sound mysterious. That's perfectly normal, everyone starts somewhere. Let's demystify all of this together, step by step.
+
+<Callout type="tip" title="You're not alone">
+Millions of people use Claude Code without ever having programmed in their lives. Lawyers, journalists, teachers, artists, project managers... This guide is made for you.
+</Callout>
+
+## What is a terminal?
+
+A terminal (also called "command prompt" or "console") is like talking to your computer by typing sentences instead of clicking.
+
+Imagine your computer as a very obedient assistant. When you use the mouse to open files, you're making gestures at it. The terminal is the same thing, but you talk to it directly. You type a sentence like `node --version`, press Enter, and the computer responds.
+
+It's more powerful than clicking because you can give very precise instructions, and it's where most modern development tools live, including Claude Code.
+
+### How to open a terminal
+
+Choose your operating system:
+
+**On macOS (Apple)**
+
+The simplest way: press `Cmd` + `Space` simultaneously to open Spotlight, type `Terminal`, then press Enter. A black or white window opens, that's your terminal.
+
+<TerminalScreenshot
+  title="Terminal - macOS"
+  lines={[
+    { type: "output", content: "Last login: Tue Mar 11 10:23:14 on ttys001" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "user@MacBook ~ % " }
+  ]}
+/>
+
+**On Windows**
+
+Press `Windows` + `R`, type `powershell`, then Enter. Or search for "PowerShell" in the Start menu. A blue window opens.
+
+<TerminalScreenshot
+  title="PowerShell - Windows"
+  lines={[
+    { type: "output", content: "Windows PowerShell" },
+    { type: "output", content: "Copyright (C) Microsoft Corporation. All rights reserved." },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "PS C:\\Users\\User> " }
+  ]}
+/>
+
+**On Linux (Ubuntu, Debian, etc.)**
+
+Press `Ctrl` + `Alt` + `T`. A terminal opens immediately.
+
+<Callout type="info" title="The terminal feels scary at first, that's normal">
+The first time you open a terminal, it can feel intimidating. There are no buttons, just text. But rest assured: if you type something wrong, at worst you'll get an error message. You can't "break" your computer by typing a bad command in the terminal (unless someone asks you to run very specific commands like `rm -rf /`, which nobody will ask you to do here).
+</Callout>
+
+## What is a command?
+
+A command is an instruction you type in the terminal. The recipe is simple:
+
+1. You type some text (the command)
+2. You press the `Enter` key
+3. The computer runs the instruction and shows the result
+
+### Mini-exercise: your first command
+
+Give it a try! Open your terminal, type exactly what's written below, and press `Enter`:
+
+<TerminalScreenshot
+  title="Terminal - your first command"
+  lines={[
+    { type: "command", content: "echo hello" },
+    { type: "output", content: "hello" }
+  ]}
+/>
+
+You should see the word `hello` appear. Congratulations, you just ran your first command! The `echo` command tells the computer to "repeat" what you said.
+
+<Callout type="tip" title="Tip: uppercase and spaces matter">
+Commands are case-sensitive and space-sensitive. `echo hello` works, but `Echo Hello` might not. Always copy-paste commands exactly as they're written.
+</Callout>
+
+## What is Node.js?
+
+Node.js is an engine that lets your computer run JavaScript code outside of a web browser. Think of JavaScript as a language, and Node.js as the translator that lets your computer understand that language.
+
+Claude Code is written in JavaScript, so it needs Node.js to run. It's like needing to install a PDF reader to open a PDF file.
+
+The good news: installation is automatic and takes only a few minutes.
+
+## What is an API key?
+
+An API key is like an **access badge** to a secure building.
+
+Imagine that Anthropic's servers are an ultra-secure office building where the Claude AI lives. To enter that building and "talk" to Claude, you need a badge. That badge is your API key.
+
+Each API key is unique, linked to your account, and allows Anthropic to know who's using their services (for billing, security, etc.). It looks something like `sk-ant-api03-...`, a long string of characters.
+
+<Callout type="warning" title="Your API key is like a password">
+Never share your API key with anyone. Don't copy it into an email or shared document. If someone gets your API key, they can use Claude on your behalf (and on your bill). If you think it's been compromised, you can create a new one from your Anthropic dashboard.
+</Callout>
+
+## What is artificial intelligence?
+
+Artificial intelligence (AI) is software trained on vast amounts of text, books, articles, websites, code, to learn to understand and generate human language.
+
+Claude Code is not "intelligent" like a human being. It doesn't truly understand what it does, doesn't feel anything, and doesn't remember you between sessions. But it's very good at recognizing patterns in text and generating coherent, useful responses.
+
+Think of it as a **very fast and versatile assistant** that has read everything published on the internet, and that can help you write, code, analyze documents, organize ideas, and much more, as long as you give it clear instructions.
+
+The quality of your results depends directly on the quality of your instructions. That's why a large part of this guide is dedicated to the art of communicating well with Claude.
+
+## What is npm?
+
+npm (Node Package Manager) is a tool that installs automatically with Node.js. It's like an **app store** for developers, but on the command line.
+
+When you type `npm install -g @anthropic-ai/claude-code`, you're asking npm to download and install Claude Code from that store. The `-g` flag means "global": Claude Code will be available everywhere on your computer, not just in a specific folder.
+
+## Visual summary
+
+| Term | Simple analogy |
+|------|---------------|
+| Terminal | Talking to your computer by typing (instead of clicking) |
+| Command | A sentence typed in the terminal + Enter |
+| Node.js | The engine that runs Claude Code |
+| npm | The app store for developers |
+| API key | Your personal access badge to Claude's servers |
+| AI | A very well-read assistant that follows your instructions |
+
+## You're ready!
+
+You now know the essential concepts to get started. You don't need to master them perfectly, just keep them in mind as you continue.
+
+Next step: install Node.js and Claude Code on your machine.
+
+- [Prerequisites and installation](/getting-started/installation): Install Claude Code step by step
+- [Frequently asked questions](/getting-started/faq-beginner): Answers to your most common questions

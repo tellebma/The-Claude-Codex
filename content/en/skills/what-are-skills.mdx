@@ -1,0 +1,184 @@
+---
+title: "Understanding Claude Code Skills"
+description: "Discover Claude Code Skills: reusable workflows that automate your recurring tasks. How they work, how they differ from MCPs and plugins."
+section: "skills"
+order: 1
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+<Callout type="tip" title="Just getting started?">Si les concepts techniques vous semblent complexes, commencez par nos [cas d'usage concrets](/use-cases) pour voir Claude Code en action sans ecrire de code.</Callout>
+
+## Les Skills, c'est quoi exactement ?
+
+Un **Skill** Claude Code est un fichier Markdown qui enseigne à Claude un comportement, un workflow ou une expertise spécifique. Quand vous invoquez un Skill avec une **slash command** (ex: `/review-pr`), Claude suit les instructions du fichier comme un chef cuisinier suit une recette.
+
+<Callout type="info" title="L'analogie de la recette de cuisine">
+Imaginez que Claude Code est un chef cuisinier talentueux. Sans recette, il peut improviser un plat correct. Mais avec une **recette précise** (un Skill), il reproduira exactement le même plat savoureux à chaque fois, les mêmes étapes, les mêmes vérifications, le même résultat. Les Skills sont les **recettes** de Claude Code : des instructions structurées qui transforment un assistant généraliste en expert spécialisé.
+</Callout>
+
+## Les 3 types de Skills
+
+Les Skills se répartissent en trois catégories selon leur portée et leur provenance.
+
+### 1. Skills built-in (intégrés)
+
+Ce sont les Skills livrés avec Claude Code. Ils couvrent les opérations courantes et sont disponibles immédiatement sans aucune configuration.
+
+```bash
+# Exemples de Skills built-in
+/init          # Initialiser un projet avec CLAUDE.md
+/review        # Revue de code du diff courant
+/compact       # Compacter la conversation pour libérer du contexte
+/memory        # Gérer les fichiers mémoire de Claude
+```
+
+### 2. Skills de projet (project commands)
+
+Créés dans le dossier `.claude/commands/` de votre projet, ces Skills sont **partagés avec toute l'équipe** via le contrôle de version. Chaque fichier Markdown dans ce dossier devient automatiquement une slash command.
+
+```bash
+# Structure des Skills de projet
+.claude/
+  commands/
+    review-pr.md       # → /project:review-pr
+    deploy.md          # → /project:deploy
+    hotfix.md          # → /project:hotfix
+    onboarding.md      # → /project:onboarding
+```
+
+### 3. Skills personnels (user commands)
+
+Stockés dans `~/.claude/commands/`, ces Skills sont disponibles dans **tous vos projets** mais ne sont pas partagés avec l'équipe. Idéal pour vos habitudes de travail personnelles.
+
+```bash
+# Structure des Skills personnels
+~/.claude/
+  commands/
+    tdd-guide.md       # → /user:tdd-guide
+    code-review.md     # → /user:code-review
+    brainstorm.md      # → /user:brainstorm
+```
+
+<Card title="Comment choisir le bon type ?" variant="accent">
+- **Built-in** : vous n'avez rien à faire, ils sont déjà là
+- **Projet** : pour les conventions et workflows partagés par l'équipe (review, deploy, conventions de code)
+- **Personnel** : pour vos habitudes individuelles (style de commit, workflow TDD personnel, templates favoris)
+</Card>
+
+## Comment fonctionne un Skill ?
+
+Quand vous tapez une slash command, Claude Code exécute un processus en quatre étapes.
+
+<Steps>
+<Step title="Détection" stepNumber={1}>
+Claude Code reconnaît la commande `/project:review-pr` et cherche le fichier correspondant dans `.claude/commands/review-pr.md`.
+</Step>
+
+<Step title="Chargement" stepNumber={2}>
+Le contenu Markdown du fichier est injecté dans le contexte de Claude comme **instructions système**. Claude les interprète comme des directives prioritaires.
+</Step>
+
+<Step title="Exécution" stepNumber={3}>
+Claude suit les instructions du Skill step by step. Si le Skill contient des variables (comme `$ARGUMENTS`), elles sont remplacées par les arguments fournis par l'utilisateur.
+</Step>
+
+<Step title="Résultat" stepNumber={4} isLast>
+Claude produit le résultat selon le format défini dans le Skill : un rapport, du code modifié, une checklist validée, etc.
+</Step>
+</Steps>
+
+## Anatomie d'un fichier Skill
+
+Un Skill est simplement un fichier Markdown avec des instructions claires. Here is an example complet :
+
+```markdown
+# Review de Pull Request
+
+Tu es un reviewer de code senior. Analyse la PR en cours et fournis un feedback structuré.
+
+## Étapes
+
+1. Lis le diff complet avec `git diff main...HEAD`
+2. Vérifie la cohérence avec les conventions du projet (CLAUDE.md)
+3. Identifie les problèmes potentiels :
+   - Bugs logiques
+   - Problèmes de performance
+   - Failles de sécurité
+   - Code dupliqué
+4. Vérifie la couverture de tests
+
+## Format de sortie
+
+Pour chaque fichier modifié, fournis :
+- **Fichier** : chemin du fichier
+- **Sévérité** : CRITICAL / HIGH / MEDIUM / LOW
+- **Problème** : description du problème
+- **Suggestion** : correction proposée
+
+## Variables
+
+- $ARGUMENTS : branche cible pour le diff (défaut: main)
+```
+
+<Callout type="tip" title="La puissance de \$ARGUMENTS">
+La variable `$ARGUMENTS` capture tout ce que vous tapez après la slash command. Par exemple, `/project:review-pr develop` remplace `$ARGUMENTS` par `develop`. Cela rend vos Skills dynamiques et réutilisables.
+</Callout>
+
+## Skill vs CLAUDE.md : quelle différence ?
+
+Vous vous demandez peut-être pourquoi créer des Skills quand on a déjà le fichier `CLAUDE.md` pour donner des instructions à Claude. La réponse tient en trois points.
+
+| | **CLAUDE.md** | **Skill** |
+|---|---|---|
+| **Portée** | Toujours actif, chargé à chaque conversation | Activé à la demande via slash command |
+| **Objectif** | Contexte global du projet (conventions, architecture) | Workflow ou tâche spécifique |
+| **Taille** | Court et ciblé (éviter de surcharger le contexte) | Aussi détaillé que nécessaire |
+| **Activation** | Automatique | Manuelle (`/command`) |
+| **Analogie** | La carte d'identité du projet | Une recette pour une tâche précise |
+
+<Card title="In summary" variant="highlight">
+Le **CLAUDE.md** dit à Claude *qui* est le projet. Les **Skills** disent à Claude *comment* accomplir une tâche précise. Les deux sont complémentaires : le CLAUDE.md fournit le contexte permanent, les Skills fournissent l'expertise à la demande.
+</Card>
+
+## Example concret : avant et après
+
+### Sans Skill
+
+```bash
+# Vous devez expliquer à chaque fois ce que vous attendez
+> Claude, fais une review de mon code. Vérifie les bugs, la sécu,
+> les perfs, et regarde si les tests couvrent bien les changements.
+> Donne-moi un rapport structuré par fichier avec la sévérité.
+```
+
+### Avec Skill
+
+```bash
+# Une seule commande, le même résultat à chaque fois
+/project:review-pr
+```
+
+Le Skill garantit que la review suit **toujours le même processus**, avec le même niveau de détail, les mêmes vérifications. Plus besoin de se souvenir de toutes les consignes, elles sont codifiées dans le fichier.
+
+## Découvrir les Skills disponibles
+
+Pour voir tous les Skills disponibles dans votre session courante :
+
+```bash
+# Lister toutes les slash commands disponibles
+/help
+
+# Ou commencez à taper / et explorez l'autocomplétion
+/
+```
+
+Claude Code affiche les Skills regroupés par source : built-in, projet (`/project:...`) et personnel (`/user:...`).
+
+## Next steps
+
+Now that you comprenez le concept des Skills, let's get hands-on.
+
+- [Top Skills recommandés 2026](/skills/best-skills) : Les Skills incontournables pour booster votre productivité
+- [Créer un Skill custom step by step](/skills/create-custom) : Guide complet pour écrire vos propres Skills
+- [Skills vs MCP vs Plugins](/skills/comparison) : Comprendre quand utiliser quoi

@@ -1,0 +1,321 @@
+---
+title: "No-code projects with Claude Code"
+description: "Build projects without coding knowledge using Claude Code: websites, tools, automations, and data processing."
+order: 3
+section: "use-cases"
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## L'automatisation, meme sans coder
+
+Automatiser ne veut pas dire programmer. Avec Claude Code, automatiser signifie simplement donner des instructions claires pour obtenir un resultat reproductible. Ces trois tutoriels vous guident step by step, de l'ouverture du terminal au resultat final.
+
+<Callout type="tip" title="Prerequisites">
+Ces tutoriels supposent que Claude Code est installe et fonctionne sur votre machine. Si ce n'est pas le cas, suivez d'abord le guide [Premiers pas](/getting-started).
+</Callout>
+
+---
+
+## Tutoriel 1 : Automatiser un rapport hebdomadaire
+
+**Objectif :** chaque lundi, generer un rapport d'activite structure a partir de vos notes de la semaine.
+
+**Temps estime :** 15 minutes la premiere fois, 5 minutes les fois suivantes.
+
+<Steps>
+<Step title="Preparez votre dossier de travail" stepNumber={1}>
+Creez un dossier sur votre ordinateur, for example `rapports-hebdo`. C'est la que vous stockerez vos notes et vos rapports generes.
+
+Ouvrez votre terminal et placez-vous dans ce dossier :
+
+```bash
+cd rapports-hebdo
+```
+</Step>
+
+<Step title="Creez votre fichier de notes" stepNumber={2}>
+Chaque semaine, notez vos activites dans un fichier texte simple. Pas besoin de format particulier, ecrivez comme vous le feriez sur un post-it :
+
+```text
+# Notes semaine du 10 mars 2026
+
+- Reunion client Maison Duval, maquettes validees
+- Formation equipe sur le nouvel outil CRM (8 personnes)
+- Bug critique sur la facturation, resolu mardi
+- 3 nouveaux leads entrants via le site web
+- Preparation du budget Q2 en cours
+- Conge de Paul mercredi et jeudi
+```
+
+Enregistrez ce fichier sous le nom `notes-semaine-10-mars.md`.
+</Step>
+
+<Step title="Lancez Claude Code" stepNumber={3}>
+Dans le terminal, tapez :
+
+```bash
+claude
+```
+
+Claude Code s'ouvre. Vous pouvez maintenant lui donner des instructions.
+</Step>
+
+<Step title="Donnez les instructions pour le rapport" stepNumber={4}>
+Collez ce prompt :
+
+```text
+Lis le fichier notes-semaine-10-mars.md et genere un rapport hebdomadaire.
+
+Structure du rapport :
+1. Resume de la semaine (3-4 lignes)
+2. Realisations (bullet points, maximum 5)
+3. Points de blocage ou retards
+4. Priorites de la semaine prochaine (a deduire des notes)
+5. Chiffres cles si disponibles
+
+Format : Markdown, pret a envoyer par email.
+Ton : professionnel et synthetique.
+Longueur : 250-350 mots.
+
+Enregistre le resultat dans un fichier rapport-semaine-10-mars.md
+```
+</Step>
+
+<Step title="Relisez et ajustez" stepNumber={5}>
+Claude Code genere le rapport et l'enregistre. Ouvrez le fichier, relisez-le, et si quelque chose ne convient pas, dites simplement dans le terminal :
+
+```text
+Modifie le rapport : ajoute dans les priorites "finaliser le budget Q2 avant vendredi" et rends le ton un peu moins formel.
+```
+
+Claude Code modifie le fichier directement.
+</Step>
+
+<Step title="Repetez chaque semaine" stepNumber={6}>
+La semaine suivante, creez un nouveau fichier de notes (for example `notes-semaine-17-mars.md`) et relancez le meme prompt en changeant le nom du fichier. Le process prend 5 minutes.
+
+Going further, vous pouvez creer un fichier `modele-rapport.md` avec la structure souhaitee et y faire reference dans votre prompt : "Utilise la structure decrite dans modele-rapport.md".
+</Step>
+</Steps>
+
+<Callout type="info" title="Astuce : le fichier CLAUDE.md">
+Si vous placez un fichier `CLAUDE.md` dans votre dossier `rapports-hebdo` avec vos preferences (ton, format, longueur), Claude Code les appliquera automatiquement a chaque session. Plus besoin de les repeter dans le prompt.
+</Callout>
+
+---
+
+## Tutoriel 2 : Creer un systeme de templates email
+
+**Objectif :** avoir des modeles d'emails prets a l'emploi pour les situations recurrentes, personnalisables en quelques secondes.
+
+**Temps estime :** 20 minutes pour la mise en place, 2 minutes par email genere.
+
+<Steps>
+<Step title="Identifiez vos emails recurrents" stepNumber={1}>
+Listez les 5 a 10 types d'emails que vous envoyez le plus souvent. Par exemple :
+
+- Relance client apres devis
+- Confirmation de rendez-vous
+- Envoi de compte-rendu
+- Demande d'information a un fournisseur
+- Remerciement apres reunion
+- Refus poli d'une sollicitation
+
+Ecrivez cette liste dans un fichier `types-emails.md`.
+</Step>
+
+<Step title="Creez votre fichier de reference" stepNumber={2}>
+Creez un fichier `contexte-emails.md` avec vos informations :
+
+```text
+# Contexte pour la generation d'emails
+
+## Mon profil
+- Nom : [Votre nom]
+- Poste : [Votre poste]
+- Entreprise : [Nom de l'entreprise]
+- Secteur : [Votre secteur]
+
+## Regles de redaction
+- Vouvoiement systematique
+- Ton professionnel mais chaleureux
+- Signature : [Prenom Nom, Poste, Telephone]
+- Longueur maximale : 10 lignes pour les emails courants
+- Pas de formules trop formelles ("je vous prie d'agreer...")
+- Formule de politesse : "Bien cordialement" ou "A bientot"
+```
+</Step>
+
+<Step title="Generez vos templates de base" stepNumber={3}>
+Ouvrez Claude Code dans le dossier contenant vos fichiers et collez :
+
+```text
+Lis le fichier contexte-emails.md et le fichier types-emails.md.
+
+Pour chaque type d'email liste, genere un template avec :
+- L'objet du mail
+- Le corps du mail avec des [placeholders] pour les elements variables
+- Une variante courte (3-4 lignes) pour les cas urgents
+
+Enregistre tous les templates dans un fichier templates-emails.md
+```
+
+Claude Code genere un fichier complet avec tous vos templates.
+</Step>
+
+<Step title="Utilisez un template au quotidien" stepNumber={4}>
+Quand vous devez envoyer un email, ouvrez Claude Code et dites simplement :
+
+```text
+Genere un email de relance client. Lis le template dans templates-emails.md.
+
+Details :
+- Client : Societe Martin et Fils
+- Devis envoye le : 3 mars 2026
+- Montant : 12 500 euros HT
+- Projet : refonte du site vitrine
+```
+
+Claude Code remplace les placeholders et vous produit un email pret a copier.
+</Step>
+
+<Step title="Ameliorez vos templates au fil du temps" stepNumber={5}>
+Si un email genere necessite des retouches, demandez a Claude Code de mettre a jour le template :
+
+```text
+Le template de relance client est trop formel. Modifie-le dans templates-emails.md pour qu'il soit plus direct et moins ceremoniaux. Garde le vouvoiement.
+```
+
+Vos templates s'ameliorent au fil de l'usage.
+</Step>
+</Steps>
+
+---
+
+## Tutoriel 3 : Generer le plan et le contenu d'une presentation
+
+**Objectif :** produire le plan complet d'une presentation avec le contenu de chaque slide, pret a copier dans PowerPoint ou Google Slides.
+
+**Temps estime :** 15 minutes pour une presentation de 10-15 slides.
+
+<Steps>
+<Step title="Rassemblez vos informations" stepNumber={1}>
+Avant de lancer Claude Code, preparez un fichier avec les informations brutes :
+
+```text
+# Presentation - Bilan projet migration CRM
+
+## Contexte
+- Projet demarre en septembre 2025
+- Migration de Salesforce vers HubSpot
+- Equipe : 4 personnes + 1 prestataire externe
+- Budget initial : 85 000 euros
+
+## Resultats
+- Migration terminee le 28 fevrier 2026 (2 semaines de retard)
+- 12 000 contacts migres, 0 perte de donnees
+- Adoption utilisateurs : 87% apres 1 mois
+- Economies prevues : 2 200 euros/mois sur les licences
+
+## Problemes rencontres
+- Champs personnalises incompatibles (3 semaines de retard)
+- Resistance de l'equipe commerciale au debut
+- Cout final : 92 000 euros (depassement de 8%)
+
+## Public
+- Comite de direction (6 personnes, profils non-techniques)
+- Ils veulent savoir : est-ce que ca a marche ? Combien ca a coute ? Et maintenant ?
+```
+
+Enregistrez-le sous `brief-presentation.md`.
+</Step>
+
+<Step title="Generez le plan de la presentation" stepNumber={2}>
+Ouvrez Claude Code et donnez les instructions :
+
+```text
+Lis le fichier brief-presentation.md.
+
+Genere le plan complet d'une presentation de 12 slides maximum.
+Duree de la presentation : 15 minutes.
+
+Pour chaque slide, indique :
+- Numero et titre de la slide
+- Contenu (3-4 bullet points ou texte court)
+- Suggestion de visuel (graphique, icone, image, screenshot)
+- Notes du presentateur (ce qu'il faut dire a l'oral, 2-3 phrases)
+
+Regles :
+- La premiere slide est le titre, la derniere une slide de questions
+- Pas plus de 4 bullet points par slide
+- Privilegier les chiffres et les visuels aux longs textes
+- Structure narrative : contexte, defis, resultats, suite
+
+Enregistre dans plan-presentation-crm.md
+```
+</Step>
+
+<Step title="Approfondissez certaines slides" stepNumber={3}>
+Si une slide a besoin de plus de details :
+
+```text
+Pour la slide 7 (resultats chiffres), genere un tableau comparatif avant/apres avec :
+- Cout mensuel des licences (avant vs apres)
+- Nombre d'utilisateurs actifs
+- Temps moyen de saisie d'un contact
+- Taux de donnees dupliquees
+
+Mets a jour le fichier plan-presentation-crm.md.
+```
+</Step>
+
+<Step title="Generez les notes du presentateur" stepNumber={4}>
+Pour vous aider a presenter sans lire vos slides :
+
+```text
+Pour chaque slide du fichier plan-presentation-crm.md, developpe les notes du presentateur :
+- Ce qu'il faut dire (3-4 phrases naturelles, comme a l'oral)
+- La transition vers la slide suivante (1 phrase)
+- Les questions que le public pourrait poser a ce moment
+
+Enregistre dans notes-presentateur-crm.md
+```
+</Step>
+
+<Step title="Copiez dans votre outil de presentation" stepNumber={5}>
+Ouvrez votre outil (PowerPoint, Google Slides, Keynote) et creez les slides en suivant le plan. Le contenu est deja pret : vous n'avez qu'a le copier-coller et ajouter les visuels.
+
+Pour les graphiques, vous pouvez demander a Claude Code de generer les donnees au bon format :
+
+```text
+Genere les donnees du graphique d'evolution des couts sous forme de tableau CSV que je pourrai importer dans Google Sheets pour creer un graphique.
+```
+</Step>
+</Steps>
+
+<Callout type="tip" title="Conseil pour les presentations recurrentes">
+Si vous faites des presentations similaires chaque trimestre (revue de projet, bilan, comite), creez un fichier `modele-presentation.md` avec votre structure type. A chaque nouvelle presentation, fournissez ce modele a Claude Code avec les nouvelles donnees. Le plan sera coherent d'une fois sur l'autre.
+</Callout>
+
+---
+
+## Les 5 principes de l'automatisation sans code
+
+Apres ces trois tutoriels, voici les principes a retenir pour automatiser d'autres taches.
+
+**1. Commencez par ce que vous faites chaque semaine.** Le gain est immediat et vous apprenez en douceur.
+
+**2. Creez des fichiers de reference.** Votre contexte (entreprise, ton, format) dans un fichier que Claude Code lit a chaque session. Vous ne le repetez plus.
+
+**3. Demandez que le resultat soit ecrit dans un fichier.** C'est plus pratique que de copier depuis le terminal, et ca vous cree un historique.
+
+**4. Ameliorez vos prompts progressivement.** La premiere version marche. La cinquieme version est excellente. Notez ce qui ne va pas et ajustez.
+
+**5. Gardez l'humain dans la boucle.** Claude Code produit le brouillon, vous validez le resultat final. C'est cette combinaison qui donne les meilleurs resultats.
+
+## Next steps
+
+- Decouvrez les [8 cas d'usage business](/use-cases/business) avec des prompts prets a copier
+- Lisez les [histoires de reussite](/use-cases/success-stories) de non-developpeurs utilisant Claude Code
+- Explorez le [guide de prompting non-developpeurs](/prompting/non-dev-prompting) pour ameliorer vos prompts

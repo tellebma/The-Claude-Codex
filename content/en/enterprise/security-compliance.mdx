@@ -1,0 +1,158 @@
+---
+title: "Security and compliance"
+description: "Claude Code enterprise security and compliance guide: data protection, GDPR, SOC 2, API security, and deployment options."
+section: "enterprise"
+order: 2
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Ou sont traitees vos donnees ?
+
+Quand vous utilisez Claude Code, vos prompts et le contexte du projet sont envoyes aux serveurs d'Anthropic via une connexion chiffree (TLS 1.2+). Le traitement a lieu sur l'infrastructure cloud d'Anthropic, principalement hebergee aux Etats-Unis.
+
+Pour les entreprises qui exigent un hebergement specifique, deux options existent :
+
+- **AWS Bedrock** : vos requetes transitent par l'infrastructure AWS de votre compte. Les donnees restent dans la region AWS que vous choisissez.
+- **Google Vertex AI** : meme principe via Google Cloud Platform.
+
+Dans les deux cas, Anthropic ne conserve pas vos donnees au-dela du traitement de la requete.
+
+<Callout type="info" title="Anthropic Trust Center">
+Consultez le [Trust Center d'Anthropic](https://trust.anthropic.com) pour les details a jour sur l'infrastructure, les certifications et les engagements de securite.
+</Callout>
+
+## Quelles donnees sont envoyees a l'API ?
+
+Claude Code envoie a l'API :
+
+- **Le contenu de votre prompt** (votre question ou instruction)
+- **Le contexte du projet** : fichiers lus, resultats de commandes, contenu du CLAUDE.md
+- **Les metadonnees de session** : modele utilise, timestamps, identifiant de conversation
+
+Claude Code **n'envoie pas** automatiquement tout votre code source. Il envoie uniquement les fichiers qu'il lit pendant la session, a votre demande ou quand il a besoin de contexte pour repondre.
+
+### Ce qui n'est jamais envoye
+
+- Le contenu de votre `.env` (sauf si vous demandez explicitement a Claude de le lire)
+- Vos credentials git, SSH keys ou tokens stockes dans le systeme
+- Les fichiers exclus par le `.gitignore` (sauf demande explicite)
+
+## Politique de retention
+
+| Mode d'acces | Retention des prompts | Retention des reponses |
+|---|---|---|
+| API directe (cle API) | Configurable, 0 a 30 jours par defaut | Idem |
+| Claude Max (abonnement) | 30 jours (conversations) | 30 jours |
+| AWS Bedrock | 0 jour (pas de retention Anthropic) | 0 jour |
+| Google Vertex AI | 0 jour (pas de retention Anthropic) | 0 jour |
+
+<Callout type="tip" title="Zero data retention via Bedrock/Vertex">
+Pour les organisations qui ne veulent aucune retention cote Anthropic, l'acces via AWS Bedrock ou Google Vertex AI garantit que les donnees ne transitent jamais par les serveurs d'Anthropic.
+</Callout>
+
+## RGPD : les points essentiels
+
+### Base legale
+
+L'utilisation de Claude Code avec des donnees personnelles peut se justifier par :
+
+- **L'interet legitime** (article 6.1.f) : amelioration de la productivite des equipes de developpement, a condition de documenter l'analyse de proportionnalite
+- **L'execution d'un contrat** (article 6.1.b) : si l'IA est utilisee dans le cadre d'une prestation client
+
+### Droits des personnes concernees
+
+Si des donnees personnelles passent par Claude Code (noms dans du code, emails dans des logs), les droits d'acces, de rectification et d'effacement s'appliquent. In practice :
+
+- Configurez une retention courte ou nulle via Bedrock/Vertex
+- Documentez les types de donnees susceptibles d'etre traites
+- Prevoyez une procedure en cas de demande d'exercice de droits
+
+### DPA (Data Processing Agreement)
+
+Anthropic propose un DPA standard, disponible sur le Trust Center. Ce DPA couvre :
+
+- Les categories de donnees traitees
+- Les mesures de securite techniques et organisationnelles
+- Les transferts internationaux (clauses contractuelles types pour les transferts UE vers US)
+- Les obligations en cas de violation de donnees
+
+## AI Act europeen
+
+Le reglement europeen sur l'IA (AI Act) classe les systemes d'IA par niveau de risque. Claude Code, utilise comme outil d'aide au developpement, tombe generalement dans la categorie **risque limite** :
+
+- **Pas de decision automatisee** sur des personnes (pas de scoring, pas de recrutement automatique)
+- **Obligation de transparence** : les utilisateurs doivent savoir qu'ils interagissent avec une IA
+
+Si vous utilisez Claude Code pour generer du code qui alimente un systeme a haut risque (sante, justice, recrutement), des obligations supplementaires s'appliquent au systeme final, pas directement a Claude Code.
+
+<Callout type="warning" title="Evaluez votre cas d'usage specifique">
+Cette analyse est generale. Pour un avis juridique adapte a votre organisation, consultez votre DPO ou un cabinet specialise en droit du numerique.
+</Callout>
+
+## Protection des secrets
+
+### Configuration de la deny list
+
+Dans votre `CLAUDE.md` ou `settings.json`, listez explicitement les fichiers que Claude Code ne doit jamais lire :
+
+```bash
+# Dans CLAUDE.md
+Ne jamais lire les fichiers suivants :
+- .env, .env.local, .env.production
+- **/credentials.json
+- **/secrets.yaml
+- **/*.pem, **/*.key
+```
+
+### Best practices
+
+- **Utilisez des variables d'environnement** pour les secrets, pas des fichiers en dur
+- **Configurez les permissions** dans `settings.json` pour restreindre les outils disponibles
+- **Activez les hooks PreToolUse** pour bloquer automatiquement la lecture de fichiers sensibles
+- **Verifiez le `.gitignore`** : les fichiers ignores par git ne sont pas automatiquement exclus de Claude Code
+
+## Audit trail
+
+Claude Code produit des traces exploitables pour l'audit :
+
+- **Historique des sessions** : chaque conversation est enregistree localement dans `~/.claude/`
+- **Logs des actions** : les fichiers modifies, les commandes executees et les outils appeles sont traces
+- **Hooks de notification** : configurez un hook `PostToolUse` pour envoyer chaque action vers un systeme de logs centralise (Slack, webhook, SIEM)
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [{
+      "matcher": "*",
+      "command": "curl -X POST https://votre-siem.com/api/logs -d '{\"tool\": \"$TOOL_NAME\", \"user\": \"$USER\", \"timestamp\": \"$TIMESTAMP\"}'"
+    }]
+  }
+}
+```
+
+## Certifications Anthropic
+
+| Certification | Statut |
+|---|---|
+| SOC 2 Type II | Obtenue |
+| HIPAA | Disponible (BAA sur demande) |
+| GDPR/DPA | DPA standard disponible |
+| ISO 27001 | En cours |
+
+Consultez le [Trust Center](https://trust.anthropic.com) pour les rapports d'audit a jour.
+
+## Best practices securite pour les equipes
+
+1. **Centralisez la configuration** : un `CLAUDE.md` a la racine du repo definit les regles pour tout le monde
+2. **Restreignez les MCP autorises** : utilisez une allow list dans `settings.json` au niveau organisation
+3. **Formez les developpeurs** : un dev qui comprend ce qui est envoye a l'API fait de meilleurs choix
+4. **Auditez regulierement** : passez en revue les MCP installes, les permissions accordees et les logs d'usage
+5. **Rotation des cles API** : changez les cles API au minimum tous les 90 jours
+6. **Separez les environnements** : des configurations differentes pour le dev, le staging et la production
+
+## Next steps
+
+- [Gouvernance et roles](/enterprise/governance) : qui a acces a quoi, comment configurer les permissions
+- [Guide d'adoption d'equipe](/enterprise/team-adoption) : integrer la securite dans le plan de deploiement
+- [FAQ Enterprise](/enterprise/faq) : reponses aux questions frequentes sur la conformite

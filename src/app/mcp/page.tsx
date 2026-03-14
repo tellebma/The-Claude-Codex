@@ -9,7 +9,6 @@ import {
   MessageSquare,
   Mail,
   Zap,
-  ChevronRight,
   Settings,
   Terminal,
   BookOpen,
@@ -28,6 +27,7 @@ import { FeatureCard } from "@/components/ui/FeatureCard";
 import { Callout } from "@/components/ui/Callout";
 import { CodeBlock } from "@/components/ui/CodeBlock";
 import { AnimateOnScroll, StaggerChildren } from "@/components/ui/AnimateOnScroll";
+import { McpArchitectureDiagram } from "@/components/ui/McpArchitectureDiagram";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
@@ -381,68 +381,9 @@ export default function McpPage() {
             description="Le MCP agit comme un pont standardise entre Claude Code et les services externes."
           />
 
-          {/* Flow diagram */}
+          {/* Flow diagram — animated beams (Story 5.3) */}
           <div className="mt-16">
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-0">
-              {/* User */}
-              <div className="glass-card flex-1 p-5 text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <BookOpen className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
-                </div>
-                <p className="text-sm font-semibold">Vous</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                  &quot;Montre-moi les issues GitHub ouvertes&quot;
-                </p>
-              </div>
-
-              {/* Arrow */}
-              <div className="flex items-center justify-center sm:px-2">
-                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
-              </div>
-
-              {/* Claude Code */}
-              <div className="glass-card flex-1 border-brand-500/30 p-5 text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                  <Terminal className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
-                </div>
-                <p className="text-sm font-semibold">Claude Code</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                  Comprend votre demande et appelle le bon MCP
-                </p>
-              </div>
-
-              {/* Arrow */}
-              <div className="flex items-center justify-center sm:px-2">
-                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
-              </div>
-
-              {/* MCP Server */}
-              <div className="glass-card flex-1 border-accent-500/30 p-5 text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
-                  <Plug className="h-6 w-6 text-accent-500" aria-hidden="true" />
-                </div>
-                <p className="text-sm font-semibold">MCP Server</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                  Traduit la requete en appels API
-                </p>
-              </div>
-
-              {/* Arrow */}
-              <div className="flex items-center justify-center sm:px-2">
-                <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
-              </div>
-
-              {/* External Service */}
-              <div className="glass-card flex-1 border-emerald-500/30 p-5 text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5">
-                  <Globe className="h-6 w-6 text-emerald-500" aria-hidden="true" />
-                </div>
-                <p className="text-sm font-semibold">Service externe</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                  GitHub, Slack, Gmail, BDD...
-                </p>
-              </div>
-            </div>
+            <McpArchitectureDiagram />
 
             <Callout type="info" title="Protocole standard">
               Le MCP est un protocole ouvert cree par Anthropic. Chaque MCP

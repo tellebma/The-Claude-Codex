@@ -16,6 +16,7 @@ import {
   BookOpen,
   Puzzle,
   MessageSquare,
+  ChevronDown,
 } from "lucide-react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
@@ -23,6 +24,7 @@ import { PathCard } from "@/components/ui/PathCard";
 import { AudienceCard } from "@/components/ui/AudienceCard";
 import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
+import { HeroTerminal } from "@/components/ui/HeroTerminal";
 import {
   AnimateOnScroll,
   StaggerChildren,
@@ -38,9 +40,9 @@ export default function HomePage() {
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at top right, var(--gradient-hero-radial-1), transparent 60%)" }} />
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at bottom left, var(--gradient-hero-radial-2), transparent 60%)" }} />
 
-        {/* Grid pattern */}
+        {/* Grid pattern — animated (Story 5.6) */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 animate-grid-fade"
           style={{
             backgroundImage:
               "linear-gradient(var(--hero-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hero-grid-line) 1px, transparent 1px)",
@@ -109,50 +111,14 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Terminal preview */}
+            {/* Terminal preview — animated typing (Story 5.1) */}
             <div className="mx-auto mt-16 max-w-2xl">
-              <div
-                className="glow overflow-hidden rounded-2xl shadow-2xl backdrop-blur"
-                style={{
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: "var(--hero-terminal-border)",
-                  backgroundColor: "var(--hero-terminal-bg)",
-                }}
-              >
-                <div className="flex items-center gap-2 border-b border-slate-700/50 px-4 py-3">
-                  <div className="h-3 w-3 rounded-full bg-red-500/80" />
-                  <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
-                  <div className="h-3 w-3 rounded-full bg-green-500/80" />
-                  <span className="ml-2 text-xs text-slate-400">terminal</span>
-                </div>
-                <div className="p-6 font-mono text-sm leading-relaxed">
-                  <div className="text-slate-400">
-                    $ <span className="text-brand-400">claude</span>
-                  </div>
-                  <div className="mt-2 text-slate-400">
-                    <span className="text-accent-400">{">"}</span> Crée-moi un site web moderne avec une landing page,{" "}
-                  </div>
-                  <div className="text-slate-400">
-                    {"  "}un système d&apos;authentification et un dashboard admin.
-                  </div>
-                  <div className="mt-3 text-emerald-400">
-                    Bien sûr ! Je vais créer votre projet étape par étape...
-                  </div>
-                  <div className="mt-1 text-slate-400">
-                    {"  "}Analyse des besoins...{" "}
-                    <span className="text-brand-400">fait</span>
-                  </div>
-                  <div className="text-slate-400">
-                    {"  "}Création de l&apos;architecture...{" "}
-                    <span className="text-brand-400">fait</span>
-                  </div>
-                  <div className="text-slate-400">
-                    {"  "}Génération du code...{" "}
-                    <span className="animate-pulse text-accent-400">en cours</span>
-                  </div>
-                </div>
-              </div>
+              <HeroTerminal />
+            </div>
+
+            {/* Scroll indicator (Story 7.3 / EPIC 7) */}
+            <div className="mt-12 flex justify-center">
+              <ChevronDown className="h-6 w-6 animate-float text-slate-400 dark:text-slate-500" aria-hidden="true" />
             </div>
           </div>
         </div>
@@ -169,13 +135,16 @@ export default function HomePage() {
             />
           </AnimateOnScroll>
 
+          {/* Bento grid layout (Story 5.2) — varied card sizes for visual hierarchy */}
           <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.08}>
-            <FeatureCard
-              icon={Globe}
-              title="Créer un site web"
-              description="De la landing page au e-commerce complet, Claude Code génère, structure et déploie vos projets web."
-              gradient="teal"
-            />
+            <div className="sm:col-span-2">
+              <FeatureCard
+                icon={Globe}
+                title="Créer un site web"
+                description="De la landing page au e-commerce complet, Claude Code génère, structure et déploie vos projets web. Décrivez votre vision et regardez votre site prendre forme en temps réel."
+                gradient="teal"
+              />
+            </div>
             <FeatureCard
               icon={FileText}
               title="Générer des documents"
@@ -200,17 +169,20 @@ export default function HomePage() {
               description="Décrivez ce que vous voulez en français. Claude Code traduit vos idées en code fonctionnel."
               gradient="teal"
             />
+            <div className="sm:col-span-2">
+              <FeatureCard
+                icon={Puzzle}
+                title="Connecter vos outils"
+                description="Grâce aux MCP, intégrez Gmail, Slack, GitHub, bases de données et bien plus encore. Un écosystème ouvert qui s'adapte à votre workflow."
+                gradient="purple"
+                href="/mcp"
+              />
+            </div>
             <FeatureCard
               icon={Palette}
               title="Designer des interfaces"
               description="Créez des interfaces modernes et accessibles en décrivant simplement votre vision."
               gradient="amber"
-            />
-            <FeatureCard
-              icon={Puzzle}
-              title="Connecter vos outils"
-              description="Grâce aux MCP, intégrez Gmail, Slack, GitHub, bases de données et bien plus encore."
-              gradient="purple"
             />
             <FeatureCard
               icon={Rocket}

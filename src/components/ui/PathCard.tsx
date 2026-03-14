@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { ArrowRight } from "lucide-react";
 import clsx from "clsx";
+import { BorderBeam } from "@/components/ui/BorderBeam";
 
 interface PathCardProps {
   icon: LucideIcon;
@@ -46,14 +47,26 @@ export function PathCard({
   href,
   color,
 }: PathCardProps) {
+  const beamColors = {
+    teal: { from: "#06b6d4", to: "#22d3ee" },
+    amber: { from: "#f59e0b", to: "#fbbf24" },
+    purple: { from: "#8b5cf6", to: "#a78bfa" },
+  };
+
   return (
     <Link
       href={href}
       className={clsx(
-        "glass-card group flex h-full flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950 active:scale-[0.98]",
+        "glass-card group relative flex h-full flex-col overflow-hidden p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950 active:scale-[0.98]",
         borderColors[color]
       )}
     >
+      <BorderBeam
+        colorFrom={beamColors[color].from}
+        colorTo={beamColors[color].to}
+        duration={5}
+        delay={color === "amber" ? 1.5 : color === "purple" ? 3 : 0}
+      />
       <div className="mb-4 flex items-center gap-3">
         <div
           className={clsx(

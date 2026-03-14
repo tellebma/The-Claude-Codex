@@ -3,37 +3,40 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Terminal, Github, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { CopyrightYear } from "@/components/ui/CopyrightYear";
 import {
   getLocaleFromPathname,
   prefixWithLocale,
 } from "@/lib/locale-utils";
 
-const footerLinks = {
-  guides: [
-    { name: "Démarrer", href: "/getting-started" },
-    { name: "MCP", href: "/mcp" },
-    { name: "Skills", href: "/skills" },
-    { name: "Prompting", href: "/prompting" },
-  ],
-  resources: [
-    { name: "Vision & Futur", href: "/future" },
-    {
-      name: "Claude Code (officiel)",
-      href: "https://github.com/anthropics/claude-code",
-      external: true,
-    },
-    {
-      name: "Documentation Anthropic",
-      href: "https://docs.anthropic.com",
-      external: true,
-    },
-  ],
-};
+const guidesNavKeys = [
+  { key: "gettingStarted", href: "/getting-started" },
+  { key: "mcp", href: "/mcp" },
+  { key: "skills", href: "/skills" },
+  { key: "prompting", href: "/prompting" },
+] as const;
+
+const resourcesLinks = [
+  { key: "visionFuture", href: "/future", external: false },
+  {
+    key: "claudeCodeOfficial",
+    href: "https://github.com/anthropics/claude-code",
+    external: true,
+  },
+  {
+    key: "anthropicDocs",
+    href: "https://docs.anthropic.com",
+    external: true,
+  },
+] as const;
 
 export function Footer() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
+  const tNav = useTranslations("navigation");
+  const tFooter = useTranslations("footer");
+  const tCommon = useTranslations("common");
 
   return (
     <footer className="border-t border-slate-200/50 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
@@ -53,45 +56,43 @@ export function Footer() {
               The Claude <span className="text-gradient">Codex</span>
             </Link>
             <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-300">
-              Le guide de référence gratuit pour maîtriser Claude Code. Créé
-              par la communauté, pour la communauté. Pas de paywall, pas de
-              tracking , juste du savoir partagé.
+              {tFooter("description")}
             </p>
           </div>
 
-          <nav aria-label="Guides">
+          <nav aria-label={tCommon("guides")}>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
-              Guides
+              {tCommon("guides")}
             </h3>
             <ul className="mt-3 space-y-2">
-              {footerLinks.guides.map((link) => (
+              {guidesNavKeys.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={prefixWithLocale(link.href, locale)}
                     className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
-                    {link.name}
+                    {tNav(link.key)}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <nav aria-label="Ressources">
+          <nav aria-label={tCommon("resources")}>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
-              Ressources
+              {tCommon("resources")}
             </h3>
             <ul className="mt-3 space-y-2">
-              {footerLinks.resources.map((link) => (
+              {resourcesLinks.map((link) => (
                 <li key={link.href}>
-                  {"external" in link ? (
+                  {link.external ? (
                     <a
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex min-h-[44px] items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                     >
-                      {link.name}
+                      {tFooter(link.key)}
                       <ExternalLink
                         className="h-3 w-3"
                         aria-hidden="true"
@@ -102,7 +103,7 @@ export function Footer() {
                       href={prefixWithLocale(link.href, locale)}
                       className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                     >
-                      {link.name}
+                      {tFooter(link.key)}
                     </Link>
                   )}
                 </li>
@@ -114,7 +115,7 @@ export function Footer() {
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200/50 pt-8 dark:border-slate-800 sm:flex-row">
           <div className="flex flex-col gap-1 text-center sm:text-left">
             <p className="text-sm text-slate-500 dark:text-slate-300">
-              <CopyrightYear /> The Claude Codex. Projet open-source.
+              <CopyrightYear /> The Claude Codex. {tCommon("openSource")}
             </p>
           </div>
           <a

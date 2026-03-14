@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages, setRequestLocale, getTranslations } from "next-intl/server";
 import { hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
@@ -67,12 +67,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === "en";
+  const tMeta = await getTranslations({ locale, namespace: "metadata" });
 
-  const siteDescription = isEn
-    ? "The free reference guide to master Claude Code. MCP, Skills, Advanced Prompting, for developers and non-developers."
-    : "Le guide de référence gratuit pour maîtriser Claude Code. MCP, Skills, Prompting avancé, pour développeurs et non-développeurs.";
-
-  const siteTitle = isEn ? "Master Claude Code" : "Maîtrisez Claude Code";
+  const siteDescription = tMeta("siteDescription");
+  const siteTitle = tMeta("siteTitle");
   const ogAlt = isEn
     ? `${SITE_NAME} | Reference guide to master Claude Code`
     : `${SITE_NAME} | Guide de référence pour maîtriser Claude Code`;
@@ -137,11 +135,10 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
+  const tCommon = await getTranslations("common");
+  const tMetadata = await getTranslations("metadata");
 
-  const siteDescription =
-    locale === "en"
-      ? "The free reference guide to master Claude Code."
-      : "Le guide de référence gratuit pour maîtriser Claude Code.";
+  const siteDescription = tMetadata("siteDescription");
 
   /*
    * JSON-LD structured data — safe: static schema built at build time
@@ -184,9 +181,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages} locale={locale}>
           <ThemeProvider>
             <a href="#main-content" className="skip-to-content">
-              {locale === "en"
-                ? "Skip to main content"
-                : "Aller au contenu principal"}
+              {tCommon("skipToContent")}
             </a>
             <div className="flex min-h-screen flex-col">
               <Header />

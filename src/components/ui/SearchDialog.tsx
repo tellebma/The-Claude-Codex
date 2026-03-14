@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Search, X, ArrowRight, FileText } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { searchEntries, type SearchEntry } from "@/lib/search-index";
 import { getLocaleFromPathname, prefixWithLocale } from "@/lib/locale-utils";
 
@@ -21,6 +22,7 @@ export function SearchDialog() {
   const router = useRouter();
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
+  const t = useTranslations("search");
 
   const openDialog = useCallback(() => {
     setOpen(true);
@@ -125,7 +127,7 @@ export function SearchDialog() {
         className="flex h-11 items-center gap-2 rounded-lg border border-slate-200 bg-white/80 px-3 text-sm text-slate-500 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:bg-slate-700"
       >
         <Search className="h-4 w-4" aria-hidden="true" />
-        <span className="sr-only sm:not-sr-only">Rechercher...</span>
+        <span className="sr-only sm:not-sr-only">{t("trigger")}</span>
         <kbd className="hidden rounded border border-slate-300 bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 sm:inline" aria-hidden="true">
           Ctrl K
         </kbd>
@@ -140,7 +142,7 @@ export function SearchDialog() {
           {/* Dialog */}
           <div
             role="dialog"
-            aria-label="Recherche globale"
+            aria-label={t("dialogTitle")}
             aria-modal="true"
             className="mx-4 w-full max-w-xl animate-fade-in overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl dark:border-slate-700/50 dark:bg-slate-900"
             onClick={(e) => e.stopPropagation()}
@@ -158,9 +160,9 @@ export function SearchDialog() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Rechercher un sujet, une page..."
+                placeholder={t("placeholder")}
                 className="flex-1 bg-transparent py-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-white dark:placeholder:text-slate-500"
-                aria-label="Rechercher"
+                aria-label={t("inputLabel")}
                 aria-expanded={results.length > 0}
                 aria-controls={RESULTS_LISTBOX_ID}
                 aria-autocomplete="list"
@@ -169,7 +171,7 @@ export function SearchDialog() {
               />
               <button
                 onClick={closeDialog}
-                aria-label="Fermer la recherche"
+                aria-label={t("close")}
                 className="rounded-md p-1 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
@@ -184,14 +186,14 @@ export function SearchDialog() {
                   aria-live="polite"
                   className="px-4 py-8 text-center text-sm text-slate-500 dark:text-slate-300"
                 >
-                  Aucun resultat pour &quot;{query}&quot;
+                  {t("noResults", { query })}
                 </div>
               )}
 
               <ul
                 id={RESULTS_LISTBOX_ID}
                 role="listbox"
-                aria-label="Resultats de recherche"
+                aria-label={t("resultsLabel")}
               >
                 {results.map((result, index) => (
                   <li
@@ -248,7 +250,7 @@ export function SearchDialog() {
 
               {query.length === 0 && (
                 <div className="px-4 py-6 text-center text-sm text-slate-500 dark:text-slate-300">
-                  Tapez un mot-cle pour rechercher dans le site
+                  {t("typeToSearch")}
                 </div>
               )}
             </div>
@@ -259,17 +261,17 @@ export function SearchDialog() {
                 <kbd className="rounded border border-slate-300 px-1 py-0.5 font-mono dark:border-slate-600">
                   Esc
                 </kbd>
-                <span>pour fermer</span>
+                <span>{t("escToClose")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <kbd className="rounded border border-slate-300 px-1 py-0.5 font-mono dark:border-slate-600">
                   &uarr;&darr;
                 </kbd>
-                <span>naviguer</span>
+                <span>{t("arrowsToNavigate")}</span>
                 <kbd className="rounded border border-slate-300 px-1 py-0.5 font-mono dark:border-slate-600">
-                  Entree
+                  &crarr;
                 </kbd>
-                <span>ouvrir</span>
+                <span>{t("enterToOpen")}</span>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Cable } from "lucide-react";
@@ -83,6 +83,8 @@ export default async function McpSlugPage({
   setRequestLocale(resolvedParams.locale);
   const { frontmatter, content } = getSectionMdxBySlug(SECTION, resolvedParams.slug);
   const { prev, next } = getAdjacentPages(resolvedParams.slug);
+  const tCommon = await getTranslations("common");
+  const tBreadcrumb = await getTranslations("breadcrumb");
 
   const articleJsonLd = createArticleSchema({
     title: frontmatter.title,
@@ -93,8 +95,8 @@ export default async function McpSlugPage({
   });
 
   const breadcrumbJsonLd = createBreadcrumbSchema([
-    { name: "Accueil", href: `/${resolvedParams.locale}` },
-    { name: "MCP", href: `/${resolvedParams.locale}/${SECTION}` },
+    { name: tCommon("home"), href: `/${resolvedParams.locale}` },
+    { name: tBreadcrumb(`sections.${SECTION}`), href: `/${resolvedParams.locale}/${SECTION}` },
     { name: frontmatter.title, href: `/${resolvedParams.locale}/${SECTION}/${resolvedParams.slug}` },
   ]);
 
@@ -129,21 +131,21 @@ export default async function McpSlugPage({
         <div className="relative px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
           {/* Breadcrumb */}
           <nav
-            aria-label="Fil d'Ariane"
+            aria-label={tBreadcrumb("ariaLabel")}
             className="mb-6 flex items-center gap-2 text-sm text-slate-400"
           >
             <Link
               href={`/${resolvedParams.locale}`}
               className="transition-colors hover:text-white"
             >
-              Accueil
+              {tCommon("home")}
             </Link>
             <span aria-hidden="true">/</span>
             <Link
               href={`/${resolvedParams.locale}/${SECTION}`}
               className="transition-colors hover:text-white"
             >
-              MCP
+              {tBreadcrumb(`sections.${SECTION}`)}
             </Link>
             <span aria-hidden="true">/</span>
             <span className="text-slate-200">{frontmatter.title}</span>
@@ -152,7 +154,7 @@ export default async function McpSlugPage({
           <div className="text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <Cable className="h-4 w-4" aria-hidden="true" />
-              MCP
+              {tBreadcrumb(`sections.${SECTION}`)}
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
               {frontmatter.title}
@@ -184,7 +186,7 @@ export default async function McpSlugPage({
               >
                 <ArrowLeft className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                 <div>
-                  <p className="text-xs text-slate-400">Pr&eacute;c&eacute;dent</p>
+                  <p className="text-xs text-slate-400">{tCommon("previous")}</p>
                   <p className="text-sm font-semibold">
                     {prev.frontmatter.title}
                   </p>
@@ -197,8 +199,8 @@ export default async function McpSlugPage({
               >
                 <ArrowLeft className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                 <div>
-                  <p className="text-xs text-slate-400">Retour</p>
-                  <p className="text-sm font-semibold">Vue d&apos;ensemble</p>
+                  <p className="text-xs text-slate-400">{tCommon("back")}</p>
+                  <p className="text-sm font-semibold">{tCommon("overview")}</p>
                 </div>
               </Link>
             )}
@@ -208,7 +210,7 @@ export default async function McpSlugPage({
                 className="group flex items-center justify-end gap-2 rounded-xl border border-slate-200/50 px-6 py-4 text-right transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <div>
-                  <p className="text-xs text-slate-400">Suivant</p>
+                  <p className="text-xs text-slate-400">{tCommon("next")}</p>
                   <p className="text-sm font-semibold">
                     {next.frontmatter.title}
                   </p>

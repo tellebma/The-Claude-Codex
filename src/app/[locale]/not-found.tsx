@@ -1,5 +1,6 @@
+"use client";
+
 import Link from "next/link";
-import type { Metadata } from "next";
 import {
   Home,
   BookOpen,
@@ -8,44 +9,42 @@ import {
   Search,
   Terminal,
 } from "lucide-react";
-import { createPageMetadata } from "@/lib/metadata";
+import { useTranslations, useLocale } from "next-intl";
+import { prefixWithLocale } from "@/lib/locale-utils";
 import { NotFoundAnimation } from "@/components/ui/NotFoundAnimation";
 
-export const metadata: Metadata = createPageMetadata({
-  title: "Page introuvable",
-  description:
-    "La page que vous cherchez n'existe pas ou a été déplacée. Retrouvez votre chemin grâce aux liens ci-dessous.",
-  path: "/404",
-});
-
-const suggestedLinks = [
-  {
-    name: "Accueil",
-    href: "/fr",
-    icon: Home,
-    description: "Retour à la page d'accueil",
-  },
-  {
-    name: "Démarrer",
-    href: "/fr/getting-started",
-    icon: BookOpen,
-    description: "Guide d'installation pas à pas",
-  },
-  {
-    name: "MCP",
-    href: "/fr/mcp",
-    icon: Puzzle,
-    description: "Connecter vos outils favoris",
-  },
-  {
-    name: "Prompting",
-    href: "/fr/prompting",
-    icon: MessageSquare,
-    description: "L'art de communiquer avec l'IA",
-  },
-];
-
 export default function NotFound() {
+  const tCommon = useTranslations("common");
+  const tNav = useTranslations("navigation");
+  const locale = useLocale();
+
+  const suggestedLinks = [
+    {
+      name: tCommon("home"),
+      href: prefixWithLocale("/", locale),
+      icon: Home,
+      description: tCommon("backToHome"),
+    },
+    {
+      name: tNav("gettingStarted"),
+      href: prefixWithLocale("/getting-started", locale),
+      icon: BookOpen,
+      description: "",
+    },
+    {
+      name: tNav("mcp"),
+      href: prefixWithLocale("/mcp", locale),
+      icon: Puzzle,
+      description: "",
+    },
+    {
+      name: tNav("prompting"),
+      href: prefixWithLocale("/prompting", locale),
+      icon: MessageSquare,
+      description: "",
+    },
+  ];
+
   return (
     <section className="relative flex min-h-[calc(100vh-8rem)] items-center overflow-hidden bg-slate-50 dark:bg-slate-950">
       {/* Background gradient */}
@@ -93,28 +92,25 @@ export default function NotFound() {
 
         {/* Message */}
         <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
-          Page introuvable
+          {tCommon("pageNotFound")}
         </h1>
         <p className="mx-auto mt-4 max-w-lg text-base text-slate-600 dark:text-slate-300 sm:text-lg">
-          Cette page n&apos;existe pas ou a été déplacée. Pas de panique, voici
-          quelques liens pour retrouver votre chemin.
+          {tCommon("pageNotFoundDescription")}
         </p>
 
         {/* Search hint */}
         <div className="mx-auto mt-8 flex max-w-md items-center justify-center gap-2 rounded-xl border border-slate-200/60 bg-white/60 px-4 py-3 text-sm text-slate-500 backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/40 dark:text-slate-300">
           <Search className="h-4 w-4 shrink-0" aria-hidden="true" />
           <span>
-            Utilisez{" "}
             <kbd className="rounded bg-slate-200/80 px-1.5 py-0.5 font-mono text-xs font-medium text-slate-700 dark:bg-slate-700/80 dark:text-slate-300">
               Ctrl+K
-            </kbd>{" "}
-            pour rechercher dans le site
+            </kbd>
           </span>
         </div>
 
         {/* Navigation cards */}
         <nav
-          aria-label="Pages suggérées"
+          aria-label={tCommon("pageNotFound")}
           className="mx-auto mt-12 grid max-w-2xl gap-4 sm:grid-cols-2"
         >
           {suggestedLinks.map((link) => (
@@ -130,9 +126,11 @@ export default function NotFound() {
                 <p className="font-semibold text-slate-900 dark:text-white">
                   {link.name}
                 </p>
-                <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-300">
-                  {link.description}
-                </p>
+                {link.description && (
+                  <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-300">
+                    {link.description}
+                  </p>
+                )}
               </div>
             </Link>
           ))}
@@ -141,11 +139,11 @@ export default function NotFound() {
         {/* Back to home CTA */}
         <div className="mt-12">
           <Link
-            href="/fr"
+            href={prefixWithLocale("/", locale)}
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
           >
             <Home className="h-4 w-4" aria-hidden="true" />
-            Retour à l&apos;accueil
+            {tCommon("backToHome")}
           </Link>
         </div>
       </div>

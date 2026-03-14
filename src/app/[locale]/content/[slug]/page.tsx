@@ -1,4 +1,4 @@
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
@@ -52,6 +52,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
   setRequestLocale(resolvedParams.locale);
   const { frontmatter, content } = getMdxBySlug(resolvedParams.slug);
   const { prev, next } = getAdjacentArticles(resolvedParams.slug);
+  const tCommon = await getTranslations("common");
 
   return (
     <>
@@ -98,7 +99,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
               >
                 <ArrowLeft className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-x-1" aria-hidden="true" />
                 <div>
-                  <p className="text-xs text-slate-400">Precedent</p>
+                  <p className="text-xs text-slate-400">{tCommon("previous")}</p>
                   <p className="text-sm font-semibold">{prev.frontmatter.title}</p>
                 </div>
               </Link>
@@ -111,7 +112,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
                 className="group flex items-center justify-end gap-2 rounded-xl border border-slate-200/50 px-6 py-4 text-right transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <div>
-                  <p className="text-xs text-slate-400">Suivant</p>
+                  <p className="text-xs text-slate-400">{tCommon("next")}</p>
                   <p className="text-sm font-semibold">{next.frontmatter.title}</p>
                 </div>
                 <ArrowRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1" aria-hidden="true" />

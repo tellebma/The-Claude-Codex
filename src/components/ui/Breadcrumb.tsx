@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { ChevronRight, Home } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   createBreadcrumbSchema,
   serializeJsonLd,
@@ -19,20 +20,10 @@ interface BreadcrumbSegment {
   readonly href: string;
 }
 
-const SECTION_LABELS: Readonly<Record<string, string>> = {
-  "getting-started": "Demarrer",
-  mcp: "MCP",
-  plugins: "Plugins",
-  skills: "Skills",
-  agents: "Agents",
-  prompting: "Prompting",
-  future: "Vision",
-  configurator: "Configurateur",
-};
-
 function buildBreadcrumbs(
   pathname: string,
-  locale: string
+  locale: string,
+  getSectionLabel: (segment: string) => string
 ): ReadonlyArray<BreadcrumbSegment> {
   const strippedPathname = stripLocaleFromPathname(pathname);
   const segments = strippedPathname.split("/").filter(Boolean);
@@ -41,11 +32,7 @@ function buildBreadcrumbs(
   let currentPath = "";
   for (const segment of segments) {
     currentPath += `/${segment}`;
-    const label =
-      SECTION_LABELS[segment] ??
-      segment
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase());
+    const label = getSectionLabel(segment);
     breadcrumbs.push({
       label,
       href: prefixWithLocale(currentPath, locale),
@@ -66,18 +53,33 @@ export function Breadcrumb() {
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
   const strippedPathname = stripLocaleFromPathname(pathname);
+  const t = useTranslations("breadcrumb");
+
+  const getSectionLabel = useMemo(() => {
+    return (segment: string) => {
+      const key = `sections.${segment}`;
+      if (t.has(key)) {
+        return t(key);
+      }
+      return segment
+        .replace(/-/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    };
+  }, [t]);
 
   const breadcrumbs = useMemo(
     () =>
-      strippedPathname === "/" ? [] : buildBreadcrumbs(pathname, locale),
-    [pathname, locale, strippedPathname]
+      strippedPathname === "/"
+        ? []
+        : buildBreadcrumbs(pathname, locale, getSectionLabel),
+    [pathname, locale, strippedPathname, getSectionLabel]
   );
 
   const breadcrumbJsonLd = useMemo(() => {
     if (breadcrumbs.length === 0) return null;
 
     const items = [
-      { name: "Accueil", href: prefixWithLocale("/", locale) },
+      { name: t("home"), href: prefixWithLocale("/", locale) },
       ...breadcrumbs.map((crumb) => ({
         name: crumb.label,
         href: crumb.href,
@@ -85,7 +87,7 @@ export function Breadcrumb() {
     ];
 
     return serializeJsonLd(createBreadcrumbSchema(items));
-  }, [breadcrumbs, locale]);
+  }, [breadcrumbs, locale, t]);
 
   if (strippedPathname === "/" || breadcrumbs.length === 0) {
     return null;
@@ -101,13 +103,13 @@ export function Breadcrumb() {
           dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
         />
       )}
-      <nav aria-label="Fil d'Ariane" className="mb-6">
+      <nav aria-label={t("ariaLabel")} className="mb-6">
         <ol className="flex flex-wrap items-center gap-1 text-sm">
           <li>
             <Link
               href={prefixWithLocale("/", locale)}
               className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
-              aria-label="Accueil"
+              aria-label={t("home")}
             >
               <Home className="h-3.5 w-3.5" aria-hidden="true" />
             </Link>

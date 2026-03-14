@@ -17,7 +17,7 @@ import {
   Puzzle,
   MessageSquare,
 } from "lucide-react";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { PathCard } from "@/components/ui/PathCard";
@@ -37,6 +37,13 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const l = (href: string) => `/${locale}${href}`;
+
+  const tHero = await getTranslations("hero");
+  const tSections = await getTranslations("sections");
+  const tFeatures = await getTranslations("features");
+  const tAudience = await getTranslations("audience");
+  const tPaths = await getTranslations("paths");
+
   return (
     <>
       {/* ===== HERO ===== */}
@@ -70,7 +77,7 @@ export default async function HomePage({
               }}
             >
               <Sparkles className="h-4 w-4" aria-hidden="true" />
-              Guide gratuit & open-source
+              {tHero("badge")}
             </div>
 
             {/* Title */}
@@ -78,10 +85,10 @@ export default async function HomePage({
               className="text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.1]"
               style={{ color: "var(--hero-text-primary)" }}
             >
-              Maîtrisez{" "}
-              <span className="text-gradient">Claude Code</span>
+              {tHero("title")}{" "}
+              <span className="text-gradient">{tHero("titleHighlight")}</span>
               <br />
-              en partant de zéro
+              {tHero("titleEnd")}
             </h1>
 
             {/* Subtitle */}
@@ -89,9 +96,7 @@ export default async function HomePage({
               className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl"
               style={{ color: "var(--hero-text-secondary)" }}
             >
-              Le guide de référence pour exploiter toute la puissance de l&apos;IA
-              dans votre quotidien. Que vous soyez développeur, entrepreneur ou
-              simplement curieux, tout commence ici.
+              {tHero("subtitle")}
             </p>
 
             {/* CTA */}
@@ -100,7 +105,7 @@ export default async function HomePage({
                 href={l("/getting-started")}
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
-                Commencer le guide
+                {tHero("ctaPrimary")}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <Link
@@ -113,7 +118,7 @@ export default async function HomePage({
                   color: "var(--hero-cta-secondary-text)",
                 }}
               >
-                Découvrir les MCP
+                {tHero("ctaSecondary")}
               </Link>
             </div>
 
@@ -139,25 +144,25 @@ export default async function HomePage({
                     $ <span className="text-brand-400">claude</span>
                   </div>
                   <div className="mt-2 text-slate-400">
-                    <span className="text-accent-400">{">"}</span> Crée-moi un site web moderne avec une landing page,{" "}
+                    <span className="text-accent-400">{">"}</span> {tHero("terminalPrompt")}{" "}
                   </div>
                   <div className="text-slate-400">
-                    {"  "}un système d&apos;authentification et un dashboard admin.
+                    {"  "}{tHero("terminalPrompt2")}
                   </div>
                   <div className="mt-3 text-emerald-400">
-                    Bien sûr ! Je vais créer votre projet étape par étape...
+                    {tHero("terminalResponse")}
                   </div>
                   <div className="mt-1 text-slate-400">
-                    {"  "}Analyse des besoins...{" "}
-                    <span className="text-brand-400">fait</span>
+                    {"  "}{tHero("terminalStep1")}{" "}
+                    <span className="text-brand-400">{tHero("terminalDone")}</span>
                   </div>
                   <div className="text-slate-400">
-                    {"  "}Création de l&apos;architecture...{" "}
-                    <span className="text-brand-400">fait</span>
+                    {"  "}{tHero("terminalStep2")}{" "}
+                    <span className="text-brand-400">{tHero("terminalDone")}</span>
                   </div>
                   <div className="text-slate-400">
-                    {"  "}Génération du code...{" "}
-                    <span className="animate-pulse text-accent-400">en cours</span>
+                    {"  "}{tHero("terminalStep3")}{" "}
+                    <span className="animate-pulse text-accent-400">{tHero("terminalInProgress")}</span>
                   </div>
                 </div>
               </div>
@@ -171,59 +176,59 @@ export default async function HomePage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Possibilités"
-              title="Ce que vous pouvez faire avec Claude Code"
-              description="Claude Code n'est pas un simple chatbot. C'est un partenaire de création qui comprend votre contexte et agit dans votre environnement."
+              badge={tSections("features.badge")}
+              title={tSections("features.title")}
+              description={tSections("features.description")}
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.08}>
             <FeatureCard
               icon={Globe}
-              title="Créer un site web"
-              description="De la landing page au e-commerce complet, Claude Code génère, structure et déploie vos projets web."
+              title={tFeatures("createWebsite.title")}
+              description={tFeatures("createWebsite.description")}
               gradient="teal"
             />
             <FeatureCard
               icon={FileText}
-              title="Générer des documents"
-              description="Rapports, présentations, documentation technique : laissez l'IA structurer et rédiger pour vous."
+              title={tFeatures("generateDocs.title")}
+              description={tFeatures("generateDocs.description")}
               gradient="amber"
             />
             <FeatureCard
               icon={Zap}
-              title="Automatiser vos tâches"
-              description="Scripts, pipelines CI/CD, migrations de données. Transformez des heures de travail en quelques minutes."
+              title={tFeatures("automate.title")}
+              description={tFeatures("automate.description")}
               gradient="purple"
             />
             <FeatureCard
               icon={BarChart3}
-              title="Analyser des données"
-              description="Connectez vos sources, explorez vos datasets et obtenez des insights en langage naturel."
+              title={tFeatures("analyzeData.title")}
+              description={tFeatures("analyzeData.description")}
               gradient="green"
             />
             <FeatureCard
               icon={Code2}
-              title="Coder sans être dev"
-              description="Décrivez ce que vous voulez en français. Claude Code traduit vos idées en code fonctionnel."
+              title={tFeatures("codeNoDev.title")}
+              description={tFeatures("codeNoDev.description")}
               gradient="teal"
             />
             <FeatureCard
               icon={Palette}
-              title="Designer des interfaces"
-              description="Créez des interfaces modernes et accessibles en décrivant simplement votre vision."
+              title={tFeatures("designUI.title")}
+              description={tFeatures("designUI.description")}
               gradient="amber"
             />
             <FeatureCard
               icon={Puzzle}
-              title="Connecter vos outils"
-              description="Grâce aux MCP, intégrez Gmail, Slack, GitHub, bases de données et bien plus encore."
+              title={tFeatures("connectTools.title")}
+              description={tFeatures("connectTools.description")}
               gradient="purple"
             />
             <FeatureCard
               icon={Rocket}
-              title="Déployer en production"
-              description="Docker, CI/CD, monitoring : Claude Code gère votre infrastructure de A à Z."
+              title={tFeatures("deploy.title")}
+              description={tFeatures("deploy.description")}
               gradient="green"
             />
           </StaggerChildren>
@@ -235,42 +240,42 @@ export default async function HomePage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Pour tous"
-              title="Peu importe votre profil, Claude Code est fait pour vous"
-              description="L'IA n'est plus réservée aux ingénieurs. Chaque personne créative, ambitieuse ou simplement curieuse peut en tirer parti."
+              badge={tSections("audience.badge")}
+              title={tSections("audience.title")}
+              description={tSections("audience.description")}
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             <AudienceCard
               icon={Code2}
-              title="Développeurs"
-              description="Accélérez votre workflow x10. Code review, refactoring, tests automatisés, debugging assisté. Votre copilote ultime."
+              title={tAudience("developers.title")}
+              description={tAudience("developers.description")}
             />
             <AudienceCard
               icon={Briefcase}
-              title="Entrepreneurs"
-              description="Lancez votre MVP en jours au lieu de semaines. Prototypez, itérez et déployez sans équipe technique."
+              title={tAudience("entrepreneurs.title")}
+              description={tAudience("entrepreneurs.description")}
             />
             <AudienceCard
               icon={Palette}
-              title="Créatifs & Designers"
-              description="Transformez vos maquettes en sites vivants. Générez des animations, des composants UI sur mesure."
+              title={tAudience("creatives.title")}
+              description={tAudience("creatives.description")}
             />
             <AudienceCard
               icon={GraduationCap}
-              title="Étudiants"
-              description="Apprenez en faisant. Claude Code explique chaque concept, corrige vos erreurs et vous guide pas à pas."
+              title={tAudience("students.title")}
+              description={tAudience("students.description")}
             />
             <AudienceCard
               icon={Lightbulb}
-              title="Curieux & Autodidactes"
-              description="Explorez le monde du code sans prérequis. Posez vos questions, expérimentez, créez vos premiers projets."
+              title={tAudience("curious.title")}
+              description={tAudience("curious.description")}
             />
             <AudienceCard
               icon={Users}
-              title="Équipes & Managers"
-              description="Standardisez vos workflows, documentez automatiquement, et donnez des super-pouvoirs à toute votre équipe."
+              title={tAudience("teams.title")}
+              description={tAudience("teams.description")}
             />
           </StaggerChildren>
         </div>
@@ -281,51 +286,51 @@ export default async function HomePage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Parcours"
-              title="Choisissez votre chemin"
-              description="Trois parcours adaptés à votre niveau. Commencez là où vous êtes, progressez à votre rythme."
+              badge={tSections("paths.badge")}
+              title={tSections("paths.title")}
+              description={tSections("paths.description")}
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-8 lg:grid-cols-3" staggerDelay={0.12}>
             <PathCard
               icon={BookOpen}
-              level="Débutant"
-              title="Les fondamentaux"
-              description="Vous n'avez jamais utilisé Claude Code ? Parfait. On part de zéro, ensemble."
+              level={tPaths("beginner.level")}
+              title={tPaths("beginner.title")}
+              description={tPaths("beginner.description")}
               items={[
-                "Installer Claude Code en 5 minutes",
-                "Comprendre le terminal et les bases",
-                "Votre premier projet guidé pas à pas",
-                "Les commandes essentielles à connaître",
+                tPaths("beginner.items.0"),
+                tPaths("beginner.items.1"),
+                tPaths("beginner.items.2"),
+                tPaths("beginner.items.3"),
               ]}
               href={l("/getting-started")}
               color="teal"
             />
             <PathCard
               icon={Puzzle}
-              level="Intermédiaire"
-              title="Maîtrise des outils"
-              description="Vous savez utiliser Claude Code ? Découvrez les MCP, les Skills et le prompting avancé."
+              level={tPaths("intermediate.level")}
+              title={tPaths("intermediate.title")}
+              description={tPaths("intermediate.description")}
               items={[
-                "Connecter vos outils favoris via les MCP",
-                "Créer et utiliser des Skills personnalisés",
-                "Techniques de prompting qui font la différence",
-                "Automatiser vos workflows quotidiens",
+                tPaths("intermediate.items.0"),
+                tPaths("intermediate.items.1"),
+                tPaths("intermediate.items.2"),
+                tPaths("intermediate.items.3"),
               ]}
               href={l("/mcp")}
               color="amber"
             />
             <PathCard
               icon={Rocket}
-              level="Avancé"
-              title="Expert & Architecte"
-              description="Poussez Claude Code dans ses retranchements. Multi-agents, workflows complexes, déploiements."
+              level={tPaths("advanced.level")}
+              title={tPaths("advanced.title")}
+              description={tPaths("advanced.description")}
               items={[
-                "Orchestration multi-agents",
-                "Workflows complexes et chaînage de prompts",
-                "CI/CD et déploiement automatisé",
-                "Créer vos propres MCP servers",
+                tPaths("advanced.items.0"),
+                tPaths("advanced.items.1"),
+                tPaths("advanced.items.2"),
+                tPaths("advanced.items.3"),
               ]}
               href={l("/prompting")}
               color="purple"
@@ -339,9 +344,9 @@ export default async function HomePage({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Configurateur"
-              title="Votre configuration sur mesure en 2 minutes"
-              description="Pas besoin de tout lire. Répondez à quelques questions et recevez une configuration personnalisée, prête à l'emploi."
+              badge={tSections("configurator.badge")}
+              title={tSections("configurator.title")}
+              description={tSections("configurator.description")}
             />
           </AnimateOnScroll>
 
@@ -358,13 +363,11 @@ export default async function HomePage({
 
         <AnimateOnScroll preset="fade-up" className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-            Prêt à transformer votre façon de{" "}
-            <span className="text-gradient">travailler</span> ?
+            {tSections("cta.title")}{" "}
+            <span className="text-gradient">{tSections("cta.titleHighlight")}</span> ?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
-            Le guide est gratuit, open-source et fait pour durer. Commencez
-            maintenant et rejoignez une communauté qui repousse les limites du
-            possible.
+            {tSections("cta.description")}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
@@ -372,7 +375,7 @@ export default async function HomePage({
               className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30 dark:bg-white dark:from-white dark:to-white dark:text-slate-900 dark:shadow-none dark:hover:bg-slate-100 dark:hover:shadow-none"
             >
               <Logo size="sm" />
-              Commencer maintenant
+              {tSections("cta.ctaPrimary")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
             <Link
@@ -380,7 +383,7 @@ export default async function HomePage({
               className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-8 py-3.5 text-base font-semibold text-slate-700 transition-all hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:text-white dark:hover:border-slate-500 dark:hover:bg-white/5"
             >
               <MessageSquare className="h-4 w-4" aria-hidden="true" />
-              Voir la vision
+              {tSections("cta.ctaSecondary")}
             </Link>
           </div>
         </AnimateOnScroll>

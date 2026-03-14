@@ -82,7 +82,7 @@ export function Tabs({ items }: TabsProps) {
               "px-4 py-2.5 text-sm font-medium transition-colors",
               activeIndex === index
                 ? "border-b-2 border-brand-500 text-brand-700 dark:text-brand-400"
-                : "text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-300"
+                : "text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"
             )}
           >
             {item.label}

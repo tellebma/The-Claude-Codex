@@ -28,14 +28,6 @@ export function createWebSiteSchema({
       name: SITE_NAME,
       url: SITE_URL,
     },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 
@@ -47,7 +39,7 @@ export function createOrganizationSchema(): Record<string, unknown> {
     url: SITE_URL,
     logo: {
       "@type": "ImageObject",
-      url: `${SITE_URL}/logo.png`,
+      url: `${SITE_URL}/icon.svg`,
       width: 512,
       height: 512,
     },

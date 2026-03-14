@@ -171,7 +171,7 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
                 "whitespace-nowrap border-b-2 px-3 py-2.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm",
                 activeTab === tab.id
                   ? "border-brand-500 text-brand-600 dark:text-brand-400"
-                  : "border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-300"
+                  : "border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"
               )}
             >
               {tab.label}

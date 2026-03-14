@@ -167,7 +167,7 @@ export function SearchDialog() {
               <button
                 onClick={closeDialog}
                 aria-label="Fermer la recherche"
-                className="rounded-md p-1 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-300 dark:hover:text-slate-300"
+                className="rounded-md p-1 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"
               >
                 <X className="h-4 w-4" aria-hidden="true" />
               </button>

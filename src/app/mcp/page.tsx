@@ -32,14 +32,14 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "Les MCP : Donnez des super-pouvoirs a Claude Code",
+  title: "Les MCP pour Claude Code",
   description:
     "Decouvrez les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris : GitHub, Slack, Gmail, bases de donnees et plus encore.",
   path: "/mcp",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "Les MCP : Donnez des super-pouvoirs a Claude Code",
+  title: "Les MCP pour Claude Code",
   description:
     "Decouvrez les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris.",
   url: `${SITE_URL}/mcp`,

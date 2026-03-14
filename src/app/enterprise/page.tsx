@@ -19,14 +19,14 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "Claude Code en entreprise : securite, adoption et gouvernance",
+  title: "Claude Code en entreprise",
   description:
     "Deployer Claude Code dans votre organisation : securite, conformite RGPD, plan d'adoption, calculateur TCO, gouvernance et FAQ enterprise.",
   path: "/enterprise",
 });
 
 const articleJsonLd = createArticleSchema({
-  title: "Claude Code en entreprise : securite, adoption et gouvernance",
+  title: "Claude Code en entreprise",
   description:
     "Deployer Claude Code dans votre organisation : securite, conformite RGPD, plan d'adoption, calculateur TCO, gouvernance et FAQ enterprise.",
   url: `${SITE_URL}/enterprise`,

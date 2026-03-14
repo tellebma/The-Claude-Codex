@@ -159,7 +159,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/glossary",
-    title: "Glossaire : Termes techniques expliqués simplement",
+    title: "Glossaire IA & Claude Code",
     description:
       "Plus de 40 termes techniques de l’IA et du développement web expliqués en langage humain, avec des analogies concrètes. Terminal, API, Git, npm, Docker et bien plus.",
     priority: 0.8,
@@ -168,7 +168,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/mcp",
-    title: "Les MCP : Donnez des super-pouvoirs a Claude Code",
+    title: "Les MCP pour Claude Code",
     description:
       "Decouvrez les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris : GitHub, Slack, Gmail, bases de donnees et plus encore.",
     priority: 0.9,
@@ -267,7 +267,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/skills",
-    title: "Skills : Enseignez de nouveaux talents à Claude Code",
+    title: "Les Skills Claude Code",
     description:
       "Apprenez à utiliser et créer des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacités et enseignez de nouveaux talents à votre assistant IA.",
     priority: 0.8,
@@ -618,7 +618,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/enterprise",
-    title: "Claude Code en entreprise : sécurité, adoption et gouvernance",
+    title: "Claude Code en entreprise",
     description:
       "Déployer Claude Code dans votre organisation : sécurité, conformité RGPD, plan d’adoption, calculateur TCO, gouvernance et FAQ enterprise.",
     priority: 0.8,
@@ -816,7 +816,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/limits",
-    title: "Limites et comparaisons : Claude Code en toute honnêteté",
+    title: "Limites de Claude Code",
     description:
       "Un tour d'horizon honnête des limites de Claude Code, des comparaisons équilibrées avec Copilot et Cursor, et un guide pour savoir quand ne PAS utiliser cet outil.",
     priority: 0.8,

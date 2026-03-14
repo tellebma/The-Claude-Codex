@@ -326,45 +326,48 @@ export default function EnterprisePage() {
 
           <div className="mt-16 space-y-6">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-0">
-              <div className="glass-card flex-1 p-6 text-center">
+              <Link
+                href="/enterprise/tco-calculator"
+                className="glass-card group flex-1 p-6 text-center transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+              >
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
                   <Calculator className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">1. Estimez les couts</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                  <Link href="/enterprise/tco-calculator" className="text-brand-600 underline dark:text-brand-400">
-                    Calculateur TCO
-                  </Link>
+                <p className="mt-1 text-xs text-brand-600 dark:text-brand-400">
+                  Calculateur TCO
                 </p>
-              </div>
+              </Link>
               <div className="flex items-center justify-center sm:px-2">
                 <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
               </div>
-              <div className="glass-card flex-1 p-6 text-center">
+              <Link
+                href="/enterprise/team-adoption"
+                className="glass-card group flex-1 p-6 text-center transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+              >
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-accent-500/20 to-accent-500/5">
                   <Users className="h-6 w-6 text-accent-600 dark:text-accent-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">2. Lancez un pilote</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                  <Link href="/enterprise/team-adoption" className="text-brand-600 underline dark:text-brand-400">
-                    Guide d&apos;adoption
-                  </Link>
+                <p className="mt-1 text-xs text-brand-600 dark:text-brand-400">
+                  Guide d&apos;adoption
                 </p>
-              </div>
+              </Link>
               <div className="flex items-center justify-center sm:px-2">
                 <ChevronRight className="h-6 w-6 rotate-90 text-slate-400 sm:rotate-0" aria-hidden="true" />
               </div>
-              <div className="glass-card flex-1 p-6 text-center">
+              <Link
+                href="/enterprise/security-compliance"
+                className="glass-card group flex-1 p-6 text-center transition-all hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+              >
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5">
                   <Shield className="h-6 w-6 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 </div>
                 <p className="text-sm font-semibold">3. Cadrez la securite</p>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
-                  <Link href="/enterprise/security-compliance" className="text-brand-600 underline dark:text-brand-400">
-                    Securite et conformite
-                  </Link>
+                <p className="mt-1 text-xs text-brand-600 dark:text-brand-400">
+                  Securite et conformite
                 </p>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { getAllMdxFiles } from "@/lib/mdx";
-import { createPageMetadata } from "@/lib/metadata";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import {
+  createCollectionPageSchema,
+  serializeJsonLd,
+} from "@/lib/structured-data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
 export const metadata: Metadata = createPageMetadata({
@@ -12,11 +16,24 @@ export const metadata: Metadata = createPageMetadata({
   path: "/content",
 });
 
+const collectionJsonLd = createCollectionPageSchema({
+  name: "Contenus editoriaux",
+  description:
+    "Tous les articles et guides editoriaux du Claude Codex sur Claude Code, les MCP, les Skills et le prompting.",
+  url: `${SITE_URL}/content`,
+});
+
 export default function ContentIndexPage() {
   const allFiles = getAllMdxFiles();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(collectionJsonLd),
+        }}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />

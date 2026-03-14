@@ -11,6 +11,7 @@ import {
 } from "@/lib/metadata";
 import {
   createWebSiteSchema,
+  createOrganizationSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
 import "./globals.css";
@@ -80,6 +81,8 @@ const websiteJsonLd = createWebSiteSchema({
   description: siteDescription,
 });
 
+const organizationJsonLd = createOrganizationSchema();
+
 const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "https://matomo.tellebma.fr";
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "3";
 
@@ -110,6 +113,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: serializeJsonLd(websiteJsonLd),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd(organizationJsonLd),
           }}
         />
         {/* Matomo cookieless analytics — no user data stored, respects Do Not Track */}

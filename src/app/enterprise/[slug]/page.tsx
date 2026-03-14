@@ -11,6 +11,7 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
   createArticleSchema,
   createBreadcrumbSchema,
+  createFAQPageSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
 
@@ -97,6 +98,38 @@ export default function EnterpriseSlugPage({
     { name: frontmatter.title, href: `/${SECTION}/${params.slug}` },
   ]);
 
+  const faqJsonLd =
+    params.slug === "faq"
+      ? createFAQPageSchema([
+          {
+            question: "Est-ce que mon code est stocke par Anthropic ?",
+            answer:
+              "Non, pas par defaut. Avec l'API directe, la retention est configurable. Avec AWS Bedrock ou Google Vertex AI, aucune donnee ne transite par les serveurs d'Anthropic.",
+          },
+          {
+            question: "Claude Code est-il conforme au RGPD ?",
+            answer:
+              "Anthropic propose un DPA conforme au RGPD, avec des clauses contractuelles types pour les transferts UE-US. Utilisez AWS Bedrock en region europeenne pour renforcer la conformite.",
+          },
+          {
+            question:
+              "Combien coute Claude Code pour une equipe de 50 developpeurs ?",
+            answer:
+              "Avec le plan Max 5x (100 $/dev/mois) : 5 000 $/mois. Avec l'API (consommation moyenne 40 $/dev/mois) : environ 2 000 $/mois.",
+          },
+          {
+            question: "A qui appartient le code genere par Claude Code ?",
+            answer:
+              "Le code genere vous appartient. Les conditions d'utilisation d'Anthropic stipulent que les outputs generes via l'API sont la propriete de l'utilisateur.",
+          },
+          {
+            question: "Claude Code s'integre-t-il avec notre CI/CD ?",
+            answer:
+              "Oui. Le mode headless (claude --print) permet d'integrer Claude Code dans GitHub Actions, GitLab CI ou n'importe quel pipeline.",
+          },
+        ])
+      : null;
+
   const articleJsonLdHtml = serializeJsonLd(articleJsonLd);
   const breadcrumbJsonLdHtml = serializeJsonLd(breadcrumbJsonLd);
 
@@ -111,6 +144,12 @@ export default function EnterpriseSlugPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbJsonLdHtml }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqJsonLd) }}
+        />
+      )}
 
       {/* Hero section */}
       <section className="relative overflow-hidden bg-slate-950">

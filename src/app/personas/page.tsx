@@ -37,7 +37,65 @@ const articleJsonLd = createArticleSchema({
  * from hardcoded values, serialized via JSON.stringify. No user input
  * reaches this code path. Same pattern used across the entire site.
  */
+const coursesJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: [
+    {
+      "@type": "Course",
+      position: 1,
+      name: "Parcours Developpeur",
+      description:
+        "Installation, prompting, MCP, agents et techniques avancees pour coder plus vite avec Claude Code.",
+      url: `${SITE_URL}/personas/developer`,
+      provider: { "@type": "Organization", name: "The Claude Codex" },
+      inLanguage: "fr-FR",
+    },
+    {
+      "@type": "Course",
+      position: 2,
+      name: "Parcours Lead Technique",
+      description:
+        "Adoption d'equipe, gouvernance, securite, CI/CD et Skills pour deployer Claude Code dans votre organisation.",
+      url: `${SITE_URL}/personas/team-lead`,
+      provider: { "@type": "Organization", name: "The Claude Codex" },
+      inLanguage: "fr-FR",
+    },
+    {
+      "@type": "Course",
+      position: 3,
+      name: "Parcours Non-developpeur",
+      description:
+        "Pre-requis, premiers pas, FAQ et templates de prompting. Un parcours progressif pour ceux qui partent de zero.",
+      url: `${SITE_URL}/personas/non-dev`,
+      provider: { "@type": "Organization", name: "The Claude Codex" },
+      inLanguage: "fr-FR",
+    },
+    {
+      "@type": "Course",
+      position: 4,
+      name: "Parcours Freelance",
+      description:
+        "Productivite, plugins, automatisation et workflows MCP. Chaque heure economisee est une heure gagnee.",
+      url: `${SITE_URL}/personas/freelance`,
+      provider: { "@type": "Organization", name: "The Claude Codex" },
+      inLanguage: "fr-FR",
+    },
+    {
+      "@type": "Course",
+      position: 5,
+      name: "Parcours Etudiant",
+      description:
+        "Fondamentaux, projets pratiques et bonnes pratiques professionnelles. Apprenez a coder avec un tuteur IA.",
+      url: `${SITE_URL}/personas/student`,
+      provider: { "@type": "Organization", name: "The Claude Codex" },
+      inLanguage: "fr-FR",
+    },
+  ],
+};
+
 const articleJsonLdHtml = serializeJsonLd(articleJsonLd);
+const coursesJsonLdHtml = serializeJsonLd(coursesJsonLd);
 
 /**
  * Sub-pages of the Personas section, displayed as clickable cards.
@@ -116,6 +174,10 @@ export default function PersonasPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: articleJsonLdHtml }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: coursesJsonLdHtml }}
       />
 
       {/* ===== HERO / INTRO ===== */}

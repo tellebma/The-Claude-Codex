@@ -28,6 +28,103 @@ export function createWebSiteSchema({
       name: SITE_NAME,
       url: SITE_URL,
     },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+export function createOrganizationSchema(): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_URL}/logo.png`,
+      width: 512,
+      height: 512,
+    },
+    description:
+      "Le guide de reference gratuit pour maitriser Claude Code. MCP, Skills, Prompting avance.",
+    sameAs: ["https://github.com/tellebma/The-Claude-Codex"],
+    founder: {
+      "@type": "Person",
+      name: "tellebma",
+      url: "https://github.com/tellebma",
+    },
+  };
+}
+
+interface FAQItem {
+  readonly question: string;
+  readonly answer: string;
+}
+
+export function createFAQPageSchema(
+  items: ReadonlyArray<FAQItem>
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+interface DefinedTermItem {
+  readonly name: string;
+  readonly description: string;
+  readonly anchor: string;
+}
+
+export function createDefinedTermSetSchema(
+  terms: ReadonlyArray<DefinedTermItem>
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "DefinedTermSet",
+    name: "Glossaire Claude Code et IA",
+    url: `${SITE_URL}/glossary`,
+    inLanguage: "fr-FR",
+    hasDefinedTerm: terms.map((term) => ({
+      "@type": "DefinedTerm",
+      name: term.name,
+      description: term.description,
+      url: `${SITE_URL}/glossary#${term.anchor}`,
+    })),
+  };
+}
+
+export function createCollectionPageSchema(options: {
+  readonly name: string;
+  readonly description: string;
+  readonly url: string;
+}): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: options.name,
+    description: options.description,
+    url: options.url,
+    inLanguage: "fr-FR",
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
   };
 }
 

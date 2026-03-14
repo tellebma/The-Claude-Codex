@@ -11,6 +11,7 @@ import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
   createArticleSchema,
   createBreadcrumbSchema,
+  createFAQPageSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
 
@@ -93,6 +94,44 @@ export default function GettingStartedSlugPage({
     { name: frontmatter.title, href: `/${SECTION}/${params.slug}` },
   ]);
 
+  const faqJsonLd =
+    params.slug === "faq-beginner"
+      ? createFAQPageSchema([
+          {
+            question: "Est-ce que ca peut casser mon ordinateur ?",
+            answer:
+              "Non. Claude Code est un outil logiciel qui ne touche pas a vos fichiers systeme et ne fait rien sans votre accord explicite.",
+          },
+          {
+            question:
+              "Est-ce que l'IA voit mes fichiers personnels : photos, documents, mails ?",
+            answer:
+              "Non. Claude Code n'accede qu'au dossier dans lequel vous le lancez, et seulement aux fichiers que vous lui montrez explicitement.",
+          },
+          {
+            question:
+              "C'est quoi la difference entre ChatGPT et Claude Code ?",
+            answer:
+              "ChatGPT et Claude.ai sont des chatbots web. Claude Code est un assistant qui travaille directement dans vos fichiers via le terminal.",
+          },
+          {
+            question: "C'est gratuit ?",
+            answer:
+              "Ce guide est 100% gratuit. L'outil Claude Code lui-meme necessite un abonnement Claude Max ou une cle API.",
+          },
+          {
+            question: "Faut-il savoir coder pour utiliser Claude Code ?",
+            answer:
+              "Non, ce n'est pas obligatoire. Claude Code peut aider avec des taches non-techniques comme rediger des emails ou analyser des documents.",
+          },
+          {
+            question: "Mes donnees sont-elles privees ?",
+            answer:
+              "Anthropic collecte les conversations pour ameliorer ses modeles, mais vous pouvez configurer votre compte pour limiter cela. Ne partagez jamais de mots de passe ou donnees sensibles.",
+          },
+        ])
+      : null;
+
   /*
    * JSON-LD structured data — safe: static schema objects built from
    * our own frontmatter at build time, serialized via JSON.stringify.
@@ -115,6 +154,13 @@ export default function GettingStartedSlugPage({
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: breadcrumbJsonLdHtml }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(faqJsonLd) }}
+        />
+      )}
 
       {/* Hero section */}
       <section className="relative overflow-hidden bg-slate-950">

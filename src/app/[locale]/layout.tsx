@@ -149,6 +149,7 @@ export default async function LocaleLayout({
     name: SITE_NAME,
     url: SITE_URL,
     description: siteDescription,
+    locale,
   });
   const organizationJsonLd = createOrganizationSchema();
 

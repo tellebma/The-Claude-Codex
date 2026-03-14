@@ -34,6 +34,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Decouvrez les plugins Claude Code pour enrichir votre assistant IA.",
     url: `${SITE_URL}/${locale}/plugins`,
+    locale,
     datePublished: "2026-03-09",
     dateModified: "2026-03-09",
   });

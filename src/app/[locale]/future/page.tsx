@@ -51,6 +51,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "L'avenir de l'IA est deja la. Decouvrez comment vous preparer et les tendances a suivre.",
     url: `${SITE_URL}/${locale}/future`,
+    locale,
     datePublished: "2026-03-07",
     dateModified: "2026-03-07",
   });

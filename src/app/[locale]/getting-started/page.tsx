@@ -35,6 +35,7 @@ function buildHowToJsonLd(locale: string) {
     description:
       "Guide complet pour installer, configurer et utiliser Claude Code.",
     url: `${SITE_URL}/${locale}/getting-started`,
+    locale,
     steps: [
       {
         name: "Découvrir Claude Code",

@@ -30,6 +30,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Documentation de référence complète pour Claude Code : commandes CLI, slash commands, raccourcis clavier, settings.json et variables d’environnement.",
     url: `${SITE_URL}/${locale}/reference`,
+    locale,
     datePublished: "2026-03-11",
     dateModified: "2026-03-11",
   });

@@ -91,6 +91,7 @@ export default async function GettingStartedSlugPage({
     title: frontmatter.title,
     description: frontmatter.description,
     url: `${SITE_URL}/${resolvedParams.locale}/${SECTION}/${resolvedParams.slug}`,
+    locale: resolvedParams.locale,
     datePublished: frontmatter.datePublished,
     dateModified: frontmatter.dateModified,
   });

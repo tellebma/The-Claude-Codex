@@ -47,6 +47,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
     url: `${SITE_URL}/${locale}/prompting`,
+    locale,
     datePublished: "2026-03-07",
     dateModified: "2026-03-07",
   });

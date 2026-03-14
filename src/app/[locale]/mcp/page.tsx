@@ -49,6 +49,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Decouvrez les MCP (Model Context Protocol) pour connecter Claude Code a vos outils favoris.",
     url: `${SITE_URL}/${locale}/mcp`,
+    locale,
     datePublished: "2026-03-07",
     dateModified: "2026-03-07",
   });

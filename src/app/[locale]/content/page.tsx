@@ -27,6 +27,7 @@ function buildCollectionJsonLd(locale: string) {
     description:
       "Tous les articles et guides editoriaux du Claude Codex sur Claude Code, les MCP, les Skills et le prompting.",
     url: `${SITE_URL}/${locale}/content`,
+    locale,
   });
 }
 

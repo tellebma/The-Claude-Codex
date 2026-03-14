@@ -36,6 +36,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Deployer Claude Code dans votre organisation : securite, conformite RGPD, plan d'adoption, calculateur TCO, gouvernance et FAQ enterprise.",
     url: `${SITE_URL}/${locale}/enterprise`,
+    locale,
     datePublished: "2026-03-12",
     dateModified: "2026-03-12",
   });

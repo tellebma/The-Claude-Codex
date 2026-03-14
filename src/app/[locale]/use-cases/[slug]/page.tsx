@@ -90,6 +90,7 @@ export default async function UseCasesSlugPage({
     title: frontmatter.title,
     description: frontmatter.description,
     url: `${SITE_URL}/${resolvedParams.locale}/${SECTION}/${resolvedParams.slug}`,
+    locale: resolvedParams.locale,
     datePublished: frontmatter.datePublished,
     dateModified: frontmatter.dateModified,
   });

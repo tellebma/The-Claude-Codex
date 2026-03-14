@@ -33,6 +33,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Un tour d'horizon honnete des limites de Claude Code, des comparaisons equilibrees avec Copilot et Cursor, et un guide pour savoir quand ne PAS utiliser cet outil.",
     url: `${SITE_URL}/${locale}/limits`,
+    locale,
     datePublished: "2026-03-12",
     dateModified: "2026-03-12",
   });

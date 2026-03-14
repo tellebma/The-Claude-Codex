@@ -18,14 +18,6 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   });
 }
 
-const definedTermSetJsonLd = createDefinedTermSetSchema(
-  glossaryTerms.map((t) => ({
-    name: t.term,
-    description: t.definition,
-    anchor: t.term.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-  }))
-);
-
 export default async function GlossaryLayout({
   children,
   params,
@@ -34,6 +26,15 @@ export default async function GlossaryLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+
+  const definedTermSetJsonLd = createDefinedTermSetSchema(
+    glossaryTerms.map((t) => ({
+      name: t.term,
+      description: t.definition,
+      anchor: t.term.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    })),
+    locale
+  );
 
   const breadcrumbJsonLd = createBreadcrumbSchema([
     { name: "Accueil", href: `/${locale}` },

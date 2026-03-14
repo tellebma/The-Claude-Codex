@@ -34,6 +34,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Cinq parcours de lecture adaptes a votre profil. Developpeur, lead technique, non-developpeur, freelance ou etudiant.",
     url: `${SITE_URL}/${locale}/personas`,
+    locale,
     datePublished: "2026-03-12",
     dateModified: "2026-03-12",
   });

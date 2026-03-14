@@ -35,6 +35,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Des exemples pratiques de Claude Code pour non-developpeurs. Cas d'usage business, histoires de reussite et tutoriels sans code.",
     url: `${SITE_URL}/${locale}/use-cases`,
+    locale,
     datePublished: "2026-03-12",
     dateModified: "2026-03-12",
   });

@@ -41,6 +41,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Découvrez les agents et subagents Claude Code pour orchestrer des workflows complexes.",
     url: `${SITE_URL}/${locale}/agents`,
+    locale,
     datePublished: "2026-03-10",
     dateModified: "2026-03-10",
   });

@@ -5,16 +5,25 @@ import { SITE_NAME, SITE_URL } from "@/lib/metadata";
  * All functions return plain objects ready to be serialized.
  */
 
+/**
+ * Maps a locale code to a BCP 47 language tag for schema.org inLanguage.
+ */
+export function localeToLanguageTag(locale: string): string {
+  return locale === "en" ? "en-US" : "fr-FR";
+}
+
 interface WebSiteSchemaOptions {
   readonly name: string;
   readonly url: string;
   readonly description: string;
+  readonly locale?: string;
 }
 
 export function createWebSiteSchema({
   name,
   url,
   description,
+  locale = "fr",
 }: WebSiteSchemaOptions): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
@@ -22,7 +31,7 @@ export function createWebSiteSchema({
     name,
     url,
     description,
-    inLanguage: "fr-FR",
+    inLanguage: localeToLanguageTag(locale),
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
@@ -83,14 +92,15 @@ interface DefinedTermItem {
 }
 
 export function createDefinedTermSetSchema(
-  terms: ReadonlyArray<DefinedTermItem>
+  terms: ReadonlyArray<DefinedTermItem>,
+  locale: string = "fr"
 ): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
     "@type": "DefinedTermSet",
-    name: "Glossaire Claude Code et IA",
-    url: `${SITE_URL}/glossary`,
-    inLanguage: "fr-FR",
+    name: locale === "en" ? "Claude Code & AI Glossary" : "Glossaire Claude Code et IA",
+    url: `${SITE_URL}/${locale}/glossary`,
+    inLanguage: localeToLanguageTag(locale),
     hasDefinedTerm: terms.map((term) => ({
       "@type": "DefinedTerm",
       name: term.name,
@@ -104,6 +114,7 @@ export function createCollectionPageSchema(options: {
   readonly name: string;
   readonly description: string;
   readonly url: string;
+  readonly locale?: string;
 }): Record<string, unknown> {
   return {
     "@context": "https://schema.org",
@@ -111,7 +122,7 @@ export function createCollectionPageSchema(options: {
     name: options.name,
     description: options.description,
     url: options.url,
-    inLanguage: "fr-FR",
+    inLanguage: localeToLanguageTag(options.locale ?? "fr"),
     isPartOf: {
       "@type": "WebSite",
       name: SITE_NAME,
@@ -124,6 +135,7 @@ interface ArticleSchemaOptions {
   readonly title: string;
   readonly description: string;
   readonly url: string;
+  readonly locale?: string;
   readonly datePublished?: string;
   readonly dateModified?: string;
   readonly image?: string;
@@ -133,6 +145,7 @@ export function createArticleSchema({
   title,
   description,
   url,
+  locale = "fr",
   datePublished,
   dateModified,
   image,
@@ -143,7 +156,7 @@ export function createArticleSchema({
     headline: title,
     description,
     url,
-    inLanguage: "fr-FR",
+    inLanguage: localeToLanguageTag(locale),
     ...(image
       ? {
           image: {
@@ -177,6 +190,7 @@ interface HowToSchemaOptions {
   readonly title: string;
   readonly description: string;
   readonly url: string;
+  readonly locale?: string;
   readonly steps: ReadonlyArray<HowToStep>;
   readonly image?: string;
 }
@@ -185,6 +199,7 @@ export function createHowToSchema({
   title,
   description,
   url,
+  locale = "fr",
   steps,
   image,
 }: HowToSchemaOptions): Record<string, unknown> {
@@ -194,7 +209,7 @@ export function createHowToSchema({
     name: title,
     description,
     url,
-    inLanguage: "fr-FR",
+    inLanguage: localeToLanguageTag(locale),
     ...(image
       ? {
           image: {

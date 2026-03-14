@@ -47,6 +47,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Apprenez à utiliser et créer des Skills pour Claude Code.",
     url: `${SITE_URL}/${locale}/skills`,
+    locale,
     datePublished: "2026-03-07",
     dateModified: "2026-03-10",
   });

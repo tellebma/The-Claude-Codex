@@ -33,6 +33,7 @@ function buildArticleJsonLd(locale: string) {
     description:
       "Hooks, mode headless, CI/CD, multi-provider et configuration enterprise.",
     url: `${SITE_URL}/${locale}/advanced`,
+    locale,
     datePublished: "2026-03-11",
     dateModified: "2026-03-11",
   });

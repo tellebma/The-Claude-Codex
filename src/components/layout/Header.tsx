@@ -18,13 +18,13 @@ const primaryNav = [
   { name: "Parcours", href: "/personas" },
   { name: "Entreprise", href: "/enterprise" },
   { name: "Avancé", href: "/advanced" },
+  { name: "Configurateur", href: "/configurator" },
 ];
 
 const secondaryNav = [
   { name: "Contenus", href: "/content" },
   { name: "Limites", href: "/limits" },
   { name: "Référence", href: "/reference" },
-  { name: "Configurateur", href: "/configurator" },
   { name: "Glossaire", href: "/glossary" },
   { name: "Vision", href: "/future" },
 ];
@@ -46,8 +46,15 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
         setOpen(false);
       }
     }
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, []);
 
   return (
@@ -76,7 +83,7 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
                 href={item.href}
                 onClick={() => setOpen(false)}
                 className={clsx(
-                  "block px-4 py-2 text-sm font-medium transition-colors",
+                  "flex min-h-[44px] items-center px-4 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"

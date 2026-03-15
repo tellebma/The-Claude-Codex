@@ -25,13 +25,13 @@ const primaryNavKeys = [
   { key: "personas", href: "/personas" },
   { key: "enterprise", href: "/enterprise" },
   { key: "advanced", href: "/advanced" },
+  { key: "configurator", href: "/configurator" },
 ] as const;
 
 const secondaryNavKeys = [
   { key: "content", href: "/content" },
   { key: "limits", href: "/limits" },
   { key: "reference", href: "/reference" },
-  { key: "configurator", href: "/configurator" },
   { key: "glossary", href: "/glossary" },
   { key: "future", href: "/future" },
 ] as const;
@@ -63,8 +63,15 @@ function MoreDropdown({
         setOpen(false);
       }
     }
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, []);
 
   return (
@@ -101,7 +108,7 @@ function MoreDropdown({
                 href={prefixWithLocale(item.href, locale)}
                 onClick={() => setOpen(false)}
                 className={clsx(
-                  "block px-4 py-2 text-sm font-medium transition-colors",
+                  "flex min-h-[44px] items-center px-4 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"

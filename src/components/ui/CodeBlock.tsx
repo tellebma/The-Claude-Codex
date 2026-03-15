@@ -64,14 +64,24 @@ export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps)
       <div className="relative">
         <button
           onClick={handleCopy}
-          className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-md border border-slate-700 bg-slate-800 text-slate-400 opacity-0 transition-all hover:border-slate-600 hover:bg-slate-700 hover:text-slate-300 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-brand-500"
+          className={`absolute right-2 top-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 ${
+            copied
+              ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-400 opacity-100"
+              : "border-slate-700 bg-slate-800 text-slate-400 opacity-0 hover:border-slate-600 hover:bg-slate-700 hover:text-slate-300 group-hover:opacity-100 focus:opacity-100"
+          }`}
           aria-label={copied ? t("copiedCode") : t("copyCode")}
           type="button"
         >
           {copied ? (
-            <Check className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+            <>
+              <Check className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>{t("copiedCode")}</span>
+            </>
           ) : (
-            <Clipboard className="h-4 w-4" aria-hidden="true" />
+            <>
+              <Clipboard className="h-3.5 w-3.5" aria-hidden="true" />
+              <span>{t("copyCode")}</span>
+            </>
           )}
         </button>
         <Highlight theme={themes.nightOwl} code={code} language={language}>

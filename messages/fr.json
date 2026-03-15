@@ -16,6 +16,7 @@
     "tableOfContents": "Table des matières",
     "onThisPage": "Sur cette page",
     "guides": "Guides",
+    "tools": "Outils",
     "resources": "Ressources",
     "pageNotFound": "Page introuvable",
     "pageNotFoundDescription": "La page que vous cherchez n'existe pas ou a été déplacée.",
@@ -38,13 +39,16 @@
     "configurator": "Configurateur",
     "glossary": "Glossaire",
     "future": "Vision",
+    "agents": "Agents",
+    "about": "À propos",
     "more": "Plus"
   },
   "footer": {
     "description": "Le guide de référence gratuit pour maîtriser Claude Code. Créé par la communauté, pour la communauté. Pas de paywall, pas de tracking, juste du savoir partagé.",
     "visionFuture": "Vision & Futur",
     "claudeCodeOfficial": "Claude Code (officiel)",
-    "anthropicDocs": "Documentation Anthropic"
+    "anthropicDocs": "Documentation Anthropic",
+    "mcpRegistry": "MCP Registry"
   },
   "search": {
     "trigger": "Rechercher...",

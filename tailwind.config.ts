@@ -46,6 +46,11 @@ const config: Config = {
         "slide-up": "slideUp 0.6s ease-out",
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         float: "float 6s ease-in-out infinite",
+        "gradient-shimmer": "gradient-shimmer 4s ease-in-out infinite",
+        "border-beam": "border-beam 4s linear infinite",
+        "grid-fade": "grid-fade 6s ease-in-out infinite",
+        "beam-flow": "beam-flow 2s ease-in-out infinite",
+        shimmer: "shimmer 2s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -59,6 +64,27 @@ const config: Config = {
         float: {
           "0%, 100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
+        },
+        "gradient-shimmer": {
+          "0%, 100%": { backgroundPosition: "0% center" },
+          "50%": { backgroundPosition: "100% center" },
+        },
+        "border-beam": {
+          "0%": { offsetDistance: "0%" },
+          "100%": { offsetDistance: "100%" },
+        },
+        "grid-fade": {
+          "0%, 100%": { opacity: "0.03" },
+          "50%": { opacity: "0.07" },
+        },
+        "beam-flow": {
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "50%": { opacity: "1" },
+          "100%": { transform: "translateX(100%)", opacity: "0" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
         },
       },
     },

@@ -15,10 +15,21 @@ const guidesNavKeys = [
   { key: "mcp", href: "/mcp" },
   { key: "skills", href: "/skills" },
   { key: "prompting", href: "/prompting" },
+  { key: "agents", href: "/agents" },
+  { key: "enterprise", href: "/enterprise" },
+] as const;
+
+const outilsNavKeys = [
+  { key: "configurator", href: "/configurator" },
+  { key: "glossary", href: "/glossary" },
+  { key: "reference", href: "/reference" },
+  { key: "useCases", href: "/use-cases" },
+  { key: "content", href: "/content" },
+  { key: "future", href: "/future" },
+  { key: "about", href: "/about" },
 ] as const;
 
 const resourcesLinks = [
-  { key: "visionFuture", href: "/future", external: false },
   {
     key: "claudeCodeOfficial",
     href: "https://github.com/anthropics/claude-code",
@@ -27,6 +38,11 @@ const resourcesLinks = [
   {
     key: "anthropicDocs",
     href: "https://docs.anthropic.com",
+    external: true,
+  },
+  {
+    key: "mcpRegistry",
+    href: "https://github.com/modelcontextprotocol/servers",
     external: true,
   },
 ] as const;
@@ -41,8 +57,8 @@ export function Footer() {
   return (
     <footer className="border-t border-slate-200/50 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="sm:col-span-2 lg:col-span-2">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="sm:col-span-2">
             <Link
               href={prefixWithLocale("/", locale)}
               className="flex items-center gap-2 text-lg font-bold"
@@ -66,6 +82,24 @@ export function Footer() {
             </h3>
             <ul className="mt-3 space-y-2">
               {guidesNavKeys.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={prefixWithLocale(link.href, locale)}
+                    className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                  >
+                    {tNav(link.key)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label={tCommon("tools")}>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+              {tCommon("tools")}
+            </h3>
+            <ul className="mt-3 space-y-2">
+              {outilsNavKeys.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={prefixWithLocale(link.href, locale)}
@@ -122,7 +156,7 @@ export function Footer() {
             href="https://github.com/tellebma/The-Claude-Codex"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+            className="flex min-h-[44px] items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
           >
             <Github className="h-4 w-4" aria-hidden="true" />
             GitHub

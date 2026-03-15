@@ -1469,6 +1469,25 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "developpement",
     ],
   },
+  // About
+  {
+    title: "À propos du Claude Codex",
+    description:
+      "Qui sommes-nous, pourquoi ce guide existe, et comment contribuer au projet open-source.",
+    href: "/about",
+    section: "Divers",
+    keywords: [
+      "about",
+      "a propos",
+      "mission",
+      "auteur",
+      "contribuer",
+      "open source",
+      "tellebma",
+      "equipe",
+      "contact",
+    ],
+  },
 ];
 
 export const searchIndexEn: ReadonlyArray<SearchEntry> = [

@@ -899,4 +899,13 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     changeFrequency: "monthly",
     lastModified: "2026-03-11",
   },
+  {
+    path: "/about",
+    title: "À propos du Claude Codex",
+    description:
+      "Qui sommes-nous, pourquoi ce guide existe, et comment contribuer au projet open-source The Claude Codex.",
+    priority: 0.5,
+    changeFrequency: "monthly",
+    lastModified: "2026-03-14",
+  },
 ];

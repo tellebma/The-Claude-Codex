@@ -16,6 +16,7 @@
     "tableOfContents": "Table of contents",
     "onThisPage": "On this page",
     "guides": "Guides",
+    "tools": "Tools",
     "resources": "Resources",
     "pageNotFound": "Page not found",
     "pageNotFoundDescription": "The page you are looking for does not exist or has been moved.",
@@ -38,13 +39,16 @@
     "configurator": "Configurator",
     "glossary": "Glossary",
     "future": "Vision",
+    "agents": "Agents",
+    "about": "About",
     "more": "More"
   },
   "footer": {
     "description": "The free reference guide to master Claude Code. Created by the community, for the community. No paywall, no tracking, just shared knowledge.",
     "visionFuture": "Vision & Future",
     "claudeCodeOfficial": "Claude Code (official)",
-    "anthropicDocs": "Anthropic Documentation"
+    "anthropicDocs": "Anthropic Documentation",
+    "mcpRegistry": "MCP Registry"
   },
   "search": {
     "trigger": "Search...",

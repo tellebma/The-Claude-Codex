@@ -16,6 +16,7 @@ import {
   BookOpen,
   Puzzle,
   MessageSquare,
+  ChevronDown,
 } from "lucide-react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -24,6 +25,7 @@ import { PathCard } from "@/components/ui/PathCard";
 import { AudienceCard } from "@/components/ui/AudienceCard";
 import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
+import { HeroTerminal } from "@/components/ui/HeroTerminal";
 import {
   AnimateOnScroll,
   StaggerChildren,
@@ -44,6 +46,40 @@ export default async function HomePage({
   const tAudience = await getTranslations("audience");
   const tPaths = await getTranslations("paths");
 
+  const terminalLines = [
+    { text: "$ claude", className: "text-slate-400", delay: 500 },
+    {
+      text: `> ${tHero("terminalPrompt")}`,
+      className: "text-slate-400 mt-2",
+      delay: 400,
+    },
+    {
+      text: `  ${tHero("terminalPrompt2")}`,
+      className: "text-slate-400",
+      delay: 200,
+    },
+    {
+      text: tHero("terminalResponse"),
+      className: "text-emerald-400 mt-3",
+      delay: 600,
+    },
+    {
+      text: `  ${tHero("terminalStep1")} ${tHero("terminalDone")}`,
+      className: "text-slate-400 mt-1",
+      delay: 400,
+    },
+    {
+      text: `  ${tHero("terminalStep2")} ${tHero("terminalDone")}`,
+      className: "text-slate-400",
+      delay: 400,
+    },
+    {
+      text: `  ${tHero("terminalStep3")} ${tHero("terminalInProgress")}`,
+      className: "text-accent-400",
+      delay: 300,
+    },
+  ] as const;
+
   return (
     <>
       {/* ===== HERO ===== */}
@@ -53,9 +89,9 @@ export default async function HomePage({
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at top right, var(--gradient-hero-radial-1), transparent 60%)" }} />
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at bottom left, var(--gradient-hero-radial-2), transparent 60%)" }} />
 
-        {/* Grid pattern */}
+        {/* Grid pattern — animated */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 animate-grid-fade"
           style={{
             backgroundImage:
               "linear-gradient(var(--hero-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hero-grid-line) 1px, transparent 1px)",
@@ -122,50 +158,14 @@ export default async function HomePage({
               </Link>
             </div>
 
-            {/* Terminal preview */}
+            {/* Terminal preview — animated typing */}
             <div className="mx-auto mt-16 max-w-2xl">
-              <div
-                className="glow overflow-hidden rounded-2xl shadow-2xl backdrop-blur"
-                style={{
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: "var(--hero-terminal-border)",
-                  backgroundColor: "var(--hero-terminal-bg)",
-                }}
-              >
-                <div className="flex items-center gap-2 border-b border-slate-700/50 px-4 py-3">
-                  <div className="h-3 w-3 rounded-full bg-red-500/80" />
-                  <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
-                  <div className="h-3 w-3 rounded-full bg-green-500/80" />
-                  <span className="ml-2 text-xs text-slate-400">terminal</span>
-                </div>
-                <div className="p-6 font-mono text-sm leading-relaxed">
-                  <div className="text-slate-400">
-                    $ <span className="text-brand-400">claude</span>
-                  </div>
-                  <div className="mt-2 text-slate-400">
-                    <span className="text-accent-400">{">"}</span> {tHero("terminalPrompt")}{" "}
-                  </div>
-                  <div className="text-slate-400">
-                    {"  "}{tHero("terminalPrompt2")}
-                  </div>
-                  <div className="mt-3 text-emerald-400">
-                    {tHero("terminalResponse")}
-                  </div>
-                  <div className="mt-1 text-slate-400">
-                    {"  "}{tHero("terminalStep1")}{" "}
-                    <span className="text-brand-400">{tHero("terminalDone")}</span>
-                  </div>
-                  <div className="text-slate-400">
-                    {"  "}{tHero("terminalStep2")}{" "}
-                    <span className="text-brand-400">{tHero("terminalDone")}</span>
-                  </div>
-                  <div className="text-slate-400">
-                    {"  "}{tHero("terminalStep3")}{" "}
-                    <span className="animate-pulse text-accent-400">{tHero("terminalInProgress")}</span>
-                  </div>
-                </div>
-              </div>
+              <HeroTerminal lines={terminalLines} />
+            </div>
+
+            {/* Scroll indicator */}
+            <div className="mt-8 flex justify-center">
+              <ChevronDown className="h-6 w-6 animate-float text-slate-400 dark:text-slate-500" aria-hidden="true" />
             </div>
           </div>
         </div>
@@ -182,13 +182,16 @@ export default async function HomePage({
             />
           </AnimateOnScroll>
 
+          {/* Bento grid layout — varied card sizes for visual hierarchy */}
           <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.08}>
-            <FeatureCard
-              icon={Globe}
-              title={tFeatures("createWebsite.title")}
-              description={tFeatures("createWebsite.description")}
-              gradient="teal"
-            />
+            <div className="sm:col-span-2">
+              <FeatureCard
+                icon={Globe}
+                title={tFeatures("createWebsite.title")}
+                description={tFeatures("createWebsite.description")}
+                gradient="teal"
+              />
+            </div>
             <FeatureCard
               icon={FileText}
               title={tFeatures("generateDocs.title")}
@@ -213,17 +216,20 @@ export default async function HomePage({
               description={tFeatures("codeNoDev.description")}
               gradient="teal"
             />
+            <div className="sm:col-span-2">
+              <FeatureCard
+                icon={Puzzle}
+                title={tFeatures("connectTools.title")}
+                description={tFeatures("connectTools.description")}
+                gradient="purple"
+                href={l("/mcp")}
+              />
+            </div>
             <FeatureCard
               icon={Palette}
               title={tFeatures("designUI.title")}
               description={tFeatures("designUI.description")}
               gradient="amber"
-            />
-            <FeatureCard
-              icon={Puzzle}
-              title={tFeatures("connectTools.title")}
-              description={tFeatures("connectTools.description")}
-              gradient="purple"
             />
             <FeatureCard
               icon={Rocket}

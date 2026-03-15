@@ -7,26 +7,26 @@ datePublished: "2026-03-12"
 dateModified: "2026-03-12"
 ---
 
-## Pourquoi une gouvernance ?
+## Why governance?
 
-Sans regles claires, chaque developpeur configure Claude Code a sa facon : des MCP non verifies installes en global, des permissions trop larges, des secrets potentiellement exposes. Une gouvernance legere mais explicite evite ces risques sans freiner la productivite.
+Without clear rules, every developer configures Claude Code their own way: unvetted MCPs installed globally, overly broad permissions, secrets potentially exposed. Lightweight but explicit governance avoids these risks without slowing productivity.
 
-## Roles et responsabilites
+## Roles and responsibilities
 
-### Les 4 roles types
+### The 4 typical roles
 
-| Role | Responsabilite | Profil |
+| Role | Responsibility | Profile |
 |---|---|---|
-| **Admin plateforme** | Configuration organisation, allow list MCP, gestion des licences, audit | DevOps, SRE, responsable infra |
-| **Tech Lead** | CLAUDE.md du projet, choix des MCP par projet, revue des configs | Lead dev, architecte |
-| **Developpeur** | Utilisation quotidienne, creation de Skills, remontee de problemes | Dev junior a senior |
-| **Auditeur** | Verification des logs, conformite, revue periodique des permissions | Securite, compliance |
+| **Platform Admin** | Organization configuration, MCP allow list, license management, audit | DevOps, SRE, infrastructure lead |
+| **Tech Lead** | Project CLAUDE.md, MCP selection per project, config review | Lead dev, architect |
+| **Developer** | Daily use, Skills creation, issue reporting | Junior to senior dev |
+| **Auditor** | Log verification, compliance, periodic permissions review | Security, compliance |
 
-### Permissions par niveau d'experience
+### Permissions by experience level
 
-Adaptez les permissions Claude Code selon le niveau du developpeur :
+Adjust Claude Code permissions based on the developer's level:
 
-**Profil junior (restreint)**
+**Junior profile (restricted)**
 
 ```json
 {
@@ -37,9 +37,9 @@ Adaptez les permissions Claude Code selon le niveau du developpeur :
 }
 ```
 
-Le junior peut lire le code et poser des questions, mais Claude Code ne modifie rien directement. Les modifications passent par des suggestions que le dev applique manuellement.
+The junior can read code and ask questions, but Claude Code doesn't modify anything directly. Changes go through suggestions that the dev applies manually.
 
-**Profil senior (permissif)**
+**Senior profile (permissive)**
 
 ```json
 {
@@ -50,9 +50,9 @@ Le junior peut lire le code et poser des questions, mais Claude Code ne modifie 
 }
 ```
 
-Le senior a acces a tous les outils. Claude Code peut lire, ecrire et executer des commandes. La confirmation reste active pour les actions sensibles.
+The senior has access to all tools. Claude Code can read, write, and execute commands. Confirmation is still active for sensitive actions.
 
-**Profil lead (complet)**
+**Lead profile (full access)**
 
 ```json
 {
@@ -64,9 +64,9 @@ Le senior a acces a tous les outils. Claude Code peut lire, ecrire et executer d
 }
 ```
 
-Le lead a acces complet, y compris aux MCP d'equipe (GitHub, Slack, Context7). Il peut aussi modifier la configuration du projet.
+The lead has full access, including team MCPs (GitHub, Slack, Context7). They can also modify the project configuration.
 
-**Profil DevOps/CI (headless)**
+**DevOps/CI profile (headless)**
 
 ```json
 {
@@ -77,72 +77,72 @@ Le lead a acces complet, y compris aux MCP d'equipe (GitHub, Slack, Context7). I
 }
 ```
 
-Utilise en mode `--print` dans les pipelines CI/CD, avec des permissions strictement definies par le workflow.
+Used in `--print` mode within CI/CD pipelines, with permissions strictly defined by the workflow.
 
-## Gestion centralisee des configurations
+## Centralized configuration management
 
-### La hierarchie des fichiers de configuration
+### The configuration file hierarchy
 
-Claude Code lit les configurations dans un ordre precis, du plus general au plus specifique :
+Claude Code reads configurations in a specific order, from most general to most specific:
 
-1. **Organisation** : `~/.claude/settings.json` (deploye par votre outil de gestion de postes)
-2. **Projet** : `.claude/settings.json` a la racine du repo (commite dans git)
-3. **Utilisateur** : overrides locaux dans `~/.claude/settings.local.json`
+1. **Organization**: `~/.claude/settings.json` (deployed by your workstation management tool)
+2. **Project**: `.claude/settings.json` at the repo root (committed to git)
+3. **User**: local overrides in `~/.claude/settings.local.json`
 
-Les niveaux inferieurs heritent des niveaux superieurs. Un `deny` au niveau organisation ne peut pas etre annule par un `allow` au niveau projet.
+Lower levels inherit from higher levels. A `deny` at the organization level cannot be overridden by an `allow` at the project level.
 
-### CLAUDE.md : la source de verite du projet
+### CLAUDE.md: the project's source of truth
 
-Chaque repo devrait avoir un `CLAUDE.md` a la racine qui definit :
+Every repo should have a `CLAUDE.md` at the root that defines:
 
-- Le contexte du projet (stack, architecture, conventions)
-- Les regles de codage specifiques
-- Les fichiers interdits d'acces
-- Les workflows preferes (TDD, naming, structure de commits)
+- Project context (stack, architecture, conventions)
+- Specific coding rules
+- Files that are off-limits
+- Preferred workflows (TDD, naming, commit structure)
 
 ```markdown
-# CLAUDE.md - Projet MonApp
+# CLAUDE.md - MyApp Project
 
 ## Stack
 - Next.js 14, TypeScript strict, Tailwind CSS, Prisma
 
-## Regles
-- Jamais de `any` en TypeScript
-- Tests obligatoires pour chaque nouvelle fonction
-- Ne jamais lire .env, .env.local ou credentials/
-- Commit messages en francais, format conventionnel
+## Rules
+- Never use `any` in TypeScript
+- Tests are mandatory for every new function
+- Never read .env, .env.local, or credentials/
+- Commit messages in English, conventional format
 
-## MCP autorises
-- github, context7, playwright (pour les tests E2E)
+## Authorized MCPs
+- github, context7, playwright (for E2E tests)
 ```
 
-Les sous-dossiers peuvent avoir leur propre `CLAUDE.md` qui complete (pas remplace) le fichier racine.
+Subdirectories can have their own `CLAUDE.md` that supplements (not replaces) the root file.
 
-## Gestion des secrets
+## Secret management
 
-### Principes
+### Principles
 
-- **Les secrets ne sont jamais dans le code** : variables d'environnement ou gestionnaire de secrets
-- **Claude Code ne doit jamais lire les fichiers de secrets** : configurez une deny list explicite
-- **Rotation reguliere** : changez les cles API tous les 90 jours minimum
+- **Secrets never go in code**: use environment variables or a secret manager
+- **Claude Code must never read secret files**: configure an explicit deny list
+- **Regular rotation**: change API keys at minimum every 90 days
 
-### Integration avec un gestionnaire de secrets
+### Integration with a secret manager
 
-Pour les equipes qui utilisent un gestionnaire de secrets (Vault, AWS Secrets Manager, Google Secret Manager), l'integration se fait via les variables d'environnement :
+For teams using a secret manager (Vault, AWS Secrets Manager, Google Secret Manager), integration is done through environment variables:
 
 ```bash
-# Exemple avec AWS Secrets Manager
+# Example with AWS Secrets Manager
 export ANTHROPIC_API_KEY=$(aws secretsmanager get-secret-value \
   --secret-id claude-api-key \
   --query SecretString \
   --output text)
 ```
 
-Pour les pipelines CI/CD, injectez la cle via les secrets du runner (GitHub Actions secrets, GitLab CI variables).
+For CI/CD pipelines, inject the key via runner secrets (GitHub Actions secrets, GitLab CI variables).
 
-### Deny list recommandee
+### Recommended deny list
 
-Dans votre `settings.json` organisation :
+In your organization `settings.json`:
 
 ```json
 {
@@ -159,15 +159,15 @@ Dans votre `settings.json` organisation :
 }
 ```
 
-## Allow list MCP et plugins
+## MCP and plugin allow list
 
-### Pourquoi une allow list ?
+### Why an allow list?
 
-Sans restriction, n'importe quel developpeur peut installer n'importe quel MCP, y compris des MCP non verifies qui pourraient exfiltrer du code. L'allow list garantit que seuls les MCP approuves par l'equipe securite sont utilises.
+Without restrictions, any developer can install any MCP, including unverified ones that could exfiltrate code. The allow list ensures that only MCPs approved by the security team are used.
 
 ### Configuration
 
-Dans le `settings.json` organisation :
+In the organization `settings.json`:
 
 ```json
 {
@@ -187,59 +187,59 @@ Dans le `settings.json` organisation :
 }
 ```
 
-Les MCP non listes dans la configuration organisation sont automatiquement bloques si vous utilisez un outil de gestion de configuration qui empeche la modification du fichier.
+MCPs not listed in the organization configuration are automatically blocked if you use a configuration management tool that prevents file modification.
 
-<Callout type="warning" title="MCP tiers : toujours auditer avant d'autoriser">
-Avant d'ajouter un MCP a l'allow list, verifiez le code source, les permissions demandees et la reputation du mainteneur. Un MCP malveillant peut lire vos fichiers et envoyer leur contenu a un serveur externe.
+<Callout type="warning" title="Third-party MCPs: always audit before authorizing">
+Before adding an MCP to the allow list, check the source code, requested permissions, and maintainer reputation. A malicious MCP can read your files and send their contents to an external server.
 </Callout>
 
-## Audit : quoi loguer, ou, retention
+## Audit: what to log, where, and retention
 
-### Quoi loguer
+### What to log
 
-| Evenement | Priorite | Details a capturer |
+| Event | Priority | Details to capture |
 |---|---|---|
-| Execution d'un outil | Haute | Nom de l'outil, parametres, timestamp, utilisateur |
-| Lecture de fichier | Moyenne | Chemin du fichier, taille, timestamp |
-| Ecriture de fichier | Haute | Chemin, diff avant/apres, timestamp |
-| Execution de commande Bash | Haute | Commande, code de retour, timestamp |
-| Appel MCP | Haute | MCP cible, outil appele, parametres |
+| Tool execution | High | Tool name, parameters, timestamp, user |
+| File read | Medium | File path, size, timestamp |
+| File write | High | Path, before/after diff, timestamp |
+| Bash command execution | High | Command, return code, timestamp |
+| MCP call | High | Target MCP, tool called, parameters |
 
-### Ou stocker les logs
+### Where to store logs
 
-- **Local** : `~/.claude/` contient l'historique des sessions (par defaut)
-- **Centralise** : configurez un hook `PostToolUse` pour envoyer les evenements vers votre SIEM, ELK Stack, Datadog ou un simple webhook
+- **Local**: `~/.claude/` contains session history (by default)
+- **Centralized**: configure a `PostToolUse` hook to send events to your SIEM, ELK Stack, Datadog, or a simple webhook
 
-### Retention recommandee
+### Recommended retention
 
-- **Logs d'audit** : 12 mois minimum (obligation reglementaire courante)
-- **Historique des sessions** : 3 mois (suffisant pour le debugging)
-- **Metriques d'usage** : 24 mois (pour les analyses de tendance et le reporting)
+- **Audit logs**: 12 months minimum (common regulatory requirement)
+- **Session history**: 3 months (sufficient for debugging)
+- **Usage metrics**: 24 months (for trend analysis and reporting)
 
-## Politique de mise a jour
+## Update policy
 
-### Frequence
+### Frequency
 
-Claude Code se met a jour regulierement (parfois plusieurs fois par semaine). Recommandations :
+Claude Code updates regularly (sometimes several times a week). Recommendations:
 
-- **Environnement de dev** : mises a jour automatiques (comportement par defaut)
-- **Pipelines CI/CD** : version fixe, mise a jour manuelle apres validation
-- **Equipes sensibles** : retardez les mises a jour de 1 a 2 semaines pour laisser la communaute identifier les bugs
+- **Dev environments**: automatic updates (default behavior)
+- **CI/CD pipelines**: pinned version, manual update after validation
+- **Sensitive teams**: delay updates by 1 to 2 weeks to let the community identify bugs
 
-### Desactiver les mises a jour automatiques
+### Disabling automatic updates
 
 ```bash
 export DISABLE_AUTOUPDATER=1
 ```
 
-Ajoutez cette variable dans le profil shell de vos machines de CI ou dans la configuration des postes de travail si vous voulez controler les versions.
+Add this variable to the shell profile on your CI machines or workstation configurations if you want to control versions.
 
 ### Changelog
 
-Suivez les notes de version sur le blog d'Anthropic et dans le changelog de Claude Code pour anticiper les changements qui pourraient impacter vos workflows.
+Follow release notes on the Anthropic blog and in the Claude Code changelog to anticipate changes that could affect your workflows.
 
 ## Next steps
 
-- [Securite et conformite](/enterprise/security-compliance) : protection des donnees et certifications
-- [Guide d'adoption d'equipe](/enterprise/team-adoption) : mettre en place les roles dans le cadre du deploiement
-- [FAQ Enterprise](/enterprise/faq) : reponses aux questions frequentes sur la gouvernance
+- [Security and compliance](/enterprise/security-compliance): data protection and certifications
+- [Team adoption guide](/enterprise/team-adoption): setting up roles as part of the deployment
+- [Enterprise FAQ](/enterprise/faq): answers to common governance questions

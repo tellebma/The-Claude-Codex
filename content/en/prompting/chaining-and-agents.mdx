@@ -7,445 +7,445 @@ datePublished: "2026-03-11"
 dateModified: "2026-03-11"
 ---
 
-## Pourquoi décomposer les grandes tâches
+## Why break down large tasks
 
-Un seul prompt ne peut pas tout faire. Pour les projets complexes, essayer de tout demander en une fois produit des résultats superficiels : le code est incomplet, les cas limites sont ignorés, les tests sont absents.
+A single prompt can't do everything. For complex projects, trying to ask for everything at once produces superficial results: the code is incomplete, edge cases are ignored, tests are missing.
 
-Le **prompt chaining** est la solution : décomposer une tâche complexe en une séquence de prompts plus petits, où chaque étape s'appuie sur le résultat de la précédente. L'**orchestration multi-agents** pousse ce principe plus loin : plusieurs agents travaillent en parallèle sur différents aspects d'un même problème.
+**Prompt chaining** is the solution: decomposing a complex task into a sequence of smaller prompts, where each step builds on the result of the previous one. **Multi-agent orchestration** takes this further: multiple agents work in parallel on different aspects of the same problem.
 
-<Callout type="info" title="L'analogie du chantier de construction">
-Un immeuble ne se construit pas en un seul geste. Il y a des phases : fondations, gros œuvre, second œuvre, finitions. Chaque phase dépend de la précédente, et des équipes spécialisées interviennent à leur moment. Le prompt chaining, c'est exactement ça : une planification par phases avec des équipes expertes à chaque étape.
+<Callout type="info" title="The construction site analogy">
+A building doesn't go up in a single gesture. There are phases: foundation, structural work, finishing, fit-out. Each phase depends on the previous one, and specialized teams step in at their moment. Prompt chaining is exactly that: phased planning with expert teams at each step.
 </Callout>
 
-## Le prompt chaining : les bases
+## Prompt chaining: the basics
 
-### Principe
+### The principle
 
-Un pipeline de prompt chaining fonctionne ainsi :
+A prompt chaining pipeline works like this:
 
-1. Prompt 1 → Résultat A
-2. Prompt 2 (qui utilise Résultat A) → Résultat B
-3. Prompt 3 (qui utilise Résultats A et B) → Résultat C
+1. Prompt 1 -> Result A
+2. Prompt 2 (uses Result A) -> Result B
+3. Prompt 3 (uses Results A and B) -> Result C
 4. ...
 
-Chaque prompt est petit, ciblé, et validé avant de passer à la suite.
+Each prompt is small, targeted, and validated before moving on.
 
-### Règles d'or du prompt chaining
+### Golden rules of prompt chaining
 
-- **Un objectif par étape** : ne mélangez jamais deux responsabilités dans un seul prompt
-- **Validation explicite** : vérifiez chaque résultat avant de passer à l'étape suivante
-- **Contexte explicite** : ne supposez pas que Claude se souvient du contexte de l'étape précédente, soyez explicite
-- **Points de sortie** : définissez à l'avance les critères qui permettent de passer à l'étape suivante
+- **One objective per step**: never mix two responsibilities in a single prompt
+- **Explicit validation**: verify each result before moving to the next step
+- **Explicit context**: don't assume Claude remembers the previous step's context; be explicit
+- **Exit criteria**: define in advance what it takes to move to the next step
 
-## Example 1 : Implémenter une feature complète
+## Example 1: Implementing a complete feature
 
-Voici un pipeline complet pour implémenter une feature de bout en bout.
+Here's a complete pipeline for implementing a feature end to end.
 
 <Steps>
-<Step title="Spécification et plan" stepNumber={1}>
+<Step title="Specification and plan" stepNumber={1}>
 ```markdown
-"Je veux implémenter une fonctionnalité de recherche full-text dans notre app
-Next.js/TypeScript avec base PostgreSQL/Prisma.
+"I want to implement a full-text search feature in our
+Next.js/TypeScript app with a PostgreSQL/Prisma database.
 
-Avant de coder :
-1. Analyse les besoins (quels champs, quels modèles, volume estimé)
-2. Compare les options techniques (pg_trgm vs tsvector vs Elasticsearch)
-3. Recommande une approche avec justification
-4. Génère un plan d'implémentation en phases
+Before coding:
+1. Analyze the requirements (which fields, which models, estimated volume)
+2. Compare technical options (pg_trgm vs tsvector vs Elasticsearch)
+3. Recommend an approach with justification
+4. Generate a phased implementation plan
 
-Attends ma validation avant de commencer."
+Wait for my approval before starting."
 ```
 
-**Résultat attendu** : plan détaillé avec 4-5 phases, choix technique justifié.
+**Expected result**: detailed plan with 4-5 phases, justified technical choice.
 
-**Validation** : vous validez le plan, vous ajustez si besoin.
+**Validation**: you approve the plan, adjust if needed.
 </Step>
 
-<Step title="Schéma et migration" stepNumber={2}>
+<Step title="Schema and migration" stepNumber={2}>
 ```markdown
-"Le plan est validé. On utilise tsvector avec GIN index.
+"Plan approved. We're using tsvector with a GIN index.
 
-Phase 1 : migration de base de données.
-Fichiers actuels : prisma/schema.prisma (je vais le coller)
+Phase 1: database migration.
+Current files: prisma/schema.prisma (I'll paste it)
 
-Génère :
-1. La migration Prisma pour ajouter les colonnes tsvector sur Product et Article
-2. Le trigger PostgreSQL pour maintenir les vecteurs à jour automatiquement
-3. L'index GIN pour les performances
-4. Un script de backfill pour les données existantes
+Generate:
+1. The Prisma migration to add tsvector columns on Product and Article
+2. The PostgreSQL trigger to keep vectors updated automatically
+3. The GIN index for performance
+4. A backfill script for existing data
 
-Ne touche pas encore au code applicatif.
-[schema.prisma actuel]"
-```
-</Step>
-
-<Step title="Service de recherche" stepNumber={3}>
-```markdown
-"Migration appliquée et validée. Phase 2 : le service de recherche.
-
-Crée src/features/search/search.service.ts avec :
-- Méthode searchProducts(query: string, filters: SearchFilters): Promise<SearchResult>
-- Méthode searchArticles(query: string, pagination: Pagination): Promise<SearchResult>
-- Gestion du ranking par pertinence (ts_rank)
-- Support des opérateurs booléens (AND, OR, NOT)
-- Sanitization des inputs
-
-Utilise le pattern Repository du projet (comme dans src/features/products/product.repository.ts).
-TypeScript strict, pas de any, gestion d'erreurs explicite."
+Don't touch application code yet.
+[current schema.prisma]"
 ```
 </Step>
 
-<Step title="API et composant UI" stepNumber={4}>
+<Step title="Search service" stepNumber={3}>
 ```markdown
-"Service validé et testé. Phase 3 : l'API et l'UI.
+"Migration applied and validated. Phase 2: the search service.
 
-Crée en parallèle :
-1. Le route handler Next.js dans app/api/search/route.ts
-   - Validation des query params avec Zod
-   - Rate limiting (20 req/min par IP)
-   - Format de réponse { success, data, meta }
+Create src/features/search/search.service.ts with:
+- searchProducts(query: string, filters: SearchFilters): Promise<SearchResult>
+- searchArticles(query: string, pagination: Pagination): Promise<SearchResult>
+- Relevance ranking (ts_rank)
+- Boolean operator support (AND, OR, NOT)
+- Input sanitization
 
-2. Le composant SearchBar dans src/components/search/SearchBar.tsx
-   - Debounce de 300ms
-   - Affichage des suggestions en dropdown
-   - Accessibilité WCAG 2.1 (aria-live, aria-expanded)
+Use the project's Repository pattern (like in src/features/products/product.repository.ts).
+Strict TypeScript, no any, explicit error handling."
+```
+</Step>
+
+<Step title="API and UI component" stepNumber={4}>
+```markdown
+"Service validated and tested. Phase 3: API and UI.
+
+Create in parallel:
+1. The Next.js route handler in app/api/search/route.ts
+   - Query param validation with Zod
+   - Rate limiting (20 req/min per IP)
+   - Response format { success, data, meta }
+
+2. The SearchBar component in src/components/search/SearchBar.tsx
+   - 300ms debounce
+   - Suggestions displayed in a dropdown
+   - WCAG 2.1 accessibility (aria-live, aria-expanded)
    - Dark mode"
 ```
 </Step>
 
-<Step title="Tests et documentation" stepNumber={5} isLast>
+<Step title="Tests and documentation" stepNumber={5} isLast>
 ```markdown
-"Implémentation terminée. Phase finale : tests et documentation.
+"Implementation complete. Final phase: tests and documentation.
 
-1. Tests unitaires pour search.service.ts (Vitest + mock Prisma)
-   - Tests des cas nominaux
-   - Tests des edge cases (query vide, caractères spéciaux, résultats vides)
-   - Tests des opérateurs booléens
+1. Unit tests for search.service.ts (Vitest + Prisma mocks)
+   - Nominal case tests
+   - Edge case tests (empty query, special characters, empty results)
+   - Boolean operator tests
 
-2. Tests E2E pour le composant SearchBar (Playwright)
-   - Saisie et affichage des suggestions
-   - Sélection d'un résultat
-   - Gestion des erreurs réseau
+2. E2E tests for the SearchBar component (Playwright)
+   - Typing and displaying suggestions
+   - Selecting a result
+   - Handling network errors
 
-3. Mise à jour du CLAUDE.md avec la documentation du module search"
+3. Update CLAUDE.md with documentation for the search module"
 ```
 </Step>
 </Steps>
 
-## Example 2 : Pipeline de debugging systématique
+## Example 2: Systematic debugging pipeline
 
-Un pipeline structuré pour les bugs difficiles à localiser.
+A structured pipeline for hard-to-locate bugs.
 
 <Steps>
-<Step title="Collecte et analyse des symptômes" stepNumber={1}>
+<Step title="Symptom collection and analysis" stepNumber={1}>
 ```markdown
-"Nous avons un bug de production sur notre API de commandes.
-Symptômes :
-- Erreur intermittente 500 sur POST /api/orders (environ 2% des requêtes)
-- Apparaît sous charge (> 100 req/s) mais pas en dev
-- Les logs montrent : 'Connection pool timeout' mais pas systématiquement
-- Démarré après le déploiement v2.3.1
+"We have a production bug in our orders API.
+Symptoms:
+- Intermittent 500 error on POST /api/orders (about 2% of requests)
+- Appears under load (> 100 req/s) but not in dev
+- Logs show: 'Connection pool timeout' but not consistently
+- Started after the v2.3.1 deployment
 
-Logs bruts : [coller les logs]
-Code de l'endpoint : [coller le code]
-Configuration Prisma : [coller la config]
+Raw logs: [paste logs]
+Endpoint code: [paste code]
+Prisma config: [paste config]
 
-Étape 1 : analyse uniquement. Liste toutes les hypothèses possibles,
-classées par probabilité. Ne propose pas encore de solution."
+Step 1: analysis only. List all possible hypotheses,
+ranked by probability. Don't suggest a solution yet."
 ```
 </Step>
 
-<Step title="Validation des hypothèses" stepNumber={2}>
+<Step title="Hypothesis validation" stepNumber={2}>
 ```markdown
-"Hypothèses reçues. Pour chaque hypothèse dans l'ordre de probabilité :
-1. Indique comment la valider avec les outils disponibles (logs, métriques, code)
-2. Estime le temps de validation
-3. Identifie les prérequis
+"Hypotheses received. For each hypothesis in order of probability:
+1. Indicate how to validate it with available tools (logs, metrics, code)
+2. Estimate validation time
+3. Identify prerequisites
 
-Commence par l'hypothèse la plus probable :
-[hypothèse choisie par Claude]"
+Start with the most likely hypothesis:
+[hypothesis chosen by Claude]"
 ```
 </Step>
 
-<Step title="Reproduction en local" stepNumber={3}>
+<Step title="Local reproduction" stepNumber={3}>
 ```markdown
-"L'hypothèse principale est : saturation du connection pool Prisma sous charge.
+"The leading hypothesis is: Prisma connection pool saturation under load.
 
-Génère :
-1. Un script de load test (k6 ou autocannon) qui reproduit les conditions de production
-2. Les métriques à capturer pendant le test (pool stats, latence, erreurs)
-3. Les seuils qui confirment ou infirment l'hypothèse"
+Generate:
+1. A load test script (k6 or autocannon) that reproduces production conditions
+2. Metrics to capture during the test (pool stats, latency, errors)
+3. Thresholds that confirm or disprove the hypothesis"
 ```
 </Step>
 
-<Step title="Isolation et correction" stepNumber={4}>
+<Step title="Isolation and fix" stepNumber={4}>
 ```markdown
-"Hypothèse confirmée par le load test. Le pool Prisma de 10 connexions
-est saturé dès 80 req/s.
+"Hypothesis confirmed by the load test. The 10-connection Prisma pool
+saturates at 80 req/s.
 
-Propose :
-1. La correction immédiate (augmenter le pool, optimiser les requêtes lentes)
-2. La correction structurelle (connection pooling avec PgBouncer, optimisation des queries N+1)
-3. Les changements de code précis avec fichiers et lignes concernés"
+Propose:
+1. The immediate fix (increase pool, optimize slow queries)
+2. The structural fix (connection pooling with PgBouncer, N+1 query optimization)
+3. The precise code changes with affected files and lines"
 ```
 </Step>
 
-<Step title="Test de régression" stepNumber={5} isLast>
+<Step title="Regression test" stepNumber={5} isLast>
 ```markdown
-"Correction appliquée. Génère :
-1. Le test de régression qui aurait détecté ce bug avant la mise en production
-2. Les alertes à configurer pour détecter ce pattern à l'avenir
-3. La post-mortem template pour documenter l'incident"
+"Fix applied. Generate:
+1. The regression test that would have caught this bug before production
+2. Alerts to configure for detecting this pattern in the future
+3. A post-mortem template to document the incident"
 ```
 </Step>
 </Steps>
 
-## Example 3 : Migration de codebase
+## Example 3: Codebase migration
 
-Un pipeline pour migrer progressivement sans casser la production.
-
-```markdown
-# Étape 0 : Inventaire
-"Analyse le codebase et génère un inventaire de migration JavaScript → TypeScript.
-Pour chaque fichier : taille, complexité estimée (1-5), dépendances, risques.
-Génère un tableau trié par priorité de migration (quick wins d'abord)."
-
-# Étape 1 (après validation de l'inventaire) : Configuration
-"Plan validé. Phase 1 : configuration TypeScript.
-Génère :
-1. tsconfig.json en mode progressif (allowJs: true, strict: false au départ)
-2. Les scripts npm mis à jour
-3. La configuration ESLint pour TypeScript
-Ne touche à aucun fichier .js pour l'instant."
-
-# Étape 2 : Migration module par module
-"Phase 2 : migration du module utils/ (le plus simple selon l'inventaire).
-Pour chaque fichier utils/*.js :
-1. Convertis en TypeScript
-2. Ajoute les types stricts
-3. Génère les tests unitaires s'ils n'existent pas
-Commence par utils/date.js. Montre-moi le résultat avant de passer au suivant."
-
-# Étapes suivantes : répéter par module
-"utils/date.ts validé. Passe à utils/validation.js."
-```
-
-## Orchestration multi-agents
-
-L'orchestration multi-agents va plus loin que le chaining séquentiel. Plusieurs agents travaillent en **parallèle** sur différents aspects d'un même problème, puis leurs résultats sont synthétisés.
-
-### Le Task Tool : lancer des agents en parallèle
-
-Le Task Tool dans Claude Code permet de lancer plusieurs sous-agents en parallèle. Chaque sous-agent est une instance de Claude qui travaille de façon autonome sur une tâche spécifique.
+A pipeline for migrating progressively without breaking production.
 
 ```markdown
-"Lance 3 agents en parallèle pour analyser notre API de paiement :
+# Step 0: Inventory
+"Analyze the codebase and generate a JavaScript -> TypeScript migration inventory.
+For each file: size, estimated complexity (1-5), dependencies, risks.
+Generate a table sorted by migration priority (quick wins first)."
 
-Agent 1 (sécurité) :
-Tu es un expert en sécurité applicative (OWASP Top 10 + PCI-DSS).
-Analyse les fichiers src/payment/*.ts pour détecter :
-- Vulnérabilités d'injection
-- Exposition de données de carte
-- Problèmes d'authentification
-Format : tableau | Sévérité | Fichier | Ligne | Vulnérabilité | Correction |
+# Step 1 (after inventory approval): Configuration
+"Plan approved. Phase 1: TypeScript configuration.
+Generate:
+1. tsconfig.json in progressive mode (allowJs: true, strict: false initially)
+2. Updated npm scripts
+3. ESLint configuration for TypeScript
+Don't touch any .js files yet."
 
-Agent 2 (performance) :
-Tu es un expert en performance Node.js.
-Analyse les fichiers src/payment/*.ts pour détecter :
-- Requêtes N+1
-- Appels synchrones bloquants
-- Manque de cache
-- Memory leaks potentiels
-Format : tableau | Type | Fichier | Ligne | Impact | Correction |
+# Step 2: Module-by-module migration
+"Phase 2: migrate the utils/ module (the simplest per the inventory).
+For each utils/*.js file:
+1. Convert to TypeScript
+2. Add strict types
+3. Generate unit tests if they don't exist
+Start with utils/date.js. Show me the result before moving to the next."
 
-Agent 3 (tests) :
-Tu es un expert TDD.
-Analyse les fichiers src/payment/*.ts et src/payment/__tests__/*.ts pour :
-- Identifier la couverture actuelle
-- Lister les cas limites non testés
-- Proposer les tests manquants critiques
-Format : liste priorisée par importance
-
-Attends les résultats des 3 agents, puis synthétise dans un rapport unifié
-avec les 10 actions prioritaires."
+# Next steps: repeat per module
+"utils/date.ts validated. Move to utils/validation.js."
 ```
 
-### Architecture fan-out / fan-in
+## Multi-agent orchestration
 
-L'architecture fan-out/fan-in est le pattern le plus courant pour l'orchestration parallèle :
+Multi-agent orchestration goes further than sequential chaining. Multiple agents work in **parallel** on different aspects of the same problem, then their results are synthesized.
 
-```
-Tâche principale
-        │
-        ├─── Agent 1 (spécialité A)
-        ├─── Agent 2 (spécialité B)    } Fan-out
-        └─── Agent 3 (spécialité C)
+### The Task Tool: launching agents in parallel
 
-        │ (résultats A + B + C)
-        ▼
-  Synthèse / Agrégation                } Fan-in
-        │
-        ▼
-  Résultat final enrichi
-```
+The Task Tool in Claude Code lets you launch multiple subagents in parallel. Each subagent is a Claude instance that works autonomously on a specific task.
 
-**Exemple : revue de code complète**
 ```markdown
-"Fan-out : lance en parallèle :
-- Agent code-reviewer : qualité, patterns, maintenabilité
-- Agent security-reviewer : OWASP, secrets, surface d'attaque
-- Agent tdd-guide : couverture, cas limites, tests manquants
-- Agent doc-updater : documentation manquante ou obsolète
+"Launch 3 agents in parallel to analyze our payment API:
 
-Fan-in : synthétise les 4 rapports en une liste d'actions prioritaires
-avec estimation d'effort pour chaque action."
+Agent 1 (security):
+You are an application security expert (OWASP Top 10 + PCI-DSS).
+Analyze the files in src/payment/*.ts to detect:
+- Injection vulnerabilities
+- Card data exposure
+- Authentication issues
+Format: table | Severity | File | Line | Vulnerability | Fix |
+
+Agent 2 (performance):
+You are a Node.js performance expert.
+Analyze the files in src/payment/*.ts to detect:
+- N+1 queries
+- Synchronous blocking calls
+- Missing caching
+- Potential memory leaks
+Format: table | Type | File | Line | Impact | Fix |
+
+Agent 3 (tests):
+You are a TDD expert.
+Analyze src/payment/*.ts and src/payment/__tests__/*.ts to:
+- Identify current coverage
+- List untested edge cases
+- Propose critical missing tests
+Format: prioritized list by importance
+
+Wait for results from all 3 agents, then synthesize into a unified report
+with the top 10 priority actions."
 ```
 
-### Architecture pipeline séquentiel
+### Fan-out / fan-in architecture
 
-Quand les étapes ont des dépendances, utilisez un pipeline séquentiel :
+Fan-out/fan-in is the most common pattern for parallel orchestration:
 
 ```
-Agent 1 : Planification
-    │ (plan validé)
-    ▼
-Agent 2 : Implémentation
-    │ (code produit)
-    ▼
-Agent 3 : Tests
-    │ (tests qui passent)
-    ▼
-Agent 4 : Documentation
-    │ (docs à jour)
-    ▼
-Agent 5 : Revue finale
+Main task
+        |
+        +--- Agent 1 (specialty A)
+        +--- Agent 2 (specialty B)    } Fan-out
+        +--- Agent 3 (specialty C)
+
+        | (results A + B + C)
+        v
+  Synthesis / Aggregation              } Fan-in
+        |
+        v
+  Enriched final result
 ```
 
-**Exemple : feature complète en pipeline**
+**Example: complete code review**
 ```markdown
-"Pipeline séquentiel pour implémenter la feature d'export PDF :
+"Fan-out: launch in parallel:
+- Agent code-reviewer: quality, patterns, maintainability
+- Agent security-reviewer: OWASP, secrets, attack surface
+- Agent tdd-guide: coverage, edge cases, missing tests
+- Agent doc-updater: missing or outdated documentation
 
-Agent 1 (planner) : Analyse le besoin, propose un plan technique, liste les fichiers à créer
-Condition de passage : plan validé par l'utilisateur
-
-Agent 2 (implementer) : Implémente selon le plan
-Input : plan de l'Agent 1
-Condition de passage : code compile, lint passe
-
-Agent 3 (tdd-guide) : Écrit les tests pour l'implémentation
-Input : code de l'Agent 2
-Condition de passage : couverture > 80%, tous les tests passent
-
-Agent 4 (doc-updater) : Met à jour la documentation
-Input : code final + tests de l'Agent 3
-Output : CLAUDE.md mis à jour, README mis à jour"
+Fan-in: synthesize the 4 reports into a prioritized action list
+with effort estimate for each action."
 ```
 
-## Configuration d'agents dans ~/.claude/agents/
+### Sequential pipeline architecture
 
-Pour les agents que vous utilisez régulièrement, créez des fichiers de configuration dans `~/.claude/agents/`.
+When steps have dependencies, use a sequential pipeline:
 
-### Structure d'un fichier d'agent
+```
+Agent 1: Planning
+    | (plan approved)
+    v
+Agent 2: Implementation
+    | (code produced)
+    v
+Agent 3: Tests
+    | (tests passing)
+    v
+Agent 4: Documentation
+    | (docs updated)
+    v
+Agent 5: Final review
+```
+
+**Example: complete feature via pipeline**
+```markdown
+"Sequential pipeline to implement the PDF export feature:
+
+Agent 1 (planner): Analyze the need, propose a technical plan, list files to create
+Pass condition: plan approved by user
+
+Agent 2 (implementer): Implement according to the plan
+Input: Agent 1's plan
+Pass condition: code compiles, lint passes
+
+Agent 3 (tdd-guide): Write tests for the implementation
+Input: Agent 2's code
+Pass condition: coverage > 80%, all tests pass
+
+Agent 4 (doc-updater): Update documentation
+Input: final code + Agent 3's tests
+Output: CLAUDE.md updated, README updated"
+```
+
+## Configuring agents in ~/.claude/agents/
+
+For agents you use regularly, create configuration files in `~/.claude/agents/`.
+
+### Agent file structure
 
 ```markdown
 # ~/.claude/agents/security-reviewer.md
 
-Tu es un expert en sécurité applicative spécialisé dans les API web.
+You are an application security expert specializing in web APIs.
 
-## Ton rôle
-Analyser le code pour détecter les vulnérabilités de sécurité avec un regard expert.
+## Your role
+Analyze code to detect security vulnerabilities with an expert eye.
 
-## Méthodologie
-1. Commence par l'OWASP Top 10 (injection, auth cassée, exposition de données...)
-2. Analyse les dépendances tierces (npm audit)
-3. Vérifie la gestion des secrets et tokens
-4. Examine la surface d'attaque de chaque endpoint public
+## Methodology
+1. Start with the OWASP Top 10 (injection, broken auth, data exposure...)
+2. Analyze third-party dependencies (npm audit)
+3. Check secret and token management
+4. Examine the attack surface of each public endpoint
 
-## Format de sortie
-Pour chaque vulnérabilité :
-| Sévérité | Catégorie | Fichier | Ligne | Description | Correction |
-Sévérités : CRITICAL / HIGH / MEDIUM / LOW / INFO
+## Output format
+For each vulnerability:
+| Severity | Category | File | Line | Description | Fix |
+Severities: CRITICAL / HIGH / MEDIUM / LOW / INFO
 
-## Règles absolues
-- CRITICAL et HIGH doivent être corrigés avant tout déploiement
-- Ne jamais exposer des tokens ou clés API dans les exemples de correction
-- Si tu trouves des secrets hardcodés, signale-les immédiatement
+## Absolute rules
+- CRITICAL and HIGH must be fixed before any deployment
+- Never expose tokens or API keys in fix examples
+- If you find hardcoded secrets, flag them immediately
 ```
 
-### Invoquer un agent configuré
+### Invoking a configured agent
 
 ```markdown
-# Invoquer l'agent security-reviewer
-"Lance l'agent security-reviewer sur le dossier src/api/
-avec une attention particulière aux endpoints d'authentification."
+# Invoke the security-reviewer agent
+"Launch the security-reviewer agent on the src/api/ directory
+with special attention to authentication endpoints."
 ```
 
-### Examples d'agents utiles à configurer
+### Examples of useful agents to configure
 
-**planner** : Décompose les features en plans techniques
-**code-reviewer** : Review de code avec sévérités
-**tdd-guide** : Aide à l'écriture de tests (RED-GREEN-REFACTOR)
-**architect** : Conseils d'architecture et design patterns
-**security-reviewer** : Analyse de sécurité OWASP
-**build-error-resolver** : Résolution des erreurs de build
-**doc-updater** : Mise à jour de la documentation
-**refactor-cleaner** : Nettoyage du code mort et refactoring
+**planner**: Breaks down features into technical plans
+**code-reviewer**: Code review with severities
+**tdd-guide**: Test writing help (RED-GREEN-REFACTOR)
+**architect**: Architecture advice and design patterns
+**security-reviewer**: OWASP security analysis
+**build-error-resolver**: Build error resolution
+**doc-updater**: Documentation updates
+**refactor-cleaner**: Dead code cleanup and refactoring
 
-## Prompts autonomes pour les sous-agents
+## Autonomous prompts for subagents
 
-Un point critique souvent négligé : chaque sous-agent démarre à froid, sans le contexte de la conversation principale. Vos prompts pour les sous-agents doivent être **entièrement autonomes**.
+A critical point often overlooked: each subagent starts cold, without the main conversation's context. Your prompts for subagents must be **fully self-contained**.
 
 ```markdown
-# Mauvais (suppose un contexte que le sous-agent n'a pas)
-"Vérifie la sécurité du code qu'on vient de discuter"
+# Bad (assumes context the subagent doesn't have)
+"Check the security of the code we just discussed"
 
-# Bon (prompt autonome et complet)
-"Tu es un expert en sécurité applicative.
+# Good (autonomous and complete prompt)
+"You are an application security expert.
 
-Contexte : application Next.js 14 avec API Routes, authentification JWT,
-base de données PostgreSQL via Prisma.
+Context: Next.js 14 application with API Routes, JWT authentication,
+PostgreSQL database via Prisma.
 
-Analyse les fichiers suivants pour détecter des vulnérabilités :
+Analyze the following files for vulnerabilities:
 - src/app/api/auth/route.ts
 - src/lib/auth.ts
 - src/middleware.ts
 
-Vérifie spécifiquement :
-1. Validation et sanitization des inputs
-2. Gestion sécurisée des tokens JWT
-3. Protection CSRF sur les mutations
-4. Exposition de données sensibles dans les réponses
-5. Headers de sécurité (CORS, CSP)
+Check specifically:
+1. Input validation and sanitization
+2. Secure JWT token management
+3. CSRF protection on mutations
+4. Sensitive data exposure in responses
+5. Security headers (CORS, CSP)
 
-Format de sortie :
-| Sévérité | Fichier | Ligne | Vulnérabilité | Correction |
-|----------|---------|-------|---------------|------------|"
+Output format:
+| Severity | File | Line | Vulnerability | Fix |
+|----------|------|------|---------------|-----|"
 ```
 
-<Callout type="warning" title="Toujours vérifier les résultats des sous-agents">
-Les sous-agents produisent des résultats autonomes sans votre supervision directe. Vérifiez toujours les résultats avant de les appliquer, surtout pour les sous-agents qui modifient des fichiers.
+<Callout type="warning" title="Always verify subagent results">
+Subagents produce autonomous results without your direct supervision. Always verify results before applying them, especially for subagents that modify files.
 </Callout>
 
-## Checklist pour un pipeline efficace
+## Checklist for an effective pipeline
 
-Avant de lancer un pipeline de prompt chaining, vérifiez :
+Before launching a prompt chaining pipeline, verify:
 
-- [ ] Chaque étape a un objectif unique et mesurable
-- [ ] Les critères de passage entre étapes sont définis
-- [ ] Les prompts des sous-agents sont autonomes (pas de dépendance de contexte implicite)
-- [ ] Les étapes indépendantes sont parallélisées
-- [ ] Les étapes avec dépendances sont séquentielles
-- [ ] Un point de validation humaine est prévu avant chaque étape irréversible
+- [ ] Each step has a single, measurable objective
+- [ ] Pass criteria between steps are defined
+- [ ] Subagent prompts are autonomous (no implicit context dependency)
+- [ ] Independent steps are parallelized
+- [ ] Steps with dependencies are sequential
+- [ ] A human validation checkpoint is planned before each irreversible step
 
 ## Next steps
 
-Vous maîtrisez maintenant le prompt chaining et l'orchestration multi-agents. Approfondissez avec :
+You've now mastered prompt chaining and multi-agent orchestration. Go deeper with:
 
-- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) : Amplifiez la qualité du raisonnement à chaque étape
-- [Gestion du contexte](/prompting/context-management) : Gérez efficacement le contexte dans les longues chaînes
-- [Orchestration avancée des agents](/agents/orchestration) : Patterns d'orchestration complexes avec worktrees et pipelines CI/CD
-- [Comprendre les agents](/agents/what-are-agents) : Approfondissez la compréhension des subagents Claude Code
-- [Créer un Skill custom](/skills/create-custom) : Encapsulez vos pipelines de prompts dans des Skills réutilisables
-- [Top MCP pour le développement](/mcp/best-development) : Outillez vos agents avec les MCP de développement
-- [Premiers pas avec Claude Code](/getting-started) : Revenez aux bases pour bien configurer votre environnement
-- [Configurateur interactif](/configurator) : Choisissez le preset d'agents adapté à votre workflow
+- [Extended Thinking and Plan Mode](/prompting/thinking-and-planning): Amplify reasoning quality at each step
+- [Context management](/prompting/context-management): Manage context efficiently in long chains
+- [Advanced agent orchestration](/agents/orchestration): Complex orchestration patterns with worktrees and CI/CD pipelines
+- [Understanding agents](/agents/what-are-agents): Deepen your understanding of Claude Code subagents
+- [Create a custom Skill](/skills/create-custom): Encapsulate your prompt pipelines into reusable Skills
+- [Top MCPs for development](/mcp/best-development): Equip your agents with development MCPs
+- [Getting started with Claude Code](/getting-started): Go back to basics to properly configure your environment
+- [Interactive configurator](/configurator): Choose the agent preset suited to your workflow

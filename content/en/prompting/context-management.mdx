@@ -7,291 +7,291 @@ datePublished: "2026-03-11"
 dateModified: "2026-03-11"
 ---
 
-## Comprendre la fenêtre de contexte
+## Understanding the context window
 
-La fenêtre de contexte est la **mémoire active** de Claude pour une session donnée. Tout ce que Claude peut "voir" et utiliser pour répondre tient dans cette fenêtre : votre historique de conversation, les fichiers qu'il a lus, les réponses précédentes, les instructions du CLAUDE.md.
+The context window is Claude's **active memory** for a given session. Everything Claude can "see" and use to respond fits within this window: your conversation history, files it has read, previous responses, and CLAUDE.md instructions.
 
-<Callout type="info" title="L'analogie du bureau de travail">
-Imaginez un bureau physique. Vous pouvez étaler dessus une certaine quantité de documents, de notes et de références. Quand le bureau est plein, vous devez ranger certains documents pour faire de la place aux nouveaux. La fenêtre de contexte fonctionne exactement comme ça : c'est la surface de travail de Claude. Quand elle est saturée, les informations les plus anciennes disparaissent, et Claude "oublie" le début de la conversation.
+<Callout type="info" title="The desk analogy">
+Picture a physical desk. You can spread out a certain amount of documents, notes, and references on it. When the desk is full, you have to put away some documents to make room for new ones. The context window works exactly like that: it's Claude's work surface. When it's saturated, the oldest information disappears, and Claude "forgets" the beginning of the conversation.
 </Callout>
 
-Claude Code dispose d'une fenêtre de contexte de **200 000 tokens**, parmi les plus larges du marché. Pour vous donner une idée de ce que ça représente :
+Claude Code has a context window of **200,000 tokens**, among the largest on the market. To give you a sense of what that represents:
 
-- 200 000 tokens ≈ 150 000 mots ≈ un roman de 500 pages
-- Un fichier TypeScript de 300 lignes ≈ 1 000 à 2 000 tokens
-- Un historique de conversation actif de 30 messages ≈ 10 000 à 30 000 tokens
-- Un fichier CLAUDE.md bien rédigé ≈ 500 à 1 000 tokens
+- 200,000 tokens ~ 150,000 words ~ a 500-page novel
+- A 300-line TypeScript file ~ 1,000 to 2,000 tokens
+- An active conversation history of 30 messages ~ 10,000 to 30,000 tokens
+- A well-written CLAUDE.md file ~ 500 to 1,000 tokens
 
-In practice, pour la plupart des sessions de développement quotidien, vous n'atteindrez jamais la limite. Mais pour les grands projets ou les sessions longues, une bonne gestion du contexte fait toute la différence.
+In practice, for most daily development sessions, you'll never hit the limit. But for large projects or long sessions, good context management makes all the difference.
 
-## Quand le contexte devient un problème
+## When context becomes a problem
 
-Voici les signaux qui indiquent que votre contexte est trop chargé :
+Here are the signals that your context is overloaded:
 
-- Claude commence à "oublier" des décisions prises en début de session
-- Les réponses deviennent moins cohérentes avec le code existant
-- Claude régénère du code que vous avez déjà validé
-- Les temps de réponse augmentent noticeablement
-- Claude mentionne lui-même qu'il ne se souvient plus de certains éléments
+- Claude starts "forgetting" decisions made earlier in the session
+- Responses become less consistent with existing code
+- Claude regenerates code you've already validated
+- Response times noticeably increase
+- Claude itself mentions it no longer remembers certain things
 
-<Callout type="warning" title="Attention aux derniers 20% du contexte">
-Quand vous approchez de la limite de la fenêtre de contexte, la qualité des réponses se dégrade. Évitez de lancer des tâches complexes (refactoring, implémentation multi-fichiers) quand la conversation est déjà très longue. Préférez démarrer une nouvelle session.
+<Callout type="warning" title="Watch out for the last 20% of context">
+When you approach the context window limit, response quality degrades. Avoid launching complex tasks (refactoring, multi-file implementation) when the conversation is already very long. Start a new session instead.
 </Callout>
 
-## La commande /compact : compresser sans perdre l'essentiel
+## The /compact command: compress without losing the essentials
 
-La commande `/compact` est votre meilleur outil pour gérer un contexte qui devient trop lourd. Elle demande à Claude de résumer la conversation en conservant les informations essentielles, tout en libérant de l'espace.
+The `/compact` command is your best tool for managing context that's getting too heavy. It asks Claude to summarize the conversation while keeping essential information, freeing up space.
 
 ```bash
-# Dans la session Claude Code, tapez simplement :
+# In the Claude Code session, simply type:
 /compact
 ```
 
 <Steps>
-<Step title="Claude analyse la conversation" stepNumber={1}>
-Claude identifie ce qui est important : les décisions d'architecture, le code validé, les conventions établies, les tâches en cours.
+<Step title="Claude analyzes the conversation" stepNumber={1}>
+Claude identifies what's important: architecture decisions, validated code, established conventions, tasks in progress.
 </Step>
 
-<Step title="Compression intelligente" stepNumber={2}>
-Claude rédige un résumé structuré qui conserve le contexte métier et technique sans reproduire tous les échanges mot pour mot. Le résumé remplace l'historique dans la fenêtre de contexte.
+<Step title="Intelligent compression" stepNumber={2}>
+Claude writes a structured summary that preserves the business and technical context without reproducing every exchange word for word. The summary replaces the history in the context window.
 </Step>
 
-<Step title="Continuation transparente" stepNumber={3} isLast>
-La session continue comme si de rien n'était. Claude sait où vous en étiez et peut reprendre immédiatement le travail.
+<Step title="Seamless continuation" stepNumber={3} isLast>
+The session continues as if nothing happened. Claude knows where you left off and can immediately resume work.
 </Step>
 </Steps>
 
 ### When to use /compact
 
-Utilisez `/compact` dans ces situations :
+Use `/compact` in these situations:
 
-- **Après une phase complète** : vous venez de terminer un module ou une fonctionnalité, et vous attaquez la suivante
-- **Avant une tâche complexe** : vous allez lancer un refactoring ou une migration qui touchera beaucoup de fichiers
-- **Quand la session est longue** : après 1 à 2 heures de travail intensif avec beaucoup d'échanges
-- **Quand vous sentez des incohérences** : Claude commence à "dériver" de vos conventions
+- **After completing a phase**: you just finished a module or feature, and you're starting the next one
+- **Before a complex task**: you're about to launch a refactoring or migration that will touch many files
+- **When the session is long**: after 1-2 hours of intensive work with lots of exchanges
+- **When you notice inconsistencies**: Claude starts "drifting" from your conventions
 
-<Callout type="tip" title="Compact proactif vs réactif">
-N'attendez pas d'avoir un problème pour utiliser `/compact`. Utilisez-le proactivement après chaque grande étape. C'est comme faire un point d'avancement en réunion : ça clarifie la situation pour tout le monde et permet de repartir sur des bases solides.
+<Callout type="tip" title="Proactive vs reactive compact">
+Don't wait until you have a problem to use `/compact`. Use it proactively after each major step. It's like doing a progress check in a meeting: it clarifies the situation for everyone and lets you move forward on solid ground.
 </Callout>
 
-## Stratégies pour les gros projets
+## Strategies for large projects
 
-Quand vous travaillez sur un projet avec des centaines de fichiers, voici comment organiser vos sessions pour rester efficace.
+When you're working on a project with hundreds of files, here's how to organize your sessions to stay effective.
 
-### Stratégie 1 : Sessions ciblées par domaine
+### Strategy 1: Domain-focused sessions
 
-Au lieu d'ouvrir Claude sur l'ensemble du projet, ciblez votre session sur un domaine spécifique.
+Instead of opening Claude on the entire project, focus your session on a specific domain.
 
 ```markdown
-# Mauvais : session fourre-tout
-"Travaillons sur le projet. Commence par revoir l'auth,
-puis le dashboard, puis optimise les requêtes SQL,
-puis mets à jour la documentation..."
+# Bad: catch-all session
+"Let's work on the project. Start by reviewing auth,
+then the dashboard, then optimize the SQL queries,
+then update the documentation..."
 
-# Bon : session ciblée
-"Cette session est dédiée au module d'authentification.
-Fichiers concernés :
+# Good: focused session
+"This session is dedicated to the authentication module.
+Files involved:
 - src/auth/auth.service.ts
 - src/auth/auth.controller.ts
 - src/auth/strategies/jwt.strategy.ts
 - src/auth/__tests__/
 
-Objectif de la session : implémenter le refresh token
-avec rotation automatique et blacklisting Redis."
+Session goal: implement the refresh token
+with automatic rotation and Redis blacklisting."
 ```
 
-Chaque session ciblée garde le contexte léger et pertinent. Quand la session est terminée, les décisions importantes sont dans le code, pas dans l'historique.
+Each focused session keeps context lightweight and relevant. When the session is done, the important decisions live in the code, not in the history.
 
-### Stratégie 2 : Cibler les fichiers explicitement
+### Strategy 2: Explicitly target files
 
-Ne laissez pas Claude deviner quels fichiers lire. Dites-lui exactement ce dont il a besoin.
+Don't let Claude guess which files to read. Tell it exactly what it needs.
 
 ```markdown
-# Avant de commencer une tâche, donnez le contexte minimal :
-"Pour cette tâche, lis d'abord ces fichiers :
-1. src/features/orders/order.service.ts (la logique actuelle)
-2. src/features/orders/order.types.ts (les types existants)
-3. src/features/orders/__tests__/order.service.test.ts (les tests existants)
+# Before starting a task, provide minimal context:
+"For this task, read these files first:
+1. src/features/orders/order.service.ts (the current logic)
+2. src/features/orders/order.types.ts (the existing types)
+3. src/features/orders/__tests__/order.service.test.ts (the existing tests)
 
-Ne lis pas les autres fichiers sauf si je te le demande explicitement."
+Don't read other files unless I explicitly ask."
 ```
 
-En limitant les fichiers lus, vous gardez le contexte concentré sur ce qui compte.
+By limiting the files read, you keep context focused on what matters.
 
-### Stratégie 3 : Documenter les décisions dans le code
+### Strategy 3: Document decisions in the code
 
-Les décisions importantes ne devraient pas vivre uniquement dans l'historique de conversation. Demandez à Claude de les documenter directement dans le code ou dans des fichiers dédiés.
+Important decisions shouldn't live only in conversation history. Ask Claude to document them directly in the code or in dedicated files.
 
 ```markdown
-# Après une décision d'architecture importante :
-"Ajoute un commentaire en haut de src/services/payment.service.ts
-qui documente l'architecture de ce service :
-- Pourquoi on utilise un pattern Command
-- Les règles de validation des montants
-- Les raisons du choix de Stripe vs PayPal
-- Les limites connues"
+# After an important architecture decision:
+"Add a comment at the top of src/services/payment.service.ts
+that documents this service's architecture:
+- Why we're using a Command pattern
+- The amount validation rules
+- The reasons for choosing Stripe vs PayPal
+- Known limitations"
 ```
 
-Ces commentaires survivent aux sessions. La prochaine fois que vous (ou Claude) ouvrirez ce fichier, le contexte sera là.
+These comments survive across sessions. The next time you (or Claude) open that file, the context will be there.
 
-### Stratégie 4 : Sessions de checkpoint
+### Strategy 4: Checkpoint sessions
 
-Régulièrement, faites une "session de checkpoint" dont l'unique but est de mettre à jour la documentation et le CLAUDE.md avec ce qui a changé.
+Periodically, run a "checkpoint session" whose sole purpose is to update documentation and CLAUDE.md with what has changed.
 
 ```markdown
-# Session de checkpoint (toutes les 2-3 semaines)
-"Passe en revue les changements récents dans le codebase.
-Mets à jour le CLAUDE.md pour refléter :
-- Les nouvelles dépendances ajoutées et leur usage
-- Les nouveaux patterns architecturaux adoptés
-- Les conventions qui ont évolué
-- Les modules complétés qui ne nécessitent plus d'attention"
+# Checkpoint session (every 2-3 weeks)
+"Review the recent changes in the codebase.
+Update CLAUDE.md to reflect:
+- New dependencies added and their usage
+- New architectural patterns adopted
+- Conventions that have evolved
+- Completed modules that no longer need attention"
 ```
 
-## CLAUDE.md : la mémoire persistante
+## CLAUDE.md: persistent memory
 
-Le fichier CLAUDE.md est votre arme secrète contre l'oubli. Contrairement à l'historique de conversation, le CLAUDE.md persiste entre les sessions. Claude le lit automatiquement à chaque nouvelle session.
+The CLAUDE.md file is your secret weapon against forgetting. Unlike conversation history, CLAUDE.md persists between sessions. Claude reads it automatically at the start of every new session.
 
-<Card title="CLAUDE.md = mémoire entre sessions" variant="highlight">
-L'historique de conversation disparaît quand vous fermez Claude. Le CLAUDE.md, lui, est toujours là. Tout ce que vous voulez que Claude sache à chaque session doit être dans le CLAUDE.md.
+<Card title="CLAUDE.md = memory between sessions" variant="highlight">
+Conversation history disappears when you close Claude. CLAUDE.md is always there. Everything you want Claude to know at every session should be in CLAUDE.md.
 </Card>
 
-### Ce qui doit aller dans le CLAUDE.md
+### What should go in CLAUDE.md
 
-Quand vous prenez une décision importante en session, demandez à Claude de la noter dans le CLAUDE.md :
+When you make an important decision during a session, ask Claude to note it in CLAUDE.md:
 
 ```markdown
-"Nous venons de décider d'utiliser le pattern Repository avec interfaces.
-Mets à jour le CLAUDE.md pour ajouter cette règle dans la section
-'Patterns architecturaux' avec un exemple concret."
+"We just decided to use the Repository pattern with interfaces.
+Update CLAUDE.md to add this rule in the
+'Architectural Patterns' section with a concrete example."
 ```
 
-### Utiliser des fichiers CLAUDE.md par module
+### Using module-level CLAUDE.md files
 
-Pour les gros projets, créez des CLAUDE.md spécialisés dans les dossiers critiques :
+For large projects, create specialized CLAUDE.md files in critical folders:
 
 ```
-projet/
-  CLAUDE.md                     # Règles globales du projet
+project/
+  CLAUDE.md                     # Global project rules
   src/
     features/
       auth/
-        CLAUDE.md               # Règles spécifiques au module auth
+        CLAUDE.md               # Auth module-specific rules
       payment/
-        CLAUDE.md               # Règles spécifiques au paiement
+        CLAUDE.md               # Payment-specific rules
     shared/
-      CLAUDE.md                 # Utilitaires partagés
+      CLAUDE.md                 # Shared utilities
 ```
 
-Chaque CLAUDE.md de module documente :
-- Le schéma de données du module
-- Les contraintes métier spécifiques
-- Les APIs externes utilisées
-- Les erreurs connues et leurs solutions
+Each module CLAUDE.md documents:
+- The module's data schema
+- Specific business constraints
+- External APIs used
+- Known issues and their solutions
 
-## Surveiller sa consommation avec /cost
+## Monitoring usage with /cost
 
-La commande `/cost` vous indique combien de tokens ont été consommés dans la session en cours et quel est le coût estimé.
+The `/cost` command tells you how many tokens have been consumed in the current session and the estimated cost.
 
 ```bash
-# Dans la session Claude Code :
+# In the Claude Code session:
 /cost
 ```
 
-Cette commande est utile pour :
+This command is useful for:
 
-- **Anticiper les fins de contexte** : si vous avez déjà consommé 150K tokens, il reste 50K pour continuer
-- **Calibrer les prompts** : identifier les prompts coûteux et les optimiser
-- **Budgéter** : suivre sa consommation mensuelle si vous utilisez l'API directe
+- **Anticipating context limits**: if you've already consumed 150K tokens, 50K remain
+- **Calibrating prompts**: identifying expensive prompts and optimizing them
+- **Budgeting**: tracking monthly consumption if you use the direct API
 
-<Callout type="tip" title="Décryptez votre /cost">
-La sortie de `/cost` indique le nombre de tokens d'entrée (input) et de sortie (output) séparément. Les tokens d'entrée coûtent moins cher que les tokens de sortie. Si vous voulez optimiser les coûts, concentrez-vous sur la réduction des outputs inutilement longs.
+<Callout type="tip" title="Decoding your /cost output">
+The `/cost` output shows input and output tokens separately. Input tokens cost less than output tokens. If you want to optimize costs, focus on reducing unnecessarily long outputs.
 </Callout>
 
-## Best practices pour les conversations longues
+## Best practices for long conversations
 
-### Structurer les nouvelles sessions
+### Structuring new sessions
 
-Quand vous démarrez une nouvelle session sur un projet existant, donnez d'emblée un résumé du contexte :
-
-```markdown
-"Reprise du projet MonApp (Node.js/Express/TypeScript/PostgreSQL).
-Dernière session : on a implémenté le module d'authentification JWT complet.
-Il est dans src/auth/ et les tests passent à 100%.
-
-Session d'aujourd'hui : implémenter le module de gestion des permissions (RBAC).
-L'architecture souhaitée : rôles en base, permissions calculées dynamiquement,
-cache Redis pour les permissions fréquentes.
-
-Commence par lire src/auth/auth.service.ts pour comprendre les patterns
-qu'on utilise dans ce projet."
-```
-
-Ce prompt de démarrage donne à Claude tout ce qu'il a besoin de savoir sans avoir à fouiller dans tout le codebase.
-
-### Utiliser des balises XML pour structurer
-
-Les balises XML dans vos prompts aident Claude à organiser l'information et à réduire l'ambiguïté, ce qui améliore la qualité des réponses même avec un contexte chargé.
+When you start a new session on an existing project, give a context summary right away:
 
 ```markdown
-<contexte>
-Projet e-commerce Next.js/TypeScript
-Module : gestion du panier (src/features/cart/)
-</contexte>
+"Resuming the MyApp project (Node.js/Express/TypeScript/PostgreSQL).
+Last session: we implemented the complete JWT authentication module.
+It's in src/auth/ and tests pass at 100%.
 
-<état_actuel>
-Le hook useCart existe mais n'a pas de persistance localStorage
-Les mutations Zustand fonctionnent
-</état_actuel>
+Today's session: implement the permissions management module (RBAC).
+Desired architecture: roles in the database, dynamically computed permissions,
+Redis cache for frequent permissions.
 
-<tâche>
-Ajouter la persistance du panier avec localStorage
-Synchroniser automatiquement au chargement de la page
-</tâche>
-
-<contraintes>
-- TypeScript strict
-- Immutabilité obligatoire
-- Tests Vitest requis
-</contraintes>
+Start by reading src/auth/auth.service.ts to understand the patterns
+we use in this project."
 ```
 
-### Réduire le bruit dans les échanges
+This startup prompt gives Claude everything it needs to know without having to dig through the entire codebase.
 
-Évitez les longs préambules et les remerciements dans une session longue. Chaque mot dans l'historique consomme des tokens.
+### Using XML tags for structure
+
+XML tags in your prompts help Claude organize information and reduce ambiguity, improving response quality even with a loaded context.
 
 ```markdown
-# Éviter (consomme du contexte inutilement)
-"Merci beaucoup Claude ! C'est exactement ce que je voulais.
-Tu fais vraiment du super travail ! J'ai une autre question pour toi.
-Est-ce que tu pourrais m'aider à..."
+<context>
+Next.js/TypeScript e-commerce project
+Module: cart management (src/features/cart/)
+</context>
 
-# Préférer (direct et efficace)
-"Parfait. Maintenant, ajoute la validation des dates dans ce service."
+<current_state>
+The useCart hook exists but has no localStorage persistence
+Zustand mutations work
+</current_state>
+
+<task>
+Add cart persistence with localStorage
+Automatically sync on page load
+</task>
+
+<constraints>
+- Strict TypeScript
+- Mandatory immutability
+- Vitest tests required
+</constraints>
 ```
 
-## Tableau récapitulatif : gestion du contexte
+### Reducing noise in exchanges
 
-| Situation | Action recommandée |
-|-----------|-------------------|
-| Session longue (> 2h) | `/compact` puis continuer |
-| Avant un gros refactoring | Nouvelle session avec prompt de démarrage |
-| Décision d'architecture prise | Documenter dans le code + CLAUDE.md |
-| Claude "oublie" des conventions | Relire le CLAUDE.md, `/compact` si besoin |
-| Contexte > 150K tokens | Démarrer une nouvelle session |
-| Nouveau membre dans l'équipe | Vérifier et enrichir le CLAUDE.md |
+Avoid long preambles and thank-yous in a long session. Every word in the history consumes tokens.
 
-## L'impact des MCP sur le contexte
+```markdown
+# Avoid (wastes context)
+"Thank you so much Claude! That's exactly what I wanted.
+You're really doing a great job! I have another question for you.
+Could you help me with..."
 
-Les MCP influencent la consommation de contexte de manière souvent sous-estimée. Comprendre ce mécanisme vous permet d'optimiser votre setup.
+# Prefer (direct and efficient)
+"Perfect. Now add date validation to this service."
+```
 
-### Comment les MCP consomment du contexte au démarrage
+## Summary table: context management
 
-À chaque démarrage de session, Claude Code interroge tous les MCP configurés pour découvrir leurs outils disponibles. Chaque outil expose un **schéma JSON** décrivant ses paramètres. Ces schémas occupent du contexte **avant même que vous ayez tapé la première lettre**.
+| Situation | Recommended action |
+|-----------|--------------------|
+| Long session (> 2h) | `/compact` then continue |
+| Before a big refactoring | New session with a startup prompt |
+| Architecture decision made | Document in code + CLAUDE.md |
+| Claude "forgets" conventions | Re-read CLAUDE.md, `/compact` if needed |
+| Context > 150K tokens | Start a new session |
+| New team member | Verify and enrich CLAUDE.md |
+
+## The impact of MCPs on context
+
+MCPs influence context consumption in ways that are often underestimated. Understanding this mechanism lets you optimize your setup.
+
+### How MCPs consume context at startup
+
+At every session start, Claude Code queries all configured MCPs to discover their available tools. Each tool exposes a **JSON schema** describing its parameters. These schemas occupy context **before you've even typed the first letter**.
 
 ```json
-// Exemple de schéma d'outil MCP (simplifié)
-// Ce schéma est chargé en contexte au démarrage
+// Example MCP tool schema (simplified)
+// This schema is loaded into context at startup
 {
   "name": "create_pull_request",
   "description": "Creates a pull request on GitHub",
@@ -309,127 +309,127 @@ Les MCP influencent la consommation de contexte de manière souvent sous-estimé
 }
 ```
 
-Chaque outil comme celui-ci consomme environ 200 à 500 tokens. Un MCP riche en outils (GitHub expose une trentaine d'outils) peut consommer 5 000 à 10 000 tokens juste pour ses définitions.
+Each tool like this consumes about 200 to 500 tokens. A tool-rich MCP (GitHub exposes around thirty tools) can consume 5,000 to 10,000 tokens just for its definitions.
 
-### Estimation de la consommation par nombre de MCP
+### Estimated consumption by MCP count
 
-| Configuration | MCP actifs | Tokens au démarrage | Contexte disponible |
+| Configuration | Active MCPs | Startup tokens | Available context |
 |---|---|---|---|
-| Légère | 0 MCP | ~500 (CLAUDE.md) | ~199 500 tokens |
-| Standard | 3 MCP | ~5 000 à 15 000 | ~185 000 tokens |
-| Chargée | 10 MCP | ~20 000 à 50 000 | ~150 000 tokens |
-| Excessive | 20+ MCP | ~60 000+ | < 140 000 tokens |
+| Light | 0 MCPs | ~500 (CLAUDE.md) | ~199,500 tokens |
+| Standard | 3 MCPs | ~5,000 to 15,000 | ~185,000 tokens |
+| Heavy | 10 MCPs | ~20,000 to 50,000 | ~150,000 tokens |
+| Excessive | 20+ MCPs | ~60,000+ | < 140,000 tokens |
 
-<Callout type="warning" title="Le mythe 'plus de MCP = plus puissant'">
-Charger 20 MCP ne rend pas Claude Code 20 fois plus capable. Au contraire, chaque MCP inutilisé dans une session consomme du contexte qui aurait pu servir à votre code ou vos conversations. Activez uniquement les MCP dont vous avez besoin dans chaque session.
+<Callout type="warning" title="The 'more MCPs = more powerful' myth">
+Loading 20 MCPs doesn't make Claude Code 20 times more capable. On the contrary, every unused MCP in a session consumes context that could have been used for your code or conversations. Only activate the MCPs you actually need in each session.
 </Callout>
 
-### Les deferred tools : chargement différé pour économiser
+### Deferred tools: lazy loading to save context
 
-Claude Code propose un mécanisme de **deferred tools** (outils différés). Les outils marqués comme "deferred" ne sont pas chargés dans le contexte au démarrage, ils sont disponibles mais chargés seulement si Claude en a besoin.
+Claude Code offers a **deferred tools** mechanism. Tools marked as "deferred" aren't loaded into context at startup; they're available but loaded only if Claude needs them.
 
 ```json
-// Dans .mcp.json, les outils disponibles mais non chargés par défaut
-// apparaissent dans la liste <available-deferred-tools>
-// Claude les charge à la demande, économisant le contexte initial
+// In .mcp.json, available but not default-loaded tools
+// appear in the <available-deferred-tools> list
+// Claude loads them on demand, saving initial context
 ```
 
-Pour bénéficier de ce mécanisme :
-- Configurez vos MCP rarement utilisés comme "optionnels"
-- Utilisez des profils `.mcp.json` par projet (pas de config globale unique)
-- Désactivez les MCP non utilisés dans une session via `claude mcp disable [nom]`
+To benefit from this mechanism:
+- Configure your rarely used MCPs as "optional"
+- Use per-project `.mcp.json` profiles (not a single global config)
+- Disable unused MCPs in a session via `claude mcp disable [name]`
 
-## Signes d'un contexte saturé
+## Signs of a saturated context
 
-Reconnaître la saturation du contexte vous permet d'agir avant que la qualité ne se dégrade sérieusement.
+Recognizing context saturation lets you act before quality seriously degrades.
 
-### Signaux précoces (contexte à 70-80%)
+### Early signals (context at 70-80%)
 
-- Claude commence à "oublier" des décisions prises en début de session
-- Les réponses deviennent moins cohérentes avec le code existant
-- Claude régénère du code que vous avez déjà validé
-- Les temps de réponse augmentent noticeablement
+- Claude starts "forgetting" decisions made earlier in the session
+- Responses become less consistent with existing code
+- Claude regenerates code you've already validated
+- Response times noticeably increase
 
-### Signaux avancés (contexte à 90%+)
+### Advanced signals (context at 90%+)
 
-- Claude mentionne lui-même qu'il ne se souvient plus de certains éléments
-- Des hallucinations apparaissent : Claude invente des API, des fonctions, des fichiers qui n'existent pas
-- Claude mélange des patterns de différents projets ou langages
-- Les réponses sont tronquées ou incomplètes
+- Claude itself mentions it no longer remembers certain things
+- Hallucinations appear: Claude invents APIs, functions, or files that don't exist
+- Claude mixes patterns from different projects or languages
+- Responses are truncated or incomplete
 
-### Impact sur la précision vs la charge de contexte
+### Impact on accuracy vs context load
 
-La relation entre charge de contexte et qualité n'est pas linéaire. Claude reste très performant jusqu'à environ 70-80% de capacité. La dégradation est rapide dans les derniers 20%.
+The relationship between context load and quality isn't linear. Claude remains very performant up to about 70-80% capacity. Degradation is rapid in the last 20%.
 
 ```
-Qualité des réponses selon le remplissage du contexte
+Response quality by context fill level
 
-100% ┤
-     │████████████████████████████████████████████
- 85% ┤░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     │
- 60% ┤                                    ░░░░░░░
-     │
-  0% └────────────────────────────────────────────
+100% |
+     |############################################
+ 85% |##########################################
+     |
+ 60% |                                    #######
+     |
+  0% +--------------------------------------------
      0%                70%    80%   90%   100%
-                              Contexte utilisé
+                              Context used
 ```
 
-## Guide de dépannage : problèmes de contexte courants
+## Troubleshooting guide: common context issues
 
-### "Claude oublie ce qu'on a décidé"
+### "Claude forgets what we decided"
 
-**Symptôme :** Claude ignore des conventions ou des décisions prises plus tôt dans la conversation.
+**Symptom:** Claude ignores conventions or decisions made earlier in the conversation.
 
-**Causes :** Le début de la conversation a été évincé du contexte, ou la décision n'était pas assez saillante pour être retenue dans un `/compact`.
+**Causes:** The beginning of the conversation has been evicted from context, or the decision wasn't prominent enough to survive a `/compact`.
 
-**Solutions :**
-1. Utiliser `/compact` et vérifier que le résumé mentionne la décision
-2. Documenter la décision dans le code (commentaire explicite) ou le CLAUDE.md
-3. Reformuler la convention en début de chaque nouveau message : "Rappel : on utilise le pattern Repository, pas d'accès direct à la BDD"
+**Solutions:**
+1. Use `/compact` and check that the summary mentions the decision
+2. Document the decision in the code (explicit comment) or CLAUDE.md
+3. Restate the convention at the start of each new message: "Reminder: we use the Repository pattern, no direct DB access"
 
-### "Les réponses sont de plus en plus lentes"
+### "Responses are getting slower and slower"
 
-**Symptôme :** Claude prend beaucoup plus de temps à répondre qu'en début de session.
+**Symptom:** Claude takes much longer to respond than at the start of the session.
 
-**Causes :** Un contexte très chargé allonge le temps d'inférence. De nombreux MCP actifs avec des schémas volumineux aggravent le phénomène.
+**Causes:** A heavily loaded context increases inference time. Many active MCPs with large schemas make it worse.
 
-**Solutions :**
-1. Exécuter `/compact` pour alléger le contexte
-2. Désactiver les MCP non utilisés dans cette session
-3. Démarrer une nouvelle session avec un prompt de démarrage synthétique
+**Solutions:**
+1. Run `/compact` to lighten the context
+2. Disable unused MCPs in this session
+3. Start a new session with a concise startup prompt
 
-### "Claude hallucine des fonctions ou des APIs"
+### "Claude hallucinates functions or APIs"
 
-**Symptôme :** Claude propose du code avec des fonctions qui n'existent pas dans votre codebase ou des APIs fictives.
+**Symptom:** Claude suggests code with functions that don't exist in your codebase or fictitious APIs.
 
-**Causes :** Contexte saturé + Claude "comble les trous" à partir de ses connaissances générales plutôt que du code réel. Peut aussi indiquer une confusion entre plusieurs projets dans l'historique.
+**Causes:** Saturated context + Claude "fills in the blanks" from general knowledge rather than real code. May also indicate confusion between multiple projects in the history.
 
-**Solutions :**
-1. Démarrer une nouvelle session (ne pas compacter, reconstruire proprement)
-2. Explicitement fournir le code existant que Claude doit utiliser
-3. Demander à Claude de lire les fichiers sources avant de proposer une solution
+**Solutions:**
+1. Start a new session (don't compact, rebuild cleanly)
+2. Explicitly provide the existing code Claude should use
+3. Ask Claude to read source files before proposing a solution
 
-### "Claude génère du code que j'ai déjà refusé"
+### "Claude generates code I already rejected"
 
-**Symptôme :** Claude repropose des patterns ou des solutions que vous avez déjà explicitement refusés.
+**Symptom:** Claude re-proposes patterns or solutions you explicitly rejected.
 
-**Causes :** Le refus et son contexte ont été évincés du contexte (ou mal mémorisés dans le `/compact`).
+**Causes:** The rejection and its context were evicted from context (or poorly captured in the `/compact`).
 
-**Solutions :**
-1. Ajouter une règle explicite dans le CLAUDE.md : "Ne jamais utiliser [pattern X] dans ce projet"
-2. Reformuler la contrainte à chaque session : "Rappel : on n'utilise jamais [pattern X]"
-3. Après un `/compact`, vérifier que la contrainte est mentionnée dans le résumé
+**Solutions:**
+1. Add an explicit rule in CLAUDE.md: "Never use [pattern X] in this project"
+2. Restate the constraint every session: "Reminder: we never use [pattern X]"
+3. After a `/compact`, verify the constraint is mentioned in the summary
 
 ## Next steps
 
-Vous maîtrisez maintenant la gestion du contexte. Explorez les techniques complémentaires.
+You've now mastered context management. Explore complementary techniques.
 
-- [Extended thinking et plan mode](/prompting/thinking-and-planning) : Comment amplifier la qualité du raisonnement de Claude
-- [Guide complet CLAUDE.md](/prompting/claude-md) : Créez une mémoire persistante efficace pour votre projet
-- [Prompt chaining et orchestration](/prompting/chaining-and-agents) : Décomposez les grandes tâches en séquences maîtrisées
-- [Comprendre les agents Claude Code](/agents/what-are-agents) : Les agents utilisent intensivement le contexte : apprenez à les configurer
-- [Sécurité des MCP](/mcp/securite-mcp) : Comment les MCP peuvent affecter votre sécurité et vos données
-- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : Comprendre ce que chaque token vous coûte vraiment
-- [Top Skills recommandés](/skills/best-skills) : Automatisez vos workflows récurrents avec des Skills
-- [Configurateur interactif](/configurator) : Optimisez votre setup Claude Code en quelques clics
+- [Extended thinking and plan mode](/prompting/thinking-and-planning): How to amplify Claude's reasoning quality
+- [Complete CLAUDE.md guide](/prompting/claude-md): Create effective persistent memory for your project
+- [Prompt chaining and orchestration](/prompting/chaining-and-agents): Break large tasks into controlled sequences
+- [Understanding Claude Code agents](/agents/what-are-agents): Agents use context intensively; learn to configure them
+- [MCP security](/mcp/securite-mcp): How MCPs can affect your security and data
+- [Real costs of Claude Code](/content/couts-reels-claude-code): Understand what each token really costs you
+- [Top recommended Skills](/skills/best-skills): Automate your recurring workflows with Skills
+- [Interactive configurator](/configurator): Optimize your Claude Code setup in a few clicks

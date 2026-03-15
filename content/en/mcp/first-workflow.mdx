@@ -7,26 +7,26 @@ datePublished: "2026-03-09"
 dateModified: "2026-03-11"
 ---
 
-## Un workflow MCP, c'est quoi ?
+## What is an MCP workflow?
 
-Un **workflow MCP**, c'est la combinaison de plusieurs MCP dans une séquence d'actions que Claude Code enchaîne automatiquement pour accomplir une tâche complexe. Au lieu d'utiliser un MCP à la fois, vous décrivez un objectif complet et Claude Code orchestre les différents outils pour y arriver.
+An **MCP workflow** is the combination of multiple MCPs in a sequence of actions that Claude Code chains automatically to accomplish a complex task. Instead of using one MCP at a time, you describe a complete objective and Claude Code orchestrates the different tools to get there.
 
-<Callout type="info" title="L'analogie de la chaîne de montage">
-Imaginez une chaîne de montage dans une usine. Chaque poste (MCP) a une spécialité : un poste découpe, un autre assemble, un autre peint, un dernier emballe. Individuellement, chaque poste est utile. Mais c'est la **chaîne** qui crée le produit fini. Les workflows MCP fonctionnent de la même manière.
+<Callout type="info" title="The assembly line analogy">
+Picture an assembly line in a factory. Each station (MCP) has a specialty: one station cuts, another assembles, another paints, the last one packages. Individually, each station is useful. But it's the **chain** that creates the finished product. MCP workflows work the same way.
 </Callout>
 
-## Le tutoriel : Context7 + GitHub + Playwright
+## The tutorial: Context7 + GitHub + Playwright
 
-Dans ce tutoriel, nous allons créer un workflow complet qui :
+In this tutorial, we'll create a complete workflow that:
 
-1. **Consulte la documentation** (Context7) pour implémenter une fonctionnalité
-2. **Crée le code** en suivant les bonnes pratiques à jour
-3. **Teste visuellement** le résultat (Playwright)
-4. **Crée une pull request** (GitHub) avec un résumé des changements
+1. **Checks the documentation** (Context7) to implement a feature
+2. **Creates the code** following up-to-date best practices
+3. **Visually tests** the result (Playwright)
+4. **Creates a pull request** (GitHub) with a summary of changes
 
-### Prerequisitesites
+### Prerequisites
 
-Assurez-vous d'avoir les trois MCP configurés dans votre fichier `~/.claude/settings.json` :
+Make sure you have all three MCPs configured in your `~/.claude/settings.json` file:
 
 ```json
 {
@@ -43,17 +43,17 @@ Assurez-vous d'avoir les trois MCP configurés dans votre fichier `~/.claude/set
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_votre-token"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your-token"
       }
     }
   }
 }
 ```
 
-Vérifiez que tout est connecté :
+Verify everything is connected:
 
 <TerminalScreenshot
-  title="Terminal - vérification des MCP"
+  title="Terminal - MCP verification"
   lines={[
     { type: "command", content: "claude mcp list" },
     { type: "empty", content: "" },
@@ -65,74 +65,74 @@ Vérifiez que tout est connecté :
   ]}
 />
 
-### Étape 1 : Formuler la demande
+### Step 1: Formulate the request
 
-La clé d'un bon workflow MCP est une demande **claire et complète**. Ne demandez pas chaque étape séparément, décrivez l'objectif final et laissez Claude Code orchestrer.
+The key to a good MCP workflow is a **clear and complete** request. Don't ask for each step separately -- describe the end goal and let Claude Code orchestrate.
 
 <Steps>
-<Step title="La demande en une phrase" stepNumber={1}>
+<Step title="The request in one sentence" stepNumber={1}>
 
 ```bash
-# Lancez Claude Code dans votre projet
+# Launch Claude Code in your project
 claude
 
-# Puis tapez votre demande complète :
-# "Consulte la documentation Next.js 14 avec Context7 pour vérifier
-# comment implémenter une page 404 personnalisée avec le App Router.
-# Crée la page not-found.tsx avec un design moderne.
-# Lance le serveur de dev, prends un screenshot de la page 404
-# pour vérifier le rendu. Ensuite, crée une branche et une PR
-# avec un résumé des changements."
+# Then type your complete request:
+# "Check the Next.js 14 docs with Context7 to see how to implement
+# a custom 404 page with the App Router.
+# Create the not-found.tsx page with a modern design.
+# Start the dev server, take a screenshot of the 404 page
+# to verify the rendering. Then create a branch and a PR
+# with a summary of changes."
 ```
 
 </Step>
 
-<Step title="Claude Code orchestre les MCP" stepNumber={2}>
+<Step title="Claude Code orchestrates the MCPs" stepNumber={2}>
 
-Claude Code va automatiquement :
+Claude Code will automatically:
 
-1. Appeler **Context7** pour consulter la documentation Next.js sur `not-found.tsx`
-2. Créer le fichier `not-found.tsx` en suivant les bonnes pratiques documentées
-3. Lancer le serveur de dev (`npm run dev`)
-4. Utiliser **Playwright** pour naviguer vers une page inexistante et prendre un screenshot
-5. Créer une branche Git
-6. Utiliser **GitHub** pour créer une pull request avec le résumé
+1. Call **Context7** to look up the Next.js documentation on `not-found.tsx`
+2. Create the `not-found.tsx` file following the documented best practices
+3. Start the dev server (`npm run dev`)
+4. Use **Playwright** to navigate to a non-existent page and take a screenshot
+5. Create a Git branch
+6. Use **GitHub** to create a pull request with the summary
 
 </Step>
 
-<Step title="Vérifier et valider" stepNumber={3} isLast>
+<Step title="Review and validate" stepNumber={3} isLast>
 
-Claude Code vous montrera le screenshot et la PR créée. Vous pouvez alors :
+Claude Code will show you the screenshot and the created PR. You can then:
 
-- Demander des ajustements : *"Change la couleur de fond en bleu foncé"*
-- Valider : *"C'est parfait, merge la PR"*
-- Itérer : *"Ajoute aussi un bouton de retour à l'accueil"*
+- Request adjustments: *"Change the background color to dark blue"*
+- Approve: *"Looks perfect, merge the PR"*
+- Iterate: *"Also add a back-to-home button"*
 
 </Step>
 </Steps>
 
-## Example concret step by step
+## Concrete example step by step
 
-Voyons ce que Claude Code fait concrètement à chaque étape.
+Let's see what Claude Code does at each stage.
 
-### 1. Consultation de la documentation (Context7)
+### 1. Documentation lookup (Context7)
 
 ```bash
-# Claude Code appelle Context7 en interne :
+# Claude Code calls Context7 internally:
 # -> resolve-library-id("nextjs")
 # -> query-docs("not-found.tsx app router custom 404 page")
 #
-# Context7 renvoie la documentation officielle :
-# - not-found.tsx doit être dans app/
-# - Il exporte un composant React par défaut
-# - Il est affiché quand notFound() est appelé
-# - Il peut utiliser les métadonnées
+# Context7 returns the official documentation:
+# - not-found.tsx must be in app/
+# - It exports a default React component
+# - It displays when notFound() is called
+# - It can use metadata
 ```
 
-### 2. Création du code
+### 2. Code creation
 
 ```tsx
-// app/not-found.tsx - Créé par Claude Code
+// app/not-found.tsx - Created by Claude Code
 import Link from 'next/link'
 
 export default function NotFound() {
@@ -142,135 +142,135 @@ export default function NotFound() {
         404
       </h1>
       <p className="mt-4 text-xl text-slate-600 dark:text-slate-400">
-        Cette page n'existe pas ou a été déplacée.
+        This page doesn't exist or has been moved.
       </p>
       <Link
         href="/"
         className="mt-8 rounded-lg bg-brand-600 px-6 py-3 text-white
                    transition-colors hover:bg-brand-700"
       >
-        Retour à l'accueil
+        Back to home
       </Link>
     </div>
   )
 }
 ```
 
-### 3. Test visuel (Playwright)
+### 3. Visual testing (Playwright)
 
 <TerminalScreenshot
-  title="Terminal - MCP Playwright en action"
+  title="Terminal - MCP Playwright in action"
   lines={[
-    { type: "comment", content: "# Claude Code appelle Playwright en interne :" },
-    { type: "output", content: "  [playwright] browser_navigate(\"http://localhost:3000/page-inexistante\")" },
+    { type: "comment", content: "# Claude Code calls Playwright internally:" },
+    { type: "output", content: "  [playwright] browser_navigate(\"http://localhost:3000/nonexistent-page\")" },
     { type: "output", content: "  [playwright] browser_take_screenshot()" },
     { type: "empty", content: "" },
-    { type: "highlight", content: "  ✓ Screenshot capturé : not-found-page.png" },
-    { type: "output", content: "  Page 404 : titre visible, bouton retour centré, design cohérent." }
+    { type: "highlight", content: "  ✓ Screenshot captured: not-found-page.png" },
+    { type: "output", content: "  404 page: title visible, back button centered, consistent design." }
   ]}
 />
 
-### 4. Création de la PR (GitHub)
+### 4. PR creation (GitHub)
 
 <TerminalScreenshot
-  title="Terminal - MCP GitHub en action"
+  title="Terminal - MCP GitHub in action"
   lines={[
-    { type: "comment", content: "# Claude Code utilise Git + GitHub MCP :" },
+    { type: "comment", content: "# Claude Code uses Git + GitHub MCP:" },
     { type: "output", content: "  [git] checkout -b feat/custom-404-page" },
     { type: "output", content: "  [git] add app/not-found.tsx" },
     { type: "output", content: "  [git] commit -m \"feat: add custom 404 page\"" },
     { type: "output", content: "  [git] push -u origin feat/custom-404-page" },
     { type: "output", content: "  [github] create_pull_request(...)" },
     { type: "empty", content: "" },
-    { type: "highlight", content: "  ✓ PR créée : feat/custom-404-page → main" },
+    { type: "highlight", content: "  ✓ PR created: feat/custom-404-page → main" },
     { type: "highlight", content: "  https://github.com/you/repo/pull/42" }
   ]}
 />
 
-## Best practices pour les workflows MCP
+## Best practices for MCP workflows
 
-### 1. Soyez précis dans vos demandes
+### 1. Be specific in your requests
 
-<Card title="Bonne demande" variant="accent">
-*"Consulte la doc de Prisma avec Context7, ajoute un champ `lastLoginAt` (DateTime nullable) à la table User, génère la migration, applique-la sur la base de dev, vérifie que le schéma est correct, et crée une PR sur GitHub."*
+<Card title="Good request" variant="accent">
+*"Check the Prisma docs with Context7, add a `lastLoginAt` field (nullable DateTime) to the User table, generate the migration, apply it to the dev database, verify the schema is correct, and create a PR on GitHub."*
 </Card>
 
-<Card title="Demande trop vague" variant="default">
-*"Mets à jour la base de données."* Claude Code ne sait pas quel changement faire, quelle table modifier, ni quel workflow enchaîner.
+<Card title="Too vague request" variant="default">
+*"Update the database."* Claude Code doesn't know what change to make, which table to modify, or which workflow to chain.
 </Card>
 
-### 2. Laissez Claude Code orchestrer
+### 2. Let Claude Code orchestrate
 
-Ne découpez pas votre workflow en micro-étapes. Décrivez l'objectif final et laissez Claude Code décider de l'ordre optimal des opérations. Il sait quels MCP appeler et dans quel ordre.
+Don't break your workflow into micro-steps. Describe the end goal and let Claude Code decide the optimal order of operations. It knows which MCPs to call and in what order.
 
-### 3. Vérifiez les résultats intermédiaires
+### 3. Check intermediate results
 
-Claude Code vous demandera confirmation avant les actions sensibles (création de PR, envoi de message, modification de données). Profitez de ces points de contrôle pour vérifier que tout se passe bien.
+Claude Code will ask for confirmation before sensitive actions (creating a PR, sending a message, modifying data). Use these checkpoints to verify everything is going well.
 
-### 4. Itérez rapidement
+### 4. Iterate quickly
 
-L'avantage des workflows MCP est la rapidité d'itération. Si le résultat n'est pas parfait, demandez un ajustement. Claude Code conserve le contexte de la conversation et peut modifier le travail déjà fait.
+The advantage of MCP workflows is the speed of iteration. If the result isn't perfect, ask for an adjustment. Claude Code keeps the conversation context and can modify work already done.
 
-### 5. Combinez les catégories
+### 5. Combine categories
 
-Les workflows les plus puissants combinent des MCP de différentes catégories :
+The most powerful workflows combine MCPs from different categories:
 
-- **Développement + Productivité** : Code review + notification Slack
-- **Design + Développement** : Génération de composants + tests E2E + PR
-- **Productivité + Design** : Analyse d'emails + création de maquettes
+- **Development + Productivity**: Code review + Slack notification
+- **Design + Development**: Component generation + E2E tests + PR
+- **Productivity + Design**: Email analysis + mockup creation
 
-## Examples de workflows avancés
+## Advanced workflow examples
 
-### Workflow "Bug fix automatisé"
-
-```bash
-# Demande à Claude Code :
-# "Regarde les erreurs Sentry des dernières 24h,
-# trouve la plus fréquente, analyse la stack trace,
-# identifie le fichier et la ligne dans notre code,
-# propose un fix, écris un test pour le reproduire,
-# vérifie visuellement que la page fonctionne avec Playwright,
-# et crée une PR avec tout ça."
-#
-# MCP utilisés : Sentry + Playwright + GitHub
-```
-
-### Workflow "Feature complète"
+### "Automated bug fix" workflow
 
 ```bash
-# Demande à Claude Code :
-# "Consulte la doc de React Hook Form avec Context7,
-# crée un formulaire de contact avec validation
-# (nom, email, message, tous requis).
-# Ajoute les styles Tailwind, teste le formulaire avec Playwright
-# (soumission vide -> erreurs, soumission valide -> succès),
-# et crée une PR avec les screenshots de test."
+# Ask Claude Code:
+# "Look at the Sentry errors from the last 24 hours,
+# find the most frequent one, analyze the stack trace,
+# identify the file and line in our code,
+# propose a fix, write a test to reproduce it,
+# visually verify the page works with Playwright,
+# and create a PR with all of that."
 #
-# MCP utilisés : Context7 + Playwright + GitHub
+# MCPs used: Sentry + Playwright + GitHub
 ```
 
-### Workflow "Rapport d'équipe"
+### "Complete feature" workflow
 
 ```bash
-# Demande à Claude Code :
-# "Regarde les PRs mergées cette semaine sur GitHub,
-# les messages importants du channel #engineering sur Slack,
-# et mes réunions de la semaine sur Google Calendar.
-# Génère un rapport hebdomadaire structuré et envoie-le
-# dans le channel #weekly-report sur Slack."
+# Ask Claude Code:
+# "Check the React Hook Form docs with Context7,
+# create a contact form with validation
+# (name, email, message, all required).
+# Add Tailwind styles, test the form with Playwright
+# (empty submission -> errors, valid submission -> success),
+# and create a PR with the test screenshots."
 #
-# MCP utilisés : GitHub + Slack + Google Calendar
+# MCPs used: Context7 + Playwright + GitHub
 ```
 
-<Callout type="tip" title="Astuce avancée : les Skills + les MCP">
-Vous pouvez créer des **Skills** (fichiers Markdown dans `.claude/commands/`) qui décrivent des workflows MCP récurrents. Ainsi, au lieu de retaper la même demande, vous lancez un slash command comme `/bug-fix` ou `/weekly-report`. C'est la combinaison ultime pour la productivité.
+### "Team report" workflow
+
+```bash
+# Ask Claude Code:
+# "Look at the PRs merged this week on GitHub,
+# the important messages from the #engineering channel on Slack,
+# and my meetings for the week on Google Calendar.
+# Generate a structured weekly report and send it
+# to the #weekly-report channel on Slack."
+#
+# MCPs used: GitHub + Slack + Google Calendar
+```
+
+<Callout type="tip" title="Advanced tip: Skills + MCPs">
+You can create **Skills** (Markdown files in `.claude/commands/`) that describe recurring MCP workflows. Instead of retyping the same request, you launch a slash command like `/bug-fix` or `/weekly-report`. It's the ultimate combination for productivity.
 </Callout>
 
 ## Next steps
 
-Vous maîtrisez maintenant les bases des workflows MCP. Here's how aller plus loin :
+You now have the basics of MCP workflows down. Here's how to go further:
 
-- [Découvrir les Skills](/skills) : Créez des commandes réutilisables pour vos workflows
-- [Maîtriser le prompting](/prompting) : Techniques avancées pour des demandes plus efficaces
-- [Comprendre les MCP](/mcp/what-are-mcps) : Revenir aux fondamentaux du protocole
-- [Configurer le Claude Codex](/configurator) : Générez votre configuration idéale
+- [Discover Skills](/skills): Create reusable commands for your workflows
+- [Master prompting](/prompting): Advanced techniques for more effective requests
+- [Understanding MCPs](/mcp/what-are-mcps): Back to protocol fundamentals
+- [Configure The Claude Codex](/configurator): Generate your ideal configuration

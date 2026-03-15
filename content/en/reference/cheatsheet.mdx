@@ -1,168 +1,168 @@
 ---
 title: "Claude Code cheatsheet"
 description: "Quick reference card for Claude Code: all commands, shortcuts, and tips in one page."
-badge: "Référence"
+badge: "Reference"
 section: "reference"
 order: 1
 datePublished: "2026-03-11"
 dateModified: "2026-03-11"
 ---
 
-## Commandes slash (slash commands)
+## Slash commands
 
-Tapez ces commandes directement dans le prompt Claude Code (session interactive).
+Type these commands directly in the Claude Code prompt (interactive session).
 
-| Commande | Description |
-|----------|-------------|
-| `/help` | Affiche l'aide et la liste des commandes disponibles |
-| `/clear` | Vide l'historique de la conversation en cours |
-| `/compact` | Compresse le contexte (résumé automatique des échanges précédents) |
-| `/cost` | Affiche le coût en tokens de la session courante |
-| `/doctor` | Diagnostics système : réseau, MCP, permissions, version |
-| `/init` | Génère un fichier `CLAUDE.md` dans le répertoire courant |
-| `/review` | Demande une revue de code sur les fichiers modifiés |
-| `/memory` | Affiche ou modifie la mémoire persistante (fichier CLAUDE.md actif) |
-| `/model` | Affiche ou change le modèle en cours (`haiku`, `sonnet`, `opus`) |
-| `/permissions` | Affiche et gère les permissions accordées aux outils |
-| `/bug` | Ouvre un rapport de bug vers Anthropic |
-| `/config` | Affiche la configuration active (settings.json fusionné) |
-| `/login` | Authentification via navigateur (Claude.ai Max) |
-| `/logout` | Déconnexion du compte Claude.ai |
-| `/status` | Affiche l'état du compte, des quotas et des MCP connectés |
-| `/mcp` | Gère les MCP : liste, activation, désactivation |
-| `/install-github` | Installe le MCP GitHub officiel |
-| `/terminal-setup` | Configure l'intégration terminal (shell hooks) |
-| `/vim` | Active le mode de saisie vi/vim dans le terminal |
-| `/resume` | Reprend la dernière session interrompue |
+| Command | Description |
+|---------|-------------|
+| `/help` | Show help and list available commands |
+| `/clear` | Clear the current conversation history |
+| `/compact` | Compress context (automatic summary of previous exchanges) |
+| `/cost` | Show the token cost of the current session |
+| `/doctor` | System diagnostics: network, MCP, permissions, version |
+| `/init` | Generate a `CLAUDE.md` file in the current directory |
+| `/review` | Request a code review on modified files |
+| `/memory` | View or edit persistent memory (active CLAUDE.md file) |
+| `/model` | View or change the current model (`haiku`, `sonnet`, `opus`) |
+| `/permissions` | View and manage permissions granted to tools |
+| `/bug` | Open a bug report to Anthropic |
+| `/config` | Show the active configuration (merged settings.json) |
+| `/login` | Authenticate via browser (Claude.ai Max) |
+| `/logout` | Log out from your Claude.ai account |
+| `/status` | Show account status, quotas, and connected MCPs |
+| `/mcp` | Manage MCPs: list, enable, disable |
+| `/install-github` | Install the official GitHub MCP |
+| `/terminal-setup` | Configure terminal integration (shell hooks) |
+| `/vim` | Enable vi/vim input mode in the terminal |
+| `/resume` | Resume the last interrupted session |
 
-<Callout type="tip" title="Autocomplétion des slash commands">
-Dans une session interactive, tapez `/` puis appuyez sur `Tab` pour voir toutes les commandes disponibles avec une description courte.
+<Callout type="tip" title="Slash command autocompletion">
+In an interactive session, type `/` then press `Tab` to see all available commands with a short description.
 </Callout>
 
 ---
 
-## Raccourcis clavier
+## Keyboard shortcuts
 
-| Raccourci | Action |
-|-----------|--------|
-| `Escape` | Annule la génération en cours (sans quitter) |
-| `Ctrl+C` | Interrompt la génération ou quitte le prompt actuel |
-| `Ctrl+D` | Quitte Claude Code proprement |
-| `Ctrl+L` | Efface l'affichage du terminal (pas le contexte) |
-| `Shift+Tab` | Insère un saut de ligne dans le prompt (multilignes) |
-| `Alt+T` / `Option+T` | Active/désactive l'Extended Thinking |
-| `Ctrl+O` | Affiche le détail du raisonnement (thinking verbose) |
-| `Flèche Haut` | Rappelle la commande précédente dans l'historique |
-| `Flèche Bas` | Avance dans l'historique des commandes |
-| `Tab` | Autocomplétion (fichiers, commandes slash) |
+| Shortcut | Action |
+|----------|--------|
+| `Escape` | Cancel the current generation (without quitting) |
+| `Ctrl+C` | Interrupt generation or exit the current prompt |
+| `Ctrl+D` | Quit Claude Code cleanly |
+| `Ctrl+L` | Clear the terminal display (not the context) |
+| `Shift+Tab` | Insert a line break in the prompt (multiline) |
+| `Alt+T` / `Option+T` | Toggle Extended Thinking on/off |
+| `Ctrl+O` | Show reasoning details (verbose thinking) |
+| `Up Arrow` | Recall the previous command from history |
+| `Down Arrow` | Move forward through command history |
+| `Tab` | Autocompletion (files, slash commands) |
 
-<Callout type="info" title="Raccourcis selon l'OS">
-`Alt+T` fonctionne sous Windows/Linux. `Option+T` est l'équivalent macOS. Les deux activent ou désactivent l'Extended Thinking.
+<Callout type="info" title="OS-specific shortcuts">
+`Alt+T` works on Windows/Linux. `Option+T` is the macOS equivalent. Both toggle Extended Thinking on or off.
 </Callout>
 
 ---
 
-## Fichiers de configuration
+## Configuration files
 
-Les fichiers sont lus dans cet ordre, du plus prioritaire au moins prioritaire.
+Files are read in this order, from highest to lowest priority.
 
-| Fichier | Portée | Description |
-|---------|--------|-------------|
-| `.claude/settings.json` | Projet | Configuration locale au projet (commitée ou non) |
-| `.claude/settings.local.json` | Projet (local) | Surcharges locales non-commitées (gitignored) |
-| `~/.claude/settings.json` | Utilisateur | Configuration globale pour tous les projets |
-| `CLAUDE.md` | Projet | Instructions en langage naturel lues au démarrage |
-| `.claude/CLAUDE.md` | Projet (caché) | Variante alternative du fichier CLAUDE.md |
-| `~/.claude/CLAUDE.md` | Global | Instructions globales appliquées à tous les projets |
-| `.claude/agents/` | Projet | Fichiers `.md` définissant les agents personnalisés |
-| `~/.claude/agents/` | Global | Agents globaux disponibles dans tous les projets |
-| `.claude/skills/` | Projet | Skills (slash commands) personnalisés au projet |
-| `~/.claude/skills/` | Global | Skills globaux disponibles partout |
+| File | Scope | Description |
+|------|-------|-------------|
+| `.claude/settings.json` | Project | Project-local configuration (committed or not) |
+| `.claude/settings.local.json` | Project (local) | Local overrides, not committed (gitignored) |
+| `~/.claude/settings.json` | User | Global configuration for all projects |
+| `CLAUDE.md` | Project | Natural language instructions read at startup |
+| `.claude/CLAUDE.md` | Project (hidden) | Alternative variant of the CLAUDE.md file |
+| `~/.claude/CLAUDE.md` | Global | Global instructions applied to all projects |
+| `.claude/agents/` | Project | `.md` files defining custom agents |
+| `~/.claude/agents/` | Global | Global agents available across all projects |
+| `.claude/skills/` | Project | Custom Skills (slash commands) for the project |
+| `~/.claude/skills/` | Global | Global Skills available everywhere |
 
 ---
 
-## 3 modes d'exécution
+## 3 execution modes
 
-### Mode interactif (défaut)
+### Interactive mode (default)
 
 ```bash
-# Lance une session REPL interactive
+# Launch an interactive REPL session
 claude
 
-# Lance avec un projet spécifique
+# Launch with a specific model
 claude --model claude-sonnet-4-5
 ```
 
-Utilisé pour le développement au quotidien. Claude maintient le contexte entre les échanges.
+Used for day-to-day development. Claude maintains context between exchanges.
 
-### Mode print (`--print` / `-p`)
+### Print mode (`--print` / `-p`)
 
 ```bash
-# Exécute une tâche et affiche le résultat, puis quitte
-claude --print "Explique ce que fait ce fichier"
+# Execute a task, display the result, then quit
+claude --print "Explain what this file does"
 
-# Alias court
-claude -p "Résume le contenu de README.md"
+# Short alias
+claude -p "Summarize the contents of README.md"
 
-# Avec format JSON
-claude --print --output-format json "Liste les fonctions de src/utils.ts"
+# With JSON format
+claude --print --output-format json "List the functions in src/utils.ts"
 
-# Mode pipe (stdin → stdout)
-echo "Corrige les fautes dans ce texte" | claude --print
-cat fichier.ts | claude --print "Ajoute des commentaires JSDoc"
+# Pipe mode (stdin -> stdout)
+echo "Fix the typos in this text" | claude --print
+cat file.ts | claude --print "Add JSDoc comments"
 ```
 
-### Mode headless / SDK
+### Headless / SDK mode
 
 ```bash
-# Pour l'automatisation et CI/CD
+# For automation and CI/CD
 claude --print --max-turns 1 --output-format stream-json "prompt"
 
-# Variables d'environnement pour le mode non-interactif
+# Environment variables for non-interactive mode
 ANTHROPIC_API_KEY=sk-ant-... claude --print "prompt"
 ```
 
 ---
 
-## Commandes MCP
+## MCP commands
 
-| Commande | Description |
-|----------|-------------|
-| `claude mcp add <nom> -- <cmd> <args>` | Ajoute un MCP en stdio (scope global par défaut) |
-| `claude mcp add --scope project <nom> -- <cmd>` | Ajoute un MCP au niveau projet |
-| `claude mcp add --transport sse <nom> <url>` | Ajoute un MCP via transport SSE |
-| `claude mcp remove <nom>` | Supprime un MCP configuré |
-| `claude mcp list` | Liste tous les MCP configurés avec leur statut |
-| `claude mcp logs <nom>` | Affiche les logs d'un MCP spécifique |
-| `claude mcp get <nom>` | Affiche la configuration détaillée d'un MCP |
+| Command | Description |
+|---------|-------------|
+| `claude mcp add <name> -- <cmd> <args>` | Add an MCP via stdio (global scope by default) |
+| `claude mcp add --scope project <name> -- <cmd>` | Add an MCP at project scope |
+| `claude mcp add --transport sse <name> <url>` | Add an MCP via SSE transport |
+| `claude mcp remove <name>` | Remove a configured MCP |
+| `claude mcp list` | List all configured MCPs with their status |
+| `claude mcp logs <name>` | Show logs for a specific MCP |
+| `claude mcp get <name>` | Show detailed configuration for an MCP |
 
 ```bash
-# Exemples concrets
-claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/projets
+# Practical examples
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/projects
 claude mcp add github -- npx -y @modelcontextprotocol/server-github
 claude mcp add --scope project postgres -- npx -y @modelcontextprotocol/server-postgres $DATABASE_URL
 claude mcp list
 claude mcp logs github
 ```
 
-<Callout type="warning" title="Scope global vs projet">
-Le scope `global` (défaut) configure le MCP dans `~/.claude/settings.json`. Le scope `project` l'ajoute dans `.claude/settings.json` du répertoire courant. Préférez `project` pour les tokens d'accès sensibles.
+<Callout type="warning" title="Global vs project scope">
+The `global` scope (default) configures the MCP in `~/.claude/settings.json`. The `project` scope adds it to `.claude/settings.json` in the current directory. Prefer `project` for sensitive access tokens.
 </Callout>
 
 ---
 
-## Commandes `claude config`
+## `claude config` commands
 
-| Commande | Description |
-|----------|-------------|
-| `claude config list` | Liste toutes les options de configuration actives |
-| `claude config get <clé>` | Affiche la valeur d'une option |
-| `claude config set <clé> <valeur>` | Définit une option de configuration |
-| `claude config add <clé> <valeur>` | Ajoute une valeur à une liste |
-| `claude config remove <clé> <valeur>` | Retire une valeur d'une liste |
+| Command | Description |
+|---------|-------------|
+| `claude config list` | List all active configuration options |
+| `claude config get <key>` | Show the value of an option |
+| `claude config set <key> <value>` | Set a configuration option |
+| `claude config add <key> <value>` | Add a value to a list |
+| `claude config remove <key> <value>` | Remove a value from a list |
 
 ```bash
-# Exemples
+# Examples
 claude config set model claude-sonnet-4-5
 claude config get model
 claude config list
@@ -172,6 +172,6 @@ claude config list
 
 ## Next steps
 
-- [CLI : Référence complète des flags](/reference/cli) : Tous les flags de la commande `claude`
-- [settings.json : Guide complet](/reference/settings) : Options de configuration détaillées
-- [Variables d'environnement](/reference/environment) : Toutes les variables reconnues
+- [CLI: Complete flag reference](/reference/cli): All flags for the `claude` command
+- [settings.json: Complete guide](/reference/settings): Detailed configuration options
+- [Environment variables](/reference/environment): All recognized variables

@@ -30,36 +30,110 @@ import { AnimateOnScroll } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  return createPageMetadata({
-    title: "Prompting : L'art de communiquer avec l'IA",
-    description:
+const translations = {
+  fr: {
+    metaTitle: "Prompting : L'art de communiquer avec l'IA",
+    metaDescription:
       "Maitrisez l'art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
-    path: `/${locale}/prompting`,
-    locale,
-  });
-}
-
-function buildArticleJsonLd(locale: string) {
-  return createArticleSchema({
-    title: "Prompting : L'art de communiquer avec l'IA",
-    description:
+    jsonLdDescription:
       "Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
-    url: `${SITE_URL}/${locale}/prompting`,
-    locale,
-    datePublished: "2026-03-07",
-    dateModified: "2026-03-07",
-  });
-}
-
-const principles = [
-  {
-    icon: Target,
-    title: "Soyez specifique",
-    description:
-      "Fournissez du contexte et des contraintes claires. Plus votre prompt est precis, plus la reponse sera pertinente.",
-    example: `# Vague
+    heroBadge: "Guide du prompting",
+    heroTitleStart: "L'art du ",
+    heroTitleHighlight: "prompting",
+    heroTitleEnd: "avec Claude Code",
+    heroSubtitle:
+      "Maitrisez l'art de communiquer avec l'IA. Un bon prompt fait la difference entre une reponse generique et un resultat exactement adapte a vos besoins.",
+    heroCtaPrimary: "Decouvrir les fondamentaux",
+    heroCtaSecondary: "Voir les templates",
+    fundamentalsBadge: "Fondamentaux",
+    fundamentalsTitle: "Les 5 principes du bon prompting",
+    fundamentalsDescription:
+      "Ces principes sont la base de toute interaction efficace avec Claude Code. Maitrisez-les et vous obtiendrez des resultats 10x meilleurs.",
+    principleLabel: "Principe",
+    goldenRuleTitle: "La regle d'or",
+    goldenRuleContent:
+      "Imaginez que vous delegue une tache a un collegue brillant mais qui ne connait rien a votre projet. Que lui diriez-vous pour qu'il reussisse du premier coup ? C'est exactement ce qu'il faut dire a Claude.",
+    templatesBadge: "Templates",
+    templatesTitle: "Prompts prets a l'emploi",
+    templatesDescription:
+      "Copiez, adaptez et utilisez ces templates pour vos projets. Chaque template suit les 5 principes et a ete optimise pour obtenir les meilleurs resultats.",
+    templateCustomizeTitle: "Comment personnaliser",
+    templateCustomizeContent:
+      "Remplacez les elements entre [CROCHETS] par vos propres valeurs. Ajoutez ou retirez des sections selon vos besoins. Ce template est un point de depart, pas un format rigide.",
+    mistakesBadge: "A eviter",
+    mistakesTitle: "Les erreurs courantes de prompting",
+    mistakesDescription:
+      "Apprenez a reconnaitre et corriger les prompts inefficaces. Chaque exemple montre un avant/apres concret.",
+    mistakeBadLabel: "A ne pas faire",
+    mistakeGoodLabel: "A faire",
+    mistakeBadFilename: "mauvais-prompt.md",
+    mistakeGoodFilename: "bon-prompt.md",
+    mistakeAdviceTitle: "Conseil",
+    advancedBadge: "Avance",
+    advancedTitle: "Prompting avance pour power users",
+    advancedDescription:
+      "Allez au-dela des bases avec des techniques qui exploitent toute la puissance de Claude Code.",
+    chainingTitle: "Prompt chaining (chainage multi-etapes)",
+    chainingDescription:
+      "Decomposez une tache complexe en une sequence de prompts ou chaque etape alimente la suivante.",
+    chainingTipTitle: "Pourquoi ca marche",
+    chainingTipContent:
+      "Le chainage force Claude a se concentrer sur une seule tache a la fois. Chaque etape produit un resultat de meilleure qualite car le contexte est plus cible.",
+    multiAgentTitle: "Orchestration multi-agents",
+    multiAgentDescription:
+      "Utilisez plusieurs agents specialises qui travaillent en parallele sur differents aspects d'un probleme.",
+    multiAgentTipTitle: "Parallelisme",
+    multiAgentTipContent:
+      "Les agents independants peuvent travailler simultanement. Cela divise le temps de travail et apporte des perspectives differentes sur le meme probleme.",
+    workflowTitle: "Workflows complexes avec agents",
+    workflowDescription:
+      "Combinez chainage, multi-agents et contexte persistant pour des workflows de production.",
+    claudeMdBadge: "Secret weapon",
+    claudeMdTitle: "CLAUDE.md : Votre arme secrete",
+    claudeMdDescription:
+      "Le fichier CLAUDE.md est le contexte persistant que Claude Code lit a chaque session. C'est la cle pour obtenir des resultats coherents et adaptes a votre projet.",
+    claudeMdStructureTitle: "Structure d'un CLAUDE.md efficace",
+    claudeMdStructureDescription:
+      "Un bon CLAUDE.md transforme Claude en un membre de votre equipe qui connait votre projet sur le bout des doigts.",
+    claudeMdPlacementTitle: "Ou placer le fichier",
+    claudeMdPlacementContent:
+      "a la racine de votre projet. Claude Code le lit automatiquement au debut de chaque session. Vous pouvez aussi avoir des fichiers CLAUDE.md par dossier pour du contexte specifique a un module.",
+    claudeMdWarningTitle: "Attention",
+    claudeMdWarningContent:
+      "Ne mettez jamais de secrets, tokens ou mots de passe dans votre CLAUDE.md. Ce fichier est souvent commite dans le repo et doit rester public-safe.",
+    claudeMdLevelsTitle: "Les 3 niveaux de CLAUDE.md",
+    claudeMdGlobalTitle: "Global",
+    claudeMdGlobalDescription:
+      "Preferences personnelles appliquees a tous vos projets (langue, style, conventions generales).",
+    claudeMdProjectTitle: "Projet",
+    claudeMdProjectDescription:
+      "Contexte specifique au projet : stack, architecture, conventions d'equipe, agents configures.",
+    claudeMdModuleTitle: "Module",
+    claudeMdModuleDescription:
+      "Contexte ultra-specifique pour un module : schema, API, contraintes metier particulieres.",
+    nextStepsBadge: "Et maintenant ?",
+    nextStepsTitle: "Continuez votre apprentissage",
+    nextStepsDescription:
+      "Le prompting est une competence qui s'ameliore avec la pratique. Explorez les autres guides pour devenir un expert de Claude Code.",
+    nextStepGettingStartedTitle: "Demarrer avec Claude Code",
+    nextStepGettingStartedDescription:
+      "Installation, configuration et premiers pas pour bien commencer.",
+    nextStepGettingStartedLink: "Lire le guide",
+    nextStepMcpTitle: "Les MCP en detail",
+    nextStepMcpDescription:
+      "Connectez Claude Code a Gmail, GitHub, Slack et des dizaines d'autres outils.",
+    nextStepMcpLink: "Explorer les MCP",
+    nextStepSkillsTitle: "Creer des Skills",
+    nextStepSkillsDescription:
+      "Automatisez vos workflows avec des Skills personnalises et reutilisables.",
+    nextStepSkillsLink: "Decouvrir les Skills",
+    backToHome: "Retour a l'accueil",
+    principles: [
+      {
+        title: "Soyez specifique",
+        description:
+          "Fournissez du contexte et des contraintes claires. Plus votre prompt est precis, plus la reponse sera pertinente.",
+        example: `# Vague
 "Fais-moi un formulaire"
 
 # Specifique
@@ -68,33 +142,30 @@ Champs : nom (requis), email (requis, valide), message (requis, min 20 caractere
 Utilise react-hook-form avec validation Zod.
 Style avec Tailwind CSS, responsive mobile-first.
 Affiche un toast de confirmation apres envoi."`,
-  },
-  {
-    icon: UserCheck,
-    title: "Definissez un role",
-    description:
-      "Donnez une identite a Claude pour cadrer ses reponses. Le role influence le niveau de detail, le vocabulaire et l'approche.",
-    example: `"Tu es un architecte logiciel senior specialise en React et Next.js.
+      },
+      {
+        title: "Definissez un role",
+        description:
+          "Donnez une identite a Claude pour cadrer ses reponses. Le role influence le niveau de detail, le vocabulaire et l'approche.",
+        example: `"Tu es un architecte logiciel senior specialise en React et Next.js.
 Tu privilegies la maintenabilite, la performance et les bonnes pratiques.
 Tu commentes ton code en francais et tu expliques chaque decision d'architecture."`,
-  },
-  {
-    icon: FileOutput,
-    title: "Specifiez le format attendu",
-    description:
-      "Indiquez clairement la structure de la reponse souhaitee : code, liste, tableau, JSON, markdown, etc.",
-    example: `"Genere la reponse au format suivant :
+      },
+      {
+        title: "Specifiez le format attendu",
+        description:
+          "Indiquez clairement la structure de la reponse souhaitee : code, liste, tableau, JSON, markdown, etc.",
+        example: `"Genere la reponse au format suivant :
 1. Un resume en 2-3 phrases
 2. Le code complet avec commentaires inline
 3. Un tableau des dependances necessaires (nom | version | usage)
 4. Les instructions d'installation etape par etape"`,
-  },
-  {
-    icon: ListChecks,
-    title: "Donnez des exemples (few-shot)",
-    description:
-      "Montrez a Claude ce que vous attendez avec des exemples concrets. C'est la technique la plus puissante pour obtenir le format exact souhaite.",
-    example: `"Genere des noms de variables en suivant ce pattern :
+      },
+      {
+        title: "Donnez des exemples (few-shot)",
+        description:
+          "Montrez a Claude ce que vous attendez avec des exemples concrets. C'est la technique la plus puissante pour obtenir le format exact souhaite.",
+        example: `"Genere des noms de variables en suivant ce pattern :
 
 Exemple 1 : utilisateur connecte → isUserLoggedIn
 Exemple 2 : nombre de produits dans le panier → cartItemCount
@@ -104,13 +175,12 @@ Maintenant, genere pour :
 - formulaire en cours de soumission
 - erreur de validation de l'email
 - liste des commandes filtrees"`,
-  },
-  {
-    icon: RefreshCcw,
-    title: "Iterez et affinez",
-    description:
-      "Le prompting est un dialogue. Affinez progressivement vos demandes en fonction des reponses obtenues.",
-    example: `# Iteration 1
+      },
+      {
+        title: "Iterez et affinez",
+        description:
+          "Le prompting est un dialogue. Affinez progressivement vos demandes en fonction des reponses obtenues.",
+        example: `# Iteration 1
 "Cree un composant Button"
 
 # Iteration 2
@@ -123,18 +193,14 @@ un etat loading avec un spinner, et la prop disabled"
 # Iteration 4
 "Ajoute les tests unitaires avec Testing Library
 et les stories Storybook pour chaque variante"`,
-  },
-];
-
-const templates = [
-  {
-    icon: Globe,
-    category: "Developpement web",
-    color: "text-brand-700 dark:text-brand-400",
-    bgColor: "bg-brand-500/10",
-    description:
-      "Pour creer des composants, des pages ou des fonctionnalites web completes.",
-    code: `Tu es un developpeur senior React/Next.js/TypeScript.
+      },
+    ],
+    templates: [
+      {
+        category: "Developpement web",
+        description:
+          "Pour creer des composants, des pages ou des fonctionnalites web completes.",
+        code: `Tu es un developpeur senior React/Next.js/TypeScript.
 
 Cree un composant React qui [DESCRIPTION DU COMPOSANT].
 
@@ -160,16 +226,13 @@ Genere le code complet avec :
 2. Les types/interfaces TypeScript
 3. Un exemple d'utilisation
 4. Les tests unitaires (Vitest + Testing Library)`,
-    filename: "template-web-dev.txt",
-  },
-  {
-    icon: FileText,
-    category: "Documentation",
-    color: "text-emerald-500",
-    bgColor: "bg-emerald-500/10",
-    description:
-      "Pour generer de la documentation technique claire et structuree.",
-    code: `Tu es un redacteur technique senior.
+        filename: "template-web-dev.txt",
+      },
+      {
+        category: "Documentation",
+        description:
+          "Pour generer de la documentation technique claire et structuree.",
+        code: `Tu es un redacteur technique senior.
 
 Redige la documentation technique pour [NOM DU PROJET/MODULE].
 
@@ -189,16 +252,13 @@ Conventions :
 - Tous les snippets doivent etre copiables et fonctionnels
 - Utilise des admonitions (note, warning, tip) quand pertinent
 - Inclus un sommaire navigable en debut de document`,
-    filename: "template-documentation.txt",
-  },
-  {
-    icon: Zap,
-    category: "Automatisation",
-    color: "text-accent-500",
-    bgColor: "bg-accent-500/10",
-    description:
-      "Pour creer des scripts et pipelines d'automatisation robustes.",
-    code: `Tu es un ingenieur DevOps/SRE senior.
+        filename: "template-documentation.txt",
+      },
+      {
+        category: "Automatisation",
+        description:
+          "Pour creer des scripts et pipelines d'automatisation robustes.",
+        code: `Tu es un ingenieur DevOps/SRE senior.
 
 Cree un script qui automatise [DESCRIPTION DE LA TACHE].
 
@@ -224,16 +284,13 @@ Genere :
 2. Le fichier .env.example
 3. Le README d'utilisation
 4. Un exemple de cron/schedule si pertinent`,
-    filename: "template-automatisation.txt",
-  },
-  {
-    icon: BarChart3,
-    category: "Analyse de donnees",
-    color: "text-violet-500",
-    bgColor: "bg-violet-500/10",
-    description:
-      "Pour explorer, transformer et visualiser des donnees efficacement.",
-    code: `Tu es un data analyst senior expert en Python.
+        filename: "template-automatisation.txt",
+      },
+      {
+        category: "Analyse de donnees",
+        description:
+          "Pour explorer, transformer et visualiser des donnees efficacement.",
+        code: `Tu es un data analyst senior expert en Python.
 
 Analyse ce dataset CSV et [OBJECTIF DE L'ANALYSE].
 
@@ -254,16 +311,13 @@ Format de sortie :
 - Commentaires expliquant chaque etape
 - Interpretation des resultats en langage non-technique
 - Recommandations basees sur les insights`,
-    filename: "template-data-analysis.txt",
-  },
-  {
-    icon: PenTool,
-    category: "Creation de contenu",
-    color: "text-rose-500",
-    bgColor: "bg-rose-500/10",
-    description:
-      "Pour rediger du contenu structure, engageant et optimise.",
-    code: `Tu es un redacteur web senior specialise en [DOMAINE].
+        filename: "template-data-analysis.txt",
+      },
+      {
+        category: "Creation de contenu",
+        description:
+          "Pour rediger du contenu structure, engageant et optimise.",
+        code: `Tu es un redacteur web senior specialise en [DOMAINE].
 
 Redige un article de blog sur [SUJET].
 
@@ -291,51 +345,444 @@ Contraintes :
 - Phrases courtes (max 20 mots)
 - Un paragraphe = une idee
 - Inclure des listes a puces pour la lisibilite`,
-    filename: "template-contenu.txt",
-  },
-];
-
-const mistakes = [
-  {
-    title: "Trop vague",
-    bad: `"Fais-moi un site web"`,
-    good: `"Cree une landing page pour une app SaaS de gestion de projet.
+        filename: "template-contenu.txt",
+      },
+    ],
+    mistakes: [
+      {
+        title: "Trop vague",
+        bad: `"Fais-moi un site web"`,
+        good: `"Cree une landing page pour une app SaaS de gestion de projet.
 Stack : Next.js 14, TypeScript, Tailwind CSS.
 Sections : hero avec CTA, features (3 colonnes), pricing (3 plans), FAQ accordion.
 Design : moderne, dark mode, animations subtiles au scroll."`,
-    tip: "Plus vous etes precis, moins vous aurez d'iterations a faire.",
-  },
-  {
-    title: "Pas de contexte",
-    bad: `"Corrige ce bug"`,
-    good: `"J'ai une erreur 'TypeError: Cannot read property map of undefined'
+        tip: "Plus vous etes precis, moins vous aurez d'iterations a faire.",
+      },
+      {
+        title: "Pas de contexte",
+        bad: `"Corrige ce bug"`,
+        good: `"J'ai une erreur 'TypeError: Cannot read property map of undefined'
 dans mon composant ProductList.tsx (ligne 42).
 Ce composant recoit un prop 'products' depuis une API REST.
 L'erreur apparait uniquement au premier rendu, avant que l'API reponde.
 Voici le composant : [code]"`,
-    tip: "Donnez toujours le contexte : fichier, erreur exacte, comportement attendu vs obtenu.",
-  },
-  {
-    title: "Tout demander d'un coup",
-    bad: `"Cree-moi une app complete avec auth, dashboard, API, base de donnees, tests, CI/CD et deploiement"`,
-    good: `"Commencons par la base de donnees.
+        tip: "Donnez toujours le contexte : fichier, erreur exacte, comportement attendu vs obtenu.",
+      },
+      {
+        title: "Tout demander d'un coup",
+        bad: `"Cree-moi une app complete avec auth, dashboard, API, base de donnees, tests, CI/CD et deploiement"`,
+        good: `"Commencons par la base de donnees.
 Cree le schema Prisma pour une app de gestion de taches avec :
 - Table User (id, email, name, createdAt)
 - Table Project (id, name, ownerId, createdAt)
 - Table Task (id, title, status, projectId, assigneeId, dueDate)
 Relations : User 1-N Project, Project 1-N Task, User 1-N Task"`,
-    tip: "Decomposez les gros projets en etapes. Une demande claire = une reponse precise.",
-  },
-  {
-    title: "Ne pas iterer",
-    bad: `"Ce n'est pas ce que je voulais" (sans plus de details)`,
-    good: `"Le composant est bien structure, mais j'aimerais 3 modifications :
+        tip: "Decomposez les gros projets en etapes. Une demande claire = une reponse precise.",
+      },
+      {
+        title: "Ne pas iterer",
+        bad: `"Ce n'est pas ce que je voulais" (sans plus de details)`,
+        good: `"Le composant est bien structure, mais j'aimerais 3 modifications :
 1. Remplace le bouton bleu par un gradient teal-to-cyan
 2. Ajoute une animation fadeIn au montage du composant
 3. Le champ email doit valider le format en temps reel (pas seulement au submit)"`,
-    tip: "Dites precisement ce qui est bien, ce qui ne va pas, et ce que vous voulez changer.",
+        tip: "Dites precisement ce qui est bien, ce qui ne va pas, et ce que vous voulez changer.",
+      },
+    ],
   },
+  en: {
+    metaTitle: "Prompting: The Art of Communicating with AI",
+    metaDescription:
+      "Master the art of prompting with Claude Code. Techniques, templates and best practices to get the most out of AI.",
+    jsonLdDescription:
+      "Techniques, templates and best practices to get the most out of AI.",
+    heroBadge: "Prompting guide",
+    heroTitleStart: "The art of ",
+    heroTitleHighlight: "prompting",
+    heroTitleEnd: "with Claude Code",
+    heroSubtitle:
+      "Master the art of communicating with AI. A good prompt makes the difference between a generic answer and a result perfectly tailored to your needs.",
+    heroCtaPrimary: "Discover the fundamentals",
+    heroCtaSecondary: "View templates",
+    fundamentalsBadge: "Fundamentals",
+    fundamentalsTitle: "The 5 principles of good prompting",
+    fundamentalsDescription:
+      "These principles are the foundation of every effective interaction with Claude Code. Master them and you will get 10x better results.",
+    principleLabel: "Principle",
+    goldenRuleTitle: "The golden rule",
+    goldenRuleContent:
+      "Imagine you are delegating a task to a brilliant colleague who knows nothing about your project. What would you tell them so they succeed on the first try? That is exactly what you should tell Claude.",
+    templatesBadge: "Templates",
+    templatesTitle: "Ready-to-use prompts",
+    templatesDescription:
+      "Copy, adapt and use these templates for your projects. Each template follows the 5 principles and has been optimized for the best results.",
+    templateCustomizeTitle: "How to customize",
+    templateCustomizeContent:
+      "Replace the elements in [BRACKETS] with your own values. Add or remove sections as needed. This template is a starting point, not a rigid format.",
+    mistakesBadge: "Avoid",
+    mistakesTitle: "Common prompting mistakes",
+    mistakesDescription:
+      "Learn to recognize and fix ineffective prompts. Each example shows a concrete before/after.",
+    mistakeBadLabel: "Don't do this",
+    mistakeGoodLabel: "Do this instead",
+    mistakeBadFilename: "bad-prompt.md",
+    mistakeGoodFilename: "good-prompt.md",
+    mistakeAdviceTitle: "Tip",
+    advancedBadge: "Advanced",
+    advancedTitle: "Advanced prompting for power users",
+    advancedDescription:
+      "Go beyond the basics with techniques that leverage the full power of Claude Code.",
+    chainingTitle: "Prompt chaining (multi-step sequencing)",
+    chainingDescription:
+      "Break down a complex task into a sequence of prompts where each step feeds the next.",
+    chainingTipTitle: "Why it works",
+    chainingTipContent:
+      "Chaining forces Claude to focus on a single task at a time. Each step produces a higher quality result because the context is more focused.",
+    multiAgentTitle: "Multi-agent orchestration",
+    multiAgentDescription:
+      "Use multiple specialized agents working in parallel on different aspects of a problem.",
+    multiAgentTipTitle: "Parallelism",
+    multiAgentTipContent:
+      "Independent agents can work simultaneously. This divides the workload and brings different perspectives to the same problem.",
+    workflowTitle: "Complex workflows with agents",
+    workflowDescription:
+      "Combine chaining, multi-agents and persistent context for production workflows.",
+    claudeMdBadge: "Secret weapon",
+    claudeMdTitle: "CLAUDE.md: Your secret weapon",
+    claudeMdDescription:
+      "The CLAUDE.md file is the persistent context that Claude Code reads at every session. It is the key to getting consistent, project-tailored results.",
+    claudeMdStructureTitle: "Structure of an effective CLAUDE.md",
+    claudeMdStructureDescription:
+      "A good CLAUDE.md turns Claude into a team member who knows your project inside out.",
+    claudeMdPlacementTitle: "Where to place the file",
+    claudeMdPlacementContent:
+      "at the root of your project. Claude Code reads it automatically at the start of each session. You can also have CLAUDE.md files per folder for module-specific context.",
+    claudeMdWarningTitle: "Warning",
+    claudeMdWarningContent:
+      "Never put secrets, tokens or passwords in your CLAUDE.md. This file is often committed to the repo and must remain public-safe.",
+    claudeMdLevelsTitle: "The 3 levels of CLAUDE.md",
+    claudeMdGlobalTitle: "Global",
+    claudeMdGlobalDescription:
+      "Personal preferences applied to all your projects (language, style, general conventions).",
+    claudeMdProjectTitle: "Project",
+    claudeMdProjectDescription:
+      "Project-specific context: stack, architecture, team conventions, configured agents.",
+    claudeMdModuleTitle: "Module",
+    claudeMdModuleDescription:
+      "Ultra-specific context for a module: schema, API, particular business constraints.",
+    nextStepsBadge: "What's next?",
+    nextStepsTitle: "Continue your learning",
+    nextStepsDescription:
+      "Prompting is a skill that improves with practice. Explore the other guides to become a Claude Code expert.",
+    nextStepGettingStartedTitle: "Getting started with Claude Code",
+    nextStepGettingStartedDescription:
+      "Installation, configuration and first steps to get started.",
+    nextStepGettingStartedLink: "Read the guide",
+    nextStepMcpTitle: "MCPs in detail",
+    nextStepMcpDescription:
+      "Connect Claude Code to Gmail, GitHub, Slack and dozens of other tools.",
+    nextStepMcpLink: "Explore MCPs",
+    nextStepSkillsTitle: "Create Skills",
+    nextStepSkillsDescription:
+      "Automate your workflows with custom, reusable Skills.",
+    nextStepSkillsLink: "Discover Skills",
+    backToHome: "Back to home",
+    principles: [
+      {
+        title: "Be specific",
+        description:
+          "Provide context and clear constraints. The more precise your prompt, the more relevant the response.",
+        example: `# Vague
+"Make me a form"
+
+# Specific
+"Create a contact form in React with TypeScript.
+Fields: name (required), email (required, valid), message (required, min 20 chars).
+Use react-hook-form with Zod validation.
+Style with Tailwind CSS, responsive mobile-first.
+Show a confirmation toast after submission."`,
+      },
+      {
+        title: "Define a role",
+        description:
+          "Give Claude an identity to frame its responses. The role influences the level of detail, vocabulary and approach.",
+        example: `"You are a senior software architect specializing in React and Next.js.
+You prioritize maintainability, performance and best practices.
+You comment your code in English and explain each architectural decision."`,
+      },
+      {
+        title: "Specify the expected format",
+        description:
+          "Clearly indicate the desired response structure: code, list, table, JSON, markdown, etc.",
+        example: `"Generate the response in the following format:
+1. A summary in 2-3 sentences
+2. The complete code with inline comments
+3. A table of required dependencies (name | version | usage)
+4. Step-by-step installation instructions"`,
+      },
+      {
+        title: "Give examples (few-shot)",
+        description:
+          "Show Claude what you expect with concrete examples. This is the most powerful technique for getting the exact format you want.",
+        example: `"Generate variable names following this pattern:
+
+Example 1: logged in user → isUserLoggedIn
+Example 2: number of products in cart → cartItemCount
+Example 3: last update date → lastUpdatedAt
+
+Now generate for:
+- form being submitted
+- email validation error
+- filtered orders list"`,
+      },
+      {
+        title: "Iterate and refine",
+        description:
+          "Prompting is a dialogue. Progressively refine your requests based on the responses you get.",
+        example: `# Iteration 1
+"Create a Button component"
+
+# Iteration 2
+"Add variants: primary, secondary, ghost and danger"
+
+# Iteration 3
+"Add icon support on left and right,
+a loading state with a spinner, and the disabled prop"
+
+# Iteration 4
+"Add unit tests with Testing Library
+and Storybook stories for each variant"`,
+      },
+    ],
+    templates: [
+      {
+        category: "Web development",
+        description:
+          "To create components, pages or complete web features.",
+        code: `You are a senior React/Next.js/TypeScript developer.
+
+Create a React component that [COMPONENT DESCRIPTION].
+
+Technical context:
+- Framework: Next.js 14 (App Router)
+- Language: TypeScript (strict mode)
+- Styling: Tailwind CSS
+- State management: [zustand / React Context / none]
+
+Functional specifications:
+- [Feature 1]
+- [Feature 2]
+- [Feature 3]
+
+Constraints:
+- Responsive mobile-first
+- Accessible (ARIA, focus management)
+- Performance optimized (memo, lazy loading if needed)
+- Error handling and loading states
+
+Generate the complete code with:
+1. The main component
+2. TypeScript types/interfaces
+3. A usage example
+4. Unit tests (Vitest + Testing Library)`,
+        filename: "template-web-dev.txt",
+      },
+      {
+        category: "Documentation",
+        description:
+          "To generate clear and structured technical documentation.",
+        code: `You are a senior technical writer.
+
+Write the technical documentation for [PROJECT/MODULE NAME].
+
+Target audience: [junior developers / internal team / open-source]
+
+Expected structure:
+1. Overview (2-3 sentences)
+2. Installation and prerequisites
+3. Configuration
+4. Quick Start guide
+5. API Reference (each function with parameters, return, example)
+6. Advanced usage examples
+7. FAQ and troubleshooting
+
+Conventions:
+- Code examples in [TypeScript/Python/etc.]
+- All snippets must be copyable and functional
+- Use admonitions (note, warning, tip) when relevant
+- Include a navigable table of contents at the beginning`,
+        filename: "template-documentation.txt",
+      },
+      {
+        category: "Automation",
+        description:
+          "To create robust automation scripts and pipelines.",
+        code: `You are a senior DevOps/SRE engineer.
+
+Create a script that automates [TASK DESCRIPTION].
+
+Environment:
+- OS: [Linux/macOS/Windows]
+- Language: [Bash/Python/Node.js]
+- Available tools: [Docker, GitHub Actions, etc.]
+
+Expected behavior:
+1. [Step 1 of the process]
+2. [Step 2 of the process]
+3. [Step 3 of the process]
+
+Requirements:
+- Robust error handling (exit codes, try/catch)
+- Logging with levels (info, warn, error)
+- Dry-run mode for testing without executing
+- Configurable variables via .env or CLI arguments
+- Idempotent (can be re-run without side effects)
+
+Generate:
+1. The complete commented script
+2. The .env.example file
+3. The usage README
+4. A cron/schedule example if relevant`,
+        filename: "template-automation.txt",
+      },
+      {
+        category: "Data analysis",
+        description:
+          "To explore, transform and visualize data effectively.",
+        code: `You are a senior data analyst expert in Python.
+
+Analyze this CSV dataset and [ANALYSIS OBJECTIVE].
+
+Data information:
+- Source: [source description]
+- Main columns: [col1, col2, col3, ...]
+- Volume: [approximate number of rows]
+- Period: [time range of data]
+
+Requested analysis:
+1. Exploration: descriptive statistics, missing values, distributions
+2. Cleaning: outlier handling, normalization, encoding
+3. Analysis: [correlations / trends / segmentation / prediction]
+4. Visualization: relevant charts with matplotlib/seaborn
+
+Output format:
+- Complete Python code (pandas, numpy, matplotlib)
+- Comments explaining each step
+- Interpretation of results in non-technical language
+- Recommendations based on insights`,
+        filename: "template-data-analysis.txt",
+      },
+      {
+        category: "Content creation",
+        description:
+          "To write structured, engaging and optimized content.",
+        code: `You are a senior web writer specializing in [DOMAIN].
+
+Write a blog post about [TOPIC].
+
+Parameters:
+- Tone: [professional / casual / educational]
+- Length: [800-1200 words]
+- Target audience: [typical reader description]
+- Objective: [inform / persuade / tutorial]
+
+Structure:
+1. Catchy title (max 60 characters)
+2. Introduction with hook (problem/question)
+3. 3-5 sections with H2 subheadings
+4. Concrete examples and data
+5. Conclusion with call-to-action
+
+SEO:
+- Main keyword: [keyword]
+- Secondary keywords: [keyword-2, keyword-3]
+- Meta description (max 155 characters)
+- Internal link suggestions
+
+Constraints:
+- No unnecessary jargon
+- Short sentences (max 20 words)
+- One paragraph = one idea
+- Include bullet lists for readability`,
+        filename: "template-content.txt",
+      },
+    ],
+    mistakes: [
+      {
+        title: "Too vague",
+        bad: `"Make me a website"`,
+        good: `"Create a landing page for a project management SaaS app.
+Stack: Next.js 14, TypeScript, Tailwind CSS.
+Sections: hero with CTA, features (3 columns), pricing (3 plans), FAQ accordion.
+Design: modern, dark mode, subtle scroll animations."`,
+        tip: "The more precise you are, the fewer iterations you will need.",
+      },
+      {
+        title: "No context",
+        bad: `"Fix this bug"`,
+        good: `"I have a 'TypeError: Cannot read property map of undefined' error
+in my ProductList.tsx component (line 42).
+This component receives a 'products' prop from a REST API.
+The error only appears on first render, before the API responds.
+Here is the component: [code]"`,
+        tip: "Always provide context: file, exact error, expected vs actual behavior.",
+      },
+      {
+        title: "Asking for everything at once",
+        bad: `"Build me a complete app with auth, dashboard, API, database, tests, CI/CD and deployment"`,
+        good: `"Let's start with the database.
+Create the Prisma schema for a task management app with:
+- Table User (id, email, name, createdAt)
+- Table Project (id, name, ownerId, createdAt)
+- Table Task (id, title, status, projectId, assigneeId, dueDate)
+Relations: User 1-N Project, Project 1-N Task, User 1-N Task"`,
+        tip: "Break large projects into steps. One clear request = one precise answer.",
+      },
+      {
+        title: "Not iterating",
+        bad: `"That's not what I wanted" (without more details)`,
+        good: `"The component is well structured, but I'd like 3 changes:
+1. Replace the blue button with a teal-to-cyan gradient
+2. Add a fadeIn animation on component mount
+3. The email field should validate the format in real-time (not only on submit)"`,
+        tip: "Say precisely what is good, what is wrong, and what you want to change.",
+      },
+    ],
+  },
+};
+
+const principleIcons = [Target, UserCheck, FileOutput, ListChecks, RefreshCcw];
+
+const templateMeta = [
+  { icon: Globe, color: "text-brand-700 dark:text-brand-400", bgColor: "bg-brand-500/10" },
+  { icon: FileText, color: "text-emerald-500", bgColor: "bg-emerald-500/10" },
+  { icon: Zap, color: "text-accent-500", bgColor: "bg-accent-500/10" },
+  { icon: BarChart3, color: "text-violet-500", bgColor: "bg-violet-500/10" },
+  { icon: PenTool, color: "text-rose-500", bgColor: "bg-rose-500/10" },
 ];
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  return createPageMetadata({
+    title: t.metaTitle,
+    description: t.metaDescription,
+    path: `/${locale}/prompting`,
+    locale,
+  });
+}
+
+function buildArticleJsonLd(locale: string) {
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  return createArticleSchema({
+    title: t.metaTitle,
+    description: t.jsonLdDescription,
+    url: `${SITE_URL}/${locale}/prompting`,
+    locale,
+    datePublished: "2026-03-07",
+    dateModified: "2026-03-07",
+  });
+}
 
 export default async function PromptingPage({
   params,
@@ -344,6 +791,7 @@ export default async function PromptingPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return (
     <>
       {/* JSON-LD structured data — safe: static schema from hardcoded values, no user input */}
@@ -371,20 +819,18 @@ export default async function PromptingPage({
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <MessageSquare className="h-4 w-4" aria-hidden="true" />
-              Guide du prompting
+              {t.heroBadge}
             </div>
 
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
-              L&apos;art du{" "}
-              <span className="text-gradient">prompting</span>
+              {t.heroTitleStart}
+              <span className="text-gradient">{t.heroTitleHighlight}</span>
               <br />
-              avec Claude Code
+              {t.heroTitleEnd}
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
-              Maitrisez l&apos;art de communiquer avec l&apos;IA. Un bon prompt fait
-              la difference entre une reponse generique et un resultat exactement
-              adapte a vos besoins.
+              {t.heroSubtitle}
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -392,14 +838,14 @@ export default async function PromptingPage({
                 href="#fondamentaux"
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
-                Decouvrir les fondamentaux
+                {t.heroCtaPrimary}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </a>
               <a
                 href="#templates"
                 className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-slate-200 transition-all hover:border-slate-500 hover:bg-white/5"
               >
-                Voir les templates
+                {t.heroCtaSecondary}
               </a>
             </div>
           </div>
@@ -411,15 +857,15 @@ export default async function PromptingPage({
         <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Fondamentaux"
-              title="Les 5 principes du bon prompting"
-              description="Ces principes sont la base de toute interaction efficace avec Claude Code. Maitrisez-les et vous obtiendrez des resultats 10x meilleurs."
+              badge={t.fundamentalsBadge}
+              title={t.fundamentalsTitle}
+              description={t.fundamentalsDescription}
             />
           </AnimateOnScroll>
 
           <div className="mt-16 space-y-12">
-            {principles.map((principle, index) => {
-              const Icon = principle.icon;
+            {t.principles.map((principle, index) => {
+              const Icon = principleIcons[index];
               return (
                 <div
                   key={principle.title}
@@ -433,7 +879,7 @@ export default async function PromptingPage({
                           <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                         </div>
                         <span className="text-sm font-semibold text-brand-700 dark:text-brand-400">
-                          Principe {index + 1}
+                          {t.principleLabel} {index + 1}
                         </span>
                       </div>
                       <h3 className="mb-3 text-xl font-bold sm:text-2xl">
@@ -460,11 +906,8 @@ export default async function PromptingPage({
             })}
           </div>
 
-          <Callout type="tip" title="La regle d'or">
-            Imaginez que vous delegue une tache a un collegue brillant mais qui ne
-            connait rien a votre projet. Que lui diriez-vous pour qu&apos;il
-            reussisse du premier coup ? C&apos;est exactement ce qu&apos;il faut
-            dire a Claude.
+          <Callout type="tip" title={t.goldenRuleTitle}>
+            {t.goldenRuleContent}
           </Callout>
         </div>
       </section>
@@ -476,21 +919,22 @@ export default async function PromptingPage({
       >
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="Templates"
-            title="Prompts prets a l'emploi"
-            description="Copiez, adaptez et utilisez ces templates pour vos projets. Chaque template suit les 5 principes et a ete optimise pour obtenir les meilleurs resultats."
+            badge={t.templatesBadge}
+            title={t.templatesTitle}
+            description={t.templatesDescription}
           />
 
           <div className="mt-16 space-y-10">
-            {templates.map((template) => {
-              const Icon = template.icon;
+            {t.templates.map((template, index) => {
+              const meta = templateMeta[index];
+              const Icon = meta.icon;
               return (
                 <div key={template.category} className="glass-card p-6 sm:p-8">
                   <div className="mb-6 flex items-center gap-4">
                     <div
-                      className={`flex h-12 w-12 items-center justify-center rounded-xl ${template.bgColor}`}
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl ${meta.bgColor}`}
                     >
-                      <Icon className={`h-6 w-6 ${template.color}`} />
+                      <Icon className={`h-6 w-6 ${meta.color}`} />
                     </div>
                     <div>
                       <h3 className="text-lg font-bold sm:text-xl">
@@ -508,10 +952,8 @@ export default async function PromptingPage({
                     filename={template.filename}
                   />
 
-                  <Callout type="info" title="Comment personnaliser">
-                    Remplacez les elements entre [CROCHETS] par vos propres valeurs.
-                    Ajoutez ou retirez des sections selon vos besoins. Ce template
-                    est un point de depart, pas un format rigide.
+                  <Callout type="info" title={t.templateCustomizeTitle}>
+                    {t.templateCustomizeContent}
                   </Callout>
                 </div>
               );
@@ -524,13 +966,13 @@ export default async function PromptingPage({
       <section id="erreurs" className="py-20 sm:py-28">
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="A eviter"
-            title="Les erreurs courantes de prompting"
-            description="Apprenez a reconnaitre et corriger les prompts inefficaces. Chaque exemple montre un avant/apres concret."
+            badge={t.mistakesBadge}
+            title={t.mistakesTitle}
+            description={t.mistakesDescription}
           />
 
           <div className="mt-16 space-y-10">
-            {mistakes.map((mistake) => (
+            {t.mistakes.map((mistake) => (
               <div key={mistake.title} className="glass-card p-6 sm:p-8">
                 <h3 className="mb-6 text-lg font-bold sm:text-xl">
                   {mistake.title}
@@ -542,13 +984,13 @@ export default async function PromptingPage({
                     <div className="mb-3 flex items-center gap-2">
                       <XCircle className="h-5 w-5 text-red-500" aria-hidden="true" />
                       <span className="text-sm font-semibold text-red-500">
-                        A ne pas faire
+                        {t.mistakeBadLabel}
                       </span>
                     </div>
                     <CodeBlock
                       code={mistake.bad}
                       language="markdown"
-                      filename="mauvais-prompt.md"
+                      filename={t.mistakeBadFilename}
                     />
                   </div>
 
@@ -557,18 +999,18 @@ export default async function PromptingPage({
                     <div className="mb-3 flex items-center gap-2">
                       <CheckCircle className="h-5 w-5 text-emerald-500" aria-hidden="true" />
                       <span className="text-sm font-semibold text-emerald-500">
-                        A faire
+                        {t.mistakeGoodLabel}
                       </span>
                     </div>
                     <CodeBlock
                       code={mistake.good}
                       language="markdown"
-                      filename="bon-prompt.md"
+                      filename={t.mistakeGoodFilename}
                     />
                   </div>
                 </div>
 
-                <Callout type="tip" title="Conseil">
+                <Callout type="tip" title={t.mistakeAdviceTitle}>
                   {mistake.tip}
                 </Callout>
               </div>
@@ -584,9 +1026,9 @@ export default async function PromptingPage({
       >
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="Avance"
-            title="Prompting avance pour power users"
-            description="Allez au-dela des bases avec des techniques qui exploitent toute la puissance de Claude Code."
+            badge={t.advancedBadge}
+            title={t.advancedTitle}
+            description={t.advancedDescription}
           />
 
           <div className="mt-16 space-y-12">
@@ -598,11 +1040,10 @@ export default async function PromptingPage({
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
-                    Prompt chaining (chainage multi-etapes)
+                    {t.chainingTitle}
                   </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
-                    Decomposez une tache complexe en une sequence de prompts ou
-                    chaque etape alimente la suivante.
+                    {t.chainingDescription}
                   </p>
                 </div>
               </div>
@@ -627,10 +1068,8 @@ et que les tests passent. Suggere des ameliorations supplementaires si pertinent
                 filename="prompt-chaining.md"
               />
 
-              <Callout type="tip" title="Pourquoi ca marche">
-                Le chainage force Claude a se concentrer sur une seule tache a la
-                fois. Chaque etape produit un resultat de meilleure qualite car le
-                contexte est plus cible.
+              <Callout type="tip" title={t.chainingTipTitle}>
+                {t.chainingTipContent}
               </Callout>
             </div>
 
@@ -642,11 +1081,10 @@ et que les tests passent. Suggere des ameliorations supplementaires si pertinent
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
-                    Orchestration multi-agents
+                    {t.multiAgentTitle}
                   </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
-                    Utilisez plusieurs agents specialises qui travaillent en
-                    parallele sur differents aspects d&apos;un probleme.
+                    {t.multiAgentDescription}
                   </p>
                 </div>
               </div>
@@ -677,10 +1115,8 @@ Une fois les tests ecrits, implemente le code pour les faire passer."`}
                 filename="multi-agent.md"
               />
 
-              <Callout type="info" title="Parallelisme">
-                Les agents independants peuvent travailler simultanement. Cela
-                divise le temps de travail et apporte des perspectives differentes
-                sur le meme probleme.
+              <Callout type="info" title={t.multiAgentTipTitle}>
+                {t.multiAgentTipContent}
               </Callout>
             </div>
 
@@ -692,11 +1128,10 @@ Une fois les tests ecrits, implemente le code pour les faire passer."`}
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
-                    Workflows complexes avec agents
+                    {t.workflowTitle}
                   </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
-                    Combinez chainage, multi-agents et contexte persistant pour des
-                    workflows de production.
+                    {t.workflowDescription}
                   </p>
                 </div>
               </div>
@@ -738,9 +1173,9 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
       <section id="claude-md" className="py-20 sm:py-28">
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="Secret weapon"
-            title="CLAUDE.md : Votre arme secrete"
-            description="Le fichier CLAUDE.md est le contexte persistant que Claude Code lit a chaque session. C'est la cle pour obtenir des resultats coherents et adaptes a votre projet."
+            badge={t.claudeMdBadge}
+            title={t.claudeMdTitle}
+            description={t.claudeMdDescription}
           />
 
           <div className="mt-16 space-y-8">
@@ -751,11 +1186,10 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
                 </div>
                 <div>
                   <h3 className="text-lg font-bold sm:text-xl">
-                    Structure d&apos;un CLAUDE.md efficace
+                    {t.claudeMdStructureTitle}
                   </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
-                    Un bon CLAUDE.md transforme Claude en un membre de votre equipe
-                    qui connait votre projet sur le bout des doigts.
+                    {t.claudeMdStructureDescription}
                   </p>
                 </div>
               </div>
@@ -806,23 +1240,18 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                 filename="CLAUDE.md"
               />
 
-              <Callout type="tip" title="Ou placer le fichier">
-                Placez <code className="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">CLAUDE.md</code> a
-                la racine de votre projet. Claude Code le lit automatiquement au
-                debut de chaque session. Vous pouvez aussi avoir des fichiers
-                CLAUDE.md par dossier pour du contexte specifique a un module.
+              <Callout type="tip" title={t.claudeMdPlacementTitle}>
+                <code className="rounded bg-slate-200 px-1.5 py-0.5 text-sm dark:bg-slate-700">CLAUDE.md</code> {t.claudeMdPlacementContent}
               </Callout>
 
-              <Callout type="warning" title="Attention">
-                Ne mettez jamais de secrets, tokens ou mots de passe dans votre
-                CLAUDE.md. Ce fichier est souvent commite dans le repo et doit
-                rester public-safe.
+              <Callout type="warning" title={t.claudeMdWarningTitle}>
+                {t.claudeMdWarningContent}
               </Callout>
             </div>
 
             <div className="glass-card p-6 sm:p-8">
               <h3 className="mb-4 text-lg font-bold">
-                Les 3 niveaux de CLAUDE.md
+                {t.claudeMdLevelsTitle}
               </h3>
 
               <div className="grid gap-4 sm:grid-cols-3">
@@ -830,14 +1259,13 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500/10">
                     <Sparkles className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                   </div>
-                  <h4 className="mb-1 font-semibold">Global</h4>
+                  <h4 className="mb-1 font-semibold">{t.claudeMdGlobalTitle}</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ~/.claude/CLAUDE.md
                     </code>
                     <br />
-                    Preferences personnelles appliquees a tous vos projets (langue,
-                    style, conventions generales).
+                    {t.claudeMdGlobalDescription}
                   </p>
                 </div>
 
@@ -845,14 +1273,13 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-accent-500/10">
                     <BrainCircuit className="h-5 w-5 text-accent-500" aria-hidden="true" />
                   </div>
-                  <h4 className="mb-1 font-semibold">Projet</h4>
+                  <h4 className="mb-1 font-semibold">{t.claudeMdProjectTitle}</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ./CLAUDE.md
                     </code>
                     <br />
-                    Contexte specifique au projet : stack, architecture, conventions
-                    d&apos;equipe, agents configures.
+                    {t.claudeMdProjectDescription}
                   </p>
                 </div>
 
@@ -860,14 +1287,13 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10">
                     <Layers className="h-5 w-5 text-violet-500" aria-hidden="true" />
                   </div>
-                  <h4 className="mb-1 font-semibold">Module</h4>
+                  <h4 className="mb-1 font-semibold">{t.claudeMdModuleTitle}</h4>
                   <p className="text-sm text-slate-500 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ./src/features/auth/CLAUDE.md
                     </code>
                     <br />
-                    Contexte ultra-specifique pour un module : schema, API,
-                    contraintes metier particulieres.
+                    {t.claudeMdModuleDescription}
                   </p>
                 </div>
               </div>
@@ -883,9 +1309,9 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <SectionHeading
-            badge="Et maintenant ?"
-            title="Continuez votre apprentissage"
-            description="Le prompting est une competence qui s'ameliore avec la pratique. Explorez les autres guides pour devenir un expert de Claude Code."
+            badge={t.nextStepsBadge}
+            title={t.nextStepsTitle}
+            description={t.nextStepsDescription}
             centered
           />
 
@@ -895,13 +1321,13 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               className="group rounded-xl border border-slate-700/50 bg-slate-800/50 p-6 text-left backdrop-blur transition-all hover:-translate-y-1 hover:border-brand-500/30 hover:bg-slate-800/80"
             >
               <h3 className="mb-2 font-semibold text-white">
-                Demarrer avec Claude Code
+                {t.nextStepGettingStartedTitle}
               </h3>
               <p className="mb-4 text-sm text-slate-400">
-                Installation, configuration et premiers pas pour bien commencer.
+                {t.nextStepGettingStartedDescription}
               </p>
               <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
-                Lire le guide
+                {t.nextStepGettingStartedLink}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
@@ -911,14 +1337,13 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               className="group rounded-xl border border-slate-700/50 bg-slate-800/50 p-6 text-left backdrop-blur transition-all hover:-translate-y-1 hover:border-brand-500/30 hover:bg-slate-800/80"
             >
               <h3 className="mb-2 font-semibold text-white">
-                Les MCP en detail
+                {t.nextStepMcpTitle}
               </h3>
               <p className="mb-4 text-sm text-slate-400">
-                Connectez Claude Code a Gmail, GitHub, Slack et des dizaines
-                d&apos;autres outils.
+                {t.nextStepMcpDescription}
               </p>
               <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
-                Explorer les MCP
+                {t.nextStepMcpLink}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
@@ -928,14 +1353,13 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               className="group rounded-xl border border-slate-700/50 bg-slate-800/50 p-6 text-left backdrop-blur transition-all hover:-translate-y-1 hover:border-brand-500/30 hover:bg-slate-800/80"
             >
               <h3 className="mb-2 font-semibold text-white">
-                Creer des Skills
+                {t.nextStepSkillsTitle}
               </h3>
               <p className="mb-4 text-sm text-slate-400">
-                Automatisez vos workflows avec des Skills personnalises et
-                reutilisables.
+                {t.nextStepSkillsDescription}
               </p>
               <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
-                Decouvrir les Skills
+                {t.nextStepSkillsLink}
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </span>
             </Link>
@@ -946,7 +1370,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
               href={`/${locale}`}
               className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:border-slate-500 hover:bg-white/5"
             >
-              Retour a l&apos;accueil
+              {t.backToHome}
             </Link>
           </div>
         </div>

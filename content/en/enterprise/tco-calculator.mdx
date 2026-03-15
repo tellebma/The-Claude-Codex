@@ -7,112 +7,112 @@ datePublished: "2026-03-12"
 dateModified: "2026-03-12"
 ---
 
-## Les plans Claude Code
+## Claude Code plans
 
-Anthropic propose plusieurs formules d'acces a Claude Code. Le bon choix depend de la taille de votre equipe, du volume d'utilisation et de vos exigences de conformite.
+Anthropic offers several access tiers for Claude Code. The right choice depends on your team size, usage volume, and compliance requirements.
 
-### Plans disponibles
+### Available plans
 
-| Plan | Prix | Limite d'usage | Ideal pour |
+| Plan | Price | Usage limit | Best for |
 |---|---|---|---|
-| **Pro** | 20 $/mois/utilisateur | Usage modere (throttling possible) | Developpeurs individuels, petites equipes |
-| **Max 5x** | 100 $/mois/utilisateur | 5x la capacite Pro | Equipes de 5 a 20 devs, usage quotidien |
-| **Max 20x** | 200 $/mois/utilisateur | 20x la capacite Pro | Equipes intensives, gros projets |
-| **API Team** | ~30 a 60 $/mois/utilisateur | Pay-as-you-go (tokens consommes) | Equipes tech, controle granulaire des couts |
+| **Pro** | $20/month/user | Moderate usage (throttling possible) | Individual developers, small teams |
+| **Max 5x** | $100/month/user | 5x Pro capacity | Teams of 5 to 20 devs, daily use |
+| **Max 20x** | $200/month/user | 20x Pro capacity | Intensive teams, large projects |
+| **API Team** | ~$30-60/month/user | Pay-as-you-go (tokens consumed) | Tech teams, granular cost control |
 
-<Callout type="info" title="API Team : le cout varie selon l'usage">
-Avec le plan API, vous payez a la consommation (tokens d'entree et de sortie). Un developpeur moyen consomme entre 30 et 60 $ par mois. Les profils intensifs (architectes, devs senior sur de gros refactorings) peuvent atteindre 100 a 150 $.
+<Callout type="info" title="API Team: cost varies by usage">
+With the API plan, you pay per consumption (input and output tokens). An average developer consumes between $30 and $60 per month. Intensive profiles (architects, senior devs on major refactors) can reach $100 to $150.
 </Callout>
 
-## Cout par taille d'equipe
+## Cost by team size
 
-Voici une estimation realiste du cout mensuel selon le plan et le nombre de developpeurs.
+Here is a realistic estimate of monthly cost by plan and number of developers.
 
-| Nombre de devs | Pro (20 $) | Max 5x (100 $) | Max 20x (200 $) | API (~40 $/dev) |
+| Number of devs | Pro ($20) | Max 5x ($100) | Max 20x ($200) | API (~$40/dev) |
 |---|---|---|---|---|
-| **10 devs** | 200 $ | 1 000 $ | 2 000 $ | ~400 $ |
-| **50 devs** | 1 000 $ | 5 000 $ | 10 000 $ | ~2 000 $ |
-| **200 devs** | 4 000 $ | 20 000 $ | 40 000 $ | ~8 000 $ |
+| **10 devs** | $200 | $1,000 | $2,000 | ~$400 |
+| **50 devs** | $1,000 | $5,000 | $10,000 | ~$2,000 |
+| **200 devs** | $4,000 | $20,000 | $40,000 | ~$8,000 |
 
-## Comparatif avec les alternatives
+## Comparison with alternatives
 
-| Outil | Prix mensuel/utilisateur | Points forts | Limites |
+| Tool | Monthly price/user | Strengths | Limitations |
 |---|---|---|---|
-| **Claude Code Max 5x** | 100 $ | Terminal natif, 200K contexte, MCP, agents | Pas d'IDE integre |
-| **GitHub Copilot Enterprise** | 39 $ | Integration IDE profonde, Copilot Chat | Contexte limite, pas de terminal |
-| **Cursor Business** | 40 $ | IDE complet, vision, multi-modeles | Lie a l'editeur Cursor |
+| **Claude Code Max 5x** | $100 | Native terminal, 200K context, MCP, agents | No built-in IDE |
+| **GitHub Copilot Enterprise** | $39 | Deep IDE integration, Copilot Chat | Limited context, no terminal |
+| **Cursor Business** | $40 | Full IDE, vision, multi-model | Tied to the Cursor editor |
 
-### Ce que le prix ne dit pas
+### What the sticker price doesn't tell you
 
-Le prix affiche ne raconte pas toute l'histoire :
+The listed price doesn't tell the whole story:
 
-- **Copilot a 39 $** offre de l'autocompletion et du chat, mais pas d'acces terminal, pas de MCP, pas d'execution de commandes. Pour des taches complexes (refactoring multi-fichiers, generation de tests E2E, automatisation CI), il faut multiplier les interactions manuelles.
-- **Cursor a 40 $** est un IDE complet mais vous lie a un editeur specifique. Si votre equipe utilise VS Code, Neovim ou JetBrains, c'est un changement d'habitudes.
-- **Claude Code a 100 $** coute plus cher en affichage, mais il agit directement dans votre environnement. Un refactoring qui prend 3 heures manuellement prend 20 minutes. Sur un salaire de dev senior, l'outil se rentabilise en quelques jours.
+- **Copilot at $39** offers autocomplete and chat, but no terminal access, no MCP, no command execution. For complex tasks (multi-file refactoring, E2E test generation, CI automation), you end up multiplying manual interactions.
+- **Cursor at $40** is a full IDE but ties you to a specific editor. If your team uses VS Code, Neovim, or JetBrains, that means changing habits.
+- **Claude Code at $100** costs more on paper, but it acts directly in your environment. A refactoring that takes 3 hours manually takes 20 minutes. Against a senior dev salary, the tool pays for itself in days.
 
-## Retour sur investissement (ROI)
+## Return on investment (ROI)
 
-Le ROI depend de deux variables : le cout de l'outil et le temps gagne par developpeur.
+ROI depends on two variables: the cost of the tool and time saved per developer.
 
-### Estimation du temps gagne
+### Estimated time savings
 
-Les retours d'equipes en production montrent des gains variables selon le type de tache :
+Feedback from teams in production shows variable gains depending on task type:
 
-| Tache | Gain de temps estime |
+| Task | Estimated time savings |
 |---|---|
-| Ecriture de tests | 40 a 60 % |
-| Scaffolding / boilerplate | 50 a 70 % |
-| Revue de code (premier passage) | 30 a 50 % |
-| Documentation technique | 40 a 60 % |
-| Debugging | 20 a 40 % |
-| Refactoring | 30 a 50 % |
+| Writing tests | 40 to 60% |
+| Scaffolding / boilerplate | 50 to 70% |
+| Code review (first pass) | 30 to 50% |
+| Technical documentation | 40 to 60% |
+| Debugging | 20 to 40% |
+| Refactoring | 30 to 50% |
 
-En moyenne, les equipes rapportent un gain de **5 a 10 heures par developpeur par semaine** sur les taches repetitives.
+On average, teams report saving **5 to 10 hours per developer per week** on repetitive tasks.
 
-### Calcul concret
+### Concrete calculation
 
-Pour un developpeur avec un salaire brut charge de 80 000 EUR par an (cout employeur) :
+For a developer with a fully loaded salary of EUR 80,000 per year (employer cost):
 
-- Cout horaire : ~42 EUR/h (basé sur 1 900 heures travaillees)
-- Gain de 7h/semaine : 294 EUR/semaine economises
-- Cout Claude Code Max 5x : ~92 EUR/mois (~23 EUR/semaine)
-- **ROI : 12x le cout de l'outil**
+- Hourly cost: ~EUR 42/h (based on 1,900 working hours)
+- Saving 7h/week: EUR 294/week saved
+- Claude Code Max 5x cost: ~EUR 92/month (~EUR 23/week)
+- **ROI: 12x the cost of the tool**
 
-Meme avec un gain modeste de 3h/semaine, le ROI reste positif des le premier mois.
+Even with a modest gain of 3h/week, the ROI is positive from the first month.
 
-## Calculateur interactif
+## Interactive calculator
 
-Utilisez le calculateur below pour estimer le cout et le ROI adaptes a votre equipe.
+Use the calculator below to estimate the cost and ROI tailored to your team.
 
 <TcoCalculator />
 
-## Recommandations par profil d'equipe
+## Recommendations by team profile
 
 ### Startup (5-15 devs)
 
-**Plan recommande : Max 5x (100 $/dev/mois)**
+**Recommended plan: Max 5x ($100/dev/month)**
 
-Le plan Pro (20 $) sera trop limite des que vos developpeurs utilisent Claude Code quotidiennement. Le throttling du plan Pro casse le flux de travail. Le Max 5x offre un bon equilibre cout/capacite.
+The Pro plan ($20) will become too limited once your developers use Claude Code daily. The throttling on the Pro plan breaks the workflow. Max 5x offers a good balance between cost and capacity.
 
 ### Scale-up (15-100 devs)
 
-**Plan recommande : API Team ou Max 5x selon les profils**
+**Recommended plan: API Team or Max 5x depending on profiles**
 
-Mixez les plans : API pour les developpeurs occasionnels, Max 5x pour les utilisateurs intensifs. L'API permet un controle fin des couts et evite de payer 100 $ pour un dev qui utilise l'outil 3 fois par semaine.
+Mix plans: API for occasional developers, Max 5x for intensive users. The API plan gives you fine-grained cost control and avoids paying $100 for a dev who uses the tool 3 times a week.
 
-### Grande entreprise (100+ devs)
+### Large enterprise (100+ devs)
 
-**Plan recommande : API Team via Bedrock/Vertex**
+**Recommended plan: API Team via Bedrock/Vertex**
 
-A cette echelle, l'API via AWS Bedrock ou Google Vertex offre le meilleur rapport flexibilite/cout/conformite. Avantages :
+At this scale, the API via AWS Bedrock or Google Vertex offers the best balance of flexibility, cost, and compliance. Benefits:
 
-- Facturation consolidee sur votre compte cloud
-- Zero retention des donnees cote Anthropic
-- Conformite RGPD simplifiee (donnees dans votre region)
-- Controle granulaire des permissions via IAM
+- Consolidated billing on your cloud account
+- Zero data retention on Anthropic's side
+- Simplified GDPR compliance (data in your region)
+- Granular permission control via IAM
 
 ## Next steps
 
-- [Guide d'adoption d'equipe](/enterprise/team-adoption) : lancez un pilote structure
-- [Securite et conformite](/enterprise/security-compliance) : cadrez la securite avant le deploiement
-- [FAQ Enterprise](/enterprise/faq) : reponses aux questions frequentes sur les couts
+- [Team adoption guide](/enterprise/team-adoption): launch a structured pilot
+- [Security and compliance](/enterprise/security-compliance): set up security before deployment
+- [Enterprise FAQ](/enterprise/faq): answers to common cost questions

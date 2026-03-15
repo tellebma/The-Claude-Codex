@@ -10,22 +10,59 @@ import {
 } from "@/lib/structured-data";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
+const translations = {
+  fr: {
+    metaTitle: "Contenus editoriaux",
+    metaDescription:
+      "Tous les articles et guides editoriaux du Claude Codex. Explorez nos contenus MDX sur Claude Code, les MCP, les Skills et le prompting.",
+    collectionName: "Contenus editoriaux",
+    collectionDescription:
+      "Tous les articles et guides editoriaux du Claude Codex sur Claude Code, les MCP, les Skills et le prompting.",
+    heroBadge: "Contenus editoriaux",
+    heroTitle: "Tous nos",
+    heroTitleHighlight: "articles",
+    heroSubtitle:
+      "Explorez nos guides editoriaux au format MDX. Chaque article est autonome et peut etre lu independamment.",
+    sectionBadge: "Articles",
+    sectionTitle: "Guides disponibles",
+    sectionDescription:
+      "Cliquez sur un article pour le lire. Les contenus sont classes par ordre de progression.",
+  },
+  en: {
+    metaTitle: "Editorial content",
+    metaDescription:
+      "All editorial articles and guides from The Claude Codex. Explore our MDX content on Claude Code, MCPs, Skills, and prompting.",
+    collectionName: "Editorial content",
+    collectionDescription:
+      "All editorial articles and guides from The Claude Codex on Claude Code, MCPs, Skills, and prompting.",
+    heroBadge: "Editorial content",
+    heroTitle: "All our",
+    heroTitleHighlight: "articles",
+    heroSubtitle:
+      "Explore our editorial guides in MDX format. Each article is self-contained and can be read independently.",
+    sectionBadge: "Articles",
+    sectionTitle: "Available guides",
+    sectionDescription:
+      "Click an article to read it. Content is sorted by progression order.",
+  },
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = translations[locale as "fr" | "en"];
   return createPageMetadata({
-    title: "Contenus editoriaux",
-    description:
-      "Tous les articles et guides editoriaux du Claude Codex. Explorez nos contenus MDX sur Claude Code, les MCP, les Skills et le prompting.",
+    title: t.metaTitle,
+    description: t.metaDescription,
     path: `/${locale}/content`,
     locale,
   });
 }
 
 function buildCollectionJsonLd(locale: string) {
+  const t = translations[locale as "fr" | "en"];
   return createCollectionPageSchema({
-    name: "Contenus editoriaux",
-    description:
-      "Tous les articles et guides editoriaux du Claude Codex sur Claude Code, les MCP, les Skills et le prompting.",
+    name: t.collectionName,
+    description: t.collectionDescription,
     url: `${SITE_URL}/${locale}/content`,
     locale,
   });
@@ -38,6 +75,7 @@ export default async function ContentIndexPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = translations[locale as "fr" | "en"];
   const allFiles = getAllMdxFiles(locale);
 
   return (
@@ -57,14 +95,13 @@ export default async function ContentIndexPage({
           <div className="text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <BookOpen className="h-4 w-4" aria-hidden="true" />
-              Contenus editoriaux
+              {t.heroBadge}
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Tous nos <span className="text-gradient">articles</span>
+              {t.heroTitle} <span className="text-gradient">{t.heroTitleHighlight}</span>
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
-              Explorez nos guides editoriaux au format MDX. Chaque article est
-              autonome et peut etre lu independamment.
+              {t.heroSubtitle}
             </p>
           </div>
         </div>
@@ -74,9 +111,9 @@ export default async function ContentIndexPage({
       <section className="py-16 sm:py-20">
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="Articles"
-            title="Guides disponibles"
-            description="Cliquez sur un article pour le lire. Les contenus sont classes par ordre de progression."
+            badge={t.sectionBadge}
+            title={t.sectionTitle}
+            description={t.sectionDescription}
           />
 
           <div className="mt-12 space-y-4">

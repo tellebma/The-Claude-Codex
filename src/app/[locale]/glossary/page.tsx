@@ -8,6 +8,47 @@ import { glossaryTerms, searchGlossary } from "@/data/glossary";
 import { getLocaleFromPathname, prefixWithLocale } from "@/lib/locale-utils";
 import clsx from "clsx";
 
+const translations = {
+  fr: {
+    heroBadge: "Référence",
+    heroTitle: "Glossaire",
+    heroSubtitleSuffix: "termes techniques expliqués en langage humain, avec des analogies concrètes pour comprendre sans être développeur.",
+    searchPlaceholder: "Rechercher un terme...",
+    searchLabel: "Rechercher dans le glossaire",
+    resultsFor: "résultat",
+    resultsForPlural: "résultats",
+    resultsForPrefix: "pour",
+    noResults: "Aucun terme trouvé pour",
+    showAll: "Voir tous les termes",
+    learnMore: "En savoir plus",
+    learnMoreLabel: "En savoir plus sur",
+    analogyLabel: "Analogie",
+    breadcrumbHome: "Accueil",
+    breadcrumbCurrent: "Glossaire",
+    alphabeticNavLabel: "Navigation alphabétique",
+    breadcrumbLabel: "Fil d'Ariane",
+  },
+  en: {
+    heroBadge: "Reference",
+    heroTitle: "Glossary",
+    heroSubtitleSuffix: "technical terms explained in plain language, with real-world analogies so anyone can understand.",
+    searchPlaceholder: "Search a term...",
+    searchLabel: "Search the glossary",
+    resultsFor: "result",
+    resultsForPlural: "results",
+    resultsForPrefix: "for",
+    noResults: "No term found for",
+    showAll: "Show all terms",
+    learnMore: "Learn more",
+    learnMoreLabel: "Learn more about",
+    analogyLabel: "Analogy",
+    breadcrumbHome: "Home",
+    breadcrumbCurrent: "Glossary",
+    alphabeticNavLabel: "Alphabetic navigation",
+    breadcrumbLabel: "Breadcrumb",
+  },
+};
+
 /**
  * Page glossaire listant tous les termes techniques avec recherche.
  * Client component pour la recherche interactive.
@@ -26,6 +67,7 @@ export default function GlossaryPage() {
   const [query, setQuery] = useState("");
   const pathname = usePathname();
   const locale = getLocaleFromPathname(pathname);
+  const t = translations[locale as "fr" | "en"];
 
   const filteredTerms = useMemo(
     () => (query.trim().length > 0 ? searchGlossary(query) : glossaryTerms),
@@ -57,27 +99,26 @@ export default function GlossaryPage() {
         <div className="relative px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
           {/* Breadcrumb */}
           <nav
-            aria-label="Fil d'Ariane"
+            aria-label={t.breadcrumbLabel}
             className="mb-6 flex items-center gap-2 text-sm text-slate-400"
           >
             <Link href={prefixWithLocale("/", locale)} className="transition-colors hover:text-white">
-              Accueil
+              {t.breadcrumbHome}
             </Link>
             <span aria-hidden="true">/</span>
-            <span className="text-slate-200">Glossaire</span>
+            <span className="text-slate-200">{t.breadcrumbCurrent}</span>
           </nav>
 
           <div className="text-center">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <BookOpen className="h-4 w-4" aria-hidden="true" />
-              Référence
+              {t.heroBadge}
             </div>
             <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              Glossaire
+              {t.heroTitle}
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
-              {glossaryTerms.length} termes techniques expliqués en langage humain,
-              avec des analogies concrètes pour comprendre sans être développeur.
+              {glossaryTerms.length} {t.heroSubtitleSuffix}
             </p>
           </div>
         </div>
@@ -95,8 +136,8 @@ export default function GlossaryPage() {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Rechercher un terme..."
-              aria-label="Rechercher dans le glossaire"
+              placeholder={t.searchPlaceholder}
+              aria-label={t.searchLabel}
               className={clsx(
                 "w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4",
                 "text-slate-900 placeholder-slate-400",
@@ -111,7 +152,7 @@ export default function GlossaryPage() {
               aria-live="polite"
               aria-atomic="true"
             >
-              {filteredTerms.length} résultat{filteredTerms.length !== 1 ? "s" : ""} pour &ldquo;{query}&rdquo;
+              {filteredTerms.length} {filteredTerms.length !== 1 ? t.resultsForPlural : t.resultsFor} {t.resultsForPrefix} &ldquo;{query}&rdquo;
             </p>
           )}
         </div>
@@ -122,16 +163,11 @@ export default function GlossaryPage() {
         <section className="border-b border-slate-200/50 dark:border-slate-700/50">
           <div className="mx-auto max-w-4xl px-4 py-2 sm:px-6">
             <nav
-              aria-label="Navigation alphabétique"
+              aria-label={t.alphabeticNavLabel}
             >
               <ul className="flex flex-wrap gap-0.5" role="list">
                 {letters.map((letter) => (
                   <li key={letter}>
-                    {/*
-                      min-h-[44px] min-w-[44px] avec flex + items-center + justify-center
-                      garantit le touch target 44x44px requis (WCAG 2.5.5).
-                      La taille visuelle reste compacte grâce au flex layout.
-                    */}
                     <a
                       href={`#letter-${letter}`}
                       className={clsx(
@@ -158,27 +194,26 @@ export default function GlossaryPage() {
           {filteredTerms.length === 0 ? (
             <div className="py-16 text-center">
               <p className="text-lg text-slate-500 dark:text-slate-300">
-                Aucun terme trouvé pour &ldquo;{query}&rdquo;
+                {t.noResults} &ldquo;{query}&rdquo;
               </p>
               <button
                 type="button"
                 onClick={() => setQuery("")}
                 className={clsx(
                   "mt-4 text-sm font-medium underline underline-offset-2",
-                  // text-brand-700 sur blanc = 5.6:1 — passe WCAG AA (était brand-600 = 3.9:1)
                   "text-brand-700 hover:text-brand-800",
                   "dark:text-brand-400 dark:hover:text-brand-300",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
                 )}
               >
-                Voir tous les termes
+                {t.showAll}
               </button>
             </div>
           ) : query.trim().length > 0 ? (
             // Résultats de recherche sans groupement par lettre
             <div className="space-y-4">
               {filteredTerms.map((entry) => (
-                <GlossaryCard key={entry.term} entry={entry} locale={locale} />
+                <GlossaryCard key={entry.term} entry={entry} locale={locale} t={t} />
               ))}
             </div>
           ) : (
@@ -186,18 +221,12 @@ export default function GlossaryPage() {
             <div className="space-y-12">
               {letters.map((letter) => (
                 <div key={letter} id={`letter-${letter}`}>
-                  {/*
-                    text-slate-400 en light (4.7:1 sur blanc) et dark:text-slate-500
-                    (3.3:1 sur slate-950). Ces lettres sont purement décoratives/structurelles
-                    et accompagnent toujours un groupe de termes — l'information n'est pas
-                    uniquement portée par leur couleur, ce qui est conforme à WCAG 1.4.1.
-                  */}
                   <h2 className="mb-4 text-2xl font-extrabold text-slate-400 dark:text-slate-500">
                     {letter}
                   </h2>
                   <div className="space-y-4">
                     {(groupedTerms[letter] ?? []).map((entry) => (
-                      <GlossaryCard key={entry.term} entry={entry} locale={locale} />
+                      <GlossaryCard key={entry.term} entry={entry} locale={locale} t={t} />
                     ))}
                   </div>
                 </div>
@@ -213,9 +242,10 @@ export default function GlossaryPage() {
 interface GlossaryCardProps {
   readonly entry: (typeof glossaryTerms)[number];
   readonly locale: string;
+  readonly t: typeof translations.fr;
 }
 
-function GlossaryCard({ entry, locale }: GlossaryCardProps) {
+function GlossaryCard({ entry, locale, t }: GlossaryCardProps) {
   return (
     <article
       className={clsx(
@@ -229,11 +259,6 @@ function GlossaryCard({ entry, locale }: GlossaryCardProps) {
           {entry.term}
         </h3>
         {entry.link && (
-          /*
-            Les liens dans entry.link sont tous internes (ex: "/getting-started/…").
-            On utilise ArrowRight (lien interne) au lieu de ExternalLink (lien externe)
-            pour un signal visuel sémantiquement correct.
-          */
           <Link
             href={prefixWithLocale(entry.link, locale)}
             className={clsx(
@@ -242,9 +267,9 @@ function GlossaryCard({ entry, locale }: GlossaryCardProps) {
               "transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
             )}
-            aria-label={`En savoir plus sur ${entry.term}`}
+            aria-label={`${t.learnMoreLabel} ${entry.term}`}
           >
-            En savoir plus
+            {t.learnMore}
             <ArrowRight className="h-3 w-3" aria-hidden="true" />
           </Link>
         )}
@@ -254,7 +279,7 @@ function GlossaryCard({ entry, locale }: GlossaryCardProps) {
       </p>
       <div className="mt-3 rounded-xl bg-slate-50 px-4 py-3 dark:bg-slate-700/50">
         <span className="text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
-          Analogie
+          {t.analogyLabel}
         </span>
         <p className="mt-1 text-sm italic text-slate-600 dark:text-slate-300">
           {entry.analogy}

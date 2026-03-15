@@ -7,170 +7,170 @@ datePublished: "2026-03-12"
 dateModified: "2026-03-12"
 ---
 
-## Overview du plan d'adoption
+## Adoption plan overview
 
-Deployer un outil d'IA dans une equipe de developpement ne se resume pas a distribuer des licences. Les organisations qui reussissent suivent un plan structure, mesurent les resultats et ajustent en continu.
+Deploying an AI tool in a development team is more than just handing out licenses. Organizations that succeed follow a structured plan, measure results, and adjust continuously.
 
-Voici un plan en 4 phases teste et adapte aux equipes de 5 a 500 developpeurs.
+Here is a 4-phase plan tested and adapted for teams of 5 to 500 developers.
 
-## Phase 1 : Preparation (1 semaine)
+## Phase 1: Preparation (1 week)
 
-### Identifier les champions
+### Identify champions
 
-Reperer 2 a 3 developpeurs motives par l'IA, curieux et credibles aupres de leurs pairs. Ces champions vont :
+Find 2 to 3 developers who are motivated by AI, curious, and credible among their peers. These champions will:
 
-- Tester Claude Code en premier
-- Documenter les cas d'usage qui fonctionnent
-- Repondre aux questions des collegues
-- Remonter les problemes et les idees d'amelioration
+- Test Claude Code first
+- Document use cases that work
+- Answer colleagues' questions
+- Report problems and improvement ideas
 
-### Definir les objectifs mesurables
+### Set measurable objectives
 
-Des objectifs vagues ("etre plus productifs") ne servent a rien. Fixez des metriques concretes :
+Vague objectives ("be more productive") are useless. Set concrete metrics:
 
-| Metrique | Comment mesurer | Objectif pilote |
+| Metric | How to measure | Pilot target |
 |---|---|---|
-| Temps de completion d'une PR | Tracking git (ouverture a merge) | -20 % |
-| Couverture de tests | Rapport de couverture CI | +15 points |
-| Temps de revue de code | Temps entre soumission et approbation | -30 % |
-| Satisfaction developpeur | Questionnaire anonyme (1-10) | > 7/10 |
+| PR completion time | Git tracking (open to merge) | -20% |
+| Test coverage | CI coverage report | +15 points |
+| Code review time | Time from submission to approval | -30% |
+| Developer satisfaction | Anonymous survey (1-10) | > 7/10 |
 
-### Preparer la configuration de base
+### Prepare the base configuration
 
-Avant de lancer le pilote, mettez en place :
+Before launching the pilot, set up:
 
-- Un `CLAUDE.md` de reference pour le projet pilote
-- Un `settings.json` organisation avec les MCP autorises
-- Un channel Slack ou Teams dedie (#claude-code-pilote)
-- Un document partage pour les retours et bonnes pratiques
+- A reference `CLAUDE.md` for the pilot project
+- An organization `settings.json` with authorized MCPs
+- A dedicated Slack or Teams channel (#claude-code-pilot)
+- A shared document for feedback and best practices
 
-## Phase 2 : Pilote (4 a 6 semaines)
+## Phase 2: Pilot (4 to 6 weeks)
 
-### Selectionner l'equipe pilote
+### Select the pilot team
 
-Choisissez une equipe de 3 a 5 developpeurs qui travaillent sur un projet actif (pas un side-project oublie). Criteres :
+Choose a team of 3 to 5 developers working on an active project (not a forgotten side-project). Criteria:
 
-- Projet en developpement actif (commits quotidiens)
-- Mix de seniorites (junior + senior)
-- Volontaires, pas designes d'office
-- Projet avec une CI/CD fonctionnelle (pour mesurer les impacts)
+- Actively developed project (daily commits)
+- Mix of seniority levels (junior + senior)
+- Volunteers, not people assigned by default
+- Project with a working CI/CD pipeline (to measure impact)
 
-### Formation initiale (1/2 journee)
+### Initial training (half day)
 
-Organisez une session de formation couvrant :
+Organize a training session covering:
 
-1. **Les bases** : installation, premiers prompts, les slash commands essentielles
-2. **Le prompting efficace** : structure d'un bon prompt, erreurs courantes, exemples concrets
-3. **Les MCP utiles** : GitHub, Context7 et les MCP specifiques a votre stack
-4. **La securite** : ce qui est envoye a l'API, ce qu'il ne faut pas faire, les regles de l'organisation
+1. **The basics**: installation, first prompts, essential slash commands
+2. **Effective prompting**: structure of a good prompt, common mistakes, concrete examples
+3. **Useful MCPs**: GitHub, Context7, and MCPs specific to your stack
+4. **Security**: what gets sent to the API, what not to do, organization rules
 
-<Callout type="tip" title="Formation en live coding">
-La formation la plus efficace est un live coding ou le formateur resout un vrai probleme du projet avec Claude Code. Les developpeurs voient concretement ce que l'outil peut faire, pas une demo marketing.
+<Callout type="tip" title="Live coding training">
+The most effective training is a live coding session where the trainer solves a real problem from the project with Claude Code. Developers see firsthand what the tool can do, not a marketing demo.
 </Callout>
 
-### Tracking hebdomadaire
+### Weekly tracking
 
-Chaque semaine pendant le pilote :
+Each week during the pilot:
 
-- **Stand-up dedie** (15 min) : chaque participant partage un cas d'usage reussi et un echec
-- **Mesure des metriques** : collectez les donnees definies en phase 1
-- **Mise a jour du CLAUDE.md** : ajoutez les instructions qui ameliorent les resultats
-- **Partage des prompts** : centralisez les meilleurs prompts dans un document partage
+- **Dedicated standup** (15 min): each participant shares a successful use case and a failure
+- **Metrics measurement**: collect the data defined in phase 1
+- **CLAUDE.md updates**: add instructions that improve results
+- **Prompt sharing**: centralize the best prompts in a shared document
 
-### Retrospective de fin de pilote
+### End-of-pilot retrospective
 
-A la fin des 4 a 6 semaines, organisez une retro structuree :
+At the end of the 4 to 6 weeks, hold a structured retro:
 
-- Ce qui a bien fonctionne (cas d'usage, prompts, workflows)
-- Ce qui n'a pas fonctionne (limites, frustrations, couts inattendus)
-- Recommandation : poursuivre, ajuster ou arreter
-- Plan d'action pour la phase suivante
+- What worked well (use cases, prompts, workflows)
+- What didn't work (limits, frustrations, unexpected costs)
+- Recommendation: continue, adjust, or stop
+- Action plan for the next phase
 
-## Phase 3 : Deploiement (2 a 4 semaines)
+## Phase 3: Deployment (2 to 4 weeks)
 
-### Deployer par cohortes
+### Deploy by cohorts
 
-Ne deployer pas a tout le monde en meme temps. Procedez par cohortes de 5 a 10 developpeurs, avec une semaine d'ecart entre chaque cohorte. Ca permet de :
+Don't deploy to everyone at once. Proceed in cohorts of 5 to 10 developers, with a one-week gap between each cohort. This lets you:
 
-- Absorber la charge de support
-- Ajuster la formation en fonction des retours
-- Identifier les problemes avant qu'ils touchent tout le monde
+- Absorb the support load
+- Adjust training based on feedback
+- Identify problems before they affect everyone
 
-### Onboarding standardise
+### Standardized onboarding
 
-Creez un parcours d'onboarding reproductible :
+Create a repeatable onboarding path:
 
-1. **Email d'accueil** avec les liens essentiels (doc interne, channel Slack, CLAUDE.md)
-2. **Session de 30 min** avec un champion pour une demo live
-3. **Exercice guide** : resoudre un bug reel du projet avec Claude Code
-4. **Check-in a J+7** : une discussion informelle pour repondre aux questions
+1. **Welcome email** with essential links (internal docs, Slack channel, CLAUDE.md)
+2. **30-minute session** with a champion for a live demo
+3. **Guided exercise**: fix a real project bug with Claude Code
+4. **Day 7 check-in**: an informal chat to answer questions
 
-### Documentation interne
+### Internal documentation
 
-Capitalisez sur les apprentissages du pilote :
+Build on what you learned during the pilot:
 
-- **Guide de demarrage rapide** specifique a votre organisation
-- **Bibliotheque de prompts** classee par cas d'usage (test, review, doc, refactoring)
-- **FAQ interne** : les vrais problemes rencontres et leurs solutions
-- **CLAUDE.md** optimise et valide par l'equipe pilote
+- **Quick start guide** specific to your organization
+- **Prompt library** organized by use case (test, review, docs, refactoring)
+- **Internal FAQ**: real problems encountered and their solutions
+- **CLAUDE.md** optimized and validated by the pilot team
 
-## Phase 4 : Optimisation (continu)
+## Phase 4: Optimization (ongoing)
 
-### Partager les Skills et configurations
+### Share Skills and configurations
 
-Mettez en place un depot partage (repo git interne) pour :
+Set up a shared repository (internal git repo) for:
 
-- Les **Skills custom** crees par l'equipe (slash commands personnalisees)
-- Les **configurations CLAUDE.md** par type de projet (frontend, backend, data)
-- Les **templates de prompts** valides et documentes
+- **Custom Skills** created by the team (custom slash commands)
+- **CLAUDE.md configurations** by project type (frontend, backend, data)
+- **Prompt templates** validated and documented
 
-### Creer un centre d'excellence
+### Create a center of excellence
 
-Designez 2 a 3 personnes (pas forcement a temps plein) pour :
+Designate 2 to 3 people (not necessarily full-time) to:
 
-- Centraliser les bonnes pratiques
-- Evaluer les nouvelles fonctionnalites de Claude Code
-- Former les nouvelles recrues
-- Suivre les metriques d'adoption et de productivite
+- Centralize best practices
+- Evaluate new Claude Code features
+- Train new hires
+- Track adoption and productivity metrics
 
-### Benchmarking continu
+### Continuous benchmarking
 
-Continuez a mesurer les metriques cles sur le long terme. Comparez :
+Keep measuring key metrics over the long term. Compare:
 
-- Les equipes qui utilisent Claude Code vs celles qui ne l'utilisent pas (encore)
-- L'evolution des metriques mois par mois
-- Le cout reel par developpeur vs le gain de productivite
+- Teams using Claude Code vs those not using it (yet)
+- Metric trends month over month
+- Actual cost per developer vs productivity gain
 
-## Change management : gerer les resistances
+## Change management: handling resistance
 
-### Les sceptiques
+### Skeptics
 
-Certains developpeurs doutent de l'utilite de l'outil. C'est normal et sain. Reponse :
+Some developers doubt the tool's usefulness. That's normal and healthy. How to respond:
 
-- Ne forcez pas l'adoption. Rendez l'outil disponible et laissez les resultats parler.
-- Demandez aux sceptiques de tester pendant 2 semaines sur un cas d'usage precis avant de juger.
-- Partagez les retours quantifies du pilote, pas des promesses marketing.
+- Don't force adoption. Make the tool available and let the results speak.
+- Ask skeptics to test for 2 weeks on a specific use case before judging.
+- Share quantified pilot feedback, not marketing promises.
 
-### La peur du remplacement
+### Fear of replacement
 
-"L'IA va prendre mon emploi" est une crainte reelle. Abordez-la frontalement :
+"AI will take my job" is a real concern. Address it head on:
 
-- Claude Code est un outil, pas un remplacant. Il automatise les taches repetitives pour liberer du temps sur les taches a haute valeur ajoutee.
-- Les developpeurs qui maitrisent l'IA seront plus valorises, pas moins.
-- Montrez des exemples concrets : l'outil ne remplace pas la reflexion architecturale, le design de systemes, la relation client.
+- Claude Code is a tool, not a replacement. It automates repetitive tasks to free up time for high-value work.
+- Developers who master AI will be more valued, not less.
+- Show concrete examples: the tool doesn't replace architectural thinking, system design, or client relationships.
 
-### Templates de communication
+### Communication templates
 
-**Pour l'annonce initiale :**
+**For the initial announcement:**
 
-> Nous lancons un pilote de Claude Code, un assistant IA en ligne de commande, avec l'equipe [nom]. L'objectif est de mesurer l'impact sur la productivite et la qualite du code. Ce n'est pas un remplacement des developpeurs, c'est un outil pour les rendre plus efficaces sur les taches repetitives. Les resultats du pilote decideront de la suite.
+> We're launching a pilot of Claude Code, a command-line AI assistant, with the [name] team. The goal is to measure the impact on productivity and code quality. This is not a replacement for developers; it's a tool to make them more effective on repetitive tasks. The pilot results will determine what comes next.
 
-**Pour les sceptiques :**
+**For skeptics:**
 
-> On comprend les doutes, c'est normal face a un nouvel outil. On vous demande simplement de tester pendant 2 semaines sur [cas d'usage precis]. Si apres 2 semaines ca ne vous apporte rien, aucun probleme. Les retours honnetes, positifs ou negatifs, nous aident a prendre la bonne decision.
+> We understand the doubts, that's normal with a new tool. We're simply asking you to try it for 2 weeks on [specific use case]. If after 2 weeks it doesn't help you, no problem. Honest feedback, positive or negative, helps us make the right call.
 
 ## Next steps
 
-- [Calculateur TCO](/enterprise/tco-calculator) : estimez le budget pour votre equipe
-- [Securite et conformite](/enterprise/security-compliance) : cadrez la securite avant le deploiement
-- [Gouvernance et roles](/enterprise/governance) : definissez les permissions et les regles
+- [TCO calculator](/enterprise/tco-calculator): estimate the budget for your team
+- [Security and compliance](/enterprise/security-compliance): set up security before deployment
+- [Governance and roles](/enterprise/governance): define permissions and rules

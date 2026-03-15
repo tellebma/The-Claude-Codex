@@ -7,213 +7,213 @@ datePublished: "2026-03-10"
 dateModified: "2026-03-10"
 ---
 
-## Trois mécanismes, trois missions
+## Three mechanisms, three missions
 
-Claude Code propose trois façons d'étendre ses capacités : les **Skills**, les **MCP** (Model Context Protocol) et les **Extensions communautaires** (souvent appelées « plugins » par abus de langage). Chacun répond à un besoin différent, et c'est en les **combinant** qu'on tire le meilleur de l'écosystème.
+Claude Code offers three ways to extend its capabilities: **Skills**, **MCPs** (Model Context Protocol), and **Community extensions** (often loosely called "plugins"). Each serves a different need, and it's by **combining** them that you get the most out of the ecosystem.
 
-<Callout type="warning" title="Les « plugins » n'existent pas comme décrit ailleurs">
-Claude Code ne dispose pas de commandes `/plugin install` ou d'un marketplace de plugins officiel. Ce que la communauté appelle « plugins » sont en réalité des **collections de fichiers** (agents, rules, skills) qui s'installent manuellement depuis GitHub ou via `/install-github`. Ce guide utilise le terme « extension communautaire » pour plus de précision.
+<Callout type="warning" title="'Plugins' don't exist as described elsewhere">
+Claude Code doesn't have `/plugin install` commands or an official plugin marketplace. What the community calls "plugins" are actually **collections of files** (agents, rules, skills) that are installed manually from GitHub or via `/install-github`. This guide uses the term "community extension" for accuracy.
 </Callout>
 
-<Callout type="info" title="L'analogie complète">
-Imaginez Claude Code comme un artisan dans son atelier.
-- Les **Skills** sont ses **recettes et procédures** : elles lui disent comment réaliser une tâche précise, step by step.
-- Les **MCP** sont ses **outils connectés** : une perceuse branchée au réseau électrique, un poste à souder relié au gaz. Ils donnent accès à des ressources externes.
-- Les **Extensions communautaires** sont des **configurations partagées** : des sets d'agents, règles et skills regroupés par la communauté pour un usage précis.
+<Callout type="info" title="The full analogy">
+Think of Claude Code as a craftsperson in their workshop.
+- **Skills** are their **recipes and procedures**: they tell them how to carry out a specific task, step by step.
+- **MCPs** are their **connected tools**: a power drill plugged into the electrical network, a welding station connected to the gas line. They provide access to external resources.
+- **Community extensions** are **shared configurations**: sets of agents, rules, and skills bundled by the community for a specific use.
 </Callout>
 
-## Le tableau comparatif
+## Comparison table
 
-| Critère | **Skill** | **MCP** | **Extension communautaire** |
+| Criteria | **Skill** | **MCP** | **Community extension** |
 |---|---|---|---|
-| **Définition** | Fichier Markdown d'instructions | Serveur externe exposant des outils via JSON-RPC | Collection d'agents, rules et skills partagée |
-| **Analogie** | Recette de cuisine | Prise USB vers un service | Pack de configuration partagé |
-| **Format** | Fichier `.md` | Serveur (Node.js, Python, etc.) | Dossier de fichiers `.md` / `.mdc` |
-| **Installation** | Copier dans `.claude/commands/` | `claude mcp add` ou `settings.json` | `/install-github` ou copie manuelle |
-| **Portée** | Projet ou utilisateur | Projet ou global | Projet ou global |
-| **Invocation** | Slash command (`/project:...`) | Automatique (Claude choisit l'outil) | Automatique (agents actifs) ou slash command |
-| **Intelligence** | Instructions suivies par Claude | Outils appelés par Claude | Instructions interprétées par Claude |
-| **Complexité** | Faible (juste du Markdown) | Moyenne (serveur à maintenir) | Faible (fichiers texte) |
-| **Partage** | Via git (`.claude/commands/`) | Via configuration partagée | Via GitHub |
-| **Exemples** | Review PR, TDD Guide, Deploy | GitHub, Slack, PostgreSQL | everything-claude-code, collections de rules |
+| **Definition** | Markdown instruction file | External server exposing tools via JSON-RPC | Shared collection of agents, rules, and skills |
+| **Analogy** | Cooking recipe | USB port to a service | Shared configuration pack |
+| **Format** | `.md` file | Server (Node.js, Python, etc.) | Folder of `.md` / `.mdc` files |
+| **Installation** | Copy into `.claude/commands/` | `claude mcp add` or `settings.json` | `/install-github` or manual copy |
+| **Scope** | Project or user | Project or global | Project or global |
+| **Invocation** | Slash command (`/project:...`) | Automatic (Claude picks the tool) | Automatic (active agents) or slash command |
+| **Intelligence** | Instructions followed by Claude | Tools called by Claude | Instructions interpreted by Claude |
+| **Complexity** | Low (just Markdown) | Medium (server to maintain) | Low (text files) |
+| **Sharing** | Via git (`.claude/commands/`) | Via shared configuration | Via GitHub |
+| **Examples** | PR Review, TDD Guide, Deploy | GitHub, Slack, PostgreSQL | everything-claude-code, rule collections |
 
-## When to use quoi ?
+## When to use what?
 
-Le choix dépend de ce que vous essayez d'accomplir. Voici un guide de décision rapide.
+The choice depends on what you're trying to accomplish. Here's a quick decision guide.
 
-### Utilisez un Skill quand...
+### Use a Skill when...
 
-- Vous voulez **standardiser un processus** (review, deploy, onboarding)
-- Vous voulez **enseigner un comportement** spécifique à Claude
-- Vous voulez quelque chose de **simple à créer et maintenir**
-- Le workflow est **auto-contenu** (pas besoin d'appeler un service externe)
-- Vous voulez **partager un process** avec l'équipe via git
-
-```bash
-# Exemples parfaits pour un Skill
-/project:review-pr          # Process de review standardisé
-/project:create-component   # Création de composant selon vos conventions
-/user:tdd-guide             # Workflow TDD personnel
-/project:deploy-checklist   # Checklist de déploiement
-```
-
-### Utilisez un MCP quand...
-
-- Vous devez **accéder à un service externe** (API, base de données, SaaS)
-- Vous voulez que Claude **lise ou écrive** dans un système tiers
-- L'outil doit être **toujours disponible** (pas invoqué manuellement)
-- You need d'un **protocole standardisé** de communication
+- You want to **standardize a process** (review, deploy, onboarding)
+- You want to **teach a specific behavior** to Claude
+- You want something **simple to create and maintain**
+- The workflow is **self-contained** (no need to call an external service)
+- You want to **share a process** with the team via git
 
 ```bash
-# Exemples parfaits pour un MCP
-claude mcp add github       # Accéder aux repos, PRs, issues GitHub
-claude mcp add slack        # Lire et envoyer des messages Slack
-claude mcp add postgres     # Requêter une base de données
-claude mcp add context7     # Accéder à la documentation à jour
+# Perfect examples for a Skill
+/project:review-pr          # Standardized review process
+/project:create-component   # Component creation per your conventions
+/user:tdd-guide             # Personal TDD workflow
+/project:deploy-checklist   # Deployment checklist
 ```
 
-<Card title="Pour approfondir les MCP" variant="default">
-Consultez notre [guide complet sur les MCP](/mcp/what-are-mcps) pour comprendre leur fonctionnement en détail, et le [top MCP recommandés](/mcp/best-productivity) pour découvrir les plus utiles.
+### Use an MCP when...
+
+- You need to **access an external service** (API, database, SaaS)
+- You want Claude to **read from or write to** a third-party system
+- The tool needs to be **always available** (not manually invoked)
+- You need a **standardized communication protocol**
+
+```bash
+# Perfect examples for an MCP
+claude mcp add github       # Access repos, PRs, GitHub issues
+claude mcp add slack        # Read and send Slack messages
+claude mcp add postgres     # Query a database
+claude mcp add context7     # Access up-to-date documentation
+```
+
+<Card title="Dive deeper into MCPs" variant="default">
+Check our [complete MCP guide](/mcp/what-are-mcps) to understand how they work in detail, and the [top recommended MCPs](/mcp/best-productivity) to discover the most useful ones.
 </Card>
 
-### Utilisez une extension communautaire quand...
+### Use a community extension when...
 
-- Vous voulez bénéficier d'un **pack complet** (agents + skills + templates) maintenu par la communauté
-- Vous ne voulez pas créer vos fichiers de zéro et préférez partir d'une **base éprouvée**
-- Vous voulez **partager une configuration** avec votre équipe ou la communauté
-- La configuration est **complexe** et nécessite plusieurs fichiers coordonnés
+- You want to benefit from a **complete pack** (agents + skills + templates) maintained by the community
+- You don't want to create your files from scratch and prefer starting from a **proven base**
+- You want to **share a configuration** with your team or the community
+- The configuration is **complex** and requires multiple coordinated files
 
 ```bash
-# Installer depuis GitHub via /install-github
-/install-github punkpeye/everything-claude-code   # Pack complet d'agents et skills
+# Install from GitHub via /install-github
+/install-github punkpeye/everything-claude-code   # Complete agent and skill pack
 
-# Ou manuellement
+# Or manually
 git clone https://github.com/punkpeye/everything-claude-code
 cp -r everything-claude-code/agents/ .claude/agents/
 cp -r everything-claude-code/rules/ .claude/rules/
 ```
 
-<Card title="Pour approfondir les extensions communautaires" variant="default">
-Consultez notre [guide complet sur les extensions communautaires](/plugins/what-are-plugins) pour comprendre comment elles fonctionnent, et le [top extensions essentielles](/plugins/best-essential) pour démarrer.
+<Card title="Dive deeper into community extensions" variant="default">
+Check our [complete guide on community extensions](/plugins/what-are-plugins) to understand how they work, and the [top essential extensions](/plugins/best-essential) to get started.
 </Card>
 
-## Les combinaisons gagnantes
+## Winning combinations
 
-La vraie puissance de Claude Code se révèle quand vous **combinez** ces trois mécanismes. Voici les combinaisons les plus efficaces.
+The real power of Claude Code shows when you **combine** these three mechanisms. Here are the most effective combinations.
 
-### Combo 1 : Développement full-stack
+### Combo 1: Full-stack development
 
 ```bash
-# MCP pour le contexte externe
-claude mcp add github          # Accès aux issues et PRs
-claude mcp add context7        # Documentation à jour des librairies
+# MCP for external context
+claude mcp add github          # Access to issues and PRs
+claude mcp add context7        # Up-to-date library documentation
 
-# Extension communautaire pour les agents
+# Community extension for agents
 /install-github punkpeye/everything-claude-code
 
-# Skills pour les workflows d'équipe
-/project:create-api            # Créer un endpoint selon vos conventions
-/project:review-pr             # Review standardisée
+# Skills for team workflows
+/project:create-api            # Create an endpoint per your conventions
+/project:review-pr             # Standardized review
 ```
 
-**Résultat** : Claude accède aux issues GitHub (MCP), utilise les agents spécialisés de la collection communautaire, et suit vos conventions d'équipe (Skills).
+**Result**: Claude accesses GitHub issues (MCP), uses the community collection's specialized agents, and follows your team conventions (Skills).
 
-### Combo 2 : Workflow de sécurité
+### Combo 2: Security workflow
 
 ```bash
-# Agent de sécurité depuis Everything Claude Code
+# Security agent from Everything Claude Code
 /install-github punkpeye/everything-claude-code
 
-# Skill pour l'audit complet
+# Skill for the complete audit
 /project:security-audit
 
-# MCP GitHub pour créer les issues de suivi
+# GitHub MCP to create tracking issues
 claude mcp add github
 ```
 
-**Résultat** : L'agent security-reviewer analyse le code, le Skill structure l'audit selon votre checklist, et le MCP GitHub crée automatiquement les issues pour les vulnérabilités trouvées.
+**Result**: The security-reviewer agent analyzes the code, the Skill structures the audit according to your checklist, and the GitHub MCP automatically creates issues for found vulnerabilities.
 
-### Combo 3 : Onboarding développeur
+### Combo 3: Developer onboarding
 
 ```bash
-# MCP pour accéder à la documentation
+# MCP to access documentation
 claude mcp add context7
 
-# Skill pour guider le nouvel arrivant
+# Skill to guide the newcomer
 /project:onboarding
 
-# Extension communautaire pour les agents spécialisés
+# Community extension for specialized agents
 /install-github punkpeye/everything-claude-code
 ```
 
-**Résultat** : Le MCP donne accès à la documentation à jour (Context7), le Skill guide le nouveau développeur à travers les étapes d'onboarding, et les agents spécialisés l'assistent sur les tâches spécifiques.
+**Result**: The MCP provides access to up-to-date documentation (Context7), the Skill guides the new developer through the onboarding steps, and specialized agents assist them on specific tasks.
 
-<Callout type="tip" title="Commencez simple, enrichissez progressivement">
-Pas besoin de tout installer d'un coup. Commencez par un ou deux Skills pour vos workflows quotidiens, ajoutez les MCP pour les services que vous utilisez, puis explorez les plugins quand vous serez à l'aise. L'écosystème est conçu pour une adoption progressive.
+<Callout type="tip" title="Start simple, enrich progressively">
+No need to install everything at once. Start with one or two Skills for your daily workflows, add MCPs for the services you use, then explore plugins when you're comfortable. The ecosystem is designed for progressive adoption.
 </Callout>
 
-## Arbre de décision
+## Decision tree
 
-Vous ne savez pas quel mécanisme utiliser ? Suivez ce guide :
+Not sure which mechanism to use? Follow this guide:
 
 <Steps>
-<Step title="Avez-vous besoin d'accéder à un service externe ?" stepNumber={1}>
-**Oui** → Utilisez un **MCP**. C'est le seul mécanisme qui connecte Claude Code à des services tiers (GitHub, Slack, bases de données, APIs).
+<Step title="Do you need to access an external service?" stepNumber={1}>
+**Yes** -> Use an **MCP**. It's the only mechanism that connects Claude Code to third-party services (GitHub, Slack, databases, APIs).
 
-**Non** → Passez à la question suivante.
+**No** -> Move to the next question.
 </Step>
 
-<Step title="Voulez-vous standardiser un processus ou un workflow ?" stepNumber={2}>
-**Oui** → Utilisez un **Skill**. C'est le moyen le plus simple de codifier un processus. Un fichier Markdown suffit.
+<Step title="Do you want to standardize a process or workflow?" stepNumber={2}>
+**Yes** -> Use a **Skill**. It's the simplest way to codify a process. A Markdown file is all you need.
 
-**Non** → Passez à la question suivante.
+**No** -> Move to the next question.
 </Step>
 
-<Step title="Avez-vous besoin d'un pack complet d'agents et de règles ?" stepNumber={3} isLast>
-**Oui** → Utilisez une **extension communautaire** (comme [everything-claude-code](https://github.com/punkpeye/everything-claude-code)). Ces collections regroupent agents, skills et templates dans un dossier cohérent, maintenu par la communauté. Installez-les avec `/install-github` ou manuellement.
+<Step title="Do you need a complete pack of agents and rules?" stepNumber={3} isLast>
+**Yes** -> Use a **community extension** (like [everything-claude-code](https://github.com/punkpeye/everything-claude-code)). These collections bundle agents, skills, and templates into a coherent folder, maintained by the community. Install them with `/install-github` or manually.
 
-**Non** → Un Skill simple suffit probablement. Commencez par là et évoluez si besoin.
+**No** -> A simple Skill is probably enough. Start there and evolve if needed.
 </Step>
 </Steps>
 
 ## FAQ
 
-### Puis-je utiliser les trois en même temps ?
+### Can I use all three at the same time?
 
-Absolument. Les trois mécanismes sont conçus pour être **complémentaires**. Une extension communautaire peut inclure des Skills, et ces Skills peuvent être utilisés en parallèle d'outils MCP. C'est la combinaison des trois qui donne les meilleurs résultats.
+Absolutely. The three mechanisms are designed to be **complementary**. A community extension can include Skills, and those Skills can be used alongside MCP tools. Combining all three gives the best results.
 
-### Un Skill peut-il appeler un MCP ?
+### Can a Skill call an MCP?
 
-Pas directement. Un Skill donne des **instructions** à Claude, et Claude peut ensuite décider d'utiliser un outil MCP si c'est pertinent. Le Skill ne "connaît" pas les MCP, mais Claude fait le lien intelligemment.
+Not directly. A Skill gives **instructions** to Claude, and Claude can then decide to use an MCP tool if it's relevant. The Skill doesn't "know about" MCPs, but Claude intelligently makes the connection.
 
-### Une extension communautaire remplace-t-elle les Skills et les MCP ?
+### Does a community extension replace Skills and MCPs?
 
-Non. Une extension communautaire **inclut** souvent des Skills (fichiers Markdown dans un dossier `commands/`), mais elle ne remplace pas les MCP. Les MCP restent nécessaires pour la connexion aux services externes. Pensez à une extension communautaire comme un **ensemble de fichiers de configuration** qui enrichit Claude Code sans nécessiter de serveur externe.
+No. A community extension often **includes** Skills (Markdown files in a `commands/` folder), but it doesn't replace MCPs. MCPs are still needed for connecting to external services. Think of a community extension as a **set of configuration files** that enriches Claude Code without requiring an external server.
 
-### Comment choisir entre un Skill de projet et un Skill personnel ?
+### How do I choose between a project Skill and a personal Skill?
 
-- **Skill de projet** (`.claude/commands/`) : pour tout ce qui concerne les conventions et workflows **partagés** par l'équipe. Versionné avec le code.
-- **Skill personnel** (`~/.claude/commands/`) : pour vos préférences individuelles de travail. Non partagé.
+- **Project Skill** (`.claude/commands/`): for everything involving conventions and workflows **shared** by the team. Versioned with the code.
+- **Personal Skill** (`~/.claude/commands/`): for your individual work preferences. Not shared.
 
-### Les Skills consomment-ils du contexte ?
+### Do Skills consume context?
 
-Oui, quand un Skill est invoqué, son contenu est injecté dans le contexte de Claude. C'est pourquoi il est important de garder les Skills **concis et ciblés**. Un Skill de 100-200 lignes est idéal. Au-delà de 500 lignes, envisagez de le découper.
+Yes, when a Skill is invoked, its content is injected into Claude's context. That's why it's important to keep Skills **concise and focused**. A 100-200 line Skill is ideal. Beyond 500 lines, consider splitting it.
 
-### Peut-on créer un MCP custom ?
+### Can you create a custom MCP?
 
-Oui, un MCP est un serveur qui implémente le protocole JSON-RPC. Vous pouvez en créer avec le [SDK MCP](https://modelcontextprotocol.io) en TypeScript, Python ou d'autres langages. Consultez notre [guide MCP](/mcp/what-are-mcps) pour plus de détails.
+Yes, an MCP is a server that implements the JSON-RPC protocol. You can create one with the [MCP SDK](https://modelcontextprotocol.io) in TypeScript, Python, or other languages. Check our [MCP guide](/mcp/what-are-mcps) for more details.
 
-### Quel est l'impact sur les performances ?
+### What's the performance impact?
 
-- **Skills** : impact minimal (juste du texte injecté dans le contexte)
-- **MCP** : dépend du service externe (latence réseau, temps de réponse de l'API)
-- **Extensions communautaires** : impact variable (les agents et rules ajoutés consomment du contexte à chaque session)
+- **Skills**: minimal impact (just text injected into context)
+- **MCPs**: depends on the external service (network latency, API response time)
+- **Community extensions**: variable impact (added agents and rules consume context every session)
 
 ## Going further
 
-- [Qu'est-ce qu'un Skill ?](/skills/what-are-skills) : Comprendre le concept en profondeur
-- [Créer un Skill custom](/skills/create-custom) : Guide step by step pour écrire vos propres Skills
-- [Comprendre les MCP](/mcp/what-are-mcps) : Tout sur le Model Context Protocol
-- [Extensions communautaires](/plugins/what-are-plugins) : Comment fonctionnent et s'installent les collections communautaires
-- [Guide de prompting](/prompting) : Optimiser vos interactions avec Claude Code
-- [Configurer Claude Code](/configurator) : Personnaliser votre environnement
+- [What is a Skill?](/skills/what-are-skills): Understand the concept in depth
+- [Create a custom Skill](/skills/create-custom): Step-by-step guide to writing your own Skills
+- [Understanding MCPs](/mcp/what-are-mcps): Everything about the Model Context Protocol
+- [Community extensions](/plugins/what-are-plugins): How community collections work and how to install them
+- [Prompting guide](/prompting): Optimize your interactions with Claude Code
+- [Configure Claude Code](/configurator): Customize your environment

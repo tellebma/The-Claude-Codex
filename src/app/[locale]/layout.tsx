@@ -32,16 +32,17 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-const MATOMO_URL =
-  process.env.NEXT_PUBLIC_MATOMO_URL ?? "https://matomo.tellebma.fr";
-const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "3";
+const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "";
+const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "";
+const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
 
 /*
  * Matomo analytics script — safe: built from environment variables
- * or hardcoded defaults at build time. No user input reaches this path.
- * Same pattern used in the previous root layout.
+ * at build time. No user input reaches this path.
+ * Tracking is disabled entirely when env vars are not set.
  */
-const matomoTrackingScript = `
+const matomoTrackingScript = MATOMO_ENABLED
+  ? `
   var _paq = window._paq = window._paq || [];
   _paq.push(['disableCookies']);
   _paq.push(['setDoNotTrack', true]);
@@ -54,7 +55,8 @@ const matomoTrackingScript = `
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
     g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
   })();
-`;
+`
+  : "";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -170,11 +172,13 @@ export default async function LocaleLayout({
           // eslint-disable-next-line react/no-danger -- safe: JSON.stringify of static schema
           dangerouslySetInnerHTML={{ __html: organizationJsonLdHtml }}
         />
-        {/* Matomo cookieless analytics — safe: env vars / hardcoded defaults only */}
-        <script
-          // eslint-disable-next-line react/no-danger -- safe: built from env vars at build time
-          dangerouslySetInnerHTML={{ __html: matomoTrackingScript }}
-        />
+        {/* Matomo cookieless analytics — only rendered when env vars are set */}
+        {MATOMO_ENABLED && (
+          <script
+            // eslint-disable-next-line react/no-danger -- safe: built from env vars at build time
+            dangerouslySetInnerHTML={{ __html: matomoTrackingScript }}
+          />
+        )}
       </head>
       <body
         className={`${jakarta.variable} ${mono.variable} font-sans antialiased`}

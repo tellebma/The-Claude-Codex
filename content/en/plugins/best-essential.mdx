@@ -7,40 +7,40 @@ datePublished: "2026-03-09"
 dateModified: "2026-03-11"
 ---
 
-## Les ressources que tout développeur Claude Code devrait connaître
+## Resources every Claude Code developer should know
 
-Ces ressources communautaires sont les **fondamentaux** de l'écosystème Claude Code. Elles enrichissent considérablement votre expérience quotidienne : agents spécialisés, documentation à jour, analyse de codebase et amélioration de prompts.
+These community resources are the **fundamentals** of the Claude Code ecosystem. They significantly enrich your daily experience: specialized agents, up-to-date documentation, codebase analysis, and prompt improvement.
 
-<Callout type="info" title="Extensions communautaires, pas des plugins officiels">
-Les ressources présentées sur cette page sont des **projets communautaires**, non officiellement publiés par Anthropic. Elles s'installent manuellement (copie de fichiers, npm, ou `/install-github`). Il n'existe pas de commande `/plugin install` dans Claude Code.
+<Callout type="info" title="Community extensions, not official plugins">
+The resources on this page are **community projects**, not officially published by Anthropic. They're installed manually (file copy, npm, or `/install-github`). There is no `/plugin install` command in Claude Code.
 </Callout>
 
 ---
 
-## Everything Claude Code : La collection complète
+## Everything Claude Code: The complete collection
 
-**Projet communautaire** | Catégorie : Agents, Rules & Skills | Auteur : [punkpeye](https://github.com/punkpeye)
+**Community project** | Category: Agents, Rules & Skills | Author: [punkpeye](https://github.com/punkpeye)
 
-[Everything Claude Code](https://github.com/punkpeye/everything-claude-code) est l'une des collections communautaires les plus connues de l'écosystème. Elle regroupe une **collection d'agents spécialisés, de règles et de skills** prêts à l'emploi qui couvrent les cas d'usage les plus courants du développement.
+[Everything Claude Code](https://github.com/punkpeye/everything-claude-code) is one of the best-known community collections in the ecosystem. It brings together a **collection of specialized agents, rules, and skills** ready to use that cover the most common development use cases.
 
-<Callout type="info" title="Projet communautaire open source">
-Everything Claude Code est hébergé sur GitHub à l'adresse [github.com/punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code). C'est un projet de la communauté, non affilié à Anthropic.
+<Callout type="info" title="Open source community project">
+Everything Claude Code is hosted on GitHub at [github.com/punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code). It's a community project, not affiliated with Anthropic.
 </Callout>
 
-### Ce qu'il apporte
+### What it provides
 
-- **Agents spécialisés** : `senior-dev`, `architect`, `reviewer`, `debugger`, `optimizer`, chacun avec une expertise et un style de réponse adaptés
-- **Rules de workflow** : conventions de code, bonnes pratiques, guidelines de revue de PR
-- **Skills** : commandes slash pour les tâches courantes (TDD, refactoring, documentation)
-- **Templates CLAUDE.md** : fichiers de configuration optimisés pour différents stacks
+- **Specialized agents**: `senior-dev`, `architect`, `reviewer`, `debugger`, `optimizer`, each with tailored expertise and response style
+- **Workflow rules**: code conventions, best practices, PR review guidelines
+- **Skills**: slash commands for common tasks (TDD, refactoring, documentation)
+- **CLAUDE.md templates**: configuration files optimized for different stacks
 
 ### Installation
 
 ```bash
-# Via /install-github (recommandé)
+# Via /install-github (recommended)
 /install-github punkpeye/everything-claude-code
 
-# Ou manuellement
+# Or manually
 git clone https://github.com/punkpeye/everything-claude-code /tmp/ecc
 mkdir -p .claude/agents .claude/rules .claude/commands
 cp -r /tmp/ecc/agents/ .claude/
@@ -50,35 +50,35 @@ cp -r /tmp/ecc/commands/ .claude/
 
 ### Use cases
 
-- **Revue de code complète** : *"En tant qu'agent reviewer, analyse ma dernière PR et suggère des améliorations"*
-- **Architecture d'un nouveau module** : *"En tant qu'architect, aide-moi à concevoir le système de notification"*
-- **Debugging avancé** : *"En tant que debugger, aide-moi à comprendre pourquoi les tests E2E échouent sur CI"*
-- **Optimisation** : *"En tant qu'optimizer, analyse les performances de mon API et propose des améliorations"*
+- **Full code review**: *"As the reviewer agent, analyze my latest PR and suggest improvements"*
+- **New module architecture**: *"As the architect, help me design the notification system"*
+- **Advanced debugging**: *"As the debugger, help me understand why E2E tests fail on CI"*
+- **Optimization**: *"As the optimizer, analyze my API's performance and suggest improvements"*
 
-<Callout type="tip" title="Adapter les agents à votre projet">
-Les agents d'Everything Claude Code sont des fichiers Markdown : vous pouvez les modifier librement pour les adapter aux conventions de votre équipe. Forkez le repo et personnalisez selon vos besoins.
+<Callout type="tip" title="Adapt agents to your project">
+Everything Claude Code agents are Markdown files: you can freely modify them to match your team's conventions. Fork the repo and customize to your needs.
 </Callout>
 
 ---
 
-## Context7 : La documentation toujours à jour
+## Context7: Always up-to-date documentation
 
-**MCP Server** | Catégorie : Documentation | Auteur : [Upstash](https://upstash.com/)
+**MCP Server** | Category: Documentation | Author: [Upstash](https://upstash.com/)
 
-Context7 résout un problème majeur : les **connaissances obsolètes**. Claude Code a une date de coupure pour ses connaissances. Context7 est un **MCP server** (pas un plugin) qui lui permet d'accéder à la **documentation la plus récente** de n'importe quelle bibliothèque ou framework, en temps réel.
+Context7 solves a major problem: **outdated knowledge**. Claude Code has a knowledge cutoff date. Context7 is an **MCP server** (not a plugin) that lets it access the **latest documentation** for any library or framework, in real time.
 
-<Callout type="info" title="Context7 est un MCP, pas un plugin">
-Context7 s'installe comme un **serveur MCP** dans votre `settings.json`, pas comme un fichier Markdown. Son package npm est `@upstash/context7-mcp`. Il est développé par Upstash et est open source sur [github.com/upstash/context7](https://github.com/upstash/context7).
+<Callout type="info" title="Context7 is an MCP, not a plugin">
+Context7 is installed as an **MCP server** in your `settings.json`, not as a Markdown file. Its npm package is `@upstash/context7-mcp`. It's developed by Upstash and is open source at [github.com/upstash/context7](https://github.com/upstash/context7).
 </Callout>
 
 ### Installation
 
 ```bash
-# Via la commande Claude
+# Via the Claude command
 claude mcp add context7 -- npx -y @upstash/context7-mcp
 ```
 
-### Configuration JSON
+### JSON configuration
 
 ```json
 {
@@ -93,96 +93,96 @@ claude mcp add context7 -- npx -y @upstash/context7-mcp
 
 ### Use cases
 
-- **API inconnue** : *"Utilise Context7 pour trouver comment utiliser useOptimistic de React 19"*
-- **Migration de version** : *"Quels breaking changes dans Next.js 15 par rapport à Next.js 14 ?"*
-- **Vérification de syntaxe** : *"Vérifie dans la doc Tailwind si la classe text-balance est disponible en v3"*
+- **Unknown API**: *"Use Context7 to find how to use useOptimistic from React 19"*
+- **Version migration**: *"What are the breaking changes in Next.js 15 compared to Next.js 14?"*
+- **Syntax check**: *"Check the Tailwind docs to see if the text-balance class is available in v3"*
 
 ---
 
-## Repomix : Analyse complète de codebase
+## Repomix: Full codebase analysis
 
-**Outil CLI npm** | Catégorie : Analyse | Auteur : [yamadashy](https://github.com/yamadashy)
+**CLI npm tool** | Category: Analysis | Author: [yamadashy](https://github.com/yamadashy)
 
-[Repomix](https://github.com/yamadashy/repomix) est un **outil CLI** (pas un plugin) qui condense une codebase entière en un seul fichier structuré, optimisé pour être passé à Claude Code comme contexte. Au lieu de lire fichier par fichier, Claude Code obtient une vue d'ensemble complète et organisée de votre projet.
+[Repomix](https://github.com/yamadashy/repomix) is a **CLI tool** (not a plugin) that condenses an entire codebase into a single structured file, optimized for passing to Claude Code as context. Instead of reading file by file, Claude Code gets a complete, organized overview of your project.
 
-<Callout type="info" title="Repomix sur npm">
-Repomix est disponible sur [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Son repo source est sur [github.com/yamadashy/repomix](https://github.com/yamadashy/repomix).
+<Callout type="info" title="Repomix on npm">
+Repomix is available on [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Its source repo is at [github.com/yamadashy/repomix](https://github.com/yamadashy/repomix).
 </Callout>
 
-### Ce qu'il apporte
+### What it provides
 
-- **Condensation intelligente** : génère un fichier texte unique contenant tout votre code, dans un format optimisé pour les LLMs
-- **Filtrage configurable** : exclut `node_modules`, fichiers binaires, et tout ce que vous configurez
-- **Statistiques** : compte les tokens pour estimer l'utilisation du contexte
-- **Multiple formats** : sortie en texte brut, XML ou Markdown
+- **Intelligent condensation**: generates a single text file containing all your code, in a format optimized for LLMs
+- **Configurable filtering**: excludes `node_modules`, binary files, and anything else you configure
+- **Statistics**: counts tokens to estimate context usage
+- **Multiple formats**: output in plain text, XML, or Markdown
 
-### Installation et utilisation
+### Installation and usage
 
 ```bash
-# Utilisation sans installation (npx)
+# Usage without installation (npx)
 npx repomix
 
-# Ou installation globale
+# Or global installation
 npm install -g repomix
 
-# Analyser le répertoire courant
+# Analyze the current directory
 repomix
 
-# Analyser en excluant certains fichiers
+# Analyze while excluding certain files
 repomix --ignore "node_modules/**,*.lock,dist/**"
 
-# Sortie dans un fichier spécifique
+# Output to a specific file
 repomix --output context.txt
 
-# Passer le résultat à Claude Code :
-# "Voici ma codebase [colle le contenu de context.txt]. Explique l'architecture."
+# Pass the result to Claude Code:
+# "Here's my codebase [paste content of context.txt]. Explain the architecture."
 ```
 
 ### Use cases
 
-- **Onboarding** : *"Analyse cette codebase et donne-moi un résumé de l'architecture, des technologies et des conventions"*
-- **Impact analysis** : *"Si je modifie ce module, quels autres fichiers seront probablement impactés ?"*
-- **Détection de dette technique** : *"Identifie les zones de dette technique dans ce projet et priorise les refactorings"*
-- **Documentation** : *"Génère une documentation d'architecture basée sur l'analyse du code"*
+- **Onboarding**: *"Analyze this codebase and give me a summary of the architecture, technologies, and conventions"*
+- **Impact analysis**: *"If I modify this module, which other files will likely be impacted?"*
+- **Technical debt detection**: *"Identify areas of technical debt in this project and prioritize refactorings"*
+- **Documentation**: *"Generate architecture documentation based on the code analysis"*
 
 ---
 
-## Prompt Improver : Des prompts optimisés
+## Prompt Improver: Optimized prompts
 
-**Projet Anthropic** | Catégorie : Prompting | Auteur : [Anthropic](https://github.com/anthropics)
+**Anthropic project** | Category: Prompting | Author: [Anthropic](https://github.com/anthropics)
 
-[Prompt Improver](https://github.com/anthropics/prompt-improver) est un outil développé par Anthropic qui aide à rédiger de meilleurs prompts. Ce n'est pas un plugin au sens d'une extension installée dans Claude Code, c'est un outil web ou CLI qui analyse vos prompts et propose des améliorations.
+[Prompt Improver](https://github.com/anthropics/prompt-improver) is a tool developed by Anthropic that helps write better prompts. It's not a plugin installed in Claude Code, it's a web or CLI tool that analyzes your prompts and suggests improvements.
 
-<Callout type="warning" title="Vérifiez l'existence du dépôt">
-Prompt Improver est un outil d'Anthropic. Le dépôt GitHub exact peut avoir changé de nom ou de structure. Vérifiez sur [github.com/anthropics](https://github.com/anthropics) avant de cloner. Anthropic propose également un outil d'amélioration de prompts intégré à la [Console Anthropic](https://console.anthropic.com).
+<Callout type="warning" title="Verify the repository exists">
+Prompt Improver is an Anthropic tool. The exact GitHub repository may have changed name or structure. Check [github.com/anthropics](https://github.com/anthropics) before cloning. Anthropic also offers a built-in prompt improvement tool in the [Anthropic Console](https://console.anthropic.com).
 </Callout>
 
-### Ce qu'il apporte
+### What it provides
 
-- **Analyse de structure** : identifie si votre prompt manque de contexte, de contraintes ou de format cible
-- **Suggestions concrètes** : reformule les parties vagues en instructions précises et structurées
-- **Best practices** : applique les techniques de prompting recommandées par Anthropic (XML tags, chain-of-thought, exemples)
+- **Structure analysis**: identifies whether your prompt lacks context, constraints, or target format
+- **Concrete suggestions**: rephrases vague parts into precise, structured instructions
+- **Best practices**: applies Anthropic's recommended prompting techniques (XML tags, chain-of-thought, examples)
 
-### Use cases manuel
+### Manual use cases
 
-Même sans outil automatisé, vous pouvez améliorer vos prompts dans Claude Code en appliquant ces principes directement :
+Even without an automated tool, you can improve your prompts in Claude Code by applying these principles directly:
 
-- **Prompt vague** : *"Fais un formulaire de contact"*
-- **Prompt amélioré** : *"Crée un formulaire de contact React avec les champs nom, email et message. Validation Zod côté client. Gestion d'erreurs explicite. État de chargement pendant la soumission. Message de succès après envoi. Composants accessibles (WCAG AA) avec attributs aria appropriés. Tests unitaires avec React Testing Library."*
+- **Vague prompt**: *"Make a contact form"*
+- **Improved prompt**: *"Create a React contact form with name, email, and message fields. Client-side Zod validation. Explicit error handling. Loading state during submission. Success message after sending. Accessible components (WCAG AA) with appropriate aria attributes. Unit tests with React Testing Library."*
 
 ---
 
 ## Summary
 
-| Ressource | Type | Source | Meilleur pour |
+| Resource | Type | Source | Best for |
 |--------|------|---------|---------------|
-| **Everything Claude Code** | Agents, Rules, Skills | [GitHub](https://github.com/punkpeye/everything-claude-code) | Workflow complet de développement |
-| **Context7** | MCP Server | [GitHub](https://github.com/upstash/context7) | Documentation à jour, migration |
-| **Repomix** | CLI npm | [GitHub](https://github.com/yamadashy/repomix) | Analyser et comprendre une codebase |
-| **Prompt Improver** | Outil web/CLI | [GitHub](https://github.com/anthropics/prompt-improver) | Améliorer la qualité des prompts |
+| **Everything Claude Code** | Agents, Rules, Skills | [GitHub](https://github.com/punkpeye/everything-claude-code) | Complete development workflow |
+| **Context7** | MCP Server | [GitHub](https://github.com/upstash/context7) | Up-to-date documentation, migration |
+| **Repomix** | CLI npm | [GitHub](https://github.com/yamadashy/repomix) | Analyzing and understanding a codebase |
+| **Prompt Improver** | Web/CLI tool | [GitHub](https://github.com/anthropics/prompt-improver) | Improving prompt quality |
 
 ## Next steps
 
-- [Extensions design & frontend](/plugins/best-design) : Les meilleures ressources pour le design et l'UI
-- [Extensions sécurité & qualité](/plugins/best-security) : Sécurisez et améliorez la qualité de votre code
-- [Installer et gérer ses extensions](/plugins/setup) : Guide d'installation et de configuration
+- [Design & frontend extensions](/plugins/best-design): The best resources for design and UI
+- [Security & quality extensions](/plugins/best-security): Secure and improve your code quality
+- [Installing and managing extensions](/plugins/setup): Installation and configuration guide

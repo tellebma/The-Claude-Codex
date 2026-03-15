@@ -34,160 +34,292 @@ import { AnimateOnScroll, StaggerChildren } from "@/components/ui/AnimateOnScrol
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
+const translations = {
+  fr: {
+    metaTitle: "Vision & Futur de l'IA",
+    metaDescription:
+      "L'avenir de l'IA est deja la. Decouvrez comment vous preparer, les tendances a suivre, et la roadmap de The Claude Codex.",
+    jsonLdDescription:
+      "L'avenir de l'IA est deja la. Decouvrez comment vous preparer et les tendances a suivre.",
+    heroBadge: "Vision & Futur",
+    heroTitle: "L'avenir est ",
+    heroTitleHighlight: "deja la",
+    heroSubtitle:
+      "L'intelligence artificielle ne remplacera pas les humains. Elle amplifiera ceux qui apprendront a l'utiliser. Ce qui etait de la science-fiction hier est votre outil de travail aujourd'hui, et ce n'est que le debut.",
+    transformationBadge: "Transformation",
+    transformationTitle: "Pourquoi l'IA va transformer chaque metier",
+    transformationDescription:
+      "L'IA n'est pas un outil de plus. C'est un multiplicateur universel de capacites humaines, un changement de paradigme comparable a l'arrivee d'Internet.",
+    keyPointTitle: "Le point cle",
+    keyPointContent:
+      "La question n'est plus \"l'IA va-t-elle impacter mon metier ?\" mais \"suis-je pret a utiliser l'IA quand elle deviendra indispensable dans mon metier ?\". Ceux qui commencent aujourd'hui auront une longueur d'avance decisive.",
+    prepareBadge: "Passer a l'action",
+    prepareTitle: "Comment se preparer des maintenant",
+    prepareDescription:
+      "Pas besoin d'attendre. Voici quatre actions concretes que vous pouvez commencer aujourd'hui.",
+    trendsBadge: "Tendances",
+    trendsTitle: "Les tendances a suivre",
+    trendsDescription:
+      "Cinq evolutions majeures qui vont faconner l'ecosysteme IA dans les 12 a 24 prochains mois.",
+    stayInformedTitle: "Restez informe",
+    stayInformedPrefix: "L'ecosysteme evolue rapidement. Suivez le ",
+    stayInformedLink: "repository officiel de Claude Code",
+    stayInformedSuffix: " et la documentation Anthropic pour ne rien manquer.",
+    roadmapBadge: "Roadmap",
+    roadmapTitle: "Ce qui arrive sur The Claude Codex",
+    roadmapDescription:
+      "Notre site evolue constamment. Voici ce que nous preparons pour vous.",
+    contributeBadge: "Open-source",
+    contributeTitle: "Construisons l'avenir ",
+    contributeTitleHighlight: "ensemble",
+    contributeSubtitle:
+      "The Claude Codex est un projet open-source. Chaque contribution compte, que ce soit une correction de faute, un nouveau tutoriel, une traduction ou une idee. Rejoignez-nous et aidez des milliers de personnes a maitriser l'IA.",
+    forkTitle: "Fork & PR",
+    forkDescription: "Clonez le repo, creez une branche, soumettez une pull request.",
+    issuesTitle: "Issues & Idees",
+    issuesDescription: "Signalez un bug, proposez une amelioration ou un nouveau chapitre.",
+    shareTitle: "Partagez",
+    shareDescription: "Parlez du projet autour de vous, sur les reseaux sociaux ou dans vos equipes.",
+    viewOnGitHub: "Voir sur GitHub",
+    startGuide: "Commencer le guide",
+    professions: [
+      {
+        title: "Developpement logiciel",
+        description:
+          "Les agents autonomes ecrivent, testent et deployent du code. Le developpeur devient architecte et superviseur, sa valeur se deplace vers la vision, la revue et la strategie technique.",
+      },
+      {
+        title: "Industries creatives",
+        description:
+          "Du design generatif au montage video assiste, l'IA amplifie la creativite humaine. Les creatifs qui maitrisent ces outils produisent 10x plus, sans sacrifier la qualite.",
+      },
+      {
+        title: "Education & apprentissage",
+        description:
+          "Tutorat personnalise, generation d'exercices adaptatifs, correction intelligente. L'IA transforme chaque apprenant en autodidacte accompagne 24h/24.",
+      },
+      {
+        title: "Business & entrepreneuriat",
+        description:
+          "De l'etude de marche au MVP, de l'automatisation comptable au service client intelligent, l'IA permet de lancer et scaler avec des equipes reduites.",
+      },
+    ],
+    preparations: [
+      {
+        title: "Maitrisez les fondamentaux",
+        description:
+          "Apprenez le prompting, comprenez les modeles, explorez les outils. La base est accessible a tous, pas besoin d'etre ingenieur.",
+        linkLabel: "Guide de demarrage",
+      },
+      {
+        title: "Construisez une habitude d'apprentissage",
+        description:
+          "Consacrez 20 minutes par jour a experimenter. La regularite bat l'intensite. Creez un projet personnel et iterez chaque semaine.",
+      },
+      {
+        title: "Restez curieux, experimentez",
+        description:
+          "Testez chaque nouveau modele, chaque nouvel outil. L'experimentation directe est le meilleur professeur. Cassez des choses, apprenez, recommencez.",
+      },
+      {
+        title: "Rejoignez des communautes",
+        description:
+          "Discord, GitHub, meetups locaux : entourez-vous de personnes qui partagent votre curiosite. L'intelligence collective accelere tout.",
+      },
+    ],
+    trends: [
+      {
+        title: "Agents autonomes",
+        description:
+          "Des IA qui planifient, executent et iterent sans intervention humaine. Claude Code en mode agent prefigure cette revolution.",
+      },
+      {
+        title: "Expansion de l'ecosysteme MCP",
+        description:
+          "Le protocole MCP devient le standard universel pour connecter l'IA a tous les outils. Des milliers de serveurs MCP emergeront en 2026.",
+      },
+      {
+        title: "Skills marketplace",
+        description:
+          "Un ecosysteme de competences partageables, comme des applications pour votre IA. Installez, combinez, creez et partagez des Skills.",
+      },
+      {
+        title: "IA multi-modale",
+        description:
+          "Code + images + voix + video dans un seul flux. Decrivez une interface a voix haute, l'IA la dessine et la code en temps reel.",
+      },
+      {
+        title: "Outils de dev AI-native",
+        description:
+          "IDE, CI/CD, monitoring : tous les outils seront repenses autour de l'IA. Le terminal intelligent n'est que le debut.",
+      },
+    ],
+    roadmapItems: [
+      { title: "Tutoriels interactifs", description: "Apprenez en faisant, directement dans le navigateur.", status: "En cours" },
+      { title: "Guides video", description: "Walkthroughs visuels pour chaque chapitre du guide.", status: "Q2 2026" },
+      { title: "Contributions communautaires", description: "Soumettez vos recettes, workflows et retours d'experience.", status: "Q2 2026" },
+      { title: "Repertoire MCP & Skills", description: "Un catalogue searchable de tous les MCP et Skills disponibles.", status: "Q3 2026" },
+      { title: "Support multilingue", description: "Le guide traduit en anglais, espagnol, arabe et plus.", status: "Q4 2026" },
+    ],
+  },
+  en: {
+    metaTitle: "Vision & Future of AI",
+    metaDescription:
+      "The future of AI is already here. Learn how to prepare, the trends to follow, and The Claude Codex roadmap.",
+    jsonLdDescription:
+      "The future of AI is already here. Learn how to prepare and the trends to follow.",
+    heroBadge: "Vision & Future",
+    heroTitle: "The future is ",
+    heroTitleHighlight: "already here",
+    heroSubtitle:
+      "Artificial intelligence will not replace humans. It will amplify those who learn to use it. What was science fiction yesterday is your work tool today, and this is just the beginning.",
+    transformationBadge: "Transformation",
+    transformationTitle: "Why AI will transform every profession",
+    transformationDescription:
+      "AI is not just another tool. It is a universal multiplier of human capabilities, a paradigm shift comparable to the arrival of the Internet.",
+    keyPointTitle: "Key takeaway",
+    keyPointContent:
+      "The question is no longer \"will AI impact my job?\" but \"am I ready to use AI when it becomes essential in my field?\". Those who start today will have a decisive head start.",
+    prepareBadge: "Take action",
+    prepareTitle: "How to prepare right now",
+    prepareDescription:
+      "No need to wait. Here are four concrete actions you can start today.",
+    trendsBadge: "Trends",
+    trendsTitle: "Trends to watch",
+    trendsDescription:
+      "Five major developments that will shape the AI ecosystem in the next 12 to 24 months.",
+    stayInformedTitle: "Stay informed",
+    stayInformedPrefix: "The ecosystem is evolving rapidly. Follow the ",
+    stayInformedLink: "official Claude Code repository",
+    stayInformedSuffix: " and the Anthropic documentation to stay up to date.",
+    roadmapBadge: "Roadmap",
+    roadmapTitle: "What's coming to The Claude Codex",
+    roadmapDescription:
+      "Our site is constantly evolving. Here is what we are preparing for you.",
+    contributeBadge: "Open-source",
+    contributeTitle: "Let's build the future ",
+    contributeTitleHighlight: "together",
+    contributeSubtitle:
+      "The Claude Codex is an open-source project. Every contribution matters, whether it is a typo fix, a new tutorial, a translation or an idea. Join us and help thousands of people master AI.",
+    forkTitle: "Fork & PR",
+    forkDescription: "Clone the repo, create a branch, submit a pull request.",
+    issuesTitle: "Issues & Ideas",
+    issuesDescription: "Report a bug, suggest an improvement or a new chapter.",
+    shareTitle: "Share",
+    shareDescription: "Spread the word on social media or within your teams.",
+    viewOnGitHub: "View on GitHub",
+    startGuide: "Start the guide",
+    professions: [
+      {
+        title: "Software development",
+        description:
+          "Autonomous agents write, test and deploy code. The developer becomes architect and supervisor, their value shifts to vision, review and technical strategy.",
+      },
+      {
+        title: "Creative industries",
+        description:
+          "From generative design to assisted video editing, AI amplifies human creativity. Creatives who master these tools produce 10x more without sacrificing quality.",
+      },
+      {
+        title: "Education & learning",
+        description:
+          "Personalized tutoring, adaptive exercises, intelligent grading. AI turns every learner into a self-taught student with 24/7 support.",
+      },
+      {
+        title: "Business & entrepreneurship",
+        description:
+          "From market research to MVP, from accounting automation to intelligent customer service, AI enables launching and scaling with smaller teams.",
+      },
+    ],
+    preparations: [
+      {
+        title: "Master the fundamentals",
+        description:
+          "Learn prompting, understand models, explore tools. The basics are accessible to everyone, no engineering degree required.",
+        linkLabel: "Getting started guide",
+      },
+      {
+        title: "Build a learning habit",
+        description:
+          "Spend 20 minutes a day experimenting. Consistency beats intensity. Create a personal project and iterate every week.",
+      },
+      {
+        title: "Stay curious, experiment",
+        description:
+          "Test every new model, every new tool. Direct experimentation is the best teacher. Break things, learn, start again.",
+      },
+      {
+        title: "Join communities",
+        description:
+          "Discord, GitHub, local meetups: surround yourself with people who share your curiosity. Collective intelligence accelerates everything.",
+      },
+    ],
+    trends: [
+      {
+        title: "Autonomous agents",
+        description:
+          "AIs that plan, execute and iterate without human intervention. Claude Code in agent mode foreshadows this revolution.",
+      },
+      {
+        title: "MCP ecosystem expansion",
+        description:
+          "The MCP protocol is becoming the universal standard for connecting AI to all tools. Thousands of MCP servers will emerge in 2026.",
+      },
+      {
+        title: "Skills marketplace",
+        description:
+          "An ecosystem of shareable capabilities, like apps for your AI. Install, combine, create and share Skills.",
+      },
+      {
+        title: "Multi-modal AI",
+        description:
+          "Code + images + voice + video in a single flow. Describe an interface out loud, the AI designs and codes it in real time.",
+      },
+      {
+        title: "AI-native dev tools",
+        description:
+          "IDE, CI/CD, monitoring: all tools will be rethought around AI. The intelligent terminal is just the beginning.",
+      },
+    ],
+    roadmapItems: [
+      { title: "Interactive tutorials", description: "Learn by doing, directly in the browser.", status: "In progress" },
+      { title: "Video guides", description: "Visual walkthroughs for each chapter of the guide.", status: "Q2 2026" },
+      { title: "Community contributions", description: "Submit your recipes, workflows and experience reports.", status: "Q2 2026" },
+      { title: "MCP & Skills directory", description: "A searchable catalog of all available MCPs and Skills.", status: "Q3 2026" },
+      { title: "Multi-language support", description: "The guide translated into English, Spanish, Arabic and more.", status: "Q4 2026" },
+    ],
+  },
+};
+
+const professionIcons = [Code2, Palette, GraduationCap, TrendingUp];
+const professionGradientKeys: Array<"teal" | "amber" | "purple" | "green"> = ["teal", "amber", "purple", "green"];
+const preparationIcons = [Target, BookOpen, Compass, Users];
+const trendIcons = [Bot, Puzzle, Zap, Image, Wrench];
+const trendColorKeys: Array<"brand" | "accent" | "violet" | "emerald" | "brand"> = ["brand", "accent", "violet", "emerald", "brand"];
+const roadmapIcons = [MonitorSmartphone, Video, Users, GalleryVerticalEnd, Globe];
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createPageMetadata({
-    title: "Vision & Futur de l'IA",
-    description:
-      "L'avenir de l'IA est deja la. Decouvrez comment vous preparer, les tendances a suivre, et la roadmap de The Claude Codex.",
+    title: t.metaTitle,
+    description: t.metaDescription,
     path: `/${locale}/future`,
     locale,
   });
 }
 
 function buildArticleJsonLd(locale: string) {
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createArticleSchema({
-    title: "Vision & Futur de l'IA",
-    description:
-      "L'avenir de l'IA est deja la. Decouvrez comment vous preparer et les tendances a suivre.",
+    title: t.metaTitle,
+    description: t.jsonLdDescription,
     url: `${SITE_URL}/${locale}/future`,
     locale,
     datePublished: "2026-03-07",
     dateModified: "2026-03-07",
   });
 }
-
-/* ---------- data ---------- */
-
-const professions = [
-  {
-    icon: Code2,
-    title: "Developpement logiciel",
-    description:
-      "Les agents autonomes ecrivent, testent et deployent du code. Le developpeur devient architecte et superviseur, sa valeur se deplace vers la vision, la revue et la strategie technique.",
-    gradient: "teal" as const,
-  },
-  {
-    icon: Palette,
-    title: "Industries creatives",
-    description:
-      "Du design generatif au montage video assiste, l'IA amplifie la creativite humaine. Les creatifs qui maitrisent ces outils produisent 10x plus, sans sacrifier la qualite.",
-    gradient: "amber" as const,
-  },
-  {
-    icon: GraduationCap,
-    title: "Education & apprentissage",
-    description:
-      "Tutorat personnalise, generation d'exercices adaptatifs, correction intelligente. L'IA transforme chaque apprenant en autodidacte accompagne 24h/24.",
-    gradient: "purple" as const,
-  },
-  {
-    icon: TrendingUp,
-    title: "Business & entrepreneuriat",
-    description:
-      "De l'etude de marche au MVP, de l'automatisation comptable au service client intelligent, l'IA permet de lancer et scaler avec des equipes reduites.",
-    gradient: "green" as const,
-  },
-];
-
-const preparations = [
-  {
-    icon: Target,
-    title: "Maitrisez les fondamentaux",
-    description:
-      "Apprenez le prompting, comprenez les modeles, explorez les outils. La base est accessible a tous, pas besoin d'etre ingenieur.",
-    link: { label: "Guide de demarrage", href: "/getting-started" },
-  },
-  {
-    icon: BookOpen,
-    title: "Construisez une habitude d'apprentissage",
-    description:
-      "Consacrez 20 minutes par jour a experimenter. La regularite bat l'intensite. Creez un projet personnel et iterez chaque semaine.",
-  },
-  {
-    icon: Compass,
-    title: "Restez curieux, experimentez",
-    description:
-      "Testez chaque nouveau modele, chaque nouvel outil. L'experimentation directe est le meilleur professeur. Cassez des choses, apprenez, recommencez.",
-  },
-  {
-    icon: Users,
-    title: "Rejoignez des communautes",
-    description:
-      "Discord, GitHub, meetups locaux : entourez-vous de personnes qui partagent votre curiosite. L'intelligence collective accelere tout.",
-  },
-];
-
-const trends = [
-  {
-    icon: Bot,
-    title: "Agents autonomes",
-    description:
-      "Des IA qui planifient, executent et iterent sans intervention humaine. Claude Code en mode agent prefigure cette revolution.",
-    color: "brand" as const,
-  },
-  {
-    icon: Puzzle,
-    title: "Expansion de l'ecosysteme MCP",
-    description:
-      "Le protocole MCP devient le standard universel pour connecter l'IA a tous les outils. Des milliers de serveurs MCP emergeront en 2026.",
-    color: "accent" as const,
-  },
-  {
-    icon: Zap,
-    title: "Skills marketplace",
-    description:
-      "Un ecosysteme de competences partageables, comme des applications pour votre IA. Installez, combinez, creez et partagez des Skills.",
-    color: "violet" as const,
-  },
-  {
-    icon: Image,
-    title: "IA multi-modale",
-    description:
-      "Code + images + voix + video dans un seul flux. Decrivez une interface a voix haute, l'IA la dessine et la code en temps reel.",
-    color: "emerald" as const,
-  },
-  {
-    icon: Wrench,
-    title: "Outils de dev AI-native",
-    description:
-      "IDE, CI/CD, monitoring : tous les outils seront repenses autour de l'IA. Le terminal intelligent n'est que le debut.",
-    color: "brand" as const,
-  },
-];
-
-const roadmapItems = [
-  {
-    icon: MonitorSmartphone,
-    title: "Tutoriels interactifs",
-    description: "Apprenez en faisant, directement dans le navigateur.",
-    status: "En cours",
-  },
-  {
-    icon: Video,
-    title: "Guides video",
-    description: "Walkthroughs visuels pour chaque chapitre du guide.",
-    status: "Q2 2026",
-  },
-  {
-    icon: Users,
-    title: "Contributions communautaires",
-    description: "Soumettez vos recettes, workflows et retours d'experience.",
-    status: "Q2 2026",
-  },
-  {
-    icon: GalleryVerticalEnd,
-    title: "Repertoire MCP & Skills",
-    description: "Un catalogue searchable de tous les MCP et Skills disponibles.",
-    status: "Q3 2026",
-  },
-  {
-    icon: Globe,
-    title: "Support multilingue",
-    description: "Le guide traduit en anglais, espagnol, arabe et plus.",
-    status: "Q4 2026",
-  },
-];
 
 /* ---------- helper maps ---------- */
 
@@ -241,6 +373,7 @@ export default async function FuturePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return (
     <>
       {/* JSON-LD structured data — safe: static schema from hardcoded values, no user input */}
@@ -272,21 +405,18 @@ export default async function FuturePage({
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <Sparkles className="h-4 w-4" aria-hidden="true" />
-              Vision & Futur
+              {t.heroBadge}
             </div>
 
             {/* Title */}
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
-              L&apos;avenir est{" "}
-              <span className="text-gradient">deja la</span>
+              {t.heroTitle}
+              <span className="text-gradient">{t.heroTitleHighlight}</span>
             </h1>
 
             {/* Subtitle */}
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
-              L&apos;intelligence artificielle ne remplacera pas les humains.
-              Elle amplifiera ceux qui apprendront a l&apos;utiliser. Ce qui
-              etait de la science-fiction hier est votre outil de travail
-              aujourd&apos;hui, et ce n&apos;est que le debut.
+              {t.heroSubtitle}
             </p>
 
             {/* Decorative orbit rings */}
@@ -319,25 +449,26 @@ export default async function FuturePage({
         <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Transformation"
-              title="Pourquoi l'IA va transformer chaque metier"
-              description="L'IA n'est pas un outil de plus. C'est un multiplicateur universel de capacites humaines, un changement de paradigme comparable a l'arrivee d'Internet."
+              badge={t.transformationBadge}
+              title={t.transformationTitle}
+              description={t.transformationDescription}
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2" staggerDelay={0.1}>
-            {professions.map((item) => {
-              const Icon = item.icon;
+            {t.professions.map((item, index) => {
+              const Icon = professionIcons[index];
+              const gradientKey = professionGradientKeys[index];
               return (
                 <div
                   key={item.title}
                   className="glass-card group p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div
-                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${professionGradients[item.gradient]}`}
+                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${professionGradients[gradientKey]}`}
                   >
                     <Icon
-                      className={`h-6 w-6 ${professionIconColors[item.gradient]}`}
+                      className={`h-6 w-6 ${professionIconColors[gradientKey]}`}
                       aria-hidden="true"
                     />
                   </div>
@@ -351,12 +482,8 @@ export default async function FuturePage({
           </StaggerChildren>
 
           <div className="mt-12">
-            <Callout type="tip" title="Le point cle">
-              La question n&apos;est plus &laquo;&nbsp;l&apos;IA va-t-elle
-              impacter mon metier&nbsp;?&nbsp;&raquo; mais &laquo;&nbsp;suis-je
-              pret a utiliser l&apos;IA quand elle deviendra indispensable dans
-              mon metier&nbsp;?&nbsp;&raquo;. Ceux qui commencent
-              aujourd&apos;hui auront une longueur d&apos;avance decisive.
+            <Callout type="tip" title={t.keyPointTitle}>
+              {t.keyPointContent}
             </Callout>
           </div>
         </div>
@@ -366,14 +493,14 @@ export default async function FuturePage({
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="Passer a l'action"
-            title="Comment se preparer des maintenant"
-            description="Pas besoin d'attendre. Voici quatre actions concretes que vous pouvez commencer aujourd'hui."
+            badge={t.prepareBadge}
+            title={t.prepareTitle}
+            description={t.prepareDescription}
           />
 
           <div className="mt-16 grid gap-8 sm:grid-cols-2">
-            {preparations.map((item, index) => {
-              const Icon = item.icon;
+            {t.preparations.map((item, index) => {
+              const Icon = preparationIcons[index];
               return (
                 <div key={item.title} className="flex gap-4">
                   {/* Number + icon */}
@@ -381,7 +508,7 @@ export default async function FuturePage({
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 text-lg font-bold text-white shadow-lg shadow-brand-500/20">
                       {index + 1}
                     </div>
-                    {index < preparations.length - 1 && (
+                    {index < t.preparations.length - 1 && (
                       <div className="mt-2 hidden h-full w-px bg-gradient-to-b from-brand-500/30 to-transparent sm:block" />
                     )}
                   </div>
@@ -395,12 +522,12 @@ export default async function FuturePage({
                     <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
                       {item.description}
                     </p>
-                    {item.link && (
+                    {"linkLabel" in item && item.linkLabel && (
                       <Link
-                        href={item.link.href}
+                        href={`/${locale}/getting-started`}
                         className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-brand-700 dark:text-brand-400 transition-colors hover:text-brand-700 dark:hover:text-brand-300"
                       >
-                        {item.link.label}
+                        {item.linkLabel}
                         <ArrowRight className="h-3 w-3" aria-hidden="true" />
                       </Link>
                     )}
@@ -417,16 +544,16 @@ export default async function FuturePage({
         <div className="px-4 sm:px-6 lg:px-0">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Tendances"
-              title="Les tendances a suivre"
-              description="Cinq evolutions majeures qui vont faconner l'ecosysteme IA dans les 12 a 24 prochains mois."
+              badge={t.trendsBadge}
+              title={t.trendsTitle}
+              description={t.trendsDescription}
             />
           </AnimateOnScroll>
 
           <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
-            {trends.map((trend) => {
-              const Icon = trend.icon;
-              const colors = trendColorMap[trend.color];
+            {t.trends.map((trend, index) => {
+              const Icon = trendIcons[index];
+              const colors = trendColorMap[trendColorKeys[index]];
               return (
                 <div
                   key={trend.title}
@@ -458,17 +585,17 @@ export default async function FuturePage({
           </StaggerChildren>
 
           <div className="mt-12">
-            <Callout type="info" title="Restez informe">
-              L&apos;ecosysteme evolue rapidement. Suivez le{" "}
+            <Callout type="info" title={t.stayInformedTitle}>
+              {t.stayInformedPrefix}
               <Link
                 href="https://github.com/anthropics/claude-code"
                 className="font-medium text-brand-700 dark:text-brand-400 underline underline-offset-2 hover:text-brand-700 dark:hover:text-brand-300"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                repository officiel de Claude Code
-              </Link>{" "}
-              et la documentation Anthropic pour ne rien manquer.
+                {t.stayInformedLink}
+              </Link>
+              {t.stayInformedSuffix}
             </Callout>
           </div>
         </div>
@@ -478,9 +605,9 @@ export default async function FuturePage({
       <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
         <div className="px-4 sm:px-6 lg:px-0">
           <SectionHeading
-            badge="Roadmap"
-            title="Ce qui arrive sur The Claude Codex"
-            description="Notre site evolue constamment. Voici ce que nous preparons pour vous."
+            badge={t.roadmapBadge}
+            title={t.roadmapTitle}
+            description={t.roadmapDescription}
           />
 
           {/* Visual timeline */}
@@ -489,8 +616,8 @@ export default async function FuturePage({
             <div className="absolute left-6 top-0 hidden h-full w-px bg-gradient-to-b from-brand-500/50 via-accent-500/50 to-violet-500/50 sm:left-8 sm:block" />
 
             <div className="space-y-8">
-              {roadmapItems.map((item, index) => {
-                const Icon = item.icon;
+              {t.roadmapItems.map((item, index) => {
+                const Icon = roadmapIcons[index];
                 const isFirst = index === 0;
                 return (
                   <div key={item.title} className="flex gap-4 sm:gap-6">
@@ -547,19 +674,16 @@ export default async function FuturePage({
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
             <Heart className="h-4 w-4" aria-hidden="true" />
-            Open-source
+            {t.contributeBadge}
           </div>
 
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            Construisons l&apos;avenir{" "}
-            <span className="text-gradient">ensemble</span>
+            {t.contributeTitle}
+            <span className="text-gradient">{t.contributeTitleHighlight}</span>
           </h2>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-            The Claude Codex est un projet open-source. Chaque contribution
-            compte, que ce soit une correction de faute, un nouveau tutoriel,
-            une traduction ou une idee. Rejoignez-nous et aidez des milliers de
-            personnes a maitriser l&apos;IA.
+            {t.contributeSubtitle}
           </p>
 
           {/* Contribution cards */}
@@ -567,30 +691,28 @@ export default async function FuturePage({
             <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur">
               <GitBranch className="mb-2 h-5 w-5 text-brand-400" aria-hidden="true" />
               <h3 className="mb-1 text-sm font-semibold text-white">
-                Fork & PR
+                {t.forkTitle}
               </h3>
               <p className="text-xs leading-relaxed text-slate-400">
-                Clonez le repo, creez une branche, soumettez une pull request.
+                {t.forkDescription}
               </p>
             </div>
             <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur">
               <Lightbulb className="mb-2 h-5 w-5 text-accent-400" aria-hidden="true" />
               <h3 className="mb-1 text-sm font-semibold text-white">
-                Issues & Idees
+                {t.issuesTitle}
               </h3>
               <p className="text-xs leading-relaxed text-slate-400">
-                Signalez un bug, proposez une amelioration ou un nouveau
-                chapitre.
+                {t.issuesDescription}
               </p>
             </div>
             <div className="rounded-xl border border-slate-700/50 bg-slate-800/50 p-4 backdrop-blur">
               <Mic className="mb-2 h-5 w-5 text-violet-400" aria-hidden="true" />
               <h3 className="mb-1 text-sm font-semibold text-white">
-                Partagez
+                {t.shareTitle}
               </h3>
               <p className="text-xs leading-relaxed text-slate-400">
-                Parlez du projet autour de vous, sur les reseaux sociaux ou dans
-                vos equipes.
+                {t.shareDescription}
               </p>
             </div>
           </div>
@@ -604,7 +726,7 @@ export default async function FuturePage({
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:bg-slate-100"
             >
               <GitBranch className="h-4 w-4" aria-hidden="true" />
-              Voir sur GitHub
+              {t.viewOnGitHub}
               <ExternalLink className="h-3 w-3 opacity-50" aria-hidden="true" />
             </Link>
             <Link

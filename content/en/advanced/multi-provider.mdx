@@ -7,35 +7,35 @@ datePublished: "2026-03-11"
 dateModified: "2026-03-11"
 ---
 
-## Why use un provider alternatif ?
+## Why use an alternative provider?
 
-Par défaut, Claude Code se connecte directement à l'API Anthropic. Dans un contexte enterprise, vous pouvez avoir besoin de :
+By default, Claude Code connects directly to the Anthropic API. In an enterprise context, you may need to:
 
-- **Conformité des données** : garder les requêtes dans votre région AWS ou GCP
-- **Facturation centralisée** : consolider les coûts sur votre compte cloud
-- **Contrôle réseau** : passer par votre VPC sans trafic public
-- **Conformité RGPD/SOC2** : utiliser des endpoints certifiés de votre fournisseur cloud
+- **Data compliance**: keep requests within your AWS or GCP region
+- **Centralized billing**: consolidate costs on your cloud account
+- **Network control**: route through your VPC without public traffic
+- **GDPR/SOC2 compliance**: use certified endpoints from your cloud provider
 
-Claude Code supporte nativement AWS Bedrock et Google Vertex AI, et tout proxy compatible avec l'API OpenAI.
+Claude Code natively supports AWS Bedrock and Google Vertex AI, plus any proxy compatible with the OpenAI API.
 
 ## AWS Bedrock
 
-### Prerequisitesites
+### Prerequisites
 
-1. Un compte AWS avec accès à Amazon Bedrock
-2. Le modèle Claude activé dans votre région (us-east-1, us-west-2, eu-west-1...)
-3. Les credentials AWS configurés (`aws configure` ou variables d'environnement)
+1. An AWS account with access to Amazon Bedrock
+2. The Claude model enabled in your region (us-east-1, us-west-2, eu-west-1...)
+3. AWS credentials configured (`aws configure` or environment variables)
 
-### Activer les modèles Claude dans Bedrock
+### Enable Claude models in Bedrock
 
-Avant de configurer Claude Code, activez l'accès aux modèles Claude dans la console AWS :
+Before configuring Claude Code, enable access to Claude models in the AWS console:
 
-1. Console AWS > Amazon Bedrock > Model access
-2. Cliquer "Manage model access"
-3. Activer "Claude 3.5 Sonnet" (ou votre modèle cible)
-4. Accepter les conditions d'utilisation Anthropic
+1. AWS Console > Amazon Bedrock > Model access
+2. Click "Manage model access"
+3. Enable "Claude 3.5 Sonnet" (or your target model)
+4. Accept the Anthropic terms of use
 
-### Configuration dans settings.json
+### Configuration in settings.json
 
 ```json
 {
@@ -44,15 +44,15 @@ Avant de configurer Claude Code, activez l'accès aux modèles Claude dans la co
 }
 ```
 
-Claude Code utilise automatiquement vos credentials AWS standard (dans l'ordre de priorité) :
-- Variables d'environnement `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`
-- Fichier `~/.aws/credentials`
-- IAM Role attaché à l'instance EC2 ou ECS task
+Claude Code automatically uses your standard AWS credentials (in order of priority):
+- Environment variables `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`
+- File `~/.aws/credentials`
+- IAM Role attached to the EC2 instance or ECS task
 
-### Credentials AWS par variable d'environnement
+### AWS credentials via environment variables
 
 ```bash
-# Configuration temporaire (session courante)
+# Temporary configuration (current session)
 export AWS_ACCESS_KEY_ID="AKIAIOSFODNN7EXAMPLE"
 export AWS_SECRET_ACCESS_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 export AWS_DEFAULT_REGION="us-east-1"
@@ -60,14 +60,14 @@ export AWS_DEFAULT_REGION="us-east-1"
 claude
 ```
 
-Pour une configuration permanente, ajoutez dans `~/.zshrc` ou `~/.bashrc` :
+For permanent configuration, add to `~/.zshrc` or `~/.bashrc`:
 
 ```bash
-export AWS_PROFILE="mon-profil-bedrock"
+export AWS_PROFILE="my-bedrock-profile"
 export AWS_DEFAULT_REGION="eu-west-1"
 ```
 
-Et dans `settings.json` :
+And in `settings.json`:
 
 ```json
 {
@@ -76,12 +76,12 @@ Et dans `settings.json` :
 }
 ```
 
-### Avec un rôle IAM assumé (STS)
+### With an assumed IAM role (STS)
 
-Pour les organisations utilisant des rôles IAM croisés :
+For organizations using cross-account IAM roles:
 
 ```bash
-# Assumer un rôle IAM avec accès Bedrock
+# Assume an IAM role with Bedrock access
 CREDS=$(aws sts assume-role \
   --role-arn "arn:aws:iam::123456789:role/ClaudeCodeBedrock" \
   --role-session-name "claude-code-session" \
@@ -94,7 +94,7 @@ export AWS_SESSION_TOKEN=$(echo "$CREDS" | jq -r '.Credentials.SessionToken')
 claude
 ```
 
-### Politique IAM minimale requise
+### Minimum required IAM policy
 
 ```json
 {
@@ -115,123 +115,123 @@ claude
 }
 ```
 
-<Callout type="tip" title="Tarification Bedrock">
-Les prix Bedrock sont facturés par Anthropic via AWS. Ils peuvent différer légèrement des prix directs de l'API Anthropic. Consultez la page de tarification AWS Bedrock pour les prix actuels par région et modèle.
+<Callout type="tip" title="Bedrock pricing">
+Bedrock prices are billed by Anthropic through AWS. They may differ slightly from direct Anthropic API prices. Check the AWS Bedrock pricing page for current prices by region and model.
 </Callout>
 
 ## Google Vertex AI
 
-### Prerequisitesites
+### Prerequisites
 
-1. Un projet Google Cloud avec la facturation activée
-2. L'API Vertex AI activée dans votre projet
-3. Un compte de service avec le rôle `Vertex AI User`
-4. `gcloud` CLI installé et authentifié
+1. A Google Cloud project with billing enabled
+2. The Vertex AI API enabled in your project
+3. A service account with the `Vertex AI User` role
+4. `gcloud` CLI installed and authenticated
 
-### Activer l'API Vertex AI
+### Enable the Vertex AI API
 
 ```bash
 # Via gcloud CLI
-gcloud services enable aiplatform.googleapis.com --project=MON_PROJET_ID
+gcloud services enable aiplatform.googleapis.com --project=MY_PROJECT_ID
 ```
 
-### Configuration dans settings.json
+### Configuration in settings.json
 
 ```json
 {
   "apiProvider": "vertex",
-  "gcpProjectId": "mon-projet-gcp-12345",
+  "gcpProjectId": "my-gcp-project-12345",
   "gcpRegion": "us-east5"
 }
 ```
 
-Les régions supportant Claude sur Vertex AI incluent `us-east5`, `europe-west4`, et d'autres. Consultez la documentation Vertex AI pour la liste à jour.
+Regions supporting Claude on Vertex AI include `us-east5`, `europe-west4`, and others. Check the Vertex AI documentation for the up-to-date list.
 
-### Authentification Vertex AI
+### Vertex AI authentication
 
-Claude Code utilise l'Application Default Credentials (ADC) de Google Cloud :
+Claude Code uses Google Cloud's Application Default Credentials (ADC):
 
 ```bash
-# Option 1 : Authentification utilisateur (développement local)
+# Option 1: User authentication (local development)
 gcloud auth application-default login
 
-# Option 2 : Compte de service (CI/CD, production)
-export GOOGLE_APPLICATION_CREDENTIALS="/chemin/vers/service-account.json"
+# Option 2: Service account (CI/CD, production)
+export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"
 
-# Option 3 : Workload Identity (GKE, Cloud Run)
-# Configuré automatiquement par la plateforme GCP
+# Option 3: Workload Identity (GKE, Cloud Run)
+# Automatically configured by the GCP platform
 ```
 
-### Créer un compte de service dédié
+### Create a dedicated service account
 
 ```bash
-# Créer le compte de service
+# Create the service account
 gcloud iam service-accounts create claude-code-sa \
   --display-name="Claude Code Service Account" \
-  --project=MON_PROJET_ID
+  --project=MY_PROJECT_ID
 
-# Attribuer le rôle minimal
-gcloud projects add-iam-policy-binding MON_PROJET_ID \
-  --member="serviceAccount:claude-code-sa@MON_PROJET_ID.iam.gserviceaccount.com" \
+# Assign the minimal role
+gcloud projects add-iam-policy-binding MY_PROJECT_ID \
+  --member="serviceAccount:claude-code-sa@MY_PROJECT_ID.iam.gserviceaccount.com" \
   --role="roles/aiplatform.user"
 
-# Créer et télécharger la clé
+# Create and download the key
 gcloud iam service-accounts keys create claude-code-key.json \
-  --iam-account=claude-code-sa@MON_PROJET_ID.iam.gserviceaccount.com
+  --iam-account=claude-code-sa@MY_PROJECT_ID.iam.gserviceaccount.com
 ```
 
-<Callout type="warning" title="Sécurité des clés de compte de service">
-Le fichier `claude-code-key.json` contient des credentials sensibles. Ne le committez **jamais** dans votre dépôt Git. Ajoutez-le à votre `.gitignore` et stockez-le dans un secret manager (AWS Secrets Manager, Google Secret Manager, HashiCorp Vault).
+<Callout type="warning" title="Service account key security">
+The `claude-code-key.json` file contains sensitive credentials. **Never** commit it to your Git repository. Add it to your `.gitignore` and store it in a secret manager (AWS Secrets Manager, Google Secret Manager, HashiCorp Vault).
 </Callout>
 
-## Proxy OpenAI-compatible
+## OpenAI-compatible proxy
 
-Claude Code peut se connecter à n'importe quel proxy respectant l'API OpenAI, ce qui permet d'utiliser :
-- Un proxy interne d'entreprise qui route vers Anthropic
-- Des solutions LLM on-premise qui émulent l'API OpenAI
+Claude Code can connect to any proxy that follows the OpenAI API, which lets you use:
+- An internal enterprise proxy that routes to Anthropic
+- On-premise LLM solutions that emulate the OpenAI API
 
-Configuration dans `settings.json` :
+Configuration in `settings.json`:
 
 ```json
 {
   "apiProvider": "openai-compatible",
-  "customApiUrl": "https://mon-proxy.interne.entreprise.com/v1"
+  "customApiUrl": "https://my-proxy.internal.company.com/v1"
 }
 ```
 
-Avec variable d'environnement pour la clé :
+With an environment variable for the key:
 
 ```bash
-export ANTHROPIC_API_KEY="ma-cle-proxy"
-export ANTHROPIC_BASE_URL="https://mon-proxy.interne.entreprise.com/v1"
+export ANTHROPIC_API_KEY="my-proxy-key"
+export ANTHROPIC_BASE_URL="https://my-proxy.internal.company.com/v1"
 ```
 
-## Changer de modèle selon la tâche
+## Choosing a model based on the task
 
-L'un des avantages du multi-provider est de pouvoir choisir le modèle selon la complexité de la tâche, pour optimiser coût et performance.
+One advantage of multi-provider is being able to choose the model based on task complexity, optimizing for cost and performance.
 
-### Stratégie de sélection par modèle
+### Model selection strategy
 
-| Modèle | Usage recommandé | Avantage |
+| Model | Recommended usage | Advantage |
 |--------|-----------------|---------|
-| Claude Haiku | Tâches légères, fréquentes | 3x moins cher, très rapide |
-| Claude Sonnet | Développement principal | Meilleur équilibre coût/qualité |
-| Claude Opus | Décisions architecturales | Qualité de raisonnement maximale |
+| Claude Haiku | Lightweight, frequent tasks | 3x cheaper, very fast |
+| Claude Sonnet | Main development work | Best cost/quality balance |
+| Claude Opus | Architectural decisions | Maximum reasoning quality |
 
-### Via le flag --model en CLI
+### Via the --model CLI flag
 
 ```bash
-# Haiku pour des tâches simples en CI/CD
-claude --print --model claude-haiku-4-5 "Génère un commentaire JSDoc pour cette fonction"
+# Haiku for simple tasks in CI/CD
+claude --print --model claude-haiku-4-5 "Generate a JSDoc comment for this function"
 
-# Sonnet pour le développement courant (défaut)
-claude --print --model claude-sonnet-4-5 "Implémente cette feature avec des tests"
+# Sonnet for everyday development (default)
+claude --print --model claude-sonnet-4-5 "Implement this feature with tests"
 
-# Opus pour des décisions complexes
-claude --print --model claude-opus-4-5 "Conçois l'architecture de ce système distribué"
+# Opus for complex decisions
+claude --print --model claude-opus-4-5 "Design the architecture for this distributed system"
 ```
 
-### Via settings.json (configuration permanente)
+### Via settings.json (permanent configuration)
 
 ```json
 {
@@ -239,9 +239,9 @@ claude --print --model claude-opus-4-5 "Conçois l'architecture de ce système d
 }
 ```
 
-### Configuration multi-environnement
+### Multi-environment configuration
 
-Pour les équipes qui veulent utiliser Haiku en CI/CD (économies) et Sonnet en dev :
+For teams that want to use Haiku in CI/CD (savings) and Sonnet in dev:
 
 ```json
 {
@@ -250,7 +250,7 @@ Pour les équipes qui veulent utiliser Haiku en CI/CD (économies) et Sonnet en 
 }
 ```
 
-Dans GitHub Actions, override le modèle via la variable d'environnement :
+In GitHub Actions, override the model via an environment variable:
 
 ```yaml
 - name: Claude Code quick check
@@ -258,16 +258,16 @@ Dans GitHub Actions, override le modèle via la variable d'environnement :
     ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     CLAUDE_MODEL: "claude-haiku-4-5"
   run: |
-    claude --print --max-turns 1 "Vérifie rapidement la syntaxe de ce fichier"
+    claude --print --max-turns 1 "Quickly check the syntax of this file"
 ```
 
-## Gestion des credentials par provider
+## Credential management by provider
 
-### Organisation des configurations
+### Configuration organization
 
-Recommandation pour les équipes enterprise :
+Recommendation for enterprise teams:
 
-Configuration personnelle dans `~/.claude/settings.json` :
+Personal configuration in `~/.claude/settings.json`:
 
 ```json
 {
@@ -275,7 +275,7 @@ Configuration personnelle dans `~/.claude/settings.json` :
 }
 ```
 
-Configuration projet dans `.claude/settings.json` (commitable) :
+Project configuration in `.claude/settings.json` (committable):
 
 ```json
 {
@@ -285,25 +285,25 @@ Configuration projet dans `.claude/settings.json` (commitable) :
 }
 ```
 
-<Callout type="info" title="Priorité de configuration">
-Claude Code applique les settings dans cet ordre (du plus spécifique au plus général) :
+<Callout type="info" title="Configuration priority">
+Claude Code applies settings in this order (from most specific to most general):
 
-1. Variables d'environnement (`ANTHROPIC_API_KEY`, `CLAUDE_MODEL`...)
-2. Fichier `.claude/settings.json` du projet courant
-3. Fichier `~/.claude/settings.json` global utilisateur
+1. Environment variables (`ANTHROPIC_API_KEY`, `CLAUDE_MODEL`...)
+2. Project `.claude/settings.json` file
+3. Global `~/.claude/settings.json` file
 
-Un paramètre au niveau projet écrase le paramètre global.
+A project-level parameter overrides the global one.
 </Callout>
 
-### Rotation des credentials
+### Credential rotation
 
-Pour les pipelines CI/CD longue durée, implémentez une rotation régulière :
+For long-running CI/CD pipelines, implement regular rotation:
 
 ```bash
 #!/bin/bash
-# Script de rotation de clé API (exemple avec AWS Secrets Manager)
+# API key rotation script (example with AWS Secrets Manager)
 
-# Récupérer la nouvelle clé depuis AWS Secrets Manager
+# Retrieve the new key from AWS Secrets Manager
 NEW_KEY=$(aws secretsmanager get-secret-value \
   --secret-id "prod/claude-code/api-key" \
   --query SecretString \
@@ -311,8 +311,8 @@ NEW_KEY=$(aws secretsmanager get-secret-value \
 
 export ANTHROPIC_API_KEY="$NEW_KEY"
 
-# Vérifier que la clé est valide
-if claude --print --max-turns 1 "Dis juste OK" | grep -q "OK"; then
+# Verify the key is valid
+if claude --print --max-turns 1 "Just say OK" | grep -q "OK"; then
   echo "Credential rotation successful"
 else
   echo "ERROR: New credential invalid" >&2
@@ -320,15 +320,15 @@ else
 fi
 ```
 
-## Comparatif des providers
+## Provider comparison
 
-| Provider | Avantages | Contraintes |
+| Provider | Advantages | Constraints |
 |----------|-----------|------------|
-| Anthropic direct | Simple, dernières fonctionnalités | Trafic hors infrastructure |
-| AWS Bedrock | Conformité AWS, facturation AWS | Latence variable |
-| Google Vertex AI | Conformité GCP, logs centralisés | Configuration plus complexe |
-| Proxy custom | Contrôle total, données internes | Maintenance du proxy |
+| Anthropic direct | Simple, latest features | Traffic outside infrastructure |
+| AWS Bedrock | AWS compliance, AWS billing | Variable latency |
+| Google Vertex AI | GCP compliance, centralized logs | More complex setup |
+| Custom proxy | Full control, internal data | Proxy maintenance |
 
 ## Next steps
 
-Vous maîtrisez maintenant les fonctionnalités avancées de Claude Code. Explorez les agents pour orchestrer des workflows complexes, ou consultez la référence technique pour les options de configuration exhaustives.
+You now master the advanced features of Claude Code. Explore agents to orchestrate complex workflows, or check the technical reference for exhaustive configuration options.

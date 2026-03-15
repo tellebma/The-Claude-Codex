@@ -7,315 +7,315 @@ datePublished: "2026-03-12"
 dateModified: "2026-03-12"
 ---
 
-## L'automatisation, meme sans coder
+## Automation, even without coding
 
-Automatiser ne veut pas dire programmer. Avec Claude Code, automatiser signifie simplement donner des instructions claires pour obtenir un resultat reproductible. Ces trois tutoriels vous guident step by step, de l'ouverture du terminal au resultat final.
+Automating doesn't mean programming. With Claude Code, automating simply means giving clear instructions to get a reproducible result. These three tutorials guide you step by step, from opening the terminal to the final result.
 
 <Callout type="tip" title="Prerequisites">
-Ces tutoriels supposent que Claude Code est installe et fonctionne sur votre machine. Si ce n'est pas le cas, suivez d'abord le guide [Premiers pas](/getting-started).
+These tutorials assume Claude Code is installed and working on your machine. If not, follow the [Getting started](/getting-started) guide first.
 </Callout>
 
 ---
 
-## Tutoriel 1 : Automatiser un rapport hebdomadaire
+## Tutorial 1: Automate a weekly report
 
-**Objectif :** chaque lundi, generer un rapport d'activite structure a partir de vos notes de la semaine.
+**Goal:** every Monday, generate a structured activity report from your week's notes.
 
-**Temps estime :** 15 minutes la premiere fois, 5 minutes les fois suivantes.
+**Estimated time:** 15 minutes the first time, 5 minutes going forward.
 
 <Steps>
-<Step title="Preparez votre dossier de travail" stepNumber={1}>
-Creez un dossier sur votre ordinateur, for example `rapports-hebdo`. C'est la que vous stockerez vos notes et vos rapports generes.
+<Step title="Set up your working folder" stepNumber={1}>
+Create a folder on your computer, for example `weekly-reports`. This is where you'll store your notes and generated reports.
 
-Ouvrez votre terminal et placez-vous dans ce dossier :
+Open your terminal and navigate to this folder:
 
 ```bash
-cd rapports-hebdo
+cd weekly-reports
 ```
 </Step>
 
-<Step title="Creez votre fichier de notes" stepNumber={2}>
-Chaque semaine, notez vos activites dans un fichier texte simple. Pas besoin de format particulier, ecrivez comme vous le feriez sur un post-it :
+<Step title="Create your notes file" stepNumber={2}>
+Each week, jot down your activities in a simple text file. No special format needed; write as you would on a sticky note:
 
 ```text
-# Notes semaine du 10 mars 2026
+# Notes week of March 10, 2026
 
-- Reunion client Maison Duval, maquettes validees
-- Formation equipe sur le nouvel outil CRM (8 personnes)
-- Bug critique sur la facturation, resolu mardi
-- 3 nouveaux leads entrants via le site web
-- Preparation du budget Q2 en cours
-- Conge de Paul mercredi et jeudi
+- Client meeting Maison Duval, mockups approved
+- Team training on new CRM tool (8 people)
+- Critical billing bug, fixed Tuesday
+- 3 new inbound leads via website
+- Q2 budget preparation underway
+- Paul on leave Wednesday and Thursday
 ```
 
-Enregistrez ce fichier sous le nom `notes-semaine-10-mars.md`.
+Save this file as `notes-week-march-10.md`.
 </Step>
 
-<Step title="Lancez Claude Code" stepNumber={3}>
-Dans le terminal, tapez :
+<Step title="Launch Claude Code" stepNumber={3}>
+In the terminal, type:
 
 ```bash
 claude
 ```
 
-Claude Code s'ouvre. Vous pouvez maintenant lui donner des instructions.
+Claude Code opens. You can now give it instructions.
 </Step>
 
-<Step title="Donnez les instructions pour le rapport" stepNumber={4}>
-Collez ce prompt :
+<Step title="Give instructions for the report" stepNumber={4}>
+Paste this prompt:
 
 ```text
-Lis le fichier notes-semaine-10-mars.md et genere un rapport hebdomadaire.
+Read the file notes-week-march-10.md and generate a weekly report.
 
-Structure du rapport :
-1. Resume de la semaine (3-4 lignes)
-2. Realisations (bullet points, maximum 5)
-3. Points de blocage ou retards
-4. Priorites de la semaine prochaine (a deduire des notes)
-5. Chiffres cles si disponibles
+Report structure:
+1. Week summary (3-4 lines)
+2. Accomplishments (bullet points, 5 max)
+3. Blockers or delays
+4. Next week priorities (infer from notes)
+5. Key figures if available
 
-Format : Markdown, pret a envoyer par email.
-Ton : professionnel et synthetique.
-Longueur : 250-350 mots.
+Format: Markdown, ready to send by email.
+Tone: professional and concise.
+Length: 250-350 words.
 
-Enregistre le resultat dans un fichier rapport-semaine-10-mars.md
+Save the result in a file called report-week-march-10.md
 ```
 </Step>
 
-<Step title="Relisez et ajustez" stepNumber={5}>
-Claude Code genere le rapport et l'enregistre. Ouvrez le fichier, relisez-le, et si quelque chose ne convient pas, dites simplement dans le terminal :
+<Step title="Review and adjust" stepNumber={5}>
+Claude Code generates the report and saves it. Open the file, read through it, and if something doesn't look right, just say in the terminal:
 
 ```text
-Modifie le rapport : ajoute dans les priorites "finaliser le budget Q2 avant vendredi" et rends le ton un peu moins formel.
+Update the report: add "finalize Q2 budget by Friday" to priorities and make the tone slightly less formal.
 ```
 
-Claude Code modifie le fichier directement.
+Claude Code updates the file directly.
 </Step>
 
-<Step title="Repetez chaque semaine" stepNumber={6}>
-La semaine suivante, creez un nouveau fichier de notes (for example `notes-semaine-17-mars.md`) et relancez le meme prompt en changeant le nom du fichier. Le process prend 5 minutes.
+<Step title="Repeat each week" stepNumber={6}>
+The following week, create a new notes file (for example `notes-week-march-17.md`) and run the same prompt with the new filename. The whole process takes 5 minutes.
 
-Going further, vous pouvez creer un fichier `modele-rapport.md` avec la structure souhaitee et y faire reference dans votre prompt : "Utilise la structure decrite dans modele-rapport.md".
+To go further, you can create a `report-template.md` file with your preferred structure and reference it in your prompt: "Use the structure described in report-template.md."
 </Step>
 </Steps>
 
-<Callout type="info" title="Astuce : le fichier CLAUDE.md">
-Si vous placez un fichier `CLAUDE.md` dans votre dossier `rapports-hebdo` avec vos preferences (ton, format, longueur), Claude Code les appliquera automatiquement a chaque session. Plus besoin de les repeter dans le prompt.
+<Callout type="info" title="Tip: the CLAUDE.md file">
+If you place a `CLAUDE.md` file in your `weekly-reports` folder with your preferences (tone, format, length), Claude Code will apply them automatically in every session. No need to repeat them in the prompt.
 </Callout>
 
 ---
 
-## Tutoriel 2 : Creer un systeme de templates email
+## Tutorial 2: Create an email template system
 
-**Objectif :** avoir des modeles d'emails prets a l'emploi pour les situations recurrentes, personnalisables en quelques secondes.
+**Goal:** have ready-to-use email templates for recurring situations, customizable in seconds.
 
-**Temps estime :** 20 minutes pour la mise en place, 2 minutes par email genere.
+**Estimated time:** 20 minutes for setup, 2 minutes per generated email.
 
 <Steps>
-<Step title="Identifiez vos emails recurrents" stepNumber={1}>
-Listez les 5 a 10 types d'emails que vous envoyez le plus souvent. Par exemple :
+<Step title="Identify your recurring emails" stepNumber={1}>
+List the 5 to 10 types of emails you send most often. For example:
 
-- Relance client apres devis
-- Confirmation de rendez-vous
-- Envoi de compte-rendu
-- Demande d'information a un fournisseur
-- Remerciement apres reunion
-- Refus poli d'une sollicitation
+- Follow-up after a quote
+- Appointment confirmation
+- Sending meeting minutes
+- Information request to a vendor
+- Post-meeting thank you
+- Polite decline of a solicitation
 
-Ecrivez cette liste dans un fichier `types-emails.md`.
+Write this list in a file called `email-types.md`.
 </Step>
 
-<Step title="Creez votre fichier de reference" stepNumber={2}>
-Creez un fichier `contexte-emails.md` avec vos informations :
+<Step title="Create your reference file" stepNumber={2}>
+Create a file `email-context.md` with your information:
 
 ```text
-# Contexte pour la generation d'emails
+# Context for email generation
 
-## Mon profil
-- Nom : [Votre nom]
-- Poste : [Votre poste]
-- Entreprise : [Nom de l'entreprise]
-- Secteur : [Votre secteur]
+## My profile
+- Name: [Your name]
+- Position: [Your position]
+- Company: [Company name]
+- Industry: [Your industry]
 
-## Regles de redaction
-- Vouvoiement systematique
-- Ton professionnel mais chaleureux
-- Signature : [Prenom Nom, Poste, Telephone]
-- Longueur maximale : 10 lignes pour les emails courants
-- Pas de formules trop formelles ("je vous prie d'agreer...")
-- Formule de politesse : "Bien cordialement" ou "A bientot"
+## Writing rules
+- Formal address throughout
+- Professional but warm tone
+- Signature: [First Last, Position, Phone]
+- Maximum length: 10 lines for standard emails
+- No overly formal closings
+- Sign-off: "Best regards" or "Talk soon"
 ```
 </Step>
 
-<Step title="Generez vos templates de base" stepNumber={3}>
-Ouvrez Claude Code dans le dossier contenant vos fichiers et collez :
+<Step title="Generate your base templates" stepNumber={3}>
+Open Claude Code in the folder containing your files and paste:
 
 ```text
-Lis le fichier contexte-emails.md et le fichier types-emails.md.
+Read the file email-context.md and the file email-types.md.
 
-Pour chaque type d'email liste, genere un template avec :
-- L'objet du mail
-- Le corps du mail avec des [placeholders] pour les elements variables
-- Une variante courte (3-4 lignes) pour les cas urgents
+For each email type listed, generate a template with:
+- The email subject
+- The email body with [placeholders] for variable elements
+- A short variant (3-4 lines) for urgent cases
 
-Enregistre tous les templates dans un fichier templates-emails.md
+Save all templates in a file called email-templates.md
 ```
 
-Claude Code genere un fichier complet avec tous vos templates.
+Claude Code generates a complete file with all your templates.
 </Step>
 
-<Step title="Utilisez un template au quotidien" stepNumber={4}>
-Quand vous devez envoyer un email, ouvrez Claude Code et dites simplement :
+<Step title="Use a template in daily work" stepNumber={4}>
+When you need to send an email, open Claude Code and simply say:
 
 ```text
-Genere un email de relance client. Lis le template dans templates-emails.md.
+Generate a client follow-up email. Read the template from email-templates.md.
 
-Details :
-- Client : Societe Martin et Fils
-- Devis envoye le : 3 mars 2026
-- Montant : 12 500 euros HT
-- Projet : refonte du site vitrine
+Details:
+- Client: Martin & Sons Ltd
+- Quote sent on: March 3, 2026
+- Amount: 12,500 euros excl. VAT
+- Project: company website redesign
 ```
 
-Claude Code remplace les placeholders et vous produit un email pret a copier.
+Claude Code fills in the placeholders and produces an email ready to copy.
 </Step>
 
-<Step title="Ameliorez vos templates au fil du temps" stepNumber={5}>
-Si un email genere necessite des retouches, demandez a Claude Code de mettre a jour le template :
+<Step title="Improve your templates over time" stepNumber={5}>
+If a generated email needs tweaks, ask Claude Code to update the template:
 
 ```text
-Le template de relance client est trop formel. Modifie-le dans templates-emails.md pour qu'il soit plus direct et moins ceremoniaux. Garde le vouvoiement.
+The client follow-up template is too formal. Edit it in email-templates.md to be more direct and less ceremonious. Keep formal address.
 ```
 
-Vos templates s'ameliorent au fil de l'usage.
+Your templates improve with use.
 </Step>
 </Steps>
 
 ---
 
-## Tutoriel 3 : Generer le plan et le contenu d'une presentation
+## Tutorial 3: Generate a presentation outline and content
 
-**Objectif :** produire le plan complet d'une presentation avec le contenu de chaque slide, pret a copier dans PowerPoint ou Google Slides.
+**Goal:** produce a complete presentation outline with content for each slide, ready to paste into PowerPoint or Google Slides.
 
-**Temps estime :** 15 minutes pour une presentation de 10-15 slides.
+**Estimated time:** 15 minutes for a 10-15 slide presentation.
 
 <Steps>
-<Step title="Rassemblez vos informations" stepNumber={1}>
-Avant de lancer Claude Code, preparez un fichier avec les informations brutes :
+<Step title="Gather your information" stepNumber={1}>
+Before launching Claude Code, prepare a file with the raw information:
 
 ```text
-# Presentation - Bilan projet migration CRM
+# Presentation - CRM Migration Project Review
 
-## Contexte
-- Projet demarre en septembre 2025
-- Migration de Salesforce vers HubSpot
-- Equipe : 4 personnes + 1 prestataire externe
-- Budget initial : 85 000 euros
+## Context
+- Project started September 2025
+- Migration from Salesforce to HubSpot
+- Team: 4 people + 1 external contractor
+- Initial budget: 85,000 euros
 
-## Resultats
-- Migration terminee le 28 fevrier 2026 (2 semaines de retard)
-- 12 000 contacts migres, 0 perte de donnees
-- Adoption utilisateurs : 87% apres 1 mois
-- Economies prevues : 2 200 euros/mois sur les licences
+## Results
+- Migration completed February 28, 2026 (2 weeks late)
+- 12,000 contacts migrated, 0 data loss
+- User adoption: 87% after 1 month
+- Projected savings: 2,200 euros/month on licenses
 
-## Problemes rencontres
-- Champs personnalises incompatibles (3 semaines de retard)
-- Resistance de l'equipe commerciale au debut
-- Cout final : 92 000 euros (depassement de 8%)
+## Issues encountered
+- Incompatible custom fields (3-week delay)
+- Resistance from the sales team initially
+- Final cost: 92,000 euros (8% overrun)
 
-## Public
-- Comite de direction (6 personnes, profils non-techniques)
-- Ils veulent savoir : est-ce que ca a marche ? Combien ca a coute ? Et maintenant ?
+## Audience
+- Executive committee (6 people, non-technical profiles)
+- They want to know: did it work? How much did it cost? What's next?
 ```
 
-Enregistrez-le sous `brief-presentation.md`.
+Save it as `presentation-brief.md`.
 </Step>
 
-<Step title="Generez le plan de la presentation" stepNumber={2}>
-Ouvrez Claude Code et donnez les instructions :
+<Step title="Generate the presentation outline" stepNumber={2}>
+Open Claude Code and give the instructions:
 
 ```text
-Lis le fichier brief-presentation.md.
+Read the file presentation-brief.md.
 
-Genere le plan complet d'une presentation de 12 slides maximum.
-Duree de la presentation : 15 minutes.
+Generate a complete outline for a presentation of 12 slides maximum.
+Presentation duration: 15 minutes.
 
-Pour chaque slide, indique :
-- Numero et titre de la slide
-- Contenu (3-4 bullet points ou texte court)
-- Suggestion de visuel (graphique, icone, image, screenshot)
-- Notes du presentateur (ce qu'il faut dire a l'oral, 2-3 phrases)
+For each slide, include:
+- Slide number and title
+- Content (3-4 bullet points or short text)
+- Visual suggestion (chart, icon, image, screenshot)
+- Presenter notes (what to say out loud, 2-3 sentences)
 
-Regles :
-- La premiere slide est le titre, la derniere une slide de questions
-- Pas plus de 4 bullet points par slide
-- Privilegier les chiffres et les visuels aux longs textes
-- Structure narrative : contexte, defis, resultats, suite
+Rules:
+- First slide is the title, last slide is for questions
+- No more than 4 bullet points per slide
+- Favor numbers and visuals over long text
+- Narrative structure: context, challenges, results, next steps
 
-Enregistre dans plan-presentation-crm.md
-```
-</Step>
-
-<Step title="Approfondissez certaines slides" stepNumber={3}>
-Si une slide a besoin de plus de details :
-
-```text
-Pour la slide 7 (resultats chiffres), genere un tableau comparatif avant/apres avec :
-- Cout mensuel des licences (avant vs apres)
-- Nombre d'utilisateurs actifs
-- Temps moyen de saisie d'un contact
-- Taux de donnees dupliquees
-
-Mets a jour le fichier plan-presentation-crm.md.
+Save to presentation-plan-crm.md
 ```
 </Step>
 
-<Step title="Generez les notes du presentateur" stepNumber={4}>
-Pour vous aider a presenter sans lire vos slides :
+<Step title="Dive deeper into specific slides" stepNumber={3}>
+If a slide needs more detail:
 
 ```text
-Pour chaque slide du fichier plan-presentation-crm.md, developpe les notes du presentateur :
-- Ce qu'il faut dire (3-4 phrases naturelles, comme a l'oral)
-- La transition vers la slide suivante (1 phrase)
-- Les questions que le public pourrait poser a ce moment
+For slide 7 (key results), generate a before/after comparison table with:
+- Monthly license cost (before vs after)
+- Number of active users
+- Average time to enter a contact
+- Rate of duplicate data
 
-Enregistre dans notes-presentateur-crm.md
+Update the file presentation-plan-crm.md.
 ```
 </Step>
 
-<Step title="Copiez dans votre outil de presentation" stepNumber={5}>
-Ouvrez votre outil (PowerPoint, Google Slides, Keynote) et creez les slides en suivant le plan. Le contenu est deja pret : vous n'avez qu'a le copier-coller et ajouter les visuels.
-
-Pour les graphiques, vous pouvez demander a Claude Code de generer les donnees au bon format :
+<Step title="Generate presenter notes" stepNumber={4}>
+To help you present without reading your slides:
 
 ```text
-Genere les donnees du graphique d'evolution des couts sous forme de tableau CSV que je pourrai importer dans Google Sheets pour creer un graphique.
+For each slide in presentation-plan-crm.md, expand the presenter notes:
+- What to say (3-4 natural, spoken-style sentences)
+- Transition to the next slide (1 sentence)
+- Questions the audience might ask at that point
+
+Save to presenter-notes-crm.md
+```
+</Step>
+
+<Step title="Copy into your presentation tool" stepNumber={5}>
+Open your tool (PowerPoint, Google Slides, Keynote) and create the slides following the outline. The content is ready: you just need to copy-paste it and add visuals.
+
+For charts, you can ask Claude Code to generate the data in the right format:
+
+```text
+Generate the cost evolution chart data as a CSV table I can import into Google Sheets to create a chart.
 ```
 </Step>
 </Steps>
 
-<Callout type="tip" title="Conseil pour les presentations recurrentes">
-Si vous faites des presentations similaires chaque trimestre (revue de projet, bilan, comite), creez un fichier `modele-presentation.md` avec votre structure type. A chaque nouvelle presentation, fournissez ce modele a Claude Code avec les nouvelles donnees. Le plan sera coherent d'une fois sur l'autre.
+<Callout type="tip" title="Tip for recurring presentations">
+If you give similar presentations each quarter (project review, status update, committee meeting), create a `presentation-template.md` file with your standard structure. For each new presentation, give this template to Claude Code along with the new data. The outline will be consistent from one time to the next.
 </Callout>
 
 ---
 
-## Les 5 principes de l'automatisation sans code
+## The 5 principles of no-code automation
 
-Apres ces trois tutoriels, voici les principes a retenir pour automatiser d'autres taches.
+After these three tutorials, here are the principles to remember for automating other tasks.
 
-**1. Commencez par ce que vous faites chaque semaine.** Le gain est immediat et vous apprenez en douceur.
+**1. Start with what you do every week.** The gain is immediate and you learn gently.
 
-**2. Creez des fichiers de reference.** Votre contexte (entreprise, ton, format) dans un fichier que Claude Code lit a chaque session. Vous ne le repetez plus.
+**2. Create reference files.** Your context (company, tone, format) in a file that Claude Code reads every session. You never repeat it.
 
-**3. Demandez que le resultat soit ecrit dans un fichier.** C'est plus pratique que de copier depuis le terminal, et ca vous cree un historique.
+**3. Ask for the result to be saved to a file.** It's more practical than copying from the terminal, and it creates a history.
 
-**4. Ameliorez vos prompts progressivement.** La premiere version marche. La cinquieme version est excellente. Notez ce qui ne va pas et ajustez.
+**4. Improve your prompts gradually.** The first version works. The fifth version is excellent. Note what's off and adjust.
 
-**5. Gardez l'humain dans la boucle.** Claude Code produit le brouillon, vous validez le resultat final. C'est cette combinaison qui donne les meilleurs resultats.
+**5. Keep a human in the loop.** Claude Code produces the draft, you validate the final result. That combination delivers the best outcomes.
 
 ## Next steps
 
-- Decouvrez les [8 cas d'usage business](/use-cases/business) avec des prompts prets a copier
-- Lisez les [histoires de reussite](/use-cases/success-stories) de non-developpeurs utilisant Claude Code
-- Explorez le [guide de prompting non-developpeurs](/prompting/non-dev-prompting) pour ameliorer vos prompts
+- Discover the [8 business use cases](/use-cases/business) with ready-to-copy prompts
+- Read the [success stories](/use-cases/success-stories) from non-developers using Claude Code
+- Explore the [non-developer prompting guide](/prompting/non-dev-prompting) to improve your prompts

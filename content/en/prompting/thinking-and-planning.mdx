@@ -7,389 +7,389 @@ datePublished: "2026-03-11"
 dateModified: "2026-03-11"
 ---
 
-## Deux modes pour raisonner plus profondément
+## Two modes for deeper reasoning
 
-Claude Code dispose de deux fonctionnalités qui amplifient considérablement la qualité du raisonnement sur les tâches complexes : l'**Extended Thinking** et le **Plan Mode**. Ce ne sont pas des gadgets. Correctement utilisés, ils font la différence entre une solution à demi cohérente et une architecture solide.
+Claude Code has two features that significantly amplify reasoning quality on complex tasks: **Extended Thinking** and **Plan Mode**. These aren't gimmicks. Used correctly, they make the difference between a half-baked solution and a solid architecture.
 
-<Callout type="info" title="L'analogie du chirurgien">
-Un chirurgien qualifié n'opère pas à la va-vite. Il étudie les radiographies, planifie l'intervention, anticipe les complications. L'Extended Thinking et le Plan Mode donnent cette même discipline à Claude : le temps de réfléchir avant d'agir. Pour les coupures de papier, vous n'avez pas besoin d'un chirurgien. Mais pour une opération à cœur ouvert, vous voulez le meilleur niveau de préparation.
+<Callout type="info" title="The surgeon analogy">
+A skilled surgeon doesn't rush into the operating room. They study the X-rays, plan the procedure, and anticipate complications. Extended Thinking and Plan Mode give Claude that same discipline: time to think before acting. For paper cuts, you don't need a surgeon. But for open-heart surgery, you want the best level of preparation.
 </Callout>
 
-## Extended Thinking : réserver des tokens pour réfléchir
+## Extended Thinking: reserving tokens for thought
 
 ### How it works
 
-L'Extended Thinking alloue une partie de la fenêtre de contexte à un **raisonnement interne** avant de formuler la réponse. Ce raisonnement n'est pas visible par défaut, mais il structure la pensée de Claude de façon plus rigoureuse.
+Extended Thinking allocates part of the context window to **internal reasoning** before formulating the response. This reasoning isn't visible by default, but it structures Claude's thinking more rigorously.
 
-Concrètement : au lieu de générer une réponse immédiate, Claude "réfléchit à voix basse", considère les options, évalue les trade-offs, anticipe les problèmes, puis formule une réponse plus élaborée.
+In practice: instead of generating an immediate response, Claude "thinks quietly," considers the options, evaluates trade-offs, anticipates problems, then formulates a more thorough answer.
 
-### Activation et configuration
+### Activation and configuration
 
 ```bash
-# Activer/désactiver l'Extended Thinking (toggle)
+# Toggle Extended Thinking on/off
 Alt+T        # Linux / Windows
 Option+T     # macOS
 
-# Voir le raisonnement interne de Claude (mode verbose)
+# View Claude's internal reasoning (verbose mode)
 Ctrl+O
 
-# Configurer le budget de tokens alloué au raisonnement
+# Configure the token budget allocated to reasoning
 export MAX_THINKING_TOKENS=10000
 
-# Configurer via ~/.claude/settings.json
+# Configure via ~/.claude/settings.json
 {
   "alwaysThinkingEnabled": true
 }
 ```
 
-<Card title="Extended Thinking est activé par défaut" variant="highlight">
-L'Extended Thinking est activé par défaut dans Claude Code, avec jusqu'à 31 999 tokens réservés pour le raisonnement interne. Vous pouvez le désactiver pour les tâches simples qui n'en ont pas besoin, et ainsi réduire la latence et les coûts.
+<Card title="Extended Thinking is enabled by default" variant="highlight">
+Extended Thinking is enabled by default in Claude Code, with up to 31,999 tokens reserved for internal reasoning. You can disable it for simple tasks that don't need it, reducing latency and costs.
 </Card>
 
-### Quand activer l'Extended Thinking
+### When to enable Extended Thinking
 
-L'Extended Thinking est particulièrement utile dans ces situations :
+Extended Thinking is particularly useful in these situations:
 
-**Décisions d'architecture complexes**
+**Complex architecture decisions**
 ```markdown
-"Nous devons choisir entre une architecture microservices et un monolithe modulaire
-pour notre nouvelle API de gestion de flotte (500 véhicules, 50 utilisateurs simultanés,
-données temps réel GPS, reporting analytique).
+"We need to choose between a microservices architecture and a modular monolith
+for our new fleet management API (500 vehicles, 50 concurrent users,
+real-time GPS data, analytical reporting).
 
-Analyse en profondeur les trade-offs : maintenabilité, coût d'infrastructure,
-complexité opérationnelle, scalabilité à 5 ans, onboarding des nouveaux devs.
-Recommande une architecture avec une justification détaillée."
+Analyze the trade-offs in depth: maintainability, infrastructure cost,
+operational complexity, 5-year scalability, onboarding new devs.
+Recommend an architecture with a detailed justification."
 ```
 
-**Debugging de problèmes difficiles à reproduire**
+**Debugging hard-to-reproduce issues**
 ```markdown
-"Notre API Node.js présente des fuites mémoire intermittentes en production.
-Heap croît de 50MB/heure, GC ne récupère pas tout.
-Logs : des requêtes GraphQL complexes corrèlent avec les pics.
+"Our Node.js API has intermittent memory leaks in production.
+Heap grows by 50MB/hour, GC doesn't reclaim everything.
+Logs: complex GraphQL queries correlate with the spikes.
 
-Analyse les causes possibles et propose un plan de diagnostic systématique."
+Analyze possible causes and propose a systematic diagnostic plan."
 ```
 
-**Refactoring de grande envergure**
+**Large-scale refactoring**
 ```markdown
-"Nous devons migrer 45 000 lignes de JavaScript vers TypeScript strict.
-Le projet a 3 ans, pas de types existants, 0% de couverture de tests.
-Équipe : 4 devs, contrainte : pas d'arrêt des nouvelles features pendant la migration.
+"We need to migrate 45,000 lines of JavaScript to strict TypeScript.
+The project is 3 years old, no existing types, 0% test coverage.
+Team: 4 devs, constraint: no stopping new features during migration.
 
-Propose une stratégie de migration progressive avec étapes, risques et métriques de succès."
+Propose a progressive migration strategy with steps, risks, and success metrics."
 ```
 
-**Analyse de sécurité approfondie**
+**In-depth security analysis**
 ```markdown
-"Audite ce module d'authentification OAuth2 pour détecter toutes les vulnérabilités potentielles.
-Ne te contente pas de la liste OWASP Top 10, analyse les timing attacks,
-les problèmes de state management, les edge cases d'expiration de token."
+"Audit this OAuth2 authentication module for all potential vulnerabilities.
+Don't settle for the OWASP Top 10 list; analyze timing attacks,
+state management issues, and token expiration edge cases."
 ```
 
-### Quand désactiver l'Extended Thinking
+### When to disable Extended Thinking
 
-Pour les tâches simples et répétitives, l'Extended Thinking ajoute de la latence sans apporter de valeur. Désactivez-le pour :
+For simple, repetitive tasks, Extended Thinking adds latency without adding value. Disable it for:
 
-- Corrections de typos ou de bugs évidents
-- Génération de code boilerplate (CRUD basique, fixtures de test)
-- Formatage et renommage
-- Questions factuelles courtes
-- Paraphrase ou résumé de documentation
+- Typo fixes or obvious bugs
+- Boilerplate code generation (basic CRUD, test fixtures)
+- Formatting and renaming
+- Short factual questions
+- Paraphrasing or summarizing documentation
 
-<Callout type="tip" title="Règle simple">
-Si vous pouviez résoudre le problème en 30 secondes de réflexion, l'Extended Thinking n'ajoute rien. Si vous auriez besoin de 10 minutes de tableau blanc pour l'aborder, activez-le.
+<Callout type="tip" title="Simple rule">
+If you could solve the problem in 30 seconds of thought, Extended Thinking adds nothing. If you'd need 10 minutes at a whiteboard to tackle it, enable it.
 </Callout>
 
-## Plan Mode : planifier avant d'agir
+## Plan Mode: plan before acting
 
 ### Concept
 
-Le Plan Mode demande à Claude de produire un plan structuré et de le soumettre à votre validation **avant** de modifier quoi que ce soit. C'est particulièrement critique pour les tâches qui touchent plusieurs fichiers ou comportent des risques de régression.
+Plan Mode asks Claude to produce a structured plan and submit it for your validation **before** modifying anything. This is particularly critical for tasks that touch multiple files or carry regression risks.
 
-### Comment activer le Plan Mode
+### How to activate Plan Mode
 
-Dans Claude Code, activez le Plan Mode via le raccourci dédié, ou demandez-le explicitement dans votre prompt :
+In Claude Code, activate Plan Mode via the dedicated shortcut, or request it explicitly in your prompt:
 
 ```markdown
-# Demander un plan explicitement
-"Avant de coder quoi que ce soit, propose-moi un plan détaillé.
-Je validerai le plan avant que tu commences l'implémentation."
+# Request a plan explicitly
+"Before coding anything, propose a detailed plan.
+I'll validate the plan before you start implementing."
 
-# Formulation alternative
-"Fais d'abord une analyse et un plan. Attends ma validation avant de toucher au code."
+# Alternative phrasing
+"Do an analysis and plan first. Wait for my approval before touching any code."
 ```
 
-### Example complet : refactoring avec Plan Mode
+### Full example: refactoring with Plan Mode
 
-**Votre prompt** :
+**Your prompt**:
 ```markdown
-"Je veux migrer notre state management de Redux Toolkit vers Zustand.
-Le projet a 25 components qui utilisent Redux, 8 slices, 15 selectors complexes.
+"I want to migrate our state management from Redux Toolkit to Zustand.
+The project has 25 components using Redux, 8 slices, 15 complex selectors.
 
-Propose un plan de migration avant de commencer.
-Pour chaque étape : fichiers impactés, changements à faire,
-risques de régression, tests à vérifier."
+Propose a migration plan before starting.
+For each step: affected files, changes to make,
+regression risks, tests to verify."
 ```
 
-**Ce que Claude va produire (Plan Mode)** :
+**What Claude will produce (Plan Mode)**:
 ```markdown
-## Plan de migration Redux → Zustand
+## Migration plan: Redux -> Zustand
 
-### Analyse de l'impact
-- 25 composants utilisent useSelector ou useDispatch
-- 8 slices : auth, cart, products, orders, ui, notifications, search, filters
-- 15 selectors, dont 6 memoïsés avec createSelector
+### Impact analysis
+- 25 components use useSelector or useDispatch
+- 8 slices: auth, cart, products, orders, ui, notifications, search, filters
+- 15 selectors, including 6 memoized with createSelector
 
-### Phase 1 : Installation et coexistence (Jour 1)
-Fichiers : package.json, store/index.ts
-Actions :
-- Installer zustand et ses devtools
-- Créer le premier store Zustand en parallèle du store Redux
-- Configurer les devtools pour les deux
-Risques : aucun (pas de modification du code existant)
-Tests : build qui passe, pas de régression
+### Phase 1: Installation and coexistence (Day 1)
+Files: package.json, store/index.ts
+Actions:
+- Install zustand and its devtools
+- Create the first Zustand store alongside the Redux store
+- Configure devtools for both
+Risks: none (no modification of existing code)
+Tests: build passes, no regression
 
-### Phase 2 : Migration des slices simples (Jours 2-3)
-Slices cibles : ui, notifications (pas de logique async)
-Fichiers : store/ui.store.ts (nouveau), store/notifications.store.ts (nouveau)
-Stratégie : créer les nouveaux stores Zustand, migrer les composants un par un
-Risques : faible (slices sans dépendances croisées)
+### Phase 2: Migrating simple slices (Days 2-3)
+Target slices: ui, notifications (no async logic)
+Files: store/ui.store.ts (new), store/notifications.store.ts (new)
+Strategy: create new Zustand stores, migrate components one by one
+Risks: low (slices without cross-dependencies)
 
-### Phase 3 : Migration des slices avec async (Jours 4-6)
-Slices cibles : auth, products, search
-Fichiers : 3 nouveaux stores + tous les composants concernés
-Stratégie : remplacer createAsyncThunk par des actions async dans Zustand
-Risques : moyen (tester les race conditions et l'état de loading)
+### Phase 3: Migrating slices with async (Days 4-6)
+Target slices: auth, products, search
+Files: 3 new stores + all affected components
+Strategy: replace createAsyncThunk with async actions in Zustand
+Risks: medium (test for race conditions and loading state)
 
 [...]
 
-Voulez-vous que je commence par la Phase 1, ou souhaitez-vous modifier le plan ?
+Would you like me to start with Phase 1, or do you want to modify the plan?
 ```
 
-Ce n'est qu'après votre validation que Claude commence à coder.
+Only after your validation does Claude start coding.
 
-### Plan Mode pour les features complexes
+### Plan Mode for complex features
 
 ```markdown
-"Je veux implémenter un système de notifications en temps réel.
-Contraintes : WebSockets, fallback SSE si WebSocket indisponible,
-reconnexion automatique, gestion des notifications non lues, persistance Redis.
+"I want to implement a real-time notification system.
+Constraints: WebSockets, SSE fallback if WebSocket unavailable,
+automatic reconnection, unread notification management, Redis persistence.
 
-Fais un plan d'implémentation par phases avec dépendances entre les phases.
-Je valide avant que tu commences."
+Create a phased implementation plan with dependencies between phases.
+I'll approve before you begin."
 ```
 
-### Combiner Extended Thinking + Plan Mode
+### Combining Extended Thinking + Plan Mode
 
-Pour les tâches les plus complexes, combinez les deux :
+For the most complex tasks, combine both:
 
 ```markdown
-"[Extended Thinking activé]
+"[Extended Thinking enabled]
 
-Je dois prendre une décision d'architecture critique : notre API Gateway actuelle
-(Express monolithique) ne tient plus la charge (pics à 10K req/s).
-Options : Kong, Nginx + Lua, AWS API Gateway, tRPC.
-Contraintes : budget < 500€/mois, team de 3 devs junior, déploiement K8s.
+I need to make a critical architecture decision: our current API Gateway
+(monolithic Express) can't handle the load anymore (peaks at 10K req/s).
+Options: Kong, Nginx + Lua, AWS API Gateway, tRPC.
+Constraints: budget < 500 EUR/month, team of 3 junior devs, K8s deployment.
 
-1. Analyse en profondeur chaque option avec ses trade-offs réels
-2. Propose un plan de migration détaillé pour l'option recommandée
-3. Identifie les risques cachés que je n'aurais peut-être pas vus
+1. Deeply analyze each option with its real trade-offs
+2. Propose a detailed migration plan for the recommended option
+3. Identify hidden risks I might not have thought of
 
-Prends le temps qu'il faut pour raisonner."
+Take the time you need to reason."
 ```
 
-<Card title="Extended Thinking + Plan Mode = combo gagnant" variant="accent">
-Extended Thinking amplifie la qualité de l'analyse. Plan Mode structure l'exécution et vous garde dans la boucle de décision. Ensemble, ils transforment Claude en un architecte qui réfléchit vraiment plutôt qu'un assistant qui code à la chaîne.
+<Card title="Extended Thinking + Plan Mode = winning combo" variant="accent">
+Extended Thinking amplifies analysis quality. Plan Mode structures execution and keeps you in the decision loop. Together, they turn Claude into an architect who actually thinks rather than an assistant that churns out code on autopilot.
 </Card>
 
-## Chain-of-thought dans vos prompts
+## Chain-of-thought in your prompts
 
-L'Extended Thinking est automatique. Mais vous pouvez aussi forcer le raisonnement step by step explicitement dans vos prompts, même sans Extended Thinking activé. C'est la technique du **chain-of-thought** (chaîne de pensée).
+Extended Thinking is automatic. But you can also force step-by-step reasoning explicitly in your prompts, even without Extended Thinking enabled. This is the **chain-of-thought** technique.
 
-### Formulations pour déclencher le chain-of-thought
-
-```markdown
-# Formulation 1 : étapes numérotées
-"Analyse ce bug step by step :
-1. Identifie les symptômes observés
-2. Formule 3 hypothèses sur la cause
-3. Pour chaque hypothèse, dis comment la valider
-4. Recommande par où commencer le debugging"
-
-# Formulation 2 : "raisonne avant de répondre"
-"Avant de proposer une solution, raisonne à voix haute :
-quelles sont les contraintes, les options, les compromis.
-Montre ton raisonnement avant la conclusion."
-
-# Formulation 3 : "joue l'avocat du diable"
-"Propose ta solution, puis joue l'avocat du diable :
-quels sont les arguments contre ta proposition ?
-Comment la rendrais-tu plus robuste face à ces critiques ?"
-```
-
-### Example : chain-of-thought pour un choix de base de données
+### Phrasings to trigger chain-of-thought
 
 ```markdown
-"Nous choisissons une base de données pour un système d'inventaire temps réel
-(50K produits, mises à jour stock chaque seconde, 200 utilisateurs simultanés,
-requêtes de reporting hebdomadaire sur 2 ans d'historique).
+# Phrasing 1: numbered steps
+"Analyze this bug step by step:
+1. Identify the observed symptoms
+2. Formulate 3 hypotheses about the cause
+3. For each hypothesis, say how to validate it
+4. Recommend where to start debugging"
 
-Raisonne step by step :
-1. Quels sont les patterns d'accès dominants (lecture/écriture, latence, volume) ?
-2. PostgreSQL vs MongoDB vs Redis vs TimescaleDB : évalue chacun sur nos critères
-3. Quels sont les compromis du choix que tu recommanderai ?
-4. Y a-t-il des architectures hybrides à envisager (Redis + PostgreSQL) ?
-5. Qu'est-ce que je n'ai pas pensé à demander mais qui est critique pour ce choix ?"
+# Phrasing 2: "reason before answering"
+"Before proposing a solution, think out loud:
+what are the constraints, the options, the compromises.
+Show your reasoning before the conclusion."
+
+# Phrasing 3: "play devil's advocate"
+"Propose your solution, then play devil's advocate:
+what are the arguments against your proposal?
+How would you make it more robust against these criticisms?"
 ```
 
-## Constraint-setting pour éviter les hallucinations
-
-Les hallucinations (informations inventées) sont moins fréquentes avec l'Extended Thinking activé, mais une bonne technique de **constraint-setting** les réduit encore davantage.
-
-### Technique 1 : Demander des sources
+### Example: chain-of-thought for a database choice
 
 ```markdown
-"Pour chaque affirmation technique que tu fais, indique si c'est :
-[CERTAIN] : tu en es sûr
-[PROBABLE] : tu penses que c'est vrai mais tu n'es pas certain
-[VÉRIFIER] : à vérifier dans la documentation officielle
+"We're choosing a database for a real-time inventory system
+(50K products, stock updates every second, 200 concurrent users,
+weekly reporting queries on 2 years of history).
 
-Si tu ne sais pas quelque chose, dis 'je ne sais pas' plutôt qu'inventer."
+Reason step by step:
+1. What are the dominant access patterns (read/write, latency, volume)?
+2. PostgreSQL vs MongoDB vs Redis vs TimescaleDB: evaluate each on our criteria
+3. What are the compromises of your recommended choice?
+4. Are there hybrid architectures to consider (Redis + PostgreSQL)?
+5. What haven't I thought to ask that's critical for this decision?"
 ```
 
-### Technique 2 : Limiter le champ d'expertise
+## Constraint-setting to avoid hallucinations
+
+Hallucinations (invented information) are less frequent with Extended Thinking enabled, but good **constraint-setting** technique reduces them even further.
+
+### Technique 1: Ask for confidence levels
 
 ```markdown
-"Réponds uniquement sur la base de ce que tu sais de PostgreSQL 15 et Prisma 5.
-Si la question sort de ce périmètre ou si tu n'es pas sûr, dis-le explicitement
-plutôt que de généraliser depuis d'autres bases de données."
+"For each technical claim you make, indicate whether it's:
+[CERTAIN]: you're sure about it
+[PROBABLE]: you think it's true but aren't certain
+[VERIFY]: should be verified in official documentation
+
+If you don't know something, say 'I don't know' rather than making it up."
 ```
 
-### Technique 3 : Exiger la vérification par le code
+### Technique 2: Limit the expertise scope
 
 ```markdown
-"Avant de me dire qu'une API ou une méthode existe, vérifie dans les fichiers
-du projet que cette API est bien importée et utilisée. Ne me dis pas qu'une
-fonction existe si tu ne l'as pas vue dans le code."
+"Answer only based on what you know about PostgreSQL 15 and Prisma 5.
+If the question falls outside this scope or you're unsure, say so explicitly
+rather than generalizing from other databases."
 ```
 
-## Différences entre Haiku, Sonnet et Opus
+### Technique 3: Require code-based verification
 
-Le choix du modèle impacte directement la qualité du raisonnement, la latence et les coûts. Claude Code peut utiliser différents modèles selon les tâches.
+```markdown
+"Before telling me an API or method exists, check in the project files
+that this API is actually imported and used. Don't tell me a function
+exists if you haven't seen it in the code."
+```
 
-<Card title="Haiku 4.5 : Rapide et économique" variant="default">
-**Use cases :**
-- Agents légers invoqués fréquemment
-- Génération de code boilerplate simple
-- Workers dans des systèmes multi-agents
-- Tâches répétitives à faible valeur ajoutée
+## Differences between Haiku, Sonnet, and Opus
 
-**Caractéristiques :**
-- ~90% des capacités de Sonnet
-- 3x moins cher que Sonnet
-- Latence très faible
+The model choice directly impacts reasoning quality, latency, and costs. Claude Code can use different models depending on the task.
 
-**Ne pas utiliser pour :**
-- Décisions d'architecture
-- Debugging complexe
-- Analyse de sécurité approfondie
+<Card title="Haiku 4.5: Fast and affordable" variant="default">
+**Use cases:**
+- Lightweight agents invoked frequently
+- Simple boilerplate code generation
+- Workers in multi-agent systems
+- Low-value repetitive tasks
+
+**Characteristics:**
+- ~90% of Sonnet's capabilities
+- 3x cheaper than Sonnet
+- Very low latency
+
+**Don't use for:**
+- Architecture decisions
+- Complex debugging
+- In-depth security analysis
 </Card>
 
-<Card title="Sonnet 4.6 : Le meilleur pour le coding" variant="accent">
-**Use cases :**
-- Développement quotidien (80% du temps)
-- Orchestration de workflows multi-agents
-- Tâches de coding complexes
-- Review de code et refactoring
+<Card title="Sonnet 4.6: Best for coding" variant="accent">
+**Use cases:**
+- Daily development (80% of the time)
+- Orchestrating multi-agent workflows
+- Complex coding tasks
+- Code review and refactoring
 
-**Caractéristiques :**
-- Meilleur rapport qualité/coût pour le code
-- Extended Thinking efficace
-- Excellent suivi des instructions complexes
+**Characteristics:**
+- Best quality-to-cost ratio for code
+- Effective Extended Thinking
+- Excellent at following complex instructions
 
-**Le choix par défaut recommandé**
+**The recommended default choice**
 </Card>
 
-<Card title="Opus 4.5 : Raisonnement le plus profond" variant="default">
-**Use cases :**
-- Décisions d'architecture critiques
-- Analyse de sécurité exhaustive
-- Recherche et synthèse de solutions innovantes
-- Problèmes nécessitant le maximum de raisonnement
+<Card title="Opus 4.5: Deepest reasoning" variant="default">
+**Use cases:**
+- Critical architecture decisions
+- Exhaustive security analysis
+- Research and synthesis of innovative solutions
+- Problems requiring maximum reasoning
 
-**Caractéristiques :**
-- Raisonnement le plus profond disponible
-- Plus lent et plus coûteux que Sonnet
-- Particulièrement adapté à l'Extended Thinking
+**Characteristics:**
+- Deepest reasoning available
+- Slower and more expensive than Sonnet
+- Particularly suited to Extended Thinking
 
-**Réservez-le pour les 5-10% de tâches critiques**
+**Reserve it for the 5-10% of critical tasks**
 </Card>
 
-### Impact sur les coûts et la latence
+### Impact on costs and latency
 
-| Modèle | Latence | Coût relatif | Qualité raisonnement |
-|--------|---------|-------------|----------------------|
-| Haiku 4.5 | Très faible | 1x | Bonne |
-| Sonnet 4.6 | Faible | 3x | Excellente |
-| Opus 4.5 | Moyenne | 15x | Maximale |
+| Model | Latency | Relative cost | Reasoning quality |
+|-------|---------|---------------|-------------------|
+| Haiku 4.5 | Very low | 1x | Good |
+| Sonnet 4.6 | Low | 3x | Excellent |
+| Opus 4.5 | Medium | 15x | Maximum |
 
-<Callout type="tip" title="Stratégie de sélection de modèle">
-Commencez toutes vos tâches avec Sonnet 4.6. Passez à Opus 4.5 uniquement quand la tâche nécessite le raisonnement le plus profond (architecture critique, sécurité, algorithmes complexes). Utilisez Haiku 4.5 pour les agents légers dans vos pipelines automatisés.
+<Callout type="tip" title="Model selection strategy">
+Start all your tasks with Sonnet 4.6. Switch to Opus 4.5 only when the task requires the deepest reasoning (critical architecture, security, complex algorithms). Use Haiku 4.5 for lightweight agents in your automated pipelines.
 </Callout>
 
-## Examples concrets par type de tâche
+## Concrete examples by task type
 
-### Architecture de service
+### Service architecture
 
 ```markdown
 "[Extended Thinking + Plan Mode]
 
-Je dois concevoir un service de traitement de commandes e-commerce.
-Contraintes : 1000 commandes/minute en pic, garantie de livraison (pas de perte),
-saga pattern pour les transactions distribuées, retry automatique.
+I need to design an e-commerce order processing service.
+Constraints: 1000 orders/minute at peak, delivery guarantee (no loss),
+saga pattern for distributed transactions, automatic retry.
 
-Analyse les patterns event-driven adaptés, propose une architecture
-avec les trade-offs, puis génère le plan d'implémentation."
+Analyze suitable event-driven patterns, propose an architecture
+with trade-offs, then generate the implementation plan."
 ```
 
-### Debugging systémique
+### Systemic debugging
 
 ```markdown
 "[Extended Thinking]
 
-Notre API Express perd des requêtes de façon aléatoire en production (1 sur 500).
-Logs incohérents : parfois 200 OK, parfois timeout, rarement erreur explicite.
-Load balancer Nginx, 3 instances Node.js, Redis pour les sessions.
+Our Express API randomly drops requests in production (1 in 500).
+Inconsistent logs: sometimes 200 OK, sometimes timeout, rarely an explicit error.
+Nginx load balancer, 3 Node.js instances, Redis for sessions.
 
-Analyse toutes les causes possibles, y compris les race conditions,
-les problèmes réseau, et les edge cases de timing. Propose un plan
-de diagnostic systématique avec les métriques à collecter."
+Analyze all possible causes, including race conditions,
+network issues, and timing edge cases. Propose a systematic
+diagnostic plan with metrics to collect."
 ```
 
-### Code review approfondie
+### In-depth code review
 
 ```markdown
 "[Extended Thinking]
 
-Review ce code de service de paiement pour détecter :
-- Les failles de sécurité (pas seulement OWASP Top 10)
-- Les problèmes de concurrence et de race conditions
-- Les edge cases non gérés dans le flux de paiement
-- Les problèmes de performance sous charge
-- Les risques de conformité PCI-DSS
+Review this payment service code to detect:
+- Security vulnerabilities (not just OWASP Top 10)
+- Concurrency and race condition issues
+- Unhandled edge cases in the payment flow
+- Performance issues under load
+- PCI-DSS compliance risks
 
-Pour chaque problème : sévérité, explication, correction suggérée.
-[coller le code]"
+For each issue: severity, explanation, suggested fix.
+[paste code]"
 ```
 
 ## Next steps
 
-Vous maîtrisez maintenant Extended Thinking et Plan Mode. Approfondissez avec :
+You've now mastered Extended Thinking and Plan Mode. Go deeper with:
 
-- [Prompt chaining et orchestration multi-agents](/prompting/chaining-and-agents) : Décomposez les grandes tâches en workflows maîtrisés
-- [Gestion du contexte](/prompting/context-management) : Optimisez l'utilisation de vos 200K tokens
-- [Prompting avancé et multi-agents](/prompting/advanced) : Chain-of-thought, few-shot et décomposition avancée
-- [Orchestration avancée des agents](/agents/orchestration) : Coordonnez des pipelines d'agents complexes avec Claude Code
-- [Premiers pas avec Claude Code](/getting-started) : Installez Claude Code et configurez votre environnement
-- [Top plugins sécurité et qualité](/plugins/best-security) : Renforcez la qualité de votre code avec les plugins essentiels
-- [Configurateur interactif](/configurator) : Paramétrez votre instance Claude Code selon vos besoins
+- [Prompt chaining and multi-agent orchestration](/prompting/chaining-and-agents): Break large tasks into controlled workflows
+- [Context management](/prompting/context-management): Optimize your 200K token usage
+- [Advanced prompting and multi-agents](/prompting/advanced): Chain-of-thought, few-shot, and advanced decomposition
+- [Advanced agent orchestration](/agents/orchestration): Coordinate complex agent pipelines with Claude Code
+- [Getting started with Claude Code](/getting-started): Install Claude Code and set up your environment
+- [Top security and quality plugins](/plugins/best-security): Strengthen your code quality with essential plugins
+- [Interactive configurator](/configurator): Configure your Claude Code instance to your needs

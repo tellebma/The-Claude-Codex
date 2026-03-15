@@ -7,122 +7,122 @@ datePublished: "2026-03-12"
 dateModified: "2026-03-12"
 ---
 
-## Donnees et vie privee
+## Data and privacy
 
-### Est-ce que mon code est stocke par Anthropic ?
+### Is my code stored by Anthropic?
 
-Non, pas par defaut. Avec l'API directe, la retention est configurable (0 a 30 jours). Avec AWS Bedrock ou Google Vertex AI, aucune donnee ne transite par les serveurs d'Anthropic. Le code envoye pendant une session sert uniquement a generer la reponse, il n'est pas utilise pour entrainer les modeles.
+No, not by default. With the direct API, retention is configurable (0 to 30 days). With AWS Bedrock or Google Vertex AI, no data passes through Anthropic's servers. Code sent during a session is only used to generate the response; it is not used to train models.
 
-### Quelles donnees sont envoyees exactement ?
+### What data is sent exactly?
 
-Claude Code envoie votre prompt, les fichiers qu'il lit pendant la session et les resultats des commandes executees. Il n'envoie pas automatiquement tout votre code source. Les fichiers `.env`, les cles SSH et les credentials systeme ne sont jamais envoyes sauf si vous demandez explicitement a Claude de les lire.
+Claude Code sends your prompt, files it reads during the session, and results of executed commands. It does not automatically send your entire source code. `.env` files, SSH keys, and system credentials are never sent unless you explicitly ask Claude to read them.
 
-### Anthropic utilise-t-il mes donnees pour entrainer ses modeles ?
+### Does Anthropic use my data to train its models?
 
-Non. Les donnees envoyees via l'API ne sont pas utilisees pour l'entrainement des modeles. C'est explicitement indique dans les conditions d'utilisation de l'API et dans le DPA.
+No. Data sent via the API is not used for model training. This is explicitly stated in the API terms of service and in the DPA.
 
-### Peut-on utiliser Claude Code sur un reseau interne deconnecte ?
+### Can Claude Code be used on a disconnected internal network?
 
-Pas directement. Claude Code necessite une connexion a l'API d'Anthropic (ou a un endpoint Bedrock/Vertex). Pour les environnements air-gapped, la seule option est un proxy interne qui route les requetes vers l'API via un point de sortie controle.
+Not directly. Claude Code requires a connection to Anthropic's API (or a Bedrock/Vertex endpoint). For air-gapped environments, the only option is an internal proxy that routes requests to the API through a controlled exit point.
 
-## Conformite
+## Compliance
 
-### Claude Code est-il conforme au RGPD ?
+### Is Claude Code GDPR-compliant?
 
-Anthropic propose un DPA (Data Processing Agreement) conforme au RGPD, avec des clauses contractuelles types pour les transferts UE-US. Pour renforcer la conformite, utilisez AWS Bedrock dans une region europeenne (eu-west-1, eu-central-1). Consultez votre DPO pour une analyse adaptee a votre contexte.
+Anthropic offers a GDPR-compliant DPA (Data Processing Agreement), with standard contractual clauses for EU-US transfers. To strengthen compliance, use AWS Bedrock in a European region (eu-west-1, eu-central-1). Consult your DPO for an analysis tailored to your context.
 
-### Qu'en est-il de l'AI Act europeen ?
+### What about the European AI Act?
 
-Claude Code, utilise comme outil d'aide au developpement, tombe dans la categorie "risque limite" de l'AI Act. Les obligations principales sont la transparence (informer les utilisateurs qu'ils interagissent avec une IA) et la documentation de l'usage. Si le code genere alimente un systeme a haut risque, des obligations supplementaires s'appliquent au systeme final.
+Claude Code, used as a development assistance tool, falls into the "limited risk" category of the AI Act. The main obligations are transparency (informing users they are interacting with an AI) and usage documentation. If the generated code feeds into a high-risk system, additional obligations apply to the final system.
 
-### Quelles certifications Anthropic possede-t-il ?
+### What certifications does Anthropic hold?
 
-SOC 2 Type II (obtenu), HIPAA (BAA disponible sur demande), DPA RGPD standard. ISO 27001 est en cours. Les rapports d'audit sont disponibles sur le [Trust Center d'Anthropic](https://trust.anthropic.com).
+SOC 2 Type II (obtained), HIPAA (BAA available on request), standard GDPR DPA. ISO 27001 is in progress. Audit reports are available on the [Anthropic Trust Center](https://trust.anthropic.com).
 
-### Peut-on obtenir un audit de securite d'Anthropic ?
+### Can we get a security audit from Anthropic?
 
-Les rapports SOC 2 sont disponibles sur demande via le Trust Center. Pour des audits complementaires ou des tests de penetration, contactez l'equipe commerciale d'Anthropic.
+SOC 2 reports are available on request through the Trust Center. For additional audits or penetration testing, contact Anthropic's sales team.
 
-## Couts et facturation
+## Costs and billing
 
-### Combien coute Claude Code pour une equipe de 50 developpeurs ?
+### How much does Claude Code cost for a team of 50 developers?
 
-Avec le plan Max 5x (100 $/dev/mois) : 5 000 $/mois. Avec l'API (consommation moyenne de 40 $/dev/mois) : environ 2 000 $/mois. Le cout reel depend du volume d'utilisation. Utilisez le [calculateur TCO](/enterprise/tco-calculator) pour une estimation adaptee.
+With the Max 5x plan ($100/dev/month): $5,000/month. With the API (average consumption of $40/dev/month): about $2,000/month. The actual cost depends on usage volume. Use the [TCO calculator](/enterprise/tco-calculator) for a tailored estimate.
 
-### Le plan Pro a 20 $ suffit-il pour une equipe ?
+### Is the $20 Pro plan enough for a team?
 
-Pour un usage occasionnel (quelques requetes par jour), oui. Pour un usage quotidien intensif, le throttling du plan Pro ralentit le flux de travail. La plupart des equipes qui utilisent Claude Code sérieusement passent au plan Max ou API.
+For occasional use (a few requests per day), yes. For intensive daily use, throttling on the Pro plan slows down the workflow. Most teams that use Claude Code seriously move to the Max or API plan.
 
-### Peut-on mixer les plans au sein d'une equipe ?
+### Can plans be mixed within a team?
 
-Oui, rien ne l'empeche. Vous pouvez avoir des devs en Max 5x (usage intensif) et d'autres en Pro ou API (usage modere). C'est meme la strategie recommandee pour optimiser les couts.
+Yes, nothing prevents it. You can have devs on Max 5x (intensive use) and others on Pro or API (moderate use). That's actually the recommended strategy for optimizing costs.
 
-### Comment suivre la consommation avec le plan API ?
+### How do you track consumption on the API plan?
 
-Via le dashboard Anthropic (console.anthropic.com) ou via les metriques de votre provider cloud (Bedrock/Vertex). Vous pouvez aussi configurer des alertes de budget pour etre prevenu avant d'atteindre un seuil.
+Via the Anthropic dashboard (console.anthropic.com) or through your cloud provider's metrics (Bedrock/Vertex). You can also set budget alerts to be notified before reaching a threshold.
 
-## Deploiement et formation
+## Deployment and training
 
-### Combien de temps faut-il pour deployer Claude Code dans une equipe ?
+### How long does it take to deploy Claude Code in a team?
 
-Comptez 1 semaine de preparation, 4 a 6 semaines de pilote, puis 2 a 4 semaines pour le deploiement progressif. Au total, 2 a 3 mois pour une adoption solide. Le [guide d'adoption](/enterprise/team-adoption) detaille chaque phase.
+Plan 1 week of preparation, 4 to 6 weeks of pilot, then 2 to 4 weeks for progressive rollout. Total: 2 to 3 months for solid adoption. The [adoption guide](/enterprise/team-adoption) details each phase.
 
-### Faut-il une formation specifique ?
+### Is specific training needed?
 
-Une demi-journee de formation initiale suffit pour les bases. Le plus important est de former au prompting efficace, pas a l'installation (qui prend 5 minutes). Prevoyez aussi un suivi hebdomadaire pendant les premieres semaines.
+A half-day initial training is enough for the basics. The most important thing is to train on effective prompting, not installation (which takes 5 minutes). Also plan weekly follow-ups during the first weeks.
 
-### Claude Code fonctionne-t-il avec tous les langages ?
+### Does Claude Code work with all languages?
 
-Oui. Claude Code comprend et genere du code dans tous les langages courants : TypeScript, Python, Rust, Go, Java, C#, Ruby, PHP, Swift, Kotlin, et bien d'autres. Il est particulierement performant sur TypeScript, Python et Rust grace au volume de donnees d'entrainement.
+Yes. Claude Code understands and generates code in all popular languages: TypeScript, Python, Rust, Go, Java, C#, Ruby, PHP, Swift, Kotlin, and many others. It performs especially well on TypeScript, Python, and Rust thanks to the volume of training data.
 
-### Peut-on utiliser Claude Code avec un monorepo ?
+### Can Claude Code be used with a monorepo?
 
-Oui. Le fichier CLAUDE.md a la racine du monorepo definit les regles globales, et chaque package peut avoir son propre CLAUDE.md avec des instructions specifiques. La fenetre de contexte de 200K tokens permet de travailler sur de gros projets, mais utilisez `/compact` regulierement pour eviter de saturer le contexte.
+Yes. The CLAUDE.md file at the monorepo root defines global rules, and each package can have its own CLAUDE.md with specific instructions. The 200K token context window supports working on large projects, but use `/compact` regularly to avoid saturating the context.
 
-## Propriete intellectuelle
+## Intellectual property
 
-### A qui appartient le code genere par Claude Code ?
+### Who owns code generated by Claude Code?
 
-Le code genere par Claude Code vous appartient. Les conditions d'utilisation d'Anthropic stipulent que les outputs generes via l'API sont la propriete de l'utilisateur. Anthropic ne revendique aucun droit sur le code genere.
+Code generated by Claude Code belongs to you. Anthropic's terms of service state that outputs generated via the API are the property of the user. Anthropic claims no rights over generated code.
 
-### Le code genere est-il soumis au droit d'auteur ?
+### Is generated code subject to copyright?
 
-La question du droit d'auteur sur le code genere par IA est encore debattue juridiquement dans plusieurs pays. In practice, le code genere par Claude Code est similaire a du code ecrit avec l'aide d'un outil : vous pouvez le modifier, le distribuer et le commercialiser librement. Consultez un juriste si votre contexte l'exige.
+The question of copyright for AI-generated code is still being debated legally in several countries. In practice, code generated by Claude Code is similar to code written with the help of a tool: you can modify, distribute, and commercialize it freely. Consult a lawyer if your situation requires it.
 
-### Y a-t-il un risque de contamination par du code open source ?
+### Is there a risk of contamination from open source code?
 
-Claude Code genere du code original base sur ses connaissances, pas du copier-coller de code existant. Le risque de reproduction litterale de code sous licence est faible mais pas nul, surtout pour des patterns tres courants. Pour les projets sensibles, faites passer le code genere par un outil de detection de licence (comme FOSSA ou Snyk).
+Claude Code generates original code based on its knowledge, not copy-pasted from existing code. The risk of literal reproduction of licensed code is low but not zero, especially for very common patterns. For sensitive projects, run generated code through a license detection tool (like FOSSA or Snyk).
 
-## Support et reversibilite
+## Support and reversibility
 
-### Quel support Anthropic propose-t-il pour les entreprises ?
+### What support does Anthropic offer for enterprises?
 
-Le support standard est accessible via le site Anthropic. Pour les equipes enterprise, un support prioritaire est disponible avec des SLA dedies. Contactez l'equipe commerciale pour les details.
+Standard support is available through the Anthropic website. For enterprise teams, priority support is available with dedicated SLAs. Contact the sales team for details.
 
-### Que se passe-t-il si on arrete Claude Code ?
+### What happens if we stop using Claude Code?
 
-Rien de bloquant. Claude Code modifie vos fichiers locaux, comme n'importe quel outil. Votre code reste votre code, dans votre repo git. Il n'y a pas de lock-in technique : pas de format propriétaire, pas de dependance runtime. Vous perdez juste l'aide de l'assistant.
+Nothing blocking. Claude Code modifies your local files, like any other tool. Your code stays your code, in your git repo. There is no technical lock-in: no proprietary format, no runtime dependency. You just lose the assistant's help.
 
-### Peut-on migrer de Claude Code vers un autre outil IA ?
+### Can you migrate from Claude Code to another AI tool?
 
-Oui. Les configurations (CLAUDE.md, settings.json) sont specifiques a Claude Code, mais les Skills et les bonnes pratiques de prompting sont largement transferables. Les MCP reposent sur un protocole ouvert et certains sont compatibles avec d'autres outils.
+Yes. The configurations (CLAUDE.md, settings.json) are specific to Claude Code, but Skills and prompting best practices are largely transferable. MCPs are based on an open protocol, and some are compatible with other tools.
 
-## Integration et workflow
+## Integration and workflow
 
-### Claude Code s'integre-t-il avec notre CI/CD ?
+### Does Claude Code integrate with our CI/CD?
 
-Oui. Le mode headless (`claude --print`) permet d'integrer Claude Code dans GitHub Actions, GitLab CI ou n'importe quel pipeline. Consultez le [guide headless et CI/CD](/advanced/headless-ci) pour les details.
+Yes. Headless mode (`claude --print`) lets you integrate Claude Code into GitHub Actions, GitLab CI, or any pipeline. See the [headless and CI/CD guide](/advanced/headless-ci) for details.
 
-### Peut-on utiliser Claude Code avec VS Code ou JetBrains ?
+### Can Claude Code be used with VS Code or JetBrains?
 
-Claude Code fonctionne dans le terminal, independamment de l'editeur. Il se combine naturellement avec n'importe quel IDE : vous gardez votre editeur prefere et utilisez Claude Code dans un terminal a cote.
+Claude Code runs in the terminal, independently of the editor. It combines naturally with any IDE: you keep your favorite editor and use Claude Code in a terminal alongside it.
 
-### Impact sur la dynamique d'equipe : les juniors vont-ils cesser d'apprendre ?
+### Impact on team dynamics: will juniors stop learning?
 
-C'est une preoccupation legitime. In practice, les juniors qui utilisent Claude Code apprennent plus vite parce qu'ils ont un "mentor" disponible 24h/24 qui explique le code, les patterns et les erreurs. La cle est de les encourager a comprendre le code genere, pas a le copier aveuglément. Les code reviews restent indispensables.
+This is a valid concern. In practice, juniors who use Claude Code learn faster because they have a "mentor" available 24/7 that explains code, patterns, and errors. The key is to encourage them to understand generated code, not blindly copy it. Code reviews remain essential.
 
 ## Next steps
 
-- [Securite et conformite](/enterprise/security-compliance) : details sur la protection des donnees
-- [Calculateur TCO](/enterprise/tco-calculator) : estimez le budget pour votre equipe
-- [Guide d'adoption](/enterprise/team-adoption) : lancez votre pilote structure
+- [Security and compliance](/enterprise/security-compliance): details on data protection
+- [TCO calculator](/enterprise/tco-calculator): estimate the budget for your team
+- [Adoption guide](/enterprise/team-adoption): launch your structured pilot

@@ -78,10 +78,10 @@ export function SearchDialog() {
 
   // Update results when query changes
   useEffect(() => {
-    const found = searchEntries(query);
+    const found = searchEntries(query, locale);
     setResults(found);
     setSelectedIndex(0);
-  }, [query]);
+  }, [query, locale]);
 
   // Keyboard navigation within results
   const handleKeyDown = (e: React.KeyboardEvent) => {

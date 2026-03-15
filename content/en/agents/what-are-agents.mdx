@@ -7,223 +7,223 @@ datePublished: "2026-03-10"
 dateModified: "2026-03-10"
 ---
 
-## Les agents, c'est quoi exactement ?
+## What exactly are agents?
 
-Un **agent** Claude Code est un processus autonome capable d'exécuter une tâche complexe de bout en bout, sans intervention humaine à chaque étape. Contrairement à un simple prompt où vous posez une question et recevez une réponse, un agent **planifie**, **exécute**, **vérifie** et **itère** jusqu'à atteindre l'objectif.
+A Claude Code **agent** is an autonomous process that can execute a complex task end-to-end, without human intervention at every step. Unlike a simple prompt where you ask a question and get an answer, an agent **plans**, **executes**, **verifies**, and **iterates** until the objective is reached.
 
-<Callout type="info" title="L'analogie de l'équipe de consultants">
-Imaginez que Claude Code est le directeur d'une équipe de consultants spécialisés. Quand vous lui confiez un projet complexe, il ne fait pas tout seul, il **délègue** à des spécialistes. Le consultant sécurité audite le code, le consultant tests écrit les tests, le consultant architecture valide les choix techniques. Chaque consultant (subagent) travaille de manière autonome dans son domaine, puis rend compte au directeur. C'est exactement ainsi que fonctionnent les agents et subagents de Claude Code.
+<Callout type="info" title="The consulting team analogy">
+Think of Claude Code as the director of a team of specialist consultants. When you hand it a complex project, it doesn't do everything alone, it **delegates** to specialists. The security consultant audits the code, the testing consultant writes the tests, the architecture consultant validates the technical choices. Each consultant (sub-agent) works autonomously in their domain, then reports back to the director. This is exactly how Claude Code agents and sub-agents work.
 </Callout>
 
-## Agent vs prompt classique
+## Agent vs traditional prompt
 
-La différence fondamentale entre un agent et un prompt classique tient en trois points.
+The fundamental difference between an agent and a traditional prompt comes down to three things.
 
-| | **Prompt classique** | **Agent** |
+| | **Traditional prompt** | **Agent** |
 |---|---|---|
-| **Interaction** | Question → Réponse unique | Objectif → Planification → Exécution → Vérification |
-| **Autonomie** | Aucune, attend vos instructions | Prend des décisions, utilise des outils, itère |
-| **Portée** | Tâche simple et ponctuelle | Workflow complet multi-étapes |
-| **Outils** | Utilise les outils que vous demandez | Choisit et combine les outils nécessaires |
-| **Durée** | Quelques secondes | Peut durer plusieurs minutes |
+| **Interaction** | Question → Single answer | Goal → Planning → Execution → Verification |
+| **Autonomy** | None, waits for your instructions | Makes decisions, uses tools, iterates |
+| **Scope** | Simple, one-off task | Complete multi-step workflow |
+| **Tools** | Uses the tools you ask for | Chooses and combines the necessary tools |
+| **Duration** | A few seconds | Can last several minutes |
 
-## Comment fonctionnent les subagents ?
+## How do sub-agents work?
 
-Un **subagent** est un agent lancé par Claude Code pour accomplir une sous-tâche spécifique. Claude Code utilise le **tool Agent** (aussi appelé `Task`) pour déléguer du travail à des processus enfants.
+A **sub-agent** is an agent launched by Claude Code to accomplish a specific sub-task. Claude Code uses the **Agent tool** (also called `Task`) to delegate work to child processes.
 
 <Steps>
-<Step title="Déclenchement" stepNumber={1}>
-Claude Code identifie qu'une tâche nécessite une expertise spécifique ou une exécution isolée. Il décide de lancer un subagent via le tool `Task`.
+<Step title="Trigger" stepNumber={1}>
+Claude Code identifies that a task requires specific expertise or isolated execution. It decides to launch a sub-agent via the `Task` tool.
 </Step>
 
-<Step title="Création du subagent" stepNumber={2}>
-Le subagent reçoit un **prompt spécialisé** qui décrit sa mission, ses contraintes et le format de résultat attendu. Il hérite d'un sous-ensemble des outils disponibles.
+<Step title="Sub-agent creation" stepNumber={2}>
+The sub-agent receives a **specialized prompt** describing its mission, constraints, and expected output format. It inherits a subset of the available tools.
 </Step>
 
-<Step title="Exécution isolée" stepNumber={3}>
-Le subagent travaille de manière autonome dans son propre contexte. Il peut lire des fichiers, exécuter des commandes, et produire des modifications, le tout sans polluer le contexte de l'agent principal.
+<Step title="Isolated execution" stepNumber={3}>
+The sub-agent works autonomously in its own context. It can read files, run commands, and produce changes, all without polluting the main agent's context.
 </Step>
 
-<Step title="Rapport et intégration" stepNumber={4} isLast>
-Le subagent renvoie son résultat à l'agent principal, qui l'intègre dans le workflow global. Si le résultat est insuffisant, l'agent principal peut relancer le subagent ou en créer un nouveau.
+<Step title="Reporting and integration" stepNumber={4} isLast>
+The sub-agent sends its result back to the main agent, which integrates it into the overall workflow. If the result is insufficient, the main agent can relaunch the sub-agent or create a new one.
 </Step>
 </Steps>
 
-## Les types d'agents
+## Types of agents
 
-Les agents Claude Code se répartissent en deux grandes catégories.
+Claude Code agents fall into two main categories.
 
-### Agents built-in
+### Built-in agents
 
-Ce sont les agents fournis avec Claude Code ou définis dans vos règles de projet. Ils couvrent les cas d'usage les plus courants.
+These are agents that ship with Claude Code or are defined in your project rules. They cover the most common use cases.
 
 ```bash
-# Agents de développement
-tdd-guide           # Impose le workflow Test-Driven Development
-code-reviewer       # Revue de code automatique avec classement par sévérité
-build-error-resolver # Diagnostic et correction des erreurs de build
+# Development agents
+tdd-guide           # Enforces the Test-Driven Development workflow
+code-reviewer       # Automated code review with severity ranking
+build-error-resolver # Diagnosis and fix for build errors
 
-# Agents d'architecture
-planner             # Planification structurée avant implémentation
-architect           # Décisions d'architecture système
+# Architecture agents
+planner             # Structured planning before implementation
+architect           # System architecture decisions
 
-# Agents de qualité
-security-reviewer   # Audit de sécurité systématique
-e2e-runner          # Tests end-to-end des parcours critiques
+# Quality agents
+security-reviewer   # Systematic security audit
+e2e-runner          # End-to-end testing of critical user flows
 
-# Agents de maintenance
-refactor-cleaner    # Nettoyage et suppression du code mort
-doc-updater         # Mise à jour de la documentation
+# Maintenance agents
+refactor-cleaner    # Cleanup and dead code removal
+doc-updater         # Documentation updates
 ```
 
-### Agents custom
+### Custom agents
 
-Vous pouvez créer vos propres agents en les définissant dans le dossier `~/.claude/agents/` ou `.claude/agents/` de votre projet. Un agent custom est un fichier Markdown qui décrit le rôle, les outils et les instructions de l'agent.
+You can create your own agents by defining them in the `~/.claude/agents/` folder or `.claude/agents/` in your project. A custom agent is a Markdown file that describes the agent's role, tools, and instructions.
 
 ```markdown
-# Mon agent de migration de base de données
+# My database migration agent
 
-## Rôle
-Tu es un expert en migrations de bases de données.
+## Role
+You are a database migration expert.
 
-## Outils disponibles
-- Bash (pour exécuter les commandes SQL)
-- Read (pour lire les fichiers de migration existants)
-- Edit (pour créer de nouvelles migrations)
+## Available tools
+- Bash (to run SQL commands)
+- Read (to read existing migration files)
+- Edit (to create new migrations)
 
 ## Instructions
-1. Analyse le schéma actuel de la base de données
-2. Compare avec le schéma cible
-3. Génère les fichiers de migration nécessaires
-4. Vérifie la réversibilité de chaque migration
-5. Teste la migration sur une base de données de test
+1. Analyze the current database schema
+2. Compare with the target schema
+3. Generate the necessary migration files
+4. Verify the reversibility of each migration
+5. Test the migration on a test database
 ```
 
-## Isolation et worktrees
+## Isolation and worktrees
 
-Un aspect crucial des subagents est leur **isolation**. Quand un subagent modifie du code, il peut travailler dans un **worktree Git** séparé, une copie de travail indépendante du répertoire principal.
+A crucial aspect of sub-agents is their **isolation**. When a sub-agent modifies code, it can work in a separate **Git worktree**, an independent working copy separate from the main directory.
 
-<Callout type="tip" title="Pourquoi l'isolation est importante">
-Sans isolation, deux subagents travaillant en parallèle pourraient modifier les mêmes fichiers et créer des conflits. Les worktrees garantissent que chaque subagent travaille dans un environnement propre. Une fois le travail terminé, les modifications sont fusionnées dans la branche principale.
+<Callout type="tip" title="Why isolation matters">
+Without isolation, two sub-agents working in parallel could modify the same files and create conflicts. Worktrees guarantee that each sub-agent works in a clean environment. Once the work is done, changes are merged into the main branch.
 </Callout>
 
 ```bash
-# Claude Code peut lancer un subagent dans un worktree isolé
-# Le subagent travaille sur sa propre copie du code
-# Pas de conflits avec les autres subagents ou le travail en cours
+# Claude Code can launch a sub-agent in an isolated worktree
+# The sub-agent works on its own copy of the code
+# No conflicts with other sub-agents or work in progress
 
-# Exemple conceptuel de ce que fait Claude Code en interne :
+# Conceptual example of what Claude Code does internally:
 git worktree add /tmp/agent-security-review feature/security-audit
-# Le subagent security-reviewer travaille dans /tmp/agent-security-review
-# Une fois terminé, les changements sont fusionnés
+# The security-reviewer sub-agent works in /tmp/agent-security-review
+# Once finished, changes are merged
 ```
 
-## Configuration des agents
+## Configuring agents
 
-Les agents se configurent à deux niveaux : le répertoire `~/.claude/agents/` pour vos agents personnels, et `.claude/agents/` dans votre projet pour les agents partagés avec l'équipe.
+Agents are configured at two levels: the `~/.claude/agents/` directory for your personal agents, and `.claude/agents/` in your project for agents shared with the team.
 
-### Le répertoire `~/.claude/agents/`
+### The `~/.claude/agents/` directory
 
-Ce dossier contient vos agents disponibles dans **tous vos projets**. Chaque fichier `.md` définit un agent.
+This folder contains your agents available across **all your projects**. Each `.md` file defines an agent.
 
 ```bash
 ~/.claude/
   agents/
-    code-reviewer.md      # Review de code automatique
-    tdd-guide.md          # Workflow TDD
-    security-reviewer.md  # Audit de sécurité
-    planner.md            # Planification de features
+    code-reviewer.md      # Automated code review
+    tdd-guide.md          # TDD workflow
+    security-reviewer.md  # Security audit
+    planner.md            # Feature planning
 ```
 
-Claude Code détecte automatiquement ces fichiers. Quand vous mentionnez "utilise l'agent code-reviewer" dans une conversation, Claude Code charge le fichier correspondant et crée un subagent avec ces instructions.
+Claude Code automatically detects these files. When you mention "use the code-reviewer agent" in a conversation, Claude Code loads the corresponding file and creates a sub-agent with those instructions.
 
-### Le répertoire `.claude/agents/` (projet)
+### The `.claude/agents/` directory (project)
 
-Les agents dans ce répertoire sont **versionnés avec Git** et partagés entre les membres de l'équipe. C'est l'endroit idéal pour les agents spécifiques à un projet.
+Agents in this directory are **version-controlled with Git** and shared among team members. It's the ideal place for project-specific agents.
 
 ```bash
-mon-projet/
+my-project/
   .claude/
     agents/
-      db-migration.md     # Spécifique au projet
-      api-reviewer.md     # Conventions API de l'équipe
-      release-manager.md  # Processus de release
+      db-migration.md     # Project-specific
+      api-reviewer.md     # Team API conventions
+      release-manager.md  # Release process
 ```
 
-<Callout type="tip" title="Priorité des agents">
-Si un agent du même nom existe aux deux niveaux, l'agent du projet (`.claude/agents/`) a la priorité sur l'agent global (`~/.claude/agents/`). Votre équipe peut surcharger un agent personnel avec une version adaptée au projet.
+<Callout type="tip" title="Agent priority">
+If an agent with the same name exists at both levels, the project agent (`.claude/agents/`) takes priority over the global agent (`~/.claude/agents/`). Your team can override a personal agent with a version tailored to the project.
 </Callout>
 
-### Le fichier AGENTS.md
+### The AGENTS.md file
 
-Le fichier `AGENTS.md` (à la racine du projet ou dans un sous-répertoire) fournit du contexte global à tous les agents. Son rôle est similaire à `CLAUDE.md`, mais focalisé sur le comportement des agents.
+The `AGENTS.md` file (at the project root or in a subdirectory) provides global context to all agents. Its role is similar to `CLAUDE.md`, but focused on agent behavior.
 
 ```markdown
 # AGENTS.md
 
-## Conventions pour tous les agents
-- Les rapports doivent être en français
-- Les niveaux de sévérité : CRITICAL, HIGH, MEDIUM, LOW
-- Les fichiers de test suivent le pattern *.test.ts
-- Ne jamais modifier directement les fichiers de configuration
+## Conventions for all agents
+- Reports must be in English
+- Severity levels: CRITICAL, HIGH, MEDIUM, LOW
+- Test files follow the *.test.ts pattern
+- Never modify configuration files directly
 
-## Agents disponibles dans ce projet
-- **db-migration** : gère les migrations Prisma
-- **api-reviewer** : vérifie les conventions REST de l'équipe
-- **release-manager** : orchestre le processus de release
+## Agents available in this project
+- **db-migration**: manages Prisma migrations
+- **api-reviewer**: checks the team's REST conventions
+- **release-manager**: orchestrates the release process
 ```
 
-Les agents créés par Claude Code héritent automatiquement du contenu de `AGENTS.md`, en plus de `CLAUDE.md`. C'est un bon endroit pour centraliser les conventions qui s'appliquent à tous les agents du projet.
+Agents created by Claude Code automatically inherit the content of `AGENTS.md`, in addition to `CLAUDE.md`. It's a good place to centralize conventions that apply to all agents in the project.
 
-## L'outil Task (Agent)
+## The Task tool (Agent)
 
-Claude Code utilise l'outil **Task** pour créer et gérer les subagents. Voici les paramètres clés :
+Claude Code uses the **Task** tool to create and manage sub-agents. Here are the key parameters:
 
-- **`description`** : la mission du subagent, sous forme de prompt détaillé
-- **`subagent_type`** : le type de subagent (`default` pour la plupart des cas)
-- **`mode`** : le mode d'exécution du subagent (`agent` pour une exécution autonome)
+- **`description`**: the sub-agent's mission, as a detailed prompt
+- **`subagent_type`**: the type of sub-agent (`default` for most cases)
+- **`mode`**: the sub-agent's execution mode (`agent` for autonomous execution)
 
-<Card title="Bon à savoir" variant="highlight">
-You don't need de manipuler l'outil Task directement. Claude Code l'utilise automatiquement quand il juge qu'une délégation est pertinente. Votre rôle est de configurer les agents disponibles et de donner des instructions claires à Claude Code pour qu'il sache quand les utiliser.
+<Card title="Good to know" variant="highlight">
+You don't need to manipulate the Task tool directly. Claude Code uses it automatically when it determines that delegation is appropriate. Your role is to configure the available agents and give Claude Code clear instructions so it knows when to use them.
 </Card>
 
-### Task pour le suivi multi-étapes
+### Task for multi-step tracking
 
-L'outil Task ne sert pas qu'à lancer des subagents. Il permet aussi de **suivre la progression** d'un workflow complexe en créant des tâches intermédiaires. Claude Code découpe un objectif en sous-tâches, marque chacune comme en cours ou terminée, et vous montre l'avancement global.
-
-```bash
-# Quand vous demandez un refactoring complexe, Claude Code crée :
-# ┌─ Task 1: Analyser le code existant          ✅ Done
-# ├─ Task 2: Écrire les tests manquants         ✅ Done
-# ├─ Task 3: Refactorer le module auth          🔄 In progress
-# ├─ Task 4: Mettre à jour les imports          ⬜ Pending
-# └─ Task 5: Vérifier que les tests passent     ⬜ Pending
-```
-
-Ce suivi est visible dans la conversation. Vous pouvez intervenir à tout moment : "arrête la tâche 3" ou "saute directement à la tâche 5".
-
-## Example concret : review de code avec agents
-
-Voici un scénario typique d'utilisation des agents :
+The Task tool isn't just for launching sub-agents. It also lets you **track the progress** of a complex workflow by creating intermediate tasks. Claude Code breaks down a goal into sub-tasks, marks each as in progress or completed, and shows you the overall progress.
 
 ```bash
-# Vous demandez à Claude Code une review complète
-> Fais une review complète de ma PR avant le merge
-
-# Claude Code orchestre automatiquement :
-# 1. Lance le subagent code-reviewer → analyse le diff
-# 2. Lance le subagent security-reviewer → vérifie les failles
-# 3. Lance le subagent tdd-guide → vérifie la couverture de tests
-# 4. Synthétise les résultats des 3 agents
-# 5. Produit un rapport consolidé avec priorités
+# When you request a complex refactoring, Claude Code creates:
+# ┌─ Task 1: Analyze existing code              ✅ Done
+# ├─ Task 2: Write missing tests                ✅ Done
+# ├─ Task 3: Refactor the auth module           🔄 In progress
+# ├─ Task 4: Update imports                     ⬜ Pending
+# └─ Task 5: Verify tests pass                  ⬜ Pending
 ```
 
-Le résultat est une review **multidimensionnelle** qui couvre la qualité du code, la sécurité et les tests, le tout en une seule commande.
+This tracking is visible in the conversation. You can intervene at any time: "stop task 3" or "skip directly to task 5".
+
+## Practical example: code review with agents
+
+Here's a typical agent usage scenario:
+
+```bash
+# You ask Claude Code for a full review
+> Do a complete review of my PR before merging
+
+# Claude Code automatically orchestrates:
+# 1. Launches the code-reviewer sub-agent → analyzes the diff
+# 2. Launches the security-reviewer sub-agent → checks for vulnerabilities
+# 3. Launches the tdd-guide sub-agent → checks test coverage
+# 4. Synthesizes the results from all 3 agents
+# 5. Produces a consolidated report with priorities
+```
+
+The result is a **multidimensional** review covering code quality, security, and tests, all in a single command.
 
 ## Next steps
 
-Now that you comprenez le concept des agents et subagents, let's get hands-on.
+Now that you understand the concept of agents and sub-agents, let's get hands-on.
 
-- [Créer un subagent spécialisé](/agents/create-subagent) : Guide complet pour créer vos propres agents custom
-- [Agent Teams](/agents/agent-teams) : Faire collaborer plusieurs agents ensemble
-- [Top agents par cas d'usage](/agents/best-agents) : Les agents incontournables pour chaque situation
+- [Create a specialized sub-agent](/agents/create-subagent): Complete guide to creating your own custom agents
+- [Agent Teams](/agents/agent-teams): Making multiple agents collaborate together
+- [Top agents by use case](/agents/best-agents): The must-have agents for every situation

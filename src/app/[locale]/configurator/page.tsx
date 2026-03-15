@@ -3,12 +3,39 @@ import { Settings, Wand2, FileCode2 } from "lucide-react";
 import { createPageMetadata } from "@/lib/metadata";
 import { ConfiguratorWizard } from "@/components/configurator/ConfiguratorWizard";
 
+const translations = {
+  fr: {
+    metaTitle: "Configurateur interactif Claude Code",
+    metaDescription:
+      "Générez votre configuration Claude Code sur mesure. CLAUDE.md, settings.json, .mcp.json et agents, en quelques clics.",
+    heroBadge: "Configurateur interactif",
+    heroTitle: "Générez votre configuration",
+    heroSubtitle:
+      "Choisissez votre profil, vos stacks et vos features. Obtenez un",
+    heroSubtitleEnd: "et des agents personnalisés en quelques clics.",
+    presetsLabel: "10 presets prêts à l'emploi",
+    filesLabel: "5 fichiers générés",
+  },
+  en: {
+    metaTitle: "Interactive Claude Code Configurator",
+    metaDescription:
+      "Generate your custom Claude Code configuration. CLAUDE.md, settings.json, .mcp.json, and agents in just a few clicks.",
+    heroBadge: "Interactive configurator",
+    heroTitle: "Generate your",
+    heroSubtitle:
+      "Choose your profile, stacks, and features. Get a",
+    heroSubtitleEnd: "and custom agents in just a few clicks.",
+    presetsLabel: "10 ready-to-use presets",
+    filesLabel: "5 generated files",
+  },
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = translations[locale as "fr" | "en"];
   return createPageMetadata({
-    title: "Configurateur interactif Claude Code",
-    description:
-      "Générez votre configuration Claude Code sur mesure. CLAUDE.md, settings.json, .mcp.json et agents, en quelques clics.",
+    title: t.metaTitle,
+    description: t.metaDescription,
     path: `/${locale}/configurator`,
     locale,
     type: "website",
@@ -22,6 +49,7 @@ export default async function ConfiguratorPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = translations[locale as "fr" | "en"];
   return (
     <>
       {/* Hero section */}
@@ -33,17 +61,16 @@ export default async function ConfiguratorPage({
           <div className="text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--hero-badge-border)] bg-[var(--hero-badge-bg)] px-4 py-1.5 text-sm text-[var(--hero-badge-text)]">
               <Settings className="h-4 w-4" aria-hidden="true" />
-              Configurateur interactif
+              {t.heroBadge}
             </div>
 
             <h1 className="text-3xl font-extrabold tracking-tight text-[var(--hero-text-primary)] sm:text-4xl lg:text-5xl">
-              Générez votre configuration{" "}
+              {t.heroTitle}{" "}
               <span className="text-gradient">Claude Code</span>
             </h1>
 
             <p className="mx-auto mt-4 max-w-2xl text-base text-[var(--hero-text-secondary)] sm:text-lg">
-              Choisissez votre profil, vos stacks et vos features.
-              Obtenez un{" "}
+              {t.heroSubtitle}{" "}
               <code className="rounded bg-slate-200/60 px-1.5 py-0.5 text-sm font-mono dark:bg-slate-700/60">
                 CLAUDE.md
               </code>
@@ -51,7 +78,7 @@ export default async function ConfiguratorPage({
               <code className="rounded bg-slate-200/60 px-1.5 py-0.5 text-sm font-mono dark:bg-slate-700/60">
                 settings.json
               </code>{" "}
-              et des agents personnalisés en quelques clics.
+              {t.heroSubtitleEnd}
             </p>
 
             <div className="mx-auto mt-8 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row">
@@ -60,7 +87,7 @@ export default async function ConfiguratorPage({
                   className="h-4 w-4 text-brand-500"
                   aria-hidden="true"
                 />
-                10 presets prêts à l&apos;emploi
+                {t.presetsLabel}
               </div>
               <span className="hidden text-slate-300 dark:text-slate-600 sm:inline">
                 |
@@ -70,7 +97,7 @@ export default async function ConfiguratorPage({
                   className="h-4 w-4 text-brand-500"
                   aria-hidden="true"
                 />
-                5 fichiers générés
+                {t.filesLabel}
               </div>
             </div>
           </div>

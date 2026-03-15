@@ -30,22 +30,505 @@ import { AnimateOnScroll, StaggerChildren } from "@/components/ui/AnimateOnScrol
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
+const translations = {
+  fr: {
+    metaTitle: "Les Skills Claude Code",
+    metaDescription:
+      "Apprenez à utiliser et créer des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacités et enseignez de nouveaux talents à votre assistant IA.",
+    jsonLdTitle: "Les Skills Claude Code",
+    jsonLdDescription:
+      "Apprenez à utiliser et créer des Skills pour Claude Code.",
+    heroBadge: "Guide Skills",
+    heroTitle1: "Les Skills : Enseignez de ",
+    heroTitle2: "nouveaux talents",
+    heroTitle3: " a Claude Code",
+    heroDescription:
+      "Les Skills transforment Claude Code en un assistant specialise. Ajoutez des capacites, automatisez vos workflows et creez vos propres recettes reutilisables.",
+    heroCta1: "Creer votre premier Skill",
+    heroCta2: "Voir les Skills recommandes",
+    conceptBadge: "Concept",
+    conceptTitle: "Qu'est-ce qu'un Skill ?",
+    conceptDescription:
+      "Comprendre les Skills en 2 minutes, meme si vous n'etes pas developpeur.",
+    conceptCardTitle: "Un Skill, c\u0027est une recette pour Claude",
+    conceptCardP1Start:
+      "Imaginez que Claude Code est un chef cuisinier talentueux. Il sait deja cuisiner, mais si vous lui donnez une ",
+    conceptCardP1Bold1: "recette precise",
+    conceptCardP1Mid:
+      ", il produira exactement le plat que vous voulez, a chaque fois. Les Skills sont ces recettes : des ",
+    conceptCardP1Bold2: "instructions structurees",
+    conceptCardP1End:
+      " qui guident Claude pour executer des taches complexes de maniere reproductible.",
+    conceptCardP2Start: "Concretement, un Skill est un ",
+    conceptCardP2Bold1: "fichier Markdown",
+    conceptCardP2Mid:
+      " qui definit un workflow, des regles et des etapes a suivre. Quand vous invoquez un Skill, Claude le charge en memoire et adapte son comportement en consequence. C\u0027est comme un ",
+    conceptCardP2Bold2: "plugin",
+    conceptCardP2End: " que vous pouvez activer a la demande.",
+    conceptCalloutTitle: "Analogie simple",
+    conceptCalloutStart:
+      "Si les MCP sont les ",
+    conceptCalloutBold1: "outils",
+    conceptCalloutMid:
+      " de Claude (marteau, tournevis, perceuse), les Skills sont les ",
+    conceptCalloutBold2: "modes d\u0027emploi",
+    conceptCalloutEnd:
+      " qui lui expliquent ",
+    conceptCalloutEm1: "comment",
+    conceptCalloutAnd: " et ",
+    conceptCalloutEm2: "quand",
+    conceptCalloutFinal:
+      " utiliser ces outils ensemble pour accomplir une tache complexe.",
+    typesBadge: "Categories",
+    typesTitle: "Les trois types de Skills",
+    typesDescription:
+      "Chaque type repond a un besoin different. Combinez-les pour un maximum d'efficacite.",
+    builtInTitle: "Built-in Skills",
+    builtInDesc:
+      "Fournis par la communaute et les outils, ces Skills sont disponibles immediatement. Ils couvrent les workflows les plus courants : TDD, code review, planning, etc.",
+    builtInFooter: "Prets a l\u0027emploi, maintenus par la communaute",
+    customTitle: "Custom Skills",
+    customDescStart: "Crees par vous dans le dossier ",
+    customDescEnd:
+      ". Ils sont disponibles dans tous vos projets et refletent vos preferences personnelles.",
+    customFooter: "Personnels, disponibles partout",
+    projectTitle: "Project Skills",
+    projectDescStart: "Definis dans le fichier ",
+    projectDescMid: " ou le dossier ",
+    projectDescEnd:
+      " de votre projet. Partages avec toute l\u0027equipe via Git.",
+    projectFooter: "Partages en equipe, specifiques au projet",
+    typesCalloutTitle: "Ordre de priorite",
+    typesCallout:
+      "Quand plusieurs Skills coexistent, Claude applique les Project Skills en priorite (specifiques au contexte), puis les Custom Skills (vos preferences), puis les Built-in Skills. Cela vous permet de surcharger un comportement par defaut avec vos propres conventions.",
+    usageBadge: "Utilisation",
+    usageTitle: "Comment utiliser un Skill",
+    usageDescription:
+      "Deux manieres d'activer un Skill : l'invocation explicite et l'activation automatique.",
+    usageExplicitTitle: "Invocation explicite avec ",
+    usageExplicitDesc:
+      "La maniere la plus directe d\u0027utiliser un Skill est de le prefixer avec ",
+    usageExplicitDescEnd:
+      " dans votre prompt. Claude chargera les instructions du Skill et les appliquera immediatement.",
+    usageExplicitCode: `# Invoquer un Skill directement
+> /tdd-guide Implemente une fonction de validation d'email
+
+# Claude va alors :
+# 1. Charger les instructions du Skill "tdd-guide"
+# 2. Ecrire les tests en premier (RED)
+# 3. Implementer le minimum pour passer les tests (GREEN)
+# 4. Refactorer si necessaire (IMPROVE)
+
+# Autre exemple avec le Skill "plan"
+> /plan Refactoring du module d'authentification
+
+# Claude va produire un plan structure avant de toucher au code`,
+    usageAutoTitle: "Activation automatique",
+    usageAutoDesc:
+      "Certains Skills s\u0027activent automatiquement selon le contexte. Par exemple, si votre fichier ",
+    usageAutoDescEnd:
+      " contient des instructions, Claude les applique systematiquement sans que vous ayez besoin de le demander.",
+    usageAutoCode: `# Exemple de CLAUDE.md avec des Skills automatiques
+# Ce fichier est lu automatiquement par Claude a chaque session
+
+## Conventions de code
+- Toujours utiliser TypeScript strict
+- Pas de \`any\`, utiliser \`unknown\` a la place
+- Tests obligatoires pour toute nouvelle fonction
+
+## Style
+- Immutabilite : jamais de mutation directe
+- Fichiers < 400 lignes
+- Fonctions < 50 lignes
+
+## Avant chaque commit
+- Lancer le code-reviewer agent
+- Verifier la couverture de tests (80%+)
+- Aucun secret en dur dans le code`,
+    usageCombineTitle: "Combiner les deux approches",
+    usageCombineStart:
+      "La strategie la plus efficace est de definir vos conventions generales dans ",
+    usageCombineMid:
+      " (activation automatique) et d\u0027invoquer les Skills specifiques avec ",
+    usageCombineEnd:
+      " pour les taches ponctuelles. Vous obtenez ainsi un comportement de base coherent avec la flexibilite d\u0027activer des workflows specialises a la demande.",
+    topSkillsBadge: "Selection",
+    topSkillsTitle: "Top Skills recommandes",
+    topSkillsDescription:
+      "Les 6 Skills incontournables pour transformer votre workflow de developpement.",
+    exampleUsage: "Exemple d\u0027utilisation",
+    tutorialBadge: "Tutorial",
+    tutorialTitle: "Creez votre premier Skill en 10 minutes",
+    tutorialDescription:
+      "Un guide pas-a-pas pour creer un Skill personnalise qui automatise la creation de composants React.",
+    tutoStep1Title: "Creer le dossier Skills",
+    tutoStep1Desc:
+      "Si ce n\u0027est pas deja fait, creez le dossier qui contiendra vos Skills personnalises.",
+    tutoStep2Title: "Creer le fichier du Skill",
+    tutoStep2Desc:
+      "Creez un fichier Markdown avec un nom descriptif. Ici, on va creer un Skill pour generer des composants React standardises.",
+    tutoStep3Title: "Ecrire les instructions du Skill",
+    tutoStep3Desc:
+      "Un bon Skill contient : un titre clair, une description de son objectif, les etapes a suivre, et des exemples concrets. Voici un exemple complet.",
+    tutoStep4Title: "Tester votre Skill",
+    tutoStep4Desc:
+      "Lancez Claude Code et invoquez votre nouveau Skill. Il sera automatiquement detecte et disponible.",
+    tutoStep5Title: "Iterer et affiner",
+    tutoStep5Desc:
+      "Un Skill n\u0027est jamais parfait du premier coup. Utilisez-le plusieurs fois, observez les resultats, et ajustez les instructions. Ajoutez des regles quand vous remarquez un pattern recurrent.",
+    tutoStep5CalloutTitle: "Conseil de pro",
+    tutoStep5CalloutStart:
+      "Versionez vos Skills avec Git ! Creez un repository dedie pour vos fichiers ",
+    tutoStep5CalloutEnd:
+      " et partagez-les avec votre equipe. Chaque amelioration profite a tout le monde.",
+    useCasesBadge: "En pratique",
+    useCasesTitle: "Les Skills en action",
+    useCasesDescription:
+      "Trois exemples concrets qui montrent la puissance des Skills combines dans des scenarios reels.",
+    useCasesCalloutTitle: "Skills et tokens",
+    useCasesCallout:
+      "Chaque Skill charge ajoute du contexte a la conversation de Claude. Evitez d\u0027invoquer trop de Skills simultanement pour ne pas surcharger la fenetre de contexte. Preferez combiner 2-3 Skills complementaires plutot que d\u0027en activer une dizaine.",
+    nextBadge: "Etapes suivantes",
+    nextTitle: "Continuez votre apprentissage",
+    nextDescription:
+      "Maintenant que vous maitrisez les Skills, explorez les deux autres piliers de Claude Code.",
+    nextPromptingTitle: "Prompting avance",
+    nextPromptingDesc:
+      "Apprenez a formuler vos demandes pour obtenir des resultats optimaux. Techniques de prompt engineering adaptees a Claude Code.",
+    nextPromptingCta: "Decouvrir",
+    nextMcpTitle: "Les MCP (Model Context Protocol)",
+    nextMcpDesc:
+      "Connectez Claude Code a vos outils : GitHub, Slack, bases de donnees, APIs. Etendez ses capacites a l\u0027infini.",
+    nextMcpCta: "Decouvrir",
+    topSkills: [
+      {
+        name: "TDD Guide",
+        category: "Dev",
+        description:
+          "Impose un workflow Test-Driven Development rigoureux : ecrire les tests d'abord, implementer le minimum pour les faire passer, puis refactorer.",
+        useCase:
+          "Vous demandez une nouvelle feature et Claude ecrit automatiquement les tests avant le code.",
+      },
+      {
+        name: "Frontend Design",
+        category: "Design",
+        description:
+          "Genere des composants UI modernes, accessibles et responsives avec Tailwind CSS, en respectant les bonnes pratiques de design system.",
+        useCase:
+          "Claude cree un formulaire de contact avec validation, animations et dark mode integre.",
+      },
+      {
+        name: "Code Reviewer",
+        category: "Qualite",
+        description:
+          "Revue de code automatique qui detecte les bugs, les problemes de performance, les failles de securite et les violations de conventions.",
+        useCase:
+          "Apres chaque modification, Claude analyse le code et signale les problemes classes par severite.",
+      },
+      {
+        name: "Plan",
+        category: "Process",
+        description:
+          "Cree un plan d'implementation structure avant de coder : PRD, architecture, design systeme, liste de taches priorisees.",
+        useCase:
+          "Avant un refactoring majeur, Claude produit un plan detaille avec les risques et les dependances.",
+      },
+      {
+        name: "E2E Testing",
+        category: "Testing",
+        description:
+          "Genere des tests end-to-end avec Playwright qui simulent de vrais parcours utilisateurs dans le navigateur.",
+        useCase:
+          "Claude ecrit un test complet pour le flow d'inscription : formulaire, email de confirmation, premiere connexion.",
+      },
+      {
+        name: "Security Review",
+        category: "Securite",
+        description:
+          "Analyse de securite systematique : injection SQL, XSS, CSRF, secrets en clair, dependances vulnerables, mauvaises configurations.",
+        useCase:
+          "Avant chaque commit, Claude verifie qu'aucun secret n'est expose et que les inputs sont valides.",
+      },
+    ],
+    useCases: [
+      {
+        title: "Lancer un MVP en mode TDD",
+        description:
+          "Un entrepreneur utilise le Skill \"Plan\" pour structurer son projet, puis \"TDD Guide\" pour implementer chaque feature avec des tests solides. Resultat : un MVP fiable en 3 jours au lieu de 3 semaines.",
+        skills: ["Plan", "TDD Guide", "Code Reviewer"],
+      },
+      {
+        title: "Refactoring securise d'une codebase legacy",
+        description:
+          "Un lead developer combine \"Security Review\" pour identifier les failles existantes, \"E2E Testing\" pour ajouter une couverture de tests avant de toucher au code, puis \"Code Reviewer\" pour valider chaque changement.",
+        skills: ["Security Review", "E2E Testing", "Code Reviewer"],
+      },
+      {
+        title: "Creer un design system coherent",
+        description:
+          "Une equipe utilise \"Frontend Design\" pour generer des composants UI consistants, puis cree un Skill personnalise qui encode les conventions de leur charte graphique. Chaque nouveau composant respecte automatiquement le systeme.",
+        skills: ["Frontend Design", "Skill personnalise"],
+      },
+    ],
+  },
+  en: {
+    metaTitle: "Claude Code Skills",
+    metaDescription:
+      "Learn to use and create Skills for Claude Code. Automate your workflows, add capabilities and teach new talents to your AI assistant.",
+    jsonLdTitle: "Claude Code Skills",
+    jsonLdDescription:
+      "Learn to use and create Skills for Claude Code.",
+    heroBadge: "Skills Guide",
+    heroTitle1: "Skills: Teach ",
+    heroTitle2: "new talents",
+    heroTitle3: " to Claude Code",
+    heroDescription:
+      "Skills turn Claude Code into a specialized assistant. Add capabilities, automate your workflows and create your own reusable recipes.",
+    heroCta1: "Create your first Skill",
+    heroCta2: "See recommended Skills",
+    conceptBadge: "Concept",
+    conceptTitle: "What is a Skill?",
+    conceptDescription:
+      "Understand Skills in 2 minutes, even if you are not a developer.",
+    conceptCardTitle: "A Skill is a recipe for Claude",
+    conceptCardP1Start:
+      "Imagine Claude Code is a talented chef. It already knows how to cook, but if you give it a ",
+    conceptCardP1Bold1: "precise recipe",
+    conceptCardP1Mid:
+      ", it will produce exactly the dish you want, every time. Skills are those recipes: ",
+    conceptCardP1Bold2: "structured instructions",
+    conceptCardP1End:
+      " that guide Claude to execute complex tasks in a reproducible way.",
+    conceptCardP2Start: "Concretely, a Skill is a ",
+    conceptCardP2Bold1: "Markdown file",
+    conceptCardP2Mid:
+      " that defines a workflow, rules and steps to follow. When you invoke a Skill, Claude loads it into memory and adapts its behavior accordingly. It is like a ",
+    conceptCardP2Bold2: "plugin",
+    conceptCardP2End: " you can activate on demand.",
+    conceptCalloutTitle: "Simple analogy",
+    conceptCalloutStart:
+      "If MCPs are Claude\u0027s ",
+    conceptCalloutBold1: "tools",
+    conceptCalloutMid:
+      " (hammer, screwdriver, drill), Skills are the ",
+    conceptCalloutBold2: "user manuals",
+    conceptCalloutEnd:
+      " that explain ",
+    conceptCalloutEm1: "how",
+    conceptCalloutAnd: " and ",
+    conceptCalloutEm2: "when",
+    conceptCalloutFinal:
+      " to use those tools together to accomplish a complex task.",
+    typesBadge: "Categories",
+    typesTitle: "The three types of Skills",
+    typesDescription:
+      "Each type addresses a different need. Combine them for maximum efficiency.",
+    builtInTitle: "Built-in Skills",
+    builtInDesc:
+      "Provided by the community and tools, these Skills are available immediately. They cover the most common workflows: TDD, code review, planning, etc.",
+    builtInFooter: "Ready to use, maintained by the community",
+    customTitle: "Custom Skills",
+    customDescStart: "Created by you in the ",
+    customDescEnd:
+      " folder. They are available in all your projects and reflect your personal preferences.",
+    customFooter: "Personal, available everywhere",
+    projectTitle: "Project Skills",
+    projectDescStart: "Defined in the ",
+    projectDescMid: " file or the ",
+    projectDescEnd:
+      " folder of your project. Shared with the entire team via Git.",
+    projectFooter: "Shared with the team, project-specific",
+    typesCalloutTitle: "Priority order",
+    typesCallout:
+      "When multiple Skills coexist, Claude applies Project Skills first (context-specific), then Custom Skills (your preferences), then Built-in Skills. This lets you override default behavior with your own conventions.",
+    usageBadge: "Usage",
+    usageTitle: "How to use a Skill",
+    usageDescription:
+      "Two ways to activate a Skill: explicit invocation and automatic activation.",
+    usageExplicitTitle: "Explicit invocation with ",
+    usageExplicitDesc:
+      "The most direct way to use a Skill is to prefix it with ",
+    usageExplicitDescEnd:
+      " in your prompt. Claude will load the Skill instructions and apply them immediately.",
+    usageExplicitCode: `# Invoke a Skill directly
+> /tdd-guide Implement an email validation function
+
+# Claude will then:
+# 1. Load the "tdd-guide" Skill instructions
+# 2. Write tests first (RED)
+# 3. Implement the minimum to pass tests (GREEN)
+# 4. Refactor if needed (IMPROVE)
+
+# Another example with the "plan" Skill
+> /plan Refactoring the authentication module
+
+# Claude will produce a structured plan before touching the code`,
+    usageAutoTitle: "Automatic activation",
+    usageAutoDesc:
+      "Some Skills activate automatically based on context. For example, if your ",
+    usageAutoDescEnd:
+      " file contains instructions, Claude applies them systematically without you needing to ask.",
+    usageAutoCode: `# Example CLAUDE.md with automatic Skills
+# This file is read automatically by Claude at each session
+
+## Code conventions
+- Always use strict TypeScript
+- No \`any\`, use \`unknown\` instead
+- Tests required for every new function
+
+## Style
+- Immutability: never mutate directly
+- Files < 400 lines
+- Functions < 50 lines
+
+## Before each commit
+- Run the code-reviewer agent
+- Check test coverage (80%+)
+- No hardcoded secrets in the code`,
+    usageCombineTitle: "Combine both approaches",
+    usageCombineStart:
+      "The most effective strategy is to define your general conventions in ",
+    usageCombineMid:
+      " (automatic activation) and invoke specific Skills with ",
+    usageCombineEnd:
+      " for one-off tasks. You get a consistent base behavior with the flexibility to activate specialized workflows on demand.",
+    topSkillsBadge: "Selection",
+    topSkillsTitle: "Top recommended Skills",
+    topSkillsDescription:
+      "The 6 essential Skills to transform your development workflow.",
+    exampleUsage: "Example usage",
+    tutorialBadge: "Tutorial",
+    tutorialTitle: "Create your first Skill in 10 minutes",
+    tutorialDescription:
+      "A step-by-step guide to create a custom Skill that automates React component creation.",
+    tutoStep1Title: "Create the Skills folder",
+    tutoStep1Desc:
+      "If not already done, create the folder that will contain your custom Skills.",
+    tutoStep2Title: "Create the Skill file",
+    tutoStep2Desc:
+      "Create a Markdown file with a descriptive name. Here, we will create a Skill to generate standardized React components.",
+    tutoStep3Title: "Write the Skill instructions",
+    tutoStep3Desc:
+      "A good Skill contains: a clear title, a description of its purpose, steps to follow, and concrete examples. Here is a complete example.",
+    tutoStep4Title: "Test your Skill",
+    tutoStep4Desc:
+      "Launch Claude Code and invoke your new Skill. It will be automatically detected and available.",
+    tutoStep5Title: "Iterate and refine",
+    tutoStep5Desc:
+      "A Skill is never perfect on the first try. Use it several times, observe the results, and adjust the instructions. Add rules when you notice a recurring pattern.",
+    tutoStep5CalloutTitle: "Pro tip",
+    tutoStep5CalloutStart:
+      "Version your Skills with Git! Create a dedicated repository for your ",
+    tutoStep5CalloutEnd:
+      " files and share them with your team. Every improvement benefits everyone.",
+    useCasesBadge: "In practice",
+    useCasesTitle: "Skills in action",
+    useCasesDescription:
+      "Three concrete examples that show the power of combined Skills in real-world scenarios.",
+    useCasesCalloutTitle: "Skills and tokens",
+    useCasesCallout:
+      "Each loaded Skill adds context to Claude\u0027s conversation. Avoid invoking too many Skills simultaneously to not overload the context window. Prefer combining 2-3 complementary Skills rather than activating a dozen.",
+    nextBadge: "Next steps",
+    nextTitle: "Continue your learning",
+    nextDescription:
+      "Now that you have mastered Skills, explore the two other pillars of Claude Code.",
+    nextPromptingTitle: "Advanced prompting",
+    nextPromptingDesc:
+      "Learn to formulate your requests for optimal results. Prompt engineering techniques adapted to Claude Code.",
+    nextPromptingCta: "Discover",
+    nextMcpTitle: "MCPs (Model Context Protocol)",
+    nextMcpDesc:
+      "Connect Claude Code to your tools: GitHub, Slack, databases, APIs. Extend its capabilities infinitely.",
+    nextMcpCta: "Discover",
+    topSkills: [
+      {
+        name: "TDD Guide",
+        category: "Dev",
+        description:
+          "Enforces a rigorous Test-Driven Development workflow: write tests first, implement the minimum to pass them, then refactor.",
+        useCase:
+          "You ask for a new feature and Claude automatically writes the tests before the code.",
+      },
+      {
+        name: "Frontend Design",
+        category: "Design",
+        description:
+          "Generates modern, accessible and responsive UI components with Tailwind CSS, following design system best practices.",
+        useCase:
+          "Claude creates a contact form with validation, animations and built-in dark mode.",
+      },
+      {
+        name: "Code Reviewer",
+        category: "Quality",
+        description:
+          "Automatic code review that detects bugs, performance issues, security flaws and convention violations.",
+        useCase:
+          "After each change, Claude analyzes the code and reports issues classified by severity.",
+      },
+      {
+        name: "Plan",
+        category: "Process",
+        description:
+          "Creates a structured implementation plan before coding: PRD, architecture, system design, prioritized task list.",
+        useCase:
+          "Before a major refactoring, Claude produces a detailed plan with risks and dependencies.",
+      },
+      {
+        name: "E2E Testing",
+        category: "Testing",
+        description:
+          "Generates end-to-end tests with Playwright that simulate real user journeys in the browser.",
+        useCase:
+          "Claude writes a complete test for the signup flow: form, confirmation email, first login.",
+      },
+      {
+        name: "Security Review",
+        category: "Security",
+        description:
+          "Systematic security analysis: SQL injection, XSS, CSRF, plaintext secrets, vulnerable dependencies, misconfigurations.",
+        useCase:
+          "Before each commit, Claude verifies that no secret is exposed and that inputs are validated.",
+      },
+    ],
+    useCases: [
+      {
+        title: "Launch an MVP with TDD",
+        description:
+          "An entrepreneur uses the \"Plan\" Skill to structure their project, then \"TDD Guide\" to implement each feature with solid tests. Result: a reliable MVP in 3 days instead of 3 weeks.",
+        skills: ["Plan", "TDD Guide", "Code Reviewer"],
+      },
+      {
+        title: "Secure refactoring of a legacy codebase",
+        description:
+          "A lead developer combines \"Security Review\" to identify existing flaws, \"E2E Testing\" to add test coverage before touching the code, then \"Code Reviewer\" to validate each change.",
+        skills: ["Security Review", "E2E Testing", "Code Reviewer"],
+      },
+      {
+        title: "Create a coherent design system",
+        description:
+          "A team uses \"Frontend Design\" to generate consistent UI components, then creates a custom Skill that encodes their brand guidelines. Every new component automatically follows the system.",
+        skills: ["Frontend Design", "Custom Skill"],
+      },
+    ],
+  },
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createPageMetadata({
-    title: "Les Skills Claude Code",
-    description:
-      "Apprenez à utiliser et créer des Skills pour Claude Code. Automatisez vos workflows, ajoutez des capacités et enseignez de nouveaux talents à votre assistant IA.",
+    title: t.metaTitle,
+    description: t.metaDescription,
     path: `/${locale}/skills`,
     locale,
   });
 }
 
 function buildArticleJsonLd(locale: string) {
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createArticleSchema({
-    title: "Les Skills Claude Code",
-    description:
-      "Apprenez à utiliser et créer des Skills pour Claude Code.",
+    title: t.jsonLdTitle,
+    description: t.jsonLdDescription,
     url: `${SITE_URL}/${locale}/skills`,
     locale,
     datePublished: "2026-03-07",
@@ -53,104 +536,33 @@ function buildArticleJsonLd(locale: string) {
   });
 }
 
-const topSkills = [
-  {
-    name: "TDD Guide",
-    category: "Dev",
-    categoryColor: "bg-brand-500/10 text-brand-700 dark:text-brand-400",
-    icon: FlaskConical,
-    iconColor: "text-brand-700 dark:text-brand-400",
-    iconBg: "from-brand-500/20 to-brand-500/5",
-    description:
-      "Impose un workflow Test-Driven Development rigoureux : ecrire les tests d'abord, implementer le minimum pour les faire passer, puis refactorer.",
-    useCase:
-      "Vous demandez une nouvelle feature et Claude ecrit automatiquement les tests avant le code.",
-  },
-  {
-    name: "Frontend Design",
-    category: "Design",
-    categoryColor: "bg-violet-500/10 text-violet-500",
-    icon: Palette,
-    iconColor: "text-violet-500",
-    iconBg: "from-violet-500/20 to-violet-500/5",
-    description:
-      "Genere des composants UI modernes, accessibles et responsives avec Tailwind CSS, en respectant les bonnes pratiques de design system.",
-    useCase:
-      "Claude cree un formulaire de contact avec validation, animations et dark mode integre.",
-  },
-  {
-    name: "Code Reviewer",
-    category: "Qualite",
-    categoryColor: "bg-emerald-500/10 text-emerald-500",
-    icon: SearchCheck,
-    iconColor: "text-emerald-500",
-    iconBg: "from-emerald-500/20 to-emerald-500/5",
-    description:
-      "Revue de code automatique qui detecte les bugs, les problemes de performance, les failles de securite et les violations de conventions.",
-    useCase:
-      "Apres chaque modification, Claude analyse le code et signale les problemes classes par severite.",
-  },
-  {
-    name: "Plan",
-    category: "Process",
-    categoryColor: "bg-accent-500/10 text-accent-500",
-    icon: ClipboardList,
-    iconColor: "text-accent-500",
-    iconBg: "from-accent-500/20 to-accent-500/5",
-    description:
-      "Cree un plan d'implementation structure avant de coder : PRD, architecture, design systeme, liste de taches priorisees.",
-    useCase:
-      "Avant un refactoring majeur, Claude produit un plan detaille avec les risques et les dependances.",
-  },
-  {
-    name: "E2E Testing",
-    category: "Testing",
-    categoryColor: "bg-sky-500/10 text-sky-500",
-    icon: TestTube2,
-    iconColor: "text-sky-500",
-    iconBg: "from-sky-500/20 to-sky-500/5",
-    description:
-      "Genere des tests end-to-end avec Playwright qui simulent de vrais parcours utilisateurs dans le navigateur.",
-    useCase:
-      "Claude ecrit un test complet pour le flow d'inscription : formulaire, email de confirmation, premiere connexion.",
-  },
-  {
-    name: "Security Review",
-    category: "Securite",
-    categoryColor: "bg-red-500/10 text-red-500",
-    icon: ShieldCheck,
-    iconColor: "text-red-500",
-    iconBg: "from-red-500/20 to-red-500/5",
-    description:
-      "Analyse de securite systematique : injection SQL, XSS, CSRF, secrets en clair, dependances vulnerables, mauvaises configurations.",
-    useCase:
-      "Avant chaque commit, Claude verifie qu'aucun secret n'est expose et que les inputs sont valides.",
-  },
+const skillIcons = [FlaskConical, Palette, SearchCheck, ClipboardList, TestTube2, ShieldCheck];
+const skillCategoryColors = [
+  "bg-brand-500/10 text-brand-700 dark:text-brand-400",
+  "bg-violet-500/10 text-violet-500",
+  "bg-emerald-500/10 text-emerald-500",
+  "bg-accent-500/10 text-accent-500",
+  "bg-sky-500/10 text-sky-500",
+  "bg-red-500/10 text-red-500",
+];
+const skillIconColors = [
+  "text-brand-700 dark:text-brand-400",
+  "text-violet-500",
+  "text-emerald-500",
+  "text-accent-500",
+  "text-sky-500",
+  "text-red-500",
+];
+const skillIconBgs = [
+  "from-brand-500/20 to-brand-500/5",
+  "from-violet-500/20 to-violet-500/5",
+  "from-emerald-500/20 to-emerald-500/5",
+  "from-accent-500/20 to-accent-500/5",
+  "from-sky-500/20 to-sky-500/5",
+  "from-red-500/20 to-red-500/5",
 ];
 
-const useCases = [
-  {
-    icon: Rocket,
-    title: "Lancer un MVP en mode TDD",
-    description:
-      "Un entrepreneur utilise le Skill \"Plan\" pour structurer son projet, puis \"TDD Guide\" pour implementer chaque feature avec des tests solides. Resultat : un MVP fiable en 3 jours au lieu de 3 semaines.",
-    skills: ["Plan", "TDD Guide", "Code Reviewer"],
-  },
-  {
-    icon: Layers,
-    title: "Refactoring securise d'une codebase legacy",
-    description:
-      "Un lead developer combine \"Security Review\" pour identifier les failles existantes, \"E2E Testing\" pour ajouter une couverture de tests avant de toucher au code, puis \"Code Reviewer\" pour valider chaque changement.",
-    skills: ["Security Review", "E2E Testing", "Code Reviewer"],
-  },
-  {
-    icon: Sparkles,
-    title: "Creer un design system coherent",
-    description:
-      "Une equipe utilise \"Frontend Design\" pour generer des composants UI consistants, puis cree un Skill personnalise qui encode les conventions de leur charte graphique. Chaque nouveau composant respecte automatiquement le systeme.",
-    skills: ["Frontend Design", "Skill personnalise"],
-  },
-];
+const useCaseIcons = [Rocket, Layers, Sparkles];
 
 export default async function SkillsPage({
   params,
@@ -159,9 +571,24 @@ export default async function SkillsPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+
+  const topSkills = t.topSkills.map((skill, i) => ({
+    ...skill,
+    icon: skillIcons[i],
+    categoryColor: skillCategoryColors[i],
+    iconColor: skillIconColors[i],
+    iconBg: skillIconBgs[i],
+  }));
+
+  const useCases = t.useCases.map((uc, i) => ({
+    ...uc,
+    icon: useCaseIcons[i],
+  }));
+
   return (
     <>
-      {/* JSON-LD structured data — safe: static schema from hardcoded values, no user input */}
+      {/* JSON-LD structured data: static schema from hardcoded values, no user input */}
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger

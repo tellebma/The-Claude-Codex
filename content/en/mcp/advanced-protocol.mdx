@@ -6,19 +6,19 @@ section: "mcp"
 datePublished: "2026-03-12"
 ---
 
-## Au-delà des bases
+## Beyond the basics
 
-Vous savez créer un MCP, installer des tools et les utiliser dans Claude Code. Cette page va plus loin : le protocole JSON-RPC sous-jacent, les différents transports disponibles, la négociation de capabilities et les techniques de debugging avancé.
+You know how to create an MCP, install tools, and use them in Claude Code. This page goes deeper: the underlying JSON-RPC protocol, the different available transports, capabilities negotiation, and advanced debugging techniques.
 
-<Callout type="info" title="Pour qui ?">
-Ce contenu s'adresse aux développeurs qui veulent comprendre le protocole en profondeur, déployer des MCP distants (SSE, HTTP), ou diagnostiquer des problèmes complexes. Si vous débutez, commencez par les tutoriels [TypeScript](/mcp/create-mcp-typescript) ou [Python](/mcp/create-mcp-python).
+<Callout type="info" title="Who is this for?">
+This content is for developers who want to understand the protocol in depth, deploy remote MCPs (SSE, HTTP), or diagnose complex issues. If you're just getting started, begin with the [TypeScript](/mcp/create-mcp-typescript) or [Python](/mcp/create-mcp-python) tutorials.
 </Callout>
 
-## Spécification JSON-RPC 2.0
+## JSON-RPC 2.0 specification
 
-Le MCP repose sur **JSON-RPC 2.0**, un protocole léger de communication par messages JSON. Chaque échange suit un format strict : requête, réponse, ou notification.
+MCP is built on **JSON-RPC 2.0**, a lightweight protocol for communication via JSON messages. Each exchange follows a strict format: request, response, or notification.
 
-### Format d'une requête
+### Request format
 
 ```json
 {
@@ -32,12 +32,12 @@ Le MCP repose sur **JSON-RPC 2.0**, un protocole léger de communication par mes
 }
 ```
 
-- `jsonrpc` : toujours `"2.0"`
-- `id` : identifiant unique pour corréler la réponse
-- `method` : la méthode appelée
-- `params` : les paramètres de l'appel
+- `jsonrpc`: always `"2.0"`
+- `id`: unique identifier to correlate the response
+- `method`: the method being called
+- `params`: the call parameters
 
-### Format d'une réponse
+### Response format
 
 ```json
 {
@@ -47,35 +47,35 @@ Le MCP repose sur **JSON-RPC 2.0**, un protocole léger de communication par mes
     "content": [
       {
         "type": "text",
-        "text": "Météo à Paris : 18°C, Nuageux"
+        "text": "Weather in Paris: 18°C, Cloudy"
       }
     ]
   }
 }
 ```
 
-### Les principales méthodes MCP
+### Main MCP methods
 
-| Méthode | Direction | Description |
-|---------|-----------|-------------|
-| `initialize` | Client vers Server | Initialise la connexion, échange les capabilities |
-| `tools/list` | Client vers Server | Liste tous les tools exposés par le serveur |
-| `tools/call` | Client vers Server | Appelle un tool avec des arguments |
-| `resources/list` | Client vers Server | Liste toutes les resources disponibles |
-| `resources/read` | Client vers Server | Lit le contenu d'une resource par URI |
-| `prompts/list` | Client vers Server | Liste les prompts disponibles |
-| `prompts/get` | Client vers Server | Récupère un prompt avec ses arguments |
-| `notifications/cancelled` | Client vers Server | Annule une requête en cours |
+| Method | Direction | Description |
+|--------|-----------|-------------|
+| `initialize` | Client to Server | Initializes the connection, exchanges capabilities |
+| `tools/list` | Client to Server | Lists all tools exposed by the server |
+| `tools/call` | Client to Server | Calls a tool with arguments |
+| `resources/list` | Client to Server | Lists all available resources |
+| `resources/read` | Client to Server | Reads the content of a resource by URI |
+| `prompts/list` | Client to Server | Lists available prompts |
+| `prompts/get` | Client to Server | Retrieves a prompt with its arguments |
+| `notifications/cancelled` | Client to Server | Cancels an in-progress request |
 
-<Callout type="tip" title="Notifications vs Requêtes">
-Les notifications n'ont pas de champ `id` et n'attendent pas de réponse. Elles servent pour les événements unidirectionnels : changement de resource, mise à jour de progression, annulation.
+<Callout type="tip" title="Notifications vs Requests">
+Notifications have no `id` field and don't expect a response. They're used for one-way events: resource changes, progress updates, cancellations.
 </Callout>
 
 ## Capabilities negotiation
 
-Au démarrage, Claude Code et le MCP Server échangent leurs capabilities. C'est la première interaction après la connexion.
+At startup, Claude Code and the MCP Server exchange their capabilities. This is the first interaction after the connection is established.
 
-### Requête d'initialisation
+### Initialization request
 
 ```json
 {
@@ -95,7 +95,7 @@ Au démarrage, Claude Code et le MCP Server échangent leurs capabilities. C'est
 }
 ```
 
-### Réponse du serveur
+### Server response
 
 ```json
 {
@@ -116,35 +116,35 @@ Au démarrage, Claude Code et le MCP Server échangent leurs capabilities. C'est
 }
 ```
 
-Le client et le serveur s'accordent sur la version du protocole et annoncent ce qu'ils supportent. Un serveur qui ne déclare pas `tools` dans ses capabilities ne recevra pas d'appels `tools/call`.
+The client and server agree on the protocol version and announce what they support. A server that doesn't declare `tools` in its capabilities won't receive `tools/call` requests.
 
-### Capabilities disponibles
+### Available capabilities
 
-| Capability | Côté | Description |
+| Capability | Side | Description |
 |-----------|------|-------------|
-| `tools` | Server | Le serveur expose des outils |
-| `resources` | Server | Le serveur expose des resources |
-| `resources.subscribe` | Server | Le client peut s'abonner aux changements de resources |
-| `prompts` | Server | Le serveur expose des prompts |
-| `sampling` | Client | Le client supporte le sampling (voir plus bas) |
+| `tools` | Server | The server exposes tools |
+| `resources` | Server | The server exposes resources |
+| `resources.subscribe` | Server | The client can subscribe to resource changes |
+| `prompts` | Server | The server exposes prompts |
+| `sampling` | Client | The client supports sampling (see below) |
 
-## Transport stdio : le mode par défaut
+## Stdio transport: the default mode
 
-Le transport **stdio** (standard input/output) est le plus simple et le plus courant. Claude Code lance le processus MCP Server et communique via les flux stdin/stdout du processus.
+The **stdio** (standard input/output) transport is the simplest and most common. Claude Code launches the MCP Server process and communicates via the process's stdin/stdout streams.
 
-### Fonctionnement
+### How it works
 
 ```
-Claude Code                      MCP Server (processus fils)
+Claude Code                      MCP Server (child process)
      |                                    |
-     |--- stdin: requête JSON-RPC ------->|
-     |                                    |--- traitement
-     |<--- stdout: réponse JSON-RPC ------|
+     |--- stdin: JSON-RPC request ------->|
+     |                                    |--- processing
+     |<--- stdout: JSON-RPC response -----|
      |                                    |
      |--- stdin: notification ----------->|
 ```
 
-Chaque message est une ligne JSON terminée par `\n`. Les logs du serveur passent par **stderr** pour ne pas interférer avec le protocole.
+Each message is a JSON line terminated by `\n`. Server logs go through **stderr** to avoid interfering with the protocol.
 
 ### Configuration
 
@@ -160,22 +160,22 @@ Chaque message est une ligne JSON terminée par `\n`. Les logs du serveur passen
 }
 ```
 
-### Advantages et limites
+### Advantages and limitations
 
-- **Simple** : pas de réseau, pas de ports, pas de configuration serveur
-- **Sécurisé** : la communication est locale, pas de surface d'attaque réseau
-- **Limité** : un processus par connexion, pas de partage entre plusieurs clients
-- **Local** : le MCP doit tourner sur la même machine que Claude Code
+- **Simple**: no networking, no ports, no server configuration
+- **Secure**: communication is local, no network attack surface
+- **Limited**: one process per connection, no sharing between multiple clients
+- **Local**: the MCP must run on the same machine as Claude Code
 
-## Transport SSE : Server-Sent Events
+## SSE transport: Server-Sent Events
 
-Le transport **SSE** permet de connecter Claude Code à un MCP Server distant via HTTP. Le client envoie des requêtes POST et reçoit les réponses via un flux SSE (Server-Sent Events).
+The **SSE** transport lets you connect Claude Code to a remote MCP Server via HTTP. The client sends POST requests and receives responses via an SSE (Server-Sent Events) stream.
 
-### Quand l'utiliser
+### When to use it
 
-- Le MCP Server tourne sur un **serveur distant** (cloud, VPS, réseau interne)
-- Plusieurs clients doivent se connecter au **même MCP Server**
-- Vous voulez un MCP Server **toujours disponible**, sans le relancer à chaque session
+- The MCP Server runs on a **remote server** (cloud, VPS, internal network)
+- Multiple clients need to connect to the **same MCP Server**
+- You want an MCP Server that's **always available**, without restarting it each session
 
 ### Configuration
 
@@ -185,41 +185,41 @@ Le transport **SSE** permet de connecter Claude Code à un MCP Server distant vi
     "remote-db": {
       "url": "https://mcp.example.com/sse",
       "headers": {
-        "Authorization": "Bearer votre-token"
+        "Authorization": "Bearer your-token"
       }
     }
   }
 }
 ```
 
-<Callout type="warning" title="Sécurité obligatoire">
-Un MCP SSE est accessible sur le réseau. Protégez-le impérativement : authentification par token, HTTPS obligatoire, liste blanche d'IPs si possible. Un MCP exposé sans protection est une faille de sécurité critique.
+<Callout type="warning" title="Security is mandatory">
+An SSE MCP is network-accessible. Protect it at all costs: token authentication, mandatory HTTPS, IP allowlisting if possible. An MCP exposed without protection is a critical security flaw.
 </Callout>
 
-### Flux de communication
+### Communication flow
 
 ```
 Claude Code                           MCP Server (HTTP)
      |                                       |
-     |--- GET /sse (établir le flux SSE) --->|
+     |--- GET /sse (establish SSE stream) -->|
      |<--- SSE: endpoint URL ----------------|
      |                                       |
-     |--- POST /messages (requête) --------->|
-     |<--- SSE: réponse JSON-RPC ------------|
+     |--- POST /messages (request) --------->|
+     |<--- SSE: JSON-RPC response -----------|
 ```
 
-## Transport Streamable HTTP : le nouveau standard
+## Streamable HTTP transport: the new standard
 
-Le transport **Streamable HTTP** est le successeur du SSE pour les MCP distants. Il combine la simplicité du HTTP avec le streaming bidirectionnel.
+The **Streamable HTTP** transport is the successor to SSE for remote MCPs. It combines HTTP simplicity with bidirectional streaming.
 
-### Différences avec SSE
+### Differences from SSE
 
-| Critère | SSE | Streamable HTTP |
-|---------|-----|-----------------|
-| **Direction** | Unidirectionnel (serveur vers client) | Bidirectionnel |
-| **Connexion** | Longue durée (flux SSE persistant) | Requêtes individuelles, streamées si besoin |
-| **Reprise** | Reconnexion manuelle | Support natif de la reprise |
-| **Proxy** | Certains proxies coupent les SSE | Compatible avec tous les proxies HTTP |
+| Criterion | SSE | Streamable HTTP |
+|-----------|-----|-----------------|
+| **Direction** | Unidirectional (server to client) | Bidirectional |
+| **Connection** | Long-lived (persistent SSE stream) | Individual requests, streamed if needed |
+| **Resumption** | Manual reconnection | Native resumption support |
+| **Proxy** | Some proxies cut SSE connections | Compatible with all HTTP proxies |
 
 ### Configuration
 
@@ -229,194 +229,194 @@ Le transport **Streamable HTTP** est le successeur du SSE pour les MCP distants.
     "remote-api": {
       "url": "https://mcp.example.com/mcp",
       "headers": {
-        "Authorization": "Bearer votre-token"
+        "Authorization": "Bearer your-token"
       }
     }
   }
 }
 ```
 
-<Callout type="info" title="Adoption progressive">
-Le transport Streamable HTTP est plus récent que SSE. Vérifiez que le serveur MCP que vous ciblez le supporte. Le SDK officiel (TypeScript et Python) le supporte dans les versions récentes.
+<Callout type="info" title="Gradual adoption">
+Streamable HTTP transport is newer than SSE. Check that the MCP server you're targeting supports it. The official SDK (TypeScript and Python) supports it in recent versions.
 </Callout>
 
-## Sampling : quand le MCP demande au LLM
+## Sampling: when the MCP asks the LLM
 
-Le **sampling** est une capability spéciale : elle permet au MCP Server de demander à Claude de compléter un prompt. C'est un flux inversé où le serveur devient temporairement "client" du LLM.
+**Sampling** is a special capability: it lets the MCP Server ask Claude to complete a prompt. It's a reversed flow where the server temporarily becomes a "client" of the LLM.
 
 ### Use cases
 
-- Un tool de traduction qui demande à Claude de traduire un texte
-- Un tool d'analyse qui demande à Claude de résumer des données
-- Un outil de génération qui utilise Claude pour produire du contenu
+- A translation tool that asks Claude to translate text
+- An analysis tool that asks Claude to summarize data
+- A generation tool that uses Claude to produce content
 
-### Flux de communication
+### Communication flow
 
 ```
 Claude Code        MCP Server               Claude (LLM)
      |                  |                         |
      |-- tools/call --->|                         |
      |                  |--- sampling/request ---->|
-     |                  |<--- réponse LLM ---------|
-     |<-- résultat -----|                         |
+     |                  |<--- LLM response --------|
+     |<-- result -------|                         |
 ```
 
-<Callout type="warning" title="Impact sur les coûts">
-Chaque requête de sampling consomme des tokens supplémentaires. Un MCP qui utilise le sampling de manière intensive peut augmenter vos coûts. Surveillez la consommation avec `/cost` dans Claude Code.
+<Callout type="warning" title="Cost impact">
+Each sampling request consumes additional tokens. An MCP that uses sampling intensively can increase your costs. Monitor consumption with `/cost` in Claude Code.
 </Callout>
 
-## Performance et latence
+## Performance and latency
 
-Les MCP ajoutent de la latence à chaque interaction. Voici les sources principales et comment les optimiser.
+MCPs add latency to every interaction. Here are the main sources and how to optimize them.
 
-### Sources de latence
+### Latency sources
 
-| Source | Latence typique | Optimisation |
+| Source | Typical latency | Optimization |
 |--------|----------------|-------------|
-| Démarrage du processus (stdio) | 500ms-2s | Garder le processus actif |
-| Découverte des tools (`tools/list`) | 10-50ms | Mise en cache côté client |
-| Appel d'un tool (`tools/call`) | Variable selon le tool | Timeouts appropriés |
-| Appel API externe | 100ms-5s | Cache, retry, fallback |
-| Transport réseau (SSE/HTTP) | 20-100ms | Serveur proche géographiquement |
+| Process startup (stdio) | 500ms-2s | Keep the process alive |
+| Tool discovery (`tools/list`) | 10-50ms | Client-side caching |
+| Tool call (`tools/call`) | Varies by tool | Appropriate timeouts |
+| External API call | 100ms-5s | Cache, retry, fallback |
+| Network transport (SSE/HTTP) | 20-100ms | Geographically close server |
 
-### Gestion des timeouts
+### Timeout management
 
-Claude Code impose un timeout par défaut sur les appels MCP. Si votre tool fait des opérations longues :
+Claude Code imposes a default timeout on MCP calls. If your tool does long-running operations:
 
 ```typescript
-// Dans votre tool handler, envoyez des notifications de progression
+// In your tool handler, send progress notifications
 server.tool(
   "long-operation",
-  "Opération qui prend du temps",
+  "Operation that takes time",
   { input: z.string() },
   async ({ input }, { sendProgress }) => {
-    await sendProgress(0, 100, "Démarrage...");
-    // ... opération longue
-    await sendProgress(50, 100, "Traitement en cours...");
-    // ... suite
-    await sendProgress(100, 100, "Terminé");
+    await sendProgress(0, 100, "Starting...");
+    // ... long operation
+    await sendProgress(50, 100, "Processing...");
+    // ... continued
+    await sendProgress(100, 100, "Done");
 
     return {
-      content: [{ type: "text" as const, text: "Résultat de l'opération" }],
+      content: [{ type: "text" as const, text: "Operation result" }],
     };
   }
 );
 ```
 
-## Security avancée
+## Advanced security
 
 ### Sandboxing
 
-Chaque MCP Server tourne dans son propre processus. Mais il a accès au système de fichiers et au réseau de la machine hôte. Pour limiter les risques :
+Each MCP Server runs in its own process. But it has access to the host machine's filesystem and network. To limit risk:
 
-- Exécutez les MCP dans un **conteneur Docker** avec des volumes restreints
-- Utilisez des **tokens avec scopes minimaux** (lecture seule quand possible)
-- Appliquez des **règles réseau** pour limiter les connexions sortantes
+- Run MCPs in a **Docker container** with restricted volumes
+- Use **tokens with minimal scopes** (read-only when possible)
+- Apply **network rules** to limit outbound connections
 
 ### Audit logs
 
-Pour tracer ce que fait un MCP :
+To trace what an MCP does:
 
 ```typescript
-// Wrapper de logging pour tous les appels de tools
+// Logging wrapper for all tool calls
 server.tool("my-tool", "Description", { param: z.string() }, async ({ param }) => {
   console.error(`[AUDIT] tool=my-tool param=${param} time=${new Date().toISOString()}`);
-  // ... logique du tool
+  // ... tool logic
   const result = "...";
   console.error(`[AUDIT] tool=my-tool result_length=${result.length}`);
   return { content: [{ type: "text" as const, text: result }] };
 });
 ```
 
-Les logs sur stderr ne perturbent pas le protocole et peuvent être capturés par votre système de monitoring.
+Logs on stderr don't interfere with the protocol and can be captured by your monitoring system.
 
 ### Token rotation
 
-Pour les MCP qui utilisent des tokens d'API externe :
+For MCPs that use external API tokens:
 
-- Stockez les tokens dans des **variables d'environnement**, pas dans le code
-- Mettez en place une **rotation régulière** des tokens (tous les 90 jours minimum)
-- Utilisez un **gestionnaire de secrets** (Vault, AWS Secrets Manager) pour la production
-- Révoquez immédiatement tout token potentiellement compromis
+- Store tokens in **environment variables**, not in code
+- Set up **regular rotation** of tokens (every 90 days minimum)
+- Use a **secret manager** (Vault, AWS Secrets Manager) for production
+- Immediately revoke any potentially compromised token
 
-## Debugging : diagnostiquer les problèmes
+## Debugging: diagnosing problems
 
-### Inspection JSON-RPC
+### JSON-RPC inspection
 
-L'inspecteur MCP est votre meilleur outil pour débugger :
+The MCP inspector is your best debugging tool:
 
 ```bash
-# Inspecter un serveur stdio
+# Inspect a stdio server
 npx @modelcontextprotocol/inspector node dist/index.js
 
-# Inspecter un serveur SSE
+# Inspect an SSE server
 npx @modelcontextprotocol/inspector --url https://mcp.example.com/sse
 ```
 
-L'inspecteur affiche chaque message JSON-RPC échangé, ce qui permet de voir exactement ce que le serveur reçoit et retourne.
+The inspector displays every JSON-RPC message exchanged, letting you see exactly what the server receives and returns.
 
-### Logging verbeux côté Claude Code
+### Verbose logging in Claude Code
 
 ```bash
-# Lancer Claude Code avec les logs MCP détaillés
+# Launch Claude Code with detailed MCP logs
 claude --verbose
 ```
 
-Le flag `--verbose` affiche les échanges JSON-RPC avec chaque MCP dans le terminal.
+The `--verbose` flag displays JSON-RPC exchanges with each MCP in the terminal.
 
-### Vérifier la santé d'un MCP
+### Check MCP health
 
 ```bash
-# Lister les MCP configurés et leur statut
+# List configured MCPs and their status
 claude mcp list
 ```
 
-Si un MCP apparaît comme "disconnected" ou "error" :
+If an MCP shows as "disconnected" or "error":
 
 <Steps>
-<Step title="Vérifier que la commande fonctionne" stepNumber={1}>
+<Step title="Verify the command works" stepNumber={1}>
 
-Exécutez la commande du MCP directement dans votre terminal pour voir les erreurs :
+Run the MCP command directly in your terminal to see errors:
 
 ```bash
-# Exemple pour un MCP Node.js
-node /chemin/vers/mcp/dist/index.js
+# Example for a Node.js MCP
+node /path/to/mcp/dist/index.js
 ```
 
-Si ça plante, le message d'erreur vous indiquera le problème (dépendance manquante, erreur de syntaxe, etc.).
+If it crashes, the error message will tell you the problem (missing dependency, syntax error, etc.).
 
 </Step>
 
-<Step title="Vérifier les variables d'environnement" stepNumber={2}>
+<Step title="Check environment variables" stepNumber={2}>
 
-Les tokens manquants sont la cause la plus fréquente. Vérifiez que toutes les variables `env` du `.mcp.json` sont correctes.
+Missing tokens are the most frequent cause. Verify that all `env` variables in the `.mcp.json` are correct.
 
 </Step>
 
-<Step title="Tester avec l'inspecteur" stepNumber={3} isLast>
+<Step title="Test with the inspector" stepNumber={3} isLast>
 
 ```bash
-npx @modelcontextprotocol/inspector node /chemin/vers/mcp/dist/index.js
+npx @modelcontextprotocol/inspector node /path/to/mcp/dist/index.js
 ```
 
-Si l'inspecteur fonctionne mais pas Claude Code, le problème vient de la configuration Claude (chemin, arguments, permissions).
+If the inspector works but Claude Code doesn't, the problem is in the Claude configuration (path, arguments, permissions).
 
 </Step>
 </Steps>
 
-### Erreurs fréquentes en debug
+### Common debugging errors
 
-| Symptôme | Cause probable | Diagnostic |
-|----------|---------------|------------|
-| MCP "disconnected" au démarrage | Processus qui plante | Exécuter la commande manuellement |
-| Tools non listés | Erreur dans `initialize` | Vérifier avec l'inspecteur MCP |
-| Réponse vide ou timeout | Handler qui ne retourne rien | Ajouter des logs stderr |
-| `parse error` JSON-RPC | `console.log()` dans le code | Remplacer par `console.error()` |
-| Token expiré | Credentials périmées | Régénérer le token et mettre à jour `env` |
+| Symptom | Likely cause | Diagnosis |
+|---------|-------------|-----------|
+| MCP "disconnected" at startup | Process crashing | Run the command manually |
+| Tools not listed | Error in `initialize` | Check with the MCP inspector |
+| Empty response or timeout | Handler that returns nothing | Add stderr logs |
+| `parse error` JSON-RPC | `console.log()` in code | Replace with `console.error()` |
+| Expired token | Stale credentials | Regenerate the token and update `env` |
 
 ## Next steps
 
-- [Créer un MCP Server en TypeScript](/mcp/create-mcp-typescript) : tutoriel complet avec le SDK TypeScript
-- [Créer un MCP Server en Python](/mcp/create-mcp-python) : tutoriel avec le SDK Python et les décorateurs
-- [Sécurité des MCP](/mcp/securite-mcp) : guide complet de sécurisation
-- [Comprendre les MCP](/mcp/what-are-mcps) : revenir aux fondamentaux du protocole
+- [Create an MCP Server in TypeScript](/mcp/create-mcp-typescript): complete tutorial with the TypeScript SDK
+- [Create an MCP Server in Python](/mcp/create-mcp-python): tutorial with the Python SDK and decorators
+- [MCP security](/mcp/securite-mcp): complete security guide
+- [Understanding MCPs](/mcp/what-are-mcps): back to protocol fundamentals

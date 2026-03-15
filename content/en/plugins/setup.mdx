@@ -7,125 +7,125 @@ datePublished: "2026-03-09"
 dateModified: "2026-03-11"
 ---
 
-## Structure des dossiers d'extension
+## Extension folder structure
 
-Claude Code lit les extensions depuis deux emplacements : un dossier global (`~/.claude/`) pour tous vos projets, et un dossier local (`.claude/`) propre à chaque projet.
+Claude Code reads extensions from two locations: a global folder (`~/.claude/`) for all your projects, and a local folder (`.claude/`) specific to each project.
 
-<Callout type="warning" title="Pas de marketplace, pas de /plugin install">
-Claude Code ne dispose d'aucune commande `/plugin install`, `/plugin marketplace` ou `/plugin list`. Les extensions communautaires sont des **fichiers** (Markdown, JSON) que vous copiez dans des dossiers spécifiques. Ce guide vous montre comment procéder correctement.
+<Callout type="warning" title="No marketplace, no /plugin install">
+Claude Code has no `/plugin install`, `/plugin marketplace`, or `/plugin list` command. Community extensions are **files** (Markdown, JSON) that you copy into specific folders. This guide shows you how to do it correctly.
 </Callout>
 
 ```bash
-# Extensions globales (tous vos projets)
+# Global extensions (all your projects)
 ~/.claude/
-├── commands/          # Skills globaux (slash commands)
-├── agents/            # Agents globaux
-└── rules/             # Règles globales
+├── commands/          # Global skills (slash commands)
+├── agents/            # Global agents
+└── rules/             # Global rules
 
-# Extensions par projet
+# Per-project extensions
 .claude/
-├── commands/          # Skills du projet
-├── agents/            # Agents du projet
-├── rules/             # Règles du projet
-└── settings.json      # Configuration MCP et permissions
+├── commands/          # Project skills
+├── agents/            # Project agents
+├── rules/             # Project rules
+└── settings.json      # MCP configuration and permissions
 ```
 
-Les fichiers dans `.claude/` (racine de projet) prennent la priorité sur les fichiers globaux dans `~/.claude/`.
+Files in `.claude/` (project root) take priority over global files in `~/.claude/`.
 
-## Les méthodes d'installation
+## Installation methods
 
-### Méthode 1 : via `/install-github` (recommandée)
+### Method 1: via `/install-github` (recommended)
 
-Claude Code propose une commande native pour installer des ressources depuis GitHub :
+Claude Code offers a native command to install resources from GitHub:
 
 ```bash
-# Installer depuis un repo GitHub (chemin relatif à la racine)
+# Install from a GitHub repo (relative to root)
 /install-github punkpeye/everything-claude-code
 ```
 
-<Callout type="info" title="Ce que fait /install-github">
-Cette commande clone le repo GitHub indiqué, détecte les fichiers `.md`/`.mdc` qui correspondent à des agents ou skills, et les copie dans les bons dossiers de votre projet. Elle ne télécharge pas un binaire, elle copie des fichiers texte.
+<Callout type="info" title="What /install-github does">
+This command clones the specified GitHub repo, detects `.md`/`.mdc` files that correspond to agents or skills, and copies them into the right folders in your project. It doesn't download a binary, it copies text files.
 </Callout>
 
-### Méthode 2 : installation manuelle (contrôle total)
+### Method 2: manual installation (full control)
 
-La méthode la plus transparente. Vous voyez exactement ce qui est installé.
+The most transparent method. You see exactly what gets installed.
 
 <Steps>
-<Step title="Trouver une extension" stepNumber={1}>
-Cherchez sur GitHub des repos communautaires. Les bons endroits de départ :
-- [punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code) : collection complète d'agents et de rules
-- La documentation officielle Anthropic : https://docs.anthropic.com/en/docs/claude-code
+<Step title="Find an extension" stepNumber={1}>
+Search GitHub for community repos. Good starting points:
+- [punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code): complete collection of agents and rules
+- The official Anthropic documentation: https://docs.anthropic.com/en/docs/claude-code
 </Step>
 
-<Step title="Cloner ou télécharger" stepNumber={2}>
+<Step title="Clone or download" stepNumber={2}>
 
 ```bash
-# Cloner le repo communautaire
+# Clone the community repo
 git clone https://github.com/punkpeye/everything-claude-code /tmp/ecc
 
-# Ou télécharger un fichier spécifique
+# Or download a specific file
 curl -o .claude/commands/tdd-guide.md \
   https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
 ```
 
 </Step>
 
-<Step title="Copier dans les bons dossiers" stepNumber={3}>
+<Step title="Copy to the right folders" stepNumber={3}>
 
 ```bash
-# Créer les dossiers s'ils n'existent pas
+# Create folders if they don't exist
 mkdir -p .claude/commands .claude/agents .claude/rules
 
-# Copier les agents
+# Copy agents
 cp /tmp/ecc/agents/*.md .claude/agents/
 
-# Copier les rules
+# Copy rules
 cp /tmp/ecc/rules/**/*.md .claude/rules/
 
-# Copier les commands (skills)
+# Copy commands (skills)
 cp /tmp/ecc/commands/*.md .claude/commands/
 ```
 
 </Step>
 
-<Step title="Vérifier dans Claude Code" stepNumber={4} isLast>
+<Step title="Verify in Claude Code" stepNumber={4} isLast>
 
-Dans une session Claude Code, vérifiez que vos skills sont disponibles :
+In a Claude Code session, check that your skills are available:
 
 ```bash
-# Les skills apparaissent comme slash commands
-# Tapez "/" pour voir la liste des commandes disponibles
-/tdd-guide créer une fonction de validation d'email
+# Skills appear as slash commands
+# Type "/" to see the list of available commands
+/tdd-guide create an email validation function
 ```
 
 </Step>
 </Steps>
 
-### Méthode 3 : outils CLI via npm
+### Method 3: CLI tools via npm
 
-Certains outils communautaires sont des packages npm qui assistent Claude Code :
+Some community tools are npm packages that assist Claude Code:
 
 ```bash
-# repomix - analyse et condense une codebase pour le contexte
+# repomix - analyzes and condenses a codebase for context
 npx repomix
 
-# Générer un fichier de contexte compressé
+# Generate a compressed context file
 npx repomix --output repomix-output.txt --ignore "node_modules/**"
 
-# Vous passez ensuite ce fichier à Claude Code :
-# "Analyse cette codebase : [contenu de repomix-output.txt]"
+# You then pass this file to Claude Code:
+# "Analyze this codebase: [paste content of repomix-output.txt]"
 ```
 
-<Callout type="info" title="repomix sur npm">
-repomix est un vrai package npm, publié sur [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Son repo source est sur [GitHub/yamadashy/repomix](https://github.com/yamadashy/repomix).
+<Callout type="info" title="repomix on npm">
+repomix is a real npm package, published on [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Its source repo is on [GitHub/yamadashy/repomix](https://github.com/yamadashy/repomix).
 </Callout>
 
-## Configuration dans settings.json
+## Configuration in settings.json
 
-Le fichier `settings.json` de Claude Code configure les **MCP servers** et les **permissions**, pas les plugins. Voici la vraie structure :
+Claude Code's `settings.json` file configures **MCP servers** and **permissions**, not plugins. Here's the actual structure:
 
-### Structure réelle de settings.json
+### Actual settings.json structure
 
 ```json
 {
@@ -138,7 +138,7 @@ Le fichier `settings.json` de Claude Code configure les **MCP servers** et les *
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_votre-token"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your-token"
       }
     }
   },
@@ -149,133 +149,133 @@ Le fichier `settings.json` de Claude Code configure les **MCP servers** et les *
 }
 ```
 
-Il n'existe pas de section `"plugins"` dans `settings.json`. Les extensions communautaires (agents, rules, commands) sont des **fichiers**, pas des entrées de configuration JSON.
+There is no `"plugins"` section in `settings.json`. Community extensions (agents, rules, commands) are **files**, not JSON configuration entries.
 
-<Callout type="warning" title="Priorité de configuration">
-La configuration de projet (`.claude/settings.json`) prend toujours le dessus sur la configuration globale (`~/.claude/settings.json`) pour les MCP et les permissions. Pour les fichiers d'extension (agents, commands, rules), les deux niveaux sont **additifs** : les extensions globales et projet sont toutes disponibles simultanément.
+<Callout type="warning" title="Configuration priority">
+The project configuration (`.claude/settings.json`) always takes precedence over the global configuration (`~/.claude/settings.json`) for MCPs and permissions. For extension files (agents, commands, rules), the two levels are **additive**: global and project extensions are all available simultaneously.
 </Callout>
 
-## Créer ses propres extensions
+## Creating your own extensions
 
-Vous pouvez créer vos propres skills, agents et règles pour partager des workflows avec votre équipe.
+You can create your own skills, agents, and rules to share workflows with your team.
 
-### Créer un skill (commande slash)
+### Create a skill (slash command)
 
-Un skill est simplement un fichier Markdown :
+A skill is simply a Markdown file:
 
 ```bash
-# Créer un skill custom dans .claude/commands/
+# Create a custom skill in .claude/commands/
 cat > .claude/commands/deploy-staging.md << 'EOF'
 # Deploy Staging
 
-Déploie l'application sur l'environnement de staging en suivant ces étapes :
+Deploy the application to the staging environment following these steps:
 
-1. Vérifier que les tests passent (`npm run test`)
-2. Builder l'application (`npm run build`)
-3. Vérifier que le build Docker fonctionne
-4. Créer un tag git avec la version
-5. Pousser sur la branche `staging`
-6. Confirmer le déploiement dans le channel Slack #releases
+1. Verify tests pass (`npm run test`)
+2. Build the application (`npm run build`)
+3. Verify the Docker build works
+4. Create a git tag with the version
+5. Push to the `staging` branch
+6. Confirm deployment in the Slack #releases channel
 
-Si une étape échoue, arrêter immédiatement et rapporter l'erreur.
+If any step fails, stop immediately and report the error.
 EOF
 ```
 
-Utilisation dans Claude Code :
+Usage in Claude Code:
 ```bash
 /deploy-staging
 ```
 
-### Créer un agent spécialisé
+### Create a specialized agent
 
 ```bash
-# Créer un agent dans .claude/agents/
+# Create an agent in .claude/agents/
 cat > .claude/agents/security-reviewer.md << 'EOF'
 ---
 name: security-reviewer
-description: Expert en sécurité qui analyse le code pour détecter les vulnérabilités OWASP
+description: Security expert who analyzes code to detect OWASP vulnerabilities
 ---
 
-Tu es un expert en cybersécurité avec une spécialisation dans la sécurité des applications web.
-Tu analyses le code en cherchant :
-- Injections SQL et NoSQL
-- Failles XSS et CSRF
-- Secrets hardcodés (tokens, mots de passe, clés API)
-- Problèmes d'authentification et d'autorisation
-- Mauvaises configurations de sécurité (CORS, headers, CSP)
+You are a cybersecurity expert specializing in web application security.
+You analyze code looking for:
+- SQL and NoSQL injections
+- XSS and CSRF vulnerabilities
+- Hardcoded secrets (tokens, passwords, API keys)
+- Authentication and authorization issues
+- Security misconfigurations (CORS, headers, CSP)
 
-Pour chaque problème trouvé, tu donnes :
-1. La sévérité (CRITIQUE / HAUTE / MOYENNE / FAIBLE)
-2. La localisation précise dans le code
-3. L'explication du risque
-4. Un exemple de correction sécurisée
+For each issue found, you provide:
+1. Severity (CRITICAL / HIGH / MEDIUM / LOW)
+2. Precise location in the code
+3. Explanation of the risk
+4. A secure fix example
 EOF
 ```
 
-### Structure d'une collection d'extensions
+### Structure of an extension collection
 
-Si vous souhaitez partager une collection avec votre équipe :
+If you want to share a collection with your team:
 
 ```bash
-mon-extension-equipe/
-├── README.md                    # Documentation et instructions d'installation
+my-team-extension/
+├── README.md                    # Documentation and installation instructions
 ├── commands/                    # Skills (slash commands)
 │   ├── deploy-staging.md
 │   └── hotfix.md
-├── agents/                      # Agents spécialisés
+├── agents/                      # Specialized agents
 │   ├── security-reviewer.md
 │   └── architect.md
-└── rules/                       # Règles et conventions
+└── rules/                       # Rules and conventions
     └── coding-conventions.md
 ```
 
-Partagez-la sur GitHub. Vos collègues l'installent avec :
+Share it on GitHub. Your colleagues install it with:
 
 ```bash
-/install-github votre-org/mon-extension-equipe
-# ou manuellement :
-git clone https://github.com/votre-org/mon-extension-equipe
-cp -r mon-extension-equipe/commands/ .claude/commands/
-cp -r mon-extension-equipe/agents/ .claude/agents/
+/install-github your-org/my-team-extension
+# or manually:
+git clone https://github.com/your-org/my-team-extension
+cp -r my-team-extension/commands/ .claude/commands/
+cp -r my-team-extension/agents/ .claude/agents/
 ```
 
-## Gérer ses extensions
+## Managing your extensions
 
-Comme il n'y a pas de gestionnaire de plugins central, la gestion est manuelle :
+Since there's no central plugin manager, management is manual:
 
 ```bash
-# Lister les skills disponibles
+# List available skills
 ls .claude/commands/
 ls ~/.claude/commands/
 
-# Lister les agents disponibles
+# List available agents
 ls .claude/agents/
 ls ~/.claude/agents/
 
-# Désactiver un skill (le renommer avec une extension différente)
-mv .claude/commands/skill-inutile.md .claude/commands/skill-inutile.md.disabled
+# Disable a skill (rename with a different extension)
+mv .claude/commands/unused-skill.md .claude/commands/unused-skill.md.disabled
 
-# Supprimer un skill
-rm .claude/commands/skill-a-supprimer.md
+# Delete a skill
+rm .claude/commands/skill-to-remove.md
 
-# Mettre à jour (re-télécharger depuis le repo source)
+# Update (re-download from the source repo)
 curl -o .claude/commands/tdd-guide.md \
   https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
 ```
 
 ## Best practices
 
-- **Lisez le contenu avant d'installer** : les fichiers d'extension sont du texte lisible, vérifiez ce qu'ils font avant de les ajouter
-- **N'installez que l'essentiel** : chaque agent et règle consomme du contexte. Gardez uniquement ce que vous utilisez
-- **Versionnez vos extensions** : commitez vos fichiers `.claude/` (hors `settings.json` s'il contient des tokens) dans Git pour que toute l'équipe ait le même environnement
-- **Testez dans un projet de test** : avant d'activer une nouvelle extension sur un projet critique, testez-la d'abord sur un projet exemple
+- **Read the content before installing**: extension files are readable text, check what they do before adding them
+- **Only install the essentials**: every agent and rule consumes context. Keep only what you actually use
+- **Version your extensions**: commit your `.claude/` files (except `settings.json` if it contains tokens) to Git so the whole team shares the same environment
+- **Test in a test project**: before activating a new extension on a critical project, test it on a sample project first
 
-<Callout type="tip" title="Partager la configuration d'équipe">
-La meilleure pratique pour partager une configuration d'équipe est de committer le dossier `.claude/` (agents, commands, rules) dans votre repo Git. Ainsi, chaque développeur qui clone le projet reçoit automatiquement la même configuration.
+<Callout type="tip" title="Sharing team configuration">
+The best practice for sharing team configuration is to commit the `.claude/` folder (agents, commands, rules) to your Git repo. That way, every developer who clones the project automatically gets the same setup.
 </Callout>
 
 ## Next steps
 
-- [Top extensions essentielles 2026](/plugins/best-essential) : Les ressources communautaires incontournables
-- [Extensions design & frontend](/plugins/best-design) : Les meilleures ressources pour le design et l'UI
-- [Extensions sécurité & qualité](/plugins/best-security) : Sécurisez et améliorez votre code
+- [Top essential extensions 2026](/plugins/best-essential): The must-have community resources
+- [Design & frontend extensions](/plugins/best-design): The best resources for design and UI
+- [Security & quality extensions](/plugins/best-security): Secure and improve your code

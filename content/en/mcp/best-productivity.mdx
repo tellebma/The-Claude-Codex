@@ -7,75 +7,75 @@ datePublished: "2026-03-09"
 dateModified: "2026-03-11"
 ---
 
-## Les MCP qui transforment votre quotidien
+## MCPs that transform your daily workflow
 
-Les MCP de productivité connectent Claude Code à vos outils du quotidien : email, messagerie, calendrier, design et audit web. Ils transforment Claude Code en assistant personnel capable d'agir dans votre environnement professionnel réel.
+Productivity MCPs connect Claude Code to your everyday tools: email, messaging, calendar, design, and web auditing. They turn Claude Code into a personal assistant that can take action in your real professional environment.
 
-<Callout type="tip" title="Configuration globale recommandée">
-Les MCP de productivité sont généralement personnels (votre Gmail, votre Slack). Configurez-les en **global** (`~/.claude/settings.json` ou `claude mcp add --scope global`) pour qu'ils soient disponibles dans tous vos projets.
+<Callout type="tip" title="Global configuration recommended">
+Productivity MCPs are typically personal (your Gmail, your Slack). Configure them **globally** (`~/.claude/settings.json` or `claude mcp add --scope global`) so they're available across all your projects.
 </Callout>
 
-<Callout type="warning" title="Noms de packages à vérifier">
-Les noms de packages MCP évoluent avec la communauté. Avant d'installer, vérifiez toujours le nom exact sur [npmjs.com](https://www.npmjs.com) ou sur le repo GitHub officiel du projet. Les packages présentés ici correspondent aux noms vérifiés au moment de la rédaction.
+<Callout type="warning" title="Package names to verify">
+MCP package names evolve with the community. Before installing, always check the exact name on [npmjs.com](https://www.npmjs.com) or on the project's official GitHub repo. The packages listed here match the verified names at the time of writing.
 </Callout>
 
 ---
 
-## Gmail : Gestion des emails
+## Gmail: Email management
 
-**Lisez, recherchez et gérez vos emails depuis Claude Code.** Créez des brouillons, analysez des conversations et extrayez des informations clés de votre boîte mail.
+**Read, search, and manage your emails from Claude Code.** Create drafts, analyze conversations, and extract key information from your inbox.
 
-<Callout type="info" title="MCP Gmail communautaire">
-Il n'existe pas de package `@anthropic/mcp-gmail` officiel. Le MCP Gmail le plus utilisé est un projet communautaire. Vérifiez le package actuel sur npm avant installation. Un exemple fonctionnel est disponible sur [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) dans le dossier `src/gmail` (si disponible) ou via des projets communautaires tiers.
+<Callout type="info" title="Community Gmail MCP">
+There is no official `@anthropic/mcp-gmail` package. The most widely used Gmail MCP is a community project. Check the current package on npm before installing. A working example is available at [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) in the `src/gmail` folder (if available) or through third-party community projects.
 </Callout>
 
-### Configuration JSON (exemple générique)
+### JSON configuration (generic example)
 
 ```json
 {
   "mcpServers": {
     "gmail": {
       "command": "npx",
-      "args": ["-y", "nom-du-package-gmail-mcp"],
+      "args": ["-y", "gmail-mcp-package-name"],
       "env": {
-        "GMAIL_OAUTH_CLIENT_ID": "votre-client-id",
-        "GMAIL_OAUTH_CLIENT_SECRET": "votre-client-secret",
-        "GMAIL_OAUTH_REFRESH_TOKEN": "votre-refresh-token"
+        "GMAIL_OAUTH_CLIENT_ID": "your-client-id",
+        "GMAIL_OAUTH_CLIENT_SECRET": "your-client-secret",
+        "GMAIL_OAUTH_REFRESH_TOKEN": "your-refresh-token"
       }
     }
   }
 }
 ```
 
-<Callout type="warning" title="Configuration OAuth">
-Gmail nécessite une configuration OAuth via Google Cloud Console. Créez un projet, activez l'API Gmail, et générez des identifiants OAuth 2.0. Consultez la documentation du package MCP que vous choisissez pour les instructions détaillées.
+<Callout type="warning" title="OAuth configuration">
+Gmail requires OAuth configuration via Google Cloud Console. Create a project, enable the Gmail API, and generate OAuth 2.0 credentials. Check the documentation of the MCP package you choose for detailed instructions.
 </Callout>
 
 ### Use cases
 
-- **Triage intelligent** : *"Montre-moi les emails non lus de cette semaine et résume chacun en une phrase"*
-- **Recherche avancée** : *"Trouve tous les emails de @client.com concernant le projet X"*
-- **Brouillons automatiques** : *"Rédige une réponse professionnelle à cet email en reprenant les points soulevés"*
-- **Extraction d'information** : *"Extrais toutes les dates de réunion mentionnées dans mes emails de la semaine"*
+- **Smart triage**: *"Show me this week's unread emails and summarize each one in a sentence"*
+- **Advanced search**: *"Find all emails from @client.com about project X"*
+- **Automatic drafts**: *"Draft a professional reply to this email addressing the points raised"*
+- **Information extraction**: *"Extract all meeting dates mentioned in my emails this week"*
 
 ---
 
-## Slack : Messagerie d'équipe
+## Slack: Team messaging
 
-**Interagissez avec Slack directement depuis Claude Code.** Lisez et envoyez des messages, gérez les channels, et recherchez dans l'historique de votre équipe.
+**Interact with Slack directly from Claude Code.** Read and send messages, manage channels, and search through your team's history.
 
-<Callout type="info" title="MCP Slack officiel">
-Le MCP Slack officiel est disponible dans le repository officiel MCP d'Anthropic : [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers). Le package npm correspondant est `@modelcontextprotocol/server-slack`.
+<Callout type="info" title="Official Slack MCP">
+The official Slack MCP is available in Anthropic's official MCP repository: [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers). The corresponding npm package is `@modelcontextprotocol/server-slack`.
 </Callout>
 
 ### Installation
 
 ```bash
-# Slack nécessite un Bot Token
-claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-votre-token -- npx -y @modelcontextprotocol/server-slack
+# Slack requires a Bot Token
+claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-your-token -- npx -y @modelcontextprotocol/server-slack
 ```
 
-### Configuration JSON
+### JSON configuration
 
 ```json
 {
@@ -84,46 +84,46 @@ claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-votre-token -- npx -y @modelcontext
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-slack"],
       "env": {
-        "SLACK_BOT_TOKEN": "xoxb-votre-bot-token",
-        "SLACK_TEAM_ID": "votre-team-id"
+        "SLACK_BOT_TOKEN": "xoxb-your-bot-token",
+        "SLACK_TEAM_ID": "your-team-id"
       }
     }
   }
 }
 ```
 
-<Callout type="info" title="Créer un Bot Slack">
-Allez sur **api.slack.com/apps**, créez une nouvelle app, ajoutez les scopes OAuth nécessaires (`channels:read`, `channels:history`, `chat:write`, `users:read`), et installez l'app dans votre workspace pour obtenir le Bot Token.
+<Callout type="info" title="Creating a Slack Bot">
+Go to **api.slack.com/apps**, create a new app, add the necessary OAuth scopes (`channels:read`, `channels:history`, `chat:write`, `users:read`), and install the app in your workspace to get the Bot Token.
 </Callout>
 
 ### Use cases
 
-- **Veille d'équipe** : *"Résume les messages importants du channel #engineering de cette semaine"*
-- **Notification automatique** : *"Envoie un message dans #releases pour annoncer la nouvelle version"*
-- **Recherche contextuelle** : *"Retrouve la conversation où on a décidé de l'architecture de la base de données"*
+- **Team monitoring**: *"Summarize the important messages from the #engineering channel this week"*
+- **Automatic notifications**: *"Send a message to #releases announcing the new version"*
+- **Contextual search**: *"Find the conversation where we decided on the database architecture"*
 
 ---
 
-## Google Calendar : Gestion de l'agenda
+## Google Calendar: Schedule management
 
-**Consultez et gérez votre agenda Google directement depuis Claude Code.** Visualisez vos événements, trouvez des créneaux libres et planifiez des réunions.
+**View and manage your Google Calendar directly from Claude Code.** See your events, find open time slots, and plan meetings.
 
-<Callout type="info" title="MCP Google Calendar communautaire">
-Il n'existe pas de package `@anthropic/mcp-google-calendar` officiel. Vérifiez les projets communautaires disponibles sur npm en cherchant « google calendar mcp ». Plusieurs implémentations existent avec des niveaux de maturité variables.
+<Callout type="info" title="Community Google Calendar MCP">
+There is no official `@anthropic/mcp-google-calendar` package. Check the community projects available on npm by searching for "google calendar mcp." Several implementations exist with varying levels of maturity.
 </Callout>
 
-### Configuration JSON (exemple générique)
+### JSON configuration (generic example)
 
 ```json
 {
   "mcpServers": {
     "google-calendar": {
       "command": "npx",
-      "args": ["-y", "nom-du-package-calendar-mcp"],
+      "args": ["-y", "calendar-mcp-package-name"],
       "env": {
-        "GOOGLE_OAUTH_CLIENT_ID": "votre-client-id",
-        "GOOGLE_OAUTH_CLIENT_SECRET": "votre-client-secret",
-        "GOOGLE_OAUTH_REFRESH_TOKEN": "votre-refresh-token"
+        "GOOGLE_OAUTH_CLIENT_ID": "your-client-id",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_OAUTH_REFRESH_TOKEN": "your-refresh-token"
       }
     }
   }
@@ -132,61 +132,61 @@ Il n'existe pas de package `@anthropic/mcp-google-calendar` officiel. Vérifiez 
 
 ### Use cases
 
-- **Overview** : *"Montre-moi mon agenda de demain avec les détails de chaque réunion"*
-- **Planification intelligente** : *"Trouve un créneau libre d'une heure cette semaine pour une session de code review"*
-- **Préparation de réunion** : *"Regarde ma prochaine réunion et prépare-moi un résumé du contexte"*
+- **Daily overview**: *"Show me tomorrow's schedule with details for each meeting"*
+- **Smart scheduling**: *"Find a free one-hour slot this week for a code review session"*
+- **Meeting prep**: *"Look at my next meeting and prepare a context summary for me"*
 
-<Callout type="tip" title="Workflow combiné puissant">
-Combinez Google Calendar + Gmail + Slack pour un assistant de productivité complet : *"Regarde mon agenda de demain, prépare un brief pour chaque réunion basé sur les emails récents, et envoie-moi un résumé sur Slack."*
+<Callout type="tip" title="Powerful combined workflow">
+Combine Google Calendar + Gmail + Slack for a complete productivity assistant: *"Check my schedule for tomorrow, prepare a brief for each meeting based on recent emails, and send me a summary on Slack."*
 </Callout>
 
 ---
 
-## Figma : Design et maquettes
+## Figma: Design and mockups
 
-**Accédez à vos designs Figma directement depuis Claude Code.** Exportez des composants, analysez des maquettes et intégrez le design dans votre workflow de développement.
+**Access your Figma designs directly from Claude Code.** Export components, analyze mockups, and integrate design into your development workflow.
 
-<Callout type="info" title="MCP Figma officiel">
-Figma propose son propre MCP officiel. Vérifiez la documentation officielle de Figma (developer.figma.com) pour le nom du package et les instructions d'installation à jour. Il n'existe pas de package `@anthropic/mcp-figma`.
+<Callout type="info" title="Official Figma MCP">
+Figma offers its own official MCP. Check the official Figma documentation (developer.figma.com) for the current package name and installation instructions. There is no `@anthropic/mcp-figma` package.
 </Callout>
 
-### Configuration JSON (exemple générique)
+### JSON configuration (generic example)
 
 ```json
 {
   "mcpServers": {
     "figma": {
       "command": "npx",
-      "args": ["-y", "nom-du-package-figma-mcp"],
+      "args": ["-y", "figma-mcp-package-name"],
       "env": {
-        "FIGMA_ACCESS_TOKEN": "figd_votre-token-figma"
+        "FIGMA_ACCESS_TOKEN": "figd_your-figma-token"
       }
     }
   }
 }
 ```
 
-<Callout type="info" title="Obtenir un token Figma">
-Allez dans **Figma > Settings > Personal Access Tokens** pour générer un token. Accordez les permissions de lecture sur les fichiers dont vous avez besoin.
+<Callout type="info" title="Getting a Figma token">
+Go to **Figma > Settings > Personal Access Tokens** to generate a token. Grant read permissions on the files you need.
 </Callout>
 
 ### Use cases
 
-- **Analyser un design** : *"Regarde cette maquette Figma et décris-moi les composants, couleurs et spacings utilisés"*
-- **Générer du code depuis un design** : *"Transforme ce composant Figma en composant React avec Tailwind CSS"*
-- **Comparer implémentation et maquette** : *"Compare ma page actuelle avec la maquette Figma et liste les différences"*
+- **Analyze a design**: *"Look at this Figma mockup and describe the components, colors, and spacing used"*
+- **Generate code from a design**: *"Turn this Figma component into a React component with Tailwind CSS"*
+- **Compare implementation to mockup**: *"Compare my current page with the Figma mockup and list the differences"*
 
 ---
 
-## Lighthouse : Audit de performance web
+## Lighthouse: Web performance auditing
 
-**Lancez des audits Lighthouse directement depuis Claude Code.** Analysez les performances, l'accessibilité, le SEO et les bonnes pratiques de n'importe quel site web.
+**Run Lighthouse audits directly from Claude Code.** Analyze performance, accessibility, SEO, and best practices for any website.
 
 <Callout type="info" title="Lighthouse via Chrome DevTools MCP">
-Pour lancer des audits Lighthouse depuis Claude Code, la solution la plus robuste est d'utiliser le MCP Chrome DevTools (ou le MCP Playwright), qui intègre Lighthouse nativement. Il n'existe pas de package `@anthropic/mcp-lighthouse` officiel.
+To run Lighthouse audits from Claude Code, the most robust approach is to use the Chrome DevTools MCP (or the Playwright MCP), which includes Lighthouse natively. There is no official `@anthropic/mcp-lighthouse` package.
 </Callout>
 
-### Via le MCP Playwright (recommandé)
+### Via the Playwright MCP (recommended)
 
 ```json
 {
@@ -199,69 +199,69 @@ Pour lancer des audits Lighthouse depuis Claude Code, la solution la plus robust
 }
 ```
 
-Puis dans Claude Code :
+Then in Claude Code:
 ```bash
-"Lance un audit Lighthouse sur https://mon-site.fr et donne-moi un résumé des scores"
+"Run a Lighthouse audit on https://my-site.com and give me a summary of the scores"
 ```
 
 ### Use cases
 
-- **Audit complet** : *"Lance un audit Lighthouse sur ma page d'accueil et donne-moi les scores performance, accessibilité, SEO"*
-- **Optimisation ciblée** : *"Analyse la performance de ma page et propose des corrections concrètes"*
-- **Suivi d'amélioration** : *"Compare les scores Lighthouse avant et après mes modifications"*
+- **Full audit**: *"Run a Lighthouse audit on my homepage and give me the performance, accessibility, and SEO scores"*
+- **Targeted optimization**: *"Analyze my page's performance and suggest concrete fixes"*
+- **Improvement tracking**: *"Compare the Lighthouse scores before and after my changes"*
 
 ---
 
 ## Summary
 
-| MCP | Package vérifié | Auth requise | Meilleur pour |
-|-----|----------------|-------------|---------------|
-| **Gmail** | Communautaire (vérifier npm) | OAuth Google | Triage email, recherche, brouillons |
-| **Slack** | `@modelcontextprotocol/server-slack` | Bot Token | Communication d'équipe, veille |
-| **Google Calendar** | Communautaire (vérifier npm) | OAuth Google | Planning, organisation |
-| **Figma** | Officiel Figma (vérifier developer.figma.com) | Token personnel | Design-to-code, analyse de maquettes |
-| **Lighthouse** | Via Playwright MCP (`@playwright/mcp`) | Aucune | Audits web, optimisation performance |
+| MCP | Verified package | Auth required | Best for |
+|-----|-----------------|--------------|----------|
+| **Gmail** | Community (check npm) | Google OAuth | Email triage, search, drafts |
+| **Slack** | `@modelcontextprotocol/server-slack` | Bot Token | Team communication, monitoring |
+| **Google Calendar** | Community (check npm) | Google OAuth | Planning, organization |
+| **Figma** | Official Figma (check developer.figma.com) | Personal token | Design-to-code, mockup analysis |
+| **Lighthouse** | Via Playwright MCP (`@playwright/mcp`) | None | Web audits, performance optimization |
 
-## Limites et gotchas
+## Limitations and gotchas
 
-Avant de brancher ces MCP en production, gardez en tête leurs limites réelles.
+Before plugging these MCPs into production, keep their real limitations in mind.
 
-### Quotas API et rate limiting
+### API quotas and rate limiting
 
-- **Gmail** : l'API Google impose des quotas quotidiens (250 requêtes/seconde par défaut). Un usage intensif du triage automatique peut les atteindre.
-- **Slack** : les rate limits varient selon le type d'endpoint (Tier 1 à 4). L'envoi de messages est limité à environ 1 requête par seconde.
-- **Google Calendar** : mêmes quotas Google que Gmail. Les lectures sont plus permissives que les écritures.
-- **Figma** : le token personnel a des limites de requêtes. Les fichiers volumineux prennent du temps à analyser.
+- **Gmail**: Google's API enforces daily quotas (250 requests/second by default). Heavy use of automatic triage can hit them.
+- **Slack**: rate limits vary by endpoint type (Tier 1 through 4). Sending messages is limited to roughly 1 request per second.
+- **Google Calendar**: same Google quotas as Gmail. Reads are more permissive than writes.
+- **Figma**: the personal token has request limits. Large files take time to analyze.
 
-### Latence et fiabilité
+### Latency and reliability
 
-Les MCP de productivité dépendent d'APIs tierces. Si Slack est en panne, le MCP Slack aussi. Prévoyez des messages d'erreur clairs et ne comptez pas sur ces MCP pour des workflows critiques en temps réel.
+Productivity MCPs depend on third-party APIs. If Slack is down, the Slack MCP is too. Plan for clear error messages and don't rely on these MCPs for real-time critical workflows.
 
-### Cas de panne courants
+### Common failure cases
 
-- **Token expiré** : les tokens OAuth Google expirent régulièrement. Configurez un refresh token valide.
-- **Permissions insuffisantes** : un Bot Slack sans le scope `chat:write` ne pourra pas envoyer de messages, même si le MCP démarre correctement.
-- **Changement d'API** : les APIs tierces évoluent. Un MCP communautaire peut devenir incompatible du jour au lendemain.
+- **Expired token**: Google OAuth tokens expire regularly. Make sure you have a valid refresh token configured.
+- **Insufficient permissions**: a Slack Bot without the `chat:write` scope won't be able to send messages, even if the MCP starts correctly.
+- **API changes**: third-party APIs evolve. A community MCP can become incompatible overnight.
 
-### Évaluer un MCP tiers
+### Evaluating a third-party MCP
 
-Avant d'installer un MCP communautaire, vérifiez ces critères :
+Before installing a community MCP, check these criteria:
 
-| Critère | Ce qu'il faut regarder |
-|---------|----------------------|
-| **Maintenance** | Dernier commit récent, issues traitées, contributeurs actifs |
-| **Sécurité** | Audit du code source, pas de permissions excessives, pas de dépendances suspectes |
-| **Performance** | Temps de démarrage raisonnable, pas de fuites mémoire connues |
-| **Documentation** | README clair, exemples de configuration, changelog maintenu |
+| Criterion | What to look for |
+|-----------|-----------------|
+| **Maintenance** | Recent commits, issues being addressed, active contributors |
+| **Security** | Source code audit, no excessive permissions, no suspicious dependencies |
+| **Performance** | Reasonable startup time, no known memory leaks |
+| **Documentation** | Clear README, configuration examples, maintained changelog |
 
-<Callout type="tip" title="Registres MCP communautaires">
-Pour trouver et comparer des MCP, consultez [smithery.ai](https://smithery.ai) ou [glama.ai/mcp/servers](https://glama.ai/mcp/servers). Ces registres référencent les MCP disponibles avec leurs évaluations et statistiques d'utilisation.
+<Callout type="tip" title="Community MCP registries">
+To find and compare MCPs, check out [smithery.ai](https://smithery.ai) or [glama.ai/mcp/servers](https://glama.ai/mcp/servers). These registries list available MCPs with ratings and usage statistics.
 </Callout>
 
 ## Next steps
 
-- [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé et résolution des problèmes
-- [Top MCP développement](/mcp/best-development) : Context7, GitHub, Sentry, bases de données
-- [Top MCP design & UI](/mcp/best-design) : Playwright, Chrome DevTools, 21st.dev Magic
-- [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner plusieurs MCP dans un flux de travail
-- [Créer un MCP custom en TypeScript](/mcp/create-mcp-typescript) : Construisez votre propre MCP
+- [Install and configure an MCP](/mcp/setup): Detailed installation guide and troubleshooting
+- [Top development MCPs](/mcp/best-development): Context7, GitHub, Sentry, databases
+- [Top design & UI MCPs](/mcp/best-design): Playwright, Chrome DevTools, 21st.dev Magic
+- [Build your first MCP workflow](/mcp/first-workflow): Combine multiple MCPs in a workflow
+- [Create a custom MCP in TypeScript](/mcp/create-mcp-typescript): Build your own MCP

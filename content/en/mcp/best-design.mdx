@@ -7,36 +7,36 @@ datePublished: "2026-03-09"
 dateModified: "2026-03-11"
 ---
 
-## Les MCP pour voir et interagir avec le web
+## MCPs for seeing and interacting with the web
 
-Les MCP de design et UI donnent à Claude Code des **yeux** et des **mains** pour interagir avec le web. Prendre des screenshots, cliquer sur des boutons, remplir des formulaires, auditer des pages, générer des composants UI, tout devient possible directement depuis le terminal.
+Design and UI MCPs give Claude Code **eyes** and **hands** to interact with the web. Taking screenshots, clicking buttons, filling out forms, auditing pages, generating UI components -- all of this becomes possible directly from the terminal.
 
-<Callout type="info" title="Pourquoi ces MCP sont révolutionnaires">
-Sans ces MCP, Claude Code travaille "à l'aveugle" sur le web. Il peut écrire du HTML/CSS, mais il ne peut pas **voir** le résultat. Les MCP de cette catégorie lui permettent de vérifier visuellement son travail, de tester des interactions et de déboguer des problèmes d'affichage.
+<Callout type="info" title="Why these MCPs are game-changers">
+Without these MCPs, Claude Code works "blind" on the web. It can write HTML/CSS, but it can't **see** the result. MCPs in this category let it visually verify its work, test interactions, and debug display issues.
 </Callout>
 
 ---
 
-## Playwright : Tests E2E et automatisation web
+## Playwright: E2E testing and web automation
 
-**Le couteau suisse de l'automatisation web.** Playwright permet à Claude Code de naviguer sur des pages web, prendre des screenshots, remplir des formulaires, cliquer sur des éléments et exécuter des tests end-to-end complets.
+**The Swiss army knife of web automation.** Playwright lets Claude Code navigate web pages, take screenshots, fill out forms, click on elements, and run complete end-to-end tests.
 
-<Callout type="info" title="Package npm officiel Microsoft">
-Le MCP Playwright est publié par Microsoft sous `@playwright/mcp`. Son repo source est sur [github.com/microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp). Il s'agit d'un projet officiel Microsoft, pas `@anthropic/mcp-playwright`.
+<Callout type="info" title="Official Microsoft npm package">
+The Playwright MCP is published by Microsoft as `@playwright/mcp`. Its source repo is at [github.com/microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp). This is an official Microsoft project, not `@anthropic/mcp-playwright`.
 </Callout>
 
 ### Installation
 
 ```bash
-# Installer Playwright si ce n'est pas déjà fait
+# Install Playwright if you haven't already
 npm install -D @playwright/test
 npx playwright install
 
-# Ajouter le MCP
+# Add the MCP
 claude mcp add playwright -- npx -y @playwright/mcp
 ```
 
-### Configuration JSON
+### JSON configuration
 
 ```json
 {
@@ -49,43 +49,43 @@ claude mcp add playwright -- npx -y @playwright/mcp
 }
 ```
 
-### Outils disponibles
+### Available tools
 
-Playwright expose une riche collection d'outils :
+Playwright exposes a rich collection of tools:
 
-- **`browser_navigate`** : Naviguer vers une URL
-- **`browser_take_screenshot`** : Prendre un screenshot de la page
-- **`browser_snapshot`** : Capturer le DOM accessible de la page
-- **`browser_click`** : Cliquer sur un élément
-- **`browser_fill_form`** : Remplir un formulaire
-- **`browser_evaluate`** : Exécuter du JavaScript dans la page
-- **`browser_wait_for`** : Attendre un élément ou une condition
-- **`browser_network_requests`** : Observer les requêtes réseau
+- **`browser_navigate`**: Navigate to a URL
+- **`browser_take_screenshot`**: Take a page screenshot
+- **`browser_snapshot`**: Capture the accessible DOM of the page
+- **`browser_click`**: Click on an element
+- **`browser_fill_form`**: Fill out a form
+- **`browser_evaluate`**: Run JavaScript in the page
+- **`browser_wait_for`**: Wait for an element or condition
+- **`browser_network_requests`**: Monitor network requests
 
 ### Use cases
 
-- **Vérification visuelle** : *"Ouvre ma page d'accueil en local et prends un screenshot pour vérifier le rendu"*
-- **Test E2E complet** : *"Teste le formulaire d'inscription : remplis les champs, soumets le formulaire et vérifie le message de succès"*
-- **Debug responsive** : *"Prends un screenshot de ma page en mobile (375px) et en desktop (1440px) et compare les deux"*
-- **Audit d'accessibilité** : *"Navigue sur ma page de contact, fais un snapshot du DOM accessible et identifie les problèmes d'accessibilité"*
+- **Visual verification**: *"Open my homepage locally and take a screenshot to check the rendering"*
+- **Full E2E test**: *"Test the signup form: fill in the fields, submit the form, and verify the success message"*
+- **Responsive debugging**: *"Take a screenshot of my page at mobile (375px) and desktop (1440px) and compare the two"*
+- **Accessibility audit**: *"Navigate to my contact page, take an accessible DOM snapshot, and identify accessibility issues"*
 
 <Callout type="tip" title="Playwright vs Puppeteer">
-Playwright est le successeur spirituel de Puppeteer, développé par la même équipe (ex-Google, maintenant Microsoft). Il supporte Chromium, Firefox et WebKit, tandis que Puppeteer se limite à Chromium. **Recommandation** : utilisez Playwright par défaut, sauf si vous avez un besoin spécifique de Puppeteer.
+Playwright is the spiritual successor to Puppeteer, built by the same team (ex-Google, now at Microsoft). It supports Chromium, Firefox, and WebKit, while Puppeteer is limited to Chromium. **Recommendation**: use Playwright by default, unless you have a specific need for Puppeteer.
 </Callout>
 
 ---
 
-## Chrome DevTools : Debug web avancé
+## Chrome DevTools: Advanced web debugging
 
-**Accédez aux Chrome DevTools directement depuis Claude Code.** Inspectez le DOM, analysez les performances, surveillez les requêtes réseau et déboguez le JavaScript, le tout sans quitter votre terminal.
+**Access Chrome DevTools directly from Claude Code.** Inspect the DOM, analyze performance, monitor network requests, and debug JavaScript, all without leaving your terminal.
 
-<Callout type="info" title="Package npm communautaire">
-Il n'existe pas de package `@anthropic/mcp-chrome-devtools`. Le MCP Chrome DevTools est un projet communautaire. Vérifiez les packages disponibles sur npm en cherchant « chrome devtools mcp ». Une alternative est d'utiliser Playwright qui intègre les DevTools nativement.
+<Callout type="info" title="Community npm package">
+There is no `@anthropic/mcp-chrome-devtools` package. The Chrome DevTools MCP is a community project. Check the available packages on npm by searching for "chrome devtools mcp." An alternative is to use Playwright, which integrates DevTools natively.
 </Callout>
 
-### Via le MCP Playwright (recommandé)
+### Via the Playwright MCP (recommended)
 
-Le MCP Playwright couvre la majorité des cas d'usage de Chrome DevTools :
+The Playwright MCP covers the majority of Chrome DevTools use cases:
 
 ```json
 {
@@ -98,38 +98,38 @@ Le MCP Playwright couvre la majorité des cas d'usage de Chrome DevTools :
 }
 ```
 
-Playwright expose des outils équivalents aux DevTools :
+Playwright exposes DevTools-equivalent tools:
 
-- **`browser_evaluate`** : Exécuter du JavaScript dans le contexte de la page
-- **`browser_network_requests`** : Voir toutes les requêtes réseau
-- **`browser_console_messages`** : Lire les messages de la console
-- **`browser_take_screenshot`** : Capture d'écran
-- **`browser_resize`** : Simuler un appareil mobile (redimensionner le viewport)
+- **`browser_evaluate`**: Run JavaScript in the page context
+- **`browser_network_requests`**: See all network requests
+- **`browser_console_messages`**: Read console messages
+- **`browser_take_screenshot`**: Screen capture
+- **`browser_resize`**: Simulate a mobile device (resize the viewport)
 
 ### Use cases
 
-- **Debug JavaScript** : *"Ouvre ma page, exécute un script de test et montre-moi les erreurs de la console"*
-- **Analyse réseau** : *"Liste toutes les requêtes réseau de ma page et identifie celles qui prennent plus de 500ms"*
-- **Debug mobile** : *"Redimensionne le navigateur à 375px de large et prends un screenshot de ma page"*
+- **JavaScript debugging**: *"Open my page, run a test script, and show me the console errors"*
+- **Network analysis**: *"List all network requests on my page and identify those taking more than 500ms"*
+- **Mobile debugging**: *"Resize the browser to 375px wide and take a screenshot of my page"*
 
 ---
 
-## 21st.dev Magic : Composants UI modernes
+## 21st.dev Magic: Modern UI components
 
-**Générez des composants UI modernes et prêts à l'emploi directement depuis Claude Code.** 21st.dev Magic fournit des composants React inspirés par les meilleurs designs du web, avec support Tailwind CSS.
+**Generate modern, ready-to-use UI components directly from Claude Code.** 21st.dev Magic provides React components inspired by the best web designs, with Tailwind CSS support.
 
-<Callout type="info" title="Package npm officiel 21st.dev">
-Le package npm officiel est `@21st-dev/magic`, publié par 21st.dev. Il n'existe pas de package `@anthropic/mcp-21st-magic`. Une clé API est nécessaire, obtenez-la sur [21st.dev](https://21st.dev).
+<Callout type="info" title="Official 21st.dev npm package">
+The official npm package is `@21st-dev/magic`, published by 21st.dev. There is no `@anthropic/mcp-21st-magic` package. An API key is required -- get one at [21st.dev](https://21st.dev).
 </Callout>
 
 ### Installation
 
 ```bash
-# 21st.dev Magic nécessite une API key
-claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @21st-dev/magic
+# 21st.dev Magic requires an API key
+claude mcp add magic -e TWENTY_FIRST_API_KEY=your-key -- npx -y @21st-dev/magic
 ```
 
-### Configuration JSON
+### JSON configuration
 
 ```json
 {
@@ -138,49 +138,49 @@ claude mcp add magic -e TWENTY_FIRST_API_KEY=votre-clé -- npx -y @21st-dev/magi
       "command": "npx",
       "args": ["-y", "@21st-dev/magic"],
       "env": {
-        "TWENTY_FIRST_API_KEY": "votre-clé-21st-dev"
+        "TWENTY_FIRST_API_KEY": "your-21st-dev-key"
       }
     }
   }
 }
 ```
 
-### Outils disponibles
+### Available tools
 
-- **`21st_magic_component_builder`** : Générer un composant UI à partir d'une description
-- **`21st_magic_component_inspiration`** : Trouver de l'inspiration parmi des composants existants
-- **`21st_magic_component_refiner`** : Améliorer un composant existant
-- **`logo_search`** : Rechercher des logos de marques
+- **`21st_magic_component_builder`**: Generate a UI component from a description
+- **`21st_magic_component_inspiration`**: Find inspiration from existing components
+- **`21st_magic_component_refiner`**: Improve an existing component
+- **`logo_search`**: Search for brand logos
 
 ### Use cases
 
-- **Création rapide** : *"Crée un composant de pricing table avec 3 plans, des badges et un bouton CTA"*
-- **Inspiration** : *"Montre-moi des exemples de hero sections modernes pour un site SaaS"*
-- **Raffinement** : *"Prends ce composant Card et améliore-le avec des animations hover et un meilleur espacement"*
-- **Prototypage** : *"Génère une page de login complète avec formulaire, validation et gestion d'erreurs"*
+- **Rapid creation**: *"Create a pricing table component with 3 plans, badges, and a CTA button"*
+- **Inspiration**: *"Show me examples of modern hero sections for a SaaS site"*
+- **Refinement**: *"Take this Card component and improve it with hover animations and better spacing"*
+- **Prototyping**: *"Generate a complete login page with a form, validation, and error handling"*
 
-<Callout type="tip" title="Workflow design-to-code accéléré">
-Combinez 21st.dev Magic + Playwright : générez un composant avec Magic, puis utilisez Playwright pour vérifier visuellement le rendu et itérer jusqu'au résultat parfait.
+<Callout type="tip" title="Accelerated design-to-code workflow">
+Combine 21st.dev Magic + Playwright: generate a component with Magic, then use Playwright to visually verify the rendering and iterate until the result is perfect.
 </Callout>
 
 ---
 
-## Puppeteer : Scraping et screenshots
+## Puppeteer: Scraping and screenshots
 
-**Automatisez Chrome pour le scraping, les screenshots et les tests.** Puppeteer est l'outil historique de Google pour contrôler Chrome programmatiquement.
+**Automate Chrome for scraping, screenshots, and testing.** Puppeteer is Google's long-standing tool for controlling Chrome programmatically.
 
-<Callout type="info" title="Package npm officiel vérifié">
-Le MCP Puppeteer est disponible dans le repository officiel MCP d'Anthropic. Le package est `@modelcontextprotocol/server-puppeteer`, disponible sur [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers). Il n'existe pas de package `@anthropic/mcp-puppeteer`.
+<Callout type="info" title="Verified official npm package">
+The Puppeteer MCP is available in Anthropic's official MCP repository. The package is `@modelcontextprotocol/server-puppeteer`, available at [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers). There is no `@anthropic/mcp-puppeteer` package.
 </Callout>
 
 ### Installation
 
 ```bash
-# Via la commande Claude
+# Via the Claude command
 claude mcp add puppeteer -- npx -y @modelcontextprotocol/server-puppeteer
 ```
 
-### Configuration JSON
+### JSON configuration
 
 ```json
 {
@@ -193,76 +193,76 @@ claude mcp add puppeteer -- npx -y @modelcontextprotocol/server-puppeteer
 }
 ```
 
-### Outils disponibles
+### Available tools
 
-- **`puppeteer_navigate`** : Naviguer vers une URL
-- **`puppeteer_screenshot`** : Prendre un screenshot
-- **`puppeteer_click`** : Cliquer sur un élément
-- **`puppeteer_fill`** : Remplir un champ de formulaire
-- **`puppeteer_evaluate`** : Exécuter du JavaScript
-- **`puppeteer_select`** : Sélectionner une option dans un menu déroulant
-- **`puppeteer_hover`** : Survoler un élément
+- **`puppeteer_navigate`**: Navigate to a URL
+- **`puppeteer_screenshot`**: Take a screenshot
+- **`puppeteer_click`**: Click on an element
+- **`puppeteer_fill`**: Fill a form field
+- **`puppeteer_evaluate`**: Run JavaScript
+- **`puppeteer_select`**: Select an option from a dropdown
+- **`puppeteer_hover`**: Hover over an element
 
 ### Use cases
 
-- **Web scraping** : *"Navigue sur ce site, extrait tous les prix des produits et présente-les dans un tableau"*
-- **Screenshots comparatifs** : *"Prends un screenshot de la page avant et après mes changements CSS"*
-- **Tests visuels** : *"Vérifie que le bouton 'Ajouter au panier' est visible et cliquable sur la page produit"*
+- **Web scraping**: *"Navigate to this site, extract all product prices, and present them in a table"*
+- **Comparative screenshots**: *"Take a screenshot of the page before and after my CSS changes"*
+- **Visual testing**: *"Verify that the 'Add to cart' button is visible and clickable on the product page"*
 
 ---
 
-## Comparatif : quel MCP choisir ?
+## Comparison: which MCP to choose?
 
-| Critère | Playwright | Chrome DevTools (via PW) | 21st.dev Magic | Puppeteer |
-|---------|-----------|--------------------------|---------------|-----------|
-| **Type** | Automatisation web | Debug avancé | Génération UI | Automatisation Chrome |
-| **Navigateurs** | Chromium, Firefox, WebKit | Chrome / Chromium | N/A (API) | Chromium uniquement |
-| **Package vérifié** | `@playwright/mcp` | Via `@playwright/mcp` | `@21st-dev/magic` | `@modelcontextprotocol/server-puppeteer` |
-| **Force** | Tests E2E, multi-navigateur | Console, réseau | Composants design modernes | Scraping, simplicité |
-| **Difficulté** | Débutant | Intermédiaire | Débutant (clé API requise) | Débutant |
+| Criterion | Playwright | Chrome DevTools (via PW) | 21st.dev Magic | Puppeteer |
+|-----------|-----------|--------------------------|---------------|-----------|
+| **Type** | Web automation | Advanced debugging | UI generation | Chrome automation |
+| **Browsers** | Chromium, Firefox, WebKit | Chrome / Chromium | N/A (API) | Chromium only |
+| **Verified package** | `@playwright/mcp` | Via `@playwright/mcp` | `@21st-dev/magic` | `@modelcontextprotocol/server-puppeteer` |
+| **Strength** | E2E testing, multi-browser | Console, network | Modern design components | Scraping, simplicity |
+| **Difficulty** | Beginner | Intermediate | Beginner (API key required) | Beginner |
 
 <Callout type="info" title="Recommendation">
-Pour la plupart des projets, **Playwright + 21st.dev Magic** est la combinaison idéale. Playwright pour tester et vérifier visuellement, 21st.dev Magic pour générer des composants de qualité. Puppeteer reste utile pour des cas de scraping spécifiques où vous n'avez besoin que de Chromium.
+For most projects, **Playwright + 21st.dev Magic** is the ideal combination. Playwright for testing and visual verification, 21st.dev Magic for generating quality components. Puppeteer remains useful for specific scraping cases where you only need Chromium.
 </Callout>
 
-## Limites et gotchas
+## Limitations and gotchas
 
-Ces MCP interagissent avec des navigateurs et des services externes. Voici les limites à connaître.
+These MCPs interact with browsers and external services. Here are the limitations to be aware of.
 
-### Quotas et ressources
+### Quotas and resources
 
-- **Playwright et Puppeteer** : pas de quotas API, mais chaque instance de navigateur consomme 200-500 MB de RAM. Si vous lancez plusieurs tests en parallèle, la mémoire peut saturer.
-- **21st.dev Magic** : soumis aux limites de votre plan (nombre de requêtes/mois). Les composants complexes consomment plus de crédits.
-- **Chrome DevTools** : même limite mémoire que Playwright, puisqu'il utilise un navigateur.
+- **Playwright and Puppeteer**: no API quotas, but each browser instance consumes 200-500 MB of RAM. Running multiple tests in parallel can exhaust memory.
+- **21st.dev Magic**: subject to your plan limits (number of requests/month). Complex components consume more credits.
+- **Chrome DevTools**: same memory limits as Playwright, since it uses a browser.
 
-### Latence et fiabilité
+### Latency and reliability
 
-- **Screenshots** : prendre un screenshot nécessite le rendu complet de la page. Les pages lourdes (SPA avec beaucoup de JS) peuvent prendre 3 à 10 secondes.
-- **Navigateurs headless** : certains sites bloquent les navigateurs headless (anti-bot). Les tests peuvent échouer sur des sites tiers protégés.
-- **21st.dev Magic** : la génération de composants passe par une API cloud. La latence dépend de la complexité du composant demandé (1 à 15 secondes).
+- **Screenshots**: taking a screenshot requires full page rendering. Heavy pages (SPAs with lots of JS) can take 3 to 10 seconds.
+- **Headless browsers**: some sites block headless browsers (anti-bot). Tests may fail on protected third-party sites.
+- **21st.dev Magic**: component generation goes through a cloud API. Latency depends on the complexity of the requested component (1 to 15 seconds).
 
-### Cas de panne courants
+### Common failure cases
 
-- **Playwright non installé** : le MCP nécessite que les navigateurs soient installés localement. Exécutez `npx playwright install` si les tests échouent avec "browser not found".
-- **Port occupé** : Playwright et Puppeteer tentent d'ouvrir un port pour le navigateur. Si le port est déjà pris, le MCP plante.
-- **Clé 21st.dev expirée** : le MCP démarre mais chaque appel retourne une erreur 401.
+- **Playwright not installed**: the MCP requires browsers to be installed locally. Run `npx playwright install` if tests fail with "browser not found."
+- **Port in use**: Playwright and Puppeteer try to open a port for the browser. If the port is already taken, the MCP crashes.
+- **Expired 21st.dev key**: the MCP starts but every call returns a 401 error.
 
-### Évaluer un MCP tiers
+### Evaluating a third-party MCP
 
-| Critère | Ce qu'il faut regarder |
-|---------|----------------------|
-| **Maintenance** | Compatibilité avec les dernières versions des navigateurs, mises à jour régulières |
-| **Sécurité** | Pas d'accès réseau non déclaré, exécution sandboxée si possible |
-| **Performance** | Gestion propre des instances de navigateur (ouverture/fermeture), pas de fuites mémoire |
-| **Documentation** | Liste complète des tools, captures d'écran d'exemple, prérequis système |
+| Criterion | What to look for |
+|-----------|-----------------|
+| **Maintenance** | Compatibility with latest browser versions, regular updates |
+| **Security** | No undeclared network access, sandboxed execution if possible |
+| **Performance** | Clean browser instance management (open/close), no memory leaks |
+| **Documentation** | Complete tools list, example screenshots, system requirements |
 
-<Callout type="tip" title="Registres MCP communautaires">
-Pour trouver des MCP design et UI supplémentaires, consultez [smithery.ai](https://smithery.ai) ou [glama.ai/mcp/servers](https://glama.ai/mcp/servers). Vous y trouverez des alternatives et des MCP spécialisés (Storybook, Chromatic, etc.).
+<Callout type="tip" title="Community MCP registries">
+To find additional design and UI MCPs, check out [smithery.ai](https://smithery.ai) or [glama.ai/mcp/servers](https://glama.ai/mcp/servers). You'll find alternatives and specialized MCPs (Storybook, Chromatic, etc.).
 </Callout>
 
 ## Next steps
 
-- [Créer son premier workflow MCP](/mcp/first-workflow) : Combiner plusieurs MCP dans un flux de travail concret
-- [Top MCP productivité](/mcp/best-productivity) : Gmail, Slack, Calendar, Figma
-- [Installer et configurer un MCP](/mcp/setup) : Guide d'installation détaillé
-- [Créer un MCP custom en TypeScript](/mcp/create-mcp-typescript) : Construisez votre propre MCP
+- [Build your first MCP workflow](/mcp/first-workflow): Combine multiple MCPs in a practical workflow
+- [Top productivity MCPs](/mcp/best-productivity): Gmail, Slack, Calendar, Figma
+- [Install and configure an MCP](/mcp/setup): Detailed installation guide
+- [Create a custom MCP in TypeScript](/mcp/create-mcp-typescript): Build your own MCP

@@ -734,7 +734,7 @@ export default async function FuturePage({
               className="group inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:border-slate-500 hover:bg-white/5"
             >
               <Rocket className="h-4 w-4" aria-hidden="true" />
-              Commencer le guide
+              {t.startGuide}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
           </div>

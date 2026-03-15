@@ -168,7 +168,7 @@ export default async function PersonasSlugPage({
       {/* Content */}
       <section className="py-12 sm:py-16">
         <div className="px-4 sm:px-6 lg:px-0">
-          <MdxRenderer source={content} />
+          <MdxRenderer source={content} locale={resolvedParams.locale} />
         </div>
       </section>
 

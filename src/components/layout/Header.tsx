@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ThemeToggle } from "./ThemeToggle";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Logo } from "./Logo";
 import { SearchDialog } from "@/components/ui/SearchDialog";
 import {
@@ -166,6 +167,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <SearchDialog />
+          <LanguageSwitcher />
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}

@@ -178,5 +178,144 @@
     "label": "Language",
     "fr": "Français",
     "en": "English"
+  },
+  "sectionNav": {
+    "getting-started": {
+      "title": "Getting Started",
+      "overview": "Overview",
+      "prerequisites-zero": "Prerequisites for beginners",
+      "what-is-claude-code": "What is Claude Code?",
+      "installation": "Prerequisites & installation",
+      "environment-setup": "Environment setup",
+      "first-project": "First project step by step",
+      "faq-beginner": "FAQ for beginners"
+    },
+    "mcp": {
+      "title": "MCP",
+      "overview": "Overview",
+      "what-are-mcps": "Understanding MCPs",
+      "setup": "Install & configure",
+      "best-productivity": "Top productivity MCPs",
+      "best-development": "Top development MCPs",
+      "best-design": "Top design & UI MCPs",
+      "first-workflow": "First MCP workflow",
+      "securite-mcp": "MCP security",
+      "create-mcp-typescript": "Create a TypeScript MCP",
+      "create-mcp-python": "Create a Python MCP",
+      "advanced-protocol": "Advanced MCP protocol"
+    },
+    "plugins": {
+      "title": "Plugins",
+      "overview": "Overview",
+      "what-are-plugins": "Understanding plugins",
+      "setup": "Install & manage",
+      "best-essential": "Top essential plugins",
+      "best-design": "Design & frontend plugins",
+      "best-security": "Security & quality plugins"
+    },
+    "skills": {
+      "title": "Skills",
+      "overview": "Overview",
+      "what-are-skills": "What is a Skill?",
+      "best-skills": "Top recommended Skills",
+      "create-custom": "Create a custom Skill",
+      "comparison": "Skills vs MCP vs Plugins"
+    },
+    "agents": {
+      "title": "Agents",
+      "overview": "Overview",
+      "what-are-agents": "Understanding agents",
+      "create-subagent": "Create a subagent",
+      "agent-teams": "Agent Teams",
+      "best-agents": "Top agents by use case",
+      "orchestration": "Advanced orchestration",
+      "agent-sdk": "Claude Agent SDK",
+      "performance-limits": "Performance & limits"
+    },
+    "prompting": {
+      "title": "Prompting",
+      "overview": "Overview",
+      "basics": "Prompting basics",
+      "directives": "Advanced directives",
+      "templates": "Templates by profession",
+      "mistakes": "Mistakes to avoid",
+      "claude-md": "CLAUDE.md guide",
+      "advanced": "Advanced prompting",
+      "context-management": "Context management",
+      "thinking-and-planning": "Extended Thinking & Plan Mode",
+      "chaining-and-agents": "Chaining & multi-agents",
+      "non-dev-prompting": "Prompting for non-developers"
+    },
+    "future": {
+      "title": "Vision",
+      "overview": "Overview",
+      "why-ai-matters": "AI and the future of development",
+      "trends-2026": "AI trends 2026",
+      "roadmap": "Project roadmap"
+    },
+    "configurator": {
+      "title": "Configurator",
+      "interactive": "Interactive configurator"
+    },
+    "use-cases": {
+      "title": "Use Cases",
+      "overview": "Overview",
+      "business": "8 business use cases",
+      "success-stories": "Success stories",
+      "no-code": "No-code tutorials"
+    },
+    "enterprise": {
+      "title": "Enterprise",
+      "overview": "Overview",
+      "security-compliance": "Security & compliance",
+      "team-adoption": "Team adoption guide",
+      "tco-calculator": "TCO calculator",
+      "faq": "Enterprise FAQ",
+      "governance": "Governance & roles"
+    },
+    "advanced": {
+      "title": "Advanced",
+      "overview": "Overview",
+      "hooks": "Hooks system",
+      "headless-ci": "Headless mode & CI/CD",
+      "multi-provider": "Multi-provider & Enterprise"
+    },
+    "reference": {
+      "title": "Reference",
+      "overview": "Overview",
+      "cheatsheet": "Cheatsheet: Quick reference",
+      "cli": "CLI: All flags",
+      "settings": "settings.json: Configuration",
+      "environment": "Environment variables"
+    },
+    "limits": {
+      "title": "Limits",
+      "overview": "Overview",
+      "known-limitations": "Known limitations",
+      "vs-copilot": "Claude Code vs Copilot",
+      "vs-cursor": "Claude Code vs Cursor",
+      "when-not-to-use": "When NOT to use Claude Code"
+    },
+    "personas": {
+      "title": "Paths",
+      "overview": "Overview",
+      "developer": "Developer path",
+      "team-lead": "Tech lead path",
+      "non-dev": "Non-developer path",
+      "freelance": "Freelance path",
+      "student": "Student path"
+    },
+    "content": {
+      "title": "Articles",
+      "all-articles": "All articles",
+      "getting-started-intro": "Introduction to Claude Code",
+      "mcp-guide": "Complete MCP guide",
+      "skills-guide": "Complete Skills guide",
+      "prompting-guide": "Prompting guide",
+      "future-vision": "Vision & AI trends",
+      "couts-reels": "Real costs of Claude Code",
+      "mythes": "8 myths about Claude Code",
+      "securite": "Security guide"
+    }
   }
 }

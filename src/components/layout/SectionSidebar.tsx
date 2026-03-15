@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   sectionNavigation,
   getSectionFromPathname,
@@ -18,6 +19,7 @@ export function SectionSidebar() {
   const locale = getLocaleFromPathname(pathname);
   const strippedPathname = stripLocaleFromPathname(pathname);
   const sectionKey = getSectionFromPathname(pathname);
+  const t = useTranslations("sectionNav");
 
   if (!sectionKey) {
     return null;
@@ -33,14 +35,16 @@ export function SectionSidebar() {
     return null;
   }
 
+  const title = t(config.titleKey);
+
   return (
     <aside
-      aria-label={`Navigation ${config.title}`}
+      aria-label={`Navigation ${title}`}
       className="hidden lg:block"
     >
       <nav className="sticky top-24">
         <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
-          {config.title}
+          {title}
         </h3>
         <ul className="space-y-1">
           {config.items.map((item) => {
@@ -61,7 +65,7 @@ export function SectionSidebar() {
                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                   )}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               </li>
             );

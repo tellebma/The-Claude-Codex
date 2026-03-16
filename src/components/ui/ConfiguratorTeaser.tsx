@@ -1,13 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { ArrowRight, Settings, Cpu, Wand2 } from "lucide-react";
-import { getLocaleFromPathname, prefixWithLocale } from "@/lib/locale-utils";
+import { Link } from "@/i18n/navigation";
 
 export function ConfiguratorTeaser() {
-  const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
   return (
     <div className="glass-card relative overflow-hidden p-8 sm:p-10 lg:p-12">
       {/* Background decorative gradient */}
@@ -63,7 +59,7 @@ export function ConfiguratorTeaser() {
         {/* Right: CTA */}
         <div className="mt-8 shrink-0 lg:ml-10 lg:mt-0">
           <Link
-            href={prefixWithLocale("/configurator", locale)}
+            href="/configurator"
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-500/30"
           >
             Lancer le configurateur

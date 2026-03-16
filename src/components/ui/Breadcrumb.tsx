@@ -1,19 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useMemo } from "react";
 import { ChevronRight, Home } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import {
   createBreadcrumbSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
-import {
-  getLocaleFromPathname,
-  stripLocaleFromPathname,
-  prefixWithLocale,
-} from "@/lib/locale-utils";
 
 interface BreadcrumbSegment {
   readonly label: string;
@@ -22,11 +16,9 @@ interface BreadcrumbSegment {
 
 function buildBreadcrumbs(
   pathname: string,
-  locale: string,
   getSectionLabel: (segment: string) => string
 ): ReadonlyArray<BreadcrumbSegment> {
-  const strippedPathname = stripLocaleFromPathname(pathname);
-  const segments = strippedPathname.split("/").filter(Boolean);
+  const segments = pathname.split("/").filter(Boolean);
   const breadcrumbs: BreadcrumbSegment[] = [];
 
   let currentPath = "";
@@ -35,7 +27,7 @@ function buildBreadcrumbs(
     const label = getSectionLabel(segment);
     breadcrumbs.push({
       label,
-      href: prefixWithLocale(currentPath, locale),
+      href: currentPath,
     });
   }
 
@@ -51,8 +43,6 @@ function buildBreadcrumbs(
  */
 export function Breadcrumb() {
   const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
-  const strippedPathname = stripLocaleFromPathname(pathname);
   const t = useTranslations("breadcrumb");
 
   const getSectionLabel = useMemo(() => {
@@ -69,17 +59,17 @@ export function Breadcrumb() {
 
   const breadcrumbs = useMemo(
     () =>
-      strippedPathname === "/"
+      pathname === "/"
         ? []
-        : buildBreadcrumbs(pathname, locale, getSectionLabel),
-    [pathname, locale, strippedPathname, getSectionLabel]
+        : buildBreadcrumbs(pathname, getSectionLabel),
+    [pathname, getSectionLabel]
   );
 
   const breadcrumbJsonLd = useMemo(() => {
     if (breadcrumbs.length === 0) return null;
 
     const items = [
-      { name: t("home"), href: prefixWithLocale("/", locale) },
+      { name: t("home"), href: "/" },
       ...breadcrumbs.map((crumb) => ({
         name: crumb.label,
         href: crumb.href,
@@ -87,9 +77,9 @@ export function Breadcrumb() {
     ];
 
     return serializeJsonLd(createBreadcrumbSchema(items));
-  }, [breadcrumbs, locale, t]);
+  }, [breadcrumbs, t]);
 
-  if (strippedPathname === "/" || breadcrumbs.length === 0) {
+  if (pathname === "/" || breadcrumbs.length === 0) {
     return null;
   }
 
@@ -107,7 +97,7 @@ export function Breadcrumb() {
         <ol className="flex flex-wrap items-center gap-1 text-sm">
           <li>
             <Link
-              href={prefixWithLocale("/", locale)}
+              href="/"
               className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
               aria-label={t("home")}
             >

@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useRef, useCallback, useId, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { glossaryTerms } from "@/data/glossary";
-import { getLocaleFromPathname, prefixWithLocale } from "@/lib/locale-utils";
+import { Link } from "@/i18n/navigation";
 import clsx from "clsx";
 
 interface GlossaryTooltipProps {
@@ -29,8 +27,6 @@ interface GlossaryTooltipProps {
 export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
   const [isOpen, setIsOpen] = useState(false);
   const tooltipId = useId();
-  const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const glossaryEntry = glossaryTerms.find(
@@ -138,7 +134,7 @@ export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
           </span>
           {glossaryEntry.link && (
             <Link
-              href={prefixWithLocale(glossaryEntry.link, locale)}
+              href={glossaryEntry.link}
               className={clsx(
                 "mt-3 block text-xs font-medium text-brand-400",
                 "hover:text-brand-300 hover:underline underline-offset-2",

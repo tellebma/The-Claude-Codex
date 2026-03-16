@@ -1,23 +1,15 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import {
   sectionNavigation,
   getSectionFromPathname,
 } from "@/lib/section-navigation";
-import {
-  getLocaleFromPathname,
-  stripLocaleFromPathname,
-  prefixWithLocale,
-} from "@/lib/locale-utils";
 import clsx from "clsx";
 
 export function SectionSidebar() {
   const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
-  const strippedPathname = stripLocaleFromPathname(pathname);
   const sectionKey = getSectionFromPathname(pathname);
   const t = useTranslations("sectionNav");
 
@@ -49,14 +41,14 @@ export function SectionSidebar() {
         <ul className="space-y-1">
           {config.items.map((item) => {
             // Normalize paths for comparison (handle trailing slashes)
-            const normalizedPathname = strippedPathname.replace(/\/$/, "");
+            const normalizedPathname = pathname.replace(/\/$/, "");
             const normalizedHref = item.href.replace(/\/$/, "");
             const isActive = normalizedPathname === normalizedHref;
 
             return (
               <li key={item.href}>
                 <Link
-                  href={prefixWithLocale(item.href, locale)}
+                  href={item.href}
                   aria-current={isActive ? "page" : undefined}
                   className={clsx(
                     "block rounded-lg px-3 py-2 text-sm transition-colors",

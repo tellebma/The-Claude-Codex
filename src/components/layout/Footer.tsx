@@ -1,14 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Terminal, Github, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { CopyrightYear } from "@/components/ui/CopyrightYear";
-import {
-  getLocaleFromPathname,
-  prefixWithLocale,
-} from "@/lib/locale-utils";
 
 const guidesNavKeys = [
   { key: "gettingStarted", href: "/getting-started" },
@@ -48,8 +43,6 @@ const resourcesLinks = [
 ] as const;
 
 export function Footer() {
-  const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
   const tNav = useTranslations("navigation");
   const tFooter = useTranslations("footer");
   const tCommon = useTranslations("common");
@@ -60,7 +53,7 @@ export function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
           <div className="sm:col-span-2">
             <Link
-              href={prefixWithLocale("/", locale)}
+              href="/"
               className="flex items-center gap-2 text-lg font-bold"
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500">
@@ -84,7 +77,7 @@ export function Footer() {
               {guidesNavKeys.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={prefixWithLocale(link.href, locale)}
+                    href={link.href}
                     className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
                     {tNav(link.key)}
@@ -102,7 +95,7 @@ export function Footer() {
               {outilsNavKeys.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={prefixWithLocale(link.href, locale)}
+                    href={link.href}
                     className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
                     {tNav(link.key)}
@@ -134,7 +127,7 @@ export function Footer() {
                     </a>
                   ) : (
                     <Link
-                      href={prefixWithLocale(link.href, locale)}
+                      href={link.href}
                       className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                     >
                       {tFooter(link.key)}

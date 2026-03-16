@@ -222,7 +222,7 @@ export default async function HomePage({
                 title={tFeatures("connectTools.title")}
                 description={tFeatures("connectTools.description")}
                 gradient="purple"
-                href={l("/mcp")}
+                href="/mcp"
               />
             </div>
             <FeatureCard
@@ -310,7 +310,7 @@ export default async function HomePage({
                 tPaths("beginner.items.2"),
                 tPaths("beginner.items.3"),
               ]}
-              href={l("/getting-started")}
+              href="/getting-started"
               color="teal"
             />
             <PathCard
@@ -324,7 +324,7 @@ export default async function HomePage({
                 tPaths("intermediate.items.2"),
                 tPaths("intermediate.items.3"),
               ]}
-              href={l("/mcp")}
+              href="/mcp"
               color="amber"
             />
             <PathCard
@@ -338,7 +338,7 @@ export default async function HomePage({
                 tPaths("advanced.items.2"),
                 tPaths("advanced.items.3"),
               ]}
-              href={l("/prompting")}
+              href="/prompting"
               color="purple"
             />
           </StaggerChildren>

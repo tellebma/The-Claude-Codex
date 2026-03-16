@@ -1,19 +1,13 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Logo } from "./Logo";
 import { SearchDialog } from "@/components/ui/SearchDialog";
-import {
-  getLocaleFromPathname,
-  stripLocaleFromPathname,
-  prefixWithLocale,
-} from "@/lib/locale-utils";
 import clsx from "clsx";
 
 const primaryNavKeys = [
@@ -40,21 +34,15 @@ const allNavKeys = [...primaryNavKeys, ...secondaryNavKeys];
 
 const MOBILE_MENU_ID = "mobile-nav-menu";
 
-function MoreDropdown({
-  pathname,
-  locale,
-}: {
-  readonly pathname: string;
-  readonly locale: string;
-}) {
+function MoreDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const t = useTranslations("navigation");
-  const strippedPathname = stripLocaleFromPathname(pathname);
+  const pathname = usePathname();
   const isSecondaryActive = secondaryNavKeys.some(
     (item) =>
-      strippedPathname === item.href ||
-      strippedPathname.startsWith(item.href + "/")
+      pathname === item.href ||
+      pathname.startsWith(item.href + "/")
   );
 
   useEffect(() => {
@@ -100,12 +88,12 @@ function MoreDropdown({
         <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-slate-200/60 bg-white/95 py-1 shadow-lg backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/95">
           {secondaryNavKeys.map((item) => {
             const isActive =
-              strippedPathname === item.href ||
-              strippedPathname.startsWith(item.href + "/");
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
-                href={prefixWithLocale(item.href, locale)}
+                href={item.href}
                 onClick={() => setOpen(false)}
                 className={clsx(
                   "flex min-h-[44px] items-center px-4 text-sm font-medium transition-colors",
@@ -127,8 +115,6 @@ function MoreDropdown({
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
-  const strippedPathname = stripLocaleFromPathname(pathname);
   const t = useTranslations("navigation");
 
   return (
@@ -138,7 +124,7 @@ export function Header() {
         className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]"
       >
         <Link
-          href={prefixWithLocale("/", locale)}
+          href="/"
           aria-label="The Claude Codex"
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
@@ -151,12 +137,12 @@ export function Header() {
         <div className="hidden items-center gap-1 lg:flex">
           {primaryNavKeys.map((item) => {
             const isActive =
-              strippedPathname === item.href ||
-              strippedPathname.startsWith(item.href + "/");
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
-                href={prefixWithLocale(item.href, locale)}
+                href={item.href}
                 aria-current={isActive ? "page" : undefined}
                 className={clsx(
                   "inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
@@ -169,7 +155,7 @@ export function Header() {
               </Link>
             );
           })}
-          <MoreDropdown pathname={pathname} locale={locale} />
+          <MoreDropdown />
         </div>
 
         <div className="flex items-center gap-2">
@@ -204,12 +190,12 @@ export function Header() {
         <div className="space-y-1 px-4 py-3">
           {allNavKeys.map((item) => {
             const isActive =
-              strippedPathname === item.href ||
-              strippedPathname.startsWith(item.href + "/");
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
-                href={prefixWithLocale(item.href, locale)}
+                href={item.href}
                 onClick={() => setMobileOpen(false)}
                 aria-current={isActive ? "page" : undefined}
                 className={clsx(

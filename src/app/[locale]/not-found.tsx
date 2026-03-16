@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   Home,
   BookOpen,
@@ -9,37 +9,35 @@ import {
   Search,
   Terminal,
 } from "lucide-react";
-import { useTranslations, useLocale } from "next-intl";
-import { prefixWithLocale } from "@/lib/locale-utils";
+import { useTranslations } from "next-intl";
 import { NotFoundAnimation } from "@/components/ui/NotFoundAnimation";
 
 export default function NotFound() {
   const tCommon = useTranslations("common");
   const tNav = useTranslations("navigation");
-  const locale = useLocale();
 
   const suggestedLinks = [
     {
       name: tCommon("home"),
-      href: prefixWithLocale("/", locale),
+      href: "/",
       icon: Home,
       description: tCommon("backToHome"),
     },
     {
       name: tNav("gettingStarted"),
-      href: prefixWithLocale("/getting-started", locale),
+      href: "/getting-started",
       icon: BookOpen,
       description: "",
     },
     {
       name: tNav("mcp"),
-      href: prefixWithLocale("/mcp", locale),
+      href: "/mcp",
       icon: Puzzle,
       description: "",
     },
     {
       name: tNav("prompting"),
-      href: prefixWithLocale("/prompting", locale),
+      href: "/prompting",
       icon: MessageSquare,
       description: "",
     },
@@ -139,7 +137,7 @@ export default function NotFound() {
         {/* Back to home CTA */}
         <div className="mt-12">
           <Link
-            href={prefixWithLocale("/", locale)}
+            href="/"
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
           >
             <Home className="h-4 w-4" aria-hidden="true" />

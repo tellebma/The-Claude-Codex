@@ -2,8 +2,10 @@
 
 import { ArrowRight, Settings, Cpu, Wand2 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export function ConfiguratorTeaser() {
+  const t = useTranslations("configuratorTeaser");
   return (
     <div className="glass-card relative overflow-hidden p-8 sm:p-10 lg:p-12">
       {/* Background decorative gradient */}
@@ -30,28 +32,26 @@ export function ConfiguratorTeaser() {
         {/* Center: Text */}
         <div className="flex-1">
           <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Configurez votre{" "}
-            <span className="text-gradient">environnement idéal</span>
+            {t("title")}{" "}
+            <span className="text-gradient">{t("titleHighlight")}</span>
           </h3>
           <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300 sm:text-lg">
-            Répondez à quelques questions simples et obtenez une configuration
-            Claude Code personnalisée : MCP recommandés, fichier CLAUDE.md
-            généré, et conseils adaptés à votre profil.
+            {t("description")}
           </p>
 
           {/* Mini feature pills */}
           <div className="mt-5 flex flex-wrap justify-center gap-2 lg:justify-start">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-700 dark:text-brand-400">
               <Wand2 className="h-3 w-3" aria-hidden="true" />
-              Configuration guidée
+              {t("pillGuided")}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-accent-500/10 px-3 py-1 text-xs font-medium text-accent-700 dark:text-accent-400">
               <Cpu className="h-3 w-3" aria-hidden="true" />
-              MCP recommandés
+              {t("pillMcp")}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-violet-500/10 px-3 py-1 text-xs font-medium text-violet-700 dark:text-violet-400">
               <Settings className="h-3 w-3" aria-hidden="true" />
-              CLAUDE.md généré
+              {t("pillClaudeMd")}
             </span>
           </div>
         </div>
@@ -62,7 +62,7 @@ export function ConfiguratorTeaser() {
             href="/configurator"
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-500/30"
           >
-            Lancer le configurateur
+            {t("cta")}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </Link>
         </div>

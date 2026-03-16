@@ -12,6 +12,7 @@ interface PathCardProps {
   items: string[];
   href: string;
   color: "teal" | "amber" | "purple";
+  ctaLabel: string;
 }
 
 const borderColors = {
@@ -46,6 +47,7 @@ export function PathCard({
   items,
   href,
   color,
+  ctaLabel,
 }: PathCardProps) {
   const beamColors = {
     teal: { from: "#06b6d4", to: "#22d3ee" },
@@ -104,7 +106,7 @@ export function PathCard({
       </ul>
 
       <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-700 dark:text-brand-400 transition-all group-hover:gap-2">
-        Commencer ce parcours
+        {ctaLabel}
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </span>
     </Link>

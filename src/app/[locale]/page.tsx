@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
   Globe,
@@ -38,8 +38,6 @@ export default async function HomePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const l = (href: string) => `/${locale}${href}`;
-
   const tHero = await getTranslations("hero");
   const tSections = await getTranslations("sections");
   const tFeatures = await getTranslations("features");
@@ -138,14 +136,14 @@ export default async function HomePage({
             {/* CTA */}
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
-                href={l("/getting-started")}
+                href="/getting-started"
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
               >
                 {tHero("ctaPrimary")}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </Link>
               <Link
-                href={l("/mcp")}
+                href="/mcp"
                 className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
                 style={{
                   borderWidth: "1px",
@@ -312,6 +310,7 @@ export default async function HomePage({
               ]}
               href="/getting-started"
               color="teal"
+              ctaLabel={tPaths("ctaLabel")}
             />
             <PathCard
               icon={Puzzle}
@@ -326,6 +325,7 @@ export default async function HomePage({
               ]}
               href="/mcp"
               color="amber"
+              ctaLabel={tPaths("ctaLabel")}
             />
             <PathCard
               icon={Rocket}
@@ -340,6 +340,7 @@ export default async function HomePage({
               ]}
               href="/prompting"
               color="purple"
+              ctaLabel={tPaths("ctaLabel")}
             />
           </StaggerChildren>
         </div>
@@ -377,7 +378,7 @@ export default async function HomePage({
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
-              href={l("/getting-started")}
+              href="/getting-started"
               className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30 dark:bg-white dark:from-white dark:to-white dark:text-slate-900 dark:shadow-none dark:hover:bg-slate-100 dark:hover:shadow-none"
             >
               <Logo size="sm" />
@@ -385,7 +386,7 @@ export default async function HomePage({
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
             </Link>
             <Link
-              href={l("/future")}
+              href="/future"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-8 py-3.5 text-base font-semibold text-slate-700 transition-all hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:text-white dark:hover:border-slate-500 dark:hover:bg-white/5"
             >
               <MessageSquare className="h-4 w-4" aria-hidden="true" />

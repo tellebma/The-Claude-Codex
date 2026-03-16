@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/i18n/navigation";
+import { useLocale } from "next-intl";
 import { Search, BookOpen, ArrowRight } from "lucide-react";
 import { glossaryTerms, searchGlossary } from "@/data/glossary";
-import { getLocaleFromPathname, prefixWithLocale } from "@/lib/locale-utils";
 import clsx from "clsx";
 
 const translations = {
@@ -65,8 +64,7 @@ const translations = {
  */
 export default function GlossaryPage() {
   const [query, setQuery] = useState("");
-  const pathname = usePathname();
-  const locale = getLocaleFromPathname(pathname);
+  const locale = useLocale();
   const t = translations[locale as "fr" | "en"];
 
   const filteredTerms = useMemo(
@@ -102,7 +100,7 @@ export default function GlossaryPage() {
             aria-label={t.breadcrumbLabel}
             className="mb-6 flex items-center gap-2 text-sm text-slate-400"
           >
-            <Link href={prefixWithLocale("/", locale)} className="transition-colors hover:text-white">
+            <Link href="/" className="transition-colors hover:text-white">
               {t.breadcrumbHome}
             </Link>
             <span aria-hidden="true">/</span>
@@ -213,7 +211,7 @@ export default function GlossaryPage() {
             // Résultats de recherche sans groupement par lettre
             <div className="space-y-4">
               {filteredTerms.map((entry) => (
-                <GlossaryCard key={entry.term} entry={entry} locale={locale} t={t} />
+                <GlossaryCard key={entry.term} entry={entry} t={t} />
               ))}
             </div>
           ) : (
@@ -226,7 +224,7 @@ export default function GlossaryPage() {
                   </h2>
                   <div className="space-y-4">
                     {(groupedTerms[letter] ?? []).map((entry) => (
-                      <GlossaryCard key={entry.term} entry={entry} locale={locale} t={t} />
+                      <GlossaryCard key={entry.term} entry={entry} t={t} />
                     ))}
                   </div>
                 </div>
@@ -241,11 +239,10 @@ export default function GlossaryPage() {
 
 interface GlossaryCardProps {
   readonly entry: (typeof glossaryTerms)[number];
-  readonly locale: string;
   readonly t: typeof translations.fr;
 }
 
-function GlossaryCard({ entry, locale, t }: GlossaryCardProps) {
+function GlossaryCard({ entry, t }: GlossaryCardProps) {
   return (
     <article
       className={clsx(
@@ -260,7 +257,7 @@ function GlossaryCard({ entry, locale, t }: GlossaryCardProps) {
         </h3>
         {entry.link && (
           <Link
-            href={prefixWithLocale(entry.link, locale)}
+            href={entry.link}
             className={clsx(
               "flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium",
               "text-brand-700 hover:bg-brand-500/10 dark:text-brand-400 dark:hover:bg-brand-500/20",

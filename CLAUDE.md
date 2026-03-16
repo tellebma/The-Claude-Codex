@@ -210,16 +210,31 @@ experimental.optimizePackageImports: ['lucide-react', 'framer-motion']
 2. Lancer `npm run lint && npm run type-check` avant tout commit
 3. Tester le build Docker localement avant de considérer une feature comme terminée
 4. Committer souvent avec des messages conventionnels (feat:, fix:, docs:, chore:)
+5. **Vérifier les deux versions FR et EN** après chaque feature : naviguer sur `/fr/` et `/en/`, vérifier que le contenu est dans la bonne langue, que le LanguageSwitcher fonctionne, et que les liens internes sont préfixés par la locale
+
+## i18n (internationalisation)
+
+- **Framework** : next-intl v4 avec `output: 'export'` (SSG)
+- **Locales** : `fr` (défaut) et `en`
+- **Structure** : `src/app/[locale]/` pour les pages, `content/fr/` et `content/en/` pour le MDX
+- **Routing** : `defineRouting()` dans `src/i18n/routing.ts`, `createNavigation()` dans `src/i18n/navigation.ts`
+- **Navigation** : utiliser `Link`, `usePathname`, `useRouter` de `@/i18n/navigation` (PAS de `next/link` ni `next/navigation` dans les composants clients)
+- **Traductions UI** : `messages/fr.json` et `messages/en.json` avec `useTranslations()` côté client, `getTranslations()` côté serveur
+- **Config Next.js** : `trailingSlash: true` obligatoire pour que l'hydration i18n fonctionne
+- **Docker** : utilise `http-server` (pas Nginx) pour servir correctement les RSC payloads `.txt`
+- **Après chaque modification** : vérifier que `/fr/` ET `/en/` affichent le bon contenu
 
 ## Checklist pour ajouter une nouvelle section
 
-1. Créer le dossier `content/{section}/` avec les fichiers MDX (frontmatter obligatoire)
-2. Créer `app/{section}/layout.tsx` qui wrap avec `<SectionLayout>`
-3. Créer `app/{section}/page.tsx` (overview) et `app/{section}/[slug]/page.tsx` (sous-pages avec `generateStaticParams`)
-4. Ajouter la section dans `lib/section-navigation.ts`
-5. Ajouter les pages dans `SITE_PAGES` de `lib/metadata.ts`
-6. Mettre à jour `lib/search-index.ts` avec les nouvelles entrées
-7. Ajouter le lien dans le `navigation` array du `Header.tsx` si pertinent
+1. Créer les dossiers `content/fr/{section}/` et `content/en/{section}/` avec les fichiers MDX (frontmatter obligatoire)
+2. Créer `app/[locale]/{section}/layout.tsx` qui wrap avec `<SectionLayout>`
+3. Créer `app/[locale]/{section}/page.tsx` (overview avec translations inline FR/EN) et `app/[locale]/{section}/[slug]/page.tsx` (sous-pages avec `generateStaticParams`)
+4. Ajouter la section dans `lib/section-navigation.ts` (avec `labelKey` et `titleKey`)
+5. Ajouter les traductions dans `messages/fr.json` et `messages/en.json` (namespace `sectionNav`)
+6. Ajouter les pages dans `SITE_PAGES` de `lib/metadata.ts`
+7. Mettre à jour `lib/search-index.ts` avec les entrées FR (`searchIndexFr`) et EN (`searchIndexEn`)
+8. Ajouter le lien dans le `navigation` array du `Header.tsx` si pertinent (utiliser la clé de traduction)
+9. **Vérifier sur `/fr/{section}/` et `/en/{section}/`** que tout s'affiche correctement
 
 ## Lors du compactage
 

@@ -1,0 +1,347 @@
+---
+title: "Security best practices"
+description: "Essential guide to security best practices with Claude Code: API keys, data protection, code review, and compliance. Practical tips to use AI safely."
+badge: "Security"
+section: "content"
+order: 8
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Introduction: security by design, not by afterthought
+
+Claude Code security isn't a layer you bolt on after the fact. It's a mindset you integrate from the start into how you configure and use the tool.
+
+<Callout type="info" title="A practical guide, not a theoretical one">
+This guide is action-oriented. Every principle comes with concrete measures you can apply right away. The checklist at the end of the page can be copied directly into your CLAUDE.md.
+</Callout>
+
+The good news: the security practices described here don't hurt your productivity. They protect you from costly mistakes and save you time in the long run.
+
+## Principle 1: Least privilege
+
+### The golden rule
+
+Grant each component (MCP, agent, script) **only the permissions it needs** for its function, nothing more.
+
+This principle applies at several levels:
+
+**Filesystem level:**
+```json
+// Bad: too permissive
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/"]
+    }
+  }
+}
+
+// Good: least privilege
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./src"]
+    }
+  }
+}
+```
+
+**Access token level:**
+```bash
+# Bad: GitHub token with all permissions
+gh auth login  # Grants all scopes
+
+# Good: GitHub token with minimal scopes
+# Create a classic token at github.com/settings/tokens
+# Check only: repo:read, issues:read (if read-only access is sufficient)
+```
+
+**Agent level:**
+- A code review agent should not have access to deployment credentials
+- A documentation agent should not be able to modify source code
+- A CI agent doesn't need access to your email
+
+### Practical application
+
+Before granting a permission, ask yourself: "Does this component **actually** need this access for its current function?"
+
+If the answer is "maybe" or "just in case," deny it.
+
+## Principle 2: Audit before installation
+
+### The 5 mandatory checks
+
+Before installing any MCP, plugin, or script:
+
+<Steps>
+<Step title="Verify the package identity" stepNumber={1}>
+```bash
+npm info package-name
+# Check: maintainers, version, homepage, repository
+# Does the repository point to the correct GitHub repo?
+# Is the author the expected organization?
+```
+</Step>
+
+<Step title="Read the main source code" stepNumber={2}>
+Open the package's main file on GitHub (usually `index.js`, `src/index.ts`). Look for:
+- Network requests to unexpected external servers
+- Access to sensitive system files (~/.ssh, ~/.aws, ~/.env)
+- Obfuscated or minified code hiding its behavior
+</Step>
+
+<Step title="Check popularity and age" stepNumber={3}>
+```bash
+# Weekly downloads
+npm show package-name dist-tags
+
+# First publication date
+npm show package-name time.created
+```
+A package published 3 days ago with 10 downloads deserves much more caution than one established for 2 years with 10,000 downloads/week.
+</Step>
+
+<Step title="Search for security reports" stepNumber={4}>
+Search GitHub Issues for the repo: "security", "malware", "token", "credentials". Also search Google: "[package-name] malicious" or "[package-name] security".
+</Step>
+
+<Step title="Test with non-sensitive data" stepNumber={5} isLast>
+On first use, test the MCP on a dummy project or one without sensitive data. Observe its behavior before exposing it to your real projects.
+</Step>
+</Steps>
+
+## Principle 3: Per-project configuration profiles
+
+### Why different profiles?
+
+Your setup for a public open-source project is very different from your setup for a project with client data. Using a single global profile for everything is a security mistake.
+
+### Recommended structure
+
+```
+~/.claude/settings.json      # Global configuration (no sensitive MCPs)
+                             # API token, general preferences
+
+open-source-project/
+  .mcp.json                  # MCPs for this public project
+  CLAUDE.md                  # Project instructions (no secrets)
+
+sensitive-client-project/
+  .mcp.json                  # Minimalist MCPs for this project
+  CLAUDE.md                  # Project instructions (no tokens)
+  .gitignore                 # CLAUDE.md in .gitignore if confidential
+```
+
+### Profile examples
+
+```json
+// .mcp.json - Public frontend project
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./src", "./public"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    }
+  }
+}
+```
+
+```json
+// .mcp.json - Project with database (environment separation)
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./src"]
+    },
+    "database-dev": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_URL": "${DATABASE_DEV_URL}"
+      }
+    }
+  }
+}
+// Note: access only to the development database, never production
+```
+
+## Principle 4: Context monitoring with /cost
+
+The `/cost` command isn't just a budget tool, it's also a security indicator.
+
+```bash
+# In a Claude Code session
+/cost
+```
+
+Use `/cost` to:
+
+- **Detect anomalies**: if your session consumes far more tokens than usual for no apparent reason, perhaps Claude is reading unexpected files or making abnormal MCP calls
+- **Monitor MCP calls**: MCP results (especially from external APIs) can generate a lot of input tokens. Examine what Claude has read
+- **Calibrate your profiles**: identify which MCPs consume the most context at startup
+
+<Callout type="tip" title="Check for unusual MCP calls">
+If /cost shows abnormally high input token consumption, ask Claude: "What have you read and which MCP calls have you made in this session?" Claude can list its recent actions for you.
+</Callout>
+
+## Principle 5: Session rotation
+
+### Why rotate sessions regularly
+
+A long Claude Code session accumulates context. The more loaded the context:
+- The more response quality degrades
+- The higher the risk of persistent injections (a malicious instruction read early in the session stays in context)
+- The higher the cost per message
+
+### Recommended rotation frequency
+
+| Usage type | Rotation frequency |
+|------------|-------------------|
+| Standard development session | Every 2-3h, or between features |
+| Session with external source reading | After each reading session |
+| CI/CD headless | New session for each job |
+| Multi-project session | Between each project switch |
+
+### What to do before closing a session
+
+```markdown
+# Before closing Claude Code, ask:
+"Summarize the important decisions made in this session.
+List the conventions adopted and patterns used.
+I'll add this to the CLAUDE.md before closing."
+```
+
+Copy this summary into your CLAUDE.md or a notes file. It will be your starting point for the next session.
+
+## Principle 6: Never dangerouslySkipPermissions in production
+
+The `--dangerously-skip-permissions` flag exists for very specific use cases (CI/CD in fully sandboxed environments, isolated automated tests). It should **never** be used:
+
+- In day-to-day development
+- With MCPs accessing sensitive data
+- With execution MCPs (Bash, eval, scripts)
+- Outside a controlled sandbox environment
+
+```bash
+# Never in standard development
+claude --dangerously-skip-permissions
+
+# Isolated CI/CD use only
+# (In a Docker container without real credentials, with test data)
+claude --dangerously-skip-permissions --print "Run the tests"
+```
+
+If you feel the need to use this flag for productivity gains, it's probably a workflow problem to solve differently.
+
+## Principle 7: Review suspicious MCP results
+
+### Warning signs in a session
+
+Watch for these behaviors that may indicate a prompt injection or malicious MCP:
+
+- **Unrequested actions**: Claude performs actions you didn't explicitly ask for
+- **Unexpected file access**: Claude mentions reading `~/.ssh/config` or `~/.env` while you're working on code
+- **Unexpected network requests**: Claude mentions making an HTTP request to an unknown domain
+- **Behavior changes**: Claude suddenly adopts a behavior different from its normal instructions
+
+### How to respond
+
+If you suspect a prompt injection:
+
+1. **Stop the session immediately**: don't keep interacting
+2. **Examine the logs**: which files were read? Which MCP calls were made?
+3. **Check your credentials**: was any sensitive file read?
+4. **Report the suspicious MCP**: open an issue on its GitHub repository
+
+## Principle 8: Environment separation
+
+### The basic rule
+
+Production credentials should never be in your Claude Code development environment.
+
+```bash
+# Bad: production environment variable in your dev shell
+export PROD_DATABASE_URL="postgresql://prod-server/..."
+# -> Claude can read your shell env via MCP or tools
+
+# Good: separate variables per environment
+export DEV_DATABASE_URL="postgresql://localhost/dev_db"
+# In production: variables injected by the deployment system
+```
+
+### Recommended architecture for projects with sensitive data
+
+```
+Local environment (Claude Code)
+  +-- Development database (dummy data)
+  +-- APIs in sandbox/test mode
+  +-- MCPs with read-only tokens
+  +-- Frequently rotated credentials
+
+CI/CD (Claude Code headless)
+  +-- Sandboxed environment (Docker)
+  +-- Credentials injected by the CI system
+  +-- Network access limited to required services
+
+Production
+  +-- No Claude Code access (automated deployment only)
+```
+
+## Complete security checklist (copyable into your CLAUDE.md)
+
+```markdown
+## Claude Code Security
+
+### Initial setup
+- [ ] MCP filesystem configured with the most restrictive path possible
+- [ ] No secrets in CLAUDE.md (use env references)
+- [ ] Access tokens with minimal scopes for each MCP
+- [ ] .mcp.json per project (no global MCP config for everything)
+- [ ] CLAUDE.md in .gitignore if content is confidential
+
+### Before installing an MCP
+- [ ] Exact package name verified (anti-typosquatting)
+- [ ] Author/organization confirmed on npm and GitHub
+- [ ] Source code read (index.js or src/index.ts)
+- [ ] No unexpected network requests in the code
+- [ ] Package downloads and age verified
+- [ ] GitHub issues checked for security reports
+- [ ] Initial test with non-sensitive data
+
+### During a session
+- [ ] /cost checked regularly to detect anomalies
+- [ ] MCP call arguments verified (not just the tool name)
+- [ ] Unrequested actions -> immediate stop + investigation
+- [ ] Unexpected access to ~/.ssh, ~/.aws, ~/.env -> immediate refusal
+- [ ] Never --dangerously-skip-permissions outside controlled sandbox
+
+### Rotation and maintenance
+- [ ] Session renewed every 2-3h or between features
+- [ ] Important decisions documented in CLAUDE.md before closing
+- [ ] Quarterly review of installed MCPs (remove unused ones)
+- [ ] Regular MCP updates (npm update in projects)
+- [ ] Access token rotation every 90 days
+
+### Environment separation
+- [ ] No production credentials in the dev environment
+- [ ] Development database with dummy data only
+- [ ] Third-party APIs in sandbox/test mode for development
+- [ ] CI/CD in sandboxed environment (Docker or equivalent)
+```
+
+## Next steps
+
+- [MCP Security](/mcp/securite-mcp): MCP-specific attack vectors in detail
+- [Myths about Claude Code](/content/mythes-claude-code): Debunking misconceptions about security
+- [Real costs of Claude Code](/content/couts-reels-claude-code): Security and budget go hand in hand
+- [CLAUDE.md guide](/prompting/claude-md): How to structure a secure CLAUDE.md
+- [Interactive configurator](/configurator): Generate a secure configuration tailored to your profile
+- [Install and configure an MCP](/mcp/setup): Secure configuration from the start

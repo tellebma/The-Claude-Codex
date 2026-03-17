@@ -24,7 +24,15 @@ export interface MdxFile {
   readonly slug: string;
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "content");
+const DEFAULT_LOCALE = "fr";
+
+/**
+ * Returns the content directory for a given locale.
+ * Falls back to the default locale ("fr") if the locale directory doesn't exist.
+ */
+function getContentDir(locale: string = DEFAULT_LOCALE): string {
+  return path.join(process.cwd(), "content", locale);
+}
 
 /**
  * Validates that gray-matter parsed data contains the required frontmatter fields.
@@ -72,16 +80,20 @@ function validateFrontmatter(
 /**
  * Reads a single MDX file from the content directory by slug.
  * Returns parsed frontmatter and raw MDX source string.
- * Throws if the file does not exist or required frontmatter fields are missing.
+ * Falls back to the default locale if the file doesn't exist in the requested locale.
+ * Throws if the file does not exist in either locale or required frontmatter fields are missing.
  */
-export function getMdxBySlug(slug: string): MdxFile {
-  const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
+export function getMdxBySlug(slug: string, locale: string = DEFAULT_LOCALE): MdxFile {
+  const filePath = path.join(getContentDir(locale), `${slug}.mdx`);
+  const fallbackPath = path.join(getContentDir(DEFAULT_LOCALE), `${slug}.mdx`);
 
-  if (!fs.existsSync(filePath)) {
-    throw new Error(`MDX file not found: ${filePath}`);
+  const resolvedPath = fs.existsSync(filePath) ? filePath : fallbackPath;
+
+  if (!fs.existsSync(resolvedPath)) {
+    throw new Error(`MDX file not found: ${filePath} (also tried fallback: ${fallbackPath})`);
   }
 
-  const fileContents = fs.readFileSync(filePath, "utf-8");
+  const fileContents = fs.readFileSync(resolvedPath, "utf-8");
   const { data, content } = matter(fileContents);
 
   return {
@@ -92,16 +104,18 @@ export function getMdxBySlug(slug: string): MdxFile {
 }
 
 /**
- * Returns all MDX slugs found in the content directory.
+ * Returns all MDX slugs found in the content directory for a given locale.
  * Used for `generateStaticParams` in dynamic routes.
  */
-export function getAllMdxSlugs(): ReadonlyArray<string> {
-  if (!fs.existsSync(CONTENT_DIR)) {
+export function getAllMdxSlugs(locale: string = DEFAULT_LOCALE): ReadonlyArray<string> {
+  const contentDir = getContentDir(locale);
+
+  if (!fs.existsSync(contentDir)) {
     return [];
   }
 
   return fs
-    .readdirSync(CONTENT_DIR)
+    .readdirSync(contentDir)
     .filter((filename) => filename.endsWith(".mdx"))
     .map((filename) => filename.replace(/\.mdx$/, ""));
 }
@@ -109,10 +123,10 @@ export function getAllMdxSlugs(): ReadonlyArray<string> {
 /**
  * Returns all MDX files in the content directory, sorted by `order` frontmatter.
  */
-export function getAllMdxFiles(): ReadonlyArray<MdxFile> {
-  const slugs = getAllMdxSlugs();
+export function getAllMdxFiles(locale: string = DEFAULT_LOCALE): ReadonlyArray<MdxFile> {
+  const slugs = getAllMdxSlugs(locale);
 
-  const files = slugs.map((slug) => getMdxBySlug(slug));
+  const files = slugs.map((slug) => getMdxBySlug(slug, locale));
 
   return [...files].sort((a, b) => {
     const orderA = a.frontmatter.order ?? 999;
@@ -125,9 +139,10 @@ export function getAllMdxFiles(): ReadonlyArray<MdxFile> {
  * Returns MDX files filtered by section, sorted by order.
  */
 export function getMdxFilesBySection(
-  section: string
+  section: string,
+  locale: string = DEFAULT_LOCALE
 ): ReadonlyArray<MdxFile> {
-  return getAllMdxFiles().filter(
+  return getAllMdxFiles(locale).filter(
     (file) => file.frontmatter.section === section
   );
 }
@@ -137,9 +152,10 @@ export function getMdxFilesBySection(
  * Used for `generateStaticParams` in section-specific dynamic routes.
  */
 export function getSectionMdxSlugs(
-  section: string
+  section: string,
+  locale: string = DEFAULT_LOCALE
 ): ReadonlyArray<string> {
-  const sectionDir = path.join(CONTENT_DIR, section);
+  const sectionDir = path.join(getContentDir(locale), section);
 
   if (!fs.existsSync(sectionDir)) {
     return [];
@@ -153,25 +169,27 @@ export function getSectionMdxSlugs(
 
 /**
  * Reads a single MDX file from a section subdirectory by slug.
- * Equivalent to getMdxBySlug(`${section}/${slug}`).
+ * Falls back to the default locale if the file doesn't exist in the requested locale.
  */
 export function getSectionMdxBySlug(
   section: string,
-  slug: string
+  slug: string,
+  locale: string = DEFAULT_LOCALE
 ): MdxFile {
-  return getMdxBySlug(`${section}/${slug}`);
+  return getMdxBySlug(`${section}/${slug}`, locale);
 }
 
 /**
  * Returns all MDX files in a section subdirectory, sorted by `order` frontmatter.
  */
 export function getAllSectionMdxFiles(
-  section: string
+  section: string,
+  locale: string = DEFAULT_LOCALE
 ): ReadonlyArray<MdxFile> {
-  const slugs = getSectionMdxSlugs(section);
+  const slugs = getSectionMdxSlugs(section, locale);
 
   const files = slugs.map((slug) =>
-    getSectionMdxBySlug(section, slug)
+    getSectionMdxBySlug(section, slug, locale)
   );
 
   return [...files].sort((a, b) => {

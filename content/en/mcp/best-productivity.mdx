@@ -1,0 +1,267 @@
+---
+title: "Top productivity MCPs for Claude Code"
+description: "The best MCPs for productivity with Claude Code: Gmail, Slack, Google Calendar, Figma, and Lighthouse. Installation, configuration, and use cases."
+section: "mcp"
+order: 3
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## MCPs that transform your daily workflow
+
+Productivity MCPs connect Claude Code to your everyday tools: email, messaging, calendar, design, and web auditing. They turn Claude Code into a personal assistant that can take action in your real professional environment.
+
+<Callout type="tip" title="Global configuration recommended">
+Productivity MCPs are typically personal (your Gmail, your Slack). Configure them **globally** (`~/.claude/settings.json` or `claude mcp add --scope global`) so they're available across all your projects.
+</Callout>
+
+<Callout type="warning" title="Package names to verify">
+MCP package names evolve with the community. Before installing, always check the exact name on [npmjs.com](https://www.npmjs.com) or on the project's official GitHub repo. The packages listed here match the verified names at the time of writing.
+</Callout>
+
+---
+
+## Gmail: Email management
+
+**Read, search, and manage your emails from Claude Code.** Create drafts, analyze conversations, and extract key information from your inbox.
+
+<Callout type="info" title="Community Gmail MCP">
+There is no official `@anthropic/mcp-gmail` package. The most widely used Gmail MCP is a community project. Check the current package on npm before installing. A working example is available at [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers) in the `src/gmail` folder (if available) or through third-party community projects.
+</Callout>
+
+### JSON configuration (generic example)
+
+```json
+{
+  "mcpServers": {
+    "gmail": {
+      "command": "npx",
+      "args": ["-y", "gmail-mcp-package-name"],
+      "env": {
+        "GMAIL_OAUTH_CLIENT_ID": "your-client-id",
+        "GMAIL_OAUTH_CLIENT_SECRET": "your-client-secret",
+        "GMAIL_OAUTH_REFRESH_TOKEN": "your-refresh-token"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="OAuth configuration">
+Gmail requires OAuth configuration via Google Cloud Console. Create a project, enable the Gmail API, and generate OAuth 2.0 credentials. Check the documentation of the MCP package you choose for detailed instructions.
+</Callout>
+
+### Use cases
+
+- **Smart triage**: *"Show me this week's unread emails and summarize each one in a sentence"*
+- **Advanced search**: *"Find all emails from @client.com about project X"*
+- **Automatic drafts**: *"Draft a professional reply to this email addressing the points raised"*
+- **Information extraction**: *"Extract all meeting dates mentioned in my emails this week"*
+
+---
+
+## Slack: Team messaging
+
+**Interact with Slack directly from Claude Code.** Read and send messages, manage channels, and search through your team's history.
+
+<Callout type="info" title="Official Slack MCP">
+The official Slack MCP is available in Anthropic's official MCP repository: [github.com/modelcontextprotocol/servers](https://github.com/modelcontextprotocol/servers). The corresponding npm package is `@modelcontextprotocol/server-slack`.
+</Callout>
+
+### Installation
+
+```bash
+# Slack requires a Bot Token
+claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-your-token -- npx -y @modelcontextprotocol/server-slack
+```
+
+### JSON configuration
+
+```json
+{
+  "mcpServers": {
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "xoxb-your-bot-token",
+        "SLACK_TEAM_ID": "your-team-id"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info" title="Creating a Slack Bot">
+Go to **api.slack.com/apps**, create a new app, add the necessary OAuth scopes (`channels:read`, `channels:history`, `chat:write`, `users:read`), and install the app in your workspace to get the Bot Token.
+</Callout>
+
+### Use cases
+
+- **Team monitoring**: *"Summarize the important messages from the #engineering channel this week"*
+- **Automatic notifications**: *"Send a message to #releases announcing the new version"*
+- **Contextual search**: *"Find the conversation where we decided on the database architecture"*
+
+---
+
+## Google Calendar: Schedule management
+
+**View and manage your Google Calendar directly from Claude Code.** See your events, find open time slots, and plan meetings.
+
+<Callout type="info" title="Community Google Calendar MCP">
+There is no official `@anthropic/mcp-google-calendar` package. Check the community projects available on npm by searching for "google calendar mcp." Several implementations exist with varying levels of maturity.
+</Callout>
+
+### JSON configuration (generic example)
+
+```json
+{
+  "mcpServers": {
+    "google-calendar": {
+      "command": "npx",
+      "args": ["-y", "calendar-mcp-package-name"],
+      "env": {
+        "GOOGLE_OAUTH_CLIENT_ID": "your-client-id",
+        "GOOGLE_OAUTH_CLIENT_SECRET": "your-client-secret",
+        "GOOGLE_OAUTH_REFRESH_TOKEN": "your-refresh-token"
+      }
+    }
+  }
+}
+```
+
+### Use cases
+
+- **Daily overview**: *"Show me tomorrow's schedule with details for each meeting"*
+- **Smart scheduling**: *"Find a free one-hour slot this week for a code review session"*
+- **Meeting prep**: *"Look at my next meeting and prepare a context summary for me"*
+
+<Callout type="tip" title="Powerful combined workflow">
+Combine Google Calendar + Gmail + Slack for a complete productivity assistant: *"Check my schedule for tomorrow, prepare a brief for each meeting based on recent emails, and send me a summary on Slack."*
+</Callout>
+
+---
+
+## Figma: Design and mockups
+
+**Access your Figma designs directly from Claude Code.** Export components, analyze mockups, and integrate design into your development workflow.
+
+<Callout type="info" title="Official Figma MCP">
+Figma offers its own official MCP. Check the official Figma documentation (developer.figma.com) for the current package name and installation instructions. There is no `@anthropic/mcp-figma` package.
+</Callout>
+
+### JSON configuration (generic example)
+
+```json
+{
+  "mcpServers": {
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-mcp-package-name"],
+      "env": {
+        "FIGMA_ACCESS_TOKEN": "figd_your-figma-token"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info" title="Getting a Figma token">
+Go to **Figma > Settings > Personal Access Tokens** to generate a token. Grant read permissions on the files you need.
+</Callout>
+
+### Use cases
+
+- **Analyze a design**: *"Look at this Figma mockup and describe the components, colors, and spacing used"*
+- **Generate code from a design**: *"Turn this Figma component into a React component with Tailwind CSS"*
+- **Compare implementation to mockup**: *"Compare my current page with the Figma mockup and list the differences"*
+
+---
+
+## Lighthouse: Web performance auditing
+
+**Run Lighthouse audits directly from Claude Code.** Analyze performance, accessibility, SEO, and best practices for any website.
+
+<Callout type="info" title="Lighthouse via Chrome DevTools MCP">
+To run Lighthouse audits from Claude Code, the most robust approach is to use the Chrome DevTools MCP (or the Playwright MCP), which includes Lighthouse natively. There is no official `@anthropic/mcp-lighthouse` package.
+</Callout>
+
+### Via the Playwright MCP (recommended)
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    }
+  }
+}
+```
+
+Then in Claude Code:
+```bash
+"Run a Lighthouse audit on https://my-site.com and give me a summary of the scores"
+```
+
+### Use cases
+
+- **Full audit**: *"Run a Lighthouse audit on my homepage and give me the performance, accessibility, and SEO scores"*
+- **Targeted optimization**: *"Analyze my page's performance and suggest concrete fixes"*
+- **Improvement tracking**: *"Compare the Lighthouse scores before and after my changes"*
+
+---
+
+## Summary
+
+| MCP | Verified package | Auth required | Best for |
+|-----|-----------------|--------------|----------|
+| **Gmail** | Community (check npm) | Google OAuth | Email triage, search, drafts |
+| **Slack** | `@modelcontextprotocol/server-slack` | Bot Token | Team communication, monitoring |
+| **Google Calendar** | Community (check npm) | Google OAuth | Planning, organization |
+| **Figma** | Official Figma (check developer.figma.com) | Personal token | Design-to-code, mockup analysis |
+| **Lighthouse** | Via Playwright MCP (`@playwright/mcp`) | None | Web audits, performance optimization |
+
+## Limitations and gotchas
+
+Before plugging these MCPs into production, keep their real limitations in mind.
+
+### API quotas and rate limiting
+
+- **Gmail**: Google's API enforces daily quotas (250 requests/second by default). Heavy use of automatic triage can hit them.
+- **Slack**: rate limits vary by endpoint type (Tier 1 through 4). Sending messages is limited to roughly 1 request per second.
+- **Google Calendar**: same Google quotas as Gmail. Reads are more permissive than writes.
+- **Figma**: the personal token has request limits. Large files take time to analyze.
+
+### Latency and reliability
+
+Productivity MCPs depend on third-party APIs. If Slack is down, the Slack MCP is too. Plan for clear error messages and don't rely on these MCPs for real-time critical workflows.
+
+### Common failure cases
+
+- **Expired token**: Google OAuth tokens expire regularly. Make sure you have a valid refresh token configured.
+- **Insufficient permissions**: a Slack Bot without the `chat:write` scope won't be able to send messages, even if the MCP starts correctly.
+- **API changes**: third-party APIs evolve. A community MCP can become incompatible overnight.
+
+### Evaluating a third-party MCP
+
+Before installing a community MCP, check these criteria:
+
+| Criterion | What to look for |
+|-----------|-----------------|
+| **Maintenance** | Recent commits, issues being addressed, active contributors |
+| **Security** | Source code audit, no excessive permissions, no suspicious dependencies |
+| **Performance** | Reasonable startup time, no known memory leaks |
+| **Documentation** | Clear README, configuration examples, maintained changelog |
+
+<Callout type="tip" title="Community MCP registries">
+To find and compare MCPs, check out [smithery.ai](https://smithery.ai) or [glama.ai/mcp/servers](https://glama.ai/mcp/servers). These registries list available MCPs with ratings and usage statistics.
+</Callout>
+
+## Next steps
+
+- [Install and configure an MCP](/mcp/setup): Detailed installation guide and troubleshooting
+- [Top development MCPs](/mcp/best-development): Context7, GitHub, Sentry, databases
+- [Top design & UI MCPs](/mcp/best-design): Playwright, Chrome DevTools, 21st.dev Magic
+- [Build your first MCP workflow](/mcp/first-workflow): Combine multiple MCPs in a workflow
+- [Create a custom MCP in TypeScript](/mcp/create-mcp-typescript): Build your own MCP

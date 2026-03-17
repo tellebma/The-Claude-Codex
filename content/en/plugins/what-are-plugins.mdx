@@ -1,0 +1,119 @@
+---
+title: "Understanding Claude Code plugins"
+description: "Discover Claude Code plugins (hooks): what they are, how they differ from MCPs and Skills, and how they extend Claude Code's behavior."
+section: "plugins"
+order: 1
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+<Callout type="tip" title="Just getting started?">If the technical concepts feel complex, start with our [practical use cases](/use-cases) to see Claude Code in action without writing code.</Callout>
+
+## What does "plugins" actually mean?
+
+<Callout type="warning" title="Important terminology clarification">
+The section you're reading is titled "Plugins" by editorial convention, but the term is **misleading**: Claude Code has no plugin system with a marketplace or `/plugin install` commands. What actually exists are **community extensions** (skill files, rules, agents, and configurations) that are installed manually. This page clarifies what really exists.
+</Callout>
+
+In the Claude Code community, "plugin" informally refers to **extensions that enhance your assistant**. In reality, these are three distinct types of resources:
+
+1. **Skills** (or custom commands): Markdown files in `.claude/commands/` invoked with `/skill-name`
+2. **Rules and agents**: `.md` or `.mdc` files in `.claude/agents/` that guide Claude's behavior
+3. **Configurations**: `CLAUDE.md` files, `settings.json`, and shared project structures
+
+These resources are created by the **community**, hosted on GitHub, and installed **manually**, by copying files or via Claude Code's `/install-github` command.
+
+<Callout type="info" title="The config files analogy">
+Think of Claude Code as your code editor. Community extensions are like `.eslintrc` files, project templates, or shared snippets. You copy them into your project, and they change how the tool behaves. No store, no automatic installation, but a lot of flexibility.
+</Callout>
+
+## Community extension vs MCP vs Skill: the differences
+
+These three extension mechanisms are **complementary**, but they operate at different levels.
+
+| | **Community extension** | **MCP** | **Skill** |
+|---|---|---|---|
+| **Role** | Shared configuration files, agents, rules | Connect Claude Code to an external service | Teach a behavior or workflow via slash command |
+| **Analogy** | Shared config file | USB adapter to an external service | Memorized recipe or tutorial |
+| **Installation** | Manual copy or `/install-github` | `claude mcp add` or `settings.json` | Markdown file in `.claude/commands/` |
+| **Execution** | Interpreted by Claude Code each session | External server (separate process via JSON-RPC) | Instructions interpreted by Claude Code |
+| **Persistence** | Per project or global depending on the folder | Configured per project or globally | Per project (`.claude/commands/`) or global (`~/.claude/commands/`) |
+| **Examples** | everything-claude-code, rule collections | GitHub, Playwright, Context7 | `review-pr`, `tdd-guide`, `deploy` |
+
+<Card title="In summary">
+**MCPs** give Claude Code **hands** to touch the outside world. **Skills** give it **recipes** to know what to do. **Community extensions** are **collections of configuration files** (agents, rules, templates) that the community shares and you adapt to your workflow.
+</Card>
+
+## How are community extensions installed?
+
+There's no official marketplace or `/plugin install` command. Community extensions are installed in several ways:
+
+### Via `/install-github` (recommended)
+
+Claude Code offers a command to install skills and agents from GitHub:
+
+```bash
+# Install a skill or agent from a GitHub repo
+/install-github punkpeye/everything-claude-code
+```
+
+### Manually by copying files
+
+The most common method is still manual copying:
+
+```bash
+# Clone a community repo
+git clone https://github.com/punkpeye/everything-claude-code
+
+# Copy agents into your project
+cp -r everything-claude-code/agents/ .claude/agents/
+
+# Copy rules
+cp -r everything-claude-code/rules/ .claude/rules/
+```
+
+### Via npm (for CLI tools)
+
+Some community tools are published on npm and used as CLI utilities:
+
+```bash
+# repomix - tool for analyzing a codebase
+npx repomix
+
+# Generate a context file for Claude Code
+npx repomix --output repomix-output.txt
+```
+
+## Types of community extensions
+
+Extensions fall into several categories:
+
+- **Agent collections**: `.md` files in `.claude/agents/` with specialized personas (reviewer, architect, debugger)
+- **Project rules**: files in `.claude/rules/` that define conventions and best practices
+- **Skills**: slash commands in `.claude/commands/` for recurring workflows
+- **CLAUDE.md templates**: project configuration files optimized for specific stacks
+- **CLI tools**: npm packages that prepare context for Claude Code (e.g., repomix)
+
+## Differences from VS Code extensions
+
+If you use VS Code with extensions like GitHub Copilot, you might wonder how Claude Code extensions differ.
+
+| | **Claude Code community extensions** | **VS Code extensions** |
+|---|---|---|
+| **Environment** | Terminal (CLI) | Graphical IDE |
+| **Interaction** | Natural language | GUI / keyboard shortcuts |
+| **Format** | Markdown and JSON files | Compiled VS Code packages |
+| **Distribution** | GitHub (manual copy) | VS Code Marketplace (1-click install) |
+| **Intelligence** | The AI interprets the instructions | The extension is passive or reactive |
+
+<Callout type="tip" title="Complementary, not competing">
+You can use Claude Code with its extensions **alongside** VS Code and its extensions. The two ecosystems are complementary. Claude Code excels at complex, multi-file tasks, while VS Code remains ideal for fine editing and visual debugging.
+</Callout>
+
+## Next steps
+
+Now that you understand what a community extension is and how it fits into the Claude Code ecosystem, let's get hands-on.
+
+- [Installing and managing extensions](/plugins/setup): How to install, organize, and create your own extensions
+- [Top essential extensions 2026](/plugins/best-essential): The must-have community resources
+- [Design & frontend extensions](/plugins/best-design): The best resources for design and UI

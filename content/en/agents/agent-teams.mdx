@@ -1,0 +1,213 @@
+---
+title: "Agent teams and collaboration"
+description: "Build collaborative agent teams with Claude Code: role assignment, communication patterns, and coordinated workflows."
+section: "agents"
+order: 3
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## What is Agent Teams?
+
+**Agent Teams** is an experimental Claude Code feature that allows multiple agent sessions to **collaborate on the same project** by sharing information and coordinating their actions. It's like going from a solo developer to a team of specialized developers.
+
+<Callout type="warning" title="Experimental feature (Research Preview)">
+Agent Teams is currently in **research preview**. This means the feature is available for advanced users but may change significantly. Enable it with the environment variable `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Expect changes in future versions.
+</Callout>
+
+<Callout type="info" title="The open office analogy">
+Picture an open office where each developer works on their task, but everyone can talk to each other, share their progress, and coordinate. Agent Teams works the same way: each agent has its own Claude Code session, but they share a common communication space to avoid conflicts and duplicates.
+</Callout>
+
+## Enabling Agent Teams
+
+To enable this feature, set the environment variable before launching Claude Code.
+
+```bash
+# Enable Agent Teams
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+
+# Then launch Claude Code normally
+claude
+```
+
+You can also add it to your shell configuration file for permanent activation.
+
+```bash
+# In ~/.bashrc or ~/.zshrc
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+```
+
+## How to set up a team
+
+A team is a group of agents working together on the same project. Each agent is identified by a common **`team_name`** that enables coordination.
+
+<Steps>
+<Step title="Define the team" stepNumber={1}>
+Choose a descriptive team name. All agents sharing this name will be able to communicate with each other.
+
+```bash
+# Terminal 1 - Development agent
+claude --team_name "feature-auth"
+
+# Terminal 2 - Testing agent
+claude --team_name "feature-auth"
+
+# Terminal 3 - Review agent
+claude --team_name "feature-auth"
+```
+</Step>
+
+<Step title="Assign roles" stepNumber={2}>
+Give each agent a clear role through its initial prompt. Agents need to know what they do and what the others are doing.
+
+```bash
+# Terminal 1 - Development agent
+> You are the lead developer on the "feature-auth" team.
+> Your mission: implement the JWT authentication module.
+> Another agent handles the tests, a third does the review.
+
+# Terminal 2 - Testing agent
+> You are the tester on the "feature-auth" team.
+> Your mission: write tests for the authentication module.
+> Wait for the developer to start before writing tests.
+
+# Terminal 3 - Review agent
+> You are the reviewer on the "feature-auth" team.
+> Your mission: review the code produced by the developer and tester.
+> Jump in when code is ready for review.
+```
+</Step>
+
+<Step title="Let the agents collaborate" stepNumber={3} isLast>
+The agents communicate through a shared space. They can see files modified by other agents and coordinate their actions to avoid conflicts.
+</Step>
+</Steps>
+
+## Use cases
+
+### 1. Cross-review
+
+Two agents work in tandem: one writes the code, the other reviews it in real time.
+
+```bash
+# Agent 1: Developer
+> Implement a Redis cache system for user sessions.
+> When you've finished a module, flag it for review.
+
+# Agent 2: Reviewer
+> You are the reviewer. Analyze each module produced by the developer.
+> Flag security, performance, and maintainability issues.
+> The developer will then address your comments.
+```
+
+This pattern creates a continuous **feedback loop**: the developer codes, the reviewer identifies issues, the developer fixes them, and so on.
+
+### 2. Parallel development
+
+Multiple agents work on independent modules of the same project.
+
+```bash
+# Agent 1: API module
+> Implement the REST endpoints for /users and /products.
+> Use Express.js with Zod validation.
+
+# Agent 2: Frontend module
+> Implement the React pages for the product list
+> and user profile. Consume the REST API.
+
+# Agent 3: Database module
+> Create the Prisma migrations for the users and products tables.
+> Add development seeds.
+```
+
+Each agent works in its domain, but they stay coordinated to ensure interface consistency.
+
+### 3. Pipeline orchestration
+
+One agent orchestrates a sequence of tasks by delegating to specialized agents.
+
+```bash
+# Orchestrator agent
+> You coordinate the release pipeline.
+> Step 1: Ask the tests agent to verify coverage
+> Step 2: Ask the security agent to run an audit
+> Step 3: Ask the docs agent to update the changelog
+> Step 4: If everything is green, prepare the release tag
+```
+
+## Communication between agents
+
+Agents on the same team share a **common context** that allows them to coordinate.
+
+| Mechanism | Description |
+|---|---|
+| **Shared files** | Agents see file modifications from other agents in real time |
+| **Project state** | Each agent accesses the current Git state (branches, commits, diffs) |
+| **Messages** | Agents can send messages to each other through the team's communication space |
+
+<Card title="No shared memory" variant="accent">
+Important: agents do **not** share their context window. Each agent has its own conversation history. Coordination happens through files, Git state, and team messages, not through direct access to other agents' thoughts.
+</Card>
+
+## Current limitations
+
+Since Agent Teams is in research preview, several limitations exist.
+
+<Callout type="warning" title="Limitations to be aware of">
+- **No automatic conflict resolution**: if two agents modify the same file, you'll need to resolve conflicts manually
+- **High token consumption**: each agent consumes its own tokens, costs are multiplied by the number of agents
+- **Imperfect coordination**: agents don't always sync perfectly, duplicates can occur
+- **No persistence between sessions**: when a session ends, the agent's context is lost
+- **Limited worktree support**: isolation via worktrees isn't yet perfectly integrated with teams
+</Callout>
+
+## Best practices
+
+### 1. Limit the number of agents
+
+Two to three well-configured agents are better than five poorly coordinated ones. Start small.
+
+```bash
+# GOOD: 2 complementary agents
+# Developer + Reviewer
+
+# AVOID: too many agents
+# Developer + Tester + Reviewer + Doc + Security + Perf
+# → Too much coordination needed, unpredictable results
+```
+
+### 2. Define clear responsibilities
+
+Each agent should have a well-defined scope. Avoid overlapping responsibilities.
+
+### 3. Use separate branches
+
+To avoid file conflicts, assign a Git branch per agent when possible.
+
+```bash
+# Agent 1 works on feat/auth-api
+# Agent 2 works on feat/auth-frontend
+# Agent 3 reviews on both branches
+```
+
+### 4. Monitor consumption
+
+With multiple active agents, token consumption can climb quickly. Monitor your usage and set limits.
+
+## Looking ahead
+
+Agent Teams is still young, but the possibilities are promising:
+
+- **Automatic conflict resolution**: intelligent resolution of concurrent modifications
+- **Declarative orchestration**: describe an agent pipeline in a configuration file
+- **Shared memory**: a common space where agents can store and retrieve information
+- **Built-in monitoring**: dashboard to track each agent's activity in real time
+
+## Next steps
+
+Now that you understand Agent Teams, explore individual agents and orchestration.
+
+- [Top agents by use case](/agents/best-agents): The most useful agents by category
+- [Advanced orchestration](/agents/orchestration): Orchestration patterns for complex workflows
+- [Understanding agents](/agents/what-are-agents): Back to fundamentals

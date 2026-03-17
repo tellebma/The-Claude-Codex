@@ -1,0 +1,229 @@
+---
+title: "Best design plugins for Claude Code"
+description: "The best plugins for design and UI work with Claude Code: component libraries, design systems, and visual tools."
+section: "plugins"
+order: 4
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## Give Claude Code design expertise
+
+These specialized resources turn Claude Code into a more effective design and frontend assistant. Some are MCP servers (which connect Claude to external services), others are community agents or skills (Markdown files to copy into `.claude/`).
+
+<Callout type="info" title="Community resources and MCPs, not official plugins">
+The resources on this page are either **community projects** (agents, skills) or **legitimate MCP servers**. There is no official "Frontend Design" or "UI UX Pro Max" plugin installable via a `/plugin install` command.
+</Callout>
+
+<Callout type="tip" title="MCP and agents work together">
+The MCPs on this page (Playwright, 21st.dev Magic) provide **action capabilities**: navigate, take screenshots, generate components via an API. Community agents and skills provide the **design intelligence**: best practices, patterns, conventions.
+</Callout>
+
+---
+
+## Frontend Design Agent: The design expert in Claude Code
+
+**Community resource** | Category: Agents | Source: Everything Claude Code
+
+The Frontend Design agent is a Markdown file that configures Claude Code as a design and frontend development expert. It's part of community collections like [Everything Claude Code](https://github.com/punkpeye/everything-claude-code).
+
+<Callout type="info" title="An agent, not a plugin">
+This isn't software to install, it's a `.md` file that defines a persona and instructions for Claude Code. You copy it into `.claude/agents/` and it becomes available in your sessions.
+</Callout>
+
+### Installation from Everything Claude Code
+
+```bash
+# Install via /install-github
+/install-github punkpeye/everything-claude-code
+
+# Or manually: download the specific agent
+mkdir -p .claude/agents
+curl -o .claude/agents/frontend-design.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/agents/frontend-design.md
+```
+
+### Example frontend-design.md agent file
+
+You can also create your own:
+
+```markdown
+---
+name: frontend-design
+description: Design and frontend development expert, specialized in React and Tailwind CSS
+---
+
+You are a design and frontend development expert with expertise in:
+- Design systems (tokens, components, documentation)
+- React with TypeScript and Tailwind CSS
+- Web accessibility (WCAG 2.1 AA minimum)
+- Responsive design and mobile-first
+- Subtle animations with Framer Motion
+
+For each component, you produce:
+1. Strict TypeScript code, no `any`
+2. Responsive Tailwind classes (mobile → desktop)
+3. ARIA attributes and focus management
+4. A dark mode example if applicable
+```
+
+### Use cases
+
+- **Full landing page**: *"As the frontend-design agent, create a landing page for a SaaS with hero, features, pricing, and footer"*
+- **Design system**: *"Generate design tokens (colors, typography, spacing) for a cohesive design system"*
+- **Accessible component**: *"Create an accessible Modal component with focus trap, escape key, and aria-labels"*
+- **Dark mode**: *"Add a complete dark mode to my application with smooth transitions"*
+
+---
+
+## 21st.dev Magic: Modern UI components (MCP)
+
+**Official MCP Server** | Category: UI generation | Author: [21st.dev](https://21st.dev)
+
+21st.dev Magic is a **real MCP server** that provides access to a library of modern UI components directly from Claude Code. Unlike agents, it's an external service connected via the MCP protocol.
+
+<Callout type="info" title="Official 21st.dev MCP">
+The npm package is `@21st-dev/magic`. It requires an API key obtained from [21st.dev](https://21st.dev). Official documentation is available on the 21st.dev website.
+</Callout>
+
+### Installation
+
+```bash
+# Via the Claude command
+claude mcp add magic -e TWENTY_FIRST_API_KEY=your-key -- npx -y @21st-dev/magic
+```
+
+### JSON configuration
+
+```json
+{
+  "mcpServers": {
+    "magic": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic"],
+      "env": {
+        "TWENTY_FIRST_API_KEY": "your-21st-dev-key"
+      }
+    }
+  }
+}
+```
+
+### Available tools
+
+- **`21st_magic_component_builder`**: Generate a UI component from a description
+- **`21st_magic_component_inspiration`**: Find inspiration from existing components
+- **`21st_magic_component_refiner`**: Improve an existing component
+- **`logo_search`**: Search for brand logos
+
+### Use cases
+
+- **Complex component**: *"I need a pricing section with 3 tiers, monthly/annual toggle, and feature comparison"*
+- **Inspiration**: *"Show me examples of modern hero sections for a documentation site"*
+- **Refinement**: *"Take this Card component and improve it with hover animations and better spacing"*
+
+---
+
+## Playwright: E2E tests and visual verification (MCP)
+
+**Official MCP Server** | Category: Testing & Automation | Author: [Microsoft / community](https://github.com/microsoft/playwright-mcp)
+
+The Playwright MCP integrates end-to-end testing directly into the Claude Code workflow. It lets Claude navigate pages, take screenshots, and validate interactions.
+
+<Callout type="info" title="Official npm package">
+The Playwright MCP is published as `@playwright/mcp` by Microsoft. Its source repo is at [github.com/microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp). It requires Playwright to be installed in your project.
+</Callout>
+
+### Installation
+
+```bash
+# Install Playwright if not already done
+npm install -D @playwright/test
+npx playwright install
+
+# Add the MCP
+claude mcp add playwright -- npx -y @playwright/mcp
+```
+
+### JSON configuration
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    }
+  }
+}
+```
+
+### Available tools
+
+- **`browser_navigate`**: Navigate to a URL
+- **`browser_take_screenshot`**: Take a screenshot of the page
+- **`browser_snapshot`**: Capture the accessible DOM of the page
+- **`browser_click`**: Click an element
+- **`browser_fill_form`**: Fill a form
+- **`browser_evaluate`**: Execute JavaScript in the page
+
+### Use cases
+
+- **Visual verification**: *"Open my local homepage and take a screenshot to check the rendering"*
+- **E2E test**: *"Test the signup form: fill in the fields, submit, and verify the success message"*
+- **Responsive debug**: *"Take a screenshot of my page in mobile (375px) and desktop (1440px)"*
+
+<Callout type="tip" title="Accelerated design-to-code workflow">
+Combine 21st.dev Magic + Playwright: generate a component with Magic, then use Playwright to visually verify the rendering and iterate until you get the desired result.
+</Callout>
+
+---
+
+## Frontend Design Skill: Dedicated slash command
+
+**Community resource** | Category: Skills | Format: Markdown file
+
+In addition to the agent, you can create a **skill** (slash command) dedicated to frontend design. Unlike the agent which is always active, the skill is invoked explicitly when you need it.
+
+### Create a frontend-design.md skill
+
+```bash
+mkdir -p .claude/commands
+cat > .claude/commands/frontend-design.md << 'EOF'
+# Frontend Design
+
+Create or improve a UI component with the following constraints:
+
+**Stack**: React 18+, TypeScript strict, Tailwind CSS v3
+**Accessibility**: WCAG 2.1 AA minimum (aria-labels, focus visible, 4.5:1 contrast)
+**Responsive**: mobile-first, breakpoints sm/md/lg/xl
+**Quality**: no `any`, named exports, one component per file
+
+Always provide:
+1. The complete TypeScript component
+2. A usage example
+3. Props documented with JSDoc
+EOF
+```
+
+Usage:
+```bash
+/frontend-design create a product card component with image, title, price, and add-to-cart button
+```
+
+---
+
+## Summary
+
+| Resource | Type | Source | Best for |
+|--------|------|---------|---------------|
+| **Frontend Design Agent** | Community agent | [Everything Claude Code](https://github.com/punkpeye/everything-claude-code) | Persistent design persona |
+| **21st.dev Magic** | MCP Server | [21st.dev](https://21st.dev) | UI component generation |
+| **Playwright MCP** | MCP Server | [microsoft/playwright-mcp](https://github.com/microsoft/playwright-mcp) | E2E tests, visual verification |
+| **Frontend Design Skill** | Skill (slash command) | Create your own | Design on demand |
+
+## Next steps
+
+- [Security & quality extensions](/plugins/best-security): Secure and improve your code quality
+- [Top essential extensions 2026](/plugins/best-essential): The fundamental resources
+- [Installing and managing extensions](/plugins/setup): Installation and configuration guide

@@ -1,0 +1,255 @@
+---
+title: "Common prompting mistakes"
+description: "The most common prompting mistakes with Claude Code and how to avoid them: vague requests, missing context, and anti-patterns."
+section: "prompting"
+order: 4
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Why these mistakes matter
+
+Prompting is a skill that can be learned. The difference between a beginner and an expert isn't about prompt complexity, but about the **ability to avoid classic mistakes**. Each of the mistakes below wastes time, context, and response quality.
+
+<Callout type="info" title="The 80/20 rule of prompting">
+80% of response problems come from 20% of mistakes. The 10 mistakes listed here cover nearly every situation where Claude "doesn't do what you want." Eliminate them and your results will improve dramatically.
+</Callout>
+
+## Mistake 1: The overly vague prompt
+
+**The problem**: you ask for something without giving enough detail. Claude has to guess what you want, and its default choices don't match your expectations.
+
+**The impact**: you get a generic result that takes 3-4 iterations to reach the desired outcome. You waste time and context.
+
+```markdown
+# Bad prompt
+"Make me a login page"
+
+# Good prompt
+"Create a login page in React/TypeScript with Tailwind CSS.
+Fields: email (required, format validated) and password (required, min 8 characters).
+Include a 'Forgot password' link and a 'Sign in with Google' button.
+Handle states: form, loading, error (bad credentials), success.
+Use react-hook-form with Zod validation.
+Accessible: explicit labels, aria-describedby for errors, focus management."
+```
+
+<Callout type="tip" title="How to fix it">
+Ask yourself: "If I gave this brief to a colleague who doesn't know the project, could they deliver exactly what I expect?" If the answer is no, add more context.
+</Callout>
+
+## Mistake 2: Missing technical context
+
+**The problem**: you don't specify the stack, conventions, or technical environment. Claude picks default technologies that don't match your project.
+
+**The impact**: you get JavaScript code when you wanted TypeScript, class-based React when you use hooks, or styled-components when your project uses Tailwind.
+
+```markdown
+# Bad prompt
+"Create a table component"
+
+# Good prompt
+"Create a DataTable component in React/TypeScript for Next.js 14 (App Router).
+Stack: Tailwind CSS, @tanstack/react-table v8.
+Features: column sorting, pagination (20 items/page), global search.
+Data comes from a REST API with the format { data: T[], total: number }.
+Strict TypeScript, no any. Named exports only."
+```
+
+## Mistake 3: Asking for everything at once
+
+**The problem**: you ask for a complete application in a single prompt. The task is too big to be done properly in one pass.
+
+**The impact**: Claude produces a superficial result on every aspect rather than a thorough result on one specific aspect. The code is often incomplete or poorly structured.
+
+```markdown
+# Bad prompt
+"Build me a complete project management app with auth, dashboard,
+task management, API, database, tests, CI/CD and deployment"
+
+# Good prompt (broken into steps)
+"Step 1: Let's create the database schema.
+Create the schema.prisma for a task management app with:
+- Table User (id uuid, email unique, name, passwordHash, createdAt)
+- Table Project (id uuid, name, description, ownerId FK User, createdAt)
+- Table Task (id uuid, title, description, status enum, priority enum,
+  projectId FK Project, assigneeId FK User nullable, dueDate nullable)
+Relations: User 1->N Project, Project 1->N Task, User 1->N Task (assigned)"
+```
+
+<Card title="The decomposition rule" variant="highlight">
+If your prompt is longer than 15 lines or covers more than 2 distinct responsibilities, break it down. One task per prompt = one quality result per response.
+</Card>
+
+## Mistake 4: Not iterating
+
+**The problem**: when the first response isn't perfect, you start over from scratch instead of refining the existing answer.
+
+**The impact**: you lose conversation context and have to re-explain everything. Targeted follow-up prompts are much more effective.
+
+```markdown
+# Bad prompt (starting over)
+"Actually, that's not what I wanted.
+Redo a completely different Button component."
+
+# Good prompt (iterating on the existing work)
+"The Button component is a good base. Here are 3 adjustments:
+1. Replace the 'info' and 'success' variants with 'ghost' and 'outline'
+2. Add 'leftIcon' and 'rightIcon' props of type LucideIcon
+3. The loading state should disable the button AND replace the label with a spinner
+Keep everything else as is."
+```
+
+## Mistake 5: Ignoring error handling
+
+**The problem**: you ask for the "happy path" without mentioning error cases, edge cases, or intermediate states.
+
+**The impact**: the code works in the nominal case but crashes as soon as a user does something unexpected.
+
+```markdown
+# Bad prompt
+"Create a function that fetches users from the API"
+
+# Good prompt
+"Create a fetchUsers function that retrieves users from GET /api/users.
+Handle the following cases:
+- Success: return the typed User[] array
+- Network error: return an explicit error with automatic retry (3 attempts)
+- 401 error: trigger the refresh token then retry the request
+- 429 error: wait for the delay specified in Retry-After then retry
+- 500 error: log the error and return a user-friendly message
+- Timeout: abort after 10 seconds with an explicit message
+Return a Result<User[], ApiError> type (no throw)."
+```
+
+## Mistake 6: Copy-pasting prompts without adapting
+
+**The problem**: you copy a prompt template found online without adapting it to your specific context.
+
+**The impact**: the result is technically correct but doesn't match your stack, conventions, or business needs.
+
+```markdown
+# Bad prompt (unadapted template)
+"You are an expert developer. Create a complete CRUD for User."
+
+# Good prompt (template adapted to project)
+"You are a backend TypeScript/Express developer in our MyApp project.
+Create the User CRUD following our conventions (see CLAUDE.md):
+- Repository pattern (src/repositories/user.repository.ts)
+- Service layer (src/services/user.service.ts)
+- Controller (src/controllers/user.controller.ts)
+- Zod validation (src/schemas/user.schema.ts)
+- Response format: { success, data, error, meta }
+- Service tests with repository mocks"
+```
+
+<Callout type="tip" title="Use templates as a starting point">
+The [role-based templates](/prompting/templates) are designed to be adapted. Never use them as-is; customize them with your project's context.
+</Callout>
+
+## Mistake 7: Forgetting to specify tests
+
+**The problem**: you ask for code without mentioning tests. Claude generates untested code by default.
+
+**The impact**: you need a second prompt for tests, and those tests are often disconnected from the implementation because Claude has "forgotten" the code details.
+
+```markdown
+# Bad prompt
+"Create a useDebounce hook"
+
+# Good prompt
+"Create a useDebounce<T>(value: T, delay: number): T hook.
+The hook returns the debounced value after 'delay' ms without change.
+Clean up the timeout on unmount and when value/delay change.
+
+Include unit tests (Vitest + Testing Library renderHook):
+- Returns the initial value immediately
+- Returns the updated value after the delay
+- Doesn't update if the value changes before the delay
+- Cleans up the timeout on component unmount
+- Works with generic types (string, number, object)"
+```
+
+## Mistake 8: Not using CLAUDE.md
+
+**The problem**: you repeat the same contextual information in every prompt instead of centralizing it in the [CLAUDE.md](/prompting/claude-md) file.
+
+**The impact**: wasted time, inconsistency between sessions, and risk of forgetting important conventions.
+
+```markdown
+# Bad (repeating in every prompt)
+"Use strict TypeScript, no any, Tailwind CSS, functional components,
+named exports, files < 400 lines, immutability..."
+
+# Good (using CLAUDE.md)
+Put this information in your CLAUDE.md once and for all.
+Then your prompt reduces to:
+"Create a SearchBar component with autocomplete and 300ms debounce."
+```
+
+<Card title="Create your CLAUDE.md in 2 minutes" variant="accent">
+Run `/init` in Claude Code. The command analyzes your project and generates a personalized CLAUDE.md with your stack, conventions, and architecture. Check the [complete CLAUDE.md guide](/prompting/claude-md) to optimize it.
+</Card>
+
+## Mistake 9: Ignoring conversation context
+
+**The problem**: you treat each prompt as independent instead of using conversation history as context.
+
+**The impact**: you re-explain information Claude already knows, wasting the context window.
+
+```markdown
+# Bad (re-explaining everything)
+"For my Next.js 14 TypeScript Tailwind CSS Prisma PostgreSQL project
+(the one we were talking about earlier), create a..."
+
+# Good (building on context)
+"Now create the rate limiting middleware for the endpoints
+we just created. Use the same structure as the auth middleware."
+```
+
+## Mistake 10: Not verifying results
+
+**The problem**: you accept Claude's response without verifying it or asking it to self-evaluate.
+
+**The impact**: subtle bugs, security vulnerabilities, or performance issues go unnoticed.
+
+```markdown
+# Bad (accepting without checking)
+"Great, thanks!" -> move on
+
+# Good (asking for verification)
+"Before moving on, check the code you just generated:
+1. Are there security vulnerabilities? (SQL injection, XSS, CSRF)
+2. Are edge cases handled? (null, undefined, empty array, empty string)
+3. Is the code testable? (no hardcoded dependencies)
+4. Is performance acceptable for 10,000 items?
+5. Is the TypeScript strict? (no any, no as unknown)"
+```
+
+<Callout type="warning" title="The responsibility remains human">
+Claude is a powerful tool, but final validation remains your responsibility. Always read the generated code, run the tests, and verify the business logic before committing.
+</Callout>
+
+## Summary table
+
+| Mistake | Symptom | Quick fix |
+|--------|----------|-----------|
+| Too vague | Generic result | Add details and constraints |
+| No context | Wrong stack/conventions | Specify the stack or use CLAUDE.md |
+| All at once | Superficial code | Break into steps |
+| No iteration | Lost context | Refine the existing response |
+| No error handling | Fragile code | List edge cases |
+| Copy-paste | Mismatched code | Customize templates |
+| No tests | Unverified code | Ask for tests in the prompt |
+| No CLAUDE.md | Repetition | Run `/init` |
+| No conversation context | Wasted context | Reference previous exchanges |
+| No verification | Hidden bugs | Ask for a self-review |
+
+## Next steps
+
+Now that you know which mistakes to avoid, refine your approach.
+
+- [The complete CLAUDE.md guide](/prompting/claude-md): Eliminate mistake #8 for good
+- [Advanced prompting and multi-agents](/prompting/advanced): Chaining and orchestration techniques
+- [Prompting basics](/prompting/basics): Review the fundamentals if needed
+- [Understanding agents](/agents/what-are-agents): Delegate verification to specialized agents

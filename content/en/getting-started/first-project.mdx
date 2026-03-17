@@ -1,0 +1,308 @@
+---
+title: "First project step by step"
+description: "Hands-on tutorial: build your first website with Claude Code in 5 minutes. Prompt examples, iterations, and best practices to get started."
+section: "getting-started"
+order: 4
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## What you'll build
+
+In this tutorial, you'll create not one but **two projects**: first an ultra-simple page (5 minutes), then a complete website with modern design. Let's start with the easiest one.
+
+<Callout type="info" title="Prerequisites">
+Before you begin, make sure Claude Code is installed and authenticated. If not, follow the [Prerequisites and installation](/getting-started/installation) guide first.
+</Callout>
+
+## First project: your introduction page (5 min)
+
+This first project is intentionally very simple. No framework, no configuration, just an HTML file you can open directly in your browser.
+
+**Goal**: create a web page that says "Hello, my name is [your name]" with a blue background and white text.
+
+### Step 1: Create a folder and launch Claude Code
+
+<TerminalScreenshot
+  title="Terminal - starting the first project"
+  lines={[
+    { type: "command", content: "mkdir ~/my-first-page && cd ~/my-first-page && claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Analysing project structure..." },
+    { type: "output", content: "  ✓ Empty project - ready to start" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> " }
+  ]}
+/>
+
+### Step 2: Ask for your page
+
+Type this request, replacing "John" with your name:
+
+```text
+> Create an HTML page with a single file (index.html).
+> The page should say "Hello, my name is John" centered on the screen.
+> Blue background (#1e40af), white text, large readable font.
+> No external dependencies, everything in a single file.
+```
+
+Claude Code will create the `index.html` file. Type `y` to accept.
+
+### Step 3: View the result in your browser
+
+The simplest way: **drag the `index.html` file** from your folder directly into your browser (Chrome, Firefox, Safari). Your page displays instantly!
+
+Or via the terminal:
+
+```bash
+# On macOS
+open index.html
+
+# On Linux
+xdg-open index.html
+
+# On Windows
+start index.html
+```
+
+<Callout type="tip" title="Well done! You just created your first web page.">
+It's that simple. Claude Code wrote all the HTML and CSS for you. You can now ask for changes: "Change the background color to green," "Add a profile photo," "Make the text bigger"...
+</Callout>
+
+---
+
+## Second project: a complete website with modern design
+
+Ready for something more ambitious? Let's build a complete portfolio with navigation, sections, and animations.
+
+## Step 1: Set the stage
+
+Create a new folder for your project and launch Claude Code inside it.
+
+<TerminalScreenshot
+  title="Terminal - starting the project"
+  lines={[
+    { type: "command", content: "mkdir ~/my-first-site && cd ~/my-first-site && claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Analysing project structure..." },
+    { type: "output", content: "  ✓ Empty project - ready to start" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Type your request or /help for commands" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> " }
+  ]}
+/>
+
+Claude Code will initialize and scan the (currently empty) folder. You're ready to talk to it.
+
+## Step 2: Describe what you want
+
+The quality of the result depends directly on the quality of your request. Here's a good prompt to start:
+
+```text
+> Build me a modern HTML/CSS web page with:
+> - A header with a text logo "My Portfolio" and navigation
+> - A hero section with a catchy title, description, and CTA button
+> - A "My Projects" section with 3 cards of fictional projects
+> - A footer with social media links
+> - Design: dark background (#0f172a), cyan accents (#06b6d4), modern typography
+> - Responsive (mobile, tablet, desktop)
+> - Subtle CSS hover animations on the cards
+> - Everything in a single index.html file with embedded CSS
+```
+
+<Callout type="tip" title="Keys to a good prompt">
+Notice the structure of the prompt above: **What** (an HTML/CSS web page), **Structure** (each section described), **Design** (specific colors), **Constraints** (responsive, single file), **Details** (animations, typography). The more precise your prompt, the closer the result will be to what you have in mind.
+</Callout>
+
+## Step 3: Watch Claude Code work
+
+After sending your prompt, Claude Code will:
+
+1. **Analyze** your request and formulate a plan
+2. **Show you** what it plans to do before doing it
+3. **Ask for your approval** to create the file
+
+<TerminalScreenshot
+  title="Terminal - Claude Code in action"
+  lines={[
+    { type: "prompt", content: "> Build me a modern HTML/CSS web page with a header, a hero section, and 3 project cards. Dark design, cyan accents, responsive." },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Claude > I'll create your portfolio page. Here's my plan:" },
+    { type: "output", content: "" },
+    { type: "output", content: "    1. Create index.html with semantic HTML structure" },
+    { type: "output", content: "    2. Embed CSS with your color palette" },
+    { type: "output", content: "    3. Add CSS hover animations on cards" },
+    { type: "output", content: "    4. Make the design responsive (mobile, tablet, desktop)" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ● Create file index.html (1 file)" },
+    { type: "output", content: "    Do you want me to proceed? (y/n)" },
+    { type: "empty", content: "" },
+    { type: "command", content: "y" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ✓ index.html created (247 lines)" }
+  ]}
+/>
+
+Type `y` (or press Enter) to accept. Claude Code will generate the complete file.
+
+## Step 4: View the result
+
+Open the file in your browser:
+
+```bash
+# On macOS
+open index.html
+
+# On Linux
+xdg-open index.html
+
+# On Windows (WSL)
+explorer.exe index.html
+
+# Or simply: drag the file into your browser
+```
+
+You should see a complete web page with the design you requested.
+
+## Step 5: Iterate and refine
+
+This is where Claude Code truly shines. Instead of editing the code by hand, simply ask for the changes you want:
+
+```text
+> Add a progressive fade-in animation on each section
+> as you scroll down
+```
+
+Claude Code will modify the existing file to add this feature. You can chain as many requests as needed:
+
+```text
+> Change the accent color from cyan to purple (#8b5cf6)
+> and add a subtle gradient on the header
+```
+
+```text
+> Add a contact form with name, email, and message fields.
+> Style it to be consistent with the rest of the design.
+```
+
+```text
+> Make the site accessible: add aria attributes,
+> check color contrasts, and make sure everything
+> is keyboard-navigable
+```
+
+<Callout type="tip" title="Iteration is key">
+Don't try to describe everything perfectly on the first try. Start simple, then refine step by step. Claude Code keeps the context of the entire conversation and understands your feedback. It's exactly like working with a colleague: you show them the result, tell them what you want to change, and they adapt.
+</Callout>
+
+## Going further: a Next.js project
+
+Ready for something more ambitious? Ask Claude Code to create a complete project with a framework.
+
+<TerminalScreenshot
+  title="Terminal - Next.js project"
+  lines={[
+    { type: "prompt", content: "> Initialize a Next.js 14 project with TypeScript and Tailwind. Landing page for a productivity app. Dark mode, minimalist design." },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Claude > I'll initialize the project and create the landing page." },
+    { type: "output", content: "    1. npx create-next-app@14 --typescript --tailwind" },
+    { type: "output", content: "    2. Create components (Header, Hero, Features, Footer)" },
+    { type: "output", content: "    3. Configure dark mode" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ● Run: npx create-next-app@14 my-app --typescript --tailwind" },
+    { type: "output", content: "    Do you want me to proceed? (y/n)" },
+    { type: "command", content: "y" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Creating a new Next.js app in ~/my-first-site/my-app..." },
+    { type: "output", content: "  Installing dependencies..." },
+    { type: "output", content: "  ✓ Project initialized successfully!" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ✓ src/components/Header.tsx created" },
+    { type: "output", content: "  ✓ src/components/Hero.tsx created" },
+    { type: "output", content: "  ✓ src/components/Features.tsx created (3 columns)" },
+    { type: "output", content: "  ✓ src/app/page.tsx updated" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Project ready! Run: npm run dev" }
+  ]}
+/>
+
+Claude Code will:
+- Initialize the project (`npx create-next-app`)
+- Configure TypeScript and Tailwind
+- Create the necessary React components
+- Structure the files correctly
+- Wire everything together so the project works right away
+
+<TerminalScreenshot
+  title="Terminal - development server"
+  lines={[
+    { type: "command", content: "cd my-app && npm run dev" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ▲ Next.js 14.2.3" },
+    { type: "output", content: "  - Local:   http://localhost:3000" },
+    { type: "output", content: "  - Network: http://192.168.1.42:3000" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Ready in 1.8s" }
+  ]}
+/>
+
+## Best practices for your first projects
+
+<Steps>
+<Step title="Start small" stepNumber={1}>
+Your first Claude Code project shouldn't be a full application. Start with an HTML page, a Python script, or a utility function. Learn to communicate with the tool before tackling complex projects.
+</Step>
+
+<Step title="Be specific in your requests" stepNumber={2}>
+"Make me a site" will give a generic result. "Make me a landing page for a meditation app, dark blue background, serif typography, with a 3-tier pricing section" will produce a result close to your vision.
+</Step>
+
+<Step title="Iterate quickly" stepNumber={3}>
+Send short, frequent requests rather than a 50-line wall of text. Claude Code understands incremental instructions better.
+</Step>
+
+<Step title="Use CLAUDE.md" stepNumber={4}>
+As soon as your project spans more than one session, create a `CLAUDE.md` file at the root. Document the stack, conventions, and useful commands. Claude Code will read it automatically.
+</Step>
+
+<Step title="Verify the result" stepNumber={5} isLast>
+Claude Code is powerful but not infallible. Always test the generated code, review critical changes, and don't blindly accept every suggestion.
+</Step>
+</Steps>
+
+## Useful commands to know
+
+During your Claude Code session, you can use these special commands:
+
+| Command | Description |
+|---------|-------------|
+| `/help` | Show help and available commands |
+| `/clear` | Clear the conversation context |
+| `/compact` | Compress the conversation to free up memory |
+| `/cost` | Show the cost of the current session |
+| `/doctor` | Diagnose configuration problems |
+| `Ctrl+C` | Cancel the current generation |
+| `Ctrl+D` | Exit Claude Code |
+
+## Next steps
+
+Congratulations, you've built your first project with Claude Code! You now master the basics: launching Claude Code, writing requests, iterating on results.
+
+To go further, explore the advanced features that will transform your daily workflow:
+
+- [MCPs](/mcp): Connect Claude Code to Gmail, GitHub, Slack, and dozens of other tools
+- [Skills](/skills): Create reusable workflows to automate your tasks
+- [Advanced Prompting](/prompting): Master the art of communicating with AI for optimal results
+
+<Callout type="tip" title="Join the community">
+Share your creations, ask your questions, and see what other users are building with Claude Code. Learning is faster when you do it together.
+</Callout>

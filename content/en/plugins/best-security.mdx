@@ -1,0 +1,278 @@
+---
+title: "Best security plugins for Claude Code"
+description: "The best security plugins for Claude Code: vulnerability scanning, dependency auditing, and code security analysis."
+section: "plugins"
+order: 5
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## Secure and harden your code
+
+Security and code quality aren't optional, they're fundamentals. The resources presented here are **community agents and skills** (Markdown files to copy into `.claude/`) that integrate security and quality best practices directly into your Claude Code workflow.
+
+<Callout type="warning" title="Helpful tools, not substitutes for human review">
+These community resources detect common issues and apply best practices, but they don't replace a human security review. For critical applications, a professional audit remains essential.
+</Callout>
+
+---
+
+## Security Reviewer Agent: The built-in security expert
+
+**Community resource** | Category: Security | Format: Agent Markdown file
+
+The Security Reviewer agent configures Claude Code as a **proactive security auditor**. It's a Markdown file placed in `.claude/agents/` that gives Claude a security expert persona.
+
+### Installation
+
+```bash
+mkdir -p .claude/agents
+
+cat > .claude/agents/security-reviewer.md << 'EOF'
+---
+name: security-reviewer
+description: Security expert who analyzes code against OWASP Top 10 standards
+---
+
+You are a cybersecurity expert specializing in web application security.
+For each analysis, you systematically look for:
+
+**OWASP Top 10**:
+- A01: Broken Access Control (missing authorization checks)
+- A02: Cryptographic Failures (hardcoded secrets, weak encryption)
+- A03: Injection (SQL, NoSQL, shell command)
+- A07: XSS (Cross-Site Scripting, HTML injection)
+- A08: Software/Data Integrity (insecure deserialization)
+
+**For each vulnerability found**:
+1. Severity: CRITICAL / HIGH / MEDIUM / LOW
+2. Precise location in the code (file:line)
+3. Concrete risk explanation
+4. Secure fix example with code
+
+You only report real issues, no false positives.
+EOF
+```
+
+### Usage
+
+```bash
+# Analyze a file or folder
+"As the security-reviewer agent, audit src/auth/ and list all vulnerabilities"
+
+# Pre-commit check
+"Security-reviewer: are there any hardcoded secrets or vulnerabilities in these changes?"
+
+# API endpoint audit
+"Analyze this REST endpoint to detect authentication, validation, and rate limiting issues"
+```
+
+### Use cases
+
+- **Secure code review**: *"Analyze my authentication module against OWASP"*
+- **Secret detection**: *"Scan my project to detect plaintext tokens and passwords"*
+- **API audit**: *"Analyze my REST endpoints and check authentication, input validation, and rate limiting"*
+
+<Callout type="tip" title="Integrate into the PR workflow">
+You can create a `/security-review` skill that automatically invokes the agent on the current diff, before each Pull Request.
+</Callout>
+
+---
+
+## Code Reviewer Agent: Automated review
+
+**Community resource** | Category: Quality | Format: Agent Markdown file
+
+The Code Reviewer agent simulates a code review by a senior developer. It analyzes the current diff and produces a structured report with concrete suggestions.
+
+### Installation
+
+```bash
+cat > .claude/agents/code-reviewer.md << 'EOF'
+---
+name: code-reviewer
+description: Senior developer who performs rigorous code reviews
+---
+
+You perform code reviews like an experienced senior developer.
+For each review, you analyze:
+
+**Quality**:
+- Readability and naming (variables, functions, files)
+- Functions too long (>50 lines) or files too large (>800 lines)
+- Excessive nesting (>4 levels)
+- Duplicated code and refactoring opportunities
+
+**Correctness**:
+- Logic bugs and unhandled edge cases
+- Missing or incomplete error handling
+- Unintended object mutations
+
+**Performance**:
+- Avoidable nested loops (O(n^2) complexity or worse)
+- N+1 queries in database calls
+- Unnecessary React re-renders
+
+**Security**:
+- Unvalidated inputs, possible injections
+- Exposed secrets or sensitive data
+
+Output format: categorize by CRITICAL, HIGH, MEDIUM, LOW.
+For each issue: location + explanation + fix suggestion.
+EOF
+```
+
+### Usage
+
+```bash
+# Review the current diff
+"As the code-reviewer agent, analyze all files modified since main"
+
+# Targeted review
+"Code-reviewer, focus on src/api/auth.ts and list the critical issues"
+```
+
+<Callout type="tip" title="Combine both agents">
+Use the **Security Reviewer** agent for security aspects and the **Code Reviewer** agent for quality. This combination covers both vulnerabilities and technical debt.
+</Callout>
+
+---
+
+## TDD Guide Skill: Tests first, always
+
+**Community resource** | Category: Testing | Format: Skill Markdown file
+
+The TDD Guide skill enforces **Test-Driven Development** discipline in Claude Code. It installs as a Markdown file in `.claude/commands/` and is invoked with `/tdd-guide`.
+
+### Installation from Everything Claude Code
+
+```bash
+# Fetch from the community repo
+mkdir -p .claude/commands
+
+curl -o .claude/commands/tdd-guide.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
+```
+
+### Or create your own
+
+```bash
+cat > .claude/commands/tdd-guide.md << 'EOF'
+# TDD Guide
+
+Implement this feature by strictly following the TDD cycle:
+
+## RED → GREEN → REFACTOR cycle
+
+**Step 1 - RED**: Write a test first that describes the expected behavior.
+The test MUST fail initially. If it passes without code, the test is bad.
+
+**Step 2 - GREEN**: Write the MINIMAL code to make the test pass.
+No premature optimization. The only goal is to pass the test.
+
+**Step 3 - REFACTOR**: Clean up the code while keeping tests green.
+Improve readability, remove duplication, follow conventions.
+
+**At each step**: show the test result (FAIL/PASS) before continuing.
+**Coverage target**: 80% minimum on the implemented code.
+EOF
+```
+
+### Test framework configuration (in CLAUDE.md)
+
+```markdown
+## Tests
+- Framework: Vitest
+- Minimum coverage: 80%
+- Style: describe/it, expect assertions
+- Mocks: vi.mock() for external dependencies
+```
+
+### Use cases
+
+- **New feature**: `/tdd-guide implement the pagination system with offset/limit`
+- **Bug fix**: `/tdd-guide fix this bug in TDD: first a test that reproduces it, then the fix`
+- **Safe refactoring**: `/tdd-guide refactor this module while making sure tests pass at each step`
+
+<Steps>
+<Step title="RED - Write the test" stepNumber={1}>
+The skill guides Claude Code to write a test first that describes the expected behavior. The test should fail, that's normal and expected.
+</Step>
+
+<Step title="GREEN - Implement" stepNumber={2}>
+Claude Code writes the minimal code to make the test pass. No over-engineering, just enough to go green.
+</Step>
+
+<Step title="REFACTOR - Improve" stepNumber={3} isLast>
+Once the test is green, Claude Code refactors the code to make it clean, readable, and performant. Tests ensure nothing breaks.
+</Step>
+</Steps>
+
+---
+
+## Configuration audit: Manual best practices
+
+There is no "AgentShield" plugin or official automated tool for auditing Claude Code configuration. Here are the best practices to apply manually.
+
+### Check configured MCPs
+
+```bash
+# List all configured MCPs
+claude mcp list
+
+# Check settings.json content
+cat ~/.claude/settings.json
+cat .claude/settings.json  # if it exists in the project
+```
+
+### Configuration security checklist
+
+```bash
+# Check that no tokens are hardcoded in versioned files
+git grep -l "GITHUB_TOKEN\|SLACK_BOT_TOKEN\|API_KEY" .
+
+# Check that settings.json isn't committed (if it contains tokens)
+cat .gitignore | grep settings.json
+
+# Recommendation: use system environment variables
+export GITHUB_TOKEN=ghp_your-token
+# Then in settings.json, don't include the value directly
+```
+
+### Example of a secure settings.json
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Token security">
+**Never** commit your tokens to a Git repository. Place sensitive configurations in `~/.claude/settings.json` (global, outside version control) or use system environment variables.
+</Callout>
+
+---
+
+## Summary
+
+| Resource | Type | Installation | Best for |
+|--------|------|-------------|---------------|
+| **Security Reviewer Agent** | Agent Markdown | Copy to `.claude/agents/` | Security audits, vulnerability detection |
+| **Code Reviewer Agent** | Agent Markdown | Copy to `.claude/agents/` | Quality reviews, team standards |
+| **TDD Guide Skill** | Skill Markdown | Copy to `.claude/commands/` | TDD discipline, test coverage |
+| **Config audit** | Best practices | Manual | Token security and permissions |
+
+## Next steps
+
+- [Understanding community extensions](/plugins/what-are-plugins): Go back to the fundamentals if needed
+- [Installing and managing extensions](/plugins/setup): Installation and configuration guide
+- [Top essential extensions 2026](/plugins/best-essential): The fundamental resources to get started
+- [Top recommended Skills](/skills/best-skills): TDD Guide, Security Review, and Code Reviewer as Skills

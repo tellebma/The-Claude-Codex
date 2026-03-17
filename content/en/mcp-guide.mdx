@@ -1,0 +1,80 @@
+---
+title: "Complete MCP guide"
+description: "Complete guide to the Model Context Protocol (MCP): understand, install, and use MCP servers with Claude Code. From basics to advanced usage."
+badge: "MCP"
+order: 2
+section: "mcp"
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## What is an MCP?
+
+The **Model Context Protocol** (MCP) is an open protocol created by Anthropic that lets Claude Code connect to external services. It's the universal adapter between Claude Code and the rest of the digital world.
+
+<Callout type="tip" title="A simple analogy">
+Imagine Claude Code as a versatile expert locked in a room. MCPs are **universal ports** you plug between Claude and your tools: your email, your source code, your databases, your browser.
+</Callout>
+
+## How to install an MCP
+
+Installation takes three steps:
+
+### 1. Use the dedicated command
+
+```bash
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /home/your-user/projects
+```
+
+### 2. Configure in settings.json
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/path/to/your/folder"
+      ]
+    }
+  }
+}
+```
+
+### 3. Verify the connection
+
+```bash
+claude mcp list
+
+# Expected output:
+# filesystem: connected
+#   Tools: read_file, write_file, list_directory, search_files, ...
+```
+
+## Essential MCPs
+
+| MCP | Level | Use case |
+|-----|-------|----------|
+| **Filesystem** | Beginner | Read, write, and explore files |
+| **GitHub** | Intermediate | Manage PRs, issues, and CI/CD workflows |
+| **PostgreSQL / SQLite** | Intermediate | Query your databases |
+| **Puppeteer / Playwright** | Advanced | Automate a web browser |
+| **Slack** | Beginner | Read and send messages |
+| **Gmail** | Beginner | Manage your emails |
+
+## Best practices
+
+<Callout type="warning" title="Token security">
+Never commit your tokens to a Git repository. Use environment variables or a secret manager for sensitive information. Prefer global configuration for personal tokens.
+</Callout>
+
+- **Principle of least privilege**: grant each MCP only the necessary permissions
+- **Per-project configuration**: use `.claude/settings.json` at the root of each project
+- **Combine MCPs**: the real power emerges when Claude chains multiple MCPs together
+- **Document your configurations**: add a CLAUDE.md file to explain which MCPs are in use
+
+## Next steps
+
+Now that you've mastered MCPs, explore [Skills](/skills) to teach new behaviors to Claude Code, or refine your [prompting](/prompting) for optimal results.

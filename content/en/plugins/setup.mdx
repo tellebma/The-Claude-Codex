@@ -1,0 +1,281 @@
+---
+title: "Installing and configuring plugins"
+description: "Complete guide to installing, configuring, and managing Claude Code plugins. Hooks, event system, and best practices."
+section: "plugins"
+order: 2
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## Extension folder structure
+
+Claude Code reads extensions from two locations: a global folder (`~/.claude/`) for all your projects, and a local folder (`.claude/`) specific to each project.
+
+<Callout type="warning" title="No marketplace, no /plugin install">
+Claude Code has no `/plugin install`, `/plugin marketplace`, or `/plugin list` command. Community extensions are **files** (Markdown, JSON) that you copy into specific folders. This guide shows you how to do it correctly.
+</Callout>
+
+```bash
+# Global extensions (all your projects)
+~/.claude/
+├── commands/          # Global skills (slash commands)
+├── agents/            # Global agents
+└── rules/             # Global rules
+
+# Per-project extensions
+.claude/
+├── commands/          # Project skills
+├── agents/            # Project agents
+├── rules/             # Project rules
+└── settings.json      # MCP configuration and permissions
+```
+
+Files in `.claude/` (project root) take priority over global files in `~/.claude/`.
+
+## Installation methods
+
+### Method 1: via `/install-github` (recommended)
+
+Claude Code offers a native command to install resources from GitHub:
+
+```bash
+# Install from a GitHub repo (relative to root)
+/install-github punkpeye/everything-claude-code
+```
+
+<Callout type="info" title="What /install-github does">
+This command clones the specified GitHub repo, detects `.md`/`.mdc` files that correspond to agents or skills, and copies them into the right folders in your project. It doesn't download a binary, it copies text files.
+</Callout>
+
+### Method 2: manual installation (full control)
+
+The most transparent method. You see exactly what gets installed.
+
+<Steps>
+<Step title="Find an extension" stepNumber={1}>
+Search GitHub for community repos. Good starting points:
+- [punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code): complete collection of agents and rules
+- The official Anthropic documentation: https://docs.anthropic.com/en/docs/claude-code
+</Step>
+
+<Step title="Clone or download" stepNumber={2}>
+
+```bash
+# Clone the community repo
+git clone https://github.com/punkpeye/everything-claude-code /tmp/ecc
+
+# Or download a specific file
+curl -o .claude/commands/tdd-guide.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
+```
+
+</Step>
+
+<Step title="Copy to the right folders" stepNumber={3}>
+
+```bash
+# Create folders if they don't exist
+mkdir -p .claude/commands .claude/agents .claude/rules
+
+# Copy agents
+cp /tmp/ecc/agents/*.md .claude/agents/
+
+# Copy rules
+cp /tmp/ecc/rules/**/*.md .claude/rules/
+
+# Copy commands (skills)
+cp /tmp/ecc/commands/*.md .claude/commands/
+```
+
+</Step>
+
+<Step title="Verify in Claude Code" stepNumber={4} isLast>
+
+In a Claude Code session, check that your skills are available:
+
+```bash
+# Skills appear as slash commands
+# Type "/" to see the list of available commands
+/tdd-guide create an email validation function
+```
+
+</Step>
+</Steps>
+
+### Method 3: CLI tools via npm
+
+Some community tools are npm packages that assist Claude Code:
+
+```bash
+# repomix - analyzes and condenses a codebase for context
+npx repomix
+
+# Generate a compressed context file
+npx repomix --output repomix-output.txt --ignore "node_modules/**"
+
+# You then pass this file to Claude Code:
+# "Analyze this codebase: [paste content of repomix-output.txt]"
+```
+
+<Callout type="info" title="repomix on npm">
+repomix is a real npm package, published on [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Its source repo is on [GitHub/yamadashy/repomix](https://github.com/yamadashy/repomix).
+</Callout>
+
+## Configuration in settings.json
+
+Claude Code's `settings.json` file configures **MCP servers** and **permissions**, not plugins. Here's the actual structure:
+
+### Actual settings.json structure
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your-token"
+      }
+    }
+  },
+  "permissions": {
+    "allow": ["Bash(git:*)", "Read(**)", "Edit(**)"],
+    "deny": []
+  }
+}
+```
+
+There is no `"plugins"` section in `settings.json`. Community extensions (agents, rules, commands) are **files**, not JSON configuration entries.
+
+<Callout type="warning" title="Configuration priority">
+The project configuration (`.claude/settings.json`) always takes precedence over the global configuration (`~/.claude/settings.json`) for MCPs and permissions. For extension files (agents, commands, rules), the two levels are **additive**: global and project extensions are all available simultaneously.
+</Callout>
+
+## Creating your own extensions
+
+You can create your own skills, agents, and rules to share workflows with your team.
+
+### Create a skill (slash command)
+
+A skill is simply a Markdown file:
+
+```bash
+# Create a custom skill in .claude/commands/
+cat > .claude/commands/deploy-staging.md << 'EOF'
+# Deploy Staging
+
+Deploy the application to the staging environment following these steps:
+
+1. Verify tests pass (`npm run test`)
+2. Build the application (`npm run build`)
+3. Verify the Docker build works
+4. Create a git tag with the version
+5. Push to the `staging` branch
+6. Confirm deployment in the Slack #releases channel
+
+If any step fails, stop immediately and report the error.
+EOF
+```
+
+Usage in Claude Code:
+```bash
+/deploy-staging
+```
+
+### Create a specialized agent
+
+```bash
+# Create an agent in .claude/agents/
+cat > .claude/agents/security-reviewer.md << 'EOF'
+---
+name: security-reviewer
+description: Security expert who analyzes code to detect OWASP vulnerabilities
+---
+
+You are a cybersecurity expert specializing in web application security.
+You analyze code looking for:
+- SQL and NoSQL injections
+- XSS and CSRF vulnerabilities
+- Hardcoded secrets (tokens, passwords, API keys)
+- Authentication and authorization issues
+- Security misconfigurations (CORS, headers, CSP)
+
+For each issue found, you provide:
+1. Severity (CRITICAL / HIGH / MEDIUM / LOW)
+2. Precise location in the code
+3. Explanation of the risk
+4. A secure fix example
+EOF
+```
+
+### Structure of an extension collection
+
+If you want to share a collection with your team:
+
+```bash
+my-team-extension/
+├── README.md                    # Documentation and installation instructions
+├── commands/                    # Skills (slash commands)
+│   ├── deploy-staging.md
+│   └── hotfix.md
+├── agents/                      # Specialized agents
+│   ├── security-reviewer.md
+│   └── architect.md
+└── rules/                       # Rules and conventions
+    └── coding-conventions.md
+```
+
+Share it on GitHub. Your colleagues install it with:
+
+```bash
+/install-github your-org/my-team-extension
+# or manually:
+git clone https://github.com/your-org/my-team-extension
+cp -r my-team-extension/commands/ .claude/commands/
+cp -r my-team-extension/agents/ .claude/agents/
+```
+
+## Managing your extensions
+
+Since there's no central plugin manager, management is manual:
+
+```bash
+# List available skills
+ls .claude/commands/
+ls ~/.claude/commands/
+
+# List available agents
+ls .claude/agents/
+ls ~/.claude/agents/
+
+# Disable a skill (rename with a different extension)
+mv .claude/commands/unused-skill.md .claude/commands/unused-skill.md.disabled
+
+# Delete a skill
+rm .claude/commands/skill-to-remove.md
+
+# Update (re-download from the source repo)
+curl -o .claude/commands/tdd-guide.md \
+  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
+```
+
+## Best practices
+
+- **Read the content before installing**: extension files are readable text, check what they do before adding them
+- **Only install the essentials**: every agent and rule consumes context. Keep only what you actually use
+- **Version your extensions**: commit your `.claude/` files (except `settings.json` if it contains tokens) to Git so the whole team shares the same environment
+- **Test in a test project**: before activating a new extension on a critical project, test it on a sample project first
+
+<Callout type="tip" title="Sharing team configuration">
+The best practice for sharing team configuration is to commit the `.claude/` folder (agents, commands, rules) to your Git repo. That way, every developer who clones the project automatically gets the same setup.
+</Callout>
+
+## Next steps
+
+- [Top essential extensions 2026](/plugins/best-essential): The must-have community resources
+- [Design & frontend extensions](/plugins/best-design): The best resources for design and UI
+- [Security & quality extensions](/plugins/best-security): Secure and improve your code

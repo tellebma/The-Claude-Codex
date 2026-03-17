@@ -1,0 +1,270 @@
+---
+title: "Installing and configuring an MCP"
+description: "Complete guide to installing, configuring, and debugging an MCP in Claude Code. The .mcp.json file, the claude mcp add command, and troubleshooting common issues."
+section: "mcp"
+order: 2
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## The MCP configuration file
+
+MCPs are configured in a JSON file that tells Claude Code which MCP servers to launch and how to connect them. There are two levels of configuration: **global** for your personal tools, and **per-project** for each repository's tech stack.
+
+<Card title="Global configuration" variant="accent">
+The `~/.claude/settings.json` file contains the MCPs available across **all** your projects. This is where you put generic MCPs (Gmail, Slack, Calendar) and personal tokens.
+</Card>
+
+<Card title="Per-project configuration" variant="highlight">
+The `.mcp.json` file at the root of your project contains MCPs specific to that project. This is where you put development-related MCPs (Context7, Sentry, project database).
+</Card>
+
+### `.mcp.json` file structure
+
+```json
+{
+  "mcpServers": {
+    "mcp-name": {
+      "command": "npx",
+      "args": ["-y", "@package/mcp-server"],
+      "env": {
+        "API_KEY": "your-key-here"
+      }
+    }
+  }
+}
+```
+
+Each entry in `mcpServers` defines an MCP with:
+
+- **`command`**: the command to launch the MCP server (`npx`, `uvx`, `docker`, or a path to a binary)
+- **`args`**: the arguments passed to the command (the npm package, configuration options)
+- **`env`** (optional): required environment variables (tokens, API keys)
+
+## Installing an MCP: three methods
+
+<Steps>
+<Step title="Method 1: via the claude mcp add command (recommended)" stepNumber={1}>
+
+The simplest way to install an MCP. Claude Code handles everything.
+
+```bash
+# General syntax
+claude mcp add <name> -- <command> <args...>
+
+# Example: add Context7
+claude mcp add context7 -- npx -y @upstash/context7-mcp
+
+# Example: add GitHub with a token
+claude mcp add github -- npx -y @modelcontextprotocol/server-github
+
+# Example: add an MCP with environment variables
+claude mcp add slack -e SLACK_BOT_TOKEN=xoxb-your-token -- npx -y @modelcontextprotocol/server-slack
+```
+
+</Step>
+
+<Step title="Method 2: manually edit the JSON file" stepNumber={2}>
+
+For full control, edit the configuration file directly.
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token"
+      }
+    }
+  }
+}
+```
+
+</Step>
+
+<Step title="Method 3: via Docker (for complex MCPs)" stepNumber={3} isLast>
+
+Some MCPs require specific dependencies. Docker isolates everything cleanly.
+
+```json
+{
+  "mcpServers": {
+    "postgres": {
+      "command": "docker",
+      "args": [
+        "run", "-i", "--rm",
+        "-e", "DATABASE_URL",
+        "mcp/postgres"
+      ],
+      "env": {
+        "DATABASE_URL": "postgresql://user:pass@host:5432/dbname"
+      }
+    }
+  }
+}
+```
+
+</Step>
+</Steps>
+
+## Configuration in Claude Code
+
+### Check installed MCPs
+
+After adding an MCP, restart Claude Code and verify it's connected.
+
+```bash
+# List all configured MCPs
+claude mcp list
+
+# Expected output:
+# context7: connected
+#   Tools: query-docs, resolve-library-id
+# github: connected
+#   Tools: list_issues, create_pull_request, search_code, ...
+
+# Remove an MCP
+claude mcp remove <name>
+
+# View details of an MCP
+claude mcp get <name>
+```
+
+### Configuration scope
+
+```bash
+# Add an MCP at the project level (default)
+claude mcp add context7 -- npx -y @upstash/context7-mcp
+
+# Add an MCP at the global level (all projects)
+claude mcp add context7 --scope global -- npx -y @upstash/context7-mcp
+
+# Add an MCP at the user level (for this user)
+claude mcp add context7 --scope user -- npx -y @upstash/context7-mcp
+```
+
+<Callout type="tip" title="Best practice: separate global and project">
+Put universal MCPs (Gmail, Slack, Calendar) in **global** and project-specific MCPs (Context7, Sentry, database) in **project**. That way, each project only has access to the tools it needs.
+</Callout>
+
+## Debug and troubleshooting
+
+### The MCP won't connect
+
+<Steps>
+<Step title="Check that the command is accessible" stepNumber={1}>
+
+```bash
+# Check that npx is installed
+which npx
+
+# Check that the MCP package exists
+npx -y @upstash/context7-mcp --help
+
+# If you're using uvx (Python)
+which uvx
+```
+
+</Step>
+
+<Step title="Check the MCP logs" stepNumber={2}>
+
+```bash
+# View MCP connection logs
+claude mcp logs
+
+# View logs for a specific MCP
+claude mcp logs context7
+```
+
+</Step>
+
+<Step title="Validate JSON syntax" stepNumber={3}>
+
+An extra comma or a missing quote can break everything. Use a JSON validator.
+
+```bash
+# Validate your .mcp.json file
+cat .mcp.json | python3 -m json.tool
+
+# Or with Node.js
+node -e "console.log(JSON.parse(require('fs').readFileSync('.mcp.json','utf8')))"
+```
+
+</Step>
+
+<Step title="Test the MCP manually" stepNumber={4} isLast>
+
+You can launch the MCP server directly to see if it starts correctly.
+
+```bash
+# Launch the MCP server directly
+npx -y @upstash/context7-mcp
+
+# If the server starts and waits for stdin input, it's working
+# Ctrl+C to quit
+```
+
+</Step>
+</Steps>
+
+### Common errors and solutions
+
+| Error | Likely cause | Solution |
+|-------|-------------|----------|
+| `command not found: npx` | Node.js not installed | Install Node.js 18+ |
+| `ENOENT` | MCP package doesn't exist | Check the package name |
+| `ECONNREFUSED` | Invalid or expired token | Regenerate the token |
+| `timeout` | MCP server too slow to start | Increase timeout or use Docker |
+| `permission denied` | Insufficient permissions | Check token/file permissions |
+
+<Callout type="warning" title="Token security">
+**Never** commit your tokens to a Git repository. Use the global configuration (`~/.claude/settings.json`) for sensitive information, or system environment variables.
+</Callout>
+
+## Full example: configuring three MCPs
+
+Here's a realistic configuration example with three MCPs for a web development project.
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_..."
+      }
+    }
+  }
+}
+```
+
+With this configuration, you can ask Claude Code:
+
+> *"Look up the Next.js 14 docs, create a 404 error page following best practices, test it in the browser, and create a pull request."*
+
+Claude Code will automatically chain Context7 (documentation), file editing (page creation), Playwright (visual testing), and GitHub (pull request).
+
+## Next steps
+
+Is your first MCP configured? Now discover the best MCPs by category.
+
+- [Understanding MCPs](/mcp/what-are-mcps): How the MCP protocol works, explained
+- [Top productivity MCPs](/mcp/best-productivity): Gmail, Slack, Calendar, Figma, Lighthouse
+- [Top development MCPs](/mcp/best-development): Context7, GitHub, Sentry, databases
+- [Top design & UI MCPs](/mcp/best-design): Playwright, Chrome DevTools, 21st.dev Magic

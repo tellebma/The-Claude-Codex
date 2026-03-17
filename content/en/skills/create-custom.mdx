@@ -1,0 +1,557 @@
+---
+title: "Creating custom Skills"
+description: "Step-by-step guide to creating your own Claude Code Skills: structure, syntax, testing, and sharing with your team."
+section: "skills"
+order: 3
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Why create a custom Skill?
+
+Built-in and community Skills cover the most common use cases. But every team has its own conventions, its own workflows, its own tools. A custom Skill lets you **codify these practices** into a reusable Markdown file the whole team can use.
+
+<Callout type="info" title="Typical cases for a custom Skill">
+- Your team has a specific review process with business-level checks
+- You follow a recurring architecture pattern (repository, hexagonal, CQRS)
+- Your deployment workflow has steps specific to your infrastructure
+- You want to standardize component creation according to your design system
+</Callout>
+
+## File structure
+
+Custom Skills are simple Markdown files. Their location determines their scope.
+
+```bash
+# Project Skills (shared with the team via git)
+.claude/
+  commands/
+    review-pr.md         # -> /project:review-pr
+    deploy-staging.md    # -> /project:deploy-staging
+    create-component.md  # -> /project:create-component
+    db-migration.md      # -> /project:db-migration
+
+# Personal Skills (available in all your projects)
+~/.claude/
+  commands/
+    tdd-guide.md         # -> /user:tdd-guide
+    brainstorm.md        # -> /user:brainstorm
+    quick-review.md      # -> /user:quick-review
+```
+
+<Callout type="tip" title="Naming convention">
+Use **kebab-case** for file names: `create-component.md`, not `createComponent.md`. The file name (without extension) becomes the slash command. Choose short, descriptive names.
+</Callout>
+
+## Anatomy of an effective Skill
+
+A good Skill follows a predictable structure that helps Claude understand exactly what's expected. Here are the recommended sections.
+
+<Steps>
+<Step title="The title and role" stepNumber={1}>
+Start with a clear title and define the role Claude should adopt. This initial framing is crucial for the quality of the result.
+
+```markdown
+# Create a React Component
+
+You are a frontend expert in React/TypeScript. You create accessible,
+performant components that conform to the project's design system.
+```
+</Step>
+
+<Step title="Context and constraints" stepNumber={2}>
+Describe the conventions and constraints specific to the project. Claude needs to know what framework it's operating within.
+
+```markdown
+## Context
+
+- Framework: React 18+ with strict TypeScript
+- Styles: Tailwind CSS with @tailwindcss/forms plugin
+- Tests: Vitest + Testing Library
+- Convention: one component per file, named exports only
+- Accessibility: WCAG 2.1 AA minimum
+```
+</Step>
+
+<Step title="Detailed steps" stepNumber={3}>
+List the steps Claude must follow, in order. Be specific about what's expected at each step.
+
+```markdown
+## Steps
+
+1. Create the component file in `src/components/`
+2. Define props with a TypeScript interface (readonly)
+3. Implement the functional component with proper aria-* attributes
+4. Add requested variants (size, color, state)
+5. Create the test file in `src/components/__tests__/`
+6. Write unit tests (render, interactions, accessibility)
+7. Export the component from the barrel file `src/components/index.ts`
+```
+</Step>
+
+<Step title="The output format" stepNumber={4}>
+Specify exactly what Claude should produce. A clear output format avoids surprises.
+
+```markdown
+## Output format
+
+For each component created, provide:
+- The component file (`.tsx`)
+- The test file (`.test.tsx`)
+- The barrel file update
+- A usage example in a JSDoc comment
+```
+</Step>
+
+<Step title="Variables and arguments" stepNumber={5} isLast>
+Use `$ARGUMENTS` to make your Skill dynamic and reusable.
+
+```markdown
+## Arguments
+
+$ARGUMENTS: name and description of the component to create.
+
+Example: `/project:create-component Button - primary button with
+variants primary, secondary, danger`
+```
+</Step>
+</Steps>
+
+## Tutorial: creating a "React Component Generator" Skill
+
+Let's put everything we've learned into practice with a complete, realistic Skill.
+
+### Step 1: Create the file
+
+```bash
+# Create the commands folder if it doesn't exist
+mkdir -p .claude/commands
+
+# Create the Skill file
+touch .claude/commands/create-component.md
+```
+
+### Step 2: Write the content
+
+Here's the complete Skill content:
+
+```markdown
+# Create a React Component
+
+You are a frontend expert in React/TypeScript. You create accessible,
+performant UI components that conform to project conventions.
+
+## Project context
+
+- React 18+ with strict TypeScript (no `any`)
+- Tailwind CSS for styles
+- Vitest + Testing Library for tests
+- Functional components with hooks only
+- Named exports (no default export)
+- One component per file, 200-400 lines max
+
+## Instructions
+
+Create the component described by the user following these steps:
+
+1. **Analysis**: Understand the need expressed in $ARGUMENTS
+2. **Interface**: Define props with a TypeScript interface
+   - All props `readonly`
+   - Optional props with sensible default values
+   - JSDoc on non-obvious props
+3. **Component**: Implement with best practices
+   - ARIA attributes for accessibility
+   - Focus management if interactive
+   - Dark mode support via Tailwind classes
+   - Responsive (mobile-first)
+4. **Tests**: Write tests with Testing Library
+   - Default render test
+   - Test each variant
+   - Test user interactions
+   - Test accessibility (ARIA roles)
+5. **Export**: Update the barrel file if needed
+
+## Output format
+
+Produce the following files:
+- `src/components/ComponentName.tsx`
+- `src/components/__tests__/ComponentName.test.tsx`
+
+## Example
+
+For the command: `/project:create-component Badge - status badge
+with variants success, warning, error`
+
+You'll create a Badge component with:
+- 3 color variants (success=green, warning=orange, error=red)
+- Sizes sm/md/lg
+- Support for text and an optional icon
+- Complete tests
+```
+
+### Step 3: Test the Skill
+
+```bash
+# Launch Claude Code
+claude
+
+# Invoke the Skill
+/project:create-component Alert - dismissible alert component with variants info, success, warning, error
+```
+
+Claude will follow the Skill's instructions and produce a complete `Alert.tsx` component with its tests.
+
+<Card title="Verify the result" variant="accent">
+After creating your Skill, test it with 2-3 different cases to verify the instructions are clear enough. If Claude deviates from the expected result, adjust the Skill's instructions.
+</Card>
+
+## Example: "API Pattern" Skill
+
+A Skill for generating API endpoints that conform to the project's pattern.
+
+```markdown
+# Create an API Endpoint
+
+You are a backend expert in Node.js/TypeScript. You create RESTful API
+endpoints that conform to project conventions.
+
+## Architecture
+
+The project follows the Repository pattern:
+- `src/routes/` - Route definitions (Express/Fastify)
+- `src/controllers/` - Control logic and validation
+- `src/services/` - Business logic
+- `src/repositories/` - Data access
+- `src/schemas/` - Validation schemas (Zod)
+
+## API Conventions
+
+- Response format: `{ success, data, error, meta }`
+- Input validation with Zod
+- Centralized error handling
+- Rate limiting on all endpoints
+- Parameterized queries (never string concatenation)
+
+## Instructions
+
+For $ARGUMENTS, create:
+
+1. The Zod validation schema (`src/schemas/`)
+2. The repository with CRUD operations (`src/repositories/`)
+3. The service with business logic (`src/services/`)
+4. The controller with validation and error handling (`src/controllers/`)
+5. The route with appropriate middleware (`src/routes/`)
+6. Unit tests for each layer
+
+## Security
+
+- NEVER hardcode secrets in the code
+- Always validate user inputs
+- Use parameterized queries
+- Verify authentication and authorization
+```
+
+## Example: "Deploy Checklist" Skill
+
+A Skill that guides the deployment process with an interactive checklist.
+
+```markdown
+# Deployment Checklist
+
+You are a senior DevOps engineer. You guide the developer through
+the production deployment checklist.
+
+## Pre-deployment verifications
+
+Check each item and report the status:
+
+### Code
+- [ ] All tests pass (`npm test`)
+- [ ] Linting is clean (`npm run lint`)
+- [ ] Production build succeeds (`npm run build`)
+- [ ] No remaining `console.log` or `debugger`
+- [ ] No unresolved critical TODOs
+
+### Security
+- [ ] No secrets in source code
+- [ ] Dependencies have no critical CVEs (`npm audit`)
+- [ ] Security headers are configured
+- [ ] CORS is properly restricted
+
+### Database
+- [ ] Migrations are up to date
+- [ ] Migrations are reversible (rollback possible)
+- [ ] Necessary indexes are created
+
+### Infrastructure
+- [ ] Environment variables are configured
+- [ ] Monitoring is in place
+- [ ] Alerts are configured
+- [ ] Rollback plan is documented
+
+## Instructions
+
+1. Execute each automatable check
+2. For each item, indicate: PASS, FAIL, or SKIP (with reason)
+3. Block deployment if a CRITICAL item is FAIL
+4. Produce a final report with the GO / NO-GO decision
+```
+
+## Writing best practices
+
+<Card title="The 7 golden rules" variant="highlight">
+1. **Be specific**: "Check for SQL injections" is better than "Check security"
+2. **Define a role**: "You are a security expert" sets the expectation level
+3. **Number the steps**: Claude follows an ordered list better than free-form text
+4. **Specify the output format**: Avoid surprises on the final output
+5. **Use \$ARGUMENTS**: Make your Skills dynamic and reusable
+6. **Give an example**: One concrete example is worth a thousand words of instruction
+7. **Test and iterate**: A Skill improves with use; adjust it regularly
+</Card>
+
+### What to avoid
+
+<Callout type="warning" title="Common pitfalls">
+- **Too vague**: "Do a good review"; Claude doesn't know what "good" means to you
+- **Too long**: a 500+ line Skill consumes too much context. Split into multiple Skills
+- **No output format**: without guidance, Claude picks a random format
+- **No project context**: without knowing your conventions, Claude uses its own defaults
+- **Contradictory instructions**: reread your Skill to check for consistency
+</Callout>
+
+## Advanced patterns
+
+Simple Skills cover 80% of needs. For the remaining 20%, here are techniques that make your Skills more powerful.
+
+### Conditional Skills (if/else)
+
+A Skill can adapt its behavior based on context. Use natural language conditionals so Claude chooses the right path.
+
+```markdown
+# Smart Review
+
+## Operating mode
+
+Analyze the diff provided in $ARGUMENTS.
+
+If the diff contains only test files:
+- Do a review focused on test quality
+- Check edge case coverage
+- Ignore production code style rules
+
+If the diff contains database migration files:
+- Check that the migration is reversible
+- Check indexes and constraints
+- Alert on any data loss risk
+
+If the diff contains configuration files (env, yaml, json):
+- Check that no secret is exposed
+- Compare with example files (.env.example)
+- Check consistency across environments
+
+Otherwise:
+- Do a standard complete review
+```
+
+Claude interprets these conditions and adapts its analysis automatically. No special syntax needed: clear instructions are enough.
+
+### Multi-step Skills with checkpoints
+
+For long workflows, break them into numbered steps with validation points. Claude advances step by step and stops if a checkpoint fails.
+
+```markdown
+# Component Migration
+
+## Steps
+
+### Step 1: Audit
+- List all uses of the component in the project
+- Identify the props used and their variants
+- CHECKPOINT: show the list and wait for confirmation before continuing
+
+### Step 2: New component
+- Create the new component with the same props
+- Add tests for the new component
+- CHECKPOINT: tests must pass before the next step
+
+### Step 3: Progressive migration
+- Replace imports one by one
+- After each replacement, verify the build passes
+- CHECKPOINT: all files migrated, all tests green
+
+### Step 4: Cleanup
+- Delete the old component
+- Update the barrel file
+- Verify no references to the old component remain
+```
+
+### Sub-skill orchestration
+
+A Skill can call other Skills to create composite workflows.
+
+```markdown
+# Complete Feature
+
+For the feature described in $ARGUMENTS:
+
+1. Use /project:plan to create the implementation plan
+2. For each task in the plan, use /user:tdd-guide to implement it
+3. Once everything is implemented, use /user:code-reviewer to verify
+4. Fix issues identified by the reviewer
+5. Use /project:deploy-checklist to validate deployment
+```
+
+<Callout type="warning" title="Watch the context">
+Skill orchestration consumes a lot of context. Each sub-skill adds its instructions to the prompt. For long workflows, prefer running Skills one at a time in separate sessions.
+</Callout>
+
+## Templating variables
+
+### $ARGUMENTS: the universal parameter
+
+`$ARGUMENTS` captures all text typed after the Skill command. It's your primary tool for making a Skill dynamic.
+
+```bash
+/project:create-component Button primary with icon and loading state
+#                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#                        All of this becomes $ARGUMENTS
+```
+
+In the Skill, use `$ARGUMENTS` as a placeholder:
+
+```markdown
+Create the component described by the user: $ARGUMENTS
+```
+
+### Environment variables
+
+Skills can reference environment variables to adapt to the execution context.
+
+```markdown
+## Context
+
+- Current environment: use available env variables
+- If NODE_ENV is "production", apply strict constraints
+- If CI is "true", format output as JSON for the pipeline
+```
+
+<Callout type="tip" title="Available variables">
+Skills have access to the shell's environment variables. You can use them to adapt behavior based on the environment (dev, staging, production) or the system (OS, shell, editor).
+</Callout>
+
+### Example: Skill with dynamic variable
+
+```markdown
+# Create a component for $PROJECT_TYPE
+
+If the project uses React (detected via package.json):
+- Functional component with hooks
+- Tests with Testing Library
+
+If the project uses Vue (detected via package.json):
+- SFC component with Composition API
+- Tests with Vue Test Utils
+
+If the project uses Svelte (detected via package.json):
+- .svelte component
+- Tests with Svelte Testing Library
+```
+
+## Token estimation and best practices
+
+A Skill consumes tokens every time it's invoked. Its content is injected entirely into the prompt, reducing the window available for conversation and code.
+
+### How many tokens does a Skill consume?
+
+| Skill size | Lines | Tokens (approx.) | Context impact |
+|---|---|---|---|
+| Light | 20-40 | 300-600 | Negligible |
+| Standard | 40-80 | 600-1,200 | Low |
+| Heavy | 80-150 | 1,200-2,500 | Moderate |
+| Too heavy | 150+ | 2,500+ | Significant; split it |
+
+<Callout type="warning" title="Rule of thumb">
+Aim for 40-80 lines per Skill. Beyond 150 lines, split into several specialized Skills. A 500-line Skill consumes about 8,000 tokens, or 4% of the context window, before any work has even begun.
+</Callout>
+
+### Optimizing consumption
+
+- **Be concise**: "Check for SQL injections" is better than "It is necessary to conduct an exhaustive verification of potential vulnerabilities related to SQL injections"
+- **Avoid overly long examples**: a 5-line example is enough; no need for 50 lines
+- **Externalize context**: put project conventions in CLAUDE.md rather than in each Skill
+- **Use references**: "Follow CLAUDE.md conventions" instead of copying the conventions
+
+## Versioning your Skills
+
+Skills live in the code. Treat them with the same rigor as your source code.
+
+### Versioning best practices
+
+```bash
+# Project Skills are in the repo
+git add .claude/commands/create-component.md
+git commit -m "feat: add create-component skill with accessibility checks"
+```
+
+**What to version:**
+- The Skill content (the Markdown file)
+- Modifications with explicit commits
+- A CHANGELOG if the Skill evolves frequently
+
+**What NOT to do:**
+- Modify a Skill without notifying the team
+- Delete a Skill used by others without migration
+- Have conflicting Skills (two Skills that do the same thing differently)
+
+### Commit conventions for Skills
+
+```bash
+feat: add deploy-checklist skill          # new skill
+fix: fix tdd-guide missing edge cases     # correction
+refactor: simplify code-reviewer criteria # improvement
+docs: update create-api skill examples    # documentation
+```
+
+<Callout type="tip" title="Skill reviews">
+Include Skill modifications in your Pull Requests. A Skill change can have as much impact as a code change, especially if it modifies a workflow used by the whole team.
+</Callout>
+
+## Organizing Skills as a team
+
+For teams using Claude Code, here's a recommended structure:
+
+```bash
+.claude/
+  commands/
+    # Development workflow
+    create-component.md    # Create a UI component
+    create-api.md          # Create an API endpoint
+    create-migration.md    # Create a DB migration
+
+    # Quality
+    review-pr.md           # Standardized PR review
+    security-audit.md      # Security audit
+    perf-check.md          # Performance check
+
+    # Operations
+    deploy-staging.md      # Deploy to staging
+    deploy-prod.md         # Deploy to production
+    rollback.md            # Rollback procedure
+
+    # Documentation
+    write-adr.md           # Write an ADR (Architecture Decision Record)
+    update-api-docs.md     # Update API docs
+```
+
+<Callout type="tip" title="Version your Skills">
+Files in `.claude/commands/` are part of the repository. Treat them like code: do reviews, version changes, and document important modifications in your commits. A well-maintained Skill is a lasting investment for the team.
+</Callout>
+
+## Next steps
+
+You now know how to create custom Skills. Discover how they compare to other extension tools.
+
+- [Skills vs MCP vs Plugins](/skills/comparison): Understand when to use each tool
+- [Top recommended Skills 2026](/skills/best-skills): Get inspired by the best existing Skills
+- [What is a Skill?](/skills/what-are-skills): Back to fundamentals
+- [Configure Claude Code](/configurator): Optimize your overall environment

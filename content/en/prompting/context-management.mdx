@@ -1,0 +1,435 @@
+---
+title: "Context management"
+description: "Master context management in Claude Code: window limits, /compact command, strategic context loading, and long conversation best practices."
+section: "prompting"
+order: 7
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Understanding the context window
+
+The context window is Claude's **active memory** for a given session. Everything Claude can "see" and use to respond fits within this window: your conversation history, files it has read, previous responses, and CLAUDE.md instructions.
+
+<Callout type="info" title="The desk analogy">
+Picture a physical desk. You can spread out a certain amount of documents, notes, and references on it. When the desk is full, you have to put away some documents to make room for new ones. The context window works exactly like that: it's Claude's work surface. When it's saturated, the oldest information disappears, and Claude "forgets" the beginning of the conversation.
+</Callout>
+
+Claude Code has a context window of **200,000 tokens**, among the largest on the market. To give you a sense of what that represents:
+
+- 200,000 tokens ~ 150,000 words ~ a 500-page novel
+- A 300-line TypeScript file ~ 1,000 to 2,000 tokens
+- An active conversation history of 30 messages ~ 10,000 to 30,000 tokens
+- A well-written CLAUDE.md file ~ 500 to 1,000 tokens
+
+In practice, for most daily development sessions, you'll never hit the limit. But for large projects or long sessions, good context management makes all the difference.
+
+## When context becomes a problem
+
+Here are the signals that your context is overloaded:
+
+- Claude starts "forgetting" decisions made earlier in the session
+- Responses become less consistent with existing code
+- Claude regenerates code you've already validated
+- Response times noticeably increase
+- Claude itself mentions it no longer remembers certain things
+
+<Callout type="warning" title="Watch out for the last 20% of context">
+When you approach the context window limit, response quality degrades. Avoid launching complex tasks (refactoring, multi-file implementation) when the conversation is already very long. Start a new session instead.
+</Callout>
+
+## The /compact command: compress without losing the essentials
+
+The `/compact` command is your best tool for managing context that's getting too heavy. It asks Claude to summarize the conversation while keeping essential information, freeing up space.
+
+```bash
+# In the Claude Code session, simply type:
+/compact
+```
+
+<Steps>
+<Step title="Claude analyzes the conversation" stepNumber={1}>
+Claude identifies what's important: architecture decisions, validated code, established conventions, tasks in progress.
+</Step>
+
+<Step title="Intelligent compression" stepNumber={2}>
+Claude writes a structured summary that preserves the business and technical context without reproducing every exchange word for word. The summary replaces the history in the context window.
+</Step>
+
+<Step title="Seamless continuation" stepNumber={3} isLast>
+The session continues as if nothing happened. Claude knows where you left off and can immediately resume work.
+</Step>
+</Steps>
+
+### When to use /compact
+
+Use `/compact` in these situations:
+
+- **After completing a phase**: you just finished a module or feature, and you're starting the next one
+- **Before a complex task**: you're about to launch a refactoring or migration that will touch many files
+- **When the session is long**: after 1-2 hours of intensive work with lots of exchanges
+- **When you notice inconsistencies**: Claude starts "drifting" from your conventions
+
+<Callout type="tip" title="Proactive vs reactive compact">
+Don't wait until you have a problem to use `/compact`. Use it proactively after each major step. It's like doing a progress check in a meeting: it clarifies the situation for everyone and lets you move forward on solid ground.
+</Callout>
+
+## Strategies for large projects
+
+When you're working on a project with hundreds of files, here's how to organize your sessions to stay effective.
+
+### Strategy 1: Domain-focused sessions
+
+Instead of opening Claude on the entire project, focus your session on a specific domain.
+
+```markdown
+# Bad: catch-all session
+"Let's work on the project. Start by reviewing auth,
+then the dashboard, then optimize the SQL queries,
+then update the documentation..."
+
+# Good: focused session
+"This session is dedicated to the authentication module.
+Files involved:
+- src/auth/auth.service.ts
+- src/auth/auth.controller.ts
+- src/auth/strategies/jwt.strategy.ts
+- src/auth/__tests__/
+
+Session goal: implement the refresh token
+with automatic rotation and Redis blacklisting."
+```
+
+Each focused session keeps context lightweight and relevant. When the session is done, the important decisions live in the code, not in the history.
+
+### Strategy 2: Explicitly target files
+
+Don't let Claude guess which files to read. Tell it exactly what it needs.
+
+```markdown
+# Before starting a task, provide minimal context:
+"For this task, read these files first:
+1. src/features/orders/order.service.ts (the current logic)
+2. src/features/orders/order.types.ts (the existing types)
+3. src/features/orders/__tests__/order.service.test.ts (the existing tests)
+
+Don't read other files unless I explicitly ask."
+```
+
+By limiting the files read, you keep context focused on what matters.
+
+### Strategy 3: Document decisions in the code
+
+Important decisions shouldn't live only in conversation history. Ask Claude to document them directly in the code or in dedicated files.
+
+```markdown
+# After an important architecture decision:
+"Add a comment at the top of src/services/payment.service.ts
+that documents this service's architecture:
+- Why we're using a Command pattern
+- The amount validation rules
+- The reasons for choosing Stripe vs PayPal
+- Known limitations"
+```
+
+These comments survive across sessions. The next time you (or Claude) open that file, the context will be there.
+
+### Strategy 4: Checkpoint sessions
+
+Periodically, run a "checkpoint session" whose sole purpose is to update documentation and CLAUDE.md with what has changed.
+
+```markdown
+# Checkpoint session (every 2-3 weeks)
+"Review the recent changes in the codebase.
+Update CLAUDE.md to reflect:
+- New dependencies added and their usage
+- New architectural patterns adopted
+- Conventions that have evolved
+- Completed modules that no longer need attention"
+```
+
+## CLAUDE.md: persistent memory
+
+The CLAUDE.md file is your secret weapon against forgetting. Unlike conversation history, CLAUDE.md persists between sessions. Claude reads it automatically at the start of every new session.
+
+<Card title="CLAUDE.md = memory between sessions" variant="highlight">
+Conversation history disappears when you close Claude. CLAUDE.md is always there. Everything you want Claude to know at every session should be in CLAUDE.md.
+</Card>
+
+### What should go in CLAUDE.md
+
+When you make an important decision during a session, ask Claude to note it in CLAUDE.md:
+
+```markdown
+"We just decided to use the Repository pattern with interfaces.
+Update CLAUDE.md to add this rule in the
+'Architectural Patterns' section with a concrete example."
+```
+
+### Using module-level CLAUDE.md files
+
+For large projects, create specialized CLAUDE.md files in critical folders:
+
+```
+project/
+  CLAUDE.md                     # Global project rules
+  src/
+    features/
+      auth/
+        CLAUDE.md               # Auth module-specific rules
+      payment/
+        CLAUDE.md               # Payment-specific rules
+    shared/
+      CLAUDE.md                 # Shared utilities
+```
+
+Each module CLAUDE.md documents:
+- The module's data schema
+- Specific business constraints
+- External APIs used
+- Known issues and their solutions
+
+## Monitoring usage with /cost
+
+The `/cost` command tells you how many tokens have been consumed in the current session and the estimated cost.
+
+```bash
+# In the Claude Code session:
+/cost
+```
+
+This command is useful for:
+
+- **Anticipating context limits**: if you've already consumed 150K tokens, 50K remain
+- **Calibrating prompts**: identifying expensive prompts and optimizing them
+- **Budgeting**: tracking monthly consumption if you use the direct API
+
+<Callout type="tip" title="Decoding your /cost output">
+The `/cost` output shows input and output tokens separately. Input tokens cost less than output tokens. If you want to optimize costs, focus on reducing unnecessarily long outputs.
+</Callout>
+
+## Best practices for long conversations
+
+### Structuring new sessions
+
+When you start a new session on an existing project, give a context summary right away:
+
+```markdown
+"Resuming the MyApp project (Node.js/Express/TypeScript/PostgreSQL).
+Last session: we implemented the complete JWT authentication module.
+It's in src/auth/ and tests pass at 100%.
+
+Today's session: implement the permissions management module (RBAC).
+Desired architecture: roles in the database, dynamically computed permissions,
+Redis cache for frequent permissions.
+
+Start by reading src/auth/auth.service.ts to understand the patterns
+we use in this project."
+```
+
+This startup prompt gives Claude everything it needs to know without having to dig through the entire codebase.
+
+### Using XML tags for structure
+
+XML tags in your prompts help Claude organize information and reduce ambiguity, improving response quality even with a loaded context.
+
+```markdown
+<context>
+Next.js/TypeScript e-commerce project
+Module: cart management (src/features/cart/)
+</context>
+
+<current_state>
+The useCart hook exists but has no localStorage persistence
+Zustand mutations work
+</current_state>
+
+<task>
+Add cart persistence with localStorage
+Automatically sync on page load
+</task>
+
+<constraints>
+- Strict TypeScript
+- Mandatory immutability
+- Vitest tests required
+</constraints>
+```
+
+### Reducing noise in exchanges
+
+Avoid long preambles and thank-yous in a long session. Every word in the history consumes tokens.
+
+```markdown
+# Avoid (wastes context)
+"Thank you so much Claude! That's exactly what I wanted.
+You're really doing a great job! I have another question for you.
+Could you help me with..."
+
+# Prefer (direct and efficient)
+"Perfect. Now add date validation to this service."
+```
+
+## Summary table: context management
+
+| Situation | Recommended action |
+|-----------|--------------------|
+| Long session (> 2h) | `/compact` then continue |
+| Before a big refactoring | New session with a startup prompt |
+| Architecture decision made | Document in code + CLAUDE.md |
+| Claude "forgets" conventions | Re-read CLAUDE.md, `/compact` if needed |
+| Context > 150K tokens | Start a new session |
+| New team member | Verify and enrich CLAUDE.md |
+
+## The impact of MCPs on context
+
+MCPs influence context consumption in ways that are often underestimated. Understanding this mechanism lets you optimize your setup.
+
+### How MCPs consume context at startup
+
+At every session start, Claude Code queries all configured MCPs to discover their available tools. Each tool exposes a **JSON schema** describing its parameters. These schemas occupy context **before you've even typed the first letter**.
+
+```json
+// Example MCP tool schema (simplified)
+// This schema is loaded into context at startup
+{
+  "name": "create_pull_request",
+  "description": "Creates a pull request on GitHub",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "owner": { "type": "string", "description": "Repository owner" },
+      "repo": { "type": "string", "description": "Repository name" },
+      "title": { "type": "string", "description": "Pull request title" },
+      "body": { "type": "string", "description": "Pull request body" },
+      "head": { "type": "string", "description": "Branch name" },
+      "base": { "type": "string", "description": "Base branch" }
+    }
+  }
+}
+```
+
+Each tool like this consumes about 200 to 500 tokens. A tool-rich MCP (GitHub exposes around thirty tools) can consume 5,000 to 10,000 tokens just for its definitions.
+
+### Estimated consumption by MCP count
+
+| Configuration | Active MCPs | Startup tokens | Available context |
+|---|---|---|---|
+| Light | 0 MCPs | ~500 (CLAUDE.md) | ~199,500 tokens |
+| Standard | 3 MCPs | ~5,000 to 15,000 | ~185,000 tokens |
+| Heavy | 10 MCPs | ~20,000 to 50,000 | ~150,000 tokens |
+| Excessive | 20+ MCPs | ~60,000+ | < 140,000 tokens |
+
+<Callout type="warning" title="The 'more MCPs = more powerful' myth">
+Loading 20 MCPs doesn't make Claude Code 20 times more capable. On the contrary, every unused MCP in a session consumes context that could have been used for your code or conversations. Only activate the MCPs you actually need in each session.
+</Callout>
+
+### Deferred tools: lazy loading to save context
+
+Claude Code offers a **deferred tools** mechanism. Tools marked as "deferred" aren't loaded into context at startup; they're available but loaded only if Claude needs them.
+
+```json
+// In .mcp.json, available but not default-loaded tools
+// appear in the <available-deferred-tools> list
+// Claude loads them on demand, saving initial context
+```
+
+To benefit from this mechanism:
+- Configure your rarely used MCPs as "optional"
+- Use per-project `.mcp.json` profiles (not a single global config)
+- Disable unused MCPs in a session via `claude mcp disable [name]`
+
+## Signs of a saturated context
+
+Recognizing context saturation lets you act before quality seriously degrades.
+
+### Early signals (context at 70-80%)
+
+- Claude starts "forgetting" decisions made earlier in the session
+- Responses become less consistent with existing code
+- Claude regenerates code you've already validated
+- Response times noticeably increase
+
+### Advanced signals (context at 90%+)
+
+- Claude itself mentions it no longer remembers certain things
+- Hallucinations appear: Claude invents APIs, functions, or files that don't exist
+- Claude mixes patterns from different projects or languages
+- Responses are truncated or incomplete
+
+### Impact on accuracy vs context load
+
+The relationship between context load and quality isn't linear. Claude remains very performant up to about 70-80% capacity. Degradation is rapid in the last 20%.
+
+```
+Response quality by context fill level
+
+100% |
+     |############################################
+ 85% |##########################################
+     |
+ 60% |                                    #######
+     |
+  0% +--------------------------------------------
+     0%                70%    80%   90%   100%
+                              Context used
+```
+
+## Troubleshooting guide: common context issues
+
+### "Claude forgets what we decided"
+
+**Symptom:** Claude ignores conventions or decisions made earlier in the conversation.
+
+**Causes:** The beginning of the conversation has been evicted from context, or the decision wasn't prominent enough to survive a `/compact`.
+
+**Solutions:**
+1. Use `/compact` and check that the summary mentions the decision
+2. Document the decision in the code (explicit comment) or CLAUDE.md
+3. Restate the convention at the start of each new message: "Reminder: we use the Repository pattern, no direct DB access"
+
+### "Responses are getting slower and slower"
+
+**Symptom:** Claude takes much longer to respond than at the start of the session.
+
+**Causes:** A heavily loaded context increases inference time. Many active MCPs with large schemas make it worse.
+
+**Solutions:**
+1. Run `/compact` to lighten the context
+2. Disable unused MCPs in this session
+3. Start a new session with a concise startup prompt
+
+### "Claude hallucinates functions or APIs"
+
+**Symptom:** Claude suggests code with functions that don't exist in your codebase or fictitious APIs.
+
+**Causes:** Saturated context + Claude "fills in the blanks" from general knowledge rather than real code. May also indicate confusion between multiple projects in the history.
+
+**Solutions:**
+1. Start a new session (don't compact, rebuild cleanly)
+2. Explicitly provide the existing code Claude should use
+3. Ask Claude to read source files before proposing a solution
+
+### "Claude generates code I already rejected"
+
+**Symptom:** Claude re-proposes patterns or solutions you explicitly rejected.
+
+**Causes:** The rejection and its context were evicted from context (or poorly captured in the `/compact`).
+
+**Solutions:**
+1. Add an explicit rule in CLAUDE.md: "Never use [pattern X] in this project"
+2. Restate the constraint every session: "Reminder: we never use [pattern X]"
+3. After a `/compact`, verify the constraint is mentioned in the summary
+
+## Next steps
+
+You've now mastered context management. Explore complementary techniques.
+
+- [Extended thinking and plan mode](/prompting/thinking-and-planning): How to amplify Claude's reasoning quality
+- [Complete CLAUDE.md guide](/prompting/claude-md): Create effective persistent memory for your project
+- [Prompt chaining and orchestration](/prompting/chaining-and-agents): Break large tasks into controlled sequences
+- [Understanding Claude Code agents](/agents/what-are-agents): Agents use context intensively; learn to configure them
+- [MCP security](/mcp/securite-mcp): How MCPs can affect your security and data
+- [Real costs of Claude Code](/content/couts-reels-claude-code): Understand what each token really costs you
+- [Top recommended Skills](/skills/best-skills): Automate your recurring workflows with Skills
+- [Interactive configurator](/configurator): Optimize your Claude Code setup in a few clicks

@@ -1,0 +1,532 @@
+---
+title: "Creating an MCP Server in Python"
+description: "Tutorial to create an MCP Server with the Python SDK: decorators, tools, resources, and testing with uvx."
+order: 8
+section: "mcp"
+datePublished: "2026-03-12"
+---
+
+## Python and MCP: a natural fit
+
+The Python MCP SDK uses decorators that make the code very readable. If you're more comfortable in Python than TypeScript, this is your entry point. The result is identical: an MCP server that Claude Code can use via stdio transport.
+
+<Callout type="info" title="What you'll build">
+An "internal database" MCP that queries a simple REST API. You'll learn to create tools, resources, and test everything before plugging it into Claude Code.
+</Callout>
+
+## Prerequisites
+
+- **Python 3.10+** installed (`python --version` or `python3 --version`)
+- **pip** or **uv** available
+- **Claude Code** installed and working
+- Basic Python knowledge (async functions, type hints, decorators)
+
+<Callout type="tip" title="uv: the recommended manager">
+The Python MCP SDK works particularly well with `uv`, the ultra-fast package manager. If you don't have it: `curl -LsSf https://astral.sh/uv/install.sh | sh`. But pip works just as well.
+</Callout>
+
+## Project scaffolding
+
+<Steps>
+<Step title="Create the project" stepNumber={1}>
+
+```bash
+mkdir mcp-internal-db && cd mcp-internal-db
+python -m venv .venv
+source .venv/bin/activate   # Linux/Mac
+# .venv\Scripts\activate    # Windows
+```
+
+</Step>
+
+<Step title="Install dependencies" stepNumber={2}>
+
+```bash
+pip install mcp httpx
+```
+
+The `mcp` package contains the complete SDK. `httpx` will be used for HTTP calls to our simulated internal API.
+
+With uv, the equivalent command:
+
+```bash
+uv pip install mcp httpx
+```
+
+</Step>
+
+<Step title="Create the structure" stepNumber={3} isLast>
+
+```bash
+touch server.py
+```
+
+Your directory tree:
+
+```
+mcp-internal-db/
+├── .venv/
+└── server.py          # MCP server entry point
+```
+
+Nothing more needed to get started. A single file is enough for a simple MCP.
+
+</Step>
+</Steps>
+
+## The minimal MCP server
+
+Start with the skeleton in `server.py`:
+
+```python
+from mcp.server.fastmcp import FastMCP
+
+# Create the MCP server
+mcp = FastMCP("internal-db")
+```
+
+`FastMCP` is the high-level class from the Python SDK. It handles transport, the JSON-RPC protocol, and tool discovery. Everything else is done with decorators.
+
+## Define Tools with @mcp.tool
+
+A tool is created by decorating an async function. The SDK automatically generates the JSON schema from type hints and docstrings.
+
+```python
+from typing import Any
+
+
+# Simulated data (replace with your real API calls)
+USERS_DB: list[dict[str, Any]] = [
+    {"id": 1, "name": "Alice Martin", "email": "alice@example.com", "role": "admin", "active": True},
+    {"id": 2, "name": "Bob Dupont", "email": "bob@example.com", "role": "dev", "active": True},
+    {"id": 3, "name": "Claire Petit", "email": "claire@example.com", "role": "dev", "active": False},
+    {"id": 4, "name": "David Moreau", "email": "david@example.com", "role": "manager", "active": True},
+]
+
+
+@mcp.tool()
+async def search_users(query: str, active_only: bool = True) -> str:
+    """Search for users in the internal database by name or email.
+
+    Args:
+        query: Search term (name or email, case-insensitive)
+        active_only: If True, only returns active users
+    """
+    query_lower = query.lower()
+    results = [
+        u for u in USERS_DB
+        if query_lower in u["name"].lower() or query_lower in u["email"].lower()
+    ]
+
+    if active_only:
+        results = [u for u in results if u["active"]]
+
+    if not results:
+        return f"No users found for '{query}'."
+
+    lines = [f"Results for '{query}' ({len(results)} found):"]
+    for u in results:
+        status = "active" if u["active"] else "inactive"
+        lines.append(f"- {u['name']} ({u['email']}) / role: {u['role']} / {status}")
+
+    return "\n".join(lines)
+```
+
+<Callout type="tip" title="Docstrings matter">
+The SDK uses the docstring as the tool description. The `Args:` section is parsed to generate descriptions for each parameter. Write your docstrings carefully -- Claude uses them to decide when and how to call your tool.
+</Callout>
+
+### A second tool: statistics
+
+```python
+@mcp.tool()
+async def get_user_stats() -> str:
+    """Returns statistics about users in the internal database.
+
+    Total count, breakdown by role and activity status.
+    """
+    total = len(USERS_DB)
+    active = sum(1 for u in USERS_DB if u["active"])
+    roles: dict[str, int] = {}
+    for u in USERS_DB:
+        roles[u["role"]] = roles.get(u["role"], 0) + 1
+
+    role_lines = [f"  - {role}: {count}" for role, count in sorted(roles.items())]
+
+    return "\n".join([
+        f"User statistics:",
+        f"- Total: {total}",
+        f"- Active: {active} / Inactive: {total - active}",
+        f"- By role:",
+        *role_lines,
+    ])
+```
+
+### Tool with HTTP call (REST API)
+
+In production, your tools will call real APIs. Here's the pattern with `httpx`:
+
+```python
+import httpx
+
+
+@mcp.tool()
+async def fetch_user_from_api(user_id: int) -> str:
+    """Fetches a user from the internal REST API.
+
+    Args:
+        user_id: Numeric user identifier
+    """
+    # Example with a public test API
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"https://jsonplaceholder.typicode.com/users/{user_id}",
+                timeout=10.0,
+            )
+            response.raise_for_status()
+            data = response.json()
+            return (
+                f"User #{data['id']}:\n"
+                f"- Name: {data['name']}\n"
+                f"- Email: {data['email']}\n"
+                f"- Company: {data['company']['name']}"
+            )
+    except httpx.HTTPStatusError as e:
+        return f"HTTP error {e.response.status_code} for user #{user_id}."
+    except httpx.RequestError as e:
+        return f"Connection error: {e}"
+```
+
+<Callout type="warning" title="Error handling">
+A tool should never raise an unhandled exception. Catch all errors and return an explanatory message. If the tool crashes, Claude Code won't receive anything useful.
+</Callout>
+
+## Define Resources with @mcp.resource
+
+Resources expose read-only data, identified by URIs.
+
+```python
+import json
+
+
+@mcp.resource("db://schema")
+async def get_schema() -> str:
+    """Internal database schema."""
+    schema = {
+        "tables": {
+            "users": {
+                "columns": {
+                    "id": "integer (primary key)",
+                    "name": "varchar(255)",
+                    "email": "varchar(255) unique",
+                    "role": "enum(admin, dev, manager)",
+                    "active": "boolean",
+                },
+                "row_count": len(USERS_DB),
+            }
+        }
+    }
+    return json.dumps(schema, indent=2, ensure_ascii=False)
+
+
+@mcp.resource("db://roles")
+async def get_roles() -> str:
+    """List of available roles in the database."""
+    roles = sorted(set(u["role"] for u in USERS_DB))
+    return json.dumps({"roles": roles}, ensure_ascii=False)
+```
+
+Claude Code can read these resources to understand the structure of your data before formulating queries.
+
+## Define Prompts with @mcp.prompt
+
+Prompts are pre-configured interaction templates.
+
+```python
+@mcp.prompt()
+async def audit_users(role: str = "all") -> str:
+    """Generates a user audit, optionally filtered by role.
+
+    Args:
+        role: Role to audit (all, admin, dev, manager)
+    """
+    if role == "all":
+        return (
+            "Perform a complete user audit. "
+            "Use get_user_stats for overall statistics, "
+            "then search_users to check each role. "
+            "Identify inactive accounts and potential anomalies."
+        )
+    return (
+        f"Perform an audit of users with the '{role}' role. "
+        f"Use search_users to find them and check their status."
+    )
+```
+
+## Start the server
+
+Add the entry point at the end of `server.py`:
+
+```python
+if __name__ == "__main__":
+    mcp.run(transport="stdio")
+```
+
+That's it. The SDK handles the rest: JSON-RPC parsing, tool discovery, response serialization.
+
+## Test the MCP
+
+<Steps>
+<Step title="Quick test" stepNumber={1}>
+
+```bash
+# Verify the server starts without errors
+python server.py
+```
+
+The server waits for JSON-RPC messages on stdin. Press Ctrl+C to stop it.
+
+</Step>
+
+<Step title="Test with the MCP inspector" stepNumber={2}>
+
+```bash
+npx @modelcontextprotocol/inspector python server.py
+```
+
+The inspector opens a web interface to interactively test your tools and resources.
+
+</Step>
+
+<Step title="Test with uvx (if uv is installed)" stepNumber={3} isLast>
+
+`uvx` lets you run a Python package in an isolated environment:
+
+```bash
+# From the project folder
+uvx --from . mcp-internal-db
+```
+
+For this to work, add a `pyproject.toml`:
+
+```toml
+[project]
+name = "mcp-internal-db"
+version = "1.0.0"
+requires-python = ">=3.10"
+dependencies = ["mcp", "httpx"]
+
+[project.scripts]
+mcp-internal-db = "server:mcp.run"
+```
+
+</Step>
+</Steps>
+
+## Integrate into Claude Code
+
+### Option 1: via the CLI
+
+```bash
+claude mcp add internal-db -- python /absolute/path/to/mcp-internal-db/server.py
+```
+
+### Option 2: via .mcp.json
+
+```json
+{
+  "mcpServers": {
+    "internal-db": {
+      "command": "python",
+      "args": ["/absolute/path/to/mcp-internal-db/server.py"]
+    }
+  }
+}
+```
+
+### Option 3: with uvx (recommended for distribution)
+
+```json
+{
+  "mcpServers": {
+    "internal-db": {
+      "command": "uvx",
+      "args": ["mcp-internal-db"]
+    }
+  }
+}
+```
+
+<Callout type="tip" title="Verification">
+Launch Claude Code and test: *"Show me the internal user statistics"* or *"Search for users with the admin role"*.
+</Callout>
+
+## The complete server.py file
+
+```python
+import json
+from typing import Any
+
+import httpx
+from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("internal-db")
+
+# --- Simulated data ---
+
+USERS_DB: list[dict[str, Any]] = [
+    {"id": 1, "name": "Alice Martin", "email": "alice@example.com", "role": "admin", "active": True},
+    {"id": 2, "name": "Bob Dupont", "email": "bob@example.com", "role": "dev", "active": True},
+    {"id": 3, "name": "Claire Petit", "email": "claire@example.com", "role": "dev", "active": False},
+    {"id": 4, "name": "David Moreau", "email": "david@example.com", "role": "manager", "active": True},
+]
+
+# --- Tools ---
+
+
+@mcp.tool()
+async def search_users(query: str, active_only: bool = True) -> str:
+    """Search for users in the internal database by name or email.
+
+    Args:
+        query: Search term (name or email, case-insensitive)
+        active_only: If True, only returns active users
+    """
+    query_lower = query.lower()
+    results = [
+        u for u in USERS_DB
+        if query_lower in u["name"].lower() or query_lower in u["email"].lower()
+    ]
+    if active_only:
+        results = [u for u in results if u["active"]]
+    if not results:
+        return f"No users found for '{query}'."
+    lines = [f"Results for '{query}' ({len(results)} found):"]
+    for u in results:
+        status = "active" if u["active"] else "inactive"
+        lines.append(f"- {u['name']} ({u['email']}) / {u['role']} / {status}")
+    return "\n".join(lines)
+
+
+@mcp.tool()
+async def get_user_stats() -> str:
+    """Returns statistics about users in the internal database."""
+    total = len(USERS_DB)
+    active = sum(1 for u in USERS_DB if u["active"])
+    roles: dict[str, int] = {}
+    for u in USERS_DB:
+        roles[u["role"]] = roles.get(u["role"], 0) + 1
+    role_lines = [f"  - {role}: {count}" for role, count in sorted(roles.items())]
+    return "\n".join([
+        "User statistics:",
+        f"- Total: {total}",
+        f"- Active: {active} / Inactive: {total - active}",
+        "- By role:",
+        *role_lines,
+    ])
+
+
+@mcp.tool()
+async def fetch_user_from_api(user_id: int) -> str:
+    """Fetches a user from the internal REST API.
+
+    Args:
+        user_id: Numeric user identifier
+    """
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"https://jsonplaceholder.typicode.com/users/{user_id}",
+                timeout=10.0,
+            )
+            response.raise_for_status()
+            data = response.json()
+            return (
+                f"User #{data['id']}:\n"
+                f"- Name: {data['name']}\n"
+                f"- Email: {data['email']}\n"
+                f"- Company: {data['company']['name']}"
+            )
+    except httpx.HTTPStatusError as e:
+        return f"HTTP error {e.response.status_code} for user #{user_id}."
+    except httpx.RequestError as e:
+        return f"Connection error: {e}"
+
+
+# --- Resources ---
+
+
+@mcp.resource("db://schema")
+async def get_schema() -> str:
+    """Internal database schema."""
+    schema = {
+        "tables": {
+            "users": {
+                "columns": {
+                    "id": "integer (primary key)",
+                    "name": "varchar(255)",
+                    "email": "varchar(255) unique",
+                    "role": "enum(admin, dev, manager)",
+                    "active": "boolean",
+                },
+                "row_count": len(USERS_DB),
+            }
+        }
+    }
+    return json.dumps(schema, indent=2, ensure_ascii=False)
+
+
+@mcp.resource("db://roles")
+async def get_roles() -> str:
+    """List of available roles in the database."""
+    roles = sorted(set(u["role"] for u in USERS_DB))
+    return json.dumps({"roles": roles}, ensure_ascii=False)
+
+
+# --- Prompts ---
+
+
+@mcp.prompt()
+async def audit_users(role: str = "all") -> str:
+    """Generates a user audit, optionally filtered by role.
+
+    Args:
+        role: Role to audit (all, admin, dev, manager)
+    """
+    if role == "all":
+        return (
+            "Perform a complete user audit. "
+            "Use get_user_stats for overall statistics, "
+            "then search_users to check each role."
+        )
+    return (
+        f"Perform an audit of users with the '{role}' role. "
+        f"Use search_users to find them and check their status."
+    )
+
+
+# --- Startup ---
+
+if __name__ == "__main__":
+    mcp.run(transport="stdio")
+```
+
+## TypeScript vs Python comparison
+
+| Criterion | TypeScript | Python |
+|-----------|-----------|--------|
+| **Parameter schema** | Explicit zod | Type hints + docstring |
+| **Syntax** | `server.tool("name", ...)` | `@mcp.tool()` decorator |
+| **Direct execution** | Requires tsx or compilation | `python server.py` is enough |
+| **Distribution** | npm (`npx`) | PyPI (`uvx`) |
+| **Performance** | Slight edge (V8) | Perfectly fine for I/O |
+| **Ecosystem** | Ideal if your stack is JS/TS | Ideal for data, ML, scripts |
+
+The choice depends on your stack. Both SDKs are maintained by Anthropic and produce perfectly compatible MCPs.
+
+## Next steps
+
+- [Create an MCP Server in TypeScript](/mcp/create-mcp-typescript): the same approach with the TypeScript SDK and zod
+- [Advanced MCP protocol](/mcp/advanced-protocol): transports, capabilities, security, and debugging
+- [First MCP workflow](/mcp/first-workflow): combine multiple MCPs in a real workflow

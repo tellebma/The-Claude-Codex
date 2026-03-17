@@ -1,0 +1,294 @@
+---
+title: "Directives and instructions"
+description: "Master Claude Code directives: writing clear instructions, setting constraints, defining output format, and controlling AI behavior."
+section: "prompting"
+order: 2
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## What is a directive?
+
+A **directive** is an explicit instruction that frames Claude's behavior. Unlike a simple request ("do this"), a directive defines *how* Claude should work: its role, its limits, its priorities, and its output format.
+
+<Callout type="info" title="The director analogy">
+If the prompt is the screenplay, directives are the stage directions. They tell the actor (Claude) *how* to play the role: the tone, the pacing, the technical constraints. A good director leaves nothing to chance, and neither does a good prompter.
+</Callout>
+
+Directives fall into four fundamental categories that we'll explore in detail.
+
+## 1. Role directives: "You are..."
+
+The role directive is the most powerful one. It transforms Claude from a generalist assistant into a **specialized expert**. The role influences vocabulary, level of detail, methodological approach, and priorities.
+
+```markdown
+# Senior developer role
+You are a senior React/TypeScript developer with 10 years of experience.
+You prioritize maintainability, performance, and best practices.
+You comment your code in English and explain every architectural decision.
+
+# Architect role
+You are a software architect specializing in distributed systems.
+You analyze the trade-offs of every decision (scalability vs complexity,
+performance vs maintainability) and justify your choices with technical arguments.
+
+# Security reviewer role
+You are an application security expert (OWASP Top 10).
+You analyze code with a paranoid eye: every input is suspect,
+every endpoint is a potential attack surface.
+You classify your findings by severity: CRITICAL, HIGH, MEDIUM, LOW.
+```
+
+<Card title="How to choose the right role" variant="highlight">
+- **Developer**: for generating production-quality code
+- **Architect**: for design and structure decisions
+- **Reviewer**: for analyzing existing code
+- **Technical writer**: for documentation
+- **DevOps**: for scripts, CI/CD, and infrastructure
+- **Data analyst**: for data analysis and SQL queries
+</Card>
+
+### Combining multiple roles
+
+You can assign multiple facets to Claude to cover different aspects of a task.
+
+```markdown
+You are a senior fullstack developer AND a WCAG 2.1 accessibility expert.
+When you generate UI code, you systematically apply:
+- Proper ARIA roles
+- Keyboard focus management
+- AA-compliant color contrasts
+- Text alternatives for visual elements
+```
+
+## 2. Constraint directives
+
+Constraints define Claude's playing field. They specify what is mandatory, forbidden, or preferred. Constraints are how you get code that conforms to *your* standards rather than generic conventions.
+
+### The ALWAYS/NEVER pattern
+
+This pattern is the most explicit way to define absolute rules. Claude treats them as top priorities.
+
+```markdown
+## Absolute rules
+
+ALWAYS:
+- Use strict TypeScript (no any, no as unknown)
+- Handle errors explicitly with try/catch or Result types
+- Create immutable objects (spread operator, Object.freeze)
+- Validate inputs at system boundaries
+- Name variables in English, comments in English
+
+NEVER:
+- Never mutate an existing object
+- Never use console.log in production (use a structured logger)
+- Never use magic values (hardcoded), use constants instead
+- Never create a file over 400 lines
+- Never commit secrets or tokens in the code
+```
+
+### Technical constraints
+
+Technical constraints specify the environment, allowed dependencies, and system limits.
+
+```markdown
+## Technical constraints
+
+Allowed stack:
+- Framework: Next.js 14 (App Router only, no Pages Router)
+- Style: Tailwind CSS (no CSS modules, no styled-components)
+- State: Zustand for global state, React state for local
+- Forms: react-hook-form + Zod for validation
+- API: tRPC or Server Actions (no traditional REST)
+- Tests: Vitest + Testing Library (no Jest, no Enzyme)
+
+Forbidden dependencies:
+- Moment.js (use date-fns or dayjs)
+- Full lodash (import individual functions if needed)
+- jQuery (never)
+```
+
+## 3. Output format directives
+
+The output format controls the structure of Claude's response. Without a format directive, Claude picks a default format that may not match your needs.
+
+```markdown
+## Expected output format
+
+For each generated React component, provide:
+
+1. **The component**: complete code with TypeScript types
+2. **The types**: interfaces and types exported in a separate file
+3. **The tests**: at minimum: error-free render, required props, user interactions
+4. **Usage example**: a snippet showing how to use the component
+5. **Notes**: known limitations, possible improvements, required dependencies
+```
+
+### Specialized formats
+
+```markdown
+# For a code analysis
+Provide your analysis in this format:
+| File | Line | Severity | Issue | Suggested fix |
+|------|------|----------|-------|---------------|
+
+# For a technical comparison
+Provide a comparison table:
+| Criteria | Option A | Option B | Recommendation |
+|----------|----------|----------|----------------|
+
+# For an implementation plan
+Provide a structured plan:
+## Phase 1: [name] (estimated duration)
+- [ ] Task 1
+- [ ] Task 2
+```
+
+## 4. Example-based directives (few-shot)
+
+Showing Claude what you expect is often more effective than describing it. The **few-shot prompting** technique consists of providing concrete examples of the expected result.
+
+```markdown
+Generate commit messages following this pattern:
+
+Example 1: adding a login button
+-> feat: add login button with OAuth2 redirect
+
+Example 2: fixing a mobile display bug
+-> fix: resolve navbar overflow on mobile viewport
+
+Example 3: rewriting the authentication service
+-> refactor: rewrite auth service with repository pattern
+
+Now generate for:
+- adding pagination to the product list
+- fixing the tax calculation that was rounding incorrectly
+- updating npm dependencies
+```
+
+<Callout type="tip" title="The power of few-shot">
+With 2-3 well-chosen examples, Claude understands the pattern and reproduces it faithfully. This is the most reliable technique for getting an exact output format.
+</Callout>
+
+## DO/DON'T patterns
+
+The DO/DON'T pattern is a structured, visual version of constraints. It works particularly well in the [CLAUDE.md](/prompting/claude-md) file or in [Skills](/skills/what-are-skills).
+
+```markdown
+## Code conventions
+
+DO:
+- Use arrow functions for React components
+- Export types and interfaces from a dedicated types.ts file
+- Handle loading, error, and success states in every API call
+- Use early returns to reduce nesting
+
+DON'T:
+- Don't create class-based React components
+- Don't use useEffect for fetching (use useSWR or React Query)
+- Don't prop drill more than 2 levels deep
+- Don't use index as key in dynamic lists
+```
+
+## Combining directives: a complete prompt
+
+Here's how the four types of directives combine in a professional prompt.
+
+```markdown
+# Role
+You are a senior backend developer specializing in REST APIs with Node.js/Express.
+
+# Task
+Create a POST /api/users/register endpoint for user registration.
+
+# Constraints
+ALWAYS:
+- Validate the body with Zod (email, password, name)
+- Hash the password with bcrypt (12 rounds)
+- Return a JWT access token (15 min) and a refresh token (7 days)
+- Log every registration attempt (success or failure)
+
+NEVER:
+- Never store the password in plain text
+- Never return the hash in the API response
+- Don't use any TypeScript
+
+# Output format
+1. The controller in src/controllers/auth.controller.ts
+2. The service in src/services/auth.service.ts
+3. The Zod schema in src/schemas/auth.schema.ts
+4. Unit tests for the service
+5. A sample curl request for testing
+```
+
+## Directives in CLAUDE.md vs in the prompt
+
+Knowing where to place your directives is important for maximizing their effectiveness.
+
+| Where | When | Example |
+|---|-------|---------|
+| **CLAUDE.md** | Permanent project rules | Stack, conventions, required patterns |
+| **Skills** | Reusable workflows | PR review, deployment, onboarding |
+| **Prompt** | One-off instructions | Specific task to accomplish now |
+| **.claude/rules/** | Thematic rules | Security, tests, performance |
+
+<Callout type="tip" title="The directive hierarchy">
+Directives from the current prompt have the highest priority, followed by active Skills, then CLAUDE.md, then global rules. If two directives contradict each other, the most specific level wins.
+</Callout>
+
+## Concrete examples by task type
+
+### For frontend code
+
+```markdown
+You are an expert frontend developer in React/Next.js.
+
+UI rules:
+- Mobile-first, responsive on all breakpoints
+- WCAG 2.1 AA accessibility minimum
+- Subtle animations with framer-motion (no overload)
+- Dark mode supported via CSS variables or next-themes
+```
+
+### For backend code
+
+```markdown
+You are a Node.js/TypeScript backend developer.
+
+API rules:
+- Uniform response format: { success, data, error, meta }
+- Semantic HTTP codes (201 Created, 404 Not Found, 422 Unprocessable)
+- Rate limiting on all public endpoints
+- Cursor-based pagination for lists
+```
+
+### For code review
+
+```markdown
+You are a senior code reviewer. For each issue found, provide:
+- Severity: CRITICAL / HIGH / MEDIUM / LOW
+- Category: bug, security, performance, maintainability, style
+- File and line affected
+- Description of the issue
+- Suggested fix with code
+```
+
+### For data analysis
+
+```markdown
+You are a senior data analyst. For each analysis:
+- Start with descriptive statistics
+- Identify outliers and missing data
+- Suggest relevant visualizations
+- End with actionable recommendations
+- Explain results in non-technical language
+```
+
+## Next steps
+
+Now that you've mastered directives, put them into practice with concrete templates.
+
+- [Prompt templates by role](/prompting/templates): Complete ready-to-use prompts
+- [Common mistakes to avoid](/prompting/mistakes): The most frequent prompting pitfalls
+- [The complete CLAUDE.md guide](/prompting/claude-md): Automate your directives with the configuration file
+- [Create a custom Skill](/skills/create-custom): Turn your directives into reusable slash commands

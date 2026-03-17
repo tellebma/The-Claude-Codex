@@ -1,0 +1,118 @@
+---
+title: "Total cost of ownership calculator"
+description: "Calculate the true cost of Claude Code for your organization: licensing, infrastructure, training, and ROI analysis."
+section: "enterprise"
+order: 4
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Claude Code plans
+
+Anthropic offers several access tiers for Claude Code. The right choice depends on your team size, usage volume, and compliance requirements.
+
+### Available plans
+
+| Plan | Price | Usage limit | Best for |
+|---|---|---|---|
+| **Pro** | $20/month/user | Moderate usage (throttling possible) | Individual developers, small teams |
+| **Max 5x** | $100/month/user | 5x Pro capacity | Teams of 5 to 20 devs, daily use |
+| **Max 20x** | $200/month/user | 20x Pro capacity | Intensive teams, large projects |
+| **API Team** | ~$30-60/month/user | Pay-as-you-go (tokens consumed) | Tech teams, granular cost control |
+
+<Callout type="info" title="API Team: cost varies by usage">
+With the API plan, you pay per consumption (input and output tokens). An average developer consumes between $30 and $60 per month. Intensive profiles (architects, senior devs on major refactors) can reach $100 to $150.
+</Callout>
+
+## Cost by team size
+
+Here is a realistic estimate of monthly cost by plan and number of developers.
+
+| Number of devs | Pro ($20) | Max 5x ($100) | Max 20x ($200) | API (~$40/dev) |
+|---|---|---|---|---|
+| **10 devs** | $200 | $1,000 | $2,000 | ~$400 |
+| **50 devs** | $1,000 | $5,000 | $10,000 | ~$2,000 |
+| **200 devs** | $4,000 | $20,000 | $40,000 | ~$8,000 |
+
+## Comparison with alternatives
+
+| Tool | Monthly price/user | Strengths | Limitations |
+|---|---|---|---|
+| **Claude Code Max 5x** | $100 | Native terminal, 200K context, MCP, agents | No built-in IDE |
+| **GitHub Copilot Enterprise** | $39 | Deep IDE integration, Copilot Chat | Limited context, no terminal |
+| **Cursor Business** | $40 | Full IDE, vision, multi-model | Tied to the Cursor editor |
+
+### What the sticker price doesn't tell you
+
+The listed price doesn't tell the whole story:
+
+- **Copilot at $39** offers autocomplete and chat, but no terminal access, no MCP, no command execution. For complex tasks (multi-file refactoring, E2E test generation, CI automation), you end up multiplying manual interactions.
+- **Cursor at $40** is a full IDE but ties you to a specific editor. If your team uses VS Code, Neovim, or JetBrains, that means changing habits.
+- **Claude Code at $100** costs more on paper, but it acts directly in your environment. A refactoring that takes 3 hours manually takes 20 minutes. Against a senior dev salary, the tool pays for itself in days.
+
+## Return on investment (ROI)
+
+ROI depends on two variables: the cost of the tool and time saved per developer.
+
+### Estimated time savings
+
+Feedback from teams in production shows variable gains depending on task type:
+
+| Task | Estimated time savings |
+|---|---|
+| Writing tests | 40 to 60% |
+| Scaffolding / boilerplate | 50 to 70% |
+| Code review (first pass) | 30 to 50% |
+| Technical documentation | 40 to 60% |
+| Debugging | 20 to 40% |
+| Refactoring | 30 to 50% |
+
+On average, teams report saving **5 to 10 hours per developer per week** on repetitive tasks.
+
+### Concrete calculation
+
+For a developer with a fully loaded salary of EUR 80,000 per year (employer cost):
+
+- Hourly cost: ~EUR 42/h (based on 1,900 working hours)
+- Saving 7h/week: EUR 294/week saved
+- Claude Code Max 5x cost: ~EUR 92/month (~EUR 23/week)
+- **ROI: 12x the cost of the tool**
+
+Even with a modest gain of 3h/week, the ROI is positive from the first month.
+
+## Interactive calculator
+
+Use the calculator below to estimate the cost and ROI tailored to your team.
+
+<TcoCalculator />
+
+## Recommendations by team profile
+
+### Startup (5-15 devs)
+
+**Recommended plan: Max 5x ($100/dev/month)**
+
+The Pro plan ($20) will become too limited once your developers use Claude Code daily. The throttling on the Pro plan breaks the workflow. Max 5x offers a good balance between cost and capacity.
+
+### Scale-up (15-100 devs)
+
+**Recommended plan: API Team or Max 5x depending on profiles**
+
+Mix plans: API for occasional developers, Max 5x for intensive users. The API plan gives you fine-grained cost control and avoids paying $100 for a dev who uses the tool 3 times a week.
+
+### Large enterprise (100+ devs)
+
+**Recommended plan: API Team via Bedrock/Vertex**
+
+At this scale, the API via AWS Bedrock or Google Vertex offers the best balance of flexibility, cost, and compliance. Benefits:
+
+- Consolidated billing on your cloud account
+- Zero data retention on Anthropic's side
+- Simplified GDPR compliance (data in your region)
+- Granular permission control via IAM
+
+## Next steps
+
+- [Team adoption guide](/enterprise/team-adoption): launch a structured pilot
+- [Security and compliance](/enterprise/security-compliance): set up security before deployment
+- [Enterprise FAQ](/enterprise/faq): answers to common cost questions

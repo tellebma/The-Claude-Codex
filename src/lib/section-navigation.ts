@@ -1,179 +1,179 @@
 export interface SectionNavItem {
-  readonly label: string;
+  readonly labelKey: string;
   readonly href: string;
 }
 
 export interface SectionNavConfig {
-  readonly title: string;
+  readonly titleKey: string;
   readonly items: ReadonlyArray<SectionNavItem>;
 }
 
 export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
   "getting-started": {
-    title: "Démarrer",
+    titleKey: "getting-started.title",
     items: [
-      { label: "Vue d'ensemble", href: "/getting-started" },
-      { label: "Pré-requis pour grands débutants", href: "/getting-started/prerequisites-zero" },
-      { label: "Qu'est-ce que Claude Code ?", href: "/getting-started/what-is-claude-code" },
-      { label: "Prérequis et installation", href: "/getting-started/installation" },
-      { label: "Configuration de l'environnement", href: "/getting-started/environment-setup" },
-      { label: "Premier projet pas à pas", href: "/getting-started/first-project" },
-      { label: "FAQ débutants", href: "/getting-started/faq-beginner" },
+      { labelKey: "getting-started.overview", href: "/getting-started" },
+      { labelKey: "getting-started.prerequisites-zero", href: "/getting-started/prerequisites-zero" },
+      { labelKey: "getting-started.what-is-claude-code", href: "/getting-started/what-is-claude-code" },
+      { labelKey: "getting-started.installation", href: "/getting-started/installation" },
+      { labelKey: "getting-started.environment-setup", href: "/getting-started/environment-setup" },
+      { labelKey: "getting-started.first-project", href: "/getting-started/first-project" },
+      { labelKey: "getting-started.faq-beginner", href: "/getting-started/faq-beginner" },
     ],
   },
   mcp: {
-    title: "MCP",
+    titleKey: "mcp.title",
     items: [
-      { label: "Vue d'ensemble", href: "/mcp" },
-      { label: "Comprendre les MCP", href: "/mcp/what-are-mcps" },
-      { label: "Installer et configurer", href: "/mcp/setup" },
-      { label: "Top MCP productivité", href: "/mcp/best-productivity" },
-      { label: "Top MCP développement", href: "/mcp/best-development" },
-      { label: "Top MCP design & UI", href: "/mcp/best-design" },
-      { label: "Premier workflow MCP", href: "/mcp/first-workflow" },
-      { label: "Sécurité des MCP", href: "/mcp/securite-mcp" },
-      { label: "Créer un MCP en TypeScript", href: "/mcp/create-mcp-typescript" },
-      { label: "Créer un MCP en Python", href: "/mcp/create-mcp-python" },
-      { label: "Protocole MCP avancé", href: "/mcp/advanced-protocol" },
+      { labelKey: "mcp.overview", href: "/mcp" },
+      { labelKey: "mcp.what-are-mcps", href: "/mcp/what-are-mcps" },
+      { labelKey: "mcp.setup", href: "/mcp/setup" },
+      { labelKey: "mcp.best-productivity", href: "/mcp/best-productivity" },
+      { labelKey: "mcp.best-development", href: "/mcp/best-development" },
+      { labelKey: "mcp.best-design", href: "/mcp/best-design" },
+      { labelKey: "mcp.first-workflow", href: "/mcp/first-workflow" },
+      { labelKey: "mcp.securite-mcp", href: "/mcp/securite-mcp" },
+      { labelKey: "mcp.create-mcp-typescript", href: "/mcp/create-mcp-typescript" },
+      { labelKey: "mcp.create-mcp-python", href: "/mcp/create-mcp-python" },
+      { labelKey: "mcp.advanced-protocol", href: "/mcp/advanced-protocol" },
     ],
   },
   plugins: {
-    title: "Plugins",
+    titleKey: "plugins.title",
     items: [
-      { label: "Vue d'ensemble", href: "/plugins" },
-      { label: "Comprendre les plugins", href: "/plugins/what-are-plugins" },
-      { label: "Installer et gérer", href: "/plugins/setup" },
-      { label: "Top plugins essentiels", href: "/plugins/best-essential" },
-      { label: "Plugins design & frontend", href: "/plugins/best-design" },
-      { label: "Plugins sécurité & qualité", href: "/plugins/best-security" },
+      { labelKey: "plugins.overview", href: "/plugins" },
+      { labelKey: "plugins.what-are-plugins", href: "/plugins/what-are-plugins" },
+      { labelKey: "plugins.setup", href: "/plugins/setup" },
+      { labelKey: "plugins.best-essential", href: "/plugins/best-essential" },
+      { labelKey: "plugins.best-design", href: "/plugins/best-design" },
+      { labelKey: "plugins.best-security", href: "/plugins/best-security" },
     ],
   },
   skills: {
-    title: "Skills",
+    titleKey: "skills.title",
     items: [
-      { label: "Vue d'ensemble", href: "/skills" },
-      { label: "Qu'est-ce qu'un Skill ?", href: "/skills/what-are-skills" },
-      { label: "Top Skills recommandés", href: "/skills/best-skills" },
-      { label: "Créer un Skill custom", href: "/skills/create-custom" },
-      { label: "Skills vs MCP vs Plugins", href: "/skills/comparison" },
+      { labelKey: "skills.overview", href: "/skills" },
+      { labelKey: "skills.what-are-skills", href: "/skills/what-are-skills" },
+      { labelKey: "skills.best-skills", href: "/skills/best-skills" },
+      { labelKey: "skills.create-custom", href: "/skills/create-custom" },
+      { labelKey: "skills.comparison", href: "/skills/comparison" },
     ],
   },
   agents: {
-    title: "Agents",
+    titleKey: "agents.title",
     items: [
-      { label: "Vue d'ensemble", href: "/agents" },
-      { label: "Comprendre les agents", href: "/agents/what-are-agents" },
-      { label: "Créer un subagent", href: "/agents/create-subagent" },
-      { label: "Agent Teams", href: "/agents/agent-teams" },
-      { label: "Top agents par cas d'usage", href: "/agents/best-agents" },
-      { label: "Orchestration avancée", href: "/agents/orchestration" },
-      { label: "Claude Agent SDK", href: "/agents/agent-sdk" },
-      { label: "Performance et limites", href: "/agents/performance-limits" },
+      { labelKey: "agents.overview", href: "/agents" },
+      { labelKey: "agents.what-are-agents", href: "/agents/what-are-agents" },
+      { labelKey: "agents.create-subagent", href: "/agents/create-subagent" },
+      { labelKey: "agents.agent-teams", href: "/agents/agent-teams" },
+      { labelKey: "agents.best-agents", href: "/agents/best-agents" },
+      { labelKey: "agents.orchestration", href: "/agents/orchestration" },
+      { labelKey: "agents.agent-sdk", href: "/agents/agent-sdk" },
+      { labelKey: "agents.performance-limits", href: "/agents/performance-limits" },
     ],
   },
   prompting: {
-    title: "Prompting",
+    titleKey: "prompting.title",
     items: [
-      { label: "Vue d'ensemble", href: "/prompting" },
-      { label: "Les bases du prompting", href: "/prompting/basics" },
-      { label: "Directives avancées", href: "/prompting/directives" },
-      { label: "Templates par métier", href: "/prompting/templates" },
-      { label: "Erreurs à éviter", href: "/prompting/mistakes" },
-      { label: "Guide CLAUDE.md", href: "/prompting/claude-md" },
-      { label: "Prompting avancé", href: "/prompting/advanced" },
-      { label: "Gestion du contexte", href: "/prompting/context-management" },
-      { label: "Extended Thinking & Plan Mode", href: "/prompting/thinking-and-planning" },
-      { label: "Chaining & multi-agents", href: "/prompting/chaining-and-agents" },
-      { label: "Prompting non-développeurs", href: "/prompting/non-dev-prompting" },
+      { labelKey: "prompting.overview", href: "/prompting" },
+      { labelKey: "prompting.basics", href: "/prompting/basics" },
+      { labelKey: "prompting.directives", href: "/prompting/directives" },
+      { labelKey: "prompting.templates", href: "/prompting/templates" },
+      { labelKey: "prompting.mistakes", href: "/prompting/mistakes" },
+      { labelKey: "prompting.claude-md", href: "/prompting/claude-md" },
+      { labelKey: "prompting.advanced", href: "/prompting/advanced" },
+      { labelKey: "prompting.context-management", href: "/prompting/context-management" },
+      { labelKey: "prompting.thinking-and-planning", href: "/prompting/thinking-and-planning" },
+      { labelKey: "prompting.chaining-and-agents", href: "/prompting/chaining-and-agents" },
+      { labelKey: "prompting.non-dev-prompting", href: "/prompting/non-dev-prompting" },
     ],
   },
   future: {
-    title: "Vision",
+    titleKey: "future.title",
     items: [
-      { label: "Vue d'ensemble", href: "/future" },
-      { label: "L'IA et les métiers du dev", href: "/future/why-ai-matters" },
-      { label: "Tendances IA 2026", href: "/future/trends-2026" },
-      { label: "Roadmap du projet", href: "/future/roadmap" },
+      { labelKey: "future.overview", href: "/future" },
+      { labelKey: "future.why-ai-matters", href: "/future/why-ai-matters" },
+      { labelKey: "future.trends-2026", href: "/future/trends-2026" },
+      { labelKey: "future.roadmap", href: "/future/roadmap" },
     ],
   },
   configurator: {
-    title: "Configurateur",
+    titleKey: "configurator.title",
     items: [
-      { label: "Configurateur interactif", href: "/configurator" },
+      { labelKey: "configurator.interactive", href: "/configurator" },
     ],
   },
   "use-cases": {
-    title: "Cas d’usage",
+    titleKey: "use-cases.title",
     items: [
-      { label: "Vue d'ensemble", href: "/use-cases" },
-      { label: "8 cas d’usage business", href: "/use-cases/business" },
-      { label: "Histoires de réussite", href: "/use-cases/success-stories" },
-      { label: "Tutoriels sans code", href: "/use-cases/no-code" },
+      { labelKey: "use-cases.overview", href: "/use-cases" },
+      { labelKey: "use-cases.business", href: "/use-cases/business" },
+      { labelKey: "use-cases.success-stories", href: "/use-cases/success-stories" },
+      { labelKey: "use-cases.no-code", href: "/use-cases/no-code" },
     ],
   },
   enterprise: {
-    title: "Entreprise",
+    titleKey: "enterprise.title",
     items: [
-      { label: "Vue d'ensemble", href: "/enterprise" },
-      { label: "Sécurité et conformité", href: "/enterprise/security-compliance" },
-      { label: "Guide d'adoption d'équipe", href: "/enterprise/team-adoption" },
-      { label: "Calculateur TCO", href: "/enterprise/tco-calculator" },
-      { label: "FAQ Enterprise", href: "/enterprise/faq" },
-      { label: "Gouvernance et rôles", href: "/enterprise/governance" },
+      { labelKey: "enterprise.overview", href: "/enterprise" },
+      { labelKey: "enterprise.security-compliance", href: "/enterprise/security-compliance" },
+      { labelKey: "enterprise.team-adoption", href: "/enterprise/team-adoption" },
+      { labelKey: "enterprise.tco-calculator", href: "/enterprise/tco-calculator" },
+      { labelKey: "enterprise.faq", href: "/enterprise/faq" },
+      { labelKey: "enterprise.governance", href: "/enterprise/governance" },
     ],
   },
   advanced: {
-    title: "Avancé",
+    titleKey: "advanced.title",
     items: [
-      { label: "Vue d'ensemble", href: "/advanced" },
-      { label: "Système de Hooks", href: "/advanced/hooks" },
-      { label: "Mode Headless et CI/CD", href: "/advanced/headless-ci" },
-      { label: "Multi-provider et Enterprise", href: "/advanced/multi-provider" },
+      { labelKey: "advanced.overview", href: "/advanced" },
+      { labelKey: "advanced.hooks", href: "/advanced/hooks" },
+      { labelKey: "advanced.headless-ci", href: "/advanced/headless-ci" },
+      { labelKey: "advanced.multi-provider", href: "/advanced/multi-provider" },
     ],
   },
   reference: {
-    title: "Référence",
+    titleKey: "reference.title",
     items: [
-      { label: "Vue d'ensemble", href: "/reference" },
-      { label: "Cheatsheet : Référence rapide", href: "/reference/cheatsheet" },
-      { label: "CLI : Tous les flags", href: "/reference/cli" },
-      { label: "settings.json : Configuration", href: "/reference/settings" },
-      { label: "Variables d'environnement", href: "/reference/environment" },
+      { labelKey: "reference.overview", href: "/reference" },
+      { labelKey: "reference.cheatsheet", href: "/reference/cheatsheet" },
+      { labelKey: "reference.cli", href: "/reference/cli" },
+      { labelKey: "reference.settings", href: "/reference/settings" },
+      { labelKey: "reference.environment", href: "/reference/environment" },
     ],
   },
   limits: {
-    title: "Limites",
+    titleKey: "limits.title",
     items: [
-      { label: "Vue d'ensemble", href: "/limits" },
-      { label: "Limites connues", href: "/limits/known-limitations" },
-      { label: "Claude Code vs Copilot", href: "/limits/vs-copilot" },
-      { label: "Claude Code vs Cursor", href: "/limits/vs-cursor" },
-      { label: "Quand ne PAS utiliser Claude Code", href: "/limits/when-not-to-use" },
+      { labelKey: "limits.overview", href: "/limits" },
+      { labelKey: "limits.known-limitations", href: "/limits/known-limitations" },
+      { labelKey: "limits.vs-copilot", href: "/limits/vs-copilot" },
+      { labelKey: "limits.vs-cursor", href: "/limits/vs-cursor" },
+      { labelKey: "limits.when-not-to-use", href: "/limits/when-not-to-use" },
     ],
   },
   personas: {
-    title: "Parcours",
+    titleKey: "personas.title",
     items: [
-      { label: "Vue d'ensemble", href: "/personas" },
-      { label: "Parcours développeur", href: "/personas/developer" },
-      { label: "Parcours lead technique", href: "/personas/team-lead" },
-      { label: "Parcours non-développeur", href: "/personas/non-dev" },
-      { label: "Parcours freelance", href: "/personas/freelance" },
-      { label: "Parcours étudiant", href: "/personas/student" },
+      { labelKey: "personas.overview", href: "/personas" },
+      { labelKey: "personas.developer", href: "/personas/developer" },
+      { labelKey: "personas.team-lead", href: "/personas/team-lead" },
+      { labelKey: "personas.non-dev", href: "/personas/non-dev" },
+      { labelKey: "personas.freelance", href: "/personas/freelance" },
+      { labelKey: "personas.student", href: "/personas/student" },
     ],
   },
   content: {
-    title: "Contenus",
+    titleKey: "content.title",
     items: [
-      { label: "Tous les articles", href: "/content" },
-      { label: "Introduction à Claude Code", href: "/content/getting-started-intro" },
-      { label: "Guide complet des MCP", href: "/content/mcp-guide" },
-      { label: "Guide complet des Skills", href: "/content/skills-guide" },
-      { label: "Guide du prompting", href: "/content/prompting-guide" },
-      { label: "Vision et tendances IA", href: "/content/future-vision" },
-      { label: "Coûts réels de Claude Code", href: "/content/couts-reels-claude-code" },
-      { label: "8 idées reçues sur Claude Code", href: "/content/mythes-claude-code" },
-      { label: "Guide de sécurité", href: "/content/bonnes-pratiques-securite" },
+      { labelKey: "content.all-articles", href: "/content" },
+      { labelKey: "content.getting-started-intro", href: "/content/getting-started-intro" },
+      { labelKey: "content.mcp-guide", href: "/content/mcp-guide" },
+      { labelKey: "content.skills-guide", href: "/content/skills-guide" },
+      { labelKey: "content.prompting-guide", href: "/content/prompting-guide" },
+      { labelKey: "content.future-vision", href: "/content/future-vision" },
+      { labelKey: "content.couts-reels", href: "/content/couts-reels-claude-code" },
+      { labelKey: "content.mythes", href: "/content/mythes-claude-code" },
+      { labelKey: "content.securite", href: "/content/bonnes-pratiques-securite" },
     ],
   },
 };
@@ -181,6 +181,21 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
 export function getSectionFromPathname(pathname: string): string | null {
   const segments = pathname.split("/").filter(Boolean);
   if (segments.length === 0) return null;
+
+  // With i18n, the first segment is the locale (e.g., "fr", "en").
+  // The section is the second segment.
   const firstSegment = segments[0];
-  return firstSegment in sectionNavigation ? firstSegment : null;
+  if (firstSegment in sectionNavigation) {
+    return firstSegment;
+  }
+
+  // If first segment is a locale prefix, check the second segment
+  if (segments.length > 1) {
+    const secondSegment = segments[1];
+    if (secondSegment in sectionNavigation) {
+      return secondSegment;
+    }
+  }
+
+  return null;
 }

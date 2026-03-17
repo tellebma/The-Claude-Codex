@@ -1,0 +1,259 @@
+---
+title: "Business use cases"
+description: "Business use cases for Claude Code: internal tools, automation, data analysis, reporting, and process optimization."
+order: 1
+section: "use-cases"
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Why this page exists
+
+You don't need to know how to code to get value from Claude Code. This page gathers 8 common professional situations with, for each one, the exact prompt to copy and the type of result you'll get.
+
+<Callout type="tip" title="How to use these examples">
+Open Claude Code in your terminal, paste the prompt as-is, then adapt the details in brackets `[...]` to your situation. Results appear directly in the terminal.
+</Callout>
+
+---
+
+## 1. Write a professional email
+
+Writing a clear email with the right tone takes time. Claude Code does it in seconds.
+
+**The prompt:**
+
+```text
+I need to send a professional email.
+Context: [following up with a client who hasn't responded to my quote in 10 days]
+Tone: professional but not cold, direct without being pushy
+Length: 5-8 lines maximum
+Language: English
+
+Generate the subject line and body. Also suggest a shorter version.
+```
+
+**What you get:** two versions of the email with subject line, ready to paste into your inbox. The long version and short version let you choose depending on the context.
+
+**Useful variations:**
+- Replace the context with "politely declining a sales pitch"
+- Or with "requesting extra time from my manager"
+- Or with "thanking a vendor after a successful project"
+
+---
+
+## 2. Summarize a long document
+
+Reading a 40-page report takes an hour. Claude Code gives you the gist in 30 seconds.
+
+**The prompt:**
+
+```text
+Read the file [annual-report-2025.pdf] and produce:
+1. An executive summary in 5 lines
+2. The 3 key figures to remember
+3. The 2 risks mentioned
+4. One recommended action in a single sentence
+
+Format: bullet points, no jargon.
+```
+
+**What you get:** a structured summary you can send to your team or paste into meeting notes. Key figures are extracted and highlighted.
+
+<Callout type="info" title="File tip">
+Place the file in the same folder where Claude Code is launched, or provide the full path. Claude Code can read text files, Markdown, and most common formats.
+</Callout>
+
+---
+
+## 3. Analyze simple data
+
+You have a CSV file or a spreadsheet and want to draw conclusions without opening Excel.
+
+**The prompt:**
+
+```text
+Analyze the file [sales-q4-2025.csv] and give me:
+1. Total revenue
+2. The best-selling product (by volume and by value)
+3. The best-performing month
+4. The overall trend (up, stable, or down)
+5. Any anomalies in the data
+
+Present the results as a readable table.
+```
+
+**What you get:** a table with key figures, observations on trends, and alerts if something looks off in your data.
+
+**Useful variations:**
+- "Compare these sales with the file [sales-q3-2025.csv]"
+- "Generate an ASCII chart showing month-by-month trends"
+- "Identify the 3 clients that account for the most revenue"
+
+---
+
+## 4. Prepare a presentation
+
+Structuring a presentation often takes longer than presenting it. Claude Code gives you a detailed outline in seconds.
+
+**The prompt:**
+
+```text
+Prepare the outline for a 15-minute presentation.
+Topic: [CRM migration project results, presenting to the executive committee]
+Audience: [non-technical directors who want results and numbers]
+
+For each slide, include:
+- The title
+- 2-3 key points (bullet points)
+- A visual or chart suggestion
+
+Number of slides: 10-12 maximum.
+Tone: factual, results-oriented.
+```
+
+**What you get:** a slide-by-slide plan with punchy titles, concise key points, and visual suggestions. All you need to do is open PowerPoint or Google Slides and fill in.
+
+---
+
+## 5. Organize a team schedule
+
+Coordinating meetings, deadlines, and availability is a headache. Claude Code can propose a clear structure.
+
+**The prompt:**
+
+```text
+I need to organize my team's schedule ([6 people]) for [the product launch on April 15].
+
+Here are the project steps:
+- Finalize marketing content: 5 days
+- User testing: 3 days
+- Post-test fixes: 2 days
+- Press release preparation: 2 days
+- Sales team briefing: 1 day
+- Launch: launch day
+
+Constraints:
+- Marie is on leave from April 1-5
+- Design must be approved before testing
+
+Generate a reverse schedule from the launch date, with start and end dates for each step, and team members to assign.
+```
+
+**What you get:** a complete reverse schedule with automatically calculated dates, task dependencies, and assignment suggestions. You can copy it into a spreadsheet or a project management tool.
+
+---
+
+## 6. Write a LinkedIn post
+
+A good LinkedIn post is a balance between value, authenticity, and platform-appropriate format. Claude Code helps you find that balance.
+
+**The prompt:**
+
+```text
+Write a LinkedIn post about [how our team reduced customer complaint processing time by 30% through automation].
+
+Constraints:
+- Tone: professional but human, experience sharing (not lecturing)
+- Structure: strong hook, 3-4 short paragraphs, conclusion with an open question
+- Length: 800-1200 characters
+- No excessive hashtags (3 maximum)
+- No emojis at the start of lines
+- Include a concrete number
+
+Suggest 2 versions: a "story" version and a "tips list" version.
+```
+
+**What you get:** two versions of the post, each with a hook designed for the LinkedIn feed. The story version tells a narrative, the list version gives actionable advice.
+
+---
+
+## 7. Produce an activity report
+
+The weekly or monthly report is a chore for many managers. Claude Code can structure it from your raw notes.
+
+**The prompt:**
+
+```text
+Turn my raw notes into a monthly activity report.
+
+My notes (unstructured):
+- 3 new clients signed (Dupont SA, Martin et Co, Groupe Leroy)
+- March revenue: 145K, target was 130K
+- 2 resignations in the support team (replacement in progress)
+- Launched site v2 on March 18, 0 critical bugs
+- Claude Code training for 12 people
+- 1 week delay on the billing project (vendor dependency)
+
+Report format:
+1. Key highlights (3-4 lines)
+2. Results with numbers (table)
+3. Watch points
+4. Next month priorities
+Tone: factual, concise, suited for an executive committee.
+```
+
+**What you get:** a structured, professional report from your raw notes. Numbers are highlighted, alerts are clearly identified, and priorities are phrased as actions.
+
+---
+
+## 8. Run a competitive analysis
+
+Synthesizing information about competitors takes hours. Claude Code can structure the analysis from the data you provide.
+
+**The prompt:**
+
+```text
+I'm giving you notes on 3 competitors. Structure a competitive analysis.
+
+Competitor A - TechnoPlus:
+- Price: 49 euros/month, no free tier
+- Strength: very intuitive interface
+- Weakness: no API, limited integration
+
+Competitor B - DataFlow:
+- Price: 29 euros/month, limited free version
+- Strength: excellent customer support, active community
+- Weakness: slow on large volumes
+
+Competitor C - SmartSync:
+- Price: 79 euros/month, 14-day trial
+- Strength: advanced features, built-in AI
+- Weakness: complex to get started with
+
+Our product: [CloudManager, 39 euros/month, good value but UI needs improvement]
+
+Generate:
+1. A comparison table (price, strengths, weaknesses)
+2. Our positioning relative to each competitor
+3. 3 strategic recommendations
+```
+
+**What you get:** a clear comparison table, a positioning analysis, and concrete recommendations. Everything is ready to drop into a presentation or strategy document.
+
+---
+
+## Tips for better results
+
+Whatever the use case, these principles improve response quality:
+
+<Steps>
+<Step title="Give context" stepNumber={1}>
+The more Claude Code understands your situation (who you are, who you're addressing, what the context is), the more relevant the response. Never skip the "context" line in your prompt.
+</Step>
+<Step title="Specify the output format" stepNumber={2}>
+"Make a table," "bullet points," "5 lines maximum": these constraints prevent responses that are too long or poorly structured.
+</Step>
+<Step title="Ask for variations" stepNumber={3}>
+"Suggest 2 versions" or "give a shorter alternative" lets you choose without having to rephrase.
+</Step>
+<Step title="Iterate" stepNumber={4}>
+If the first result isn't perfect, just say "make the tone more formal" or "shorten part 3." Claude Code keeps the conversation context.
+</Step>
+</Steps>
+
+## Next steps
+
+- Check out the [success stories](/use-cases/success-stories) to see how other professionals use Claude Code daily
+- Explore the [no-code tutorials](/use-cases/no-code) to automate repetitive tasks
+- Find our [prompting templates for non-developers](/prompting/non-dev-prompting) to go further

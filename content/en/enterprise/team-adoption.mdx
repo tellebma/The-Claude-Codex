@@ -1,0 +1,176 @@
+---
+title: "Team adoption guide"
+description: "Guide to successfully adopting Claude Code across your development team: onboarding, training, best practices, and measuring impact."
+section: "enterprise"
+order: 3
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Adoption plan overview
+
+Deploying an AI tool in a development team is more than just handing out licenses. Organizations that succeed follow a structured plan, measure results, and adjust continuously.
+
+Here is a 4-phase plan tested and adapted for teams of 5 to 500 developers.
+
+## Phase 1: Preparation (1 week)
+
+### Identify champions
+
+Find 2 to 3 developers who are motivated by AI, curious, and credible among their peers. These champions will:
+
+- Test Claude Code first
+- Document use cases that work
+- Answer colleagues' questions
+- Report problems and improvement ideas
+
+### Set measurable objectives
+
+Vague objectives ("be more productive") are useless. Set concrete metrics:
+
+| Metric | How to measure | Pilot target |
+|---|---|---|
+| PR completion time | Git tracking (open to merge) | -20% |
+| Test coverage | CI coverage report | +15 points |
+| Code review time | Time from submission to approval | -30% |
+| Developer satisfaction | Anonymous survey (1-10) | > 7/10 |
+
+### Prepare the base configuration
+
+Before launching the pilot, set up:
+
+- A reference `CLAUDE.md` for the pilot project
+- An organization `settings.json` with authorized MCPs
+- A dedicated Slack or Teams channel (#claude-code-pilot)
+- A shared document for feedback and best practices
+
+## Phase 2: Pilot (4 to 6 weeks)
+
+### Select the pilot team
+
+Choose a team of 3 to 5 developers working on an active project (not a forgotten side-project). Criteria:
+
+- Actively developed project (daily commits)
+- Mix of seniority levels (junior + senior)
+- Volunteers, not people assigned by default
+- Project with a working CI/CD pipeline (to measure impact)
+
+### Initial training (half day)
+
+Organize a training session covering:
+
+1. **The basics**: installation, first prompts, essential slash commands
+2. **Effective prompting**: structure of a good prompt, common mistakes, concrete examples
+3. **Useful MCPs**: GitHub, Context7, and MCPs specific to your stack
+4. **Security**: what gets sent to the API, what not to do, organization rules
+
+<Callout type="tip" title="Live coding training">
+The most effective training is a live coding session where the trainer solves a real problem from the project with Claude Code. Developers see firsthand what the tool can do, not a marketing demo.
+</Callout>
+
+### Weekly tracking
+
+Each week during the pilot:
+
+- **Dedicated standup** (15 min): each participant shares a successful use case and a failure
+- **Metrics measurement**: collect the data defined in phase 1
+- **CLAUDE.md updates**: add instructions that improve results
+- **Prompt sharing**: centralize the best prompts in a shared document
+
+### End-of-pilot retrospective
+
+At the end of the 4 to 6 weeks, hold a structured retro:
+
+- What worked well (use cases, prompts, workflows)
+- What didn't work (limits, frustrations, unexpected costs)
+- Recommendation: continue, adjust, or stop
+- Action plan for the next phase
+
+## Phase 3: Deployment (2 to 4 weeks)
+
+### Deploy by cohorts
+
+Don't deploy to everyone at once. Proceed in cohorts of 5 to 10 developers, with a one-week gap between each cohort. This lets you:
+
+- Absorb the support load
+- Adjust training based on feedback
+- Identify problems before they affect everyone
+
+### Standardized onboarding
+
+Create a repeatable onboarding path:
+
+1. **Welcome email** with essential links (internal docs, Slack channel, CLAUDE.md)
+2. **30-minute session** with a champion for a live demo
+3. **Guided exercise**: fix a real project bug with Claude Code
+4. **Day 7 check-in**: an informal chat to answer questions
+
+### Internal documentation
+
+Build on what you learned during the pilot:
+
+- **Quick start guide** specific to your organization
+- **Prompt library** organized by use case (test, review, docs, refactoring)
+- **Internal FAQ**: real problems encountered and their solutions
+- **CLAUDE.md** optimized and validated by the pilot team
+
+## Phase 4: Optimization (ongoing)
+
+### Share Skills and configurations
+
+Set up a shared repository (internal git repo) for:
+
+- **Custom Skills** created by the team (custom slash commands)
+- **CLAUDE.md configurations** by project type (frontend, backend, data)
+- **Prompt templates** validated and documented
+
+### Create a center of excellence
+
+Designate 2 to 3 people (not necessarily full-time) to:
+
+- Centralize best practices
+- Evaluate new Claude Code features
+- Train new hires
+- Track adoption and productivity metrics
+
+### Continuous benchmarking
+
+Keep measuring key metrics over the long term. Compare:
+
+- Teams using Claude Code vs those not using it (yet)
+- Metric trends month over month
+- Actual cost per developer vs productivity gain
+
+## Change management: handling resistance
+
+### Skeptics
+
+Some developers doubt the tool's usefulness. That's normal and healthy. How to respond:
+
+- Don't force adoption. Make the tool available and let the results speak.
+- Ask skeptics to test for 2 weeks on a specific use case before judging.
+- Share quantified pilot feedback, not marketing promises.
+
+### Fear of replacement
+
+"AI will take my job" is a real concern. Address it head on:
+
+- Claude Code is a tool, not a replacement. It automates repetitive tasks to free up time for high-value work.
+- Developers who master AI will be more valued, not less.
+- Show concrete examples: the tool doesn't replace architectural thinking, system design, or client relationships.
+
+### Communication templates
+
+**For the initial announcement:**
+
+> We're launching a pilot of Claude Code, a command-line AI assistant, with the [name] team. The goal is to measure the impact on productivity and code quality. This is not a replacement for developers; it's a tool to make them more effective on repetitive tasks. The pilot results will determine what comes next.
+
+**For skeptics:**
+
+> We understand the doubts, that's normal with a new tool. We're simply asking you to try it for 2 weeks on [specific use case]. If after 2 weeks it doesn't help you, no problem. Honest feedback, positive or negative, helps us make the right call.
+
+## Next steps
+
+- [TCO calculator](/enterprise/tco-calculator): estimate the budget for your team
+- [Security and compliance](/enterprise/security-compliance): set up security before deployment
+- [Governance and roles](/enterprise/governance): define permissions and rules

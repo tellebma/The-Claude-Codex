@@ -1,43 +1,48 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { ThemeToggle } from "./ThemeToggle";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { Logo } from "./Logo";
 import { SearchDialog } from "@/components/ui/SearchDialog";
 import clsx from "clsx";
 
-const primaryNav = [
-  { name: "Démarrer", href: "/getting-started" },
-  { name: "MCP", href: "/mcp" },
-  { name: "Skills", href: "/skills" },
-  { name: "Prompting", href: "/prompting" },
-  { name: "Cas d'usage", href: "/use-cases" },
-  { name: "Parcours", href: "/personas" },
-  { name: "Entreprise", href: "/enterprise" },
-  { name: "Avancé", href: "/advanced" },
-  { name: "Configurateur", href: "/configurator" },
-];
+const primaryNavKeys = [
+  { key: "gettingStarted", href: "/getting-started" },
+  { key: "mcp", href: "/mcp" },
+  { key: "skills", href: "/skills" },
+  { key: "prompting", href: "/prompting" },
+  { key: "useCases", href: "/use-cases" },
+  { key: "personas", href: "/personas" },
+  { key: "enterprise", href: "/enterprise" },
+  { key: "advanced", href: "/advanced" },
+  { key: "configurator", href: "/configurator" },
+] as const;
 
-const secondaryNav = [
-  { name: "Contenus", href: "/content" },
-  { name: "Limites", href: "/limits" },
-  { name: "Référence", href: "/reference" },
-  { name: "Glossaire", href: "/glossary" },
-  { name: "Vision", href: "/future" },
-];
+const secondaryNavKeys = [
+  { key: "content", href: "/content" },
+  { key: "limits", href: "/limits" },
+  { key: "reference", href: "/reference" },
+  { key: "glossary", href: "/glossary" },
+  { key: "future", href: "/future" },
+] as const;
 
-const navigation = [...primaryNav, ...secondaryNav];
+const allNavKeys = [...primaryNavKeys, ...secondaryNavKeys];
 
 const MOBILE_MENU_ID = "mobile-nav-menu";
 
-function MoreDropdown({ pathname }: { readonly pathname: string }) {
+function MoreDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const isSecondaryActive = secondaryNav.some(
-    (item) => pathname === item.href || pathname.startsWith(item.href + "/")
+  const t = useTranslations("navigation");
+  const pathname = usePathname();
+  const isSecondaryActive = secondaryNavKeys.some(
+    (item) =>
+      pathname === item.href ||
+      pathname.startsWith(item.href + "/")
   );
 
   useEffect(() => {
@@ -70,13 +75,21 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
         aria-expanded={open}
         aria-haspopup="true"
       >
-        Plus
-        <ChevronDown className={clsx("h-3.5 w-3.5 transition-transform", open && "rotate-180")} aria-hidden="true" />
+        {t("more")}
+        <ChevronDown
+          className={clsx(
+            "h-3.5 w-3.5 transition-transform",
+            open && "rotate-180"
+          )}
+          aria-hidden="true"
+        />
       </button>
       {open && (
         <div className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-slate-200/60 bg-white/95 py-1 shadow-lg backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/95">
-          {secondaryNav.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          {secondaryNavKeys.map((item) => {
+            const isActive =
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
@@ -89,7 +102,7 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                 )}
               >
-                {item.name}
+                {t(item.key)}
               </Link>
             );
           })}
@@ -102,13 +115,17 @@ function MoreDropdown({ pathname }: { readonly pathname: string }) {
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const t = useTranslations("navigation");
 
   return (
     <header className="glass sticky top-0 z-50">
-      <nav aria-label="Navigation principale" className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
+      <nav
+        aria-label={t("mainNav")}
+        className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]"
+      >
         <Link
           href="/"
-          aria-label="The Claude Codex - Accueil"
+          aria-label="The Claude Codex"
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
           <Logo />
@@ -118,8 +135,10 @@ export function Header() {
         </Link>
 
         <div className="hidden items-center gap-1 lg:flex">
-          {primaryNav.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          {primaryNavKeys.map((item) => {
+            const isActive =
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
@@ -132,20 +151,21 @@ export function Header() {
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                 )}
               >
-                {item.name}
+                {t(item.key)}
               </Link>
             );
           })}
-          <MoreDropdown pathname={pathname} />
+          <MoreDropdown />
         </div>
 
         <div className="flex items-center gap-2">
           <SearchDialog />
+          <LanguageSwitcher />
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700 lg:hidden"
-            aria-label="Menu de navigation"
+            aria-label={t("menuToggle")}
             aria-expanded={mobileOpen}
             aria-controls={MOBILE_MENU_ID}
           >
@@ -168,8 +188,10 @@ export function Header() {
         aria-hidden={!mobileOpen}
       >
         <div className="space-y-1 px-4 py-3">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          {allNavKeys.map((item) => {
+            const isActive =
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.href}
@@ -183,7 +205,7 @@ export function Header() {
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                 )}
               >
-                {item.name}
+                {t(item.key)}
               </Link>
             );
           })}

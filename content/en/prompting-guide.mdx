@@ -1,0 +1,96 @@
+---
+title: "Prompting guide"
+description: "Complete guide to prompting with Claude Code: learn to write effective prompts, master communication techniques, and get the best results from AI."
+badge: "Prompting"
+order: 4
+section: "prompting"
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## The 5 principles of good prompting
+
+A good prompt makes the difference between a generic response and a result tailored exactly to your needs. Here are the fundamental principles.
+
+### 1. Be specific
+
+Provide context and clear constraints. The more precise your prompt, the more relevant the response.
+
+```markdown
+# Vague
+"Make me a form"
+
+# Specific
+"Create a contact form in React with TypeScript.
+Fields: name (required), email (required, validated), message (required, min 20 chars).
+Use react-hook-form with Zod validation.
+Style with Tailwind CSS, responsive mobile-first."
+```
+
+### 2. Define a role
+
+Give Claude an identity to frame its responses. The role influences the level of detail, vocabulary, and approach.
+
+### 3. Specify the expected format
+
+Clearly indicate the desired response structure: code, list, table, JSON, markdown, etc.
+
+### 4. Provide examples (few-shot)
+
+Show Claude what you expect with concrete examples. This is the most powerful technique for getting the exact format you want.
+
+### 5. Iterate and refine
+
+Prompting is a dialogue. Gradually refine your requests based on the responses you receive.
+
+<Callout type="tip" title="Golden rule">
+Imagine you're delegating a task to a brilliant colleague who knows nothing about your project. What would you tell them so they succeed on the first try? That's exactly what you should tell Claude.
+</Callout>
+
+## Common mistakes to avoid
+
+| Mistake | Problem | Solution |
+|---------|---------|----------|
+| Too vague | Generic response | Add context and constraints |
+| No context | Claude doesn't understand the issue | Provide file, error, expected behavior |
+| All at once | Incomplete result | Break it into steps |
+| Not iterating | Frustration | Give precise feedback |
+
+## CLAUDE.md: your secret weapon
+
+The `CLAUDE.md` file is the persistent context that Claude Code reads every session. Place it at the root of your project for consistent, tailored results.
+
+```markdown
+# CLAUDE.md
+
+## Project
+Name: MyApp - SaaS project management application
+Stack: Next.js 14, TypeScript, Tailwind CSS, Prisma
+
+## Code conventions
+- Immutability: always create new objects
+- Files < 400 lines, functions < 50 lines
+- Tests mandatory (coverage 80%+)
+
+## Git
+- Conventional commits: feat:, fix:, refactor:
+- PRs with detailed description
+```
+
+## Advanced techniques
+
+### Prompt chaining
+
+Break a complex task into a sequence of prompts where each step feeds the next. This forces Claude to focus on one task at a time.
+
+### Multi-agent orchestration
+
+Use multiple specialized agents working in parallel on different aspects of a problem: planning, testing, code review, and security.
+
+<Callout type="info" title="Parallelism">
+Independent agents can work simultaneously. This cuts work time and brings different perspectives to the same problem.
+</Callout>
+
+## Next steps
+
+Explore the [AI vision and trends](/future) to understand where the ecosystem is heading, or go back to the [fundamentals](/getting-started) to solidify your foundations.

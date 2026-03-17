@@ -1,0 +1,474 @@
+---
+title: "Best Skills for Claude Code"
+description: "The most useful Skills for Claude Code: code review, testing, documentation, deployment, and more. Ready-to-use examples."
+section: "skills"
+order: 2
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## The must-have Skills
+
+Here are the most popular and useful Skills in the Claude Code ecosystem in 2026. Each one transforms Claude into a **specialized expert** for a specific task. They're organized by category to help you find the one you need.
+
+<Callout type="info" title="Where to find these Skills?">
+The Skills presented here are available as Markdown files to place in `.claude/commands/` (project) or `~/.claude/commands/` (personal). Some are included in [community extensions](/plugins/best-essential) like **everything-claude-code** ([github.com/punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code)). You can also create them yourself using the examples below as inspiration.
+</Callout>
+
+---
+
+## Development & Quality
+
+### TDD Guide
+
+The **TDD Guide** Skill turns Claude into a test-driven development coach. It enforces strict discipline: write the test first, make it fail, then implement the minimum to make it pass.
+
+```bash
+# Invocation
+/user:tdd-guide create an email validation function
+```
+
+**Use cases:**
+- Implementing a new feature with solid test coverage
+- Learning TDD on an existing project
+- Refactoring legacy code by adding tests first
+
+**What the Skill does:**
+
+<Steps>
+<Step title="RED: Write the test" stepNumber={1}>
+Claude writes a test that describes the expected behavior. The test must fail because the feature doesn't exist yet.
+</Step>
+
+<Step title="GREEN: Implement" stepNumber={2}>
+Claude writes the minimum code to make the test pass. No premature optimization, just the bare minimum.
+</Step>
+
+<Step title="REFACTOR: Improve" stepNumber={3} isLast>
+Claude refactors the code while ensuring tests still pass. It checks coverage and suggests additional edge cases.
+</Step>
+</Steps>
+
+<Card title="Sample output" variant="default">
+The Skill produces a test file (`email-validator.test.ts`) and an implementation file (`email-validator.ts`), with a coverage report showing 95%+ coverage on the feature.
+</Card>
+
+---
+
+### Code Reviewer
+
+The **Code Reviewer** simulates a code review by a senior developer. It analyzes the current diff and produces a structured report with concrete suggestions.
+
+```bash
+# Review the current diff against main
+/user:code-reviewer
+
+# Review a specific diff
+/user:code-reviewer develop
+```
+
+**Use cases:**
+- Checking your code before creating a Pull Request
+- Getting an automated second look on critical changes
+- Training junior developers on code review best practices
+
+**What the Skill checks:**
+- Logic bugs and unhandled edge cases
+- Security vulnerabilities (injection, XSS, CSRF)
+- Performance issues (nested loops, N+1 queries)
+- Compliance with project conventions (via CLAUDE.md)
+- Test coverage of changes
+- Duplicated code and refactoring opportunities
+
+<Callout type="tip" title="Combine with the TDD Guide">
+Use the **TDD Guide** to implement, then the **Code Reviewer** to verify. This combination covers both test quality and code quality.
+</Callout>
+
+---
+
+### Debugging
+
+The **Debugging** Skill structures the bug resolution approach. Instead of trial and error, Claude follows a systematic method to identify and fix the problem.
+
+```bash
+# Debug a specific error
+/user:debugging TypeError: Cannot read property 'map' of undefined
+
+# Debug with context
+/user:debugging the contact form isn't submitting data
+```
+
+**Use cases:**
+- Resolving runtime errors with a structured approach
+- Investigating intermittent bugs
+- Understanding unexpected behavior in complex code
+
+**What the Skill does:**
+1. Reproduce the problem (identify exact conditions)
+2. Isolate the root cause (not the symptom)
+3. Propose a minimal, targeted fix
+4. Add a regression test
+5. Verify no side effects are introduced
+
+---
+
+## Architecture & Planning
+
+### Plan
+
+The **Plan** Skill is your planning assistant for complex features. It breaks down a request into phases, identifies risks, and produces a detailed action plan.
+
+```bash
+# Plan a new feature
+/user:plan add an OAuth2 authentication system
+
+# Plan a migration
+/user:plan migrate from REST to GraphQL
+```
+
+**Use cases:**
+- Starting a complex feature without knowing where to begin
+- Estimating development effort for a task
+- Identifying dependencies and risks before coding
+- Creating a technical roadmap for an epic
+
+**What the Skill produces:**
+- A concise **PRD** (Product Requirements Document)
+- An ordered task list with dependencies
+- Identified risks and mitigation strategies
+- Files that will be created or modified
+- A complexity estimate (S/M/L/XL)
+
+<Card title="Usage tip" variant="accent">
+Run **Plan** before any feature that touches more than 3 files. The time invested in planning is always recovered during implementation. Combine with the [architect agent](/agents) for structural decisions.
+</Card>
+
+---
+
+### Brainstorming
+
+**Brainstorming** helps explore ideas and solutions from multiple angles. Claude adopts different perspectives to enrich the thinking process.
+
+```bash
+# Explore technical solutions
+/user:brainstorm which database to choose for a real-time chat system
+
+# Explore product approaches
+/user:brainstorm how to improve the onboarding experience
+```
+
+**Use cases:**
+- Choosing between multiple technical approaches
+- Exploring creative solutions to a problem
+- Preparing an RFC or technical proposal
+- Evaluating trade-offs of an architecture
+
+**What the Skill does:**
+- Generates 3 to 5 distinct approaches
+- Evaluates each approach against criteria (performance, maintainability, cost, complexity)
+- Identifies the trade-offs of each solution
+- Recommends the approach best suited to the project context
+
+---
+
+## Tests & Security
+
+### E2E Testing
+
+The **E2E Testing** Skill generates end-to-end tests for critical user journeys. It targets popular frameworks like Playwright and Cypress.
+
+```bash
+# Generate E2E tests for a journey
+/user:e2e-testing registration and login flow
+
+# Generate for a specific framework
+/user:e2e-testing --framework playwright shopping cart
+```
+
+**Use cases:**
+- Covering critical paths before a release
+- Automating regression tests on main flows
+- Generating tests for existing uncovered features
+
+**What the Skill produces:**
+
+```typescript
+// Sample output for a registration journey
+import { test, expect } from "@playwright/test";
+
+test.describe("User registration", () => {
+  test("registration with valid data", async ({ page }) => {
+    await page.goto("/register");
+    await page.fill("[name=email]", "test@example.com");
+    await page.fill("[name=password]", "SecureP@ss123");
+    await page.fill("[name=confirmPassword]", "SecureP@ss123");
+    await page.click("button[type=submit]");
+    await expect(page).toHaveURL("/dashboard");
+    await expect(
+      page.getByText("Welcome")
+    ).toBeVisible();
+  });
+
+  test("shows error with invalid email", async ({ page }) => {
+    await page.goto("/register");
+    await page.fill("[name=email]", "invalid-email");
+    await page.click("button[type=submit]");
+    await expect(
+      page.getByText("Invalid email")
+    ).toBeVisible();
+  });
+});
+```
+
+---
+
+### Security Review
+
+**Security Review** analyzes your code from a security perspective. It identifies known vulnerabilities (OWASP Top 10) and suggests fixes.
+
+```bash
+# Global security audit
+/user:security-review
+
+# Targeted audit on a module
+/user:security-review src/auth/
+```
+
+**Use cases:**
+- Security audit before production deployment
+- Verifying exposed API endpoints
+- Reviewing secret and token management
+- OWASP compliance for web applications
+
+**What the Skill checks:**
+- SQL and NoSQL injections
+- XSS (Cross-Site Scripting) vulnerabilities
+- Authentication and authorization issues
+- Sensitive data exposure (API keys, tokens, passwords)
+- Security misconfiguration (CORS, headers, CSP)
+- Dependencies with known vulnerabilities (CVE)
+
+<Callout type="warning" title="Not a replacement for a professional audit">
+The Security Review Skill is an excellent first filter, but it doesn't replace a professional security audit for critical applications. Use it as a complement to your existing security practices.
+</Callout>
+
+---
+
+## Design & Frontend
+
+### Frontend Design
+
+**Frontend Design** helps design and implement modern user interfaces. It integrates design system principles and accessibility best practices.
+
+```bash
+# Create a UI component
+/user:frontend-design create a responsive pricing table component
+
+# Improve an existing component
+/user:frontend-design improve the Modal component's accessibility
+```
+
+**Use cases:**
+- Creating accessible, responsive UI components
+- Implementing a consistent design system
+- Converting a Figma mockup to code
+- Improving the UX of an existing component
+
+**What the Skill produces:**
+- A functional React/Vue/Svelte component
+- Optimized Tailwind CSS styles for responsive
+- Accessibility attributes (ARIA, focus management, contrast)
+- Theme variants (light/dark mode)
+- Component tests with Testing Library
+
+---
+
+## Non-technical Skills
+
+Claude Code isn't just for developers. These Skills turn Claude into a specialized assistant for everyday tasks: writing, organization, communication. No technical skills required.
+
+### Professional Email
+
+Writes emails adapted to the recipient and context. The Skill identifies the right tone (formal, semi-formal, casual) and systematically offers both a concise and a detailed version.
+
+```bash
+/user:email-pro follow up with a client who hasn't responded to my quote in 10 days
+```
+
+**Use cases:**
+- Client and vendor follow-ups
+- Diplomatic responses to difficult requests
+- Prospecting or sales follow-up emails
+- Internal communication (announcements, information requests)
+
+[Download this skill](/skills/email-pro.md)
+
+---
+
+### Document Summary
+
+Produces a structured summary of any document: meeting notes, reports, articles, technical specifications. The summary includes key points, decisions, action items, and unclear areas.
+
+```bash
+/user:resume-document [paste text or indicate file path]
+```
+
+**Use cases:**
+- Condensing a 2-hour meeting report into 10 lines
+- Extracting decisions and actions from a long email thread
+- Summarizing an article or report to share with the team
+- Preparing a brief from multiple documents
+
+[Download this skill](/skills/resume-document.md)
+
+---
+
+### Project Planning
+
+Breaks down a project into phases, tasks, and milestones. Each task is estimated by effort (S/M/L/XL) with its dependencies. The Skill also identifies risks and the critical path.
+
+```bash
+/user:planning-project organize a new product launch, team of 5, deadline end of June
+```
+
+**Use cases:**
+- Planning a sprint or quarter
+- Breaking down a complex project before estimating
+- Preparing a roadmap for leadership
+- Organizing an event or launch
+
+[Download this skill](/skills/planning-project.md)
+
+---
+
+### Presentation Builder
+
+Creates structured slide deck content: catchy titles, key messages per slide, suggested visuals, and speaker notes. The Skill adapts the length to the presentation time.
+
+```bash
+/user:presentation-slides 15-min pitch for leadership on Q1 results
+```
+
+**Use cases:**
+- Results presentations for the executive committee
+- Product pitches for clients or investors
+- Internal training for teams
+- Conference presentations
+
+[Download this skill](/skills/presentation-slides.md)
+
+---
+
+### LinkedIn Post
+
+A bonus Skill for those who maintain a LinkedIn presence. Claude structures the post with an attention-grabbing hook, concise development points, and an appropriate call-to-action.
+
+```bash
+/user:linkedin-post sharing my experience on AI adoption in my 10-person team
+```
+
+**Use cases:**
+- Sharing professional experience and lessons learned
+- Recruitment or new project announcements
+- Reactions to industry news
+- Personal branding and expertise positioning
+
+<Callout type="tip" title="Create your own LinkedIn Skill">
+The LinkedIn Skill isn't included in downloadable files because everyone has a different style and tone. Start from the [Skill creation guide](/skills/create-custom) and add your own constraints: tone, length, hashtags, post type.
+</Callout>
+
+---
+
+## Downloadable Skill files
+
+All Skills presented on this page are available for direct download. Copy them into `.claude/commands/` (project) or `~/.claude/commands/` (personal) and they're immediately usable.
+
+### Technical Skills
+
+| Skill | Description | Download |
+|---|---|---|
+| React Component | Creates accessible, tested React components | [react-component.md](/skills/react-component.md) |
+| API Pattern | Generates complete REST API endpoints | [api-pattern.md](/skills/api-pattern.md) |
+| Deploy Checklist | Guides production deployment | [deploy-checklist.md](/skills/deploy-checklist.md) |
+| TDD Guide | Enforces the RED-GREEN-REFACTOR cycle | [tdd-guide.md](/skills/tdd-guide.md) |
+| Code Reviewer | Structured code review by severity | [code-reviewer.md](/skills/code-reviewer.md) |
+| Systematic Debug | Methodical debugging approach | [debug-systematic.md](/skills/debug-systematic.md) |
+
+### Non-technical Skills
+
+| Skill | Description | Download |
+|---|---|---|
+| Email Pro | Context-adapted professional emails | [email-pro.md](/skills/email-pro.md) |
+| Document Summary | Structured document synthesis | [resume-document.md](/skills/resume-document.md) |
+| Project Planning | Phase and task breakdown | [planning-project.md](/skills/planning-project.md) |
+| Presentation Slides | Structured slide deck content | [presentation-slides.md](/skills/presentation-slides.md) |
+
+<Callout type="info" title="How to use these files?">
+1. Download the desired `.md` file
+2. Place it in `~/.claude/commands/` for global access, or `.claude/commands/` for a specific project
+3. Restart Claude Code
+4. Type `/user:skill-name` or `/project:skill-name` followed by your arguments
+</Callout>
+
+---
+
+## Summary
+
+| Skill | Category | Command | Ideal for |
+|---|---|---|---|
+| TDD Guide | Development | `/user:tdd-guide` | New features |
+| Code Reviewer | Quality | `/user:code-reviewer` | Before a PR |
+| Debugging | Development | `/user:debugging` | Bug resolution |
+| Systematic Debug | Development | `/user:debug-systematic` | Complex bugs |
+| Plan | Planning | `/user:plan` | Complex features |
+| Brainstorming | Planning | `/user:brainstorm` | Exploring solutions |
+| E2E Testing | Tests | `/user:e2e-testing` | Critical user paths |
+| Security Review | Security | `/user:security-review` | Before deployment |
+| Frontend Design | Design | `/user:frontend-design` | UI components |
+| React Component | Development | `/project:react-component` | React components |
+| API Pattern | Development | `/project:api-pattern` | REST endpoints |
+| Deploy Checklist | Ops | `/project:deploy-checklist` | Going to production |
+| Email Pro | Communication | `/user:email-pro` | Professional emails |
+| Document Summary | Productivity | `/user:resume-document` | Document synthesis |
+| Project Planning | Organization | `/user:planning-project` | Planning |
+| Presentation | Communication | `/user:presentation-slides` | Slide decks |
+
+---
+
+## Finding Skills that fit your needs
+
+The Skills presented on this page are just a glimpse of what's available. The Claude ecosystem is growing fast and new creations appear every week. To help you explore **all** the available resources, one essential reference exists.
+
+<Card title="Awesome Claude Skills: the community reference library">
+
+The **Awesome Claude Skills** project, maintained by the [ComposioHQ](https://github.com/ComposioHQ) team, is an organized, regularly updated catalog listing **dozens of ready-to-use Skills**, sorted by category:
+
+- **Document processing**: PDF, DOCX, XLSX, presentations
+- **Development tools**: CI/CD, linting, deployment
+- **Data & analysis**: pipelines, visualization, scraping
+- **Communication**: email, Slack, calendars, CRM
+- **Productivity**: project management, automation, workflows
+- **Security & systems**: audits, monitoring, infrastructure
+
+Whether you're looking for a specific Skill or just inspiration, it's the best starting point.
+
+</Card>
+
+<Card title="Access the complete library" variant="accent">
+
+**[github.com/punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code)**
+
+Browse the catalog, find the Skill that matches your need, and integrate it into your Claude Code workflow in seconds. This community repository gathers dozens of ready-to-use Skills, Agents, and Rules.
+
+</Card>
+
+---
+
+## Next steps
+
+You now know the most useful Skills and where to find more. Let's move on to creating your own custom Skills.
+
+- [Create a custom Skill step by step](/skills/create-custom): Write your own Skills tailored to your workflow
+- [Skills vs MCP vs Plugins](/skills/comparison): Understand when to use each tool
+- [What is a Skill?](/skills/what-are-skills): Back to fundamentals
+- [Top development MCPs](/mcp/best-development): Combine your Skills with Context7, GitHub, and Sentry

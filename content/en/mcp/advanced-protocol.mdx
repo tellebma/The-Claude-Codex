@@ -1,0 +1,422 @@
+---
+title: "Advanced MCP protocol: transports and architecture"
+description: "JSON-RPC 2.0 specification, stdio/SSE/HTTP transports, capabilities negotiation, security, and MCP debugging."
+order: 9
+section: "mcp"
+datePublished: "2026-03-12"
+---
+
+## Beyond the basics
+
+You know how to create an MCP, install tools, and use them in Claude Code. This page goes deeper: the underlying JSON-RPC protocol, the different available transports, capabilities negotiation, and advanced debugging techniques.
+
+<Callout type="info" title="Who is this for?">
+This content is for developers who want to understand the protocol in depth, deploy remote MCPs (SSE, HTTP), or diagnose complex issues. If you're just getting started, begin with the [TypeScript](/mcp/create-mcp-typescript) or [Python](/mcp/create-mcp-python) tutorials.
+</Callout>
+
+## JSON-RPC 2.0 specification
+
+MCP is built on **JSON-RPC 2.0**, a lightweight protocol for communication via JSON messages. Each exchange follows a strict format: request, response, or notification.
+
+### Request format
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "get-weather",
+    "arguments": { "city": "Paris" }
+  }
+}
+```
+
+- `jsonrpc`: always `"2.0"`
+- `id`: unique identifier to correlate the response
+- `method`: the method being called
+- `params`: the call parameters
+
+### Response format
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Weather in Paris: 18°C, Cloudy"
+      }
+    ]
+  }
+}
+```
+
+### Main MCP methods
+
+| Method | Direction | Description |
+|--------|-----------|-------------|
+| `initialize` | Client to Server | Initializes the connection, exchanges capabilities |
+| `tools/list` | Client to Server | Lists all tools exposed by the server |
+| `tools/call` | Client to Server | Calls a tool with arguments |
+| `resources/list` | Client to Server | Lists all available resources |
+| `resources/read` | Client to Server | Reads the content of a resource by URI |
+| `prompts/list` | Client to Server | Lists available prompts |
+| `prompts/get` | Client to Server | Retrieves a prompt with its arguments |
+| `notifications/cancelled` | Client to Server | Cancels an in-progress request |
+
+<Callout type="tip" title="Notifications vs Requests">
+Notifications have no `id` field and don't expect a response. They're used for one-way events: resource changes, progress updates, cancellations.
+</Callout>
+
+## Capabilities negotiation
+
+At startup, Claude Code and the MCP Server exchange their capabilities. This is the first interaction after the connection is established.
+
+### Initialization request
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "sampling": {}
+    },
+    "clientInfo": {
+      "name": "claude-code",
+      "version": "1.0.0"
+    }
+  }
+}
+```
+
+### Server response
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "tools": {},
+      "resources": { "subscribe": true },
+      "prompts": {}
+    },
+    "serverInfo": {
+      "name": "mcp-weather",
+      "version": "1.0.0"
+    }
+  }
+}
+```
+
+The client and server agree on the protocol version and announce what they support. A server that doesn't declare `tools` in its capabilities won't receive `tools/call` requests.
+
+### Available capabilities
+
+| Capability | Side | Description |
+|-----------|------|-------------|
+| `tools` | Server | The server exposes tools |
+| `resources` | Server | The server exposes resources |
+| `resources.subscribe` | Server | The client can subscribe to resource changes |
+| `prompts` | Server | The server exposes prompts |
+| `sampling` | Client | The client supports sampling (see below) |
+
+## Stdio transport: the default mode
+
+The **stdio** (standard input/output) transport is the simplest and most common. Claude Code launches the MCP Server process and communicates via the process's stdin/stdout streams.
+
+### How it works
+
+```
+Claude Code                      MCP Server (child process)
+     |                                    |
+     |--- stdin: JSON-RPC request ------->|
+     |                                    |--- processing
+     |<--- stdout: JSON-RPC response -----|
+     |                                    |
+     |--- stdin: notification ----------->|
+```
+
+Each message is a JSON line terminated by `\n`. Server logs go through **stderr** to avoid interfering with the protocol.
+
+### Configuration
+
+```json
+{
+  "mcpServers": {
+    "my-mcp": {
+      "command": "node",
+      "args": ["dist/index.js"],
+      "env": { "API_KEY": "..." }
+    }
+  }
+}
+```
+
+### Advantages and limitations
+
+- **Simple**: no networking, no ports, no server configuration
+- **Secure**: communication is local, no network attack surface
+- **Limited**: one process per connection, no sharing between multiple clients
+- **Local**: the MCP must run on the same machine as Claude Code
+
+## SSE transport: Server-Sent Events
+
+The **SSE** transport lets you connect Claude Code to a remote MCP Server via HTTP. The client sends POST requests and receives responses via an SSE (Server-Sent Events) stream.
+
+### When to use it
+
+- The MCP Server runs on a **remote server** (cloud, VPS, internal network)
+- Multiple clients need to connect to the **same MCP Server**
+- You want an MCP Server that's **always available**, without restarting it each session
+
+### Configuration
+
+```json
+{
+  "mcpServers": {
+    "remote-db": {
+      "url": "https://mcp.example.com/sse",
+      "headers": {
+        "Authorization": "Bearer your-token"
+      }
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Security is mandatory">
+An SSE MCP is network-accessible. Protect it at all costs: token authentication, mandatory HTTPS, IP allowlisting if possible. An MCP exposed without protection is a critical security flaw.
+</Callout>
+
+### Communication flow
+
+```
+Claude Code                           MCP Server (HTTP)
+     |                                       |
+     |--- GET /sse (establish SSE stream) -->|
+     |<--- SSE: endpoint URL ----------------|
+     |                                       |
+     |--- POST /messages (request) --------->|
+     |<--- SSE: JSON-RPC response -----------|
+```
+
+## Streamable HTTP transport: the new standard
+
+The **Streamable HTTP** transport is the successor to SSE for remote MCPs. It combines HTTP simplicity with bidirectional streaming.
+
+### Differences from SSE
+
+| Criterion | SSE | Streamable HTTP |
+|-----------|-----|-----------------|
+| **Direction** | Unidirectional (server to client) | Bidirectional |
+| **Connection** | Long-lived (persistent SSE stream) | Individual requests, streamed if needed |
+| **Resumption** | Manual reconnection | Native resumption support |
+| **Proxy** | Some proxies cut SSE connections | Compatible with all HTTP proxies |
+
+### Configuration
+
+```json
+{
+  "mcpServers": {
+    "remote-api": {
+      "url": "https://mcp.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer your-token"
+      }
+    }
+  }
+}
+```
+
+<Callout type="info" title="Gradual adoption">
+Streamable HTTP transport is newer than SSE. Check that the MCP server you're targeting supports it. The official SDK (TypeScript and Python) supports it in recent versions.
+</Callout>
+
+## Sampling: when the MCP asks the LLM
+
+**Sampling** is a special capability: it lets the MCP Server ask Claude to complete a prompt. It's a reversed flow where the server temporarily becomes a "client" of the LLM.
+
+### Use cases
+
+- A translation tool that asks Claude to translate text
+- An analysis tool that asks Claude to summarize data
+- A generation tool that uses Claude to produce content
+
+### Communication flow
+
+```
+Claude Code        MCP Server               Claude (LLM)
+     |                  |                         |
+     |-- tools/call --->|                         |
+     |                  |--- sampling/request ---->|
+     |                  |<--- LLM response --------|
+     |<-- result -------|                         |
+```
+
+<Callout type="warning" title="Cost impact">
+Each sampling request consumes additional tokens. An MCP that uses sampling intensively can increase your costs. Monitor consumption with `/cost` in Claude Code.
+</Callout>
+
+## Performance and latency
+
+MCPs add latency to every interaction. Here are the main sources and how to optimize them.
+
+### Latency sources
+
+| Source | Typical latency | Optimization |
+|--------|----------------|-------------|
+| Process startup (stdio) | 500ms-2s | Keep the process alive |
+| Tool discovery (`tools/list`) | 10-50ms | Client-side caching |
+| Tool call (`tools/call`) | Varies by tool | Appropriate timeouts |
+| External API call | 100ms-5s | Cache, retry, fallback |
+| Network transport (SSE/HTTP) | 20-100ms | Geographically close server |
+
+### Timeout management
+
+Claude Code imposes a default timeout on MCP calls. If your tool does long-running operations:
+
+```typescript
+// In your tool handler, send progress notifications
+server.tool(
+  "long-operation",
+  "Operation that takes time",
+  { input: z.string() },
+  async ({ input }, { sendProgress }) => {
+    await sendProgress(0, 100, "Starting...");
+    // ... long operation
+    await sendProgress(50, 100, "Processing...");
+    // ... continued
+    await sendProgress(100, 100, "Done");
+
+    return {
+      content: [{ type: "text" as const, text: "Operation result" }],
+    };
+  }
+);
+```
+
+## Advanced security
+
+### Sandboxing
+
+Each MCP Server runs in its own process. But it has access to the host machine's filesystem and network. To limit risk:
+
+- Run MCPs in a **Docker container** with restricted volumes
+- Use **tokens with minimal scopes** (read-only when possible)
+- Apply **network rules** to limit outbound connections
+
+### Audit logs
+
+To trace what an MCP does:
+
+```typescript
+// Logging wrapper for all tool calls
+server.tool("my-tool", "Description", { param: z.string() }, async ({ param }) => {
+  console.error(`[AUDIT] tool=my-tool param=${param} time=${new Date().toISOString()}`);
+  // ... tool logic
+  const result = "...";
+  console.error(`[AUDIT] tool=my-tool result_length=${result.length}`);
+  return { content: [{ type: "text" as const, text: result }] };
+});
+```
+
+Logs on stderr don't interfere with the protocol and can be captured by your monitoring system.
+
+### Token rotation
+
+For MCPs that use external API tokens:
+
+- Store tokens in **environment variables**, not in code
+- Set up **regular rotation** of tokens (every 90 days minimum)
+- Use a **secret manager** (Vault, AWS Secrets Manager) for production
+- Immediately revoke any potentially compromised token
+
+## Debugging: diagnosing problems
+
+### JSON-RPC inspection
+
+The MCP inspector is your best debugging tool:
+
+```bash
+# Inspect a stdio server
+npx @modelcontextprotocol/inspector node dist/index.js
+
+# Inspect an SSE server
+npx @modelcontextprotocol/inspector --url https://mcp.example.com/sse
+```
+
+The inspector displays every JSON-RPC message exchanged, letting you see exactly what the server receives and returns.
+
+### Verbose logging in Claude Code
+
+```bash
+# Launch Claude Code with detailed MCP logs
+claude --verbose
+```
+
+The `--verbose` flag displays JSON-RPC exchanges with each MCP in the terminal.
+
+### Check MCP health
+
+```bash
+# List configured MCPs and their status
+claude mcp list
+```
+
+If an MCP shows as "disconnected" or "error":
+
+<Steps>
+<Step title="Verify the command works" stepNumber={1}>
+
+Run the MCP command directly in your terminal to see errors:
+
+```bash
+# Example for a Node.js MCP
+node /path/to/mcp/dist/index.js
+```
+
+If it crashes, the error message will tell you the problem (missing dependency, syntax error, etc.).
+
+</Step>
+
+<Step title="Check environment variables" stepNumber={2}>
+
+Missing tokens are the most frequent cause. Verify that all `env` variables in the `.mcp.json` are correct.
+
+</Step>
+
+<Step title="Test with the inspector" stepNumber={3} isLast>
+
+```bash
+npx @modelcontextprotocol/inspector node /path/to/mcp/dist/index.js
+```
+
+If the inspector works but Claude Code doesn't, the problem is in the Claude configuration (path, arguments, permissions).
+
+</Step>
+</Steps>
+
+### Common debugging errors
+
+| Symptom | Likely cause | Diagnosis |
+|---------|-------------|-----------|
+| MCP "disconnected" at startup | Process crashing | Run the command manually |
+| Tools not listed | Error in `initialize` | Check with the MCP inspector |
+| Empty response or timeout | Handler that returns nothing | Add stderr logs |
+| `parse error` JSON-RPC | `console.log()` in code | Replace with `console.error()` |
+| Expired token | Stale credentials | Regenerate the token and update `env` |
+
+## Next steps
+
+- [Create an MCP Server in TypeScript](/mcp/create-mcp-typescript): complete tutorial with the TypeScript SDK
+- [Create an MCP Server in Python](/mcp/create-mcp-python): tutorial with the Python SDK and decorators
+- [MCP security](/mcp/securite-mcp): complete security guide
+- [Understanding MCPs](/mcp/what-are-mcps): back to protocol fundamentals

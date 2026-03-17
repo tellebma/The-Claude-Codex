@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useCallback, useId, useEffect } from "react";
-import Link from "next/link";
 import { glossaryTerms } from "@/data/glossary";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
 interface GlossaryTooltipProps {
@@ -25,6 +26,7 @@ interface GlossaryTooltipProps {
  * - Fermeture avec Escape (WCAG 1.4.13)
  */
 export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
+  const t = useTranslations("glossary");
   const [isOpen, setIsOpen] = useState(false);
   const tooltipId = useId();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -129,7 +131,7 @@ export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
           </span>
           {/* text-slate-400 sur bg-slate-800 = ~5.9:1 — passe WCAG AA */}
           <span className="block rounded-lg bg-slate-800 px-3 py-2 text-xs italic text-slate-400">
-            <span className="not-italic font-medium text-brand-400">Analogie : </span>
+            <span className="not-italic font-medium text-brand-400">{t("analogyLabel")} </span>
             {glossaryEntry.analogy}
           </span>
           {glossaryEntry.link && (
@@ -141,10 +143,10 @@ export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500",
                 "focus-visible:ring-offset-1 focus-visible:ring-offset-slate-900"
               )}
-              aria-label={`En savoir plus sur ${glossaryEntry.term}`}
+              aria-label={t("learnMoreAbout", { term: glossaryEntry.term })}
               onClick={(e) => e.stopPropagation()}
             >
-              En savoir plus sur ce terme →
+              {t("learnMoreLink")}
             </Link>
           )}
         </span>

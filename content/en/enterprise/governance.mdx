@@ -1,0 +1,245 @@
+---
+title: "AI governance framework"
+description: "Implement AI governance for Claude Code in your organization: policies, guidelines, risk management, and oversight mechanisms."
+section: "enterprise"
+order: 6
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Why governance?
+
+Without clear rules, every developer configures Claude Code their own way: unvetted MCPs installed globally, overly broad permissions, secrets potentially exposed. Lightweight but explicit governance avoids these risks without slowing productivity.
+
+## Roles and responsibilities
+
+### The 4 typical roles
+
+| Role | Responsibility | Profile |
+|---|---|---|
+| **Platform Admin** | Organization configuration, MCP allow list, license management, audit | DevOps, SRE, infrastructure lead |
+| **Tech Lead** | Project CLAUDE.md, MCP selection per project, config review | Lead dev, architect |
+| **Developer** | Daily use, Skills creation, issue reporting | Junior to senior dev |
+| **Auditor** | Log verification, compliance, periodic permissions review | Security, compliance |
+
+### Permissions by experience level
+
+Adjust Claude Code permissions based on the developer's level:
+
+**Junior profile (restricted)**
+
+```json
+{
+  "permissions": {
+    "allow": ["Read", "Glob", "Grep"],
+    "deny": ["Bash", "Write"]
+  }
+}
+```
+
+The junior can read code and ask questions, but Claude Code doesn't modify anything directly. Changes go through suggestions that the dev applies manually.
+
+**Senior profile (permissive)**
+
+```json
+{
+  "permissions": {
+    "allow": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "deny": []
+  }
+}
+```
+
+The senior has access to all tools. Claude Code can read, write, and execute commands. Confirmation is still active for sensitive actions.
+
+**Lead profile (full access)**
+
+```json
+{
+  "permissions": {
+    "allow": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "deny": []
+  },
+  "allowedTools": ["mcp__github__*", "mcp__slack__*", "mcp__context7__*"]
+}
+```
+
+The lead has full access, including team MCPs (GitHub, Slack, Context7). They can also modify the project configuration.
+
+**DevOps/CI profile (headless)**
+
+```json
+{
+  "permissions": {
+    "allow": ["Read", "Write", "Glob", "Grep", "Bash"],
+    "deny": []
+  }
+}
+```
+
+Used in `--print` mode within CI/CD pipelines, with permissions strictly defined by the workflow.
+
+## Centralized configuration management
+
+### The configuration file hierarchy
+
+Claude Code reads configurations in a specific order, from most general to most specific:
+
+1. **Organization**: `~/.claude/settings.json` (deployed by your workstation management tool)
+2. **Project**: `.claude/settings.json` at the repo root (committed to git)
+3. **User**: local overrides in `~/.claude/settings.local.json`
+
+Lower levels inherit from higher levels. A `deny` at the organization level cannot be overridden by an `allow` at the project level.
+
+### CLAUDE.md: the project's source of truth
+
+Every repo should have a `CLAUDE.md` at the root that defines:
+
+- Project context (stack, architecture, conventions)
+- Specific coding rules
+- Files that are off-limits
+- Preferred workflows (TDD, naming, commit structure)
+
+```markdown
+# CLAUDE.md - MyApp Project
+
+## Stack
+- Next.js 14, TypeScript strict, Tailwind CSS, Prisma
+
+## Rules
+- Never use `any` in TypeScript
+- Tests are mandatory for every new function
+- Never read .env, .env.local, or credentials/
+- Commit messages in English, conventional format
+
+## Authorized MCPs
+- github, context7, playwright (for E2E tests)
+```
+
+Subdirectories can have their own `CLAUDE.md` that supplements (not replaces) the root file.
+
+## Secret management
+
+### Principles
+
+- **Secrets never go in code**: use environment variables or a secret manager
+- **Claude Code must never read secret files**: configure an explicit deny list
+- **Regular rotation**: change API keys at minimum every 90 days
+
+### Integration with a secret manager
+
+For teams using a secret manager (Vault, AWS Secrets Manager, Google Secret Manager), integration is done through environment variables:
+
+```bash
+# Example with AWS Secrets Manager
+export ANTHROPIC_API_KEY=$(aws secretsmanager get-secret-value \
+  --secret-id claude-api-key \
+  --query SecretString \
+  --output text)
+```
+
+For CI/CD pipelines, inject the key via runner secrets (GitHub Actions secrets, GitLab CI variables).
+
+### Recommended deny list
+
+In your organization `settings.json`:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read:.env",
+      "Read:.env.*",
+      "Read:**/credentials*",
+      "Read:**/*.pem",
+      "Read:**/*.key",
+      "Read:**/secrets*"
+    ]
+  }
+}
+```
+
+## MCP and plugin allow list
+
+### Why an allow list?
+
+Without restrictions, any developer can install any MCP, including unverified ones that could exfiltrate code. The allow list ensures that only MCPs approved by the security team are used.
+
+### Configuration
+
+In the organization `settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@context7/mcp"]
+    }
+  }
+}
+```
+
+MCPs not listed in the organization configuration are automatically blocked if you use a configuration management tool that prevents file modification.
+
+<Callout type="warning" title="Third-party MCPs: always audit before authorizing">
+Before adding an MCP to the allow list, check the source code, requested permissions, and maintainer reputation. A malicious MCP can read your files and send their contents to an external server.
+</Callout>
+
+## Audit: what to log, where, and retention
+
+### What to log
+
+| Event | Priority | Details to capture |
+|---|---|---|
+| Tool execution | High | Tool name, parameters, timestamp, user |
+| File read | Medium | File path, size, timestamp |
+| File write | High | Path, before/after diff, timestamp |
+| Bash command execution | High | Command, return code, timestamp |
+| MCP call | High | Target MCP, tool called, parameters |
+
+### Where to store logs
+
+- **Local**: `~/.claude/` contains session history (by default)
+- **Centralized**: configure a `PostToolUse` hook to send events to your SIEM, ELK Stack, Datadog, or a simple webhook
+
+### Recommended retention
+
+- **Audit logs**: 12 months minimum (common regulatory requirement)
+- **Session history**: 3 months (sufficient for debugging)
+- **Usage metrics**: 24 months (for trend analysis and reporting)
+
+## Update policy
+
+### Frequency
+
+Claude Code updates regularly (sometimes several times a week). Recommendations:
+
+- **Dev environments**: automatic updates (default behavior)
+- **CI/CD pipelines**: pinned version, manual update after validation
+- **Sensitive teams**: delay updates by 1 to 2 weeks to let the community identify bugs
+
+### Disabling automatic updates
+
+```bash
+export DISABLE_AUTOUPDATER=1
+```
+
+Add this variable to the shell profile on your CI machines or workstation configurations if you want to control versions.
+
+### Changelog
+
+Follow release notes on the Anthropic blog and in the Claude Code changelog to anticipate changes that could affect your workflows.
+
+## Next steps
+
+- [Security and compliance](/enterprise/security-compliance): data protection and certifications
+- [Team adoption guide](/enterprise/team-adoption): setting up roles as part of the deployment
+- [Enterprise FAQ](/enterprise/faq): answers to common governance questions

@@ -1,0 +1,188 @@
+---
+title: "Essential plugins for Claude Code"
+description: "The must-have plugins for Claude Code: auto-formatting, linting, testing, and productivity. Installation and configuration for each one."
+section: "plugins"
+order: 3
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## Resources every Claude Code developer should know
+
+These community resources are the **fundamentals** of the Claude Code ecosystem. They significantly enrich your daily experience: specialized agents, up-to-date documentation, codebase analysis, and prompt improvement.
+
+<Callout type="info" title="Community extensions, not official plugins">
+The resources on this page are **community projects**, not officially published by Anthropic. They're installed manually (file copy, npm, or `/install-github`). There is no `/plugin install` command in Claude Code.
+</Callout>
+
+---
+
+## Everything Claude Code: The complete collection
+
+**Community project** | Category: Agents, Rules & Skills | Author: [punkpeye](https://github.com/punkpeye)
+
+[Everything Claude Code](https://github.com/punkpeye/everything-claude-code) is one of the best-known community collections in the ecosystem. It brings together a **collection of specialized agents, rules, and skills** ready to use that cover the most common development use cases.
+
+<Callout type="info" title="Open source community project">
+Everything Claude Code is hosted on GitHub at [github.com/punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code). It's a community project, not affiliated with Anthropic.
+</Callout>
+
+### What it provides
+
+- **Specialized agents**: `senior-dev`, `architect`, `reviewer`, `debugger`, `optimizer`, each with tailored expertise and response style
+- **Workflow rules**: code conventions, best practices, PR review guidelines
+- **Skills**: slash commands for common tasks (TDD, refactoring, documentation)
+- **CLAUDE.md templates**: configuration files optimized for different stacks
+
+### Installation
+
+```bash
+# Via /install-github (recommended)
+/install-github punkpeye/everything-claude-code
+
+# Or manually
+git clone https://github.com/punkpeye/everything-claude-code /tmp/ecc
+mkdir -p .claude/agents .claude/rules .claude/commands
+cp -r /tmp/ecc/agents/ .claude/
+cp -r /tmp/ecc/rules/ .claude/
+cp -r /tmp/ecc/commands/ .claude/
+```
+
+### Use cases
+
+- **Full code review**: *"As the reviewer agent, analyze my latest PR and suggest improvements"*
+- **New module architecture**: *"As the architect, help me design the notification system"*
+- **Advanced debugging**: *"As the debugger, help me understand why E2E tests fail on CI"*
+- **Optimization**: *"As the optimizer, analyze my API's performance and suggest improvements"*
+
+<Callout type="tip" title="Adapt agents to your project">
+Everything Claude Code agents are Markdown files: you can freely modify them to match your team's conventions. Fork the repo and customize to your needs.
+</Callout>
+
+---
+
+## Context7: Always up-to-date documentation
+
+**MCP Server** | Category: Documentation | Author: [Upstash](https://upstash.com/)
+
+Context7 solves a major problem: **outdated knowledge**. Claude Code has a knowledge cutoff date. Context7 is an **MCP server** (not a plugin) that lets it access the **latest documentation** for any library or framework, in real time.
+
+<Callout type="info" title="Context7 is an MCP, not a plugin">
+Context7 is installed as an **MCP server** in your `settings.json`, not as a Markdown file. Its npm package is `@upstash/context7-mcp`. It's developed by Upstash and is open source at [github.com/upstash/context7](https://github.com/upstash/context7).
+</Callout>
+
+### Installation
+
+```bash
+# Via the Claude command
+claude mcp add context7 -- npx -y @upstash/context7-mcp
+```
+
+### JSON configuration
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
+```
+
+### Use cases
+
+- **Unknown API**: *"Use Context7 to find how to use useOptimistic from React 19"*
+- **Version migration**: *"What are the breaking changes in Next.js 15 compared to Next.js 14?"*
+- **Syntax check**: *"Check the Tailwind docs to see if the text-balance class is available in v3"*
+
+---
+
+## Repomix: Full codebase analysis
+
+**CLI npm tool** | Category: Analysis | Author: [yamadashy](https://github.com/yamadashy)
+
+[Repomix](https://github.com/yamadashy/repomix) is a **CLI tool** (not a plugin) that condenses an entire codebase into a single structured file, optimized for passing to Claude Code as context. Instead of reading file by file, Claude Code gets a complete, organized overview of your project.
+
+<Callout type="info" title="Repomix on npm">
+Repomix is available on [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Its source repo is at [github.com/yamadashy/repomix](https://github.com/yamadashy/repomix).
+</Callout>
+
+### What it provides
+
+- **Intelligent condensation**: generates a single text file containing all your code, in a format optimized for LLMs
+- **Configurable filtering**: excludes `node_modules`, binary files, and anything else you configure
+- **Statistics**: counts tokens to estimate context usage
+- **Multiple formats**: output in plain text, XML, or Markdown
+
+### Installation and usage
+
+```bash
+# Usage without installation (npx)
+npx repomix
+
+# Or global installation
+npm install -g repomix
+
+# Analyze the current directory
+repomix
+
+# Analyze while excluding certain files
+repomix --ignore "node_modules/**,*.lock,dist/**"
+
+# Output to a specific file
+repomix --output context.txt
+
+# Pass the result to Claude Code:
+# "Here's my codebase [paste content of context.txt]. Explain the architecture."
+```
+
+### Use cases
+
+- **Onboarding**: *"Analyze this codebase and give me a summary of the architecture, technologies, and conventions"*
+- **Impact analysis**: *"If I modify this module, which other files will likely be impacted?"*
+- **Technical debt detection**: *"Identify areas of technical debt in this project and prioritize refactorings"*
+- **Documentation**: *"Generate architecture documentation based on the code analysis"*
+
+---
+
+## Prompt Improver: Optimized prompts
+
+**Anthropic project** | Category: Prompting | Author: [Anthropic](https://github.com/anthropics)
+
+[Prompt Improver](https://github.com/anthropics/prompt-improver) is a tool developed by Anthropic that helps write better prompts. It's not a plugin installed in Claude Code, it's a web or CLI tool that analyzes your prompts and suggests improvements.
+
+<Callout type="warning" title="Verify the repository exists">
+Prompt Improver is an Anthropic tool. The exact GitHub repository may have changed name or structure. Check [github.com/anthropics](https://github.com/anthropics) before cloning. Anthropic also offers a built-in prompt improvement tool in the [Anthropic Console](https://console.anthropic.com).
+</Callout>
+
+### What it provides
+
+- **Structure analysis**: identifies whether your prompt lacks context, constraints, or target format
+- **Concrete suggestions**: rephrases vague parts into precise, structured instructions
+- **Best practices**: applies Anthropic's recommended prompting techniques (XML tags, chain-of-thought, examples)
+
+### Manual use cases
+
+Even without an automated tool, you can improve your prompts in Claude Code by applying these principles directly:
+
+- **Vague prompt**: *"Make a contact form"*
+- **Improved prompt**: *"Create a React contact form with name, email, and message fields. Client-side Zod validation. Explicit error handling. Loading state during submission. Success message after sending. Accessible components (WCAG AA) with appropriate aria attributes. Unit tests with React Testing Library."*
+
+---
+
+## Summary
+
+| Resource | Type | Source | Best for |
+|--------|------|---------|---------------|
+| **Everything Claude Code** | Agents, Rules, Skills | [GitHub](https://github.com/punkpeye/everything-claude-code) | Complete development workflow |
+| **Context7** | MCP Server | [GitHub](https://github.com/upstash/context7) | Up-to-date documentation, migration |
+| **Repomix** | CLI npm | [GitHub](https://github.com/yamadashy/repomix) | Analyzing and understanding a codebase |
+| **Prompt Improver** | Web/CLI tool | [GitHub](https://github.com/anthropics/prompt-improver) | Improving prompt quality |
+
+## Next steps
+
+- [Design & frontend extensions](/plugins/best-design): The best resources for design and UI
+- [Security & quality extensions](/plugins/best-security): Secure and improve your code quality
+- [Installing and managing extensions](/plugins/setup): Installation and configuration guide

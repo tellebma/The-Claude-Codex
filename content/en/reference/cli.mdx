@@ -1,0 +1,329 @@
+---
+title: "CLI reference"
+description: "Complete Claude Code CLI reference: all commands, flags, options, and usage examples."
+badge: "CLI"
+section: "reference"
+order: 2
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Main command: `claude`
+
+```bash
+claude [OPTIONS] [PROMPT]
+```
+
+### General flags
+
+| Flag | Alias | Type | Description |
+|------|-------|------|-------------|
+| `--model <id>` | `-m` | string | Model to use (`claude-haiku-4-5`, `claude-sonnet-4-5`, `claude-opus-4-5`, etc.) |
+| `--print` | `-p` | boolean | Non-interactive mode: print the response and exit |
+| `--output-format <fmt>` | | string | Output format: `text` (default), `json`, `stream-json` |
+| `--verbose` | | boolean | Show tool calls and metadata (debug) |
+| `--no-cache` | | boolean | Disable prompt caching (avoid cached results) |
+| `--dangerously-skip-permissions` | | boolean | **Not recommended**: skip all confirmation prompts |
+| `--continue` | `-c` | boolean | Resume the last conversation session |
+| `--resume <id>` | | string | Resume a specific session by its identifier |
+| `--max-turns <n>` | | number | Limit the number of exchange turns (agentic mode) |
+| `--allowedTools <list>` | | string | Allowed tools (comma-separated: `Bash,Read,Write`) |
+| `--disallowedTools <list>` | | string | Disallowed tools (comma-separated) |
+| `--system-prompt <text>` | `-s` | string | System prompt to inject (overrides CLAUDE.md) |
+| `--append-system-prompt <text>` | | string | Text appended to the existing system prompt |
+| `--add-dir <path>` | | string | Add a directory to the accessible file context |
+| `--debug` | | boolean | Extended debug mode (internal logs) |
+| `--version` | `-v` | boolean | Show the installed Claude Code version |
+| `--help` | `-h` | boolean | Show help |
+
+<Callout type="warning" title="--dangerously-skip-permissions">
+This flag bypasses all Claude Code confirmations, including before destructive actions (file deletion, script execution, API calls). Only use it in an isolated sandbox environment, never in production.
+</Callout>
+
+### Examples: `claude` command
+
+```bash
+# Standard interactive session
+claude
+
+# Interactive session with a specific model
+claude --model claude-opus-4-5
+
+# Print mode: execute a task and exit
+claude --print "Explain the code in src/auth.ts"
+claude -p "Generate unit tests for utils/date.ts"
+
+# Print mode with JSON format
+claude --print --output-format json "List the functions in this file"
+
+# Stream-json mode (for real-time processing)
+claude --print --output-format stream-json "Analyze this project"
+
+# Limit the number of turns (agentic mode)
+claude --max-turns 5 "Refactor the auth module"
+
+# Restrict available tools
+claude --allowedTools "Read,Bash" "Analyze without modifying files"
+
+# Resume the last session
+claude --continue
+
+# Resume a session by ID
+claude --resume abc123
+
+# Verbose (debug)
+claude --verbose "Why is this test failing?"
+```
+
+---
+
+## Pipe mode (stdin -> stdout)
+
+The `--print` mode is compatible with standard Unix pipes.
+
+```bash
+# Pass a file as input
+cat src/auth.ts | claude --print "Add JSDoc comments to this code"
+
+# Chain commands
+git diff HEAD~1 | claude --print "Summarize these changes in bullet points"
+
+# Pass a prompt via standard input
+echo "Explain the Observer Design Pattern" | claude --print
+
+# Integration in a shell script
+RESULT=$(claude --print --output-format json "Analyze this code" < src/main.ts)
+echo $RESULT | jq '.content[0].text'
+
+# Read from a file
+claude --print "What are the security risks here?" < config/database.yml
+```
+
+---
+
+## SDK / headless mode
+
+For automated scripts, CI/CD pipelines, and applications that integrate Claude Code.
+
+```bash
+# Non-interactive execution with strict control
+ANTHROPIC_API_KEY="sk-ant-..." \
+  claude \
+  --print \
+  --max-turns 1 \
+  --output-format json \
+  "Check code quality in src/"
+
+# Agentic mode with multiple turns
+claude \
+  --print \
+  --max-turns 10 \
+  --dangerously-skip-permissions \
+  "Run the test suite and fix the errors"
+
+# With environment variables in the config
+claude \
+  --print \
+  --allowedTools "Read,Bash,Write" \
+  --system-prompt "You are a security expert. Do not modify any files." \
+  "Audit this project"
+```
+
+<Callout type="info" title="CI/CD integration">
+In CI/CD, always use `--print` and `--max-turns` to avoid infinite sessions. Set `ANTHROPIC_API_KEY` as a secret in your CI platform (GitHub Actions, GitLab CI, etc.). See our complete guide on hooks and headless mode.
+</Callout>
+
+---
+
+## Subcommand: `claude config`
+
+Manages Claude Code configuration (`~/.claude/settings.json` file by default).
+
+```bash
+claude config [SUBCOMMAND] [OPTIONS]
+```
+
+| Subcommand | Description |
+|------------|-------------|
+| `claude config list` | List all active options and their values |
+| `claude config get <key>` | Show the value of a specific key |
+| `claude config set <key> <value>` | Set a key's value |
+| `claude config add <key> <value>` | Add a value to an array |
+| `claude config remove <key> <value>` | Remove a value from an array |
+
+```bash
+# Examples
+claude config list
+
+claude config get model
+# -> claude-sonnet-4-5
+
+claude config set model claude-opus-4-5
+
+claude config add allowedTools "Bash"
+claude config remove allowedTools "Bash"
+
+# With scope (global by default)
+claude config --global set model claude-haiku-4-5
+```
+
+---
+
+## Subcommand: `claude mcp`
+
+Manages MCP (Model Context Protocol) servers.
+
+```bash
+claude mcp [SUBCOMMAND] [OPTIONS]
+```
+
+### `claude mcp add`
+
+```bash
+claude mcp add [OPTIONS] <name> -- <command> [args...]
+```
+
+| Option | Description |
+|--------|-------------|
+| `--scope <scope>` | `global` (default), `project`, or `user` |
+| `--transport <type>` | `stdio` (default) or `sse` |
+| `-e <VAR=value>` | Set an environment variable for the MCP |
+
+```bash
+# Add a stdio MCP (local, via npx)
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/projects
+
+# Add an MCP with project scope
+claude mcp add --scope project postgres -- \
+  npx -y @modelcontextprotocol/server-postgres postgresql://localhost/mydb
+
+# Add an MCP with an environment variable
+claude mcp add github -e GITHUB_TOKEN=ghp_xxx -- \
+  npx -y @modelcontextprotocol/server-github
+
+# Add an MCP via SSE transport (HTTP)
+claude mcp add --transport sse my-api https://api.example.com/mcp
+
+# Add a Python MCP (via uvx)
+claude mcp add my-script -- uvx my-python-package
+```
+
+### `claude mcp remove`
+
+```bash
+claude mcp remove [--scope <scope>] <name>
+```
+
+```bash
+claude mcp remove filesystem
+claude mcp remove --scope project postgres
+```
+
+### `claude mcp list`
+
+```bash
+claude mcp list
+# Shows: name, status (connected/disconnected), available tools, scope
+```
+
+### `claude mcp logs`
+
+```bash
+# Show MCP logs (useful for debugging)
+claude mcp logs github
+
+# Follow logs in real time
+claude mcp logs -f filesystem
+```
+
+### `claude mcp get`
+
+```bash
+# Show the full configuration for an MCP
+claude mcp get github
+```
+
+---
+
+## Subcommand: `claude doctor`
+
+Diagnoses your Claude Code installation and configuration.
+
+```bash
+claude doctor
+```
+
+It checks:
+- Claude Code version and available updates
+- Network connectivity to the Anthropic API
+- API key validity (`ANTHROPIC_API_KEY`)
+- Status of configured MCPs (connection, available tools)
+- System permissions (file read/write)
+- Shell and environment variable configuration
+
+```bash
+# Example output
+claude doctor
+# -> Claude Code v1.x.x (up to date)
+# -> Anthropic API reachable
+# -> ANTHROPIC_API_KEY valid
+# -> MCP filesystem: connected (5 tools)
+# x MCP github: connection error (GITHUB_TOKEN missing)
+# -> File permissions: OK
+```
+
+---
+
+## Subcommand: `claude update`
+
+```bash
+# Update Claude Code to the latest version
+claude update
+
+# Check version without updating
+claude --version
+```
+
+---
+
+## Advanced options: output formats
+
+### `--output-format text` (default)
+
+Plain text formatted for human reading. Includes markdown rendered in the terminal.
+
+### `--output-format json`
+
+Returns a complete JSON object with the response and metadata.
+
+```json
+{
+  "type": "result",
+  "subtype": "success",
+  "cost_usd": 0.0023,
+  "is_error": false,
+  "duration_ms": 1842,
+  "num_turns": 1,
+  "result": "Response text here...",
+  "session_id": "abc123"
+}
+```
+
+### `--output-format stream-json`
+
+Stream of JSON messages (newline-delimited) in real time, suited for streaming processing.
+
+```bash
+# Line-by-line processing
+claude --print --output-format stream-json "prompt" | while IFS= read -r line; do
+  echo "$line" | jq -r 'select(.type == "content_block_delta") | .delta.text // empty'
+done
+```
+
+---
+
+## Next steps
+
+- [Cheatsheet: Quick reference](/reference/cheatsheet): Slash commands and shortcuts
+- [settings.json: Complete guide](/reference/settings): All configuration options
+- [Environment variables](/reference/environment): Variables recognized by Claude Code

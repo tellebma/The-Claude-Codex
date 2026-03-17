@@ -1,6 +1,6 @@
 services:
   web:
-    image: tellebma/the-claude-codex:latest
+    image: claude-code-guide:latest
     build:
       context: .
       dockerfile: Dockerfile

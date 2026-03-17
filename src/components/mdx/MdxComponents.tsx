@@ -185,3 +185,36 @@ export const mdxComponents: MDXComponents = {
     />
   ),
 };
+
+/**
+ * Check if an href is an internal link that needs locale prefixing.
+ * Internal links start with "/" and don't already have a locale prefix.
+ */
+function isInternalLink(href: string | undefined): boolean {
+  if (!href) return false;
+  if (!href.startsWith("/")) return false;
+  if (href.startsWith("//")) return false;
+  // Already has a locale prefix
+  if (/^\/(?:fr|en)(?:\/|$)/.test(href)) return false;
+  return true;
+}
+
+/**
+ * Creates locale-aware MDX components that auto-prefix internal links.
+ */
+export function createLocaleMdxComponents(locale: string): MDXComponents {
+  return {
+    ...mdxComponents,
+    a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+      const href =
+        isInternalLink(props.href) ? `/${locale}${props.href}` : props.href;
+      return (
+        <a
+          className="text-brand-700 underline underline-offset-2 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
+          {...props}
+          href={href}
+        />
+      );
+    },
+  };
+}

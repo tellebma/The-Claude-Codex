@@ -1,0 +1,124 @@
+---
+title: "Understanding MCPs in 5 minutes"
+description: "Discover the Model Context Protocol (MCP): the universal adapter that connects Claude Code to your tools. Architecture, how it works, and differences from plugins and skills."
+section: "mcp"
+order: 1
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+<Callout type="tip" title="Just getting started?">If technical concepts feel complex, start with our [real-world use cases](/use-cases) to see Claude Code in action without writing code.</Callout>
+
+## What exactly is MCP?
+
+The **Model Context Protocol** (MCP) is an open protocol created by Anthropic that lets Claude Code communicate with external services. It's the standard that transforms Claude Code from an isolated assistant into one that's **connected to your real environment**.
+
+<Callout type="info" title="The USB port analogy">
+Imagine Claude Code as an ultra-powerful laptop with no ports. It can think, calculate, and reason, but it can't **touch** anything outside itself. MCPs are like **universal USB ports** you plug into that laptop. Each port opens a connection to a service: your email, your source code, your database, your web browser. The more ports you plug in, the more powerful your assistant becomes.
+</Callout>
+
+Without MCP, Claude Code can only read and write local files and run shell commands. That's already powerful, but limited to your machine. With MCPs, it can:
+
+- **Send a Slack message** to your team
+- **Create a pull request** on GitHub
+- **Run a SQL query** on your database
+- **Take a screenshot** of a web page
+- **Read your emails** in Gmail
+- **Look up documentation** for a library
+
+All from **your terminal**, in plain language.
+
+## Architecture: how it works under the hood
+
+MCP relies on a simple and elegant **client-server** architecture.
+
+<Steps>
+<Step title="You make a request" stepNumber={1}>
+You write in plain language in Claude Code: *"Show me the open GitHub issues on my project"*.
+</Step>
+
+<Step title="Claude Code identifies the right tool" stepNumber={2}>
+Claude Code analyzes your request and determines it needs the GitHub MCP. It knows which tools each MCP exposes thanks to the discovery phase at startup.
+</Step>
+
+<Step title="The MCP Server translates the request" stepNumber={3}>
+Claude Code sends a **JSON-RPC** message to the GitHub MCP Server via **stdin/stdout**. The MCP server translates this request into actual GitHub API calls.
+</Step>
+
+<Step title="The result comes back to you" stepNumber={4} isLast>
+The MCP Server receives the GitHub API response, reformats it, and sends it back to Claude Code. Claude Code presents the result in a readable format and can chain additional actions.
+</Step>
+</Steps>
+
+### The protocol in detail
+
+MCP uses **JSON-RPC 2.0** as its communication format. It's a well-established standard that's lightweight and easy to implement. Communication between Claude Code (the client) and each MCP Server happens via **stdin/stdout**, using the operating system's standard streams.
+
+```bash
+# Simplified MCP flow diagram
+# Claude Code (client) --stdin--> MCP Server (bridge) --REST API--> External service
+# Claude Code (client) <--stdout-- MCP Server (bridge) <----------- External service
+```
+
+Each MCP Server exposes a set of **tools** that Claude Code can call. For example, the GitHub MCP exposes tools like `list_issues`, `create_pull_request`, `search_code`, etc. At startup, Claude Code queries each configured MCP to discover its available tools.
+
+<Callout type="tip" title="No coding required">
+You don't need to write code to use an MCP. You just configure it in a JSON file. The MCP Server is a standalone program that bridges Claude Code and the external service.
+</Callout>
+
+## MCP vs Plugins vs Skills: what's the difference?
+
+These three concepts complement each other but serve different roles.
+
+| | **MCP** | **Skills** | **Plugins** |
+|---|---|---|---|
+| **Role** | Connect Claude Code to an external service | Teach a reusable behavior or workflow | Extend Claude Code's internal capabilities |
+| **Analogy** | A USB port to the outside world | A memorized tutorial or recipe | A built-in add-on module |
+| **Example** | GitHub MCP to access repos, PRs, issues | "review-pr" skill for a review process | Formatting, analysis plugins, etc. |
+| **Configuration** | `.mcp.json` file or `settings.json` | Markdown file in `.claude/commands/` | Via Claude's configuration system |
+| **Execution** | External server (separate process) | Instructions interpreted by Claude Code | Code integrated into Claude Code |
+
+<Card title="In summary" variant="accent">
+**MCPs** give Claude Code **hands** to interact with the outside world. **Skills** give it **recipes** to know what to do. **Plugins** give it additional **internal capabilities**. All three combine to create a custom-built assistant.
+</Card>
+
+## Key MCP protocol concepts
+
+### Tools
+
+Each MCP Server exposes a list of tools. A tool is a function that Claude Code can call. For example:
+
+- `mcp__github__list_issues`: list issues in a repo
+- `mcp__slack__send_message`: send a Slack message
+- `mcp__filesystem__read_file`: read a file
+
+Claude Code knows the signature of each tool (its parameters and types) and can call them automatically based on your request.
+
+### Resources
+
+Some MCPs also expose **resources**: data that Claude Code can read but not modify. This is useful for providing additional context (documentation, database schemas, etc.).
+
+### Prompts
+
+An MCP can also provide **predefined prompts**: interaction templates optimized for specific use cases.
+
+## Security and permissions
+
+<Callout type="warning" title="Critical security">
+MCPs execute **real** actions in your services. Claude Code will always ask for confirmation before running a sensitive action (sending a message, creating a file, write query). Never disable this protection in production.
+</Callout>
+
+Here are MCP security best practices:
+
+- **Principle of least privilege**: grant each MCP only the strictly necessary permissions
+- **Tokens with restricted scopes**: use access tokens with minimum rights
+- **Global configuration for secrets**: store your tokens in `~/.claude/settings.json` (never in the repo)
+- **Regular review**: periodically check which MCPs are configured and what access they have
+
+## Next steps
+
+Now that you understand what an MCP is and how it works, let's get hands-on.
+
+- [Install and configure an MCP](/mcp/setup): Step-by-step guide to plug in your first MCP
+- [Top productivity MCPs](/mcp/best-productivity): The best MCPs for Gmail, Slack, Calendar, and more
+- [Top development MCPs](/mcp/best-development): GitHub, Context7, Sentry, databases

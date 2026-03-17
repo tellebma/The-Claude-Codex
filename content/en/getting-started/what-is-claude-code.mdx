@@ -1,0 +1,129 @@
+---
+title: "What is Claude Code?"
+description: "Discover Claude Code, Anthropic's AI-powered command-line assistant. Learn what sets it apart from Copilot or Cursor, who it's for, and practical use cases."
+section: "getting-started"
+order: 1
+datePublished: "2026-03-09"
+dateModified: "2026-03-09"
+---
+
+## Claude Code in one sentence
+
+Claude Code is a **command-line AI assistant** built by Anthropic. It lives in your terminal, understands your entire project, and can act directly on your files, code, and tools.
+
+Think of it as a senior developer colleague who knows your codebase inside and out, never sleeps, and is always ready to help. That's Claude Code.
+
+<TerminalScreenshot
+  title="Terminal - Claude Code in action"
+  lines={[
+    { type: "command", content: "claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  ✓ Project: my-app (Next.js + TypeScript)" },
+    { type: "output", content: "  ✓ Files indexed: 47 files" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> Add a contact page with form validation" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  I'll create the contact page with React Hook Form." },
+    { type: "output", content: "  Validation: name (required), email (format), message (min 10 chars)." },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ● Create src/app/contact/page.tsx" },
+    { type: "output", content: "    Do you want me to proceed? (y/n)" },
+    { type: "command", content: "y" },
+    { type: "output", content: "  ✓ src/app/contact/page.tsx created (89 lines)" }
+  ]}
+/>
+
+<Callout type="info" title="Terminal = Superpower">
+Unlike regular chatbots that can only answer questions, Claude Code **acts** in your real environment. It creates files, runs commands, analyzes your directory structure, and interacts with Git. That's the key difference.
+</Callout>
+
+## How does it work?
+
+Claude Code operates on three simple principles:
+
+1. **You launch Claude Code** in a terminal, at the root of your project
+2. **You describe** what you want in plain language (English, French, or any language)
+3. **Claude Code acts**: it reads your files, proposes a plan, creates or edits code, and runs commands, always with your approval
+
+<Steps>
+<Step title="Automatic context" stepNumber={1}>
+As soon as you launch Claude Code in a folder, it analyzes the directory structure, reads configuration files (package.json, CLAUDE.md, etc.) and understands your project layout. No need to re-explain everything each time.
+</Step>
+
+<Step title="Natural conversation" stepNumber={2}>
+You communicate in plain language. No special syntax, no shortcuts to memorize. Just say what you want to accomplish, the way you would with a colleague.
+</Step>
+
+<Step title="Concrete actions" stepNumber={3} isLast>
+Claude Code doesn't just suggest code in a side panel. It creates, modifies, and deletes files. It runs shell commands. It makes Git commits. All while asking for your permission.
+</Step>
+</Steps>
+
+## Claude Code vs other tools
+
+You may already be familiar with GitHub Copilot, Cursor, or other AI assistants. Here's what sets Claude Code apart.
+
+| Criterion | Claude Code | GitHub Copilot | Cursor |
+|-----------|------------|----------------|--------|
+| **Interface** | Terminal (CLI) | IDE extension | Full IDE |
+| **Scope** | Entire project + system | Current file | Entire project |
+| **Actions** | Read, write, execute | Inline suggestions | Edit + chat |
+| **MCP** | Yes (Gmail, GitHub, Slack...) | No | Limited |
+| **Skills** | Yes (reusable workflows) | No | No |
+| **Model** | Claude (Anthropic) | GPT / Claude | Multiple |
+| **Pricing** | API pay-as-you-go or Max | Monthly subscription | Monthly subscription |
+
+<Callout type="tip" title="It's not a replacement, it's a complement">
+Claude Code doesn't replace your IDE. Many developers use Claude Code **alongside** VS Code or Cursor. Claude Code excels at tasks that go beyond a single file: multi-file refactoring, building complete projects, complex debugging, and interacting with external APIs.
+</Callout>
+
+### Claude Code's unique strengths
+
+- **Full filesystem access**: Claude Code sees your entire project, not just the open file
+- **Command execution**: it can run your tests, check your build, analyze your logs
+- **MCP extensibility**: connect it to Gmail, Slack, GitHub, PostgreSQL, and dozens of other tools
+- **Project memory via CLAUDE.md**: give it persistent context that it reads every session
+- **Custom Skills**: create reusable workflows to automate your recurring tasks
+
+## Who is Claude Code for?
+
+<Card title="Experienced developers" variant="accent">
+You already know the terminal and software development. Claude Code accelerates your workflow: quick refactoring, test generation, code review, project scaffolding. Think of it as a pair programmer available 24/7 who knows your stack.
+</Card>
+
+<Card title="Beginner developers" variant="highlight">
+You're learning to code. Claude Code is a fantastic learning tool: it explains every line of code it produces, answers your questions, and guides you step by step. It's like having a patient mentor who's always available.
+</Card>
+
+<Card title="Non-developers (product managers, designers, marketers...)" variant="default">
+You've never written a line of code. Claude Code makes building prototypes, internal tools, and automation scripts accessible to everyone. Describe what you want, Claude Code builds it.
+</Card>
+
+## Real-world use cases
+
+Here are some examples of what people do with Claude Code every day:
+
+- **Build a complete website** by describing the desired design and features
+- **Refactor a codebase** of thousands of lines to follow new conventions
+- **Write and run tests** automatically to improve code coverage
+- **Debug a problem** by analyzing logs, code, and stack traces
+- **Generate a complete REST API** with validation, error handling, and documentation
+- **Automate tasks**: send emails, update a spreadsheet, post on Slack
+- **Analyze data** by writing processing and visualization scripts
+- **Create internal tools** for your team without being a developer
+
+<Callout type="info" title="Did you know?">
+The site you're reading right now was built entirely with Claude Code. From the Next.js architecture to the MDX content, the Tailwind design, and the Docker configuration, every line was produced in collaboration with AI.
+</Callout>
+
+## Next steps
+
+Convinced? Let's get practical. The next step is to install Claude Code on your machine.
+
+- [Install Claude Code](/getting-started/installation): Prerequisites and step-by-step installation
+- [Configure your environment](/getting-started/environment-setup): API key, settings.json, and CLAUDE.md
+- [Your first project](/getting-started/first-project): Build a website in 5 minutes

@@ -21,25 +21,25 @@ export const metadata: Metadata = createPageMetadata({
 const suggestedLinks = [
   {
     name: "Accueil",
-    href: "/",
+    href: "/fr",
     icon: Home,
     description: "Retour à la page d'accueil",
   },
   {
     name: "Démarrer",
-    href: "/getting-started",
+    href: "/fr/getting-started",
     icon: BookOpen,
     description: "Guide d'installation pas à pas",
   },
   {
     name: "MCP",
-    href: "/mcp",
+    href: "/fr/mcp",
     icon: Puzzle,
     description: "Connecter vos outils favoris",
   },
   {
     name: "Prompting",
-    href: "/prompting",
+    href: "/fr/prompting",
     icon: MessageSquare,
     description: "L'art de communiquer avec l'IA",
   },
@@ -141,7 +141,7 @@ export default function NotFound() {
         {/* Back to home CTA */}
         <div className="mt-12">
           <Link
-            href="/"
+            href="/fr"
             className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
           >
             <Home className="h-4 w-4" aria-hidden="true" />

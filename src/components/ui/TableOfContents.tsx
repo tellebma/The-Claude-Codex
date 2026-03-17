@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { List } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface TocHeading {
   readonly id: string;
@@ -34,6 +35,7 @@ export function TableOfContents() {
   const [headings, setHeadings] = useState<ReadonlyArray<TocHeading>>([]);
   const [activeId, setActiveId] = useState<string>("");
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const t = useTranslations("common");
 
   const updateHeadings = useCallback(() => {
     const found = getHeadings();
@@ -103,13 +105,13 @@ export function TableOfContents() {
 
   return (
     <nav
-      aria-label="Table des matieres"
+      aria-label={t("tableOfContents")}
       className="hidden xl:block"
     >
       <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
         <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
           <List className="h-3.5 w-3.5" aria-hidden="true" />
-          Sur cette page
+          {t("onThisPage")}
         </div>
         <ul className="space-y-1 border-l border-slate-200 dark:border-slate-700">
           {headings.map((heading) => {

@@ -1,0 +1,450 @@
+---
+title: "Headless mode and CI/CD integration"
+description: "Use Claude Code in headless mode for CI/CD pipelines: GitHub Actions, GitLab CI, automated code review, and batch processing."
+section: "advanced"
+order: 2
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## Headless mode: Claude Code without an interface
+
+Headless mode lets you use Claude Code as a **standard command-line tool**: it receives an instruction, executes it, and returns a result, with no interactive interface, no confirmation prompts, no waiting for input.
+
+It's the gateway to integration with CI/CD pipelines, automation scripts, and DevOps tools.
+
+## The --print (-p) flag: basic usage
+
+The `--print` (or `-p`) flag launches Claude Code in non-interactive mode and outputs the result to stdout:
+
+```bash
+# Basic usage
+claude --print "Explain what this function does"
+
+# With a file as context (piping)
+cat src/utils/auth.ts | claude --print "Identify security risks in this code"
+
+# Piping to other commands
+git diff HEAD~1 | claude --print "Write a CHANGELOG summary for these changes"
+
+# Shorthand -p
+claude -p "Generate unit tests for the file src/lib/parser.ts"
+```
+
+### Piping and scripts
+
+The `--print` mode integrates naturally into Unix pipes:
+
+```bash
+#!/bin/bash
+# Pre-commit code analysis script
+
+CHANGED_FILES=$(git diff --name-only HEAD)
+
+for file in $CHANGED_FILES; do
+  if [[ "$file" == *.ts ]] || [[ "$file" == *.tsx ]]; then
+    echo "Analyzing $file..."
+
+    REVIEW=$(cat "$file" | claude --print \
+      "Identify critical issues in this TypeScript code.
+       Respond in JSON: {issues: array, severity: critical|high|medium|low}")
+
+    echo "$REVIEW" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+critical = [i for i in data.get('issues', []) if i.get('severity') == 'critical']
+if critical:
+    print('BLOCKING:', critical)
+    exit(1)
+print('OK: no critical issues')
+"
+  fi
+done
+```
+
+## --output-format json: automated parsing
+
+To integrate Claude's output into scripts, use the JSON format:
+
+```bash
+# Structured JSON format
+claude --print --output-format json "Analyze this code and return a JSON object"
+
+# Stream JSON (for long outputs)
+claude --print --output-format stream-json "Generate the documentation for this API"
+```
+
+The `json` format returns an object with the following structure:
+
+```json
+{
+  "type": "result",
+  "subtype": "success",
+  "result": "The content of Claude's response...",
+  "session_id": "sess_abc123",
+  "total_cost_usd": 0.0023,
+  "num_turns": 1
+}
+```
+
+Extract only the response with `jq`:
+
+```bash
+RESULT=$(claude --print --output-format json "Summarize in one sentence: $(cat README.md)" | jq -r '.result')
+echo "Summary: $RESULT"
+```
+
+## --max-turns: limiting iterations
+
+In headless mode, Claude can perform multiple "turns" (read files, write code, verify...). `--max-turns` limits this number to prevent infinite loops:
+
+```bash
+# Limit to 5 execution turns
+claude --print --max-turns 5 "Fix the TypeScript errors in src/"
+
+# For simple tasks, 1 turn is enough
+claude --print --max-turns 1 "Generate a README.md file for this project"
+```
+
+## --dangerously-skip-permissions: full automatic mode
+
+<Callout type="warning" title="High security risk">
+This flag suppresses all Claude Code confirmation prompts. It can **read, write, and execute** any file or command without human validation. Use **only** in isolated environments (CI/CD containers, sandboxes) with system permissions reduced to the minimum.
+
+Never use it on your personal development machine for unaudited tasks.
+</Callout>
+
+```bash
+# In CI/CD only, in an isolated container
+claude --print --dangerously-skip-permissions \
+  "Generate the missing tests for src/services/ and run them"
+```
+
+In production CI/CD, the recommended combination is:
+
+```bash
+claude \
+  --print \
+  --dangerously-skip-permissions \
+  --max-turns 10 \
+  --output-format json \
+  "Your task here"
+```
+
+## GitHub Actions integration
+
+### Full workflow: automated PR review
+
+This workflow triggers a Claude Code review on every Pull Request:
+
+```yaml
+name: Claude Code PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run Claude Code review
+        id: review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          DIFF=$(git diff origin/${{ github.base_ref }}...HEAD -- '*.ts' '*.tsx' '*.js' | head -c 10000)
+
+          REVIEW=$(echo "$DIFF" | claude \
+            --print \
+            --max-turns 3 \
+            --output-format json \
+            "You are a code review expert. Analyze this Git diff and provide:
+            1. A summary of the changes
+            2. Potential issues (security, performance)
+            3. Concrete improvement suggestions
+            Format: Structured and concise Markdown." | jq -r '.result')
+
+          echo "$REVIEW" > /tmp/review.md
+          echo "review_done=true" >> $GITHUB_OUTPUT
+
+      - name: Post review comment
+        if: steps.review.outputs.review_done == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const review = fs.readFileSync('/tmp/review.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Automated review: Claude Code\n\n${review}\n\n---\n*Automatically generated by Claude Code*`
+            });
+```
+
+### Workflow: automatic test generation
+
+```yaml
+name: Generate missing tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_path:
+        description: 'Path to analyze (e.g. src/services/)'
+        required: true
+        default: 'src/'
+
+jobs:
+  generate-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Generate missing tests
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          claude \
+            --print \
+            --dangerously-skip-permissions \
+            --max-turns 15 \
+            "Analyze the files in ${{ github.event.inputs.target_path }}.
+             For each file without tests: create the Jest + TypeScript test file
+             covering nominal and error cases.
+             Then run npm test to verify."
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: "test: automatically generate missing tests"
+          title: "Tests automatically generated by Claude Code"
+          body: |
+            Tests automatically generated for files without coverage.
+
+            **Verify before merging:**
+            - [ ] Tests cover nominal cases
+            - [ ] Tests cover error cases
+            - [ ] Coverage is > 80%
+          branch: "auto/generated-tests"
+```
+
+### Workflow: weekly security audit
+
+```yaml
+name: Claude Code Security Audit
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6am
+  workflow_dispatch:
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run security audit
+        id: audit
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          AUDIT=$(claude \
+            --print \
+            --max-turns 8 \
+            --output-format json \
+            "Full security audit:
+            1. Search for hardcoded secrets
+            2. Vulnerable dependencies (package.json)
+            3. Dangerous patterns (eval, innerHTML)
+            4. Security configurations (CORS, CSP)
+            Return JSON with: critical (array), warnings (array), score (/10)" \
+            | jq -r '.result')
+
+          echo "$AUDIT" > /tmp/audit.json
+          CRITICAL_COUNT=$(echo "$AUDIT" | python3 -c "
+import sys, json
+try:
+    data = json.loads(sys.stdin.read())
+    print(len(data.get('critical', [])))
+except:
+    print(0)
+")
+          echo "critical_count=$CRITICAL_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Create issue if critical findings
+        if: steps.audit.outputs.critical_count > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const audit = fs.readFileSync('/tmp/audit.json', 'utf8');
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '[SECURITY] Critical issues detected by Claude Code',
+              body: `## Security audit report\n\n\`\`\`json\n${audit}\n\`\`\``,
+              labels: ['security', 'critical']
+            });
+```
+
+### Secrets and configuration variables
+
+<Callout type="warning" title="Managing secrets in GitHub Actions">
+**Never** put `ANTHROPIC_API_KEY` in plaintext in your workflows. Always use GitHub secrets:
+
+1. Go to Settings > Secrets and variables > Actions
+2. Click "New repository secret"
+3. Name: `ANTHROPIC_API_KEY`, Value: your Anthropic API key
+
+In the workflow, reference via `${{ secrets.ANTHROPIC_API_KEY }}`.
+</Callout>
+
+## GitLab CI integration
+
+Basic example of integration in a GitLab pipeline:
+
+```yaml
+# .gitlab-ci.yml
+stages:
+  - review
+  - test
+
+claude-review:
+  stage: review
+  image: node:20-alpine
+  only:
+    - merge_requests
+  script:
+    - npm install -g @anthropic-ai/claude-code
+    - |
+      DIFF=$(git diff origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME...HEAD | head -c 8000)
+      REVIEW=$(echo "$DIFF" | claude \
+        --print \
+        --max-turns 3 \
+        "Review this diff and identify potential issues.")
+      echo "$REVIEW"
+  variables:
+    ANTHROPIC_API_KEY: $ANTHROPIC_API_KEY
+```
+
+## Pre-commit hooks with Claude Code
+
+Integrate Claude Code into your git pre-commit hooks:
+
+```bash
+#!/bin/bash
+# .git/hooks/pre-commit
+# Make executable: chmod +x .git/hooks/pre-commit
+
+set -e
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|tsx|js|jsx)$' || true)
+
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+echo "Claude Code analysis of staged files..."
+
+for file in $STAGED_FILES; do
+  ISSUES=$(cat "$file" | claude \
+    --print \
+    --max-turns 1 \
+    --output-format json \
+    "Identify CRITICAL issues (obvious bugs, security flaws).
+     Respond with a JSON {issues: string[], has_critical: boolean}" \
+    | jq -r '.result' 2>/dev/null || echo '{"has_critical": false}')
+
+  HAS_CRITICAL=$(echo "$ISSUES" | python3 -c "
+import sys, json
+try:
+    d = json.loads(sys.stdin.read())
+    print('true' if d.get('has_critical') else 'false')
+except:
+    print('false')
+")
+
+  if [ "$HAS_CRITICAL" = "true" ]; then
+    echo "BLOCKED: critical issue in $file"
+    exit 1
+  fi
+done
+
+echo "OK: no critical issues detected"
+exit 0
+```
+
+## Security best practices in headless mode
+
+<Callout type="warning" title="Mandatory security checklist">
+Before deploying Claude Code in headless mode in a production pipeline:
+
+- Use encrypted secrets (GitHub Secrets, GitLab Variables, AWS Secrets Manager)
+- Reduce runner permissions to the minimum necessary
+- Limit `--max-turns` to avoid expensive loops
+- Log token costs to detect abuse
+- Isolate in containers without unnecessary network access
+- Never commit files containing `ANTHROPIC_API_KEY`
+- Use `--output-format json` to parse results safely
+</Callout>
+
+### Controlling costs in CI/CD
+
+```bash
+# Bad: sends the entire codebase
+claude --print "Analyze the entire project"
+
+# Good: target modified files
+git diff --name-only HEAD~1 | xargs -I{} sh -c \
+  'cat {} | claude --print --max-turns 1 "Analyze this file"'
+
+# Good: limit diff size
+git diff | head -c 5000 | claude --print --max-turns 2 "Review this diff"
+```
+
+## Next steps
+
+Combine headless mode with enterprise providers (Bedrock, Vertex) for CI/CD pipelines that comply with your organization's data constraints.

@@ -1,0 +1,276 @@
+---
+title: "Building your first MCP workflow"
+description: "Step-by-step tutorial to combine Context7, GitHub, and Playwright in a complete MCP workflow. Learn to chain MCPs to automate your development tasks."
+section: "mcp"
+order: 6
+datePublished: "2026-03-09"
+dateModified: "2026-03-11"
+---
+
+## What is an MCP workflow?
+
+An **MCP workflow** is the combination of multiple MCPs in a sequence of actions that Claude Code chains automatically to accomplish a complex task. Instead of using one MCP at a time, you describe a complete objective and Claude Code orchestrates the different tools to get there.
+
+<Callout type="info" title="The assembly line analogy">
+Picture an assembly line in a factory. Each station (MCP) has a specialty: one station cuts, another assembles, another paints, the last one packages. Individually, each station is useful. But it's the **chain** that creates the finished product. MCP workflows work the same way.
+</Callout>
+
+## The tutorial: Context7 + GitHub + Playwright
+
+In this tutorial, we'll create a complete workflow that:
+
+1. **Checks the documentation** (Context7) to implement a feature
+2. **Creates the code** following up-to-date best practices
+3. **Visually tests** the result (Playwright)
+4. **Creates a pull request** (GitHub) with a summary of changes
+
+### Prerequisites
+
+Make sure you have all three MCPs configured in your `~/.claude/settings.json` file:
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your-token"
+      }
+    }
+  }
+}
+```
+
+Verify everything is connected:
+
+<TerminalScreenshot
+  title="Terminal - MCP verification"
+  lines={[
+    { type: "command", content: "claude mcp list" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  context7    ✓ connected" },
+    { type: "highlight", content: "  playwright  ✓ connected" },
+    { type: "highlight", content: "  github      ✓ connected" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  3 MCP servers active" }
+  ]}
+/>
+
+### Step 1: Formulate the request
+
+The key to a good MCP workflow is a **clear and complete** request. Don't ask for each step separately -- describe the end goal and let Claude Code orchestrate.
+
+<Steps>
+<Step title="The request in one sentence" stepNumber={1}>
+
+```bash
+# Launch Claude Code in your project
+claude
+
+# Then type your complete request:
+# "Check the Next.js 14 docs with Context7 to see how to implement
+# a custom 404 page with the App Router.
+# Create the not-found.tsx page with a modern design.
+# Start the dev server, take a screenshot of the 404 page
+# to verify the rendering. Then create a branch and a PR
+# with a summary of changes."
+```
+
+</Step>
+
+<Step title="Claude Code orchestrates the MCPs" stepNumber={2}>
+
+Claude Code will automatically:
+
+1. Call **Context7** to look up the Next.js documentation on `not-found.tsx`
+2. Create the `not-found.tsx` file following the documented best practices
+3. Start the dev server (`npm run dev`)
+4. Use **Playwright** to navigate to a non-existent page and take a screenshot
+5. Create a Git branch
+6. Use **GitHub** to create a pull request with the summary
+
+</Step>
+
+<Step title="Review and validate" stepNumber={3} isLast>
+
+Claude Code will show you the screenshot and the created PR. You can then:
+
+- Request adjustments: *"Change the background color to dark blue"*
+- Approve: *"Looks perfect, merge the PR"*
+- Iterate: *"Also add a back-to-home button"*
+
+</Step>
+</Steps>
+
+## Concrete example step by step
+
+Let's see what Claude Code does at each stage.
+
+### 1. Documentation lookup (Context7)
+
+```bash
+# Claude Code calls Context7 internally:
+# -> resolve-library-id("nextjs")
+# -> query-docs("not-found.tsx app router custom 404 page")
+#
+# Context7 returns the official documentation:
+# - not-found.tsx must be in app/
+# - It exports a default React component
+# - It displays when notFound() is called
+# - It can use metadata
+```
+
+### 2. Code creation
+
+```tsx
+// app/not-found.tsx - Created by Claude Code
+import Link from 'next/link'
+
+export default function NotFound() {
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center">
+      <h1 className="text-6xl font-bold text-slate-900 dark:text-white">
+        404
+      </h1>
+      <p className="mt-4 text-xl text-slate-600 dark:text-slate-400">
+        This page doesn't exist or has been moved.
+      </p>
+      <Link
+        href="/"
+        className="mt-8 rounded-lg bg-brand-600 px-6 py-3 text-white
+                   transition-colors hover:bg-brand-700"
+      >
+        Back to home
+      </Link>
+    </div>
+  )
+}
+```
+
+### 3. Visual testing (Playwright)
+
+<TerminalScreenshot
+  title="Terminal - MCP Playwright in action"
+  lines={[
+    { type: "comment", content: "# Claude Code calls Playwright internally:" },
+    { type: "output", content: "  [playwright] browser_navigate(\"http://localhost:3000/nonexistent-page\")" },
+    { type: "output", content: "  [playwright] browser_take_screenshot()" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Screenshot captured: not-found-page.png" },
+    { type: "output", content: "  404 page: title visible, back button centered, consistent design." }
+  ]}
+/>
+
+### 4. PR creation (GitHub)
+
+<TerminalScreenshot
+  title="Terminal - MCP GitHub in action"
+  lines={[
+    { type: "comment", content: "# Claude Code uses Git + GitHub MCP:" },
+    { type: "output", content: "  [git] checkout -b feat/custom-404-page" },
+    { type: "output", content: "  [git] add app/not-found.tsx" },
+    { type: "output", content: "  [git] commit -m \"feat: add custom 404 page\"" },
+    { type: "output", content: "  [git] push -u origin feat/custom-404-page" },
+    { type: "output", content: "  [github] create_pull_request(...)" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ PR created: feat/custom-404-page → main" },
+    { type: "highlight", content: "  https://github.com/you/repo/pull/42" }
+  ]}
+/>
+
+## Best practices for MCP workflows
+
+### 1. Be specific in your requests
+
+<Card title="Good request" variant="accent">
+*"Check the Prisma docs with Context7, add a `lastLoginAt` field (nullable DateTime) to the User table, generate the migration, apply it to the dev database, verify the schema is correct, and create a PR on GitHub."*
+</Card>
+
+<Card title="Too vague request" variant="default">
+*"Update the database."* Claude Code doesn't know what change to make, which table to modify, or which workflow to chain.
+</Card>
+
+### 2. Let Claude Code orchestrate
+
+Don't break your workflow into micro-steps. Describe the end goal and let Claude Code decide the optimal order of operations. It knows which MCPs to call and in what order.
+
+### 3. Check intermediate results
+
+Claude Code will ask for confirmation before sensitive actions (creating a PR, sending a message, modifying data). Use these checkpoints to verify everything is going well.
+
+### 4. Iterate quickly
+
+The advantage of MCP workflows is the speed of iteration. If the result isn't perfect, ask for an adjustment. Claude Code keeps the conversation context and can modify work already done.
+
+### 5. Combine categories
+
+The most powerful workflows combine MCPs from different categories:
+
+- **Development + Productivity**: Code review + Slack notification
+- **Design + Development**: Component generation + E2E tests + PR
+- **Productivity + Design**: Email analysis + mockup creation
+
+## Advanced workflow examples
+
+### "Automated bug fix" workflow
+
+```bash
+# Ask Claude Code:
+# "Look at the Sentry errors from the last 24 hours,
+# find the most frequent one, analyze the stack trace,
+# identify the file and line in our code,
+# propose a fix, write a test to reproduce it,
+# visually verify the page works with Playwright,
+# and create a PR with all of that."
+#
+# MCPs used: Sentry + Playwright + GitHub
+```
+
+### "Complete feature" workflow
+
+```bash
+# Ask Claude Code:
+# "Check the React Hook Form docs with Context7,
+# create a contact form with validation
+# (name, email, message, all required).
+# Add Tailwind styles, test the form with Playwright
+# (empty submission -> errors, valid submission -> success),
+# and create a PR with the test screenshots."
+#
+# MCPs used: Context7 + Playwright + GitHub
+```
+
+### "Team report" workflow
+
+```bash
+# Ask Claude Code:
+# "Look at the PRs merged this week on GitHub,
+# the important messages from the #engineering channel on Slack,
+# and my meetings for the week on Google Calendar.
+# Generate a structured weekly report and send it
+# to the #weekly-report channel on Slack."
+#
+# MCPs used: GitHub + Slack + Google Calendar
+```
+
+<Callout type="tip" title="Advanced tip: Skills + MCPs">
+You can create **Skills** (Markdown files in `.claude/commands/`) that describe recurring MCP workflows. Instead of retyping the same request, you launch a slash command like `/bug-fix` or `/weekly-report`. It's the ultimate combination for productivity.
+</Callout>
+
+## Next steps
+
+You now have the basics of MCP workflows down. Here's how to go further:
+
+- [Discover Skills](/skills): Create reusable commands for your workflows
+- [Master prompting](/prompting): Advanced techniques for more effective requests
+- [Understanding MCPs](/mcp/what-are-mcps): Back to protocol fundamentals
+- [Configure The Claude Codex](/configurator): Generate your ideal configuration

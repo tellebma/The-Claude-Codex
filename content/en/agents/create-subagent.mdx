@@ -1,0 +1,457 @@
+---
+title: "Creating a sub-agent"
+description: "Step-by-step guide to creating Claude Code sub-agents: configuration, context passing, error handling, and orchestration."
+section: "agents"
+order: 2
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Why create a custom agent?
+
+Built-in agents cover the most common use cases, but every team has its own workflows, conventions, and processes. A **custom agent** lets you codify those specifics and make them reusable.
+
+<Callout type="info" title="The employee handbook analogy">
+Creating a custom agent is like writing a **procedures manual** for a new team member. You describe their role, responsibilities, the steps to follow, and the quality criteria. The agent will follow these instructions systematically, like a well-trained employee who rigorously applies procedures.
+</Callout>
+
+## Structure of an agent
+
+An agent is defined by a Markdown file in the `.claude/agents/` folder (project level) or `~/.claude/agents/` (global level). Each file contains the following sections.
+
+### Full anatomy
+
+```markdown
+# Agent name
+
+## Role
+Description of the agent's role and expertise.
+What the agent should and shouldn't do.
+
+## Available tools
+List of tools the agent can use:
+- Read (file reading)
+- Edit (file modification)
+- Bash (command execution)
+- Grep (code search)
+- Glob (pattern-based file search)
+
+## Instructions
+Specific steps the agent must follow.
+1. First step
+2. Second step
+3. ...
+
+## Output format
+How the agent should structure its report or result.
+
+## Constraints
+What the agent must never do.
+```
+
+## Example 1: Code review agent
+
+This agent performs an in-depth code review focused on quality and conventions.
+
+```markdown
+# Code Reviewer
+
+## Role
+You are a senior code reviewer with 15 years of experience.
+You analyze modified code with rigor and constructive feedback.
+You don't just flag problems, you propose concrete fixes.
+
+## Available tools
+- Bash (for git diff, git log)
+- Read (to read modified files and their context)
+- Grep (to search for problematic patterns)
+
+## Instructions
+1. Get the diff with `git diff main...HEAD`
+2. For each modified file:
+   a. Read the full file (not just the diff)
+   b. Check consistency with the project style
+   c. Look for potential bugs
+   d. Check error handling
+   e. Check for hardcoded secrets
+3. Verify that tests exist for new code paths
+4. Produce the structured report
+
+## Output format
+For each issue found:
+- **File**: path/to/file.ts:line
+- **Severity**: CRITICAL | HIGH | MEDIUM | LOW
+- **Issue**: clear description of the problem
+- **Fix**: proposed corrected code
+
+End with a summary: total number of issues by severity.
+
+## Constraints
+- NEVER modify code directly
+- Don't flag style issues already covered by the linter
+- Limit yourself to 20 issues maximum (prioritize the most critical)
+```
+
+## Example 2: Testing agent
+
+An agent specialized in writing unit and integration tests.
+
+```markdown
+# Test Writer
+
+## Role
+You are a testing expert who writes exhaustive, readable,
+and maintainable tests. You follow the AAA pattern
+(Arrange-Act-Assert) and cover edge cases.
+
+## Available tools
+- Read (to read the source code to test)
+- Write (to create test files)
+- Bash (to run tests and check coverage)
+- Grep (to find existing tests)
+
+## Instructions
+1. Read the source file to test
+2. Identify all public functions
+3. For each function, list the test cases:
+   - Nominal case (happy path)
+   - Edge cases
+   - Error paths
+   - Cases with null/undefined values
+4. Write the tests following the AAA pattern
+5. Run the tests to verify they pass
+6. Check coverage (target: 80%+)
+
+## Output format
+Create the test file next to the source file:
+- `module.ts` → `module.test.ts`
+- `module.tsx` → `module.test.tsx`
+
+## Constraints
+- Don't use mocks unless absolutely necessary
+- Each test must be independent (no execution order)
+- Descriptive test names
+- Maximum 50 lines per test
+```
+
+## Example 3: Documentation agent
+
+An agent that generates and updates technical documentation.
+
+```markdown
+# Doc Updater
+
+## Role
+You are a technical writer who produces clear, concise,
+and up-to-date documentation. You write for intermediate-level
+developers.
+
+## Available tools
+- Read (to read source code)
+- Edit (to update documentation files)
+- Glob (to find existing .md files)
+- Bash (to check project structure)
+
+## Instructions
+1. Analyze recent changes (git log --oneline -20)
+2. Identify impacted documentation files
+3. For each file to update:
+   a. Read the corresponding source code
+   b. Verify the documentation reflects the current code
+   c. Update obsolete sections
+   d. Add undocumented new features
+4. Check internal links (no broken links)
+
+## Constraints
+- Keep the project's tone (check CLAUDE.md)
+- Don't invent features
+- Always include a working code example
+- Use standard Markdown format
+```
+
+## Where to place agent files
+
+<Steps>
+<Step title="Project agents (shared with the team)" stepNumber={1}>
+Place them in `.claude/agents/` at the root of your project. They will be version-controlled with Git and available to all team members.
+
+```bash
+my-project/
+  .claude/
+    agents/
+      code-reviewer.md
+      test-writer.md
+      doc-updater.md
+      db-migration.md
+```
+</Step>
+
+<Step title="Personal agents (your preferences)" stepNumber={2}>
+Place them in `~/.claude/agents/` in your home directory. They will be available in all your projects but not shared with the team.
+
+```bash
+~/.claude/
+  agents/
+    my-review-style.md
+    my-test-preferences.md
+    brainstorm-helper.md
+```
+</Step>
+
+<Step title="Agents via CLAUDE.md (integrated into context)" stepNumber={3} isLast>
+You can also reference agents directly in your `CLAUDE.md` by describing when to use them.
+
+```markdown
+# CLAUDE.md
+
+## Available agents
+- Use the **code-reviewer** agent after each modification
+- Use the **tdd-guide** agent for new features
+- Use the **security-reviewer** agent before each commit
+```
+</Step>
+</Steps>
+
+## Best practices for agent prompts
+
+An agent's effectiveness depends directly on the quality of its prompt. Here are the fundamental principles.
+
+### 1. Be specific about the role
+
+```markdown
+# BAD
+You are a code review agent.
+
+# GOOD
+You are a senior code reviewer specialized in TypeScript
+and React. You have 15 years of experience and pay particular
+attention to performance, security, and accessibility issues.
+You give constructive feedback with concrete fix suggestions.
+```
+
+### 2. Define clear steps
+
+```markdown
+# BAD
+Analyze the code and tell me if it's good.
+
+# GOOD
+1. Read the full diff with git diff main...HEAD
+2. For each modified file, check:
+   a. Error handling (try/catch, input validation)
+   b. Performance issues (nested loops, N+1 queries)
+   c. Security flaws (injection, XSS, hardcoded secrets)
+3. Check test coverage
+4. Produce a structured report by severity
+```
+
+### 3. Specify the output format
+
+```markdown
+# BAD
+Give me the results.
+
+# GOOD
+For each issue, provide:
+- **File**: path:line
+- **Severity**: CRITICAL / HIGH / MEDIUM / LOW
+- **Issue**: one-sentence description
+- **Suggestion**: corrected code in a code block
+End with a summary table.
+```
+
+### 4. Define constraints (the "nevers")
+
+<Callout type="warning" title="Constraints are essential">
+Without explicit constraints, an agent can take unwanted initiatives: modifying code instead of just reviewing it, deleting files, or producing a 500-line report when you expected 20. Constraints frame the agent's behavior.
+</Callout>
+
+```markdown
+## Constraints
+- NEVER modify code directly (review only)
+- Don't flag more than 15 issues (prioritize)
+- Ignore formatting issues (handled by Prettier)
+- Don't comment on architecture choices unless critical
+- Always respond in English
+```
+
+## Advanced sub-agent patterns
+
+Beyond simple agents, several patterns let you solve complex problems by combining sub-agents in structured ways.
+
+### Fan-out/fan-in pattern
+
+Fan-out/fan-in launches multiple sub-agents in parallel on independent sub-tasks, then a synthesizer agent gathers the results.
+
+```markdown
+# Fan-out/Fan-in: Multi-perspective review
+
+## Fan-out phase (parallel)
+Orchestrator agent prompt:
+> Launch 3 sub-agents in parallel:
+> 1. Quality agent: analyzes readability and patterns
+> 2. Security agent: looks for vulnerabilities
+> 3. Performance agent: identifies bottlenecks
+
+## Fan-in phase (synthesis)
+> Consolidate the 3 reports into a single document.
+> Deduplicate issues flagged by multiple agents.
+> Sort by descending severity.
+```
+
+This pattern is ideal for code reviews, audits, and multi-criteria analyses. The total time is that of the slowest agent (not the sum).
+
+### Pipeline pattern
+
+The pipeline passes each agent's result to the next, like an assembly line.
+
+```markdown
+# Pipeline: Complete feature
+
+Agent 1 (planner) → produces a plan
+Agent 2 (coder)   → implements according to the plan
+Agent 3 (tester)  → writes and runs tests
+Agent 4 (reviewer) → validates everything
+
+Each agent receives the previous one's result as context.
+```
+
+```bash
+# In practice, you phrase the request like this:
+> Implement the "PDF export" feature following this pipeline:
+> 1. First, plan the architecture with the planner agent
+> 2. Then, implement with the tdd-guide agent (tests first)
+> 3. Finally, do a review with the code-reviewer agent
+> Each step uses the result of the previous one.
+```
+
+### Reviewer chain pattern
+
+Multiple agents review the same work sequentially, each focusing on a different aspect. Each reviewer has access to the previous reviewers' comments.
+
+```markdown
+# Reviewer Chain: 3 review passes
+
+## Pass 1: Correctness
+The agent verifies the code does what it's supposed to do.
+Result: list of potential bugs.
+
+## Pass 2: Security (sees Pass 1 results)
+The agent checks for vulnerabilities, taking already-flagged bugs into account.
+Result: list of vulnerabilities.
+
+## Pass 3: Maintainability (sees Pass 1 + Pass 2)
+The agent evaluates the long-term quality of the code.
+Result: refactoring suggestions.
+
+## Final synthesis
+A final agent produces the consolidated report with priorities.
+```
+
+## Context management between agents
+
+Context (available information) is not automatically shared between agents. You need to choose an explicit strategy.
+
+### File strategy (recommended for large results)
+
+Agent A writes its result to a file. Agent B reads it at the start of its mission.
+
+```bash
+# Agent A: Review
+> Do a review of the auth module.
+> Write the result to /tmp/review-auth.md
+
+# Agent B: Fix
+> Read the file /tmp/review-auth.md and fix
+> the issues by descending severity.
+```
+
+### Prompt strategy (recommended for short results)
+
+The orchestrator agent summarizes Agent A's result and includes it in Agent B's prompt.
+
+```bash
+# The orchestrator passes a concise summary
+> The review agent found 3 issues:
+> 1. CRITICAL: SQL injection in users.ts:42
+> 2. HIGH: no rate limiting on /api/login
+> 3. MEDIUM: unused variable in utils.ts:15
+>
+> Fix these 3 issues in priority order.
+```
+
+### Git strategy (recommended for code changes)
+
+Agent A commits its changes. Agent B works on the same branch and sees the modifications.
+
+```bash
+# Agent A modifies code and commits
+# Agent B sees the changes via git diff
+# No need to pass context explicitly
+```
+
+<Callout type="tip" title="Combine strategies">
+For a complete pipeline, use Git for code changes and the prompt for metadata ("the previous agent found 2 critical bugs"). The two approaches complement each other.
+</Callout>
+
+## Parallelism strategies
+
+Sub-agents can run in parallel to speed up workflows. Here are the rules to follow.
+
+### When to parallelize
+
+- Tasks are **independent** (no data dependency)
+- Agents work on **different files**
+- One agent's result **doesn't influence** the others
+
+### When to stay sequential
+
+- An agent needs the previous one's result
+- Agents modify the **same files**
+- Execution order **changes the result**
+
+```bash
+# GOOD: parallel (independent tasks)
+> Launch in parallel:
+> - Agent security: audit the auth module
+> - Agent tests: check the billing module coverage
+> - Agent docs: update the README
+
+# BAD: parallel on the same files
+> Launch in parallel:
+> - Agent A: refactor auth.ts
+> - Agent B: add tests in auth.ts
+# → Guaranteed conflict!
+```
+
+<Callout type="warning" title="Worktrees for safe parallelization">
+If you absolutely must parallelize agents that modify code, use Git worktrees to isolate each agent. See the [Advanced orchestration](/agents/orchestration) page for details.
+</Callout>
+
+## Testing your agent
+
+Once your agent is created, test it on a real scenario.
+
+```bash
+# Launch Claude Code in your project
+$ claude
+
+# Explicitly request your agent
+> Use the code-reviewer agent to analyze my latest changes
+
+# Or integrate it into a larger workflow
+> Do a complete review of my PR with the code-reviewer
+> then check the tests with the test-writer
+```
+
+<Card title="Iterate on your agents" variant="accent">
+A good agent is rarely perfect on the first try. Use it several times, observe the results, and adjust the instructions. Add constraints when the agent goes off track, and clarify steps when it skips some. Like with a real team member, communication improves over time.
+</Card>
+
+## Next steps
+
+Now that you know how to create custom agents, learn how to make them collaborate.
+
+- [Agent Teams](/agents/agent-teams): Making multiple agents work together on the same project
+- [Top agents by use case](/agents/best-agents): The best agents by category
+- [Advanced orchestration](/agents/orchestration): Multi-agent orchestration patterns

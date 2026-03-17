@@ -1,115 +1,138 @@
-import Link from "next/link";
+"use client";
+
 import { Terminal, Github, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { CopyrightYear } from "@/components/ui/CopyrightYear";
 
-const footerLinks = {
-  guides: [
-    { name: "Démarrer", href: "/getting-started" },
-    { name: "MCP", href: "/mcp" },
-    { name: "Skills", href: "/skills" },
-    { name: "Prompting", href: "/prompting" },
-    { name: "Agents", href: "/agents" },
-    { name: "Entreprise", href: "/enterprise" },
-  ],
-  outils: [
-    { name: "Configurateur", href: "/configurator" },
-    { name: "Glossaire", href: "/glossary" },
-    { name: "Référence CLI", href: "/reference" },
-    { name: "Cas d'usage", href: "/use-cases" },
-    { name: "Contenus", href: "/content" },
-    { name: "Vision & Futur", href: "/future" },
-    { name: "À propos", href: "/about" },
-  ],
-  resources: [
-    {
-      name: "Claude Code (officiel)",
-      href: "https://github.com/anthropics/claude-code",
-      external: true,
-    },
-    {
-      name: "Documentation Anthropic",
-      href: "https://docs.anthropic.com",
-      external: true,
-    },
-    {
-      name: "MCP Registry",
-      href: "https://github.com/modelcontextprotocol/servers",
-      external: true,
-    },
-  ],
-};
+const guidesNavKeys = [
+  { key: "gettingStarted", href: "/getting-started" },
+  { key: "mcp", href: "/mcp" },
+  { key: "skills", href: "/skills" },
+  { key: "prompting", href: "/prompting" },
+  { key: "agents", href: "/agents" },
+  { key: "enterprise", href: "/enterprise" },
+] as const;
+
+const outilsNavKeys = [
+  { key: "configurator", href: "/configurator" },
+  { key: "glossary", href: "/glossary" },
+  { key: "reference", href: "/reference" },
+  { key: "useCases", href: "/use-cases" },
+  { key: "content", href: "/content" },
+  { key: "future", href: "/future" },
+  { key: "about", href: "/about" },
+] as const;
+
+const resourcesLinks = [
+  {
+    key: "claudeCodeOfficial",
+    href: "https://github.com/anthropics/claude-code",
+    external: true,
+  },
+  {
+    key: "anthropicDocs",
+    href: "https://docs.anthropic.com",
+    external: true,
+  },
+  {
+    key: "mcpRegistry",
+    href: "https://github.com/modelcontextprotocol/servers",
+    external: true,
+  },
+] as const;
 
 export function Footer() {
+  const tNav = useTranslations("navigation");
+  const tFooter = useTranslations("footer");
+  const tCommon = useTranslations("common");
+
   return (
     <footer className="border-t border-slate-200/50 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
           <div className="sm:col-span-2">
-            <Link href="/" className="flex items-center gap-2 text-lg font-bold">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-lg font-bold"
+            >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500">
-                <Terminal className="h-4 w-4 text-white" aria-hidden="true" />
+                <Terminal
+                  className="h-4 w-4 text-white"
+                  aria-hidden="true"
+                />
               </div>
               The Claude <span className="text-gradient">Codex</span>
             </Link>
             <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-300">
-              Le guide de référence gratuit pour maîtriser Claude Code. Créé par
-              la communauté, pour la communauté. Pas de paywall, pas de tracking
-              , juste du savoir partagé.
+              {tFooter("description")}
             </p>
           </div>
 
-          <nav aria-label="Guides">
+          <nav aria-label={tCommon("guides")}>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
-              Guides
+              {tCommon("guides")}
             </h3>
             <ul className="mt-3 space-y-2">
-              {footerLinks.guides.map((link) => (
+              {guidesNavKeys.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
-                    {link.name}
+                    {tNav(link.key)}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <nav aria-label="Outils">
+          <nav aria-label={tCommon("tools")}>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
-              Outils
+              {tCommon("tools")}
             </h3>
             <ul className="mt-3 space-y-2">
-              {footerLinks.outils.map((link) => (
+              {outilsNavKeys.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
                     className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
                   >
-                    {link.name}
+                    {tNav(link.key)}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <nav aria-label="Ressources externes">
+          <nav aria-label={tCommon("resources")}>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
-              Ressources
+              {tCommon("resources")}
             </h3>
             <ul className="mt-3 space-y-2">
-              {footerLinks.resources.map((link) => (
+              {resourcesLinks.map((link) => (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex min-h-[44px] items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
-                  >
-                    {link.name}
-                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
-                  </a>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-[44px] items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                    >
+                      {tFooter(link.key)}
+                      <ExternalLink
+                        className="h-3 w-3"
+                        aria-hidden="true"
+                      />
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                    >
+                      {tFooter(link.key)}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -119,7 +142,7 @@ export function Footer() {
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200/50 pt-8 dark:border-slate-800 sm:flex-row">
           <div className="flex flex-col gap-1 text-center sm:text-left">
             <p className="text-sm text-slate-500 dark:text-slate-300">
-              <CopyrightYear /> The Claude Codex. Projet open-source.
+              <CopyrightYear /> The Claude Codex. {tCommon("openSource")}
             </p>
           </div>
           <a

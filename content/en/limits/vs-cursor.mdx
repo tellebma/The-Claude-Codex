@@ -1,0 +1,104 @@
+---
+title: "Claude Code vs Cursor"
+description: "Detailed comparison between Claude Code and Cursor: IDE integration, agent capabilities, pricing, and when to use each tool."
+section: "limits"
+order: 3
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+Cursor and Claude Code are closer than you might think. Both take an agent approach: they read your code, understand the context, and can modify multiple files. The main difference is the interface. Cursor is a full IDE (a VS Code fork), Claude Code is a command-line tool.
+
+## Two interfaces, a similar philosophy
+
+**Cursor** is a code editor with AI natively integrated. It offers autocomplete (like Copilot), a contextual chat, and an agent mode capable of modifying multiple files. Everything happens in the IDE, with visual diffs and a change acceptance system.
+
+**Claude Code** lives in the terminal. No graphical interface, no built-in visual diffs. You describe what you want, Claude Code executes. It's more raw, but also more flexible: it can do anything your terminal can do.
+
+## Point-by-point comparison
+
+| Criterion | Claude Code | Cursor |
+|---------|-------------|--------|
+| **Interface** | Terminal (CLI) | IDE (VS Code fork) |
+| **Autocomplete** | No | Yes (Tab) |
+| **Agent mode** | Native, primary | Yes (Composer Agent) |
+| **Visual diffs** | Via git diff | Built into the IDE |
+| **Available models** | Claude only | Claude, GPT-4o, Gemini, etc. |
+| **Model selection** | Sonnet/Opus/Haiku | Flexible multi-provider |
+| **Context window** | 200K tokens | Variable by model |
+| **MCP / tools** | Rich ecosystem | MCP support in beta |
+| **Command execution** | Yes (native shell) | Yes (built-in terminal) |
+| **Custom agents** | Yes (markdown files) | .cursorrules (more limited) |
+| **Hooks and automation** | Yes | No |
+| **Headless / CI mode** | Yes (--print) | No |
+| **Price** | $20-200/month | $20-40/month (+ API costs) |
+| **Offline access** | No | No |
+
+## Where Cursor does better
+
+**The visual experience.** Cursor displays proposed changes as colored diffs in the IDE. You see exactly what will change before accepting. Claude Code modifies files directly, and it's up to you to check with `git diff`.
+
+**Autocomplete.** Cursor offers Tab completions while you type, like Copilot. Claude Code doesn't offer this feature. If you alternate between manual writing and AI assistance, Cursor is smoother.
+
+**Multi-model.** Cursor lets you choose between Claude, GPT-4o, Gemini, and other models by task. Claude Code is restricted to Anthropic models (Claude). If one model is better than another for a specific language, Cursor gives you that flexibility.
+
+**Learning curve.** If you already use VS Code, switching to Cursor is nearly seamless. Claude Code requires being comfortable with the terminal and learning the commands and conventions.
+
+**Entry price.** Cursor Pro costs $20/month and includes autocomplete + agent mode. Claude Code's Pro plan also costs $20/month, but with quicker throttling and no autocomplete.
+
+## Where Claude Code does better
+
+**Execution autonomy.** Claude Code can chain dozens of actions without intervention: read files, run tests, fix code, re-run tests, commit. Cursor generally waits for your approval at each step.
+
+**MCPs and the tool ecosystem.** Claude Code can query GitHub, Slack, a database, a browser, and external APIs via MCPs. The ecosystem is mature and expanding rapidly. Cursor is starting to support MCPs, but it's still in beta.
+
+**Headless mode and CI/CD.** Claude Code can run in a GitHub Actions or GitLab CI pipeline without a graphical interface. Generate automatic code reviews, changelogs, or fixes on every pull request. Cursor is a desktop-only tool.
+
+**Hooks and automation.** Claude Code's PreToolUse and PostToolUse hooks let you automate actions (format with Prettier after every change, notify Slack, check permissions). Cursor doesn't offer this level of automation.
+
+**Custom agents and personalization.** The CLAUDE.md file, markdown agents, skills: Claude Code deeply adapts to your conventions. Cursor offers `.cursorrules`, which is more limited in scope and expressiveness.
+
+**Working on large projects.** Claude Code can index and navigate codebases of several hundred thousand lines using selective reading strategies. Cursor loads context differently, and context limits hit harder on very large projects.
+
+## What both do well
+
+- **Code comprehension:** both read your project and understand the architecture
+- **Multi-file modifications:** both can refactor across multiple files
+- **Debugging:** both can analyze errors and propose fixes
+- **Test generation:** both produce tests of decent quality
+- **Popular language support:** Python, TypeScript, JavaScript, Go, Rust, etc.
+
+## Can you use both?
+
+Yes, but it's less complementary than with Copilot. Cursor and Claude Code cover overlapping territory. The most common scenario:
+
+- **Cursor** for daily work in the IDE (coding, completions, quick changes)
+- **Claude Code** for background tasks, automation, CI/CD workflows, and massive refactorings launched from the terminal
+
+<Callout type="info" title="Budget note">
+Cursor Pro ($20/month) + Claude Code Max 5x ($100/month) = $120/month. That's a significant investment. Try each tool separately for a month before combining them.
+</Callout>
+
+## How to choose
+
+**Choose Cursor if:**
+- You want an all-in-one IDE with built-in AI
+- Tab autocomplete is essential for your workflow
+- You like validating each change visually
+- You want to switch between different models (Claude, GPT-4o, Gemini)
+- You prefer a graphical interface over the terminal
+
+**Choose Claude Code if:**
+- You're comfortable in the terminal and want an autonomous agent
+- You need to automate complex workflows (MCP, hooks, CI/CD)
+- You work on large projects with many files
+- Deep customization (CLAUDE.md, custom agents) interests you
+- You want to integrate AI into your CI/CD pipelines
+
+**The right reflex:** try both for a week on your real project. Theoretical comparisons have their limits; nothing beats firsthand experience.
+
+## Next steps
+
+- Also compare with Copilot: [Claude Code vs GitHub Copilot](/limits/vs-copilot)
+- Find out when Claude Code isn't the right choice: [When NOT to use Claude Code](/limits/when-not-to-use)
+- Check the technical limits: [Known limitations](/limits/known-limitations)

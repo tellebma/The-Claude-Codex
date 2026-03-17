@@ -1,0 +1,402 @@
+---
+title: "Settings reference"
+description: "Complete reference for Claude Code settings.json: all options, permissions, and configuration examples."
+badge: "Config"
+section: "reference"
+order: 3
+datePublished: "2026-03-11"
+dateModified: "2026-03-11"
+---
+
+## The 3 configuration levels
+
+Claude Code merges configuration files in this order of precedence (highest to lowest priority):
+
+| Level | File | Scope |
+|-------|------|-------|
+| **1. Project local** | `.claude/settings.local.json` | This project only (not committed, gitignored) |
+| **2. Project** | `.claude/settings.json` | This project (committable, shareable with the team) |
+| **3. User** | `~/.claude/settings.json` | All of the user's projects |
+
+<Callout type="info" title="Precedence">
+Project-level options override user-level ones. The local file (`.local.json`) overrides both. This lets you share a baseline configuration via Git while allowing personal overrides.
+</Callout>
+
+---
+
+## Annotated full structure
+
+```json
+{
+  // Default model for all sessions
+  "model": "claude-sonnet-4-5",
+
+  // Enable Extended Thinking
+  "alwaysThinkingEnabled": false,
+
+  // Automatic context compaction
+  "autoCompact": true,
+
+  // API provider (anthropic by default)
+  "apiProvider": "anthropic",
+
+  // Custom API URL (proxies, bedrock, vertex)
+  "customApiUrl": "https://api.anthropic.com",
+
+  // Global per-tool permissions
+  "permissions": {
+    "allow": ["Bash(git:*)", "Read"],
+    "deny": ["Bash(rm -rf:*)"]
+  },
+
+  // Allowed tools list
+  "allowedTools": ["Read", "Write", "Bash", "Glob", "Grep"],
+
+  // Disabled tools list
+  "disabledTools": [],
+
+  // Environment variables injected into every session
+  "env": {
+    "NODE_ENV": "development",
+    "MY_VAR": "value"
+  },
+
+  // MCP server configuration
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "~/projects"],
+      "env": {}
+    }
+  }
+}
+```
+
+---
+
+## Option: `model`
+
+The default Claude model for all sessions.
+
+| Value | Description |
+|-------|-------------|
+| `claude-haiku-4-5` | Fast and affordable, 90% of Sonnet's capabilities |
+| `claude-sonnet-4-5` | Best quality/cost balance (recommended) |
+| `claude-opus-4-5` | Deepest reasoning, slower |
+
+```json
+{
+  "model": "claude-sonnet-4-5"
+}
+```
+
+Can be overridden in-session with `/model` or via `--model` in the CLI.
+
+---
+
+## Option: `alwaysThinkingEnabled`
+
+Enables Extended Thinking by default. Claude reserves tokens for internal reasoning before responding.
+
+```json
+{
+  "alwaysThinkingEnabled": true
+}
+```
+
+- **Default**: `false`
+- **In-session toggle**: `Alt+T` (Windows/Linux) or `Option+T` (macOS)
+- **Budget**: controlled by `MAX_THINKING_TOKENS` (environment variable)
+
+---
+
+## Option: `autoCompact`
+
+Automatically compacts context when the token window approaches the limit. Claude generates a summary of previous exchanges.
+
+```json
+{
+  "autoCompact": true
+}
+```
+
+- **Default**: `true`
+- **Manual**: `/compact` command in-session
+
+---
+
+## Option: `permissions`
+
+Fine-grained per-tool authorization control. Two lists: `allow` (explicit authorizations) and `deny` (restrictions).
+
+### Permission syntax
+
+```
+Tool(filter)
+```
+
+| Example | Meaning |
+|---------|---------|
+| `"Read"` | Allow all file reads |
+| `"Bash(git:*)"` | Allow all git commands |
+| `"Bash(npm run:*)"` | Allow all npm scripts |
+| `"Bash(rm -rf:*)"` | Allow `rm -rf` (or deny it if in deny list) |
+| `"Write(src/**)"` | Allow writing in `src/` only |
+| `"WebFetch"` | Allow outgoing HTTP requests |
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Bash(git:*)",
+      "Bash(npm run:*)",
+      "Bash(npm test:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "WebFetch"
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="Permission priority order">
+`deny` rules take priority over `allow` rules. If a tool appears in both lists, it will be denied. Test your rules with `claude config list` to verify the merged configuration.
+</Callout>
+
+---
+
+## Option: `allowedTools`
+
+Whitelist of tools that Claude Code can use. If set, only listed tools are available.
+
+### Available tools
+
+| Tool | Description |
+|------|-------------|
+| `Read` | Read files |
+| `Write` | Write files |
+| `Edit` | Partial file modification |
+| `MultiEdit` | Multiple modifications in one operation |
+| `Bash` | Execute shell commands |
+| `Glob` | Search files by pattern |
+| `Grep` | Search content within files |
+| `LS` | List directories |
+| `WebFetch` | HTTP requests |
+| `WebSearch` | Web search |
+| `Task` | Launch sub-agents (agentic mode) |
+| `TodoRead` | Read the task list |
+| `TodoWrite` | Write to the task list |
+| `NotebookRead` | Read Jupyter notebooks |
+| `NotebookEdit` | Edit Jupyter notebooks |
+
+```json
+{
+  "allowedTools": ["Read", "Bash", "Glob", "Grep"]
+}
+```
+
+---
+
+## Option: `disabledTools`
+
+List of explicitly disabled tools (blacklist). Complements `allowedTools`.
+
+```json
+{
+  "disabledTools": ["WebFetch", "WebSearch"]
+}
+```
+
+---
+
+## Option: `env`
+
+Environment variables automatically injected into all Claude Code sessions and any subprocesses they launch.
+
+```json
+{
+  "env": {
+    "NODE_ENV": "development",
+    "DATABASE_URL": "postgresql://localhost/myapp",
+    "LOG_LEVEL": "debug"
+  }
+}
+```
+
+<Callout type="warning" title="Secrets in env">
+Never commit secrets (passwords, API tokens) in a versioned `.claude/settings.json`. Use `.claude/settings.local.json` (gitignored) or system environment variables for sensitive values.
+</Callout>
+
+---
+
+## Option: `apiProvider`
+
+API provider to use. Useful for enterprise proxies or deployments via Amazon Bedrock / Google Vertex.
+
+| Value | Description |
+|-------|-------------|
+| `"anthropic"` | Direct Anthropic API (default) |
+| `"bedrock"` | Amazon Bedrock (requires AWS credentials) |
+| `"vertex"` | Google Vertex AI |
+
+```json
+{
+  "apiProvider": "anthropic",
+  "customApiUrl": "https://my-proxy.company.com/anthropic"
+}
+```
+
+---
+
+## Option: `customApiUrl`
+
+Custom base URL for API calls. Useful for enterprise proxies, gateways, or self-hosted deployments.
+
+```json
+{
+  "customApiUrl": "https://api-proxy.my-company.com"
+}
+```
+
+The API key (`ANTHROPIC_API_KEY`) is still required even with a custom URL.
+
+---
+
+## Option: `mcpServers`
+
+MCP server configuration. Each entry is a named MCP server.
+
+### MCP server structure
+
+```json
+{
+  "mcpServers": {
+    "<mcp-name>": {
+      "command": "<executable>",
+      "args": ["<arg1>", "<arg2>"],
+      "env": {
+        "VAR": "value"
+      },
+      "transport": "stdio"
+    }
+  }
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `command` | string | Yes (stdio) | Command to start the server |
+| `args` | string[] | No | Arguments passed to the command |
+| `env` | object | No | Environment variables for the MCP process |
+| `transport` | string | No | `"stdio"` (default) or `"sse"` |
+| `url` | string | Yes (SSE) | SSE server URL (if `transport: "sse"`) |
+
+### MCP configuration examples
+
+```json
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/projects",
+        "/tmp"
+      ]
+    },
+
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_your_token"
+      }
+    },
+
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://localhost:5432/mydb"
+      ]
+    },
+
+    "my-sse-api": {
+      "transport": "sse",
+      "url": "https://my-server.com/mcp"
+    }
+  }
+}
+```
+
+---
+
+## Complete configuration examples
+
+### Solo developer setup
+
+```json
+// ~/.claude/settings.json
+{
+  "model": "claude-sonnet-4-5",
+  "alwaysThinkingEnabled": false,
+  "autoCompact": true,
+  "permissions": {
+    "allow": ["Read", "Write", "Bash(git:*)", "Bash(npm:*)"],
+    "deny": ["Bash(sudo:*)"]
+  },
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "~/projects"]
+    }
+  }
+}
+```
+
+### Team setup (committed to the repo)
+
+```json
+// .claude/settings.json
+{
+  "model": "claude-sonnet-4-5",
+  "allowedTools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
+  "permissions": {
+    "deny": ["Bash(rm -rf:*)", "Bash(sudo:*)", "WebFetch"]
+  },
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./"]
+    }
+  }
+}
+```
+
+### Secure setup (read-only)
+
+```json
+// For audits or sensitive environments
+{
+  "allowedTools": ["Read", "Glob", "Grep", "LS"],
+  "permissions": {
+    "deny": ["Write", "Edit", "Bash", "WebFetch", "WebSearch"]
+  }
+}
+```
+
+---
+
+## Next steps
+
+- [Cheatsheet: Quick reference](/reference/cheatsheet): Overview of all commands
+- [CLI: Complete reference](/reference/cli): All flags for the `claude` command
+- [Environment variables](/reference/environment): Variables recognized by Claude Code

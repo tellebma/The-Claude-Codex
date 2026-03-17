@@ -2,7 +2,18 @@
 
 import { TypingTerminal } from "@/components/ui/TypingTerminal";
 
-const TERMINAL_LINES = [
+interface TerminalLine {
+  readonly text: string;
+  readonly className?: string;
+  readonly delay?: number;
+}
+
+interface HeroTerminalProps {
+  readonly lines?: readonly TerminalLine[];
+  readonly ariaLabel?: string;
+}
+
+const DEFAULT_LINES: readonly TerminalLine[] = [
   { text: "$ claude", className: "text-slate-400", delay: 500 },
   {
     text: "> Crée-moi un site web moderne avec une landing page,",
@@ -34,14 +45,15 @@ const TERMINAL_LINES = [
     className: "text-accent-400",
     delay: 300,
   },
-] as const;
+];
 
-export function HeroTerminal() {
+export function HeroTerminal({ lines, ariaLabel }: HeroTerminalProps) {
+  const terminalLines = lines ?? DEFAULT_LINES;
   return (
     <div
       className="glow overflow-hidden rounded-2xl shadow-2xl backdrop-blur"
       role="img"
-      aria-label="Terminal simulant une interaction avec Claude Code : l'utilisateur demande de créer un site web et Claude Code génère le projet étape par étape"
+      aria-label={ariaLabel ?? "Terminal simulant une interaction avec Claude Code : l'utilisateur demande de créer un site web et Claude Code génère le projet étape par étape"}
       style={{
         borderWidth: "1px",
         borderStyle: "solid",
@@ -56,7 +68,7 @@ export function HeroTerminal() {
         <span className="ml-2 text-xs text-slate-400">terminal</span>
       </div>
       <div className="p-6">
-        <TypingTerminal lines={TERMINAL_LINES} typingSpeed={25} />
+        <TypingTerminal lines={terminalLines} typingSpeed={25} />
       </div>
     </div>
   );

@@ -1,0 +1,258 @@
+---
+title: "Best agent configurations"
+description: "The most effective Claude Code agent configurations: code review, testing, refactoring, documentation, and deployment agents."
+section: "agents"
+order: 4
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## The must-have agents
+
+Claude Code has a catalog of specialized agents, each optimized for a specific type of task. Here are the most useful agents organized by domain, with practical usage examples.
+
+<Callout type="tip" title="How to invoke an agent?">
+Agents can be invoked in two ways: either Claude Code uses them **automatically** when it deems the situation appropriate (if your `CLAUDE.md` configures it), or you ask for them **explicitly** in your prompt. For example: "Use the code-reviewer agent to analyze my diff".
+</Callout>
+
+## Development
+
+### TDD Guide
+
+The TDD (Test-Driven Development) guide enforces a rigorous workflow that ensures every feature is covered by tests.
+
+| | |
+|---|---|
+| **When to use** | For any new feature or bug fix |
+| **What it does** | Writes tests first (RED), implements the minimum (GREEN), then refactors (IMPROVE) |
+| **Key advantage** | Guarantees 80%+ test coverage from the start |
+
+```bash
+# Explicit invocation
+> Use the tdd-guide agent to implement an email address
+> validation function with edge cases
+
+# Claude Code will:
+# 1. Write the tests (nominal, edge, error cases)
+# 2. Verify the tests fail (RED)
+# 3. Implement the minimum to make them pass (GREEN)
+# 4. Refactor to improve quality (IMPROVE)
+# 5. Verify final coverage
+```
+
+### Code Reviewer
+
+The review agent analyzes modified code and produces a structured report with fix suggestions.
+
+| | |
+|---|---|
+| **When to use** | After each code modification, before a commit |
+| **What it does** | Analyzes the diff, identifies bugs, performance issues, security flaws |
+| **Key advantage** | Systematic and reproducible review, ranked by severity |
+
+```bash
+# Explicit invocation
+> Use the code-reviewer agent to analyze my latest changes
+
+# Claude Code produces a report:
+# - CRITICAL: SQL injection in user query (auth.ts:42)
+# - HIGH: Unvalidated input variable (utils.ts:18)
+# - MEDIUM: N+1 loop in product retrieval (api.ts:95)
+# - LOW: Non-descriptive variable name (helpers.ts:12)
+```
+
+### Build Error Resolver
+
+This agent diagnoses and fixes build errors methodically.
+
+| | |
+|---|---|
+| **When to use** | When the build fails and the error isn't obvious |
+| **What it does** | Analyzes the error message, identifies the root cause, proposes and applies the fix |
+| **Key advantage** | Incremental resolution, fixes one error at a time and re-verifies |
+
+```bash
+# Explicit invocation
+> The build is failing with "Module not found". Use the
+> build-error-resolver agent to diagnose and fix it.
+
+# Claude Code will:
+# 1. Read the complete error message
+# 2. Identify the missing module
+# 3. Check if it's an import, dependency, or config issue
+# 4. Apply the minimal fix
+# 5. Rerun the build to verify
+```
+
+## Architecture
+
+### Planner
+
+The planning agent creates a structured implementation plan before touching any code.
+
+| | |
+|---|---|
+| **When to use** | Before any major refactoring or complex new feature |
+| **What it does** | Produces a plan with PRD, architecture, system design, prioritized task list |
+| **Key advantage** | Prevents coding too fast without thinking, identifies risks upfront |
+
+```bash
+# Explicit invocation
+> Use the planner agent to plan the refactoring of the
+> payment module. We want to migrate from Stripe v2 to v3
+> and add Apple Pay support.
+
+# Claude Code produces:
+# - PRD: objectives, success criteria, out of scope
+# - Architecture: diagram of impacted components
+# - Risks: backward compatibility, data migration
+# - Task plan: 12 ordered tasks with estimates
+# - Validation criteria: tests to write for each step
+```
+
+### Architect
+
+The architect agent handles system design decisions and structural technical choices.
+
+| | |
+|---|---|
+| **When to use** | For architecture decisions that impact multiple modules |
+| **What it does** | Analyzes options, compares trade-offs, recommends an approach |
+| **Key advantage** | Takes into account scalability, maintainability, and performance constraints |
+
+```bash
+# Explicit invocation
+> Use the architect agent to decide whether we should
+> use a monorepo or multi-repo for our new project
+> with 3 microservices and a frontend.
+
+# Claude Code analyzes:
+# - Team size and organization
+# - Deployment frequency
+# - Code sharing between services
+# - CI/CD complexity
+# → Argued recommendation with ADR (Architecture Decision Record)
+```
+
+## Security
+
+### Security Reviewer
+
+The security agent performs a systematic code audit looking for vulnerabilities.
+
+| | |
+|---|---|
+| **When to use** | Before each commit, and in depth before each release |
+| **What it does** | Checks for SQL injection, XSS, CSRF, plaintext secrets, vulnerable dependencies |
+| **Key advantage** | Exhaustive checklist, nothing gets missed |
+
+```bash
+# Explicit invocation
+> Use the security-reviewer agent to audit the
+> authentication module before the release.
+
+# Claude Code checks:
+# No hardcoded secrets in source code
+# All user inputs are validated
+# Parameterized SQL queries (no concatenation)
+# CSRF token missing on the login form
+# Rate limiting not configured on /api/auth/login
+# Passwords hashed with bcrypt (cost factor 12)
+# Session cookie without HttpOnly flag
+```
+
+<Callout type="warning" title="An agent doesn't replace a professional audit">
+The security-reviewer agent is an excellent safety net for day-to-day development, but it doesn't replace a professional security audit for critical applications. Use it as a first line of defense, not as your only protection.
+</Callout>
+
+## Testing
+
+### E2E Runner
+
+The E2E agent generates and runs end-to-end tests that simulate real user journeys.
+
+| | |
+|---|---|
+| **When to use** | To test critical user flows before a release |
+| **What it does** | Writes Playwright tests that navigate, fill forms, verify results |
+| **Key advantage** | Tests actual application behavior, not just code units |
+
+```bash
+# Explicit invocation
+> Use the e2e-runner agent to test the signup flow:
+> form, confirmation email, first login, personalized
+> home page.
+
+# Claude Code generates and runs a complete Playwright test
+# that simulates the entire user journey end-to-end
+```
+
+## Maintenance
+
+### Refactor Cleaner
+
+The refactoring agent identifies and removes dead code, unused dependencies, and obsolete patterns.
+
+| | |
+|---|---|
+| **When to use** | During maintenance sprints, after a major migration |
+| **What it does** | Detects unused code, unnecessary imports, phantom dependencies |
+| **Key advantage** | Reduces codebase size and improves readability |
+
+```bash
+# Explicit invocation
+> Use the refactor-cleaner agent to clean up the
+> src/utils/ folder. Identify dead code and
+> functions that are never called.
+
+# Claude Code analyzes:
+# - formatDate() - never imported (dead code)
+# - legacyParser.ts - entire file is unused
+# - import lodash - only _.get is used, replace with optional chaining
+# - calculateTax() - only used in a test, needs verification
+```
+
+### Doc Updater
+
+The documentation agent keeps technical docs up to date based on code changes.
+
+| | |
+|---|---|
+| **When to use** | After a refactoring or adding new features |
+| **What it does** | Compares current code with documentation, updates obsolete sections |
+| **Key advantage** | Documentation stays synced with code, no manual effort |
+
+```bash
+# Explicit invocation
+> Use the doc-updater agent to update the documentation
+> after the API module refactoring.
+
+# Claude Code:
+# 1. Compares existing docs with current code
+# 2. Updates modified function signatures
+# 3. Adds documentation for new routes
+# 4. Fixes obsolete code examples
+# 5. Verifies all internal links work
+```
+
+## Summary table
+
+| Agent | Domain | Main use | Recommended frequency |
+|---|---|---|---|
+| **tdd-guide** | Dev | New features with tests | Every feature |
+| **code-reviewer** | Dev | Automated code review | Every commit |
+| **build-error-resolver** | Dev | Build error diagnosis | When the build fails |
+| **planner** | Architecture | Planning before coding | Complex features |
+| **architect** | Architecture | Structural technical decisions | Architecture choices |
+| **security-reviewer** | Security | Code security audit | Before each release |
+| **e2e-runner** | Testing | User flow testing | Before each release |
+| **refactor-cleaner** | Maintenance | Dead code cleanup | Maintenance sprints |
+| **doc-updater** | Maintenance | Documentation updates | After each refactoring |
+
+## Next steps
+
+Now that you know the available agents, learn how to combine them effectively.
+
+- [Advanced orchestration](/agents/orchestration): Patterns for combining multiple agents
+- [Create a sub-agent](/agents/create-subagent): Create your own specialized agents
+- [Understanding Skills](/skills/what-are-skills): Skills complement agents for a complete workflow

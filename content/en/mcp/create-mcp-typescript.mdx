@@ -1,0 +1,604 @@
+---
+title: "Creating an MCP Server in TypeScript"
+description: "Complete tutorial to create your own MCP Server with the TypeScript SDK: tools, resources, prompts, local testing, and Claude Code integration."
+order: 7
+section: "mcp"
+datePublished: "2026-03-12"
+---
+
+## Why create your own MCP?
+
+Community MCPs cover the most common use cases. But your tech stack has its own specifics: an internal API, a custom data format, a workflow unique to your team. Creating a custom MCP lets you connect Claude Code to **exactly** what you need.
+
+This tutorial guides you from scratch to a working MCP, tested and integrated into Claude Code.
+
+<Callout type="info" title="What you'll build">
+A "weather" MCP that exposes a tool to fetch the weather for a city. Simple, concrete, and transferable to any API. By the end of the tutorial, you'll know how to create tools, resources, and prompts.
+</Callout>
+
+## Prerequisites
+
+Before starting, make sure you have:
+
+- **Node.js 18+** installed (`node --version`)
+- **npm** or **pnpm** available
+- **Claude Code** installed and working
+- Basic TypeScript knowledge (types, async/await, imports)
+
+## Project scaffolding
+
+<Steps>
+<Step title="Initialize the project" stepNumber={1}>
+
+Create a new folder and initialize the project:
+
+```bash
+mkdir mcp-weather && cd mcp-weather
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+npm install -D typescript @types/node tsx
+```
+
+The `@modelcontextprotocol/sdk` provides everything needed to create an MCP Server. `zod` is used to validate tool parameters. `tsx` lets you run TypeScript directly.
+
+</Step>
+
+<Step title="Configure TypeScript" stepNumber={2}>
+
+Create a minimal `tsconfig.json` file:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true
+  },
+  "include": ["src"]
+}
+```
+
+</Step>
+
+<Step title="Create the file structure" stepNumber={3}>
+
+```bash
+mkdir src
+touch src/index.ts
+```
+
+Your directory tree looks like this:
+
+```
+mcp-weather/
+├── src/
+│   └── index.ts       # MCP server entry point
+├── package.json
+└── tsconfig.json
+```
+
+</Step>
+
+<Step title="Configure package.json" stepNumber={4} isLast>
+
+Add the `bin` field and scripts to your `package.json`:
+
+```json
+{
+  "name": "mcp-weather",
+  "version": "1.0.0",
+  "type": "module",
+  "bin": {
+    "mcp-weather": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts"
+  }
+}
+```
+
+The `type: "module"` field is required to use ES module imports.
+
+</Step>
+</Steps>
+
+## Create the basic MCP server
+
+Open `src/index.ts` and start with the minimal structure:
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+
+// Create the server with its metadata
+const server = new McpServer({
+  name: "mcp-weather",
+  version: "1.0.0",
+});
+```
+
+This skeleton creates an empty MCP server. It doesn't do anything yet, but it's already valid. Let's add features one by one.
+
+## Define a Tool: fetch the weather
+
+A **tool** is a function that Claude Code can call. Each tool has a name, a description, a parameter schema (via zod), and a handler that returns the result.
+
+```typescript
+// Simulate a weather API (replace with a real HTTP call in production)
+function getWeatherData(city: string): {
+  city: string;
+  temperature: number;
+  condition: string;
+  humidity: number;
+} {
+  // Simulated data for the tutorial
+  const weatherData: Record<string, { temperature: number; condition: string; humidity: number }> = {
+    paris: { temperature: 18, condition: "Cloudy", humidity: 65 },
+    lyon: { temperature: 22, condition: "Sunny", humidity: 45 },
+    marseille: { temperature: 26, condition: "Sunny", humidity: 55 },
+    lille: { temperature: 14, condition: "Rainy", humidity: 80 },
+  };
+
+  const normalized = city.toLowerCase().trim();
+  const data = weatherData[normalized];
+
+  if (!data) {
+    return {
+      city,
+      temperature: 20,
+      condition: "Data unavailable",
+      humidity: 50,
+    };
+  }
+
+  return { city, ...data };
+}
+
+// Register the tool on the server
+server.tool(
+  "get-weather",
+  "Fetches the current weather for a given city",
+  {
+    city: z.string().describe("City name (e.g., Paris, Lyon, Marseille)"),
+  },
+  async ({ city }) => {
+    const weather = getWeatherData(city);
+
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: [
+            `Weather in ${weather.city}:`,
+            `- Temperature: ${weather.temperature}°C`,
+            `- Conditions: ${weather.condition}`,
+            `- Humidity: ${weather.humidity}%`,
+          ].join("\n"),
+        },
+      ],
+    };
+  }
+);
+```
+
+<Callout type="tip" title="The role of the description">
+The tool description is read by Claude to decide when to use it. Be precise and concrete. A bad description = Claude won't know when to call your tool.
+</Callout>
+
+### Add a second tool: forecast
+
+You can add as many tools as needed. Here's a second tool for forecasts:
+
+```typescript
+server.tool(
+  "get-forecast",
+  "Fetches the weather forecast for the next few days for a city",
+  {
+    city: z.string().describe("City name"),
+    days: z.number().min(1).max(7).default(3).describe("Number of days (1-7)"),
+  },
+  async ({ city, days }) => {
+    const conditions = ["Sunny", "Cloudy", "Rainy", "Stormy", "Foggy"];
+    const forecast = Array.from({ length: days }, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() + i + 1);
+      const dayStr = date.toLocaleDateString("en-US", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      });
+      const temp = Math.round(15 + Math.random() * 15);
+      const condition = conditions[Math.floor(Math.random() * conditions.length)];
+      return `${dayStr}: ${temp}°C, ${condition}`;
+    });
+
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: `Forecast for ${city}:\n${forecast.join("\n")}`,
+        },
+      ],
+    };
+  }
+);
+```
+
+## Define a Resource
+
+**Resources** are read-only data that Claude Code can consult to enrich its context. They're identified by URIs.
+
+```typescript
+// Static resource: list of supported cities
+server.resource(
+  "cities-list",
+  "weather://cities",
+  async (uri) => ({
+    contents: [
+      {
+        uri: uri.href,
+        mimeType: "application/json",
+        text: JSON.stringify({
+          cities: ["Paris", "Lyon", "Marseille", "Lille"],
+          note: "Other cities: estimated data",
+        }),
+      },
+    ],
+  })
+);
+```
+
+<Callout type="info" title="Resources vs Tools">
+Resources provide **context** (read-only data). Tools perform **actions** (API calls, calculations, writes). Claude Code can read resources automatically at startup to better understand what your MCP offers.
+</Callout>
+
+## Define a Prompt
+
+**Prompts** are optimized interaction templates. They let Claude Code offer pre-configured workflows.
+
+```typescript
+server.prompt(
+  "weather-report",
+  "Generates a complete weather report for a city",
+  {
+    city: z.string().describe("City name for the report"),
+  },
+  ({ city }) => ({
+    messages: [
+      {
+        role: "user" as const,
+        content: {
+          type: "text" as const,
+          text: [
+            `Generate a complete weather report for ${city}.`,
+            "Use the get-weather tool for current weather",
+            "and get-forecast for the forecast.",
+            "Present everything in a clear, readable format.",
+          ].join(" "),
+        },
+      },
+    ],
+  })
+);
+```
+
+## Lifecycle: starting the server
+
+An MCP Server's lifecycle has two key phases: initialization and shutdown.
+
+Add the startup code at the end of `src/index.ts`:
+
+```typescript
+// Start the server with stdio transport
+async function main(): Promise<void> {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("MCP Weather server running on stdio");
+}
+
+main().catch((error: unknown) => {
+  console.error("Fatal error:", error);
+  process.exit(1);
+});
+```
+
+<Callout type="warning" title="stdout vs stderr">
+Use `console.error()` for your logs, never `console.log()`. The stdio transport uses stdout for JSON-RPC communication with Claude Code. Everything going through stdout must be valid JSON-RPC. Your debug messages must go to stderr.
+</Callout>
+
+## Test locally
+
+Before integrating your MCP into Claude Code, test it in isolation.
+
+<Steps>
+<Step title="Verify the server starts" stepNumber={1}>
+
+```bash
+# Compile and run
+npm run build
+
+# Test that the server responds
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"test","version":"1.0.0"}}}' | node dist/index.js
+```
+
+You should see a JSON-RPC response with your server's capabilities.
+
+</Step>
+
+<Step title="Test with the MCP inspector" stepNumber={2}>
+
+The SDK provides an interactive inspection tool:
+
+```bash
+npx @modelcontextprotocol/inspector node dist/index.js
+```
+
+The inspector opens a web interface where you can:
+- See the list of tools, resources, and prompts
+- Call each tool with test parameters
+- Verify responses
+
+</Step>
+
+<Step title="Verify the output" stepNumber={3} isLast>
+
+Manually call a tool to verify the output format:
+
+```bash
+echo '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"get-weather","arguments":{"city":"Paris"}}}' | node dist/index.js
+```
+
+The response should contain the formatted weather text.
+
+</Step>
+</Steps>
+
+## Integrate into Claude Code
+
+Once your MCP is tested, connect it to Claude Code.
+
+### Option 1: via the CLI
+
+```bash
+# From your MCP project folder
+claude mcp add weather -- node /absolute/path/to/mcp-weather/dist/index.js
+```
+
+### Option 2: via the .mcp.json file
+
+Create or edit the `.mcp.json` file at the root of the project that will use the MCP:
+
+```json
+{
+  "mcpServers": {
+    "weather": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-weather/dist/index.js"]
+    }
+  }
+}
+```
+
+### Option 3: in development with tsx
+
+To iterate quickly without recompiling:
+
+```json
+{
+  "mcpServers": {
+    "weather": {
+      "command": "npx",
+      "args": ["tsx", "/absolute/path/to/mcp-weather/src/index.ts"]
+    }
+  }
+}
+```
+
+<Callout type="tip" title="Verify the integration">
+Launch Claude Code and ask: *"What MCP tools are available?"*. You should see `get-weather` and `get-forecast` in the list. Test with: *"What's the weather in Paris?"*
+</Callout>
+
+## Complete example: the final src/index.ts file
+
+Here's the complete file for reference:
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+
+const server = new McpServer({
+  name: "mcp-weather",
+  version: "1.0.0",
+});
+
+// --- Simulated data ---
+
+function getWeatherData(city: string) {
+  const weatherData: Record<
+    string,
+    { temperature: number; condition: string; humidity: number }
+  > = {
+    paris: { temperature: 18, condition: "Cloudy", humidity: 65 },
+    lyon: { temperature: 22, condition: "Sunny", humidity: 45 },
+    marseille: { temperature: 26, condition: "Sunny", humidity: 55 },
+    lille: { temperature: 14, condition: "Rainy", humidity: 80 },
+  };
+
+  const normalized = city.toLowerCase().trim();
+  const data = weatherData[normalized];
+
+  if (!data) {
+    return { city, temperature: 20, condition: "Data unavailable", humidity: 50 };
+  }
+
+  return { city, ...data };
+}
+
+// --- Tools ---
+
+server.tool(
+  "get-weather",
+  "Fetches the current weather for a given city",
+  { city: z.string().describe("City name") },
+  async ({ city }) => {
+    const w = getWeatherData(city);
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: `Weather in ${w.city}:\n- Temperature: ${w.temperature}°C\n- Conditions: ${w.condition}\n- Humidity: ${w.humidity}%`,
+        },
+      ],
+    };
+  }
+);
+
+server.tool(
+  "get-forecast",
+  "Fetches the weather forecast for the next few days for a city",
+  {
+    city: z.string().describe("City name"),
+    days: z.number().min(1).max(7).default(3).describe("Number of days (1-7)"),
+  },
+  async ({ city, days }) => {
+    const conditions = ["Sunny", "Cloudy", "Rainy", "Stormy"];
+    const lines = Array.from({ length: days }, (_, i) => {
+      const date = new Date();
+      date.setDate(date.getDate() + i + 1);
+      const label = date.toLocaleDateString("en-US", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      });
+      const temp = Math.round(15 + Math.random() * 15);
+      return `${label}: ${temp}°C, ${conditions[Math.floor(Math.random() * conditions.length)]}`;
+    });
+
+    return {
+      content: [{ type: "text" as const, text: `Forecast for ${city}:\n${lines.join("\n")}` }],
+    };
+  }
+);
+
+// --- Resources ---
+
+server.resource("cities-list", "weather://cities", async (uri) => ({
+  contents: [
+    {
+      uri: uri.href,
+      mimeType: "application/json",
+      text: JSON.stringify({
+        cities: ["Paris", "Lyon", "Marseille", "Lille"],
+        note: "Other cities: estimated data",
+      }),
+    },
+  ],
+}));
+
+// --- Prompts ---
+
+server.prompt(
+  "weather-report",
+  "Generates a complete weather report for a city",
+  { city: z.string().describe("City name") },
+  ({ city }) => ({
+    messages: [
+      {
+        role: "user" as const,
+        content: {
+          type: "text" as const,
+          text: `Generate a complete weather report for ${city}. Use get-weather for current weather and get-forecast for the forecast.`,
+        },
+      },
+    ],
+  })
+);
+
+// --- Startup ---
+
+async function main(): Promise<void> {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+  console.error("MCP Weather server running on stdio");
+}
+
+main().catch((error: unknown) => {
+  console.error("Fatal error:", error);
+  process.exit(1);
+});
+```
+
+## npm publishing (optional)
+
+If you want to share your MCP with the community:
+
+<Steps>
+<Step title="Prepare the package" stepNumber={1}>
+
+Add a shebang as the first line of `src/index.ts`:
+
+```typescript
+#!/usr/bin/env node
+```
+
+Update `package.json` with the fields required for npm:
+
+```json
+{
+  "name": "@your-scope/mcp-weather",
+  "description": "MCP Server for checking the weather",
+  "keywords": ["mcp", "weather", "claude-code"],
+  "license": "MIT",
+  "files": ["dist"],
+  "bin": {
+    "mcp-weather": "dist/index.js"
+  }
+}
+```
+
+</Step>
+
+<Step title="Build and publish" stepNumber={2} isLast>
+
+```bash
+npm run build
+npm publish --access public
+```
+
+Users will then be able to install it with:
+
+```bash
+claude mcp add weather -- npx -y @your-scope/mcp-weather
+```
+
+</Step>
+</Steps>
+
+<Callout type="warning" title="Before publishing">
+Remove the mock data and connect to a real API. Add robust error handling, documentation in the README, and test on multiple Node.js versions.
+</Callout>
+
+## Common errors and solutions
+
+| Error | Likely cause | Solution |
+|-------|-------------|----------|
+| `Cannot find module` | Incorrect path in .mcp.json | Use an absolute path to `dist/index.js` |
+| `SyntaxError: Unexpected token` | TS file executed without tsx | Compile first (`npm run build`) or use tsx |
+| No tools visible in Claude Code | Server crashes at startup | Test manually with the MCP inspector |
+| `stdout is not a valid JSON-RPC message` | `console.log()` in the code | Replace with `console.error()` for logs |
+| Tool called but no response | Handler that returns nothing | Make sure the handler returns a `content` object |
+
+## Next steps
+
+- [Create an MCP Server in Python](/mcp/create-mcp-python): the same tutorial with the Python SDK and decorators
+- [Advanced MCP protocol](/mcp/advanced-protocol): transports, capabilities negotiation, security, and debugging
+- [MCP security](/mcp/securite-mcp): best practices to protect your data

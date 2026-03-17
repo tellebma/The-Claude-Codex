@@ -1,0 +1,340 @@
+{
+  "common": {
+    "skipToContent": "Skip to main content",
+    "home": "Home",
+    "previous": "Previous",
+    "next": "Next",
+    "back": "Back",
+    "overview": "Overview",
+    "readGuide": "Read the guide",
+    "openSource": "Open-source project.",
+    "copiedCode": "Code copied",
+    "copyCode": "Copy code",
+    "scrollToTop": "Back to top",
+    "lightMode": "Switch to light mode",
+    "darkMode": "Switch to dark mode",
+    "tableOfContents": "Table of contents",
+    "onThisPage": "On this page",
+    "guides": "Guides",
+    "tools": "Tools",
+    "resources": "Resources",
+    "pageNotFound": "Page not found",
+    "pageNotFoundDescription": "The page you are looking for does not exist or has been moved.",
+    "backToHome": "Back to home"
+  },
+  "navigation": {
+    "mainNav": "Main navigation",
+    "menuToggle": "Navigation menu",
+    "gettingStarted": "Getting Started",
+    "mcp": "MCP",
+    "skills": "Skills",
+    "prompting": "Prompting",
+    "useCases": "Use Cases",
+    "personas": "Paths",
+    "enterprise": "Enterprise",
+    "advanced": "Advanced",
+    "content": "Articles",
+    "limits": "Limits",
+    "reference": "Reference",
+    "configurator": "Configurator",
+    "glossary": "Glossary",
+    "future": "Vision",
+    "agents": "Agents",
+    "about": "About",
+    "more": "More"
+  },
+  "footer": {
+    "description": "The free reference guide to master Claude Code. Created by the community, for the community. No paywall, no tracking, just shared knowledge.",
+    "visionFuture": "Vision & Future",
+    "claudeCodeOfficial": "Claude Code (official)",
+    "anthropicDocs": "Anthropic Documentation",
+    "mcpRegistry": "MCP Registry"
+  },
+  "search": {
+    "trigger": "Search...",
+    "dialogTitle": "Global search",
+    "placeholder": "Search for a topic, a page...",
+    "inputLabel": "Search",
+    "close": "Close search",
+    "noResults": "No results for \"{query}\"",
+    "typeToSearch": "Type a keyword to search the site",
+    "resultsLabel": "Search results",
+    "escToClose": "to close",
+    "arrowsToNavigate": "navigate",
+    "enterToOpen": "open"
+  },
+  "breadcrumb": {
+    "ariaLabel": "Breadcrumb",
+    "home": "Home",
+    "sections": {
+      "getting-started": "Getting Started",
+      "mcp": "MCP",
+      "plugins": "Plugins",
+      "skills": "Skills",
+      "agents": "Agents",
+      "prompting": "Prompting",
+      "future": "Vision",
+      "configurator": "Configurator",
+      "content": "Articles",
+      "use-cases": "Use Cases",
+      "enterprise": "Enterprise",
+      "advanced": "Advanced",
+      "reference": "Reference",
+      "limits": "Limits",
+      "personas": "Paths",
+      "glossary": "Glossary"
+    }
+  },
+  "callout": {
+    "info": "Information",
+    "tip": "Tip",
+    "warning": "Warning"
+  },
+  "hero": {
+    "badge": "Free & open-source guide",
+    "title": "Master",
+    "titleHighlight": "Claude Code",
+    "titleEnd": "from scratch",
+    "subtitle": "The reference guide to harness the full power of AI in your daily work. Whether you're a developer, entrepreneur or simply curious, it all starts here.",
+    "ctaPrimary": "Start the guide",
+    "ctaSecondary": "Discover MCPs",
+    "terminalPrompt": "Build me a modern website with a landing page,",
+    "terminalPrompt2": "an authentication system and an admin dashboard.",
+    "terminalResponse": "Sure! I'll create your project step by step...",
+    "terminalStep1": "Analyzing requirements...",
+    "terminalStep2": "Creating architecture...",
+    "terminalStep3": "Generating code...",
+    "terminalDone": "done",
+    "terminalInProgress": "in progress"
+  },
+  "sections": {
+    "features": {
+      "badge": "Capabilities",
+      "title": "What you can do with Claude Code",
+      "description": "Claude Code is not just a chatbot. It's a creative partner that understands your context and acts in your environment."
+    },
+    "audience": {
+      "badge": "For everyone",
+      "title": "No matter your profile, Claude Code is made for you",
+      "description": "AI is no longer reserved for engineers. Every creative, ambitious or simply curious person can benefit from it."
+    },
+    "paths": {
+      "badge": "Paths",
+      "title": "Choose your path",
+      "description": "Three paths adapted to your level. Start where you are, progress at your own pace."
+    },
+    "configurator": {
+      "badge": "Configurator",
+      "title": "Your custom setup in 2 minutes",
+      "description": "No need to read everything. Answer a few questions and get a personalized configuration, ready to use."
+    },
+    "cta": {
+      "title": "Ready to transform the way you",
+      "titleHighlight": "work",
+      "description": "The guide is free, open-source and built to last. Start now and join a community that pushes the boundaries of what's possible.",
+      "ctaPrimary": "Start now",
+      "ctaSecondary": "See the vision"
+    }
+  },
+  "features": {
+    "createWebsite": { "title": "Create a website", "description": "From landing page to full e-commerce, Claude Code generates, structures and deploys your web projects." },
+    "generateDocs": { "title": "Generate documents", "description": "Reports, presentations, technical documentation: let AI structure and write for you." },
+    "automate": { "title": "Automate your tasks", "description": "Scripts, CI/CD pipelines, data migrations. Turn hours of work into minutes." },
+    "analyzeData": { "title": "Analyze data", "description": "Connect your sources, explore your datasets and get insights in natural language." },
+    "codeNoDev": { "title": "Code without being a dev", "description": "Describe what you want in plain language. Claude Code translates your ideas into working code." },
+    "designUI": { "title": "Design interfaces", "description": "Create modern and accessible interfaces by simply describing your vision." },
+    "connectTools": { "title": "Connect your tools", "description": "With MCPs, integrate Gmail, Slack, GitHub, databases and much more." },
+    "deploy": { "title": "Deploy to production", "description": "Docker, CI/CD, monitoring: Claude Code handles your infrastructure from A to Z." }
+  },
+  "audience": {
+    "developers": { "title": "Developers", "description": "Accelerate your workflow 10x. Code review, refactoring, automated tests, assisted debugging. Your ultimate copilot." },
+    "entrepreneurs": { "title": "Entrepreneurs", "description": "Launch your MVP in days instead of weeks. Prototype, iterate and deploy without a tech team." },
+    "creatives": { "title": "Creatives & Designers", "description": "Transform your mockups into living websites. Generate animations, custom UI components." },
+    "students": { "title": "Students", "description": "Learn by doing. Claude Code explains every concept, fixes your mistakes and guides you step by step." },
+    "curious": { "title": "Curious & Self-taught", "description": "Explore the world of code without prerequisites. Ask questions, experiment, create your first projects." },
+    "teams": { "title": "Teams & Managers", "description": "Standardize your workflows, auto-document, and give superpowers to your entire team." }
+  },
+  "paths": {
+    "ctaLabel": "Start this path",
+    "beginner": {
+      "level": "Beginner",
+      "title": "The fundamentals",
+      "description": "Never used Claude Code? Perfect. We start from zero, together.",
+      "items": ["Install Claude Code in 5 minutes", "Understand the terminal and the basics", "Your first guided project step by step", "Essential commands to know"]
+    },
+    "intermediate": {
+      "level": "Intermediate",
+      "title": "Tool mastery",
+      "description": "You know how to use Claude Code? Discover MCPs, Skills and advanced prompting.",
+      "items": ["Connect your favorite tools via MCPs", "Create and use custom Skills", "Prompting techniques that make a difference", "Automate your daily workflows"]
+    },
+    "advanced": {
+      "level": "Advanced",
+      "title": "Expert & Architect",
+      "description": "Push Claude Code to its limits. Multi-agents, complex workflows, deployments.",
+      "items": ["Multi-agent orchestration", "Complex workflows and prompt chaining", "CI/CD and automated deployment", "Create your own MCP servers"]
+    }
+  },
+  "glossary": {
+    "analogyLabel": "Analogy:",
+    "learnMoreAbout": "Learn more about {term}",
+    "learnMoreLink": "Learn more about this term \u2192"
+  },
+  "configuratorTeaser": {
+    "title": "Configure your",
+    "titleHighlight": "ideal environment",
+    "description": "Answer a few simple questions and get a personalized Claude Code setup: recommended MCPs, generated CLAUDE.md file, and tips tailored to your profile.",
+    "pillGuided": "Guided setup",
+    "pillMcp": "Recommended MCPs",
+    "pillClaudeMd": "Generated CLAUDE.md",
+    "cta": "Launch the configurator"
+  },
+  "metadata": {
+    "siteTitle": "Master Claude Code",
+    "siteDescription": "The free reference guide to master Claude Code. MCP, Skills, Advanced Prompting, for developers and non-developers."
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "fr": "Français",
+    "en": "English"
+  },
+  "sectionNav": {
+    "getting-started": {
+      "title": "Getting Started",
+      "overview": "Overview",
+      "prerequisites-zero": "Prerequisites for beginners",
+      "what-is-claude-code": "What is Claude Code?",
+      "installation": "Prerequisites & installation",
+      "environment-setup": "Environment setup",
+      "first-project": "First project step by step",
+      "faq-beginner": "FAQ for beginners"
+    },
+    "mcp": {
+      "title": "MCP",
+      "overview": "Overview",
+      "what-are-mcps": "Understanding MCPs",
+      "setup": "Install & configure",
+      "best-productivity": "Top productivity MCPs",
+      "best-development": "Top development MCPs",
+      "best-design": "Top design & UI MCPs",
+      "first-workflow": "First MCP workflow",
+      "securite-mcp": "MCP security",
+      "create-mcp-typescript": "Create a TypeScript MCP",
+      "create-mcp-python": "Create a Python MCP",
+      "advanced-protocol": "Advanced MCP protocol"
+    },
+    "plugins": {
+      "title": "Plugins",
+      "overview": "Overview",
+      "what-are-plugins": "Understanding plugins",
+      "setup": "Install & manage",
+      "best-essential": "Top essential plugins",
+      "best-design": "Design & frontend plugins",
+      "best-security": "Security & quality plugins"
+    },
+    "skills": {
+      "title": "Skills",
+      "overview": "Overview",
+      "what-are-skills": "What is a Skill?",
+      "best-skills": "Top recommended Skills",
+      "create-custom": "Create a custom Skill",
+      "comparison": "Skills vs MCP vs Plugins"
+    },
+    "agents": {
+      "title": "Agents",
+      "overview": "Overview",
+      "what-are-agents": "Understanding agents",
+      "create-subagent": "Create a subagent",
+      "agent-teams": "Agent Teams",
+      "best-agents": "Top agents by use case",
+      "orchestration": "Advanced orchestration",
+      "agent-sdk": "Claude Agent SDK",
+      "performance-limits": "Performance & limits"
+    },
+    "prompting": {
+      "title": "Prompting",
+      "overview": "Overview",
+      "basics": "Prompting basics",
+      "directives": "Advanced directives",
+      "templates": "Templates by profession",
+      "mistakes": "Mistakes to avoid",
+      "claude-md": "CLAUDE.md guide",
+      "advanced": "Advanced prompting",
+      "context-management": "Context management",
+      "thinking-and-planning": "Extended Thinking & Plan Mode",
+      "chaining-and-agents": "Chaining & multi-agents",
+      "non-dev-prompting": "Prompting for non-developers"
+    },
+    "future": {
+      "title": "Vision",
+      "overview": "Overview",
+      "why-ai-matters": "AI and the future of development",
+      "trends-2026": "AI trends 2026",
+      "roadmap": "Project roadmap"
+    },
+    "configurator": {
+      "title": "Configurator",
+      "interactive": "Interactive configurator"
+    },
+    "use-cases": {
+      "title": "Use Cases",
+      "overview": "Overview",
+      "business": "8 business use cases",
+      "success-stories": "Success stories",
+      "no-code": "No-code tutorials"
+    },
+    "enterprise": {
+      "title": "Enterprise",
+      "overview": "Overview",
+      "security-compliance": "Security & compliance",
+      "team-adoption": "Team adoption guide",
+      "tco-calculator": "TCO calculator",
+      "faq": "Enterprise FAQ",
+      "governance": "Governance & roles"
+    },
+    "advanced": {
+      "title": "Advanced",
+      "overview": "Overview",
+      "hooks": "Hooks system",
+      "headless-ci": "Headless mode & CI/CD",
+      "multi-provider": "Multi-provider & Enterprise"
+    },
+    "reference": {
+      "title": "Reference",
+      "overview": "Overview",
+      "cheatsheet": "Cheatsheet: Quick reference",
+      "cli": "CLI: All flags",
+      "settings": "settings.json: Configuration",
+      "environment": "Environment variables"
+    },
+    "limits": {
+      "title": "Limits",
+      "overview": "Overview",
+      "known-limitations": "Known limitations",
+      "vs-copilot": "Claude Code vs Copilot",
+      "vs-cursor": "Claude Code vs Cursor",
+      "when-not-to-use": "When NOT to use Claude Code"
+    },
+    "personas": {
+      "title": "Paths",
+      "overview": "Overview",
+      "developer": "Developer path",
+      "team-lead": "Tech lead path",
+      "non-dev": "Non-developer path",
+      "freelance": "Freelance path",
+      "student": "Student path"
+    },
+    "content": {
+      "title": "Articles",
+      "all-articles": "All articles",
+      "getting-started-intro": "Introduction to Claude Code",
+      "mcp-guide": "Complete MCP guide",
+      "skills-guide": "Complete Skills guide",
+      "prompting-guide": "Prompting guide",
+      "future-vision": "Vision & AI trends",
+      "couts-reels": "Real costs of Claude Code",
+      "mythes": "8 myths about Claude Code",
+      "securite": "Security guide"
+    }
+  }
+}

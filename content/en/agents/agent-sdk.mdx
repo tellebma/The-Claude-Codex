@@ -1,0 +1,421 @@
+---
+title: "Agent SDK and programmatic usage"
+description: "Use the Claude Code Agent SDK for programmatic agent creation: API reference, TypeScript integration, and advanced patterns."
+section: "agents"
+order: 6
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## What is the Claude Agent SDK?
+
+The **Claude Agent SDK** is an official Anthropic development kit that lets you create **programmatic agents** directly in your TypeScript or Python code. Unlike Claude Code's native sub-agents (which live in the terminal), SDK agents integrate into your applications, scripts, and pipelines.
+
+<Callout type="info" title="The remote control vs home automation analogy">
+Claude Code's native sub-agents are like a remote control: you press a button and the agent executes a predefined action. The Claude Agent SDK is full home automation: you program complex scenarios that trigger automatically based on conditions, with total control over every step.
+</Callout>
+
+## Why use the SDK instead of native sub-agents?
+
+| Criterion | Native sub-agents | Agent SDK |
+|---|---|---|
+| **Environment** | Claude Code terminal | Your application (server, script, CI) |
+| **Language** | Markdown prompts | TypeScript or Python |
+| **Control** | Delegated to the model | Full programmatic control |
+| **Integration** | Claude Code tools (Bash, Read, Edit...) | Custom tools you define |
+| **Triggering** | Manual via the terminal | Automatic (webhook, cron, event) |
+| **Persistence** | Session duration | Your choice (database, file...) |
+| **Scalability** | One session at a time | Multiple agents in parallel |
+
+In short: native sub-agents are perfect for interactive work in the terminal, the SDK is built for automation and integration into your systems.
+
+## Installation
+
+<Steps>
+<Step title="TypeScript" stepNumber={1}>
+
+```bash
+# Install the TypeScript SDK
+npm install @anthropic-ai/claude-code-sdk
+
+# Prerequisite: Claude Code must be installed globally
+npm install -g @anthropic-ai/claude-code
+```
+
+The TypeScript SDK uses Claude Code under the hood. Make sure Claude Code is installed and authenticated.
+
+</Step>
+
+<Step title="Python" stepNumber={2} isLast>
+
+```bash
+# Install the Python SDK
+pip install claude-code-sdk
+
+# Prerequisite: Claude Code accessible in the PATH
+npm install -g @anthropic-ai/claude-code
+```
+
+The Python SDK works the same way: it orchestrates Claude Code via a child process.
+
+</Step>
+</Steps>
+
+## First agent in TypeScript
+
+Here's a minimal agent that analyzes a file and produces a report.
+
+```typescript
+import { claude } from "@anthropic-ai/claude-code-sdk";
+
+async function analyzeFile(filePath: string): Promise<string> {
+  // Launch an agent with a prompt and options
+  const result = await claude({
+    prompt: `Analyze the file ${filePath} and produce a report
+             with: line count, exported functions,
+             estimated cyclomatic complexity, and suggestions.`,
+    options: {
+      maxTurns: 10,
+      allowedTools: ["Read", "Bash", "Grep"],
+    },
+  });
+
+  // The result contains the response text
+  return result.text;
+}
+
+// Usage
+const report = await analyzeFile("src/lib/utils.ts");
+console.log(report);
+```
+
+<Callout type="tip" title="maxTurns controls the depth">
+The `maxTurns` parameter limits the number of agent iterations. A simple review agent needs 5 to 10 turns. A complex refactoring agent may need 20 to 30. Start low and increase if the agent stops too early.
+</Callout>
+
+## First agent in Python
+
+The same agent in Python, with similar syntax.
+
+```python
+import asyncio
+from claude_code_sdk import claude, ClaudeOptions
+
+async def analyze_file(file_path: str) -> str:
+    """Analyze a file and produce a structured report."""
+    result = await claude(
+        prompt=f"Analyze the file {file_path} and produce a report "
+               f"with: line count, exported functions, "
+               f"estimated cyclomatic complexity, and suggestions.",
+        options=ClaudeOptions(
+            max_turns=10,
+            allowed_tools=["Read", "Bash", "Grep"],
+        ),
+    )
+    return result.text
+
+# Usage
+report = asyncio.run(analyze_file("src/lib/utils.ts"))
+print(report)
+```
+
+## Integrating external tools
+
+The real power of the SDK lies in the ability to add your **own tools**. The agent can call functions from your codebase, APIs, databases, anything you can code.
+
+```typescript
+import { claude, Tool } from "@anthropic-ai/claude-code-sdk";
+
+// Define a custom tool
+const slackNotifier: Tool = {
+  name: "notify_slack",
+  description: "Send a notification to a Slack channel",
+  parameters: {
+    type: "object",
+    properties: {
+      channel: { type: "string", description: "The Slack channel" },
+      message: { type: "string", description: "The message to send" },
+    },
+    required: ["channel", "message"],
+  },
+  // The tool implementation
+  async execute({ channel, message }) {
+    const response = await fetch(SLACK_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ channel, text: message }),
+    });
+    return { success: response.ok };
+  },
+};
+
+// Use the agent with the custom tool
+const result = await claude({
+  prompt: "Check that all tests pass. If a test fails, "
+        + "notify the #dev channel on Slack with the error details.",
+  options: {
+    maxTurns: 15,
+    allowedTools: ["Bash", "Read"],
+    customTools: [slackNotifier],
+  },
+});
+```
+
+## Practical examples
+
+### 1. Automated monitoring
+
+An agent that runs on a cron and monitors your application's health.
+
+```typescript
+import { claude } from "@anthropic-ai/claude-code-sdk";
+
+async function healthCheck() {
+  const result = await claude({
+    prompt: `You are a monitoring agent. Check:
+      1. That the server responds on http://localhost:3000/health
+      2. That the database is accessible
+      3. That disk space is sufficient (> 20% free)
+      4. That recent logs don't contain critical errors
+
+      Produce a JSON report with the status of each check.
+      If a problem is detected, use notify_slack to alert.`,
+    options: {
+      maxTurns: 10,
+      allowedTools: ["Bash"],
+      customTools: [slackNotifier],
+    },
+  });
+
+  return JSON.parse(result.text);
+}
+
+// Run every 5 minutes via a cron or scheduler
+```
+
+### 2. Deployment pipeline
+
+An agent that orchestrates a full deployment.
+
+```python
+import asyncio
+from claude_code_sdk import claude, ClaudeOptions
+
+async def deploy_pipeline(version: str) -> dict:
+    """4-step deployment pipeline."""
+
+    # Step 1: Pre-deployment checks
+    pre_check = await claude(
+        prompt=f"Verify that the main branch is clean, "
+               f"that all tests pass, and that the build "
+               f"for version {version} is OK.",
+        options=ClaudeOptions(
+            max_turns=10,
+            allowed_tools=["Bash", "Read"],
+        ),
+    )
+
+    if "FAILURE" in pre_check.text:
+        return {"status": "blocked", "reason": pre_check.text}
+
+    # Step 2: Build and tag
+    build = await claude(
+        prompt=f"Create the v{version} tag, build the Docker image "
+               f"and push it to the registry.",
+        options=ClaudeOptions(
+            max_turns=15,
+            allowed_tools=["Bash"],
+        ),
+    )
+
+    # Step 3: Deployment
+    deploy = await claude(
+        prompt="Deploy the new image to the staging environment. "
+               "Verify that the health check passes.",
+        options=ClaudeOptions(
+            max_turns=10,
+            allowed_tools=["Bash"],
+        ),
+    )
+
+    return {
+        "status": "success",
+        "version": version,
+        "pre_check": pre_check.text,
+        "build": build.text,
+        "deploy": deploy.text,
+    }
+```
+
+### 3. Automated bug triage
+
+An agent that reads new GitHub issues and categorizes them automatically.
+
+```typescript
+import { claude, Tool } from "@anthropic-ai/claude-code-sdk";
+
+const githubTool: Tool = {
+  name: "github_api",
+  description: "Interact with the GitHub API",
+  parameters: {
+    type: "object",
+    properties: {
+      action: { type: "string", enum: ["list_issues", "add_labels", "add_comment"] },
+      repo: { type: "string" },
+      issueNumber: { type: "number" },
+      labels: { type: "array", items: { type: "string" } },
+      comment: { type: "string" },
+    },
+    required: ["action", "repo"],
+  },
+  async execute(params) {
+    // Implementation with the GitHub API (Octokit, gh CLI, etc.)
+    // ...
+    return { success: true };
+  },
+};
+
+async function triageNewIssues() {
+  const result = await claude({
+    prompt: `You are a bug triage agent. For each new untriaged
+      issue in the "my-org/my-app" repo:
+
+      1. Read the title and description
+      2. Categorize: bug, feature-request, question, documentation
+      3. Estimate priority: P0 (critical), P1 (high), P2 (medium), P3 (low)
+      4. Add the appropriate labels
+      5. If it's a P0, add a comment to alert the team
+
+      Process all issues created in the last 24 hours.`,
+    options: {
+      maxTurns: 30,
+      customTools: [githubTool],
+    },
+  });
+
+  return result.text;
+}
+```
+
+## SDK configuration options
+
+The main options for controlling agent behavior:
+
+| Option | Type | Description |
+|---|---|---|
+| `prompt` | `string` | The agent's mission |
+| `maxTurns` | `number` | Maximum number of iterations (default: 10) |
+| `allowedTools` | `string[]` | Authorized Claude Code tools |
+| `customTools` | `Tool[]` | Your custom tools |
+| `cwd` | `string` | The agent's working directory |
+| `model` | `string` | Model to use (sonnet, opus, haiku) |
+| `outputFormat` | `string` | Output format (`text`, `json`, `stream-json`) |
+| `systemPrompt` | `string` | Additional system instructions |
+
+```typescript
+// Example with all options
+const result = await claude({
+  prompt: "Refactor the auth module to use JWT tokens",
+  options: {
+    maxTurns: 25,
+    allowedTools: ["Read", "Edit", "Bash", "Grep", "Glob"],
+    cwd: "/home/user/my-project",
+    model: "sonnet",
+    outputFormat: "json",
+    systemPrompt: "You are a security expert. "
+                 + "Always prioritize security over performance.",
+  },
+});
+```
+
+## Detailed comparison with native sub-agents
+
+<Callout type="tip" title="When to choose what?">
+Use **native sub-agents** for interactive day-to-day development: review, debug, refactoring while you code. Use the **SDK** when you need automation without human intervention: CI/CD, monitoring, triage, nightly pipelines.
+</Callout>
+
+### Native sub-agents: strengths
+
+- Simple configuration (Markdown file)
+- Full access to Claude Code tools
+- Natural integration into the terminal workflow
+- No code to write or maintain
+- Ideal for exploration and prototyping
+
+### Agent SDK: strengths
+
+- Full programmatic control (conditions, loops, errors)
+- Integration into your existing applications and pipelines
+- Unlimited custom tools (APIs, databases, services)
+- Automatic execution (cron, webhooks, events)
+- Fine-grained error handling and retries
+- Built-in logging and observability
+
+## Best practices
+
+### 1. Limit each agent's scope
+
+An agent should have a clear and bounded mission. If the task is too broad, split it into multiple coordinated agents.
+
+```typescript
+// BAD: one agent that does everything
+const result = await claude({
+  prompt: "Refactor the project, write the tests, do the review, "
+        + "update the docs, and deploy to production",
+});
+
+// GOOD: specialized and coordinated agents
+const refactorResult = await claude({
+  prompt: "Refactor the auth module according to the provided plan",
+  options: { maxTurns: 20 },
+});
+
+const testResult = await claude({
+  prompt: "Write tests for the refactored auth module",
+  options: { maxTurns: 15 },
+});
+```
+
+### 2. Handle errors explicitly
+
+```typescript
+try {
+  const result = await claude({
+    prompt: "Run the database migrations",
+    options: { maxTurns: 10 },
+  });
+
+  if (result.text.includes("ERROR")) {
+    // Rollback or notification
+    await notifyTeam("Migration failed", result.text);
+  }
+} catch (error) {
+  // Timeout, network error, etc.
+  console.error("Agent SDK error:", error);
+  await notifyTeam("Agent unavailable", String(error));
+}
+```
+
+### 3. Use JSON format for structured results
+
+```typescript
+const result = await claude({
+  prompt: "Analyze the project's dependencies and produce a report "
+        + "in JSON format with: total, outdated, vulnerable, suggestions.",
+  options: {
+    maxTurns: 10,
+    outputFormat: "json",
+  },
+});
+
+const report = JSON.parse(result.text);
+console.log(`${report.vulnerable} vulnerabilities found`);
+```
+
+## Next steps
+
+Now that you know the Claude Agent SDK, explore related topics.
+
+- [Agent performance and limits](/agents/performance-limits): Costs, recursion depth, and production best practices
+- [Multi-agent orchestration](/agents/orchestration): Patterns for combining multiple agents
+- [Headless mode and CI/CD](/advanced/headless-ci): Integrate Claude Code into your pipelines

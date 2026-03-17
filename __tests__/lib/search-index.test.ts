@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { searchEntries, searchIndex } from "@/lib/search-index";
+import { searchEntries, searchIndexFr, searchIndexEn } from "@/lib/search-index";
 
 describe("searchEntries", () => {
   it("returns an empty array for an empty query", () => {
@@ -61,13 +61,50 @@ describe("searchEntries", () => {
     expect(results).toEqual([]);
   });
 
-  it("searchIndex has entries with required fields", () => {
-    for (const entry of searchIndex) {
+  it("searchIndexFr has entries with required fields", () => {
+    for (const entry of searchIndexFr) {
       expect(entry.title).toBeTruthy();
       expect(entry.description).toBeTruthy();
       expect(entry.href).toMatch(/^\//);
       expect(entry.section).toBeTruthy();
       expect(entry.keywords.length).toBeGreaterThan(0);
     }
+  });
+
+  it("searchIndexEn has entries with required fields", () => {
+    for (const entry of searchIndexEn) {
+      expect(entry.title).toBeTruthy();
+      expect(entry.description).toBeTruthy();
+      expect(entry.href).toMatch(/^\//);
+      expect(entry.section).toBeTruthy();
+      expect(entry.keywords.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("searchIndexEn and searchIndexFr have the same number of entries", () => {
+    expect(searchIndexEn.length).toBe(searchIndexFr.length);
+  });
+
+  it("returns English results when locale is en", () => {
+    const results = searchEntries("mcp", "en");
+    expect(results.length).toBeGreaterThan(0);
+    const hasMcpEntry = results.some((r) => r.href === "/mcp");
+    expect(hasMcpEntry).toBe(true);
+    // Should return English title
+    const mcpEntry = results.find((r) => r.href === "/mcp");
+    expect(mcpEntry?.title).toContain("Superpowers");
+  });
+
+  it("returns French results when locale is fr", () => {
+    const results = searchEntries("mcp", "fr");
+    expect(results.length).toBeGreaterThan(0);
+    const mcpEntry = results.find((r) => r.href === "/mcp");
+    expect(mcpEntry?.title).toContain("Super-pouvoirs");
+  });
+
+  it("defaults to French when no locale is provided", () => {
+    const results = searchEntries("mcp");
+    const mcpEntry = results.find((r) => r.href === "/mcp");
+    expect(mcpEntry?.title).toContain("Super-pouvoirs");
   });
 });

@@ -1,0 +1,184 @@
+---
+title: "Understanding Claude Code Skills"
+description: "Discover Claude Code Skills: reusable workflows that automate your recurring tasks. How they work, how they differ from MCPs and plugins."
+section: "skills"
+order: 1
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+<Callout type="tip" title="Just getting started?">If the technical concepts feel overwhelming, start with our [concrete use cases](/use-cases) to see Claude Code in action without writing any code.</Callout>
+
+## What exactly are Skills?
+
+A **Skill** in Claude Code is a Markdown file that teaches Claude a specific behavior, workflow, or area of expertise. When you invoke a Skill with a **slash command** (e.g., `/review-pr`), Claude follows the file's instructions like a chef following a recipe.
+
+<Callout type="info" title="The cooking recipe analogy">
+Imagine Claude Code is a talented chef. Without a recipe, they can improvise a decent dish. But with a **precise recipe** (a Skill), they'll reproduce exactly the same delicious dish every time: the same steps, the same checks, the same result. Skills are Claude Code's **recipes**: structured instructions that transform a generalist assistant into a specialized expert.
+</Callout>
+
+## The 3 types of Skills
+
+Skills fall into three categories based on their scope and origin.
+
+### 1. Built-in Skills
+
+These are the Skills that ship with Claude Code. They cover common operations and are available immediately without any configuration.
+
+```bash
+# Built-in Skill examples
+/init          # Initialize a project with CLAUDE.md
+/review        # Code review of the current diff
+/compact       # Compact the conversation to free context
+/memory        # Manage Claude's memory files
+```
+
+### 2. Project Skills (project commands)
+
+Created in your project's `.claude/commands/` folder, these Skills are **shared with the entire team** via version control. Each Markdown file in this folder automatically becomes a slash command.
+
+```bash
+# Project Skills structure
+.claude/
+  commands/
+    review-pr.md       # -> /project:review-pr
+    deploy.md          # -> /project:deploy
+    hotfix.md          # -> /project:hotfix
+    onboarding.md      # -> /project:onboarding
+```
+
+### 3. Personal Skills (user commands)
+
+Stored in `~/.claude/commands/`, these Skills are available across **all your projects** but aren't shared with the team. Ideal for your personal work habits.
+
+```bash
+# Personal Skills structure
+~/.claude/
+  commands/
+    tdd-guide.md       # -> /user:tdd-guide
+    code-review.md     # -> /user:code-review
+    brainstorm.md      # -> /user:brainstorm
+```
+
+<Card title="How to choose the right type?" variant="accent">
+- **Built-in**: you don't need to do anything; they're already there
+- **Project**: for conventions and workflows shared by the team (review, deploy, code conventions)
+- **Personal**: for your individual habits (commit style, personal TDD workflow, favorite templates)
+</Card>
+
+## How does a Skill work?
+
+When you type a slash command, Claude Code executes a four-step process.
+
+<Steps>
+<Step title="Detection" stepNumber={1}>
+Claude Code recognizes the `/project:review-pr` command and looks for the corresponding file in `.claude/commands/review-pr.md`.
+</Step>
+
+<Step title="Loading" stepNumber={2}>
+The Markdown file content is injected into Claude's context as **system instructions**. Claude interprets them as priority directives.
+</Step>
+
+<Step title="Execution" stepNumber={3}>
+Claude follows the Skill's instructions step by step. If the Skill contains variables (like `$ARGUMENTS`), they're replaced with the arguments provided by the user.
+</Step>
+
+<Step title="Result" stepNumber={4} isLast>
+Claude produces the result according to the format defined in the Skill: a report, modified code, a validated checklist, etc.
+</Step>
+</Steps>
+
+## Anatomy of a Skill file
+
+A Skill is simply a Markdown file with clear instructions. Here's a complete example:
+
+```markdown
+# Pull Request Review
+
+You are a senior code reviewer. Analyze the current PR and provide structured feedback.
+
+## Steps
+
+1. Read the complete diff with `git diff main...HEAD`
+2. Check consistency with project conventions (CLAUDE.md)
+3. Identify potential issues:
+   - Logic bugs
+   - Performance problems
+   - Security vulnerabilities
+   - Duplicated code
+4. Check test coverage
+
+## Output format
+
+For each modified file, provide:
+- **File**: file path
+- **Severity**: CRITICAL / HIGH / MEDIUM / LOW
+- **Issue**: description of the problem
+- **Suggestion**: proposed fix
+
+## Variables
+
+- $ARGUMENTS: target branch for the diff (default: main)
+```
+
+<Callout type="tip" title="The power of \$ARGUMENTS">
+The `$ARGUMENTS` variable captures everything you type after the slash command. For example, `/project:review-pr develop` replaces `$ARGUMENTS` with `develop`. This makes your Skills dynamic and reusable.
+</Callout>
+
+## Skill vs CLAUDE.md: what's the difference?
+
+You might wonder why create Skills when you already have the `CLAUDE.md` file for giving Claude instructions. The answer comes down to three points.
+
+| | **CLAUDE.md** | **Skill** |
+|---|---|---|
+| **Scope** | Always active, loaded in every conversation | Activated on demand via slash command |
+| **Purpose** | Global project context (conventions, architecture) | Specific workflow or task |
+| **Size** | Short and focused (avoid overloading context) | As detailed as needed |
+| **Activation** | Automatic | Manual (`/command`) |
+| **Analogy** | The project's ID card | A recipe for a specific task |
+
+<Card title="In summary" variant="highlight">
+**CLAUDE.md** tells Claude *who* the project is. **Skills** tell Claude *how* to accomplish a specific task. The two are complementary: CLAUDE.md provides permanent context, Skills provide expertise on demand.
+</Card>
+
+## Concrete example: before and after
+
+### Without a Skill
+
+```bash
+# You have to explain what you expect every time
+> Claude, do a review of my code. Check for bugs, security issues,
+> performance, and look at whether tests cover the changes properly.
+> Give me a structured report by file with severity.
+```
+
+### With a Skill
+
+```bash
+# One command, the same result every time
+/project:review-pr
+```
+
+The Skill ensures the review **always follows the same process**, with the same level of detail, the same checks. No more trying to remember all the instructions; they're codified in the file.
+
+## Discovering available Skills
+
+To see all Skills available in your current session:
+
+```bash
+# List all available slash commands
+/help
+
+# Or start typing / and explore the autocomplete
+/
+```
+
+Claude Code displays Skills grouped by source: built-in, project (`/project:...`), and personal (`/user:...`).
+
+## Next steps
+
+Now that you understand the Skills concept, let's get hands-on.
+
+- [Top recommended Skills 2026](/skills/best-skills): The must-have Skills to boost your productivity
+- [Create a custom Skill step by step](/skills/create-custom): Complete guide to writing your own Skills
+- [Skills vs MCP vs Plugins](/skills/comparison): Understanding when to use what

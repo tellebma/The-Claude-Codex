@@ -1,0 +1,348 @@
+---
+title: "Prompt templates"
+description: "Ready-to-use prompt templates for Claude Code: code generation, debugging, refactoring, testing, documentation, and more."
+section: "prompting"
+order: 3
+datePublished: "2026-03-10"
+dateModified: "2026-03-10"
+---
+
+## Ready-to-use prompts
+
+Each template below has been designed to produce professional-quality results with Claude Code. They follow the [5 prompting principles](/prompting/basics) and incorporate [advanced directives](/prompting/directives) to effectively frame the responses.
+
+<Callout type="tip" title="How to use these templates">
+1. Copy the template that matches your need
+2. Replace elements in `[BRACKETS]` with your own values
+3. Add or remove sections based on your context
+4. Refine the result through successive iterations
+</Callout>
+
+## Frontend web developer
+
+### React component creation
+
+```markdown
+You are a senior frontend developer in React/Next.js/TypeScript.
+
+Create a React component for [COMPONENT DESCRIPTION].
+
+Technical context:
+- Framework: Next.js 14 (App Router)
+- Language: strict TypeScript (no any)
+- Style: Tailwind CSS (utility classes only)
+- State: [zustand / React state / none]
+
+Functional specifications:
+- [Feature 1 with details]
+- [Feature 2 with details]
+- [Feature 3 with details]
+
+Constraints:
+- Responsive mobile-first
+- Accessible WCAG 2.1 AA (aria-labels, visible focus, contrasts)
+- Optimized performance (React.memo if relevant, lazy loading)
+- State handling: loading, error, empty, success
+- Dark mode supported
+
+Generate:
+1. The main component in src/components/[Name].tsx
+2. The types/interfaces in src/types/[name].types.ts
+3. A usage example
+4. Unit tests (Vitest + Testing Library)
+```
+
+**Expected result**: a production-ready component with types, accessibility, responsive design, and tests.
+
+### Mockup integration
+
+```markdown
+You are an expert web integrator in Tailwind CSS and React.
+
+Integrate the following mockup as a React/TypeScript component:
+[Describe the mockup or paste a link to a screenshot]
+
+Specifications:
+- Faithfully reproduce the design (spacing, colors, typography)
+- Mobile: [mobile layout description]
+- Tablet: [tablet layout description]
+- Desktop: [desktop layout description]
+
+Color palette:
+- Primary: [hex code]
+- Secondary: [hex code]
+- Background: [hex code]
+- Text: [hex code]
+
+ALWAYS:
+- Use existing Tailwind classes from the design system
+- Optimize images with next/image (WebP, lazy loading)
+- Add scroll-triggered appearance animations with framer-motion
+```
+
+## Mobile developer
+
+### React Native component
+
+```markdown
+You are a senior mobile developer in React Native/TypeScript.
+
+Create a [SCREEN NAME] screen for a [APP TYPE] application.
+
+Technical context:
+- React Native 0.74+ with Expo
+- Navigation: expo-router (file-based routing)
+- Style: NativeWind (Tailwind for React Native)
+- State: [Zustand / React Query / Context]
+
+Screen specifications:
+- Layout: [layout description]
+- Interactions: [gestures, animations, transitions]
+- Data: [data source, format]
+
+Mobile constraints:
+- iOS and Android support
+- Keyboard handling (KeyboardAvoidingView)
+- Notch support (SafeAreaView)
+- Performance: FlatList for lists, not ScrollView
+- Accessibility: accessibilityLabel, accessibilityRole
+
+Generate:
+1. The screen component in app/[name].tsx
+2. The necessary custom hooks
+3. Types in types/[name].types.ts
+4. Mock data for development
+```
+
+## Backend developer
+
+### REST API endpoint
+
+```markdown
+You are a senior backend developer in Node.js/Express/TypeScript.
+
+Create a [METHOD] [ROUTE] endpoint for [DESCRIPTION].
+
+Technical context:
+- Runtime: Node.js 20 with Express 4
+- ORM: Prisma with PostgreSQL
+- Validation: Zod
+- Auth: JWT (middleware already in place)
+- Logging: Winston
+
+Data schema:
+- Input (body/params/query): [field descriptions]
+- Output: [expected response description]
+
+Business rules:
+- [Rule 1]
+- [Rule 2]
+- [Rule 3]
+
+ALWAYS:
+- Validate all inputs with a Zod schema
+- Return the format { success, data, error, meta }
+- Handle errors with try/catch and semantic HTTP codes
+- Log every request (success and failure)
+- Use parameterized queries (never string concatenation)
+
+NEVER:
+- Never return sensitive data (password, internal tokens)
+- Never expose raw Prisma errors to the client
+- Don't use any TypeScript
+
+Generate:
+1. The controller in src/controllers/[name].controller.ts
+2. The service in src/services/[name].service.ts
+3. The Zod schema in src/schemas/[name].schema.ts
+4. Unit tests for the service
+5. A sample curl request
+```
+
+### Database migration
+
+```markdown
+You are a DBA/backend developer expert in PostgreSQL and Prisma.
+
+Create a migration for [CHANGE DESCRIPTION].
+
+Current schema state:
+[Paste the relevant schema.prisma or describe existing tables]
+
+Requested changes:
+- [Add/modify/delete table or column]
+- [Relations to create or modify]
+- [Indexes to add]
+
+Constraints:
+- The migration must be reversible (up and down)
+- No data loss on existing tables
+- Handle default values for new NOT NULL columns
+- Performance: add relevant indexes
+
+Generate:
+1. The schema.prisma update
+2. The Prisma command to run
+3. A seed script for test data
+4. Post-migration verifications
+```
+
+## DevOps / SRE
+
+### CI/CD pipeline
+
+```markdown
+You are a senior DevOps engineer.
+
+Create a CI/CD pipeline with [GitHub Actions / GitLab CI] for [PROJECT TYPE].
+
+Context:
+- Repo: [monorepo / single app]
+- Language: [Node.js / Python / Go / etc.]
+- Deployment target: [Vercel / AWS / GCP / Docker]
+- Environments: [dev, staging, production]
+
+Required pipeline:
+1. Lint and type-check on every PR
+2. Unit and integration tests
+3. Application build
+4. Automatic deployment to [target]
+
+Constraints:
+- Dependency caching to speed up builds
+- Environment variables via secrets (never hardcoded)
+- Slack notifications on failure
+- Automatic rollback if health check fails
+- Target build time: < 5 minutes
+
+Generate:
+1. The complete workflow file (.github/workflows/ci-cd.yml)
+2. The optimized Dockerfile (multi-stage)
+3. The docker-compose.yml for local dev
+4. Deployment documentation
+```
+
+### Automation script
+
+```markdown
+You are a senior DevOps/SRE engineer.
+
+Create a [Bash/Python] script that automates [TASK DESCRIPTION].
+
+Environment:
+- OS: [Linux Ubuntu 22.04 / macOS]
+- Prerequisites: [required tools]
+- Execution frequency: [manual / cron / CI]
+
+How it works:
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+Requirements:
+- Robust error handling (exit codes, trap)
+- Logging with levels (INFO, WARN, ERROR)
+- Dry-run mode for testing without executing
+- Configurable variables via .env or arguments
+- Idempotent (re-runnable without side effects)
+
+Generate:
+1. The complete, commented script
+2. The .env.example file
+3. Usage instructions
+```
+
+## Designer / Integrator
+
+### Design system
+
+```markdown
+You are a designer/frontend developer expert in design systems.
+
+Create the base components of a design system for [PROJECT TYPE].
+
+Stack:
+- React/TypeScript
+- Tailwind CSS
+- Storybook for documentation
+- CVA (class-variance-authority) for variants
+
+Components to create:
+1. Button (primary, secondary, ghost, danger | sm, md, lg | with icon)
+2. Input (text, email, password, number | with label, error, helper)
+3. Card (default, elevated, outlined | with header, body, footer)
+4. Badge (info, success, warning, error | sm, md)
+5. Modal (with overlay, animation, focus trap)
+
+For each component:
+- TypeScript code with all variants
+- Props typed with union types (no enums)
+- Dark mode support
+- Full accessibility
+- Storybook story with all states
+- Unit tests
+```
+
+## Technical writer
+
+### API documentation
+
+```markdown
+You are a senior technical writer specializing in API documentation.
+
+Write the documentation for the [API NAME] API.
+
+Target audience: [junior developers / internal team / third-party developers]
+
+Structure:
+1. Overview (description, base URL, authentication)
+2. Authentication (method, obtaining keys, examples)
+3. Endpoints by resource:
+   - Method + URL
+   - Description
+   - Parameters (path, query, body) with types and required
+   - Responses (success + errors) with JSON examples
+   - Request example (curl, JavaScript, Python)
+4. Error codes (table with code, message, resolution)
+5. Rate limiting (limits, headers, best practices)
+6. Changelog and versioning
+
+Conventions:
+- Working, copy-pastable code examples
+- Use admonitions (Note, Warning, Tip)
+- Include a navigable table of contents
+- All JSON examples must be valid
+```
+
+## How to adapt a template to your project
+
+<Steps>
+<Step title="Identify your need" stepNumber={1}>
+Choose the template closest to your task. Don't look for a perfect match; a template that's 70% relevant is better than a prompt written from scratch.
+</Step>
+
+<Step title="Customize the context" stepNumber={2}>
+Replace the values in `[BRACKETS]` with the specifics of your project: tech stack, conventions, business constraints.
+</Step>
+
+<Step title="Add your constraints" stepNumber={3}>
+Add your project-specific rules in the ALWAYS/NEVER blocks. Reference your [CLAUDE.md](/prompting/claude-md) if you have one.
+</Step>
+
+<Step title="Iterate on the result" stepNumber={4} isLast>
+The first result will be good but not perfect. Use follow-up prompts to refine: "Add error handling", "Make it accessible", "Optimize performance".
+</Step>
+</Steps>
+
+<Callout type="tip" title="Turn your templates into Skills">
+If you use a template regularly, turn it into a [Claude Code Skill](/skills/create-custom). Create a `.claude/commands/my-template.md` file and you'll be able to invoke it with `/project:my-template` every time. No more copy-pasting, no more forgetting.
+</Callout>
+
+## Next steps
+
+You now have a library of ready-to-use templates. To go further:
+
+- [Common mistakes to avoid](/prompting/mistakes): The pitfalls that ruin even the best templates
+- [The complete CLAUDE.md guide](/prompting/claude-md): Integrate your templates into the project's permanent context
+- [Advanced prompting and multi-agents](/prompting/advanced): Chaining techniques and agent orchestration
+- [Top recommended Skills](/skills/best-skills): Skills that automate recurring tasks

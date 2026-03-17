@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { Check, Clipboard } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CodeBlockProps {
   code: string;
@@ -13,6 +14,7 @@ interface CodeBlockProps {
 export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const t = useTranslations("common");
 
   useEffect(() => {
     return () => {
@@ -67,18 +69,18 @@ export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps)
               ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-400 opacity-100"
               : "border-slate-700 bg-slate-800 text-slate-400 opacity-0 hover:border-slate-600 hover:bg-slate-700 hover:text-slate-300 group-hover:opacity-100 focus:opacity-100"
           }`}
-          aria-label={copied ? "Code copié" : "Copier le code"}
+          aria-label={copied ? t("copiedCode") : t("copyCode")}
           type="button"
         >
           {copied ? (
             <>
               <Check className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>Copié !</span>
+              <span>{t("copiedCode")}</span>
             </>
           ) : (
             <>
               <Clipboard className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>Copier</span>
+              <span>{t("copyCode")}</span>
             </>
           )}
         </button>

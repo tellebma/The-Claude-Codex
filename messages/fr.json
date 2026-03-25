@@ -256,7 +256,8 @@
       "best-agents": "Top agents par cas d'usage",
       "orchestration": "Orchestration avancée",
       "agent-sdk": "Claude Agent SDK",
-      "performance-limits": "Performance et limites"
+      "performance-limits": "Performance et limites",
+      "background-agents": "Background Agents"
     },
     "prompting": {
       "title": "Prompting",
@@ -313,7 +314,8 @@
       "cheatsheet": "Cheatsheet : Référence rapide",
       "cli": "CLI : Tous les flags",
       "settings": "settings.json : Configuration",
-      "environment": "Variables d'environnement"
+      "environment": "Variables d'environnement",
+      "voice-mode": "Voice Mode"
     },
     "limits": {
       "title": "Limites",

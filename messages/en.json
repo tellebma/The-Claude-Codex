@@ -256,7 +256,8 @@
       "best-agents": "Top agents by use case",
       "orchestration": "Advanced orchestration",
       "agent-sdk": "Claude Agent SDK",
-      "performance-limits": "Performance & limits"
+      "performance-limits": "Performance & limits",
+      "background-agents": "Background Agents"
     },
     "prompting": {
       "title": "Prompting",
@@ -313,7 +314,8 @@
       "cheatsheet": "Cheatsheet: Quick reference",
       "cli": "CLI: All flags",
       "settings": "settings.json: Configuration",
-      "environment": "Environment variables"
+      "environment": "Environment variables",
+      "voice-mode": "Voice Mode"
     },
     "limits": {
       "title": "Limits",

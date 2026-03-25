@@ -1,0 +1,177 @@
+---
+title: "Voice Mode: dictate tasks out loud"
+description: "Enable Claude Code's voice mode to dictate prompts without typing: /voice command, push-to-talk with Space, use cases and limitations."
+badge: "NEW"
+section: "reference"
+order: 5
+datePublished: "2026-03-25"
+dateModified: "2026-03-25"
+---
+
+## Talk to Claude Code
+
+Voice Mode turns your microphone into an input interface. Hold the spacebar, speak, release — your dictation becomes a prompt sent to Claude Code. This is useful for tasks that are long to describe, contexts where typing is uncomfortable, or simply to save time on complex requests.
+
+<Callout type="info" title="Availability">
+Voice Mode is available since Claude Code version 2.1.x. It works on macOS, Linux, and Windows (WSL). A microphone is required.
+</Callout>
+
+## Enable Voice Mode
+
+```bash
+# In an interactive Claude Code session, type:
+/voice
+```
+
+Claude Code confirms voice mode activation and shows you how to use it.
+
+<TerminalScreenshot
+  title="Terminal - Voice Mode activation"
+  lines={[
+    { type: "prompt", content: "> /voice" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Voice Mode enabled" },
+    { type: "output", content: "  Hold [Space] to speak, release to send." },
+    { type: "output", content: "  Type /voice again to disable." },
+    { type: "empty", content: "" },
+    { type: "output", content: "  🎤 Ready — press Space to start" }
+  ]}
+/>
+
+## Usage: push-to-talk
+
+Voice Mode works as **push-to-talk**: hold the spacebar while speaking, then release to send the prompt.
+
+<Steps>
+<Step title="Hold Space" stepNumber={1}>
+Press and hold the **spacebar** in the terminal. Claude Code starts listening. A visual indicator confirms recording is active.
+</Step>
+
+<Step title="Speak clearly" stepNumber={2}>
+Dictate your instruction in English or French. Speak at a normal pace — no need to shout or over-articulate.
+
+Example: *"Create a React dashboard component with three widgets: a line chart, a stats card, and a recent activity list. Use Recharts for the charts."*
+</Step>
+
+<Step title="Release Space" stepNumber={3} isLast>
+Release the spacebar. Claude Code transcribes your dictation and sends it as a prompt. The transcription is displayed in the terminal before sending.
+</Step>
+</Steps>
+
+<Callout type="tip" title="Check before sending">
+The transcription appears briefly before being sent. If it's incorrect, press `Ctrl+C` to cancel and try again. You can also edit the transcribed text if your terminal allows it.
+</Callout>
+
+## Disable Voice Mode
+
+```bash
+# Disable in the current session
+/voice
+
+# Voice Mode also deactivates automatically
+# at the end of each Claude Code session
+```
+
+## Use cases
+
+### Describing complex tasks
+
+Long, detailed prompts are often more natural to dictate than type. Voice lets you describe constraints, context, and requirements more fluidly:
+
+```text
+[Voice dictation]
+"Refactor the authentication service to support OAuth2
+with Google and GitHub in addition to the current email login.
+Maintain backwards compatibility with existing sessions,
+add tests for each provider, and document the required
+environment variables in the README."
+```
+
+### Debugging out loud
+
+Describing a bug while observing it is more natural than typing while searching:
+
+```text
+"I have a memory leak on the dashboard page. The profiler
+shows the ChartWidget component isn't unmounting properly.
+Event listeners are probably not being cleaned up.
+Analyze the component and fix it."
+```
+
+### Code review sessions
+
+Comment on code verbally during a review:
+
+```text
+"Look at the functions in utils slash validation dot ts.
+Add strict TypeScript types wherever annotations are missing,
+and suggest unit tests for edge cases."
+```
+
+## Supported languages
+
+Voice Mode supports transcription in **English and French** natively, as well as most major European languages. Language detection is automatic.
+
+<Callout type="tip" title="Language mixing">
+You can dictate in English even if your codebase has French comments, or mix both in the same prompt. Claude Code understands both languages: "Add a `parseDate` function that takes an ISO 8601 string and returns a Date object with timezone handling."
+</Callout>
+
+## Known limitations
+
+| Limitation | Detail |
+|-----------|--------|
+| **Latency** | Transcription adds ~1-2 seconds before sending the prompt |
+| **Background noise** | Noisy environments degrade transcription quality |
+| **Technical terms** | Variable names, URLs, and file paths may be transcribed incorrectly |
+| **Length** | Very long dictations (> 2 minutes) may be truncated |
+| **CI/CD** | Voice Mode is not available in headless mode (`--print`) |
+
+### Working around transcription errors
+
+For highly technical terms:
+
+```text
+# 1. Spell out critical names
+"Create a variable named — spelling it out: A-U-T-H underscore T-O-K-E-N"
+
+# 2. Combine voice and typing
+# Dictate the general structure, then manually complete
+# exact variable names in the terminal
+
+# 3. Use descriptions
+"The variable that stores the JWT authentication token"
+```
+
+## Combining with other features
+
+### Voice Mode + Extended Thinking
+
+Dictate complex architecture questions with Extended Thinking enabled for deep analysis without typing long prompts:
+
+```bash
+# Enable both
+/voice    # Enable voice mode
+Alt+T     # Enable Extended Thinking (Linux/Windows)
+          # Option+T on macOS
+
+# Then dictate your architecture question
+```
+
+### Voice Mode + Plan Mode
+
+Request a full plan verbally before starting an implementation:
+
+```text
+[Dictation]
+"Before coding anything, give me a detailed plan
+for migrating our Express API to Fastify. I need to know
+the migration order, risks at each step, and points of
+no return. Wait for my approval before starting."
+```
+
+## Next steps
+
+- [Cheatsheet: Quick reference](/reference/cheatsheet) — All slash commands at a glance
+- [Extended Thinking and Plan Mode](/prompting/thinking-and-planning) — Combine voice with deep reasoning
+- [CLI: Full reference](/reference/cli) — All flags and subcommands
+- [settings.json: Configuration](/reference/settings) — Configure Claude Code to your needs

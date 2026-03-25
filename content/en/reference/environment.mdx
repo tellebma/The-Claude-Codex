@@ -55,7 +55,7 @@ Never commit `ANTHROPIC_API_KEY` in a versioned file. Use a secret manager (AWS 
 |-------|-------|
 | **Description** | Default Claude model to use |
 | **Required** | No |
-| **Default** | `claude-sonnet-4-5` |
+| **Default** | `claude-sonnet-4-6` |
 | **Format** | Anthropic model identifier |
 
 ```bash
@@ -63,16 +63,16 @@ Never commit `ANTHROPIC_API_KEY` in a versioned file. Use a secret manager (AWS 
 export CLAUDE_MODEL="claude-haiku-4-5"
 
 # Use Opus for complex tasks
-export CLAUDE_MODEL="claude-opus-4-5"
+export CLAUDE_MODEL="claude-opus-4-6"
 
 # Override for a single command
-CLAUDE_MODEL="claude-opus-4-5" claude --print "complex task"
+CLAUDE_MODEL="claude-opus-4-6" claude --print "complex task"
 ```
 
 Common model identifiers:
 - `claude-haiku-4-5`: Fast and affordable
-- `claude-sonnet-4-5`: Recommended balance
-- `claude-opus-4-5`: Deepest reasoning
+- `claude-sonnet-4-6`: Recommended balance
+- `claude-opus-4-6`: Deepest reasoning
 
 ---
 
@@ -237,7 +237,7 @@ export CLAUDE_CONFIG_DIR="/tmp/claude-ci-config"
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `ANTHROPIC_API_KEY` | Yes* | None | Anthropic API key |
-| `CLAUDE_MODEL` | No | `claude-sonnet-4-5` | Default model |
+| `CLAUDE_MODEL` | No | `claude-sonnet-4-6` | Default model |
 | `MAX_THINKING_TOKENS` | No | `31999` | Extended Thinking budget |
 | `ANTHROPIC_BASE_URL` | No | `https://api.anthropic.com` | Custom API URL |
 | `HTTP_PROXY` | No | None | HTTP proxy |
@@ -258,7 +258,7 @@ export CLAUDE_CONFIG_DIR="/tmp/claude-ci-config"
 ```bash
 # ~/.zshrc or ~/.bashrc
 export ANTHROPIC_API_KEY="sk-ant-api03-..."
-export CLAUDE_MODEL="claude-sonnet-4-5"
+export CLAUDE_MODEL="claude-sonnet-4-6"
 
 # Optional: Extended Thinking with reduced budget
 export MAX_THINKING_TOKENS=10000

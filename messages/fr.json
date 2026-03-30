@@ -300,7 +300,9 @@
       "headless-ci": "Mode Headless et CI/CD",
       "multi-provider": "Multi-provider et Enterprise",
       "worktrees": "Git Worktrees",
-      "permissions-sandbox": "Permissions et Sandbox"
+      "permissions-sandbox": "Permissions et Sandbox",
+      "workflows": "Workflows avancés",
+      "browser-automation": "Browser Automation"
     },
     "reference": {
       "title": "Référence",

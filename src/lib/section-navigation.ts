@@ -132,6 +132,8 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.multi-provider", href: "/advanced/multi-provider" },
       { labelKey: "advanced.worktrees", href: "/advanced/worktrees" },
       { labelKey: "advanced.permissions-sandbox", href: "/advanced/permissions-sandbox" },
+      { labelKey: "advanced.workflows", href: "/advanced/workflows" },
+      { labelKey: "advanced.browser-automation", href: "/advanced/browser-automation" },
     ],
   },
   reference: {

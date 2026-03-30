@@ -379,6 +379,123 @@ The LinkedIn Skill isn't included in downloadable files because everyone has a d
 
 ---
 
+## Skill taxonomy
+
+The Claude Code team, together with Thariq Shihipar, proposed a nine-category classification to organize skills by what they actually automate. This framework helps you identify the kind of skill you need and name your own creations consistently.
+
+### 1. Library & API Reference
+
+Skills that embed the internal documentation of an API or library: gotchas, anti-patterns, conventions specific to your stack. Claude doesn't have to guess — the answer is already in its context.
+
+Examples: `stripe-api`, `internal-design-system`, `prisma-patterns`
+
+### 2. Product Verification
+
+Skills that run automated checks on user flows: Playwright, tmux, smoke tests. They answer the question "is this still working?" without you having to open a browser.
+
+Examples: `verify-checkout-flow`, `smoke-test-auth`, `e2e-critical-paths`
+
+### 3. Data Fetching & Analysis
+
+Skills that connect to your dashboards, databases, or analytics APIs to retrieve and interpret metrics. Useful for daily reviews or regression investigations.
+
+Examples: `fetch-metrics`, `query-datadog`, `analyze-funnel`
+
+### 4. Business Process & Team Automation
+
+Skills that automate repetitive team tasks: posting the standup to Slack, creating a Jira ticket from a bug, sending a deployment notification.
+
+Examples: `standup-post`, `create-ticket`, `notify-deploy`
+
+### 5. Code Scaffolding & Templates
+
+Skills that generate boilerplate code from a template defined by your team. They ensure every new file follows project conventions from the start.
+
+Examples: `new-migration`, `create-component`, `scaffold-api-endpoint`
+
+### 6. Code Quality & Review
+
+Skills that analyze code against precise rules: style, complexity, security, consistency with the rest of the project. More nuanced than a linter, they factor in business context.
+
+Examples: `adversarial-review`, `enforce-code-style`, `check-complexity`
+
+### 7. CI/CD & Deployment
+
+Skills that interact with your deployment pipeline: monitoring a PR, triggering a deploy, cherry-picking a fix to the production branch.
+
+Examples: `babysit-pr`, `deploy-staging`, `cherry-pick-prod`
+
+### 8. Runbooks
+
+Multi-step investigation skills triggered by a symptom. They guide Claude through an ordered series of checks to identify the root cause of an incident, like an ops runbook but executed automatically.
+
+Examples: `investigate-latency-spike`, `diagnose-auth-failure`, `incident-response`
+
+### 9. Infrastructure Operations
+
+Regular maintenance skills: cleaning up stale branches, updating dependencies, rotating secrets, infrastructure audits. They automate the tasks nobody wants to do but everyone has to.
+
+Examples: `cleanup-stale-branches`, `update-dependencies`, `rotate-secrets`
+
+---
+
+## Best practices for writing a skill
+
+Here's what the Claude Code team has learned about writing effective skills. These rules separate a skill you use once from one you use every day.
+
+**1. Don't state the obvious**
+
+A skill should focus on what pushes Claude outside its default behavior. No need to say "be precise" or "use TypeScript if the project is in TypeScript." Only include what actually changes something.
+
+**2. The "Gotchas" section is the most important part**
+
+This is where you document the traps you discovered the hard way: the API that returns 200 even on error, the function that mutates its argument in place, the environment variable that must be set before the other one. A skill without gotchas is an incomplete skill.
+
+**3. Progressive disclosure**
+
+Don't load everything into the main file. Organize your skill into folders and put only what's needed on every call inside `SKILL.md`. Reference documentation goes in `references/`, utility scripts in `scripts/`, examples in `examples/`.
+
+```
+.claude/skills/my-skill/
+  SKILL.md              # Main file, loaded on every call
+  references/           # Reference documentation (loaded if needed)
+  scripts/              # Utility scripts
+  examples/             # Code examples
+  config.json           # Skill configuration
+```
+
+**4. Don't railroader Claude**
+
+Describe your objectives and constraints, not the steps to follow. If you script every step, you prevent Claude from adapting its approach to the actual context. Trust it to find the path — just point it at the destination.
+
+**5. The description field is a trigger, not a summary**
+
+A skill's description tells Claude whether to activate it automatically in a given context. It should describe the situations that call for this skill, not how it works internally.
+
+<Callout type="tip" title="Concrete example">
+Bad description: "This skill performs an adversarial code review of the current diff."
+
+Good description: "Use when asked to review code, check a PR, or validate changes before merging. Activates automatically when the user mentions 'review', 'PR', or 'code quality'."
+</Callout>
+
+**6. Store config in a `config.json`**
+
+Parameters that vary from project to project (branch names, endpoints, coverage thresholds) shouldn't be hardcoded in the Markdown file. Put them in a `config.json` next to the skill.
+
+**7. Include scripts for Claude to compose**
+
+Rather than having Claude reconstruct the same commands on every call, provide utility scripts in `scripts/`. Claude will compose and call them based on context, without reinventing them each time.
+
+**8. On-demand hooks**
+
+A skill can activate or deactivate Claude hooks dynamically. For example, a deployment skill can enable a "pre-commit" hook only for the duration of the process, then disable it once done. Cleaner than a global hook that's always active.
+
+**9. One skill, one responsibility**
+
+The temptation is to build a mega-skill that does everything. Resist it. A focused skill is easier to maintain, faster to load, and more precise in its results. If your skill exceeds 200 lines, it's probably two skills.
+
+---
+
 ## Downloadable Skill files
 
 All Skills presented on this page are available for direct download. Copy them into `.claude/commands/` (project) or `~/.claude/commands/` (personal) and they're immediately usable.

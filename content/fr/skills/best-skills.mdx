@@ -379,6 +379,123 @@ Le Skill LinkedIn n'est pas inclus dans les fichiers téléchargeables car chaqu
 
 ---
 
+## Taxonomie des skills
+
+L'équipe Claude Code, avec Thariq Shihipar, a proposé une classification en 9 catégories pour mieux organiser les skills selon ce qu'ils automatisent réellement. Cette grille aide à identifier le type de skill dont vous avez besoin, et à nommer correctement ceux que vous créez.
+
+### 1. Library & API Reference
+
+Skills qui embarquent la documentation interne d'une API ou d'une librairie : les gotchas, les patterns à éviter, les conventions propres à votre stack. Claude n'a pas à deviner, il a la réponse dans son contexte.
+
+Exemples : `stripe-api`, `internal-design-system`, `prisma-patterns`
+
+### 2. Product Verification
+
+Skills qui lancent des vérifications automatisées sur des flows utilisateurs : Playwright, tmux, smoke tests. Ils répondent à la question "est-ce que ça marche encore ?" sans que vous ayez à ouvrir un navigateur.
+
+Exemples : `verify-checkout-flow`, `smoke-test-auth`, `e2e-critical-paths`
+
+### 3. Data Fetching & Analysis
+
+Skills qui se connectent à vos dashboards, bases de données, ou APIs d'analytics pour récupérer et interpréter des métriques. Utiles pour les daily reviews ou les investigations de régression.
+
+Exemples : `fetch-metrics`, `query-datadog`, `analyze-funnel`
+
+### 4. Business Process & Team Automation
+
+Skills qui automatisent les tâches répétitives d'équipe : poster le standup sur Slack, créer un ticket Jira à partir d'un bug, envoyer une notification de déploiement.
+
+Exemples : `standup-post`, `create-ticket`, `notify-deploy`
+
+### 5. Code Scaffolding & Templates
+
+Skills qui génèrent du code boilerplate à partir d'un template défini par votre équipe. Ils garantissent que tous les nouveaux fichiers respectent les conventions du projet dès le départ.
+
+Exemples : `new-migration`, `create-component`, `scaffold-api-endpoint`
+
+### 6. Code Quality & Review
+
+Skills qui analysent le code selon des règles précises : style, complexité, sécurité, cohérence avec le reste du projet. Plus fins qu'un linter, ils tiennent compte du contexte métier.
+
+Exemples : `adversarial-review`, `enforce-code-style`, `check-complexity`
+
+### 7. CI/CD & Deployment
+
+Skills qui interagissent avec votre pipeline de déploiement : surveiller une PR, déclencher un déploiement, cherry-picker un fix vers la branche de prod.
+
+Exemples : `babysit-pr`, `deploy-staging`, `cherry-pick-prod`
+
+### 8. Runbooks
+
+Skills d'investigation multi-étapes déclenchés par un symptôme. Ils guident Claude à travers une série de vérifications ordonnées pour identifier la cause racine d'un incident, comme un runbook d'ops mais exécuté automatiquement.
+
+Exemples : `investigate-latency-spike`, `diagnose-auth-failure`, `incident-response`
+
+### 9. Infrastructure Operations
+
+Skills de maintenance régulière : nettoyage de branches, mise à jour des dépendances, rotation de secrets, audits d'infrastructure. Ils automatisent les tâches que personne n'a envie de faire mais que tout le monde doit faire.
+
+Exemples : `cleanup-stale-branches`, `update-dependencies`, `rotate-secrets`
+
+---
+
+## Bonnes pratiques pour écrire un skill
+
+Voici ce que l'expérience de l'équipe Claude Code a retenu sur la création de skills efficaces. Ces règles font la différence entre un skill qu'on utilise une fois et un skill qu'on utilise tous les jours.
+
+**1. Ne pas énoncer l'évident**
+
+Un skill doit se concentrer sur ce qui pousse Claude hors de son comportement par défaut. Pas besoin de lui dire "sois précis" ou "utilise TypeScript si le projet est en TypeScript". Mettez uniquement ce qui change quelque chose.
+
+**2. La section "Gotchas" est la plus importante**
+
+C'est là que se trouvent les pièges que vous avez découverts à vos dépens : l'API qui renvoie un 200 même en cas d'erreur, la fonction qui modifie son argument en place, la variable d'environnement qui doit être définie avant l'autre. Un skill sans gotchas est un skill incomplet.
+
+**3. Progressive disclosure**
+
+Ne chargez pas tout dans le fichier principal. Organisez votre skill en dossiers et ne mettez dans `SKILL.md` que ce qui est utile à chaque appel. La documentation de référence va dans `references/`, les scripts utilitaires dans `scripts/`, les exemples dans `examples/`.
+
+```
+.claude/skills/my-skill/
+  SKILL.md              # Fichier principal, chargé à chaque appel
+  references/           # Documentation de référence (chargée si besoin)
+  scripts/              # Scripts utilitaires
+  examples/             # Exemples de code
+  config.json           # Configuration du skill
+```
+
+**4. Ne pas "railroader" Claude**
+
+Décrivez vos objectifs et vos contraintes, pas les étapes à suivre. Si vous décrivez chaque étape, vous empêchez Claude d'adapter son approche au contexte réel. Faites-lui confiance pour trouver le chemin, orientez-le sur la destination.
+
+**5. Le champ description est un trigger, pas un résumé**
+
+La description d'un skill sert à Claude pour décider s'il doit l'activer automatiquement dans un contexte donné. Elle doit décrire les situations qui appellent ce skill, pas son fonctionnement interne.
+
+<Callout type="tip" title="Exemple concret">
+Mauvaise description : "Ce skill effectue une revue de code adversariale du diff courant."
+
+Bonne description : "Use when asked to review code, check a PR, or validate changes before merging. Activates automatically when the user mentions 'review', 'PR', or 'code quality'."
+</Callout>
+
+**6. Stocker la config dans un `config.json`**
+
+Les paramètres qui varient d'un projet à l'autre (noms de branches, endpoints, seuils de couverture) ne doivent pas être codés en dur dans le fichier Markdown. Mettez-les dans un `config.json` à côté du skill.
+
+**7. Inclure des scripts que Claude compose**
+
+Plutôt que de demander à Claude de reconstruire les mêmes commandes à chaque appel, fournissez des scripts utilitaires dans `scripts/`. Claude les composera et les appellera selon le contexte, sans les réinventer.
+
+**8. Les hooks on-demand**
+
+Un skill peut activer ou désactiver des hooks Claude dynamiquement. Par exemple, un skill de déploiement peut activer un hook "pre-commit" uniquement pendant la durée du processus, puis le désactiver une fois terminé. C'est plus propre qu'un hook global toujours actif.
+
+**9. Un skill par responsabilité**
+
+La tentation est de créer un méga-skill qui fait tout. Résistez-y. Un skill ciblé est plus facile à maintenir, plus rapide à charger, et plus précis dans ses résultats. Si votre skill dépasse 200 lignes, c'est probablement deux skills.
+
+---
+
 ## Fichiers de Skills téléchargeables
 
 Tous les Skills présentés sur cette page sont disponibles en téléchargement direct. Copiez-les dans `.claude/commands/` (projet) ou `~/.claude/commands/` (personnel) et ils sont immédiatement utilisables.

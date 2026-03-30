@@ -4,7 +4,7 @@ description: "Tout sur le fichier CLAUDE.md : rôle, structure, bonnes pratiques
 section: "prompting"
 order: 5
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-03-30"
 ---
 
 ## Le CLAUDE.md, c'est quoi ?
@@ -214,6 +214,50 @@ Le contexte ultra-spécifique pour un module : schéma de données, contraintes 
 
 La hiérarchie fonctionne par accumulation : les trois niveaux se combinent, avec le niveau le plus spécifique qui a la priorité en cas de conflit.
 
+## Comment Claude charge les fichiers CLAUDE.md
+
+Il ne suffit pas de créer les fichiers : encore faut-il savoir lesquels Claude charge, et à quel moment. Il y a deux mécanismes distincts.
+
+### Chargement vers le haut (ancestor loading)
+
+Au démarrage, Claude remonte l'arbre de dossiers depuis votre répertoire courant jusqu'à la racine du système. Chaque `CLAUDE.md` trouvé sur le chemin est chargé, du plus éloigné au plus proche. Le plus proche a la priorité.
+
+```
+/                          ← CLAUDE.md chargé en 1er
+  home/
+    vous/
+      projets/
+        monapp/            ← cwd au démarrage
+          CLAUDE.md        ← chargé en 2nd (prioritaire)
+          src/
+            CLAUDE.md      ← pas encore chargé
+```
+
+Si vous lancez Claude depuis `/monapp`, seuls `/.../monapp/CLAUDE.md` et les CLAUDE.md parents sont chargés. Le fichier dans `src/` ne l'est pas encore.
+
+### Chargement vers le bas (descendant loading)
+
+Claude charge les fichiers CLAUDE.md des sous-dossiers de façon **paresseuse** : uniquement quand il touche un fichier dans ce sous-dossier. Si `src/components/CLAUDE.md` existe et que Claude ouvre un fichier dans `src/components/`, il charge ce CLAUDE.md à ce moment-là.
+
+<Callout type="tip" title="Les frères ne se parlent pas">
+Les fichiers CLAUDE.md dans des dossiers frères ne se chargent jamais mutuellement. `src/auth/CLAUDE.md` et `src/payments/CLAUDE.md` sont indépendants. Chacun ne s'active que quand Claude touche ses propres fichiers.
+</Callout>
+
+**Exemple concret** : avec cette arborescence...
+
+```
+/projet/
+  CLAUDE.md                       ← chargé au démarrage
+  src/
+    CLAUDE.md                     ← chargé au démarrage (cwd = /projet)
+    auth/
+      CLAUDE.md                   ← chargé quand Claude lit src/auth/
+    payments/
+      CLAUDE.md                   ← chargé quand Claude lit src/payments/
+```
+
+...si le cwd est `/projet`, les deux premiers fichiers sont chargés immédiatement. Les deux autres attendent que Claude entre dans leurs dossiers respectifs.
+
 ## CLAUDE.md vs settings.json vs .claude/rules/
 
 Ces trois fichiers ont des rôles différents et complémentaires. Voici comment les utiliser.
@@ -250,6 +294,65 @@ projet/
 - **.claude/rules/** = les **règles détaillées** par thème (trop longues pour le CLAUDE.md)
 </Callout>
 
+## .claude/rules/ : découper les instructions en fichiers thématiques
+
+Quand votre CLAUDE.md commence à dépasser 150 lignes, c'est le signe que certaines sections méritent leur propre fichier. Le dossier `.claude/rules/` est fait pour ça : Claude charge automatiquement tous les fichiers qui s'y trouvent au démarrage.
+
+```
+.claude/
+  rules/
+    code-style.md      ← conventions TypeScript, nommage, structure
+    testing.md         ← stratégie de test, couverture requise, mocks
+    security.md        ← règles de sécurité, gestion des secrets
+    deployment.md      ← process de déploiement, checklist pre-prod
+```
+
+Chaque fichier se concentre sur un seul sujet. Quand vous modifiez les règles de test, vous éditez `testing.md` sans toucher au reste. C'est plus maintenable, et ça facilite les revues de code.
+
+<Callout type="tip" title="Un bon découpage">
+Gardez dans `CLAUDE.md` ce qui s'applique à tout : stack, commandes, architecture. Déplacez dans `.claude/rules/` les règles longues ou spécifiques à un domaine. Si un fichier de règles dépasse 100 lignes, découpez-le davantage.
+</Callout>
+
+## Directives conditionnelles avec `<important>`
+
+Certaines règles ne s'appliquent que dans des contextes précis. Le tag `<important if="...">` garantit que Claude ne les ignore pas quand la condition est remplie, même si le reste du CLAUDE.md est dense.
+
+```markdown
+<important if="editing auth code">
+Toujours vérifier les permissions avant de modifier les fichiers dans src/auth/.
+Ne jamais stocker de tokens en clair dans le code.
+Toute modification du middleware d'auth doit être accompagnée d'un test.
+</important>
+
+<important if="writing database migrations">
+Tester la migration sur un dump de production avant de la valider.
+Toujours écrire la migration inverse (down migration).
+Ne jamais supprimer une colonne sans période de dépréciation.
+</important>
+```
+
+C'est plus fort qu'un commentaire Markdown ordinaire : Claude comprend que ces instructions ont une priorité élevée dès que la condition est remplie.
+
+<Callout type="warning" title="N'en abusez pas">
+Réservez `<important if="...">` aux règles qui ont causé des problèmes concrets dans votre projet. Si tout est "important", rien ne l'est vraiment.
+</Callout>
+
+## Mémoire des agents
+
+Quand vous utilisez des sous-agents (agents lancés par un agent parent), chacun peut avoir sa propre mémoire persistante, indépendante du CLAUDE.md. Il y a trois niveaux :
+
+| Type | Stockage | Portée |
+|------|----------|--------|
+| `memory: user` | `~/.claude/agent-memory/` | Cross-projet, personnel |
+| `memory: project` | `.claude/agent-memory/` | Partagé avec l'équipe |
+| `memory: local` | `.claude/agent-memory-local/` | Personnel, sur ce projet |
+
+Les 200 premières lignes du fichier `MEMORY.md` correspondant sont injectées automatiquement au démarrage de l'agent. C'est utile pour des agents spécialisés qui ont besoin de se souvenir de décisions passées : un agent de code review qui retient vos préférences, un agent de documentation qui connaît le style éditorial du projet, etc.
+
+<Callout type="info" title="MEMORY.md vs CLAUDE.md">
+Le CLAUDE.md décrit le projet (invariant). La mémoire d'agent stocke ce que l'agent a appris au fil du temps (évolutif). Les deux se complètent.
+</Callout>
+
 ## Bonnes pratiques
 
 ### Ce qu'il faut mettre dans le CLAUDE.md
@@ -277,6 +380,23 @@ Mettez à jour votre CLAUDE.md quand :
 - Vous ajoutez un nouveau pattern architectural
 - Un nouveau membre rejoint l'équipe (ajoutez les conventions de l'équipe)
 - Vous constatez que Claude refait les mêmes erreurs (ajoutez la règle correspondante)
+
+Une façon simple de garder le CLAUDE.md à jour : après avoir corrigé une erreur récurrente, demandez directement à Claude de mettre le fichier à jour pour refléter la règle. Il le fait bien, et ça évite de recommencer les mêmes conversations.
+
+### Comportements déterministes : settings.json plutôt que CLAUDE.md
+
+Certains comportements ne doivent pas dépendre de l'interprétation du texte. Pour ceux-là, `settings.json` est plus fiable que le CLAUDE.md :
+
+- Interdire certains outils (ex: `Bash` pour des raisons de sécurité)
+- Configurer les permissions de lecture/écriture
+- Forcer un modèle particulier pour un agent
+- Gérer l'attribution dans les commits
+
+Le CLAUDE.md est du texte que Claude *interprète*. `settings.json` est de la configuration que Claude *obéit*.
+
+<Callout type="warning" title="Pas de règles contradictoires">
+Si votre CLAUDE.md dit "utilise toujours TypeScript strict" mais que votre settings.json autorise des fichiers `.js`, Claude peut être désorienté. Vérifiez que les deux fichiers sont cohérents entre eux.
+</Callout>
 
 ## Prochaines étapes
 

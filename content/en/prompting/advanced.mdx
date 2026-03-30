@@ -4,7 +4,7 @@ description: "Advanced prompting techniques for Claude Code: chain-of-thought, f
 section: "prompting"
 order: 6
 datePublished: "2026-03-10"
-dateModified: "2026-03-11"
+dateModified: "2026-03-30"
 ---
 
 ## Beyond the basics
@@ -481,6 +481,75 @@ The only difference: add a status filter (query param ?status=todo)
 and cursor-based pagination."
 ```
 
+## Output styles: controlling the response format
+
+Claude Code supports different output styles that change how it presents responses. You can configure them with the `/output-style` command or mention them directly in your prompt.
+
+| Style | Behavior | When to use it |
+|-------|----------|----------------|
+| **Default** | Concise, action-oriented responses | Daily work, clear tasks |
+| **Explanatory** | Detailed responses with reasoning | Learning a new codebase |
+| **Learning** | Pedagogical responses with analogies and context | Discovering an unfamiliar concept |
+| **Custom** | Style defined by you via prompt | Very specific needs |
+
+```bash
+# Change the output style in Claude Code
+/output-style explanatory
+
+# Or specify it directly in the prompt
+"Reply in explanatory mode: explain your reasoning at each step."
+```
+
+<Callout type="tip" title="Explanatory style for unfamiliar codebases">
+When you join a new project, switch to Explanatory mode for the first few sessions. Claude will explain why it makes each choice, which accelerates your ramp-up on the codebase. Once comfortable, switch back to Default for speed.
+</Callout>
+
+### Defining a custom style
+
+If no built-in style fits, define your own directly in the prompt or in your CLAUDE.md.
+
+```markdown
+# Custom style in CLAUDE.md
+## Response style
+- Always start with a one-sentence summary of what you're about to do
+- Explain architecture decisions but not syntactic details
+- End every response with "Points to validate:" and 2-3 questions
+- If you're unsure about my intent, ask before coding
+```
+
+## Prototype rather than specify
+
+A tip from Boris Cherny: building 20 to 30 quick versions of a concept is more productive than writing a detailed PRD (Product Requirements Document). Claude Code excels at iterating fast, so take advantage of that.
+
+The idea is simple: instead of spending time precisely specifying what you want (which is often hard before you've seen something concrete), you ask for a quick first version, react to what you see, and refine from there. Each iteration takes a few minutes.
+
+```markdown
+# Iteration 1: establish a direction
+"Give me a quick v1 of an analytics dashboard component.
+It doesn't need to be perfect — I just want to see a direction."
+
+# Iteration 2: adjust the angle
+"Good. Now change the approach for the charts: instead of
+bar charts, use inline sparklines inside the KPI cards."
+
+# Iteration 3: explore an alternative
+"Interesting. Try a completely different approach:
+a dense table layout like Linear, no charts at all,
+just numbers and text-based trends."
+
+# Iteration 4: converge
+"The dense table is better. Take that and add a previous-period
+comparison with colored progress indicators."
+```
+
+<Card title="Why this beats a PRD" variant="highlight">
+With a 10-page PRD, you specify what you think you want. With 5 quick iterations, you discover what you actually want by seeing it. Claude doesn't get tired of redoing things, doesn't judge direction changes, and each iteration takes less time than rereading a PRD.
+</Card>
+
+<Callout type="warning" title="Know when to stop iterating">
+The risk of this approach: iterating indefinitely without ever converging. Set a rule for yourself: after 5 iterations, pick the best direction and start building seriously. The v6 should be a production version, not another exploration.
+</Callout>
+
 ## Summary of advanced techniques
 
 | Technique | Use case | Complexity |
@@ -495,6 +564,8 @@ and cursor-based pagination."
 | Decomposition | Complex features, migrations | High impact |
 | Multi-agents | Code review, audits, big projects | High |
 | Contextual prompting | Following project patterns | Low |
+| Output styles | Adapting the explanation level | Low |
+| Rapid prototyping | Exploring a concept, finding the right direction | Low to use |
 
 ## Next steps
 

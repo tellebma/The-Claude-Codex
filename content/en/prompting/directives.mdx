@@ -4,7 +4,7 @@ description: "Master Claude Code directives: writing clear instructions, setting
 section: "prompting"
 order: 2
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-03-30"
 ---
 
 ## What is a directive?
@@ -188,6 +188,105 @@ DON'T:
 - Don't use useEffect for fetching (use useSWR or React Query)
 - Don't prop drill more than 2 levels deep
 - Don't use index as key in dynamic lists
+```
+
+## Voice dictation: coding by speaking
+
+Boris Cherny, the creator of Claude Code, codes primarily by dictating his prompts. Dictation is roughly three times faster than typing for describing complex intentions, and it naturally pushes you to think in terms of intent rather than implementation.
+
+### How to enable dictation
+
+**Native Claude Code:**
+
+```bash
+# Inside Claude Code, simply type:
+/voice
+# The microphone activates; speak, then press Enter
+```
+
+**macOS (system dictation):**
+
+```bash
+# Double-tap the Fn key
+# macOS system dictation activates in any app
+# Works directly in the Claude Code terminal
+```
+
+**Wispr Flow (third-party app):**
+
+```bash
+# Most popular in the community
+# Benefit: automatic punctuation, app-aware context
+# Install at: wispr.flow
+```
+
+### When to dictate, when to type
+
+Dictation isn't suited for everything. Here's how to combine both for optimal results:
+
+| Mode | Best for | Less suited for |
+|------|----------|-----------------|
+| **Dictation** | Describing intent, explaining context, asking questions | Variable names, file paths, exact technical code |
+| **Typing** | Precise constraints, code snippets, ALWAYS/NEVER rules | Long feature descriptions |
+
+<Callout type="tip" title="The winning combination">
+Dictate the intent ("I want a responsive navigation component that collapses into a hamburger menu on mobile"), then type the precise technical constraints. Dictation captures the "what and why", typing captures the "exactly how".
+</Callout>
+
+## ASCII diagrams: visualizing before coding
+
+Asking Claude to draw an ASCII diagram is one of the most underrated techniques. In seconds, you get a visual representation of the architecture, data flow, or component structure, with no external tool required.
+
+```markdown
+"Before coding, draw an ASCII diagram of this project's architecture:
+the main modules, data flows between them,
+and external entry points (API, user, cron)."
+```
+
+Claude will produce something like:
+
+```
+┌─────────────────────────────────────────────────┐
+│                   Client (Browser)               │
+└──────────────────────┬──────────────────────────┘
+                       │ HTTP
+                       ▼
+┌─────────────────────────────────────────────────┐
+│              Next.js App (App Router)            │
+│  ┌──────────────┐    ┌────────────────────────┐ │
+│  │  Server      │    │  Client Components     │ │
+│  │  Components  │    │  (React state, hooks)  │ │
+│  └──────┬───────┘    └────────────┬───────────┘ │
+└─────────┼────────────────────────┼──────────────┘
+          │ SQL                    │ tRPC
+          ▼                        ▼
+   ┌─────────────┐        ┌──────────────────┐
+   │  PostgreSQL  │        │   API Routes     │
+   └─────────────┘        └──────────────────┘
+```
+
+<Callout type="info" title="Why it helps">
+An ASCII diagram is a form of inverted contextual prompting: you give Claude the chance to show you its understanding of the system before it touches the code. If the diagram is wrong, that's the right moment to correct it, not after 200 lines of code.
+</Callout>
+
+### Useful diagram prompts
+
+```markdown
+# Overall architecture
+"Draw an ASCII diagram of this project's architecture,
+with the main data flows."
+
+# Authentication flow
+"Show me the authentication flow in ASCII:
+from password input all the way to the JWT token in the database."
+
+# Module dependencies
+"Draw an ASCII dependency graph between the files
+in the src/services/ folder. Identify any circular dependencies."
+
+# Data model
+"Represent the data model in ASCII (like a simplified ERD):
+tables, main columns, and relationships."
 ```
 
 ## Combining directives: a complete prompt

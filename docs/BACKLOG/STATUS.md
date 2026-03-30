@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-04-01 (EPIC UX/UI/A11y termine)
+> Derniere mise a jour : 2026-03-30
 
 ---
 
@@ -9,9 +9,8 @@
 | EPIC | Stories | Fait | En cours | A faire | Progression |
 |------|---------|------|----------|---------|-------------|
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
-| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 11 | 0 | 0 | 100% |
 
-**Total projet** : 27/28 stories (96%) · 100/102 SP livres (98%)
+**Total projet** : 16/17 stories (94%) · 65/68 SP livres (96%)
 
 > Note : le composant WorkflowDiagram (C4, 3 SP) reste en backlog, nice-to-have.
 
@@ -69,53 +68,7 @@
 
 ---
 
-## EPIC : Corrections UX/UI/A11y
-
-> Source : audit multi-agents (3 agents : UX/Nielsen, UI/Design, A11y/WCAG)
-> Lighthouse automatise = 100/100 — tous les problemes sont manuels
-
-### Sprint 1 : Critiques visuels et contrastes — ✅ Termine
-
-| ID | Story | SP | Statut |
-|----|-------|----|--------|
-| US-1 | Hierarchie visuelle sections/cartes landing | 3 | ✅ Fait |
-| US-2 | Contrastes textuels WCAG AA | 3 | ✅ Fait |
-| US-3 | Coherence styles interactifs cartes | 2 | ✅ Fait |
-
-**Sprint 1** : 3/3 stories · 8/8 SP · 100%
-
-### Sprint 2 : Navigation, recherche et i18n — ✅ Termine
-
-| ID | Story | SP | Statut |
-|----|-------|----|--------|
-| US-4 | Navigation header et ARIA dropdown | 5 | ✅ Fait |
-| US-5 | Focus trap et accessibilite recherche | 3 | ✅ Fait |
-| US-6 | Pages hors i18n et traductions | 5 | ✅ Fait |
-
-**Sprint 2** : 3/3 stories · 13/13 SP · 100%
-
-### Sprint 3 : Coherence visuelle et ergonomie — ✅ Termine
-
-| ID | Story | SP | Statut |
-|----|-------|----|--------|
-| US-7 | Coherence dark/light pages section | 3 | ✅ Fait |
-| US-8 | Indicateur de progression parcours | 3 | ✅ Fait |
-| US-9 | Espacement vertical et responsive | 2 | ✅ Fait |
-| US-10 | Liens externes et semantique ARIA | 3 | ✅ Fait |
-
-**Sprint 3** : 4/4 stories · 11/11 SP · 100%
-
-### Sprint 4 : Polish — ✅ Termine
-
-| ID | Story | SP | Statut |
-|----|-------|----|--------|
-| US-11 | Corrections mineures de polish | 2 | ✅ Fait |
-
-**Sprint 4** : 1/1 stories · 2/2 SP · 100%
-
----
-
-## EPIC : Best Practices Integration — Resultats finaux
+## Resultats finaux
 
 | Metrique | Valeur |
 |----------|--------|

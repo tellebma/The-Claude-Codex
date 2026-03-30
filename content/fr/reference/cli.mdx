@@ -32,6 +32,11 @@ claude [OPTIONS] [PROMPT]
 | `--system-prompt <texte>` | `-s` | string | System prompt à injecter (surcharge CLAUDE.md) |
 | `--append-system-prompt <texte>` | | string | Texte ajouté au system prompt existant |
 | `--add-dir <chemin>` | | string | Ajoute un répertoire dans le contexte des fichiers accessibles |
+| `--worktree` | `-w` | boolean | Lance la session dans un git worktree isolé |
+| `--bare` | | boolean | Mode minimal : pas de CLAUDE.md, pas de MCP, pas de plugins |
+| `--teleport` | | boolean | Récupère une session web (claude.ai/code) pour la continuer en local |
+| `--agent <nom>` | | string | Utilise un agent custom depuis `.claude/agents/` comme system prompt |
+| `--max-budget-usd <montant>` | | number | Limite le budget de la session en dollars |
 | `--debug` | | boolean | Mode debug étendu (logs internes) |
 | `--version` | `-v` | boolean | Affiche la version installée de Claude Code |
 | `--help` | `-h` | boolean | Affiche l'aide |
@@ -74,6 +79,105 @@ claude --resume abc123
 # Verbose (debug)
 claude --verbose "Pourquoi ce test échoue-t-il ?"
 ```
+
+---
+
+## Flags avancés
+
+### `--worktree` / `-w` : sessions parallèles sans conflits
+
+Quand on travaille sur plusieurs features en même temps, le problème classique c'est que les branches se marchent dessus. `--worktree` crée un git worktree isolé pour la session : chaque instance de Claude a sa propre copie du repo et peut faire des modifications sans interférer avec les autres.
+
+```bash
+# Démarrer une session dans un worktree isolé
+claude --worktree "Implémente la feature de paiement"
+
+# Avec un modèle spécifique
+claude -w --model claude-opus-4-5 "Refactorise le module auth"
+```
+
+<Callout type="tip" title="Quand utiliser --worktree">
+Utile surtout quand vous lancez plusieurs sessions Claude en parallèle sur le même repo. Chaque session travaille dans son propre espace sans risque de conflits sur les fichiers non committés.
+</Callout>
+
+---
+
+### `--bare` : démarrage rapide sans contexte
+
+Par défaut, Claude Code charge le CLAUDE.md, connecte les serveurs MCP et initialise les plugins. Tout ça prend du temps. En mode `--bare`, tout ce chargement est court-circuité : la session démarre quasi instantanément.
+
+C'est le mode idéal pour les scripts où vous n'avez pas besoin du contexte projet, et pour les pipelines CI/CD où chaque milliseconde compte.
+
+```bash
+# Démarrage minimal, sans aucun contexte projet
+claude --bare --print "Génère un UUID v4 en TypeScript"
+
+# Dans un script shell (démarrage ~10x plus rapide)
+claude --bare --print --output-format json "Analyse ce JSON" < data.json
+
+# En CI/CD pour une tâche ponctuelle
+claude --bare --print --max-turns 1 "Vérifie la syntaxe de ce fichier YAML" < config.yml
+```
+
+<Callout type="info" title="Quand --bare fait une vraie différence">
+Dans un pipeline qui lance Claude des dizaines de fois, le temps de chargement des MCP s'accumule. `--bare` réduit le startup de plusieurs secondes à quelques centaines de millisecondes.
+</Callout>
+
+---
+
+### `--teleport` : continuer une session web dans le terminal
+
+Vous avez commencé une conversation sur claude.ai/code dans votre navigateur, et vous voulez maintenant l'ouvrir dans le terminal pour avoir accès aux outils fichiers et bash. C'est exactement ce que fait `--teleport` : il récupère la session en cours et vous permet de continuer là où vous en étiez, avec toute la puissance du CLI.
+
+```bash
+# Récupère la dernière session web active
+claude --teleport
+
+# Si plusieurs sessions sont disponibles, une liste vous est présentée
+```
+
+---
+
+### `--agent <nom>` : agents spécialisés
+
+Claude Code permet de définir des agents custom dans `.claude/agents/`. Chaque agent est un fichier YAML ou Markdown qui définit un system prompt spécialisé. Le flag `--agent` charge cet agent au démarrage de la session.
+
+```bash
+# Utiliser l'agent "code-reviewer" défini dans .claude/agents/code-reviewer.md
+claude --agent code-reviewer "Revois les changements dans src/api/"
+
+# Agent de sécurité pour un audit
+claude --agent security-auditor --print "Analyse ce fichier" < src/auth.ts
+
+# Agent de rédaction technique
+claude --agent tech-writer "Génère la documentation pour ce module"
+```
+
+<Callout type="tip" title="Créer un agent custom">
+Un fichier agent dans `.claude/agents/mon-agent.md` contient simplement un system prompt en Markdown. Claude Code le charge comme instruction de base pour toute la session.
+</Callout>
+
+---
+
+### `--max-budget-usd <montant>` : contrôle des coûts
+
+Pour les tâches longues ou les pipelines automatisés, il peut être utile de plafonner les dépenses par session. Quand le budget est atteint, Claude s'arrête proprement plutôt que de continuer à consommer.
+
+```bash
+# Session limitée à 0.50 $
+claude --max-budget-usd 0.50 "Analyse et refactorise le dossier src/"
+
+# En CI/CD pour éviter les dérapages
+claude \
+  --print \
+  --max-budget-usd 1.00 \
+  --max-turns 20 \
+  "Exécute les tests et corrige les erreurs"
+```
+
+<Callout type="tip" title="Combinaison recommandée en production">
+En mode automatisé, combinez `--max-budget-usd` avec `--max-turns` pour avoir deux niveaux de sécurité : un plafond de coût et un plafond d'itérations.
+</Callout>
 
 ---
 

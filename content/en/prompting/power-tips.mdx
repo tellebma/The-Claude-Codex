@@ -1,0 +1,198 @@
+---
+title: "Power Tips: Hidden Shortcuts and Commands"
+description: "Ultrathink, Esc Esc, /rewind, /compact: the advanced shortcuts and techniques Claude Code power users rely on every day."
+section: "prompting"
+order: 8
+datePublished: "2026-03-30"
+dateModified: "2026-03-30"
+badge: "TIPS"
+---
+
+## The shortcuts nobody tells you about
+
+Claude Code is packed with hidden features that fundamentally change how you work. These shortcuts and commands aren't always prominently documented, but power users rely on them daily.
+
+This page gathers the most useful techniques, tested and validated by the team that built Claude Code.
+
+## Controlling thinking depth
+
+### ultrathink and its variants
+
+When Claude Code faces a complex problem (architecture, multi-file debugging, tricky refactoring), you can ask it to think more deeply by adding keywords to your prompt:
+
+| Keyword | Effect | When to use |
+|---------|--------|-------------|
+| `think` | Extended standard thinking | Moderately complex questions |
+| `think harder` | Deep thinking | Problems with multiple possible solutions |
+| `ultrathink` | Maximum thinking | Architecture, complex debugging, critical decisions |
+| `megathink` | Same as ultrathink | Your pick |
+
+```bash
+# Complex debugging
+"ultrathink: why does this test pass locally but fail in CI? Here's the error log..."
+
+# Architecture decision
+"think harder: we need to choose between Redis and an in-memory cache for this use case. Here are the constraints..."
+```
+
+<Callout type="tip" title="When to use ultrathink">
+Save ultrathink for genuinely complex problems. For simple questions, Claude Code already thinks enough. Overusing it slows down responses without improving quality.
+</Callout>
+
+### Extended thinking (thinking mode)
+
+Thinking mode forces Claude to show its reasoning before answering. You can enable it:
+- In settings.json: `"alwaysThinkingEnabled": true`
+- With the <KeyboardShortcut keys={["Alt", "T"]} /> shortcut during a session
+- With the `--thinking` flag at launch
+
+## Navigating the conversation
+
+### Esc Esc: graceful interrupt
+
+When Claude Code heads in the wrong direction or takes too long, press <KeyboardShortcut keys={["Esc", "Esc"]} separator=" " /> twice:
+
+- First <KeyboardShortcut keys={["Esc"]} /> signals the interruption
+- Second <KeyboardShortcut keys={["Esc"]} /> confirms the stop
+
+Claude stops cleanly and gives you back control. You can then rephrase your request or adjust course.
+
+<Callout type="info" title="Difference from Ctrl+C">
+<KeyboardShortcut keys={["Ctrl", "C"]} /> cancels the response entirely. <KeyboardShortcut keys={["Esc", "Esc"]} separator=" " /> is gentler: Claude finishes its current thought and keeps the context of what it started.
+</Callout>
+
+### /rewind: go back in time
+
+When a response doesn't work out, instead of asking "no, try again," use `/rewind`:
+
+```bash
+# Go back one turn (removes the last response + your last message)
+/rewind
+
+# Go back 3 turns
+/rewind 3
+```
+
+It's cleaner than correcting in the same context: it frees up context window space and starts from a clean state.
+
+### /branch: fork the conversation
+
+When you want to try two different approaches without losing your work:
+
+```bash
+/branch
+```
+
+Claude creates a copy of the conversation. You can explore approach A in the main session and approach B in the fork.
+
+## Managing the context window
+
+### /compact: compress before it's too late
+
+The golden rule: manually compact at 50% of the context window. Don't wait for Claude Code to do it automatically (it kicks in around 95%, when quality has already dropped).
+
+```bash
+/compact
+```
+
+Compaction summarizes the conversation to free space while keeping the important context.
+
+<Callout type="warning" title="The last 20% is dangerous territory">
+When the context window exceeds 80%, response quality drops noticeably. Large refactors and multi-file changes are hit first. Compact BEFORE you get there.
+</Callout>
+
+### /rename and /resume: keep your sessions
+
+For long or important sessions:
+
+```bash
+# Name the current session
+/rename "refactoring auth module"
+
+# Later, resume this session
+claude -c  # resumes the last session
+/resume    # lists available sessions
+```
+
+## Advanced prompting techniques
+
+### "Grill me": get challenged
+
+Instead of merging right away, ask Claude to challenge your code:
+
+```bash
+"Grill me on these changes and don't make a PR until I pass your test"
+```
+
+Claude will:
+1. Review all the changes
+2. Ask pointed questions about edge cases
+3. Identify weaknesses
+4. Only approve when your answers are solid
+
+It's like having a demanding reviewer available 24/7.
+
+### "Scrap this": start fresh, but smarter
+
+When a fix becomes a patch on top of a patch:
+
+```bash
+"Knowing everything you know now, scrap this and implement the elegant solution"
+```
+
+Claude keeps the context of what DIDN'T work and proposes a clean approach. Much better than micro-fixing broken code.
+
+### Paste a bug and say "fix"
+
+No need for an elaborate prompt. Paste the error or the Slack thread and say:
+
+```bash
+"fix"
+```
+
+Claude reads the context, identifies the problem, and fixes it. No micro-management needed.
+
+### Ask for ASCII diagrams
+
+To understand a complex architecture:
+
+```bash
+"Draw an ASCII diagram of this project's architecture"
+```
+
+Claude produces a text diagram right in the terminal, often faster than any diagramming tool.
+
+## Useful keyboard shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| <KeyboardShortcut keys={["Esc", "Esc"]} separator=" " /> | Gracefully interrupt Claude |
+| <KeyboardShortcut keys={["Ctrl", "C"]} /> | Cancel the current response |
+| <KeyboardShortcut keys={["Shift", "Tab"]} /> | Toggle modes (normal, plan, auto-accept) |
+| <KeyboardShortcut keys={["Alt", "T"]} /> | Toggle thinking mode |
+| <KeyboardShortcut keys={["Fn", "Fn"]} separator=" " /> | Activate voice dictation (macOS) |
+| <KeyboardShortcut keys={["/"]} /> | Open slash command list |
+
+<Callout type="tip" title="Voice dictation is 3x faster">
+Boris Cherny, the creator of Claude Code, primarily codes by dictating his prompts. Enable dictation with <KeyboardShortcut keys={["Fn", "Fn"]} separator=" " /> on macOS, or use `/voice` in Claude Code. You'd be surprised how effective it is for describing what you want.
+</Callout>
+
+## Lesser-known slash commands
+
+| Command | Purpose |
+|---------|---------|
+| `/btw` | Ask a quick question without interrupting the current task |
+| `/rename` | Name the session for easy retrieval |
+| `/resume` | Resume a saved session |
+| `/rewind` | Go back N turns |
+| `/branch` | Fork the conversation |
+| `/compact` | Manually compact the context |
+| `/statusline` | Display real-time info (context, model, cost) |
+| `/voice` | Switch to voice dictation mode |
+
+## Next steps
+
+- [Advanced prompting](/prompting/advanced) for pattern-based workflows (code review, refactoring, testing)
+- [CLAUDE.md: Customizing Claude Code](/prompting/claude-md) to configure default behavior
+- [CLI Reference](/reference/cli) for the complete list of flags
+- [Hooks system](/advanced/hooks) to automate these workflows

@@ -1,0 +1,270 @@
+---
+title: "Git Worktrees : travailler en parallèle"
+description: "Lancez plusieurs sessions Claude Code en parallèle avec les git worktrees pour multiplier votre productivité sans jongler entre les branches."
+section: "advanced"
+order: 4
+datePublished: "2026-03-30"
+dateModified: "2026-03-30"
+badge: "PRODUCTIVITÉ"
+---
+
+## Pourquoi les worktrees changent tout
+
+Imaginez que vous travaillez sur un roman. Vous avez votre bureau principal ouvert au chapitre 5, mais vous devez aussi corriger une coquille au chapitre 2 et rédiger l'épilogue en parallèle. Sans worktrees, vous seriez obligé de fermer votre bureau, ranger tous vos papiers, en sortir d'autres, travailler, puis tout remettre en place avant de revenir. C'est exactement ce que `git stash` + `git checkout` vous impose.
+
+Les worktrees, c'est l'équivalent d'avoir trois bureaux côte à côte, chacun ouvert à une page différente du même roman. Vous passez de l'un à l'autre sans rien ranger.
+
+Pour Claude Code, cette capacité est encore plus puissante : vous pouvez lancer **trois sessions Claude indépendantes en parallèle**, chacune sur sa propre branche, chacune travaillant sur une tâche différente. Pendant que Claude implémente une feature dans le terminal 1, il corrige un bug dans le terminal 2 et rédige des tests dans le terminal 3.
+
+<Callout type="info" title="Le choix numéro 1 de l'équipe Claude Code">
+L'équipe Anthropic qui développe Claude Code utilise 3 à 5 worktrees en parallèle au quotidien. C'est la technique qu'ils recommandent en premier pour multiplier sa productivité.
+</Callout>
+
+## Qu'est-ce qu'un git worktree ?
+
+Un worktree est un **checkout supplémentaire de votre dépôt dans un autre dossier**. Votre repo principal reste intact, mais vous obtenez un second (ou troisième, ou quatrième) dossier de travail pointant sur une branche différente.
+
+### La différence avec git clone
+
+| | `git clone` | `git worktree` |
+|--|-------------|----------------|
+| Fichiers `.git` | Copie complète | Un seul partagé |
+| Historique | Dupliqué | Commun |
+| Espace disque | Doublé | Seuls les fichiers de travail |
+| Synchronisation | Manuelle (fetch/push) | Automatique (même repo) |
+| Branches | Indépendantes | Liées, pas de doublon |
+
+Avec `git clone`, vous avez deux repos distincts qui peuvent diverger. Avec `git worktree`, vous avez un seul repo avec plusieurs dossiers de travail. Un commit dans le worktree 1 est immédiatement visible dans les autres.
+
+### Vue d'ensemble en ASCII
+
+```
+mon-projet/               ← Repo principal (branche: main)
+├── .git/                 ← Fichier .git UNIQUE et partagé
+├── src/
+└── package.json
+
+../mon-projet-feat-auth/  ← Worktree 1 (branche: feat/auth)
+├── .git                  ← Pointeur vers ../mon-projet/.git
+├── src/
+└── package.json
+
+../mon-projet-fix-42/     ← Worktree 2 (branche: fix/issue-42)
+├── .git                  ← Pointeur vers ../mon-projet/.git
+├── src/
+└── package.json
+```
+
+Les trois dossiers partagent le même historique git. Une branche ne peut exister que dans un seul worktree à la fois.
+
+## Utiliser les worktrees avec Claude Code
+
+### La commande --worktree
+
+Claude Code intègre les worktrees nativement avec le flag `--worktree` (ou `-w`) :
+
+```bash
+# Lance Claude dans un nouveau worktree créé automatiquement
+claude --worktree
+
+# Avec un nom de branche explicite
+claude --worktree feat/auth
+
+# Dans un dossier de destination spécifique
+claude --worktree feat/auth --worktree-path ../mon-projet-auth
+```
+
+Quand vous lancez `claude --worktree`, Claude :
+1. Crée une nouvelle branche depuis votre branche courante
+2. Crée un dossier worktree dans le répertoire parent
+3. Lance une session interactive dans ce worktree isolé
+4. Nettoie le worktree automatiquement si aucun changement n'a été fait
+
+### Créer un worktree manuellement
+
+Si vous préférez gérer les worktrees vous-même, git fournit les commandes nécessaires :
+
+```bash
+# Créer un worktree sur une nouvelle branche
+git worktree add ../mon-projet-auth feat/auth
+
+# Créer un worktree sur une branche existante
+git worktree add ../mon-projet-fix fix/issue-42
+
+# Lister les worktrees actifs
+git worktree list
+
+# Supprimer un worktree (après avoir mergé)
+git worktree remove ../mon-projet-auth
+```
+
+Puis lancer Claude dans le dossier créé :
+
+```bash
+cd ../mon-projet-auth
+claude
+```
+
+## Workflow parallèle : 3 sessions simultanées
+
+Voici le pattern concret qu'utilise l'équipe Claude Code. Ouvrez trois terminaux côte à côte.
+
+**Terminal 1 : nouvelle feature**
+
+```bash
+cd ~/mon-projet
+claude --worktree feat/auth
+# Puis dans Claude :
+# "Implémente le système d'authentification JWT avec refresh tokens.
+#  Crée les routes /login, /logout, /refresh dans src/routes/auth.ts"
+```
+
+**Terminal 2 : correction de bug**
+
+```bash
+cd ~/mon-projet
+claude --worktree fix/issue-42
+# Puis dans Claude :
+# "Le bug #42 signale un crash quand l'utilisateur upload un fichier > 10MB.
+#  Reproduis le bug dans src/services/upload.ts et corrige-le."
+```
+
+**Terminal 3 : tests et documentation**
+
+```bash
+cd ~/mon-projet
+claude --worktree chore/payment-tests
+# Puis dans Claude :
+# "Écris les tests Jest pour src/services/payment.ts.
+#  Couvre les cas nominaux, les remboursements et les erreurs réseau."
+```
+
+Chaque session a son propre contexte, ses propres fichiers modifiés, sa propre branche. Elles ne se bloquent pas mutuellement et ne partagent pas leurs modifications en cours.
+
+<Callout type="tip" title="Nommage des dossiers worktree">
+Par convention, nommez vos dossiers worktree avec le préfixe du repo suivi du nom de branche : `mon-projet-feat-auth`, `mon-projet-fix-42`. Gardez-les dans le répertoire parent de votre repo principal pour les retrouver facilement.
+</Callout>
+
+## La commande /batch : parallélisme de masse
+
+La commande `/batch` dans Claude Code distribue une tâche sur plusieurs worktrees automatiquement. C'est le mode turbo des worktrees.
+
+```
+/batch "Migre tous les fichiers .js en .ts dans chaque sous-dossier de src/"
+```
+
+Claude analyse la tâche, la décompose, crée autant de worktrees que nécessaire et les exécute en parallèle. Chaque worktree traite une partie indépendante du travail.
+
+Exemples d'utilisation de `/batch` :
+
+```
+# Audit de sécurité sur un monorepo
+/batch "Lance un audit de sécurité complet sur chacun des 5 packages du monorepo.
+        Pour chaque package : vérifie les dépendances, les secrets hardcodés,
+        et les patterns dangereux. Génère un rapport par package."
+
+# Migration de style dans un grand projet
+/batch "Migre tous les composants React de styled-components vers Tailwind CSS.
+        Traite chaque dossier dans src/components/ séparément."
+
+# Génération de tests en masse
+/batch "Pour chaque service dans src/services/, crée le fichier de tests
+        correspondant dans tests/services/ avec une couverture > 80%."
+```
+
+<Callout type="info" title="/batch et les subagents">
+La commande `/batch` s'appuie sur les subagents de Claude Code. Quand `isolation: "worktree"` est configuré dans vos settings, les subagents créent et gèrent leurs worktrees de manière autonome, sans intervention manuelle.
+</Callout>
+
+## Configuration dans settings.json
+
+Optimisez le comportement des worktrees dans `.claude/settings.json` :
+
+```json
+{
+  "worktree": {
+    "symlinkDirectories": ["node_modules", ".venv", "vendor"],
+    "sparsePaths": ["src/", "tests/", "package.json", "tsconfig.json"],
+    "defaultBranchPrefix": "claude/",
+    "autoCleanup": true
+  },
+  "agents": {
+    "isolation": "worktree",
+    "maxConcurrent": 4
+  }
+}
+```
+
+| Option | Valeur par défaut | Description |
+|--------|-----------------|-------------|
+| `symlinkDirectories` | `[]` | Dossiers à symlinker plutôt que copier (économise l'espace disque et le temps d'installation) |
+| `sparsePaths` | `null` | Sparse checkout : seuls ces chemins sont checkoutés (indispensable sur les gros monorepos) |
+| `defaultBranchPrefix` | `"worktree/"` | Préfixe automatique des branches créées par `--worktree` |
+| `autoCleanup` | `true` | Supprime le worktree si aucune modification n'a été commitée |
+| `agents.isolation` | `"none"` | Isolation des subagents : `"none"`, `"worktree"` ou `"container"` |
+| `agents.maxConcurrent` | `4` | Nombre maximum de worktrees parallèles |
+
+### Symlinker node_modules
+
+Sans symlinking, chaque worktree dispose de son propre `node_modules`. Sur un projet Node.js classique, cela représente 300-500 MB par worktree. Avec 4 worktrees, vous atteignez facilement 2 GB.
+
+```json
+{
+  "worktree": {
+    "symlinkDirectories": ["node_modules"]
+  }
+}
+```
+
+Avec cette configuration, tous les worktrees partagent le `node_modules` du repo principal via un symlink. Attention : si les dépendances diffèrent entre branches, cette option peut causer des conflits.
+
+## Limites et bonnes pratiques
+
+### Espace disque
+
+Chaque worktree copie tous les fichiers du projet (à l'exception des dossiers symlinkés). Sur un projet de 500 MB avec 4 worktrees actifs, comptez 2 GB d'espace disque.
+
+Nettoyez régulièrement les worktrees terminés :
+
+```bash
+# Lister tous les worktrees
+git worktree list
+
+# Supprimer un worktree spécifique
+git worktree remove ../mon-projet-feat-auth
+
+# Nettoyer les worktrees dont les dossiers ont été supprimés manuellement
+git worktree prune
+```
+
+### Performance CPU et RAM
+
+Plusieurs sessions Claude Code en parallèle, c'est plusieurs processus Node.js et plusieurs contextes d'exécution simultanés. Sur une machine avec 8 GB de RAM, 3-4 worktrees actifs avec des builds parallèles peuvent saturer les ressources.
+
+Un repère pratique : limitez `agents.maxConcurrent` à `nombre de coeurs CPU / 2`.
+
+### Coût API
+
+Chaque session Claude consomme des tokens indépendamment. Cinq sessions parallèles de 30 minutes ont le même coût que cinq sessions séquentielles de 30 minutes. Le parallélisme accélère votre productivité, pas votre consommation API.
+
+<Callout type="warning" title="Ne pas modifier la même branche dans deux worktrees">
+Git interdit d'avoir la même branche checkoutée dans deux worktrees différents. Si vous essayez, vous obtiendrez l'erreur `fatal: 'feat/auth' is already checked out at '...'`. Chaque worktree doit travailler sur sa propre branche.
+</Callout>
+
+### Fichiers partagés à surveiller
+
+Certains fichiers génèrent des conflits quand plusieurs worktrees travaillent en parallèle sur le même repo :
+
+- `package-lock.json` ou `yarn.lock` : si deux worktrees installent des dépendances différentes
+- Fichiers de configuration à la racine modifiés par plusieurs branches simultanément
+- Bases de données locales (SQLite, fichiers `.db`)
+
+La règle : **une responsabilité par worktree**. Si deux tâches touchent aux mêmes fichiers racines, mieux vaut les traiter séquentiellement.
+
+## Prochaines étapes
+
+Les worktrees atteignent leur plein potentiel combinés à d'autres features avancées de Claude Code.
+
+- [Système de Hooks](/fr/advanced/hooks) : automatisez la création et le nettoyage des worktrees avec des hooks `Stop`
+- [Mode Headless et CI/CD](/fr/advanced/headless-ci) : utilisez les worktrees dans vos pipelines pour des reviews de code parallèles
+- [Multi-provider](/fr/advanced/multi-provider) : distribuez vos worktrees sur différents providers (Bedrock, Vertex) pour optimiser les coûts

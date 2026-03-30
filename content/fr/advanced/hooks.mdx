@@ -17,16 +17,18 @@ Contrairement aux MCP (qui étendent les capacités de Claude) ou aux Skills (qu
 Les hooks sont disponibles depuis Claude Code 1.x. Vérifiez votre version avec `claude --version` et mettez à jour via `npm update -g @anthropic-ai/claude-code`.
 </Callout>
 
-## Les 4 types de hooks
+## Les 6 types de hooks
 
-Claude Code expose quatre points d'ancrage dans son cycle de vie :
+Claude Code expose six points d'ancrage dans son cycle de vie :
 
 | Type | Déclenchement | Usage typique |
 |------|--------------|---------------|
+| `SessionStart` | Au démarrage d'une session | Vérifier les prérequis, charger une config |
 | `PreToolUse` | Avant l'exécution d'un outil | Valider les paramètres, bloquer des actions |
 | `PostToolUse` | Après l'exécution d'un outil | Auto-format, notifications, logs |
 | `Stop` | Quand Claude termine la session | Rapport de session, nettoyage |
 | `Notification` | Quand Claude envoie une notification | Alertes Slack, emails |
+| `PermissionRequest` | Avant qu'une permission soit demandée | Auto-approuver certaines actions, router vers un modèle |
 
 ## Configuration dans settings.json
 
@@ -82,7 +84,7 @@ hooks:
           command: "..."  # Commande shell exécutée
 ```
 
-Le **matcher** accepte le nom exact d'un outil Claude Code : `Bash`, `Write`, `Edit`, `Read`, `WebFetch`, etc. Il est omis pour `Stop` et `Notification`.
+Le **matcher** accepte le nom exact d'un outil Claude Code : `Bash`, `Write`, `Edit`, `Read`, `WebFetch`, etc. Il est omis pour `Stop`, `Notification` et `SessionStart`.
 
 ## Variables d'environnement disponibles
 
@@ -242,6 +244,108 @@ Puis dans `settings.json` :
 }
 ```
 
+### SessionStart : vérifier les prérequis au démarrage
+
+Ce hook vérifie que Docker est en cours d'exécution avant de commencer une session de développement. Si Docker est arrêté, Claude en est informé dès le départ plutôt qu'au milieu d'une tâche.
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/check-prerequisites.sh
+
+# Vérifier que Docker est lancé
+if ! docker info > /dev/null 2>&1; then
+  echo "AVERTISSEMENT : Docker n'est pas lancé. Les commandes liées aux conteneurs échoueront." >&2
+fi
+
+# Afficher le contexte du projet au démarrage
+echo "Projet : $(basename $(pwd))"
+echo "Branche : $(git branch --show-current 2>/dev/null || echo 'N/A')"
+echo "Node : $(node --version 2>/dev/null || echo 'Non installé')"
+
+exit 0
+```
+
+Puis dans `settings.json` :
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/check-prerequisites.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="SessionStart pour le contexte projet">
+SessionStart est idéal pour injecter automatiquement des informations de contexte au démarrage : métriques du projet, tickets ouverts, version du dernier déploiement. Claude dispose ainsi du contexte dès la première interaction.
+</Callout>
+
+### PermissionRequest : gérer les approbations automatiquement
+
+Le hook `PermissionRequest` s'exécute quand Claude demande une permission à l'utilisateur. Un code de sortie `0` auto-approuve, un code `1` force la confirmation manuelle.
+
+Ce script auto-approuve les commandes de lecture Git (inoffensives) et bloque les commandes d'écriture réseau pour demander confirmation :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/smart-permissions.sh
+
+TOOL=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('tool_name', ''))
+" 2>/dev/null)
+
+COMMAND=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('command', ''))
+" 2>/dev/null)
+
+# Auto-approuver les commandes Git en lecture seule
+SAFE_GIT_CMDS="git status|git diff|git log|git branch|git show"
+if echo "$COMMAND" | grep -qE "$SAFE_GIT_CMDS"; then
+  exit 0  # Approuvé automatiquement
+fi
+
+# Demander confirmation pour git push et git force
+if echo "$COMMAND" | grep -qE "git push|git force|git reset --hard"; then
+  exit 1  # Demande confirmation manuelle
+fi
+
+# Par défaut : laisser Claude Code gérer
+exit 0
+```
+
+```json
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/smart-permissions.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="PermissionRequest et sécurité">
+Un hook PermissionRequest qui retourne systématiquement `exit 0` désactive de fait toutes les demandes de confirmation. Soyez précis dans vos conditions pour ne jamais auto-approuver des actions destructrices.
+</Callout>
+
 ## Patterns avancés
 
 ### Hooks conditionnels par type de fichier
@@ -321,6 +425,217 @@ done
 
 exit 0
 ```
+
+### Routing de modèle selon la complexité
+
+Ce pattern utilise un hook `PreToolUse` pour rediriger les outils de lecture simples (grep, lecture de fichier) vers Haiku, moins coûteux, et réserver Opus aux tâches complexes. Claude Code lit la sortie du hook pour adapter le modèle utilisé.
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'model: haiku'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="Routing et économie de tokens">
+Combiner le routing de modèle avec des agents autonomes peut réduire significativement les coûts : les sous-tâches de collecte d'information (lecture, recherche) tournent sur Haiku pendant que la logique principale reste sur Sonnet ou Opus.
+</Callout>
+
+### Nudge de continuation après Stop
+
+Claude s'arrête parfois prématurément sans avoir vérifié son travail. Ce hook `Stop` relance automatiquement une invite de vérification :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/nudge-continue.sh
+
+# Vérifie si la session s'est arrêtée sans avoir lancé les tests
+LAST_OUTPUT=$(cat ~/.claude/last_output.txt 2>/dev/null || echo "")
+
+if ! echo "$LAST_OUTPUT" | grep -qE "test|lint|check|verify"; then
+  echo "Rappel : avez-vous vérifié que les tests passent et que le lint est propre ?"
+fi
+
+exit 0
+```
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/nudge-continue.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Logging structuré en JSON
+
+Auditer chaque action de Claude Code dans un fichier JSON facilite l'analyse post-session (quels fichiers ont été modifiés, quelles commandes ont été exécutées, combien de temps) :
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/audit-log.sh
+# Hook PostToolUse (tous les outils)
+
+LOG_FILE=~/.claude/audit/$(date +%Y-%m-%d).jsonl
+mkdir -p ~/.claude/audit
+
+# Construire l'entrée JSON
+python3 -c "
+import sys, json, os
+from datetime import datetime
+
+entry = {
+  'timestamp': datetime.utcnow().isoformat() + 'Z',
+  'session_id': os.environ.get('CLAUDE_SESSION_ID', ''),
+  'tool': os.environ.get('CLAUDE_TOOL_NAME', ''),
+  'file': os.environ.get('CLAUDE_TOOL_OUTPUT_FILE', ''),
+  'success': True
+}
+print(json.dumps(entry))
+" >> "$LOG_FILE"
+
+exit 0
+```
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/audit-log.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Le fichier `~/.claude/audit/2026-03-30.jsonl` contiendra une ligne JSON par action, facile à analyser avec `jq` :
+
+```bash
+# Lister tous les fichiers modifiés aujourd'hui
+cat ~/.claude/audit/$(date +%Y-%m-%d).jsonl | jq -r 'select(.file != "") | .file' | sort -u
+```
+
+### Hooks on-demand via slash commands
+
+Les slash commands peuvent activer ou désactiver des hooks à la volée. C'est utile pour basculer entre un mode "prudent" et un mode "rapide" selon la nature du travail.
+
+Créez deux scripts dans `~/.claude/commands/` :
+
+```bash
+#!/bin/bash
+# ~/.claude/commands/careful.sh
+# Activé par /careful — bloque les commandes destructrices
+
+COMMAND=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('command', ''))
+" 2>/dev/null)
+
+DANGEROUS_PATTERNS="rm -rf|DROP TABLE|DELETE FROM|truncate|format [A-Z]:"
+
+if echo "$COMMAND" | grep -qiE "$DANGEROUS_PATTERNS"; then
+  echo "BLOQUÉ par le mode /careful : commande potentiellement destructrice détectée." >&2
+  exit 1
+fi
+
+exit 0
+```
+
+```bash
+#!/bin/bash
+# ~/.claude/commands/freeze.sh
+# Activé par /freeze — bloque les éditions hors du dossier courant
+
+FILE="$CLAUDE_TOOL_OUTPUT_FILE"
+ALLOWED_DIR="$(pwd)"
+
+if [[ -n "$FILE" ]] && [[ "$FILE" != "$ALLOWED_DIR"* ]]; then
+  echo "BLOQUÉ par le mode /freeze : édition hors de $ALLOWED_DIR interdite." >&2
+  exit 1
+fi
+
+exit 0
+```
+
+Configurez-les comme hooks conditionnels dans `settings.json` :
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/.claude/.careful ] && bash ~/.claude/commands/careful.sh || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/.claude/.freeze ] && bash ~/.claude/commands/freeze.sh || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Créez ensuite les slash commands pour activer/désactiver ces modes :
+
+```bash
+# ~/.claude/commands/careful.md
+Active le mode prudent : bloque les commandes destructrices (rm -rf, DROP TABLE, etc.).
+
+touch ~/.claude/.careful
+echo "Mode /careful activé. Les commandes destructrices seront bloquées."
+```
+
+```bash
+# ~/.claude/commands/freeze.md
+Gèle les modifications hors du dossier courant.
+
+touch ~/.claude/.freeze
+echo "Mode /freeze activé. Les éditions sont limitées à $(pwd)."
+```
+
+Pour désactiver : `/uncareful` et `/unfreeze` qui suppriment les fichiers marqueurs avec `rm -f ~/.claude/.careful`.
+
+<Callout type="tip" title="Fichiers marqueurs">
+Le pattern des fichiers marqueurs (`touch ~/.claude/.careful`) est simple et robuste : pas de base de données, pas de variables d'environnement à propager. Un fichier existe = mode actif. Il n'existe pas = mode inactif.
+</Callout>
 
 ## Troubleshooting
 

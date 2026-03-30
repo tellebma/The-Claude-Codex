@@ -20,8 +20,7 @@
     "resources": "Resources",
     "pageNotFound": "Page not found",
     "pageNotFoundDescription": "The page you are looking for does not exist or has been moved.",
-    "backToHome": "Back to home",
-    "opensNewTab": "(opens in a new tab)"
+    "backToHome": "Back to home"
   },
   "navigation": {
     "mainNav": "Main navigation",
@@ -62,13 +61,7 @@
     "resultsLabel": "Search results",
     "escToClose": "to close",
     "arrowsToNavigate": "navigate",
-    "enterToOpen": "open",
-    "resultCount": "{count, plural, one {# result} other {# results}}",
-    "suggestions": "Popular pages",
-    "suggestGettingStarted": "Getting started with Claude Code",
-    "suggestMcp": "Connect tools (MCP)",
-    "suggestPrompting": "Prompting techniques",
-    "suggestSkills": "Skills and automation"
+    "enterToOpen": "open"
   },
   "breadcrumb": {
     "ariaLabel": "Breadcrumb",
@@ -270,7 +263,8 @@
       "context-management": "Context management",
       "thinking-and-planning": "Extended Thinking & Plan Mode",
       "chaining-and-agents": "Chaining & multi-agents",
-      "non-dev-prompting": "Prompting for non-developers"
+      "non-dev-prompting": "Prompting for non-developers",
+      "power-tips": "Power Tips"
     },
     "future": {
       "title": "Vision",
@@ -305,7 +299,8 @@
       "hooks": "Hooks system",
       "headless-ci": "Headless mode & CI/CD",
       "multi-provider": "Multi-provider & Enterprise",
-      "mcp-profiles": "MCP profiles per mission"
+      "worktrees": "Git Worktrees",
+      "permissions-sandbox": "Permissions & Sandbox"
     },
     "reference": {
       "title": "Reference",
@@ -344,44 +339,5 @@
       "mythes": "8 myths about Claude Code",
       "securite": "Security guide"
     }
-  },
-  "about": {
-    "badge": "Open-source",
-    "title": "About",
-    "titleHighlight": "The Claude Codex",
-    "subtitle": "A comprehensive, free guide to learn how to use Claude Code. Created by users, for users.",
-    "missionBadge": "Our mission",
-    "missionTitle": "Making AI accessible to everyone",
-    "missionDescription": "Claude Code is a powerful tool, but its official documentation is in English and developer-oriented. We created The Claude Codex to change that.",
-    "missionP1": "The Claude Codex was born from a simple observation: generative AI is transforming the daily work of millions of people, but the resources to learn how to use it properly remain fragmented, often in English, and rarely suited to non-developers.",
-    "missionP2": "This guide covers the entire Claude Code ecosystem: from installation to multi-agent orchestration, including MCPs, Skills, advanced prompting and real-world use cases. Every page is written to be understandable by someone discovering the topic.",
-    "missionP3": "The project is entirely open-source under the MIT license. You can read the code, suggest improvements, report errors or contribute new pages. Every contribution is welcome.",
-    "valuesBadge": "Values",
-    "valuesTitle": "What guides the project",
-    "valueFreeTitle": "Free and open",
-    "valueFreeDesc": "All content is freely accessible. No paywall, no mandatory account, no locked content. Knowledge should flow.",
-    "valueForAllTitle": "For all profiles",
-    "valueForAllDesc": "Senior developer or entrepreneur who has never coded: every guide is designed to be accessible regardless of your technical level.",
-    "valueIndependentTitle": "Independent",
-    "valueIndependentDesc": "This project is not affiliated with Anthropic. The content reflects the community's real-world experience, not marketing speak.",
-    "valueFrenchTitle": "French-first",
-    "valueFrenchDesc": "Quality AI documentation in French is rare. This guide fills that gap for the French-speaking community.",
-    "authorBadge": "Author",
-    "authorTitle": "Who is behind the project?",
-    "authorName": "tellebma",
-    "authorRole": "Fullstack developer & daily Claude Code user",
-    "authorP1": "Passionate about tools that improve developer productivity, I use Claude Code daily on Next.js, Python and DevOps projects. This guide is the result of hundreds of hours of experimentation and documentation.",
-    "authorP2": "The goal: share what I've learned so others save time. No abstract theory, just advice tested in real conditions.",
-    "github": "GitHub",
-    "sourceCode": "Source code",
-    "ctaTitle": "Want to",
-    "ctaHighlight": "contribute",
-    "ctaDescription": "The project is open-source. You can suggest corrections, add content or report errors on GitHub.",
-    "ctaGithub": "View on GitHub",
-    "ctaGuide": "Start the guide"
-  },
-  "videoEmbed": {
-    "play": "Play video: {title}",
-    "thumbnail": "Video thumbnail: {title}"
   }
 }

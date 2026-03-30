@@ -32,6 +32,11 @@ claude [OPTIONS] [PROMPT]
 | `--system-prompt <text>` | `-s` | string | System prompt to inject (overrides CLAUDE.md) |
 | `--append-system-prompt <text>` | | string | Text appended to the existing system prompt |
 | `--add-dir <path>` | | string | Add a directory to the accessible file context |
+| `--worktree` | `-w` | boolean | Launch the session in an isolated git worktree |
+| `--bare` | | boolean | Minimal mode: no CLAUDE.md, no MCP servers, no plugins |
+| `--teleport` | | boolean | Pull a web session (claude.ai/code) into your local terminal |
+| `--agent <name>` | | string | Use a custom agent from `.claude/agents/` as the system prompt |
+| `--max-budget-usd <amount>` | | number | Cap the session spend in USD |
 | `--debug` | | boolean | Extended debug mode (internal logs) |
 | `--version` | `-v` | boolean | Show the installed Claude Code version |
 | `--help` | `-h` | boolean | Show help |
@@ -74,6 +79,105 @@ claude --resume abc123
 # Verbose (debug)
 claude --verbose "Why is this test failing?"
 ```
+
+---
+
+## Advanced flags
+
+### `--worktree` / `-w`: parallel sessions without conflicts
+
+When you're juggling multiple features at once, branches can get in each other's way. `--worktree` spins up an isolated git worktree for the session: each Claude instance gets its own copy of the repo and can make changes without touching the others.
+
+```bash
+# Start a session in an isolated worktree
+claude --worktree "Implement the payment feature"
+
+# With a specific model
+claude -w --model claude-opus-4-5 "Refactor the auth module"
+```
+
+<Callout type="tip" title="When to use --worktree">
+Most useful when running multiple Claude sessions in parallel on the same repo. Each session works in its own space with no risk of conflicts on uncommitted files.
+</Callout>
+
+---
+
+### `--bare`: fast startup with no context
+
+By default, Claude Code loads your CLAUDE.md, connects MCP servers, and initializes plugins. That all takes time. With `--bare`, none of that happens: the session starts almost instantly.
+
+This is the go-to mode for scripts where you don't need project context, and for CI/CD pipelines where startup time adds up.
+
+```bash
+# Minimal startup, no project context at all
+claude --bare --print "Generate a UUID v4 in TypeScript"
+
+# In a shell script (starts ~10x faster)
+claude --bare --print --output-format json "Parse this JSON" < data.json
+
+# In CI/CD for a one-off task
+claude --bare --print --max-turns 1 "Check the syntax of this YAML file" < config.yml
+```
+
+<Callout type="info" title="When --bare actually matters">
+In a pipeline that calls Claude dozens of times, MCP load time accumulates fast. `--bare` cuts startup from several seconds down to a few hundred milliseconds.
+</Callout>
+
+---
+
+### `--teleport`: bring a web session into your terminal
+
+You started a conversation on claude.ai/code in your browser and now you want to continue it in the terminal, with full access to file and bash tools. `--teleport` does exactly that: it picks up the active session and drops you right back where you left off, with the full power of the CLI.
+
+```bash
+# Pull the last active web session into the terminal
+claude --teleport
+
+# If multiple sessions are available, a list is shown for you to pick from
+```
+
+---
+
+### `--agent <name>`: specialized agents
+
+Claude Code lets you define custom agents in `.claude/agents/`. Each agent is a YAML or Markdown file that specifies a specialized system prompt. The `--agent` flag loads that agent at session startup.
+
+```bash
+# Use the "code-reviewer" agent defined in .claude/agents/code-reviewer.md
+claude --agent code-reviewer "Review the changes in src/api/"
+
+# Security agent for an audit
+claude --agent security-auditor --print "Analyze this file" < src/auth.ts
+
+# Technical writing agent
+claude --agent tech-writer "Generate documentation for this module"
+```
+
+<Callout type="tip" title="Creating a custom agent">
+An agent file at `.claude/agents/my-agent.md` is just a Markdown system prompt. Claude Code loads it as the baseline instruction for the entire session.
+</Callout>
+
+---
+
+### `--max-budget-usd <amount>`: cost control
+
+For long-running tasks or automated pipelines, it's useful to cap spending per session. When the budget runs out, Claude stops cleanly rather than continuing to rack up costs.
+
+```bash
+# Session capped at $0.50
+claude --max-budget-usd 0.50 "Analyze and refactor the src/ directory"
+
+# In CI/CD to prevent runaway costs
+claude \
+  --print \
+  --max-budget-usd 1.00 \
+  --max-turns 20 \
+  "Run the tests and fix any errors"
+```
+
+<Callout type="tip" title="Recommended combo for production">
+In automated mode, pair `--max-budget-usd` with `--max-turns` for two layers of safety: a cost ceiling and an iteration ceiling.
+</Callout>
 
 ---
 

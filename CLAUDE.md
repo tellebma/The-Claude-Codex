@@ -235,7 +235,3 @@ experimental.optimizePackageImports: ['lucide-react', 'framer-motion']
 7. Mettre à jour `lib/search-index.ts` avec les entrées FR (`searchIndexFr`) et EN (`searchIndexEn`)
 8. Ajouter le lien dans le `navigation` array du `Header.tsx` si pertinent (utiliser la clé de traduction)
 9. **Vérifier sur `/fr/{section}/` et `/en/{section}/`** que tout s'affiche correctement
-
-## Lors du compactage
-
-Quand tu compactes, conserve toujours : la liste complète des fichiers modifiés, l'état d'avancement des pages (terminée/en cours/à faire), et les décisions d'architecture prises.

@@ -31,7 +31,9 @@ export function FeatureCard({
   gradient = "teal",
   href,
 }: FeatureCardProps) {
-  const sharedClassName = "glass-card group h-full p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950 active:scale-[0.98]";
+  const baseClassName = "glass-card group h-full p-6 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950";
+
+  const interactiveClassName = "hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] cursor-pointer";
 
   const content = (
     <>
@@ -52,14 +54,14 @@ export function FeatureCard({
 
   if (href) {
     return (
-      <Link href={href} className={clsx(sharedClassName, "block")}>
+      <Link href={href} className={clsx(baseClassName, interactiveClassName, "block")}>
         {content}
       </Link>
     );
   }
 
   return (
-    <div className={sharedClassName}>
+    <div className={baseClassName}>
       {content}
     </div>
   );

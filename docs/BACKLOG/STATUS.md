@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-04-01
+> Derniere mise a jour : 2026-04-01 (US-7 termine)
 
 ---
 
@@ -9,9 +9,9 @@
 | EPIC | Stories | Fait | En cours | A faire | Progression |
 |------|---------|------|----------|---------|-------------|
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
-| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 6 | 0 | 5 | 55% |
+| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 7 | 0 | 4 | 64% |
 
-**Total projet** : 22/28 stories (79%) · 86/102 SP livres (84%)
+**Total projet** : 23/28 stories (82%) · 89/102 SP livres (87%)
 
 > Note : le composant WorkflowDiagram (C4, 3 SP) reste en backlog, nice-to-have.
 
@@ -94,16 +94,16 @@
 
 **Sprint 2** : 3/3 stories · 13/13 SP · 100%
 
-### Sprint 3 : Coherence visuelle et ergonomie — ⬜ A faire
+### Sprint 3 : Coherence visuelle et ergonomie — 🔄 En cours
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| US-7 | Coherence dark/light pages section | 3 | ⬜ A faire |
+| US-7 | Coherence dark/light pages section | 3 | ✅ Fait |
 | US-8 | Indicateur de progression parcours | 3 | ⬜ A faire |
 | US-9 | Espacement vertical et responsive | 2 | ⬜ A faire |
 | US-10 | Liens externes et semantique ARIA | 3 | ⬜ A faire |
 
-**Sprint 3** : 0/4 stories · 0/11 SP · 0%
+**Sprint 3** : 1/4 stories · 3/11 SP · 27%
 
 ### Sprint 4 : Polish — ⬜ A faire
 

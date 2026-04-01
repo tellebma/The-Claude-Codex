@@ -18,6 +18,7 @@ export function SearchDialog() {
   const [results, setResults] = useState<ReadonlyArray<SearchEntry>>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -103,17 +104,49 @@ export function SearchDialog() {
     }
   };
 
-  // Lock body scroll when dialog is open
+  // Lock body scroll when dialog is open (with scrollbar compensation to avoid layout shift)
   useEffect(() => {
     if (open) {
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
       document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
     }
     return () => {
       document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
     };
   }, [open]);
+
+  // Focus trap: cycle Tab/Shift+Tab within the dialog
+  const handleDialogKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== "Tab") return;
+
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const focusable = dialog.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }, []);
 
   const activeDescendant =
     results.length > 0 ? getOptionId(selectedIndex) : undefined;
@@ -140,11 +173,13 @@ export function SearchDialog() {
         >
           {/* Dialog */}
           <div
+            ref={dialogRef}
             role="dialog"
             aria-label={t("dialogTitle")}
             aria-modal="true"
             className="mx-4 w-full max-w-xl animate-fade-in overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl dark:border-slate-700/50 dark:bg-slate-900"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={handleDialogKeyDown}
           >
             {/* Search input */}
             <div className="flex items-center gap-3 border-b border-slate-200 px-4 dark:border-slate-700">
@@ -177,15 +212,36 @@ export function SearchDialog() {
               </button>
             </div>
 
+            {/* Aria-live region for screen reader result count announcements */}
+            <div role="status" aria-live="polite" className="sr-only">
+              {query.length > 0 && results.length > 0 && t("resultCount", { count: results.length })}
+              {query.length > 0 && results.length === 0 && t("noResults", { query })}
+            </div>
+
             {/* Results */}
             <div className="max-h-80 overflow-y-auto p-2">
               {query.length > 0 && results.length === 0 && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="px-4 py-8 text-center text-sm text-slate-500 dark:text-slate-300"
-                >
-                  {t("noResults", { query })}
+                <div className="px-4 py-6 text-center">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                    {t("noResults", { query })}
+                  </p>
+                  <div className="mt-4 space-y-1">
+                    <p className="text-xs font-medium text-slate-400 dark:text-slate-500">{t("suggestions")}</p>
+                    {[
+                      { href: "/getting-started", label: t("suggestGettingStarted") },
+                      { href: "/mcp", label: t("suggestMcp") },
+                      { href: "/prompting", label: t("suggestPrompting") },
+                      { href: "/skills", label: t("suggestSkills") },
+                    ].map((link) => (
+                      <button
+                        key={link.href}
+                        onClick={() => navigateTo(link.href)}
+                        className="block w-full rounded-lg px-3 py-2 text-left text-sm text-brand-700 transition-colors hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10"
+                      >
+                        {link.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 

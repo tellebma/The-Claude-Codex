@@ -61,7 +61,13 @@
     "resultsLabel": "Search results",
     "escToClose": "to close",
     "arrowsToNavigate": "navigate",
-    "enterToOpen": "open"
+    "enterToOpen": "open",
+    "resultCount": "{count, plural, one {# result} other {# results}}",
+    "suggestions": "Popular pages",
+    "suggestGettingStarted": "Getting started with Claude Code",
+    "suggestMcp": "Connect tools (MCP)",
+    "suggestPrompting": "Prompting techniques",
+    "suggestSkills": "Skills and automation"
   },
   "breadcrumb": {
     "ariaLabel": "Breadcrumb",

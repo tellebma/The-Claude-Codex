@@ -61,7 +61,13 @@
     "resultsLabel": "Resultats de recherche",
     "escToClose": "pour fermer",
     "arrowsToNavigate": "naviguer",
-    "enterToOpen": "ouvrir"
+    "enterToOpen": "ouvrir",
+    "resultCount": "{count, plural, one {# résultat} other {# résultats}}",
+    "suggestions": "Pages populaires",
+    "suggestGettingStarted": "Démarrer avec Claude Code",
+    "suggestMcp": "Connecter des outils (MCP)",
+    "suggestPrompting": "Techniques de prompting",
+    "suggestSkills": "Skills et automatisation"
   },
   "breadcrumb": {
     "ariaLabel": "Fil d'Ariane",

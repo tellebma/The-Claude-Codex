@@ -9,8 +9,9 @@ describe("ScrollToTop", () => {
 
   it("renders the scroll-to-top button", () => {
     const { container } = render(<ScrollToTop />);
+    // useTranslations mock: t("scrollToTop") -> "scrollToTop"
     const button = container.querySelector(
-      'button[aria-label="Retour en haut de la page"]'
+      'button[aria-label="scrollToTop"]'
     );
     expect(button).not.toBeNull();
   });
@@ -18,7 +19,7 @@ describe("ScrollToTop", () => {
   it("is hidden when page is at the top (scrollY < 300)", () => {
     const { container } = render(<ScrollToTop />);
     const button = container.querySelector(
-      'button[aria-label="Retour en haut de la page"]'
+      'button[aria-label="scrollToTop"]'
     );
     expect(button).not.toBeNull();
     expect(button?.getAttribute("aria-hidden")).toBe("true");
@@ -32,7 +33,7 @@ describe("ScrollToTop", () => {
     fireEvent.scroll(window);
 
     const button = screen.getByRole("button", {
-      name: "Retour en haut de la page",
+      name: "scrollToTop",
     });
     expect(button.getAttribute("aria-hidden")).toBe("false");
     expect(button).toHaveAttribute("tabindex", "0");
@@ -48,7 +49,7 @@ describe("ScrollToTop", () => {
     fireEvent.scroll(window);
 
     const button = screen.getByRole("button", {
-      name: "Retour en haut de la page",
+      name: "scrollToTop",
     });
     fireEvent.click(button);
 
@@ -66,7 +67,7 @@ describe("ScrollToTop", () => {
     fireEvent.scroll(window);
 
     const button = container.querySelector(
-      'button[aria-label="Retour en haut de la page"]'
+      'button[aria-label="scrollToTop"]'
     );
     expect(button?.getAttribute("aria-hidden")).toBe("false");
 

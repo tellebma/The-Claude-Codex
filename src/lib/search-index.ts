@@ -2947,6 +2947,24 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "development",
     ],
   },
+  // About
+  {
+    title: "About The Claude Codex",
+    description:
+      "Who we are, why this guide exists, and how to contribute to the open-source project.",
+    href: "/about",
+    section: "Misc",
+    keywords: [
+      "about",
+      "mission",
+      "author",
+      "contribute",
+      "open source",
+      "tellebma",
+      "team",
+      "contact",
+    ],
+  },
 ];
 
 function normalizeText(text: string): string {

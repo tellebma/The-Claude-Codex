@@ -58,7 +58,8 @@ describe("CodeBlock", () => {
 
   it("renders a copy button with correct aria-label", () => {
     render(<CodeBlock code="npm install" />);
-    const button = screen.getByRole("button", { name: "Copier le code" });
+    // useTranslations mock: t("copyCode") -> "copyCode"
+    const button = screen.getByRole("button", { name: "copyCode" });
     expect(button).toBeInTheDocument();
   });
 
@@ -78,7 +79,7 @@ describe("CodeBlock", () => {
 
   it("copies code to clipboard and updates aria-label", async () => {
     render(<CodeBlock code="test code" />);
-    const button = screen.getByRole("button", { name: "Copier le code" });
+    const button = screen.getByRole("button", { name: "copyCode" });
 
     fireEvent.click(button);
 
@@ -87,8 +88,9 @@ describe("CodeBlock", () => {
     });
 
     await waitFor(() => {
+      // After copy: t("copiedCode") -> "copiedCode"
       expect(
-        screen.getByRole("button", { name: "Code copié" })
+        screen.getByRole("button", { name: "copiedCode" })
       ).toBeInTheDocument();
     });
   });

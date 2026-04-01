@@ -1,29 +1,15 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { Footer } from "@/components/layout/Footer";
-
-vi.mock("next/link", () => ({
-  default: ({
-    children,
-    href,
-    ...props
-  }: {
-    children: React.ReactNode;
-    href: string;
-    [key: string]: unknown;
-  }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
 
 describe("Footer", () => {
   it("renders the site brand name", () => {
     render(<Footer />);
     // The brand text is split across elements: "The Claude " and "Codex"
     const brand = screen.getByText((_, element) => {
-      return element?.textContent === "The Claude Codex" && element.tagName === "A";
+      return (
+        element?.textContent === "The Claude Codex" && element.tagName === "A"
+      );
     });
     expect(brand).toBeInTheDocument();
   });
@@ -31,26 +17,25 @@ describe("Footer", () => {
   it("renders Guide section links", () => {
     render(<Footer />);
     const guideLinks = [
-      { name: "Demarrer", href: "/getting-started" },
-      { name: "MCP", href: "/mcp" },
-      { name: "Skills", href: "/skills" },
-      { name: "Prompting", href: "/prompting" },
+      { href: "/getting-started" },
+      { href: "/mcp" },
+      { href: "/skills" },
+      { href: "/prompting" },
     ];
 
     for (const link of guideLinks) {
-      // Use getAllByText since "Demarrer" text appears just with special chars
-      const foundLinks = screen.getAllByRole("link").filter(
-        (el) => el.getAttribute("href") === link.href
-      );
+      const foundLinks = screen
+        .getAllByRole("link")
+        .filter((el) => el.getAttribute("href") === link.href);
       expect(foundLinks.length).toBeGreaterThan(0);
     }
   });
 
   it("renders Resources section with external links", () => {
     render(<Footer />);
-    const externalLinks = screen.getAllByRole("link").filter(
-      (link) => link.getAttribute("target") === "_blank"
-    );
+    const externalLinks = screen
+      .getAllByRole("link")
+      .filter((link) => link.getAttribute("target") === "_blank");
     expect(externalLinks.length).toBeGreaterThanOrEqual(2);
     // Verify they have rel="noopener noreferrer"
     for (const link of externalLinks) {
@@ -65,9 +50,10 @@ describe("Footer", () => {
     expect(yearText).toBeInTheDocument();
   });
 
-  it("includes 'Projet open-source' text", () => {
+  it("includes open-source text (translation key)", () => {
     render(<Footer />);
-    expect(screen.getByText(/Projet open-source/)).toBeInTheDocument();
+    // useTranslations mock returns the key: tCommon("openSource") -> "openSource"
+    expect(screen.getByText(/openSource/)).toBeInTheDocument();
   });
 
   it("renders GitHub link", () => {
@@ -80,9 +66,11 @@ describe("Footer", () => {
 
   it("has accessible navigation landmarks", () => {
     render(<Footer />);
-    const navGuides = screen.getByRole("navigation", { name: "Guides" });
+    // useTranslations mock returns the key: tCommon("guides") -> "guides"
+    const navGuides = screen.getByRole("navigation", { name: "guides" });
+    // tCommon("resources") -> "resources"
     const navResources = screen.getByRole("navigation", {
-      name: "Ressources",
+      name: "resources",
     });
     expect(navGuides).toBeInTheDocument();
     expect(navResources).toBeInTheDocument();
@@ -90,9 +78,9 @@ describe("Footer", () => {
 
   it("renders Vision & Futur link in resources", () => {
     render(<Footer />);
-    const visionLink = screen.getAllByRole("link").filter(
-      (el) => el.getAttribute("href") === "/future"
-    );
+    const visionLink = screen
+      .getAllByRole("link")
+      .filter((el) => el.getAttribute("href") === "/future");
     expect(visionLink.length).toBeGreaterThan(0);
   });
 });

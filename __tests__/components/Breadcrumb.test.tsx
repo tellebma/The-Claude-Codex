@@ -1,18 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
+import React from "react";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 
 // Track the mocked pathname
 let mockPathname = "/";
 
-// Mock next/navigation
-vi.mock("next/navigation", () => ({
-  usePathname: () => mockPathname,
-}));
-
-// Mock next/link to render a plain anchor
-vi.mock("next/link", () => ({
-  default: ({
+// Override the global @/i18n/navigation mock to use local mockPathname
+vi.mock("@/i18n/navigation", () => ({
+  Link: ({
     children,
     href,
     ...props
@@ -20,11 +16,16 @@ vi.mock("next/link", () => ({
     children: React.ReactNode;
     href: string;
     [key: string]: unknown;
-  }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
+  }) => {
+    const resolvedHref = typeof href === "object" ? "/" : href;
+    return (
+      <a href={resolvedHref} {...props}>
+        {children}
+      </a>
+    );
+  },
+  usePathname: () => mockPathname,
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
 describe("Breadcrumb", () => {
@@ -42,16 +43,19 @@ describe("Breadcrumb", () => {
     mockPathname = "/mcp";
     render(<Breadcrumb />);
 
-    const nav = screen.getByRole("navigation", { name: "Fil d'Ariane" });
+    // useTranslations mock returns the key: t("ariaLabel") -> "ariaLabel"
+    const nav = screen.getByRole("navigation", { name: "ariaLabel" });
     expect(nav).toBeInTheDocument();
 
-    // Home link
-    const homeLink = screen.getByRole("link", { name: "Accueil" });
+    // Home link: t("home") -> "home"
+    const homeLink = screen.getByRole("link", { name: "home" });
     expect(homeLink).toHaveAttribute("href", "/");
 
-    // Current page (last breadcrumb) should be a span, not a link
-    expect(screen.getByText("MCP")).toBeInTheDocument();
-    expect(screen.getByText("MCP").getAttribute("aria-current")).toBe("page");
+    // Current page: t.has("sections.mcp") returns true, t("sections.mcp") -> "sections.mcp"
+    expect(screen.getByText("sections.mcp")).toBeInTheDocument();
+    expect(screen.getByText("sections.mcp").getAttribute("aria-current")).toBe(
+      "page"
+    );
   });
 
   it("renders multi-level breadcrumbs with intermediate links", () => {
@@ -59,27 +63,31 @@ describe("Breadcrumb", () => {
     render(<Breadcrumb />);
 
     // Home
-    expect(screen.getByRole("link", { name: "Accueil" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "home" })).toBeInTheDocument();
 
-    // MCP should be a link (not the last item)
-    const mcpLink = screen.getByRole("link", { name: "MCP" });
+    // MCP should be a link (not the last item): t("sections.mcp") -> "sections.mcp"
+    const mcpLink = screen.getByRole("link", { name: "sections.mcp" });
     expect(mcpLink).toHaveAttribute("href", "/mcp");
 
-    // Setup should be the current page (span)
-    const lastItem = screen.getByText("Setup");
+    // Setup should be the current page: t("sections.setup") -> "sections.setup"
+    const lastItem = screen.getByText("sections.setup");
     expect(lastItem.getAttribute("aria-current")).toBe("page");
   });
 
-  it("uses known labels for sections (getting-started -> Demarrer)", () => {
+  it("returns translation key for known sections", () => {
     mockPathname = "/getting-started";
     render(<Breadcrumb />);
-    expect(screen.getByText("Demarrer")).toBeInTheDocument();
+    // t.has returns true, t("sections.getting-started") -> "sections.getting-started"
+    expect(screen.getByText("sections.getting-started")).toBeInTheDocument();
   });
 
-  it("capitalizes unknown segments", () => {
+  it("returns translation key for unknown segments too (t.has always true in mock)", () => {
     mockPathname = "/some-unknown-section";
     render(<Breadcrumb />);
-    expect(screen.getByText("Some Unknown Section")).toBeInTheDocument();
+    // Even unknown segments: t.has returns true, t("sections.some-unknown-section")
+    expect(
+      screen.getByText("sections.some-unknown-section")
+    ).toBeInTheDocument();
   });
 
   it("includes JSON-LD structured data", () => {

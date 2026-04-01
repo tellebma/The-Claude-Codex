@@ -1,16 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+import React from "react";
 import { Header } from "@/components/layout/Header";
 
 let mockPathname = "/";
 
-vi.mock("next/navigation", () => ({
-  usePathname: () => mockPathname,
-  useRouter: () => ({ push: vi.fn() }),
-}));
-
-vi.mock("next/link", () => ({
-  default: ({
+vi.mock("@/i18n/navigation", () => ({
+  Link: ({
     children,
     href,
     ...props
@@ -18,15 +14,16 @@ vi.mock("next/link", () => ({
     children: React.ReactNode;
     href: string;
     [key: string]: unknown;
-  }) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  ),
-}));
-
-vi.mock("next-themes", () => ({
-  useTheme: () => ({ theme: "light", setTheme: vi.fn() }),
+  }) => {
+    const resolvedHref = typeof href === "object" ? "/" : href;
+    return (
+      <a href={resolvedHref} {...props}>
+        {children}
+      </a>
+    );
+  },
+  usePathname: () => mockPathname,
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
 describe("Header", () => {
@@ -51,9 +48,7 @@ describe("Header", () => {
       "/skills",
       "/prompting",
       "/use-cases",
-      "/personas",
       "/enterprise",
-      "/advanced",
     ];
 
     for (const href of primaryHrefs) {
@@ -66,21 +61,24 @@ describe("Header", () => {
 
     // secondaryNav items are inside a closed dropdown (not rendered until opened)
     const secondaryHrefs = [
+      "/personas",
+      "/advanced",
+      "/configurator",
       "/content",
       "/limits",
       "/reference",
-      "/configurator",
       "/glossary",
       "/future",
     ];
-    // Open the "Plus" dropdown
-    const plusButton = screen.getByRole("button", { name: /Plus/ });
-    fireEvent.click(plusButton);
+    // Open the "More" dropdown — mock returns the key "more"
+    const moreButton = screen.getByRole("button", { name: /more/ });
+    fireEvent.click(moreButton);
     for (const href of secondaryHrefs) {
-      const links = screen
-        .getAllByRole("link")
-        .filter((link) => link.getAttribute("href") === href);
-      expect(links.length).toBeGreaterThanOrEqual(1);
+      // Dropdown items have role="menuitem" set explicitly
+      const items = screen
+        .getAllByRole("menuitem")
+        .filter((item) => item.getAttribute("href") === href);
+      expect(items.length).toBeGreaterThanOrEqual(1);
     }
   });
 
@@ -120,8 +118,9 @@ describe("Header", () => {
 
   it("renders mobile menu toggle button", () => {
     render(<Header />);
+    // useTranslations mock returns the key: "menuToggle"
     const menuButton = screen.getByRole("button", {
-      name: "Menu de navigation",
+      name: "menuToggle",
     });
     expect(menuButton).toBeInTheDocument();
     expect(menuButton.getAttribute("aria-expanded")).toBe("false");
@@ -130,7 +129,7 @@ describe("Header", () => {
   it("toggles mobile menu open and closed", () => {
     render(<Header />);
     const menuButton = screen.getByRole("button", {
-      name: "Menu de navigation",
+      name: "menuToggle",
     });
 
     fireEvent.click(menuButton);
@@ -142,8 +141,9 @@ describe("Header", () => {
 
   it("renders search dialog trigger", () => {
     render(<Header />);
+    // SearchDialog uses useTranslations("search") — button label is a translation key
     const searchButton = screen.getByRole("button", {
-      name: /Rechercher/,
+      name: /trigger/,
     });
     expect(searchButton).toBeInTheDocument();
   });

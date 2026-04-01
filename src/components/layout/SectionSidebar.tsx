@@ -29,6 +29,13 @@ export function SectionSidebar() {
 
   const title = t(config.titleKey);
 
+  const normalizedPathname = pathname.replace(/\/$/, "");
+  const totalPages = config.items.length;
+  const currentIndex = config.items.findIndex(
+    (item) => normalizedPathname === item.href.replace(/\/$/, "")
+  );
+  const currentPage = currentIndex >= 0 ? currentIndex + 1 : 0;
+
   return (
     <aside
       aria-label={`Navigation ${title}`}
@@ -38,10 +45,33 @@ export function SectionSidebar() {
         <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
           {title}
         </h3>
+        {currentPage > 0 && (
+          <div className="mb-3">
+            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span aria-live="polite">
+                Page {currentPage} / {totalPages}
+              </span>
+              <span className="sr-only">
+                {Math.round((currentPage / totalPages) * 100)}% complete
+              </span>
+            </div>
+            <div
+              className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
+              role="progressbar"
+              aria-valuenow={currentPage}
+              aria-valuemin={1}
+              aria-valuemax={totalPages}
+              aria-label={`Progress: page ${currentPage} of ${totalPages}`}
+            >
+              <div
+                className="h-full rounded-full bg-brand-500 transition-all duration-300"
+                style={{ width: `${(currentPage / totalPages) * 100}%` }}
+              />
+            </div>
+          </div>
+        )}
         <ul className="space-y-1">
           {config.items.map((item) => {
-            // Normalize paths for comparison (handle trailing slashes)
-            const normalizedPathname = pathname.replace(/\/$/, "");
             const normalizedHref = item.href.replace(/\/$/, "");
             const isActive = normalizedPathname === normalizedHref;
 

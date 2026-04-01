@@ -124,7 +124,8 @@ export function TableOfContents() {
                     e.preventDefault();
                     const target = document.getElementById(heading.id);
                     if (target) {
-                      target.scrollIntoView({ behavior: "smooth" });
+                      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+                      target.scrollIntoView({ behavior: prefersReducedMotion ? "instant" : "smooth" });
                       // Update URL hash without jumping
                       window.history.replaceState(null, "", `#${heading.id}`);
                     }

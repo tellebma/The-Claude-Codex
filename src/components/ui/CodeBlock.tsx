@@ -64,7 +64,7 @@ export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps)
       <div className="relative">
         <button
           onClick={handleCopy}
-          className={`absolute right-2 top-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 ${
+          className={`absolute right-2 top-2 flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-md border px-2 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 ${
             copied
               ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-400 opacity-100"
               : "border-slate-700 bg-slate-800 text-slate-400 opacity-0 hover:border-slate-600 hover:bg-slate-700 hover:text-slate-300 group-hover:opacity-100 focus:opacity-100"

@@ -31,7 +31,7 @@ export function LanguageSwitcher() {
             aria-label={t(l)}
             aria-current={isActive ? "page" : undefined}
             className={clsx(
-              "rounded px-1.5 py-0.5 text-xs font-medium transition-colors",
+              "inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded px-1.5 py-0.5 text-xs font-medium transition-colors",
               isActive
                 ? "bg-brand-500/15 text-brand-700 dark:bg-brand-500/25 dark:text-brand-400"
                 : "text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"

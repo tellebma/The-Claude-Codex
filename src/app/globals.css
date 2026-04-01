@@ -25,7 +25,7 @@
     --hero-cta-secondary-border: #cbd5e1;
     --hero-cta-secondary-text: #334155;
     --hero-cta-secondary-hover-border: #94a3b8;
-    --hero-cta-secondary-hover-bg: rgba(0, 0, 0, 0.03);
+    --hero-cta-secondary-hover-bg: rgba(0, 0, 0, 0.06);
     --hero-terminal-border: rgba(203, 213, 225, 0.5);
     --hero-terminal-bg: rgba(15, 23, 42, 0.95);
   }
@@ -67,6 +67,7 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }

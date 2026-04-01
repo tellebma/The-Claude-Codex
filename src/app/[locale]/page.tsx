@@ -170,7 +170,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== CE QUE VOUS POUVEZ FAIRE ===== */}
-      <section className="py-20 sm:py-28">
+      <section className="bg-white py-20 dark:bg-slate-950 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -240,7 +240,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== POUR QUI ? ===== */}
-      <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
+      <section className="bg-slate-50 py-20 dark:bg-slate-900 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -286,7 +286,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== PARCOURS ===== */}
-      <section className="py-20 sm:py-28">
+      <section className="bg-white py-20 dark:bg-slate-950 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -347,7 +347,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== CONFIGURATEUR RAPIDE ===== */}
-      <section className="bg-slate-50/50 py-20 dark:bg-slate-900/50 sm:py-28">
+      <section className="bg-slate-50 py-20 dark:bg-slate-900 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading

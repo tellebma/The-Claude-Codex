@@ -11,10 +11,10 @@ interface FeatureCardProps {
 }
 
 const gradients = {
-  teal: "from-brand-500/20 to-brand-500/5",
-  amber: "from-accent-500/20 to-accent-500/5",
-  purple: "from-violet-500/20 to-violet-500/5",
-  green: "from-emerald-500/20 to-emerald-500/5",
+  teal: "from-brand-100 to-brand-50",
+  amber: "from-accent-100 to-accent-50",
+  purple: "from-violet-100 to-violet-50",
+  green: "from-emerald-100 to-emerald-50",
 };
 
 const iconColors = {

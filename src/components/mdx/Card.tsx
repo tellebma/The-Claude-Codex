@@ -8,11 +8,11 @@ interface CardProps {
 
 const variantStyles = {
   default:
-    "border-slate-200/50 bg-white/50 dark:border-slate-700/50 dark:bg-slate-800/50",
+    "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800",
   accent:
-    "border-brand-500/30 bg-brand-500/5 dark:border-brand-500/20 dark:bg-brand-500/5",
+    "border-brand-500/30 bg-brand-50 dark:border-brand-500/20 dark:bg-brand-950",
   highlight:
-    "border-accent-500/30 bg-accent-500/5 dark:border-accent-500/20 dark:bg-accent-500/5",
+    "border-accent-500/30 bg-accent-50 dark:border-accent-500/20 dark:bg-accent-950",
 };
 
 export function Card({ title, variant = "default", children }: CardProps) {

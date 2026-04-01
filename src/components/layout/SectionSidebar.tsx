@@ -39,7 +39,7 @@ export function SectionSidebar() {
   return (
     <aside
       aria-label={`Navigation ${title}`}
-      className="hidden lg:block"
+      className="hidden h-full lg:block"
     >
       <nav className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
         <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">

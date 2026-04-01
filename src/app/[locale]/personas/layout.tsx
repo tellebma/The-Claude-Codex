@@ -1,9 +1,1 @@
-import { SectionLayout } from "@/components/layout/SectionLayout";
-
-export default function PersonasLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return <SectionLayout>{children}</SectionLayout>;
-}
+export { default } from "@/app/[locale]/_shared/section-layout-wrapper";

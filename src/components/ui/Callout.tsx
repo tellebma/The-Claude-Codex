@@ -34,12 +34,11 @@ export function Callout({ type = "info", title, children }: CalloutProps) {
   const t = useTranslations("callout");
 
   return (
-    <div
+    <aside
       className={clsx(
         "my-6 rounded-xl border-l-4 p-4",
         style.container
       )}
-      role="note"
     >
       <div className="flex items-start gap-3">
         <IconComponent className={clsx("mt-0.5 h-5 w-5 shrink-0", style.icon)} aria-hidden="true" />
@@ -50,6 +49,6 @@ export function Callout({ type = "info", title, children }: CalloutProps) {
           </div>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }

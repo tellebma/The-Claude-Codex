@@ -102,12 +102,19 @@ export const mdxComponents: MDXComponents = {
   li: (props: React.HTMLAttributes<HTMLLIElement>) => (
     <li className="leading-relaxed" {...props} />
   ),
-  a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a
-      className="text-brand-700 underline underline-offset-2 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
-      {...props}
-    />
-  ),
+  a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    const isExternal = props.href?.startsWith("http") || props.target === "_blank";
+    return (
+      <a
+        className="text-brand-700 underline underline-offset-2 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
+        {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...props}
+      >
+        {props.children}
+        {isExternal && <span className="sr-only"> (ouvre un nouvel onglet)</span>}
+      </a>
+    );
+  },
   blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
     <blockquote
       className="my-6 border-l-4 border-brand-500/30 pl-4 italic text-slate-600 dark:text-slate-300"
@@ -208,12 +215,17 @@ export function createLocaleMdxComponents(locale: string): MDXComponents {
     a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
       const href =
         isInternalLink(props.href) ? `/${locale}${props.href}` : props.href;
+      const isExternal = href?.startsWith("http") || props.target === "_blank";
       return (
         <a
           className="text-brand-700 underline underline-offset-2 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
+          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           {...props}
           href={href}
-        />
+        >
+          {props.children}
+          {isExternal && <span className="sr-only"> (ouvre un nouvel onglet)</span>}
+        </a>
       );
     },
   };

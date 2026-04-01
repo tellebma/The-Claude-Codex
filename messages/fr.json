@@ -20,7 +20,8 @@
     "resources": "Ressources",
     "pageNotFound": "Page introuvable",
     "pageNotFoundDescription": "La page que vous cherchez n'existe pas ou a été déplacée.",
-    "backToHome": "Retour à l'accueil"
+    "backToHome": "Retour à l'accueil",
+    "opensNewTab": "(ouvre un nouvel onglet)"
   },
   "navigation": {
     "mainNav": "Navigation principale",

@@ -83,19 +83,19 @@ export const mdxComponents: MDXComponents = {
   ),
   p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
     <p
-      className="my-4 leading-relaxed text-slate-600 dark:text-slate-300"
+      className="my-4 leading-relaxed text-slate-700 dark:text-slate-200"
       {...props}
     />
   ),
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
     <ul
-      className="my-4 list-disc space-y-2 pl-6 text-slate-600 dark:text-slate-300"
+      className="my-4 list-disc space-y-2 pl-6 text-slate-700 dark:text-slate-200"
       {...props}
     />
   ),
   ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
     <ol
-      className="my-4 list-decimal space-y-2 pl-6 text-slate-600 dark:text-slate-300"
+      className="my-4 list-decimal space-y-2 pl-6 text-slate-700 dark:text-slate-200"
       {...props}
     />
   ),
@@ -110,7 +110,7 @@ export const mdxComponents: MDXComponents = {
   ),
   blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
     <blockquote
-      className="my-6 border-l-4 border-brand-500/30 pl-4 italic text-slate-500 dark:text-slate-300"
+      className="my-6 border-l-4 border-brand-500/30 pl-4 italic text-slate-600 dark:text-slate-300"
       {...props}
     />
   ),

@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { setRequestLocale, getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
   Github,
@@ -16,55 +17,60 @@ import {
   createArticleSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
+import { routing } from "@/i18n/routing";
 
-export const metadata = createPageMetadata({
-  title: "À propos du Claude Codex",
-  description:
-    "Qui sommes-nous, pourquoi ce guide existe, et comment contribuer au projet open-source The Claude Codex.",
-  path: "/about",
-});
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
-const articleJsonLd = createArticleSchema({
-  title: "À propos du Claude Codex",
-  description:
-    "Qui sommes-nous, pourquoi ce guide existe, et comment contribuer.",
-  url: `${SITE_URL}/about`,
-  datePublished: "2026-03-14",
-  dateModified: "2026-03-14",
-});
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "about" });
+  return createPageMetadata({
+    title: `${t("title")} ${t("titleHighlight")}`,
+    description: t("subtitle"),
+    path: `/${locale}/about`,
+    locale,
+  });
+}
 
-/* JSON-LD: safe static schema from build-time constants, serialized with
-   JSON.stringify. Same pattern used across all section pages. */
-const jsonLdHtml = serializeJsonLd(articleJsonLd);
+function buildArticleJsonLd(locale: string, title: string, description: string) {
+  return createArticleSchema({
+    title,
+    description,
+    url: `${SITE_URL}/${locale}/about`,
+    locale,
+    datePublished: "2026-03-14",
+    dateModified: "2026-03-14",
+  });
+}
 
-const values = [
-  {
-    icon: BookOpen,
-    title: "Gratuit et ouvert",
-    description:
-      "Tout le contenu est libre d'accès. Pas de paywall, pas de compte obligatoire, pas de contenu verrouillé. Le savoir doit circuler.",
-  },
-  {
-    icon: Users,
-    title: "Pour tous les profils",
-    description:
-      "Développeur senior ou entrepreneur qui n'a jamais codé : chaque guide est pensé pour être accessible quel que soit votre niveau technique.",
-  },
-  {
-    icon: Shield,
-    title: "Indépendant",
-    description:
-      "Ce projet n'est pas affilié à Anthropic. Le contenu reflète l'expérience terrain de la communauté, pas un discours marketing.",
-  },
-  {
-    icon: Globe,
-    title: "Francophone d'abord",
-    description:
-      "La documentation IA de qualité en français est rare. Ce guide comble ce manque pour la communauté francophone.",
-  },
-];
+const valueIcons = [BookOpen, Users, Shield, Globe] as const;
+const valueKeys = [
+  "valueFree",
+  "valueForAll",
+  "valueIndependent",
+  "valueFrench",
+] as const;
 
-export default function AboutPage() {
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "about" });
+
+  const fullTitle = `${t("title")} ${t("titleHighlight")}`;
+  const jsonLdHtml = serializeJsonLd(
+    buildArticleJsonLd(locale, fullTitle, t("subtitle"))
+  );
+
   return (
     <>
       {/* JSON-LD structured data — safe: static schema, no user input */}
@@ -82,16 +88,14 @@ export default function AboutPage() {
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
               <Heart className="h-4 w-4" aria-hidden="true" />
-              Open-source
+              {t("badge")}
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-              &Agrave; propos du{" "}
-              <span className="text-gradient">Claude Codex</span>
+              {t("title")}{" "}
+              <span className="text-gradient">{t("titleHighlight")}</span>
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-              Un guide complet, gratuit et en fran&ccedil;ais pour apprendre
-              &agrave; utiliser Claude Code. Cr&eacute;&eacute; par des
-              utilisateurs, pour des utilisateurs.
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -102,34 +106,16 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Notre mission"
-              title="Rendre l'IA accessible à tous"
-              description="Claude Code est un outil puissant, mais sa documentation officielle est en anglais et orientée développeurs. Nous avons créé The Claude Codex pour changer ça."
+              badge={t("missionBadge")}
+              title={t("missionTitle")}
+              description={t("missionDescription")}
             />
           </AnimateOnScroll>
 
           <div className="mx-auto mt-12 max-w-3xl space-y-6 text-lg text-slate-600 dark:text-slate-300">
-            <p>
-              The Claude Codex est n&eacute; d&apos;un constat simple : l&apos;IA
-              g&eacute;n&eacute;rative transforme le travail quotidien de millions
-              de personnes, mais les ressources pour apprendre &agrave; l&apos;utiliser
-              correctement restent fragment&eacute;es, souvent en anglais, et rarement
-              adapt&eacute;es aux non-d&eacute;veloppeurs.
-            </p>
-            <p>
-              Ce guide couvre tout l&apos;&eacute;cosyst&egrave;me Claude Code :
-              de l&apos;installation &agrave; l&apos;orchestration multi-agents, en
-              passant par les MCP, les Skills, le prompting avanc&eacute; et les
-              cas d&apos;usage concrets. Chaque page est r&eacute;dig&eacute;e pour
-              &ecirc;tre compr&eacute;hensible par quelqu&apos;un qui d&eacute;couvre
-              le sujet.
-            </p>
-            <p>
-              Le projet est enti&egrave;rement open-source sous licence MIT. Vous
-              pouvez lire le code, proposer des am&eacute;liorations, signaler des
-              erreurs ou contribuer de nouvelles pages. Toute contribution est
-              la bienvenue.
-            </p>
+            <p>{t("missionP1")}</p>
+            <p>{t("missionP2")}</p>
+            <p>{t("missionP3")}</p>
           </div>
         </div>
       </section>
@@ -139,22 +125,27 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Valeurs"
-              title="Ce qui guide le projet"
+              badge={t("valuesBadge")}
+              title={t("valuesTitle")}
             />
           </AnimateOnScroll>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            {values.map((value) => {
-              const Icon = value.icon;
+            {valueKeys.map((key, index) => {
+              const Icon = valueIcons[index];
               return (
-                <div key={value.title} className="glass-card p-6">
+                <div key={key} className="glass-card p-6">
                   <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
-                    <Icon className="h-6 w-6 text-brand-700 dark:text-brand-400" aria-hidden="true" />
+                    <Icon
+                      className="h-6 w-6 text-brand-700 dark:text-brand-400"
+                      aria-hidden="true"
+                    />
                   </div>
-                  <h3 className="mb-2 text-lg font-semibold">{value.title}</h3>
+                  <h3 className="mb-2 text-lg font-semibold">
+                    {t(`${key}Title`)}
+                  </h3>
                   <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-                    {value.description}
+                    {t(`${key}Desc`)}
                   </p>
                 </div>
               );
@@ -168,8 +159,8 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
-              badge="Auteur"
-              title="Qui est derrière le projet ?"
+              badge={t("authorBadge")}
+              title={t("authorTitle")}
             />
           </AnimateOnScroll>
 
@@ -180,25 +171,15 @@ export default function AboutPage() {
                   T
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">tellebma</h3>
+                  <h3 className="text-xl font-bold">{t("authorName")}</h3>
                   <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                    D&eacute;veloppeur fullstack &amp; utilisateur quotidien de Claude Code
+                    {t("authorRole")}
                   </p>
                 </div>
               </div>
               <div className="mt-6 space-y-4 text-slate-600 dark:text-slate-300">
-                <p>
-                  Passionn&eacute; par les outils qui am&eacute;liorent la
-                  productivit&eacute; des d&eacute;veloppeurs, j&apos;utilise
-                  Claude Code au quotidien dans des projets Next.js, Python et
-                  DevOps. Ce guide est le r&eacute;sultat de centaines d&apos;heures
-                  d&apos;exp&eacute;rimentation et de documentation.
-                </p>
-                <p>
-                  L&apos;objectif : partager ce que j&apos;ai appris pour que
-                  d&apos;autres gagnent du temps. Pas de th&eacute;orie abstraite,
-                  que des conseils test&eacute;s en conditions r&eacute;elles.
-                </p>
+                <p>{t("authorP1")}</p>
+                <p>{t("authorP2")}</p>
               </div>
               <div className="mt-6 flex gap-4">
                 <a
@@ -208,7 +189,7 @@ export default function AboutPage() {
                   className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
                 >
                   <Github className="h-4 w-4" aria-hidden="true" />
-                  GitHub
+                  {t("github")}
                   <ExternalLink className="h-3 w-3" aria-hidden="true" />
                 </a>
                 <a
@@ -218,7 +199,7 @@ export default function AboutPage() {
                   className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
                 >
                   <BookOpen className="h-4 w-4" aria-hidden="true" />
-                  Code source
+                  {t("sourceCode")}
                   <ExternalLink className="h-3 w-3" aria-hidden="true" />
                 </a>
               </div>
@@ -234,12 +215,11 @@ export default function AboutPage() {
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
-            Envie de{" "}
-            <span className="text-gradient">contribuer</span> ?
+            {t("ctaTitle")}{" "}
+            <span className="text-gradient">{t("ctaHighlight")}</span> ?
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
-            Le projet est open-source. Vous pouvez proposer des corrections,
-            ajouter du contenu ou signaler des erreurs sur GitHub.
+            {t("ctaDescription")}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
@@ -249,14 +229,17 @@ export default function AboutPage() {
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:bg-slate-100"
             >
               <Github className="h-4 w-4" aria-hidden="true" />
-              Voir sur GitHub
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              {t("ctaGithub")}
+              <ArrowRight
+                className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
             </a>
             <Link
               href="/getting-started"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:border-slate-500 hover:bg-white/5"
             >
-              Commencer le guide
+              {t("ctaGuide")}
             </Link>
           </div>
         </div>

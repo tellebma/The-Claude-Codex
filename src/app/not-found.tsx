@@ -47,7 +47,7 @@ const suggestedLinks = [
 
 export default function NotFound() {
   return (
-    <section className="relative flex min-h-[calc(100vh-8rem)] items-center overflow-hidden bg-slate-50 dark:bg-slate-950">
+    <section lang="fr" className="relative flex min-h-[calc(100vh-8rem)] items-center overflow-hidden bg-slate-50 dark:bg-slate-950">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
       <div

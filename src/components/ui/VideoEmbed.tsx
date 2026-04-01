@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 type VideoEmbedProps = {
   /** YouTube video ID (the part after ?v= in the URL) */
@@ -24,6 +25,7 @@ export function VideoEmbed({
   caption,
   className = "",
 }: VideoEmbedProps) {
+  const t = useTranslations("videoEmbed");
   const [playing, setPlaying] = useState(false);
 
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
@@ -47,13 +49,13 @@ export function VideoEmbed({
               type="button"
               onClick={() => setPlaying(true)}
               className="group absolute inset-0 flex w-full items-center justify-center bg-slate-900"
-              aria-label={`Lancer la vidéo : ${title}`}
+              aria-label={t("play", { title })}
             >
               {/* Thumbnail */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={thumbnailUrl}
-                alt={`Miniature de la vidéo : ${title}`}
+                alt={t("thumbnail", { title })}
                 className="absolute inset-0 h-full w-full object-cover opacity-70 transition-opacity duration-200 group-hover:opacity-90"
                 loading="lazy"
               />

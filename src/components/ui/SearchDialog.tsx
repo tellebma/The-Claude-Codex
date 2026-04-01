@@ -104,6 +104,31 @@ export function SearchDialog() {
     }
   };
 
+  // Add inert to background content when dialog is open
+  useEffect(() => {
+    if (!open) return;
+
+    const main = document.getElementById("main-content");
+    const header = document.querySelector("header");
+    if (main) main.setAttribute("inert", "");
+    if (header) header.setAttribute("inert", "");
+
+    return () => {
+      if (main) main.removeAttribute("inert");
+      if (header) header.removeAttribute("inert");
+    };
+  }, [open]);
+
+  // Auto-scroll active option into view
+  useEffect(() => {
+    if (results.length > 0 && selectedIndex >= 0) {
+      const optionEl = document.getElementById(getOptionId(selectedIndex));
+      if (optionEl) {
+        optionEl.scrollIntoView({ block: "nearest" });
+      }
+    }
+  }, [selectedIndex, results.length]);
+
   // Lock body scroll when dialog is open (with scrollbar compensation to avoid layout shift)
   useEffect(() => {
     if (open) {

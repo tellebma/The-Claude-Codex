@@ -116,7 +116,7 @@
     @apply backdrop-blur-lg border border-slate-200 dark:border-slate-700/40 rounded-2xl shadow-sm shadow-slate-200/50 dark:shadow-none transition-colors;
     background-color: var(--surface-card);
   }
-  .glass-card:hover {
+  .glass-card[data-interactive]:hover {
     background-color: var(--surface-card-hover);
   }
 

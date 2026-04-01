@@ -35,6 +35,7 @@ export function Callout({ type = "info", title, children }: CalloutProps) {
 
   return (
     <aside
+      aria-label={title ?? t(type)}
       className={clsx(
         "my-6 rounded-xl border-l-4 p-4",
         style.container

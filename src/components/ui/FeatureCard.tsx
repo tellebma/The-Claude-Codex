@@ -54,7 +54,7 @@ export function FeatureCard({
 
   if (href) {
     return (
-      <Link href={href} className={clsx(baseClassName, interactiveClassName, "block")}>
+      <Link href={href} data-interactive className={clsx(baseClassName, interactiveClassName, "block")}>
         {content}
       </Link>
     );

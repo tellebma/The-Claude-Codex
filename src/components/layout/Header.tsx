@@ -291,7 +291,7 @@ export function Header() {
                 onClick={() => setMobileOpen(false)}
                 aria-current={isActive ? "page" : undefined}
                 className={clsx(
-                  "block rounded-lg px-3 py-3 text-sm font-medium transition-colors",
+                  "flex min-h-[44px] items-center rounded-lg px-3 py-3 text-sm font-medium transition-colors",
                   isActive
                     ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"

@@ -15,7 +15,7 @@ export function SectionLayout({ children }: SectionLayoutProps) {
       </div>
       <div className="mx-auto max-w-7xl lg:flex lg:gap-8 lg:px-4 xl:max-w-[1400px] xl:gap-12 2xl:max-w-[1800px] 2xl:gap-16">
         {/* Left sidebar for section navigation */}
-        <div className="hidden w-56 shrink-0 lg:block xl:w-60 2xl:w-64">
+        <div className="hidden w-56 shrink-0 pt-6 lg:block xl:w-60 2xl:w-64">
           <SectionSidebar />
         </div>
 

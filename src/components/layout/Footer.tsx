@@ -50,8 +50,8 @@ export function Footer() {
   return (
     <footer className="border-t border-slate-200/50 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
-          <div className="sm:col-span-2">
+        <div className="grid grid-cols-2 gap-6 lg:grid-cols-5">
+          <div className="col-span-2">
             <Link
               href="/"
               className="flex items-center gap-2 text-lg font-bold"
@@ -70,9 +70,9 @@ export function Footer() {
           </div>
 
           <nav aria-label={tCommon("guides")}>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+            <p className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               {tCommon("guides")}
-            </h3>
+            </p>
             <ul className="mt-3 space-y-2">
               {guidesNavKeys.map((link) => (
                 <li key={link.href}>
@@ -88,9 +88,9 @@ export function Footer() {
           </nav>
 
           <nav aria-label={tCommon("tools")}>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+            <p className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               {tCommon("tools")}
-            </h3>
+            </p>
             <ul className="mt-3 space-y-2">
               {outilsNavKeys.map((link) => (
                 <li key={link.href}>
@@ -106,9 +106,9 @@ export function Footer() {
           </nav>
 
           <nav aria-label={tCommon("resources")}>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+            <p className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
               {tCommon("resources")}
-            </h3>
+            </p>
             <ul className="mt-3 space-y-2">
               {resourcesLinks.map((link) => (
                 <li key={link.href}>
@@ -124,6 +124,7 @@ export function Footer() {
                         className="h-3 w-3"
                         aria-hidden="true"
                       />
+                      <span className="sr-only"> {tCommon("opensNewTab")}</span>
                     </a>
                   ) : (
                     <Link
@@ -153,6 +154,7 @@ export function Footer() {
           >
             <Github className="h-4 w-4" aria-hidden="true" />
             GitHub
+            <span className="sr-only"> {tCommon("opensNewTab")}</span>
           </a>
         </div>
       </div>

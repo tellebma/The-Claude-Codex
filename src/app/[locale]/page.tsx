@@ -170,7 +170,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== CE QUE VOUS POUVEZ FAIRE ===== */}
-      <section className="bg-white py-20 dark:bg-slate-950 sm:py-28">
+      <section className="bg-white py-16 dark:bg-slate-950 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -240,7 +240,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== POUR QUI ? ===== */}
-      <section className="bg-slate-50 py-20 dark:bg-slate-900 sm:py-28">
+      <section className="bg-slate-50 py-16 dark:bg-slate-900 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -286,7 +286,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== PARCOURS ===== */}
-      <section className="bg-white py-20 dark:bg-slate-950 sm:py-28">
+      <section className="bg-white py-16 dark:bg-slate-950 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -347,7 +347,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== CONFIGURATEUR RAPIDE ===== */}
-      <section className="bg-slate-50 py-20 dark:bg-slate-900 sm:py-28">
+      <section className="bg-slate-50 py-16 dark:bg-slate-900 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -364,7 +364,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== CTA FINAL ===== */}
-      <section className="relative overflow-hidden bg-slate-100 py-20 dark:bg-slate-950 sm:py-28">
+      <section className="relative overflow-hidden bg-slate-100 py-16 dark:bg-slate-950 sm:py-20 lg:py-24">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-slate-50 to-brand-100 dark:from-brand-950 dark:via-slate-900 dark:to-brand-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.08),_transparent_70%)] dark:bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
 

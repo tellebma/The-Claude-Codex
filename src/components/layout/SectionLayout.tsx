@@ -20,7 +20,7 @@ export function SectionLayout({ children }: SectionLayoutProps) {
         </div>
 
         {/* Main content */}
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 max-w-3xl">
           {children}
         </div>
 

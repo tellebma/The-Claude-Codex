@@ -241,24 +241,24 @@ export default async function GettingStartedPage({
       />
 
       {/* ===== HERO / INTRO ===== */}
-      <section className="relative overflow-hidden bg-slate-950">
+      <section className="relative overflow-hidden bg-slate-50 dark:bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
 
         <div className="relative px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28 lg:px-8">
           <div className="text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-700 dark:text-brand-400">
               <Sparkles className="h-4 w-4" aria-hidden="true" />
               {t.heroBadge}
             </div>
 
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
               {t.heroTitle}{" "}
               <span className="text-gradient">Claude Code</span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300 sm:text-xl">
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300 sm:text-xl">
               {t.heroSubtitle}
             </p>
           </div>
@@ -322,19 +322,19 @@ export default async function GettingStartedPage({
 
       {/* ===== PROCHAINES ETAPES ===== */}
       <section className="relative overflow-hidden py-16 sm:py-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-slate-50 to-brand-100 dark:from-brand-950 dark:via-slate-900 dark:to-brand-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.12),_transparent_70%)]" />
 
         <div className="relative px-4 sm:px-6 lg:px-0">
           <div className="text-center">
-            <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-400">
+            <span className="mb-3 inline-block rounded-full bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-400">
               {t.nextBadge}
             </span>
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
               {t.nextTitle}{" "}
               <span className="text-gradient">{t.nextTitleHighlight}</span>.
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
               {t.nextDescription}
             </p>
           </div>
@@ -342,12 +342,12 @@ export default async function GettingStartedPage({
           <div className="mt-12 grid gap-4 sm:grid-cols-3">
             <Link
               href={`/${locale}/mcp`}
-              className="group rounded-xl border border-slate-700/50 bg-slate-800/50 p-6 backdrop-blur transition-all hover:border-brand-500/50 hover:bg-slate-800/80"
+              className="group rounded-xl border border-slate-200 bg-white/70 p-6 backdrop-blur transition-all hover:border-brand-500/50 hover:bg-white dark:border-slate-700/50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80"
             >
-              <Puzzle className="mb-3 h-8 w-8 text-brand-400" aria-hidden="true" />
-              <h3 className="mb-2 font-semibold text-white">{t.mcpTitle}</h3>
-              <p className="text-sm leading-relaxed text-slate-400">{t.mcpDescription}</p>
-              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-brand-400 transition-colors group-hover:text-brand-300">
+              <Puzzle className="mb-3 h-8 w-8 text-brand-600 dark:text-brand-400" aria-hidden="true" />
+              <h3 className="mb-2 font-semibold text-slate-900 dark:text-white">{t.mcpTitle}</h3>
+              <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{t.mcpDescription}</p>
+              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-brand-600 transition-colors group-hover:text-brand-500 dark:text-brand-400 dark:group-hover:text-brand-300">
                 {t.mcpLink}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </div>
@@ -355,12 +355,12 @@ export default async function GettingStartedPage({
 
             <Link
               href={`/${locale}/skills`}
-              className="group rounded-xl border border-slate-700/50 bg-slate-800/50 p-6 backdrop-blur transition-all hover:border-accent-500/50 hover:bg-slate-800/80"
+              className="group rounded-xl border border-slate-200 bg-white/70 p-6 backdrop-blur transition-all hover:border-accent-500/50 hover:bg-white dark:border-slate-700/50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80"
             >
-              <BookOpen className="mb-3 h-8 w-8 text-accent-400" aria-hidden="true" />
-              <h3 className="mb-2 font-semibold text-white">{t.skillsTitle}</h3>
-              <p className="text-sm leading-relaxed text-slate-400">{t.skillsDescription}</p>
-              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-accent-400 transition-colors group-hover:text-accent-300">
+              <BookOpen className="mb-3 h-8 w-8 text-accent-600 dark:text-accent-400" aria-hidden="true" />
+              <h3 className="mb-2 font-semibold text-slate-900 dark:text-white">{t.skillsTitle}</h3>
+              <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{t.skillsDescription}</p>
+              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-accent-600 transition-colors group-hover:text-accent-500 dark:text-accent-400 dark:group-hover:text-accent-300">
                 {t.skillsLink}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </div>
@@ -368,12 +368,12 @@ export default async function GettingStartedPage({
 
             <Link
               href={`/${locale}/prompting`}
-              className="group rounded-xl border border-slate-700/50 bg-slate-800/50 p-6 backdrop-blur transition-all hover:border-emerald-500/50 hover:bg-slate-800/80"
+              className="group rounded-xl border border-slate-200 bg-white/70 p-6 backdrop-blur transition-all hover:border-emerald-500/50 hover:bg-white dark:border-slate-700/50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80"
             >
-              <MessageSquare className="mb-3 h-8 w-8 text-emerald-400" aria-hidden="true" />
-              <h3 className="mb-2 font-semibold text-white">{t.promptingTitle}</h3>
-              <p className="text-sm leading-relaxed text-slate-400">{t.promptingDescription}</p>
-              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-emerald-400 transition-colors group-hover:text-emerald-300">
+              <MessageSquare className="mb-3 h-8 w-8 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+              <h3 className="mb-2 font-semibold text-slate-900 dark:text-white">{t.promptingTitle}</h3>
+              <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{t.promptingDescription}</p>
+              <div className="mt-4 flex items-center gap-1 text-sm font-medium text-emerald-600 transition-colors group-hover:text-emerald-500 dark:text-emerald-400 dark:group-hover:text-emerald-300">
                 {t.promptingLink}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </div>

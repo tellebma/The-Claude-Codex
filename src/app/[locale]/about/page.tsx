@@ -80,21 +80,21 @@ export default async function AboutPage({
       />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-slate-950">
+      <section className="relative overflow-hidden bg-slate-50 dark:bg-slate-950">
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
 
         <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 sm:pb-28 sm:pt-28 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-700 dark:text-brand-400">
               <Heart className="h-4 w-4" aria-hidden="true" />
               {t("badge")}
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
               {t("title")}{" "}
               <span className="text-gradient">{t("titleHighlight")}</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
               {t("subtitle")}
             </p>
           </div>
@@ -210,15 +210,15 @@ export default async function AboutPage({
 
       {/* CTA */}
       <section className="relative overflow-hidden py-20 sm:py-28">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-slate-50 to-brand-100 dark:from-brand-950 dark:via-slate-900 dark:to-brand-900" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
 
         <div className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
             {t("ctaTitle")}{" "}
             <span className="text-gradient">{t("ctaHighlight")}</span> ?
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-300">
+          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
             {t("ctaDescription")}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -226,7 +226,7 @@ export default async function AboutPage({
               href="https://github.com/tellebma/The-Claude-Codex"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-slate-900 shadow-lg transition-all hover:bg-slate-100"
+              className="group inline-flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-3.5 text-sm font-semibold text-white shadow-lg transition-all hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
             >
               <Github className="h-4 w-4" aria-hidden="true" />
               {t("ctaGithub")}
@@ -237,7 +237,7 @@ export default async function AboutPage({
             </a>
             <Link
               href="/getting-started"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-600 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:border-slate-500 hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-8 py-3.5 text-sm font-semibold text-slate-700 transition-all hover:border-slate-400 hover:bg-slate-100 dark:border-slate-600 dark:text-white dark:hover:border-slate-500 dark:hover:bg-white/5"
             >
               {t("ctaGuide")}
             </Link>

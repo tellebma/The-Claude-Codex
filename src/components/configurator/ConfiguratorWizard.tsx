@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { ArrowLeft, ArrowRight, RotateCcw } from "lucide-react";
+import { useState, useCallback, useMemo, useRef } from "react";
+import { ArrowLeft, ArrowRight, RotateCcw, Eye, EyeOff } from "lucide-react";
 import type {
   ConfigState,
   Profile,
@@ -33,6 +33,8 @@ export function ConfiguratorWizard() {
   const [config, setConfig] = useState<ConfigState>(INITIAL_STATE);
   const [step, setStep] = useState<WizardStep>(1);
   const [showPreview, setShowPreview] = useState(false);
+  const [showPreviewMobile, setShowPreviewMobile] = useState(false);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   // Memoize generated config
   const generatedConfig = useMemo(() => generateAll(config), [config]);
@@ -89,6 +91,10 @@ export function ConfiguratorWizard() {
       features: [...preset.features],
     });
     setShowPreview(true);
+    setShowPreviewMobile(true);
+    requestAnimationFrame(() => {
+      previewRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   }, []);
 
   // Navigation
@@ -111,6 +117,7 @@ export function ConfiguratorWizard() {
     setConfig(INITIAL_STATE);
     setStep(1);
     setShowPreview(false);
+    setShowPreviewMobile(false);
   }, []);
 
   // Can navigate forward?
@@ -185,6 +192,8 @@ export function ConfiguratorWizard() {
     }
   };
 
+  const hasConfig = config.profile !== null || showPreview;
+
   return (
     <div>
       {/* Section Presets */}
@@ -197,7 +206,7 @@ export function ConfiguratorWizard() {
           configuration optimisée.
         </p>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {PRESETS.map((preset) => (
             <PresetCard
               key={preset.id}
@@ -222,7 +231,7 @@ export function ConfiguratorWizard() {
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
           Configurateur pas à pas
         </h2>
-        {(config.profile !== null || showPreview) && (
+        {hasConfig && (
           <button
             type="button"
             onClick={handleReset}
@@ -249,7 +258,7 @@ export function ConfiguratorWizard() {
               aria-label={`Aller à l'étape ${s} : ${WIZARD_STEP_LABELS[s]}${!isReachable ? " (complétez les étapes précédentes)" : ""}`}
               aria-current={step === s ? "step" : undefined}
               className={clsx(
-                "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-2 rounded-lg px-1.5 py-2 text-sm font-medium transition-colors sm:px-3",
                 !isReachable
                   ? "cursor-not-allowed text-slate-300 dark:text-slate-600"
                   : step === s
@@ -296,9 +305,14 @@ export function ConfiguratorWizard() {
           })}
         </div>
 
+        {/* Current step label on mobile */}
+        <p className="mt-2 text-center text-xs font-medium text-brand-600 dark:text-brand-400 sm:hidden">
+          {WIZARD_STEP_LABELS[step]}
+        </p>
+
         {/* Progress bar */}
         <div
-          className="mt-3 h-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
+          className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700 sm:h-1"
           role="progressbar"
           aria-valuenow={step}
           aria-valuemin={1}
@@ -313,53 +327,84 @@ export function ConfiguratorWizard() {
       </nav>
 
       {/* Contenu principal : step + preview */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1fr] xl:grid-cols-[3fr_2fr]">
         {/* Zone de l'étape courante */}
         <div className="min-w-0">
           {renderStep()}
 
-          {/* Boutons de navigation */}
-          <div className="mt-8 flex items-center justify-between">
-            <button
-              type="button"
-              onClick={handlePrev}
-              disabled={step === 1}
-              aria-label="Étape précédente"
-              className={clsx(
-                "flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors",
-                step === 1
-                  ? "cursor-not-allowed text-slate-300 dark:text-slate-600"
-                  : "border border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
-              )}
-            >
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Précédent
-            </button>
+          {/* Boutons de navigation — sticky sur mobile */}
+          <div className="sticky bottom-0 z-10 -mx-4 mt-8 border-t border-slate-200 bg-white/80 px-4 py-3 backdrop-blur-sm dark:border-slate-700 dark:bg-slate-900/80 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:backdrop-blur-none">
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={handlePrev}
+                disabled={step === 1}
+                aria-label="Étape précédente"
+                className={clsx(
+                  "flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors",
+                  step === 1
+                    ? "cursor-not-allowed text-slate-300 dark:text-slate-600"
+                    : "border border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800"
+                )}
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                Précédent
+              </button>
 
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={!canGoNext}
+                aria-label={
+                  step === 4
+                    ? "Générer la configuration"
+                    : "Passer à l'étape suivante"
+                }
+                className={clsx(
+                  "flex items-center gap-1.5 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors",
+                  canGoNext
+                    ? "bg-brand-500 text-white shadow-sm hover:bg-brand-600"
+                    : "cursor-not-allowed bg-slate-200 text-slate-400 dark:bg-slate-700 dark:text-slate-500"
+                )}
+              >
+                {step === 4 ? "Générer" : "Suivant"}
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile : toggle aperçu */}
+          {hasConfig && (
             <button
               type="button"
-              onClick={handleNext}
-              disabled={!canGoNext}
-              aria-label={
-                step === 4
-                  ? "Générer la configuration"
-                  : "Passer à l'étape suivante"
-              }
-              className={clsx(
-                "flex items-center gap-1.5 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors",
-                canGoNext
-                  ? "bg-brand-500 text-white shadow-sm hover:bg-brand-600"
-                  : "cursor-not-allowed bg-slate-200 text-slate-400 dark:bg-slate-700 dark:text-slate-500"
-              )}
+              onClick={() => setShowPreviewMobile((prev) => !prev)}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 py-2.5 text-sm font-medium text-slate-600 dark:border-slate-700 dark:text-slate-300 lg:hidden"
             >
-              {step === 4 ? "Générer" : "Suivant"}
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              {showPreviewMobile ? (
+                <>
+                  <EyeOff className="h-4 w-4" aria-hidden="true" />
+                  Masquer l&apos;aperçu
+                </>
+              ) : (
+                <>
+                  <Eye className="h-4 w-4" aria-hidden="true" />
+                  Voir l&apos;aperçu
+                </>
+              )}
             </button>
-          </div>
+          )}
         </div>
 
-        {/* Preview en temps réel */}
-        <div className="min-w-0">
+        {/* Preview en temps réel — sticky sur desktop */}
+        <div
+          ref={previewRef}
+          className={clsx(
+            "min-w-0 lg:sticky lg:top-24 lg:self-start",
+            !hasConfig && "hidden lg:block",
+            hasConfig && !showPreviewMobile && "hidden lg:block",
+            hasConfig && showPreviewMobile && "block"
+          )}
+        >
           <div className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-300">
               Aperçu en temps réel
@@ -373,16 +418,6 @@ export function ConfiguratorWizard() {
           <ConfigPreview config={generatedConfig} />
         </div>
       </div>
-
-      {/* Preview plein écran après génération via preset */}
-      {showPreview && (
-        <div className="mt-12 lg:hidden">
-          <h3 className="mb-4 text-xl font-bold">
-            Votre configuration générée
-          </h3>
-          <ConfigPreview config={generatedConfig} />
-        </div>
-      )}
     </div>
   );
 }

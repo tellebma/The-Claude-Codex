@@ -156,6 +156,7 @@ export function generateClaudeMd(config: ConfigState): string {
     sections.push("## Features activées");
     sections.push("");
     for (const featureId of config.features) {
+      if (featureId === "backlog") continue; // section dédiée ci-dessous
       const featureInfo = FEATURES.find((f) => f.id === featureId);
       if (featureInfo) {
         sections.push(`### ${featureInfo.label}`);
@@ -165,7 +166,93 @@ export function generateClaudeMd(config: ConfigState): string {
     }
   }
 
+  // Backlog & Suivi des demandes
+  if (config.features.includes("backlog")) {
+    sections.push(...generateBacklogSection());
+  }
+
   return sections.join("\n");
+}
+
+/**
+ * Génère la section Backlog & Suivi des demandes pour CLAUDE.md.
+ */
+function generateBacklogSection(): string[] {
+  const lines: string[] = [];
+
+  lines.push("## Backlog & Suivi des demandes");
+  lines.push("");
+  lines.push("### Structure");
+  lines.push("");
+  lines.push("Le backlog est géré localement dans `BACKLOG/` (gitignored). Il centralise EPICs, features et user stories :");
+  lines.push("");
+  lines.push("```");
+  lines.push("BACKLOG/");
+  lines.push("  README.md                        # Vue macro de toutes les EPICs");
+  lines.push("  EPIC-{nom}/");
+  lines.push("    README.md                      # Objectif, périmètre, tableau de progression");
+  lines.push("    FEATURES/{feature}/");
+  lines.push("      README.md                    # Routes, branche git, progression par US");
+  lines.push("      us-{sujet}.md                # User Story : rôle / action / bénéfice + critères");
+  lines.push("    ENABLERS/{enabler}/");
+  lines.push("      README.md                    # Contexte technique, progression par US");
+  lines.push("      us-{sujet}.md                # Découpage technique");
+  lines.push("```");
+  lines.push("");
+  lines.push("### Suivi de progression");
+  lines.push("");
+  lines.push("Chaque README contient un tableau avec 4 colonnes :");
+  lines.push("");
+  lines.push("| Colonne | Responsable | Signification |");
+  lines.push("|---|---|---|");
+  lines.push("| 🤖 Claude | Claude | Implémenté et fonctionnel (auto-évaluation) |");
+  lines.push("| ✅ PO | Product Owner | Validation métier acceptée |");
+  lines.push("| 🧪 Tests | QA | Tests unitaires/intégration couvrant la feature |");
+  lines.push("| 🚀 Shipped | DevOps | Mergé sur main, déployable |");
+  lines.push("");
+  lines.push("États : `✅ Done` · `🔄 In Progress` · `⬜ To Do` · `❌ Blocked`");
+  lines.push("");
+  lines.push("### Mises à jour (Claude)");
+  lines.push("");
+  lines.push("Claude met à jour la colonne 🤖 en temps réel :");
+  lines.push("- US terminée : `✅ Done` dans `us-{sujet}.md` ET dans le README parent");
+  lines.push("- Feature complète : mise à jour du README de l'EPIC");
+  lines.push("- US en cours : `🔄 In Progress`");
+  lines.push("- US bloquée : `❌ Blocked` + note explicative");
+  lines.push("");
+  lines.push("### Quand un besoin non suivi est exprimé");
+  lines.push("");
+  lines.push("Si l'utilisateur mentionne une feature, amélioration ou correction non encore suivie, Claude doit :");
+  lines.push("");
+  lines.push("1. **Identifier** l'EPIC concernée (ou en créer une nouvelle)");
+  lines.push("2. **Créer** le fichier `us-{sujet}.md` avec rôle / action / bénéfice + critères d'acceptation");
+  lines.push("3. **Mettre à jour** les README de la feature/enabler et de l'EPIC");
+  lines.push("4. **Confirmer** à l'utilisateur que la US a été créée avant de commencer l'implémentation");
+  lines.push("");
+  lines.push("> Ne jamais ignorer un besoin en supposant qu'il sera suivi plus tard. Chaque demande reçoit une user story immédiatement.");
+  lines.push("");
+  lines.push("### Format de User Story");
+  lines.push("");
+  lines.push("```markdown");
+  lines.push("# US : {Titre}");
+  lines.push("");
+  lines.push("**En tant que** {rôle},");
+  lines.push("**je veux** {action},");
+  lines.push("**afin de** {bénéfice}.");
+  lines.push("");
+  lines.push("## Critères d'acceptation");
+  lines.push("");
+  lines.push("- [ ] {critère 1}");
+  lines.push("- [ ] {critère 2}");
+  lines.push("- [ ] {critère 3}");
+  lines.push("");
+  lines.push("## Notes techniques");
+  lines.push("");
+  lines.push("{Notes optionnelles : contraintes, dépendances, contexte technique}");
+  lines.push("```");
+  lines.push("");
+
+  return lines;
 }
 
 /**
@@ -428,6 +515,11 @@ export function generateInstallGuide(config: ConfigState): string {
     }
   }
 
+  if (config.features.includes("backlog")) {
+    lines.push("├── BACKLOG/               # Backlog EPICs & User Stories (gitignored)");
+    lines.push("│   └── README.md          # Vue macro de toutes les EPICs");
+  }
+
   lines.push("└── ...");
   lines.push("```");
   lines.push("");
@@ -450,6 +542,20 @@ export function generateInstallGuide(config: ConfigState): string {
     lines.push("");
     lines.push(
       "N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens."
+    );
+    lines.push("");
+  }
+
+  if (config.features.includes("backlog")) {
+    lines.push("## 8. Initialiser le backlog");
+    lines.push("");
+    lines.push("```bash");
+    lines.push("mkdir -p BACKLOG");
+    lines.push('echo "BACKLOG/" >> .gitignore');
+    lines.push("```");
+    lines.push("");
+    lines.push(
+      "Le dossier `BACKLOG/` est local et gitignored. Claude créera automatiquement les EPICs et user stories au fil de vos demandes."
     );
     lines.push("");
   }

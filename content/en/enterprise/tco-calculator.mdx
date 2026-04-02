@@ -1,6 +1,6 @@
 ---
 title: "Total cost of ownership calculator"
-description: "Calculate the true cost of Claude Code for your organization: licensing, infrastructure, training, and ROI analysis."
+description: "Calculate the true cost of Claude Code for your organization: LLM benchmarks (Claude, GPT, Gemini, DeepSeek, Qwen, Mistral, local models) and comparison with Copilot, Cursor, Windsurf, Aider."
 section: "enterprise"
 order: 4
 datePublished: "2026-03-12"
@@ -34,13 +34,16 @@ Here is a realistic estimate of monthly cost by plan and number of developers.
 | **50 devs** | $1,000 | $5,000 | $10,000 | ~$2,000 |
 | **200 devs** | $4,000 | $20,000 | $40,000 | ~$8,000 |
 
-## Comparison with alternatives
+## Coding assistant tools comparison
 
-| Tool | Monthly price/user | Strengths | Limitations |
-|---|---|---|---|
-| **Claude Code Max 5x** | $100 | Native terminal, 200K context, MCP, agents | No built-in IDE |
-| **GitHub Copilot Enterprise** | $39 | Deep IDE integration, Copilot Chat | Limited context, no terminal |
-| **Cursor Business** | $40 | Full IDE, vision, multi-model | Tied to the Cursor editor |
+| Tool | Type | Price/user/month | Strengths | Limitations |
+|---|---|---|---|---|
+| **Claude Code Max 5x** | Terminal agent | $100 | Native terminal, 200K context, MCP, autonomous agents | No built-in IDE |
+| **GitHub Copilot Business** | IDE plugin | $39 | Deep IDE integration, Copilot Chat, agent mode | Limited context, no terminal |
+| **Cursor Business** | IDE (VS Code fork) | $40 | Full IDE, vision, multi-model | Tied to the Cursor editor |
+| **Windsurf Pro** | IDE (VS Code fork) | $15 | Best value agentic IDE, multi-step "Flows" | Younger ecosystem |
+| **Aider** | Terminal agent (OSS) | Free (API keys) | Open source, git-native, works with any model | Manual setup, no GUI |
+| **Codestral (Mistral)** | Code API | ~$0.30/MTok input | 256K context, 80+ languages, very affordable | Raw API, no integrated tooling |
 
 ### What the sticker price doesn't tell you
 
@@ -49,6 +52,62 @@ The listed price doesn't tell the whole story:
 - **Copilot at $39** offers autocomplete and chat, but no terminal access, no MCP, no command execution. For complex tasks (multi-file refactoring, E2E test generation, CI automation), you end up multiplying manual interactions.
 - **Cursor at $40** is a full IDE but ties you to a specific editor. If your team uses VS Code, Neovim, or JetBrains, that means changing habits.
 - **Claude Code at $100** costs more on paper, but it acts directly in your environment. A refactoring that takes 3 hours manually takes 20 minutes. Against a senior dev salary, the tool pays for itself in days.
+- **Windsurf at $15** is the best value in the agentic IDE category, but its ecosystem is newer.
+- **Aider** is free and open source, but you pay for the underlying model's API keys. A solid option for teams that want full control.
+- **Codestral (Mistral)** is roughly 7x cheaper than GPT-4.1 per token, making it compelling for high-volume autocomplete.
+
+<Callout type="tip" title="Multi-tool approach">
+Many teams combine an IDE agent (Cursor or Windsurf) for daily work with a terminal agent (Claude Code or Aider) for complex tasks. This is not an either/or choice.
+</Callout>
+
+## LLM coding benchmarks
+
+The scores below compare models on the main coding benchmarks. SWE-bench Verified measures the ability to resolve real bugs in open-source projects. HumanEval measures isolated function generation.
+
+<Callout type="warning" title="How to read these numbers">
+SWE-bench scores depend on the harness used (the agent orchestrating the model). The same model can score 10 points higher or lower depending on the scaffold. HumanEval is largely saturated: all frontier models exceed 90%, making it a poor differentiator. Scores marked with ~ are approximate.
+</Callout>
+
+### Cloud models (paid API)
+
+| Model | Provider | SWE-bench Verified | HumanEval | Aider Polyglot | API pricing (input/output per MTok) |
+|---|---|---|---|---|---|
+| **Claude Opus 4** | Anthropic | 72.5% | 94.5% | - | $15 / $75 |
+| **Claude Sonnet 4** | Anthropic | 72.7% | 95.1% | - | $3 / $15 |
+| **GPT-4.1** | OpenAI | 54.6% | ~90% | - | $2 / $8 |
+| **GPT-4o** | OpenAI | 33.2% | 90.2% | - | $2.50 / $10 |
+| **Gemini 2.5 Pro** | Google | 63.8-71.8% | ~90%+ | 74.0% | $1.25 / $10 |
+| **Mistral Large 2** | Mistral | - | 92.0% | - | $2 / $6 |
+| **Codestral** | Mistral | - | 86.6% | - | $0.30 / $0.90 |
+
+### Chinese models
+
+| Model | Provider | SWE-bench Verified | HumanEval | Aider Polyglot | API pricing |
+|---|---|---|---|---|---|
+| **DeepSeek V3** | DeepSeek | 38.8% | 90.2% | 71.6% | $0.28 / $0.42 |
+| **Qwen 2.5 Coder 32B** | Alibaba | ~GPT-4o level | 92.7% | - | Open-weight |
+| **Qwen 3 235B** | Alibaba | ~61.7% | ~93% | - | $0.70 / $2.80 |
+
+<Callout type="info" title="DeepSeek and Qwen: unbeatable price-to-performance">
+DeepSeek V3 costs roughly 10x less than Claude Sonnet per token. Chinese models are improving rapidly on code benchmarks. Worth monitoring for high-volume tasks where budget matters more than peak quality.
+</Callout>
+
+### Local models (open-weight)
+
+These models run on your own hardware. All data stays on-site, addressing data sovereignty requirements.
+
+| Model | Size | VRAM needed (Q4) | HumanEval | Use case |
+|---|---|---|---|---|
+| **Qwen 2.5 Coder 32B** | 32B | ~20 GB | 92.7% | Best local coding model, rivals GPT-4o |
+| **Mistral Small 3.2** | 24B | ~15 GB | 92.9% | Excellent generalist + code |
+| **Phi-4** | 14B | ~9 GB | 82.6% | Great performance-per-size ratio, strong at STEM |
+| **Qwen 3 7B** | 7B | ~5 GB | 76.0% | Best sub-8B model for code |
+| **Llama 3.3 8B** | 8B | ~5 GB | 72.6% | Runs on 8 GB RAM |
+| **CodeGemma 7B** | 7B | ~5 GB | 60.4% | Dated (2024), prefer Qwen 3 7B |
+
+<Callout type="tip" title="Which GPU for which model?">
+**8 GB VRAM** (consumer GPU): Qwen 3 7B or Llama 3.3 8B. **16 GB**: Qwen 2.5 Coder 14B or Phi-4. **24 GB** (RTX 4090): Qwen 2.5 Coder 32B or Mistral Small 3.2, near-cloud performance.
+</Callout>
 
 ## Return on investment (ROI)
 

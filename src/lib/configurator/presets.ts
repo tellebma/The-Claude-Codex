@@ -372,4 +372,10 @@ export const FEATURES: ReadonlyArray<FeatureInfo> = [
       "Activez la réflexion approfondie pour les tâches complexes nécessitant plus de raisonnement.",
     requiresSubscription: "pro",
   },
+  {
+    id: "backlog",
+    label: "Backlog & Suivi des demandes",
+    description:
+      "Structurez vos demandes en EPICs, features et user stories. Claude crée automatiquement une US pour chaque besoin exprimé.",
+  },
 ];

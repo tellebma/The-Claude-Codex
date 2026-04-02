@@ -1,6 +1,6 @@
 ---
 title: "Calculateur de cout total (TCO)"
-description: "Estimez le cout de Claude Code pour votre equipe : comparatif des plans, ROI, et comparaison avec Copilot Enterprise et Cursor Business."
+description: "Estimez le cout de Claude Code pour votre equipe : comparatif des plans, ROI, benchmarks LLM (Claude, GPT, Gemini, DeepSeek, Qwen, Mistral, modeles locaux) et comparaison avec Copilot, Cursor, Windsurf, Aider."
 section: "enterprise"
 order: 4
 datePublished: "2026-03-12"
@@ -34,13 +34,16 @@ Voici une estimation realiste du cout mensuel selon le plan et le nombre de deve
 | **50 devs** | 1 000 $ | 5 000 $ | 10 000 $ | ~2 000 $ |
 | **200 devs** | 4 000 $ | 20 000 $ | 40 000 $ | ~8 000 $ |
 
-## Comparatif avec les alternatives
+## Comparatif des outils d'assistance au code
 
-| Outil | Prix mensuel/utilisateur | Points forts | Limites |
-|---|---|---|---|
-| **Claude Code Max 5x** | 100 $ | Terminal natif, 200K contexte, MCP, agents | Pas d'IDE integre |
-| **GitHub Copilot Enterprise** | 39 $ | Integration IDE profonde, Copilot Chat | Contexte limite, pas de terminal |
-| **Cursor Business** | 40 $ | IDE complet, vision, multi-modeles | Lie a l'editeur Cursor |
+| Outil | Type | Prix/utilisateur/mois | Points forts | Limites |
+|---|---|---|---|---|
+| **Claude Code Max 5x** | Agent terminal | 100 $ | Terminal natif, 200K contexte, MCP, agents autonomes | Pas d'IDE integre |
+| **GitHub Copilot Business** | Plugin IDE | 39 $ | Integration IDE profonde, Copilot Chat, agent mode | Contexte limite, pas de terminal |
+| **Cursor Business** | IDE (fork VS Code) | 40 $ | IDE complet, vision, multi-modeles | Lie a l'editeur Cursor |
+| **Windsurf Pro** | IDE (fork VS Code) | 15 $ | Bon rapport qualite/prix, "Flows" multi-etapes | Ecosysteme plus jeune |
+| **Aider** | Agent terminal (OSS) | Gratuit (cles API) | Open source, git natif, fonctionne avec tout modele | Configuration manuelle, pas de GUI |
+| **Codestral (Mistral)** | API de code | ~0.30 $/MTok entree | 256K contexte, 80+ langages, tres economique | Pas d'outil integre (API brute) |
 
 ### Ce que le prix ne dit pas
 
@@ -49,6 +52,62 @@ Le prix affiche ne raconte pas toute l'histoire :
 - **Copilot a 39 $** offre de l'autocompletion et du chat, mais pas d'acces terminal, pas de MCP, pas d'execution de commandes. Pour des taches complexes (refactoring multi-fichiers, generation de tests E2E, automatisation CI), il faut multiplier les interactions manuelles.
 - **Cursor a 40 $** est un IDE complet mais vous lie a un editeur specifique. Si votre equipe utilise VS Code, Neovim ou JetBrains, c'est un changement d'habitudes.
 - **Claude Code a 100 $** coute plus cher en affichage, mais il agit directement dans votre environnement. Un refactoring qui prend 3 heures manuellement prend 20 minutes. Sur un salaire de dev senior, l'outil se rentabilise en quelques jours.
+- **Windsurf a 15 $** est le meilleur rapport qualite/prix pour un IDE agentique, mais son ecosysteme est plus recent.
+- **Aider** est gratuit et open source, mais vous payez les cles API du modele sous-jacent. C'est une bonne option pour les equipes qui veulent un controle total.
+- **Codestral (Mistral)** est 7x moins cher que GPT-4.1 par token, ce qui le rend interessant pour de l'autocompletion a haut volume.
+
+<Callout type="tip" title="Approche multi-outils">
+Beaucoup d'equipes combinent un agent IDE (Cursor ou Windsurf) pour le quotidien et un agent terminal (Claude Code ou Aider) pour les taches complexes. Ce n'est pas un choix exclusif.
+</Callout>
+
+## Benchmarks des LLM pour le code
+
+Les scores ci-dessous comparent les modeles sur les principaux benchmarks de code. SWE-bench Verified mesure la capacite a resoudre de vrais bugs dans des projets open source. HumanEval mesure la generation de fonctions isolees.
+
+<Callout type="warning" title="Comment lire ces chiffres">
+Les scores SWE-bench dependent du harness utilise (l'agent qui orchestre le modele). Un meme modele peut scorer 10 points de plus ou de moins selon le scaffold. HumanEval est largement sature : tous les modeles frontier depassent 90 %, ce qui en fait un mauvais critere de differenciation. Les scores marqués d'un ~ sont approximatifs.
+</Callout>
+
+### Modeles cloud (API payante)
+
+| Modele | Editeur | SWE-bench Verified | HumanEval | Aider Polyglot | Prix API (entree/sortie par MTok) |
+|---|---|---|---|---|---|
+| **Claude Opus 4** | Anthropic | 72.5 % | 94.5 % | - | 15 $ / 75 $ |
+| **Claude Sonnet 4** | Anthropic | 72.7 % | 95.1 % | - | 3 $ / 15 $ |
+| **GPT-4.1** | OpenAI | 54.6 % | ~90 % | - | 2 $ / 8 $ |
+| **GPT-4o** | OpenAI | 33.2 % | 90.2 % | - | 2.50 $ / 10 $ |
+| **Gemini 2.5 Pro** | Google | 63.8-71.8 % | ~90 %+ | 74.0 % | 1.25 $ / 10 $ |
+| **Mistral Large 2** | Mistral | - | 92.0 % | - | 2 $ / 6 $ |
+| **Codestral** | Mistral | - | 86.6 % | - | 0.30 $ / 0.90 $ |
+
+### Modeles chinois
+
+| Modele | Editeur | SWE-bench Verified | HumanEval | Aider Polyglot | Prix API |
+|---|---|---|---|---|---|
+| **DeepSeek V3** | DeepSeek | 38.8 % | 90.2 % | 71.6 % | 0.28 $ / 0.42 $ |
+| **Qwen 2.5 Coder 32B** | Alibaba | ~niveau GPT-4o | 92.7 % | - | Open-weight |
+| **Qwen 3 235B** | Alibaba | ~61.7 % | ~93 % | - | 0.70 $ / 2.80 $ |
+
+<Callout type="info" title="DeepSeek et Qwen : rapport qualite/prix imbattable">
+DeepSeek V3 coute environ 10x moins cher que Claude Sonnet par token. Les modeles chinois progressent tres vite sur les benchmarks de code. A surveiller pour des taches a haut volume ou le budget prime sur la qualite maximale.
+</Callout>
+
+### Modeles locaux (open-weight)
+
+Ces modeles tournent sur votre propre hardware. Toutes les donnees restent sur site, ce qui repond aux exigences de souverainete.
+
+| Modele | Taille | VRAM requise (Q4) | HumanEval | Cas d'usage |
+|---|---|---|---|---|
+| **Qwen 2.5 Coder 32B** | 32B | ~20 Go | 92.7 % | Meilleur modele local pour le code, rivalise avec GPT-4o |
+| **Mistral Small 3.2** | 24B | ~15 Go | 92.9 % | Excellent generaliste + code |
+| **Phi-4** | 14B | ~9 Go | 82.6 % | Bon ratio performance/taille, fort en STEM |
+| **Qwen 3 7B** | 7B | ~5 Go | 76.0 % | Meilleur modele < 8B pour le code |
+| **Llama 3.3 8B** | 8B | ~5 Go | 72.6 % | Tourne sur 8 Go de RAM |
+| **CodeGemma 7B** | 7B | ~5 Go | 60.4 % | Date (2024), preferer Qwen 3 7B |
+
+<Callout type="tip" title="Quel GPU pour quel modele ?">
+**8 Go VRAM** (GPU grand public) : Qwen 3 7B ou Llama 3.3 8B. **16 Go** : Qwen 2.5 Coder 14B ou Phi-4. **24 Go** (RTX 4090) : Qwen 2.5 Coder 32B ou Mistral Small 3.2, des performances proches du cloud.
+</Callout>
 
 ## Retour sur investissement (ROI)
 

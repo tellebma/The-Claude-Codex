@@ -232,7 +232,7 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
 
       {/* Contenu avec syntax highlighting */}
       <div
-        className="max-h-[500px] overflow-auto bg-slate-950"
+        className="max-h-[280px] overflow-auto bg-slate-950 sm:max-h-[400px] lg:max-h-[500px] xl:max-h-[600px]"
         role="tabpanel"
         id={`tabpanel-${activeTab}`}
         aria-labelledby={`tab-${activeTab}`}

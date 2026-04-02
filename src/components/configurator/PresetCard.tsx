@@ -43,7 +43,7 @@ export function PresetCard({ preset, onSelect }: PresetCardProps) {
       onClick={() => onSelect(preset)}
       aria-label={`Utiliser le preset ${preset.name}`}
       className={clsx(
-        "group flex flex-col items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 text-left",
+        "group flex flex-col items-start gap-3 rounded-xl border border-slate-200 bg-white p-3 text-left sm:p-4",
         "transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md",
         "dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-brand-600"
       )}
@@ -62,7 +62,7 @@ export function PresetCard({ preset, onSelect }: PresetCardProps) {
         <h4 className="font-semibold text-slate-900 dark:text-slate-100">
           {preset.name}
         </h4>
-        <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
+        <p className="mt-1 hidden text-xs text-slate-500 dark:text-slate-300 sm:block">
           {preset.description}
         </p>
       </div>

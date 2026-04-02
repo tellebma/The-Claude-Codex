@@ -21,7 +21,8 @@ export type Feature =
   | "mcp"
   | "hooks"
   | "skills"
-  | "extended-thinking";
+  | "extended-thinking"
+  | "backlog";
 
 /** État courant du configurateur */
 export interface ConfigState {

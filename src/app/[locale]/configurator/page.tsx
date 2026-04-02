@@ -106,7 +106,7 @@ export default async function ConfiguratorPage({
 
       {/* Configurateur */}
       <section className="py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1600px]">
           <ConfiguratorWizard />
         </div>
       </section>

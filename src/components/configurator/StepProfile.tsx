@@ -40,7 +40,7 @@ export function StepProfile({ selected, onSelect }: StepProfileProps) {
         principale.
       </p>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4">
         {PROFILES.map((profile) => {
           const Icon = ICON_MAP[profile.icon] ?? Monitor;
           const isSelected = selected === profile.id;

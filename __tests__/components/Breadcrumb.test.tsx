@@ -90,17 +90,16 @@ describe("Breadcrumb", () => {
     ).toBeInTheDocument();
   });
 
-  it("includes JSON-LD structured data", () => {
+  it("does not emit JSON-LD (server component SectionSlugContent owns it)", () => {
+    // The BreadcrumbList schema.org JSON-LD is emitted by SectionSlugContent
+    // on the server, where locale prefix and frontmatter title are available.
+    // This client component used to emit a second, locale-stripped duplicate
+    // which confused Google's rich results — hence the removal.
     mockPathname = "/mcp";
     const { container } = render(<Breadcrumb />);
     const script = container.querySelector(
       'script[type="application/ld+json"]'
     );
-    expect(script).not.toBeNull();
-
-    if (script) {
-      const data = JSON.parse(script.innerHTML) as Record<string, unknown>;
-      expect(data["@type"]).toBe("BreadcrumbList");
-    }
+    expect(script).toBeNull();
   });
 });

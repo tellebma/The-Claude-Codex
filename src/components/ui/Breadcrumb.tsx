@@ -4,10 +4,6 @@ import { useMemo } from "react";
 import { ChevronRight, Home } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
-import {
-  createBreadcrumbSchema,
-  serializeJsonLd,
-} from "@/lib/structured-data";
 
 interface BreadcrumbSegment {
   readonly label: string;
@@ -35,11 +31,11 @@ function buildBreadcrumbs(
 }
 
 /**
- * Renders a breadcrumb navigation with schema.org BreadcrumbList JSON-LD.
+ * Visual-only breadcrumb navigation.
  *
- * Security: The dangerouslySetInnerHTML usage below is safe because the
- * content is built from our own static labels, serialized via JSON.stringify.
- * No user-supplied HTML is involved.
+ * JSON-LD BreadcrumbList is emitted by SectionSlugContent (server component)
+ * which has access to locale and frontmatter title — emitting it here too
+ * would produce duplicate/conflicting structured data.
  */
 export function Breadcrumb() {
   const pathname = usePathname();
@@ -65,34 +61,12 @@ export function Breadcrumb() {
     [pathname, getSectionLabel]
   );
 
-  const breadcrumbJsonLd = useMemo(() => {
-    if (breadcrumbs.length === 0) return null;
-
-    const items = [
-      { name: t("home"), href: "/" },
-      ...breadcrumbs.map((crumb) => ({
-        name: crumb.label,
-        href: crumb.href,
-      })),
-    ];
-
-    return serializeJsonLd(createBreadcrumbSchema(items));
-  }, [breadcrumbs, t]);
-
   if (pathname === "/" || breadcrumbs.length === 0) {
     return null;
   }
 
   return (
     <>
-      {/* JSON-LD: safe — serialized from static schema via JSON.stringify, no user HTML */}
-      {breadcrumbJsonLd !== null && (
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger -- safe: JSON.stringify of static schema
-          dangerouslySetInnerHTML={{ __html: breadcrumbJsonLd }}
-        />
-      )}
       <nav aria-label={t("ariaLabel")} className="mb-6">
         <ol className="flex flex-wrap items-center gap-1 text-sm">
           <li>

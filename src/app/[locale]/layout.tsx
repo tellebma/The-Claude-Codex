@@ -77,6 +77,11 @@ export async function generateMetadata({
     ? `${SITE_NAME} | Reference guide to master Claude Code`
     : `${SITE_NAME} | Guide de référence pour maîtriser Claude Code`;
 
+  // For the default locale (fr), the canonical points to the site root.
+  // Nginx 301-redirects / → /fr/ so Google consolidates signals on the
+  // shorter URL, which it had already picked as its canonical anyway.
+  const canonicalUrl = locale === "fr" ? `${SITE_URL}/` : `${SITE_URL}/en`;
+
   return {
     metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? SITE_URL),
     title: {
@@ -85,10 +90,11 @@ export async function generateMetadata({
     },
     description: siteDescription,
     alternates: {
-      canonical: `${SITE_URL}/${locale}`,
+      canonical: canonicalUrl,
       languages: {
-        fr: `${SITE_URL}/fr`,
+        fr: `${SITE_URL}/`,
         en: `${SITE_URL}/en`,
+        "x-default": `${SITE_URL}/`,
       },
     },
     openGraph: {
@@ -97,7 +103,7 @@ export async function generateMetadata({
       type: "website",
       locale: isEn ? "en_US" : "fr_FR",
       siteName: SITE_NAME,
-      url: `${SITE_URL}/${locale}`,
+      url: canonicalUrl,
       images: [
         { url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: ogAlt },
       ],

@@ -224,6 +224,17 @@ experimental.optimizePackageImports: ['lucide-react', 'framer-motion']
 - **Docker** : utilise `http-server` (pas Nginx) pour servir correctement les RSC payloads `.txt`
 - **Après chaque modification** : vérifier que `/fr/` ET `/en/` affichent le bon contenu
 
+## Mise a jour des dates sitemap
+
+Quand un fichier de contenu (MDX) ou une page (page.tsx) est modifie, mettre a jour la date `lastModified` correspondante :
+
+1. **Fichier MDX** : mettre a jour le champ `dateModified` dans le frontmatter du fichier modifie
+2. **metadata.ts** : mettre a jour le champ `lastModified` de l'entree correspondante dans `SITE_PAGES` (`lib/metadata.ts`)
+
+Les deux doivent etre a la date du jour (format `YYYY-MM-DD`). Cela garantit que le sitemap XML et les donnees structurees JSON-LD refletent la bonne date de derniere modification.
+
+**Concerne** : toute modification de texte visible (contenu, titres, descriptions). Ne pas mettre a jour pour des changements purement techniques (reformatage, imports, commentaires).
+
 ## Checklist pour ajouter une nouvelle section
 
 1. Créer les dossiers `content/fr/{section}/` et `content/en/{section}/` avec les fichiers MDX (frontmatter obligatoire)

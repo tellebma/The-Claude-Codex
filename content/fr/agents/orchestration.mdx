@@ -76,6 +76,33 @@ Ce pattern est idéal quand les tâches sont indépendantes. Claude Code peut la
 
 Un **pipeline** combine le séquentiel et le parallèle : certaines étapes sont parallélisées, d'autres sont séquentielles.
 
+```mermaid
+flowchart LR
+    subgraph P1["Phase 1 — parallèle"]
+        T["Tests"] 
+        S["Sécurité"]
+    end
+    subgraph P2["Phase 2 — séquentiel"]
+        R["Review"]
+    end
+    subgraph P3["Phase 3 — parallèle"]
+        D["Docs"]
+        E["E2E"]
+    end
+    subgraph P4["Phase 4"]
+        REL["Release"]
+    end
+
+    P1 --> P2 --> P3 --> P4
+
+    style T fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style S fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style R fill:#fef3c7,stroke:#f59e0b,color:#0f172a
+    style D fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style E fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style REL fill:#0891b2,stroke:#06b6d4,color:#fff
+```
+
 ```bash
 # Pipeline complet de release
 > Exécute ce pipeline :

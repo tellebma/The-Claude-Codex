@@ -274,19 +274,27 @@ avec les 10 actions prioritaires."
 
 L'architecture fan-out/fan-in est le pattern le plus courant pour l'orchestration parallèle :
 
-```
-Tâche principale
-        │
-        ├─── Agent 1 (spécialité A)
-        ├─── Agent 2 (spécialité B)    } Fan-out
-        └─── Agent 3 (spécialité C)
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: base
+---
+flowchart TD
+    T["Tâche principale"] --> A1["Agent 1\nSécurité"]
+    T --> A2["Agent 2\nPerformance"]
+    T --> A3["Agent 3\nTests"]
+    A1 --> S["Synthèse"]
+    A2 --> S
+    A3 --> S
+    S --> R["Résultat enrichi"]
 
-        │ (résultats A + B + C)
-        ▼
-  Synthèse / Agrégation                } Fan-in
-        │
-        ▼
-  Résultat final enrichi
+    style T fill:#0891b2,stroke:#06b6d4,color:#fff
+    style A1 fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style A2 fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style A3 fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style S fill:#fef3c7,stroke:#f59e0b,color:#0f172a
+    style R fill:#0891b2,stroke:#06b6d4,color:#fff
 ```
 
 **Exemple : revue de code complète**
@@ -305,20 +313,23 @@ avec estimation d'effort pour chaque action."
 
 Quand les étapes ont des dépendances, utilisez un pipeline séquentiel :
 
-```
-Agent 1 : Planification
-    │ (plan validé)
-    ▼
-Agent 2 : Implémentation
-    │ (code produit)
-    ▼
-Agent 3 : Tests
-    │ (tests qui passent)
-    ▼
-Agent 4 : Documentation
-    │ (docs à jour)
-    ▼
-Agent 5 : Revue finale
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: base
+---
+flowchart LR
+    P["Planification"] --> I["Implémentation"]
+    I --> T["Tests"]
+    T --> D["Documentation"]
+    D --> R["Revue finale"]
+
+    style P fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style I fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style T fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style D fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style R fill:#0891b2,stroke:#06b6d4,color:#fff
 ```
 
 **Exemple : feature complète en pipeline**

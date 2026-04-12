@@ -10,6 +10,7 @@ import { KeyboardShortcut } from "@/components/ui/KeyboardShortcut";
 import { PricingTable } from "@/components/ui/PricingTable";
 import { ComparisonTable } from "@/components/ui/ComparisonTable";
 import { TcoCalculator } from "@/components/ui/TcoCalculator";
+import { MermaidDiagram } from "@/components/ui/MermaidDiagram";
 import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
 import { Card } from "@/components/mdx/Card";
@@ -55,6 +56,7 @@ export const mdxComponents: MDXComponents = {
   PricingTable,
   ComparisonTable,
   TcoCalculator,
+  MermaidDiagram,
   Tabs,
   Steps,
   Step,
@@ -152,6 +154,11 @@ export const mdxComponents: MDXComponents = {
       if (languageMatch) {
         const language = languageMatch[1];
         const code = extractTextFromChildren(codeElement.props.children).trimEnd();
+
+        if (language === "mermaid") {
+          return <MermaidDiagram chart={code} />;
+        }
+
         return <CodeBlock code={code} language={language} />;
       }
     }

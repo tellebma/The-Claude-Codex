@@ -646,6 +646,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-12",
   },
   {
+    path: "/advanced/ultraplan",
+    title: "Ultraplan : planifier dans le cloud",
+    description:
+      "Lancez un plan depuis votre CLI, affinez-le sur Claude Code web avec commentaires inline, puis exécutez-le dans le cloud ou en local.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-12",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

@@ -49,6 +49,27 @@ The sub-agent sends its result back to the main agent, which integrates it into 
 </Step>
 </Steps>
 
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: base
+---
+sequenceDiagram
+    participant U as You
+    participant C as Claude Code
+    participant S as Subagent
+    participant W as Worktree
+
+    U->>C: "Do a complete review"
+    C->>C: Breaks down the task
+    C->>S: Specialized prompt
+    S->>W: Isolated work
+    W-->>S: Result
+    S-->>C: Report
+    C-->>U: Final synthesis
+```
+
 ## Types of agents
 
 Claude Code agents fall into two main categories.

@@ -131,10 +131,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.hooks", href: "/advanced/hooks" },
       { labelKey: "advanced.headless-ci", href: "/advanced/headless-ci" },
       { labelKey: "advanced.multi-provider", href: "/advanced/multi-provider" },
+      { labelKey: "advanced.mcp-profiles", href: "/advanced/mcp-profiles" },
       { labelKey: "advanced.worktrees", href: "/advanced/worktrees" },
       { labelKey: "advanced.permissions-sandbox", href: "/advanced/permissions-sandbox" },
       { labelKey: "advanced.workflows", href: "/advanced/workflows" },
       { labelKey: "advanced.browser-automation", href: "/advanced/browser-automation" },
+      { labelKey: "advanced.ultraplan", href: "/advanced/ultraplan" },
     ],
   },
   reference: {

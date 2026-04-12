@@ -300,10 +300,12 @@
       "hooks": "Hooks system",
       "headless-ci": "Headless mode & CI/CD",
       "multi-provider": "Multi-provider & Enterprise",
+      "mcp-profiles": "MCP profiles per mission",
       "worktrees": "Git Worktrees",
       "permissions-sandbox": "Permissions & Sandbox",
       "workflows": "Advanced Workflows",
-      "browser-automation": "Browser Automation"
+      "browser-automation": "Browser Automation",
+      "ultraplan": "Ultraplan: plan in the cloud"
     },
     "reference": {
       "title": "Reference",

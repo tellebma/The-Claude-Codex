@@ -3,7 +3,9 @@ import { render, screen } from "@testing-library/react";
 import React from "react";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 
-const MockIcon = (props: any) => <svg data-testid="mock-icon" {...props} />;
+const MockIcon = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
+  (props, ref) => <svg data-testid="mock-icon" ref={ref} {...props} />
+) as unknown as typeof import("lucide-react").Terminal;
 
 describe("FeatureCard", () => {
   it("renders title as h3", () => {

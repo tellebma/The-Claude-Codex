@@ -7,7 +7,9 @@ vi.mock("@/components/ui/BorderBeam", () => ({
   BorderBeam: () => null,
 }));
 
-const MockIcon = (props: any) => <svg data-testid="mock-icon" {...props} />;
+const MockIcon = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
+  (props, ref) => <svg data-testid="mock-icon" ref={ref} {...props} />
+) as unknown as typeof import("lucide-react").Terminal;
 
 const defaultProps = {
   icon: MockIcon,

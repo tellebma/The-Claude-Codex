@@ -54,10 +54,20 @@ The MCP Server receives the GitHub API response, reformats it, and sends it back
 
 MCP uses **JSON-RPC 2.0** as its communication format. It's a well-established standard that's lightweight and easy to implement. Communication between Claude Code (the client) and each MCP Server happens via **stdin/stdout**, using the operating system's standard streams.
 
-```bash
-# Simplified MCP flow diagram
-# Claude Code (client) --stdin--> MCP Server (bridge) --REST API--> External service
-# Claude Code (client) <--stdout-- MCP Server (bridge) <----------- External service
+```mermaid
+sequenceDiagram
+    participant U as Terminal
+    participant C as Claude Code
+    participant M as MCP Server
+    participant S as External API
+
+    U->>C: "List GitHub issues"
+    C->>C: Identifies MCP tool
+    C->>M: JSON-RPC via stdin
+    M->>S: REST API call
+    S-->>M: JSON response
+    M-->>C: Result via stdout
+    C-->>U: Formatted result
 ```
 
 Each MCP Server exposes a set of **tools** that Claude Code can call. For example, the GitHub MCP exposes tools like `list_issues`, `create_pull_request`, `search_code`, etc. At startup, Claude Code queries each configured MCP to discover its available tools.

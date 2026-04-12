@@ -361,17 +361,12 @@ Recognizing context saturation lets you act before quality seriously degrades.
 
 The relationship between context load and quality isn't linear. Claude remains very performant up to about 70-80% capacity. Degradation is rapid in the last 20%.
 
-```
-Response quality by context fill level
-
-100% |
-     |############################################
- 85% |##########################################
-     |
- 60% |                                    #######
-     |
-  0% +--------------------------------------------
-     0%                70%    80%   90%   100%
+```mermaid
+xychart-beta
+    title "Response quality vs context usage"
+    x-axis ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"]
+    y-axis "Quality (%)" 0 --> 100
+    line [98, 98, 97, 97, 96, 95, 94, 90, 75, 50, 30]
                               Context used
 ```
 

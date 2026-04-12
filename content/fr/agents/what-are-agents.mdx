@@ -49,6 +49,27 @@ Le subagent renvoie son résultat à l'agent principal, qui l'intègre dans le w
 </Step>
 </Steps>
 
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: base
+---
+sequenceDiagram
+    participant U as Vous
+    participant C as Claude Code
+    participant S as Subagent
+    participant W as Worktree
+
+    U->>C: "Fais une review complète"
+    C->>C: Décompose la tâche
+    C->>S: Prompt spécialisé
+    S->>W: Travail isolé
+    W-->>S: Résultat
+    S-->>C: Rapport
+    C-->>U: Synthèse finale
+```
+
 ## Les types d'agents
 
 Les agents Claude Code se répartissent en deux grandes catégories.

@@ -274,19 +274,27 @@ with the top 10 priority actions."
 
 Fan-out/fan-in is the most common pattern for parallel orchestration:
 
-```
-Main task
-        |
-        +--- Agent 1 (specialty A)
-        +--- Agent 2 (specialty B)    } Fan-out
-        +--- Agent 3 (specialty C)
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: base
+---
+flowchart TD
+    T["Main task"] --> A1["Agent 1\nSecurity"]
+    T --> A2["Agent 2\nPerformance"]
+    T --> A3["Agent 3\nTests"]
+    A1 --> S["Synthesis"]
+    A2 --> S
+    A3 --> S
+    S --> R["Enriched result"]
 
-        | (results A + B + C)
-        v
-  Synthesis / Aggregation              } Fan-in
-        |
-        v
-  Enriched final result
+    style T fill:#0891b2,stroke:#06b6d4,color:#fff
+    style A1 fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style A2 fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style A3 fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style S fill:#fef3c7,stroke:#f59e0b,color:#0f172a
+    style R fill:#0891b2,stroke:#06b6d4,color:#fff
 ```
 
 **Example: complete code review**
@@ -305,20 +313,23 @@ with effort estimate for each action."
 
 When steps have dependencies, use a sequential pipeline:
 
-```
-Agent 1: Planning
-    | (plan approved)
-    v
-Agent 2: Implementation
-    | (code produced)
-    v
-Agent 3: Tests
-    | (tests passing)
-    v
-Agent 4: Documentation
-    | (docs updated)
-    v
-Agent 5: Final review
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: base
+---
+flowchart LR
+    P["Planning"] --> I["Implementation"]
+    I --> T["Tests"]
+    T --> D["Documentation"]
+    D --> R["Final review"]
+
+    style P fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style I fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style T fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style D fill:#a5f3fc,stroke:#0891b2,color:#0f172a
+    style R fill:#0891b2,stroke:#06b6d4,color:#fff
 ```
 
 **Example: complete feature via pipeline**

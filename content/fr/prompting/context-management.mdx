@@ -361,18 +361,12 @@ Reconnaître la saturation du contexte vous permet d'agir avant que la qualité 
 
 La relation entre charge de contexte et qualité n'est pas linéaire. Claude reste très performant jusqu'à environ 70-80% de capacité. La dégradation est rapide dans les derniers 20%.
 
-```
-Qualité des réponses selon le remplissage du contexte
-
-100% ┤
-     │████████████████████████████████████████████
- 85% ┤░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-     │
- 60% ┤                                    ░░░░░░░
-     │
-  0% └────────────────────────────────────────────
-     0%                70%    80%   90%   100%
-                              Contexte utilisé
+```mermaid
+xychart-beta
+    title "Qualité des réponses vs contexte utilisé"
+    x-axis ["0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"]
+    y-axis "Qualité (%)" 0 --> 100
+    line [98, 98, 97, 97, 96, 95, 94, 90, 75, 50, 30]
 ```
 
 ## Guide de dépannage : problèmes de contexte courants

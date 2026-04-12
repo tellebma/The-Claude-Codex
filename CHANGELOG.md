@@ -1,3 +1,22 @@
+# [1.1.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.0.0...v1.1.0) (2026-04-12)
+
+
+### Bug Fixes
+
+* corriger tests après rebase (ThemeProvider type, MermaidDiagram message, deps) ([0469d5c](https://github.com/tellebma/The-Claude-Codex/commit/0469d5c90161840f7e5271e85401d2655689b36d))
+* **seo:** canonical /fr/, trailing slashes, and optimized meta titles/descriptions ([17ce7ca](https://github.com/tellebma/The-Claude-Codex/commit/17ce7cad3700f1da533293384dbd0a895fdfc4c7))
+
+
+### Features
+
+* ajouter la page Ultraplan (FR + EN) ([6a9dcb3](https://github.com/tellebma/The-Claude-Codex/commit/6a9dcb38da46b217a6ff9fdde8d6ee1500473ad9))
+* composant MermaidDiagram avec support dark/light et hand-drawn ([a675790](https://github.com/tellebma/The-Claude-Codex/commit/a67579013fe3736262ff8cd8e893e3bfaa2a7a0e))
+* EPIC best practices Sprint 0 — 3 new pages, 3 enrichments, 1 component ([81092a8](https://github.com/tellebma/The-Claude-Codex/commit/81092a882122b83f73e7dc056d66e89e8746f751))
+* EPIC best practices Sprint 1 — 1 new page, 4 enrichments, 1 component ([4b8c2e5](https://github.com/tellebma/The-Claude-Codex/commit/4b8c2e596ceaee82842df4f6df905bbe6395dd60))
+* EPIC best practices Sprint 2 — 1 new page, 2 enrichments ([65a3b1e](https://github.com/tellebma/The-Claude-Codex/commit/65a3b1e0e3fa158b248c5b61a9c6aca21755584b))
+* mise à jour contenu — modèles 4.6, 1M tokens, Voice Mode, Background Agents, MCP Elicitation ([d56a939](https://github.com/tellebma/The-Claude-Codex/commit/d56a93902aaf43dcfc3cdb95a2b91a7494eccecb))
+* remplacer les diagrammes ASCII par des diagrammes Mermaid (FR + EN) ([580bb13](https://github.com/tellebma/The-Claude-Codex/commit/580bb1331cb43dd6234447071f4b7236c87e493c))
+
 # 1.0.0 (2026-04-12)
 
 

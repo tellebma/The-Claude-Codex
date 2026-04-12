@@ -305,7 +305,8 @@
       "hooks": "Système de Hooks",
       "headless-ci": "Mode Headless et CI/CD",
       "multi-provider": "Multi-provider et Enterprise",
-      "mcp-profiles": "Profils MCP par mission"
+      "mcp-profiles": "Profils MCP par mission",
+      "ultraplan": "Ultraplan : planifier dans le cloud"
     },
     "reference": {
       "title": "Référence",

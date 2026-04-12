@@ -35,10 +35,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# screenshots
+# screenshots (hors public/)
 *.png
 *.jpg
 *.jpeg
+!public/images/**/*.png
+!public/images/**/*.jpg
 
 # playwright
 .playwright-mcp/

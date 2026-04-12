@@ -130,6 +130,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.headless-ci", href: "/advanced/headless-ci" },
       { labelKey: "advanced.multi-provider", href: "/advanced/multi-provider" },
       { labelKey: "advanced.mcp-profiles", href: "/advanced/mcp-profiles" },
+      { labelKey: "advanced.ultraplan", href: "/advanced/ultraplan" },
     ],
   },
   reference: {

@@ -1,0 +1,176 @@
+---
+title: "Ultraplan : planifier dans le cloud"
+description: "Lancez un plan depuis votre CLI, affinez-le sur Claude Code web avec commentaires inline, puis exécutez-le dans le cloud ou en local. Guide complet d'Ultraplan."
+section: "advanced"
+order: 5
+datePublished: "2026-04-12"
+dateModified: "2026-04-12"
+badge: "NEW"
+---
+
+## C'est quoi Ultraplan ?
+
+Ultraplan déporte la phase de planification dans le cloud. Vous lancez une demande depuis votre terminal, Claude rédige le plan sur [Claude Code web](https://claude.ai/code), et vous le relisez dans votre navigateur avec des outils de revue (commentaires inline, réactions, sommaire interactif).
+
+Le terminal reste libre pendant que le plan se construit. Quand il est prêt, vous choisissez où l'exécuter : dans le cloud (avec création de PR automatique) ou de retour dans votre terminal.
+
+<Callout type="warning" title="Research preview">
+Ultraplan est en preview et nécessite Claude Code v2.1.91 ou plus récent. Le comportement peut évoluer.
+</Callout>
+
+## Plan Mode vs Ultraplan : quelle différence ?
+
+### Le Plan Mode standard
+
+Le Plan Mode (`Shift+Tab` ou demande explicite) fonctionne entièrement dans votre terminal. Claude rédige un plan, l'affiche en texte brut, et attend votre feu vert avant de coder. C'est un échange linéaire : Claude propose, vous acceptez, refusez ou demandez des ajustements. Tout se passe dans la même session, votre terminal est mobilisé pendant toute la durée.
+
+Pour un refactoring de 3 fichiers, c'est parfait. Pour une migration d'architecture qui touche 40 fichiers, relire un plan de 200 lignes dans un terminal, commenter globalement "modifie la phase 3", et attendre que Claude reformule l'ensemble, ça devient vite laborieux.
+
+### Ce qu'Ultraplan change
+
+Ultraplan reprend la même logique (planifier avant de coder) et la déplace dans le navigateur. Le gain n'est pas cosmétique :
+
+| | Plan Mode standard | Ultraplan |
+|---|---|---|
+| **Où se passe la planification** | Dans le terminal | Dans le cloud (claude.ai/code) |
+| **Terminal pendant la planification** | Bloqué en attente | Libre, vous continuez à travailler |
+| **Format du plan** | Texte brut scrollable | Vue structurée avec sommaire latéral |
+| **Feedback** | Réponse globale en texte | Commentaires inline sur chaque section |
+| **Itérations** | Reformulation complète à chaque tour | Modifications ciblées section par section |
+| **Exécution** | Locale uniquement | Cloud (avec PR automatique) ou locale |
+| **Idéal pour** | Plans courts (< 50 lignes) | Plans longs, tâches multi-fichiers, revue collaborative |
+
+En résumé : le Plan Mode, c'est un brouillon rapide sur un post-it. Ultraplan, c'est un Google Doc partagé avec des commentaires, un sommaire, et la possibilité de déléguer l'exécution.
+
+### Quand rester sur le Plan Mode standard
+
+Ultraplan n'est pas toujours le bon choix. Le Plan Mode classique reste plus adapté quand :
+
+- La tâche est simple et le plan tient en 20-30 lignes
+- Vous voulez garder le flux entièrement local, sans dépendance cloud
+- Le repo n'est pas sur GitHub (Ultraplan nécessite GitHub)
+- Vous préférez un aller-retour rapide sans ouvrir le navigateur
+
+## Pré-requis
+
+- Un compte [Claude Code web](https://claude.ai/code)
+- Un dépôt GitHub connecté
+- Claude Code v2.1.91 minimum
+
+Ultraplan tourne sur l'infrastructure cloud d'Anthropic. Il n'est pas disponible avec Amazon Bedrock, Google Cloud Vertex AI ou Microsoft Foundry.
+
+## Lancer Ultraplan depuis le CLI
+
+Trois façons de démarrer :
+
+### 1. La commande `/ultraplan`
+
+```bash
+/ultraplan migrer le service auth de sessions vers JWT
+```
+
+![Lancement de la commande /ultraplan dans le terminal Claude Code](/images/advanced/ultraplan_command.png)
+
+### 2. Le mot-clé dans un prompt classique
+
+Incluez simplement le mot `ultraplan` dans votre message :
+
+```
+Je voudrais un ultraplan pour refactorer le module de paiement
+```
+
+### 3. Depuis un plan local
+
+Quand Claude termine un plan en mode local et affiche le dialogue de validation, choisissez **Non, affiner avec Ultraplan sur Claude Code web**. Le brouillon part dans le cloud pour continuer l'itération.
+
+<Callout type="info" title="Remote Control">
+Si Remote Control est actif, il se déconnecte automatiquement au lancement d'Ultraplan. Les deux fonctionnalités utilisent l'interface claude.ai/code et une seule peut être connectée à la fois.
+</Callout>
+
+Après confirmation, un dialogue vous demande si vous voulez lancer la session cloud :
+
+![Dialogue de confirmation pour lancer Ultraplan dans le cloud](/images/advanced/ultraplan_session_acces.png)
+
+## Suivre l'avancement dans le terminal
+
+Une fois le plan lancé, votre prompt affiche un indicateur de statut :
+
+| Statut | Signification |
+|--------|---------------|
+| `◇ ultraplan` | Claude analyse votre codebase et rédige le plan |
+| `◇ ultraplan needs your input` | Claude a une question, ouvrez le lien de session pour répondre |
+| `◆ ultraplan ready` | Le plan est prêt à relire dans votre navigateur |
+
+Tapez `/tasks` et sélectionnez l'entrée ultraplan pour voir le détail : lien de session, activité de l'agent et option **Stop ultraplan**. L'arrêt archive la session cloud et efface l'indicateur, rien n'est sauvegardé côté terminal.
+
+## Relire et commenter le plan dans le navigateur
+
+Quand le statut passe à `◆ ultraplan ready`, ouvrez le lien de session. Le plan s'affiche dans une vue dédiée avec trois outils de revue :
+
+- **Commentaires inline** : surlignez un passage et laissez un commentaire pour que Claude le prenne en compte
+- **Réactions emoji** : réagissez à une section pour signaler un accord ou une inquiétude sans écrire un commentaire complet
+- **Sommaire latéral** : naviguez entre les sections du plan
+
+![Vue du plan dans le navigateur avec le sommaire latéral](/images/advanced/ultraplan_plan_proposition.png)
+
+Demandez à Claude de traiter vos commentaires : il produit une version révisée du plan. Vous pouvez itérer autant de fois que nécessaire avant de valider.
+
+## Choisir où exécuter le plan
+
+Une fois le plan validé, deux options depuis le navigateur :
+
+![Options d'exécution : coder dans le cloud, revenir au terminal, ou donner d'autres instructions](/images/advanced/ultraplan_retour_terminal.png)
+
+### Exécuter dans le cloud
+
+Cliquez sur **Approve Claude's plan and start coding**. Claude implémente le plan dans la même session cloud. Votre terminal affiche une confirmation et l'indicateur disparaît.
+
+Quand l'implémentation est terminée, vous relisez le diff et créez une pull request depuis l'interface web.
+
+### Renvoyer le plan dans le terminal
+
+Cliquez sur **Approve plan and teleport back to terminal**. La session web est archivée pour éviter un travail en doublon.
+
+Votre terminal affiche le plan dans un dialogue **Ultraplan approved** avec trois choix :
+
+| Option | Ce qui se passe |
+|--------|-----------------|
+| **Implement here** | Le plan est injecté dans votre conversation en cours |
+| **Start new session** | Nouvelle conversation avec uniquement le plan comme contexte |
+| **Cancel** | Le plan est sauvegardé dans un fichier, Claude affiche le chemin |
+
+Si vous choisissez une nouvelle session, Claude affiche une commande `claude --resume` pour retrouver votre conversation précédente.
+
+## Workflow type
+
+Voici un scénario concret d'utilisation :
+
+```bash
+# 1. Lancer le plan depuis le terminal
+/ultraplan ajouter le support WebSocket au service de notifications
+
+# 2. Continuer à travailler pendant que Claude planifie
+# Le terminal reste disponible, l'indicateur ◇ ultraplan tourne
+
+# 3. Quand ◆ ultraplan ready apparaît, ouvrir le lien
+# → Relire le plan, commenter les sections qui posent question
+
+# 4. Valider et choisir l'exécution
+# → Cloud : Claude code et ouvre une PR
+# → Terminal : le plan revient pour une implémentation locale
+```
+
+## Limites actuelles
+
+Quelques points à garder en tête pendant la preview :
+
+- Nécessite un dépôt GitHub (pas de GitLab ou Bitbucket pour l'instant)
+- Non disponible avec les providers tiers (Bedrock, Vertex, Foundry)
+- Remote Control se déconnecte automatiquement
+- La session cloud utilise l'environnement par défaut de votre compte
+
+## Prochaines étapes
+
+- Découvrez [Claude Code web](/advanced/headless-ci) pour comprendre l'infrastructure cloud
+- Explorez le [plan mode local](/prompting/thinking-and-planning) pour les cas où Ultraplan n'est pas nécessaire
+- Consultez les [hooks](/advanced/hooks) pour automatiser des actions après l'exécution d'un plan

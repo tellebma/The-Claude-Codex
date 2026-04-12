@@ -1,0 +1,247 @@
+---
+title: "Background Agents : exécution parallèle avec Git Worktree"
+description: "Lancez des agents Claude Code en arrière-plan avec Git Worktree pour des tâches parallèles et isolées : configuration, cas d'usage, coordination et bonnes pratiques."
+badge: "NEW"
+section: "agents"
+order: 6
+datePublished: "2026-03-25"
+dateModified: "2026-03-25"
+---
+
+## Le problème des agents en parallèle
+
+Quand plusieurs agents travaillent en même temps sur le même dépôt, ils se marchent dessus : conflits de fichiers, résultats incohérents, branches mélangées. Les Background Agents résolvent ce problème en donnant à chaque agent sa propre copie isolée du code via **Git Worktree**.
+
+<Callout type="info" title="Qu'est-ce que Git Worktree ?">
+Git Worktree est une fonctionnalité native de Git qui permet d'extraire plusieurs branches du même dépôt dans des dossiers distincts. Chaque worktree partage l'historique Git mais a ses propres fichiers de travail. Résultat : deux agents peuvent modifier le même fichier en parallèle sans interférer.
+</Callout>
+
+## Comment fonctionnent les Background Agents
+
+```
+Dépôt principal (main)
+    ├── Worktree 1 → branch: feat/refactor-auth     → Agent A
+    ├── Worktree 2 → branch: feat/add-tests          → Agent B
+    └── Worktree 3 → branch: fix/memory-leak         → Agent C
+```
+
+Chaque agent opère sur sa propre branche dans son propre répertoire de travail. Les modifications d'un agent ne sont visibles par les autres qu'après un merge explicite. Vous coordonnez les résultats une fois les agents terminés.
+
+## Lancer un Background Agent
+
+### Méthode 1 : Via le SDK Agent
+
+```typescript
+import { query } from "@anthropic-ai/claude-code-sdk";
+
+// Lancer un agent en arrière-plan
+const agent = await query({
+  prompt: "Refactorise le module auth pour TypeScript strict",
+  options: {
+    worktree: true,          // Crée un worktree Git isolé
+    branch: "feat/ts-strict-auth",
+    maxTurns: 20,
+  }
+});
+
+console.log(`Agent lancé sur la branche: ${agent.branch}`);
+console.log(`Worktree: ${agent.worktreePath}`);
+```
+
+### Méthode 2 : Via la commande `claude agents`
+
+```bash
+# Lister tous les agents configurés et en cours
+claude agents
+
+# Exemple de sortie
+# ID          STATUS      BRANCH                    SINCE
+# agent-a3f2  running     feat/refactor-auth        5m ago
+# agent-b8c1  running     feat/add-tests            2m ago
+# agent-d9e4  completed   fix/memory-leak           12m ago
+```
+
+## Cas d'usage concrets
+
+### Revue de code parallèle
+
+Lancez un agent de revue de code sur chaque PR ouverte sans qu'ils s'interfèrent :
+
+```typescript
+const openPRs = await github.listPullRequests({ state: "open" });
+
+const reviews = await Promise.all(
+  openPRs.map(pr =>
+    query({
+      prompt: `Revue de la PR #${pr.number}: ${pr.title}.
+               Analyse la qualité du code, les problèmes de performance,
+               les failles de sécurité et les cas non couverts par les tests.`,
+      options: {
+        worktree: true,
+        branch: `review/pr-${pr.number}`,
+        allowedTools: ["Read", "Bash"],  // Lecture seule
+        maxTurns: 10,
+      }
+    })
+  )
+);
+```
+
+### Génération de tests en parallèle
+
+Un agent par module, tous en parallèle :
+
+```typescript
+const modules = ["auth", "billing", "notifications", "search"];
+
+const testJobs = modules.map(module =>
+  query({
+    prompt: `Génère des tests unitaires complets pour le module ${module}.
+             Cible 80% de couverture. Utilise Jest et Testing Library.
+             Crée les fichiers dans src/${module}/__tests__/`,
+    options: {
+      worktree: true,
+      branch: `feat/tests-${module}`,
+      maxTurns: 15,
+    }
+  })
+);
+
+// Lancer tous les agents en parallèle
+const results = await Promise.allSettled(testJobs);
+```
+
+### Migration progressive de codebase
+
+Migrez un grand projet module par module, chaque agent travaillant indépendamment :
+
+```typescript
+const migrationTasks = [
+  { module: "api", task: "Migrer Express vers Fastify" },
+  { module: "db", task: "Migrer Mongoose vers Prisma" },
+  { module: "auth", task: "Migrer JWT manuel vers Auth.js" },
+];
+
+for (const { module, task } of migrationTasks) {
+  await query({
+    prompt: `${task} dans le dossier src/${module}/.
+             Maintiens la compatibilité des interfaces publiques.
+             Ajoute des tests de régression.
+             Documente les changements dans CHANGELOG.md`,
+    options: {
+      worktree: true,
+      branch: `migrate/${module}`,
+    }
+  });
+}
+```
+
+## Cycle de vie d'un Background Agent
+
+<Steps>
+<Step title="Création du worktree" stepNumber={1}>
+Claude Code crée automatiquement un nouveau Git worktree dans un dossier temporaire. Une nouvelle branche est créée ou utilisée à partir de la branche courante.
+
+```bash
+# Ce que Claude Code fait en interne
+git worktree add /tmp/claude-agent-a3f2 -b feat/refactor-auth
+```
+</Step>
+
+<Step title="Exécution de l'agent" stepNumber={2}>
+L'agent travaille dans son worktree isolé. Il peut lire et modifier tous les fichiers, lancer des commandes, créer des commits. Les autres agents ne voient pas ses modifications.
+</Step>
+
+<Step title="Commit des résultats" stepNumber={3}>
+Quand l'agent termine, ses modifications sont committées sur sa branche. Le worktree reste disponible pour inspection.
+</Step>
+
+<Step title="Nettoyage ou merge" stepNumber={4} isLast>
+Vous inspectez les résultats avec `git diff` ou une PR, puis mergez ce qui vous convient. Les worktrees peuvent être supprimés manuellement ou sont nettoyés automatiquement si l'agent n'a fait aucun changement.
+
+```bash
+# Inspecter les changements d'un agent
+git diff main feat/refactor-auth
+
+# Merger si satisfait
+git merge feat/refactor-auth
+
+# Supprimer le worktree
+git worktree remove /tmp/claude-agent-a3f2
+```
+</Step>
+</Steps>
+
+## Coordination entre agents
+
+Les Background Agents sont indépendants par design. Si des agents ont besoin de partager des résultats, coordonnez-les dans votre code, pas au niveau Git.
+
+### Pattern : pipeline d'agents
+
+```typescript
+// Agent 1 : analyse le code
+const analysis = await query({
+  prompt: "Analyse ce module et identifie les problèmes de performance",
+  options: { worktree: true, branch: "analysis/perf" }
+});
+
+// Agent 2 : corrige en se basant sur l'analyse
+const fix = await query({
+  prompt: `Sur la base de cette analyse: ${analysis.result}
+           Implémente les corrections de performance.`,
+  options: { worktree: true, branch: "fix/perf" }
+});
+
+// Agent 3 : génère les tests pour les corrections
+const tests = await query({
+  prompt: `Génère des tests de régression pour ces corrections: ${fix.result}`,
+  options: { worktree: true, branch: "test/perf-regression" }
+});
+```
+
+### Pattern : fan-out / fan-in
+
+```typescript
+// Fan-out : plusieurs agents en parallèle
+const [authFix, billingFix, searchFix] = await Promise.all([
+  query({ prompt: "Corrige les bugs dans auth", options: { worktree: true } }),
+  query({ prompt: "Corrige les bugs dans billing", options: { worktree: true } }),
+  query({ prompt: "Corrige les bugs dans search", options: { worktree: true } }),
+]);
+
+// Fan-in : un agent intégrateur
+const integration = await query({
+  prompt: `Intègre ces corrections et résous les conflits potentiels:
+           Auth: ${authFix.branch}
+           Billing: ${billingFix.branch}
+           Search: ${searchFix.branch}`,
+  options: { worktree: true, branch: "integrate/all-fixes" }
+});
+```
+
+## Limites et précautions
+
+<Callout type="warning" title="Consommation de ressources">
+Chaque Background Agent consomme des tokens, de la CPU et de l'espace disque. Ne lancez pas des dizaines d'agents simultanément sans surveiller les coûts. Commencez avec 2-3 agents en parallèle et ajustez selon les résultats.
+</Callout>
+
+| Limite | Valeur recommandée |
+|--------|-------------------|
+| Agents simultanés | 3-5 (selon la complexité) |
+| `maxTurns` par agent | 10-25 (évite les boucles infinies) |
+| Taille du worktree | Dépend du projet (prévoir ~100MB par worktree) |
+
+### Conflits de merge
+
+Les Background Agents travaillent sur des branches distinctes. Les conflits de merge peuvent apparaître lors de l'intégration, surtout si plusieurs agents modifient les mêmes fichiers. Strategies pour les réduire :
+
+- Découpez les tâches par domaine fonctionnel, pas par fichier
+- Donnez des périmètres clairs à chaque agent (`src/auth/`, `src/billing/`, etc.)
+- Utilisez un agent intégrateur en dernier pour résoudre les conflits
+
+## Prochaines étapes
+
+- [Orchestration multi-agents avancée](/agents/orchestration) : Coordonnez des pipelines d'agents complexes
+- [Agent Teams](/agents/agent-teams) : Structurer des équipes d'agents spécialisés
+- [Claude Agent SDK](/agents/agent-sdk) : Construire des workflows programmatiques
+- [Mode Headless et CI/CD](/advanced/headless-ci) : Intégrer les agents dans vos pipelines

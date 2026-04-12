@@ -18,7 +18,7 @@ claude [OPTIONS] [PROMPT]
 
 | Flag | Alias | Type | Description |
 |------|-------|------|-------------|
-| `--model <id>` | `-m` | string | Model to use (`claude-haiku-4-5`, `claude-sonnet-4-5`, `claude-opus-4-5`, etc.) |
+| `--model <id>` | `-m` | string | Model to use (`claude-haiku-4-5`, `claude-sonnet-4-6`, `claude-opus-4-6`, etc.) |
 | `--print` | `-p` | boolean | Non-interactive mode: print the response and exit |
 | `--output-format <fmt>` | | string | Output format: `text` (default), `json`, `stream-json` |
 | `--verbose` | | boolean | Show tool calls and metadata (debug) |
@@ -47,7 +47,7 @@ This flag bypasses all Claude Code confirmations, including before destructive a
 claude
 
 # Interactive session with a specific model
-claude --model claude-opus-4-5
+claude --model claude-opus-4-6
 
 # Print mode: execute a task and exit
 claude --print "Explain the code in src/auth.ts"
@@ -135,6 +135,26 @@ In CI/CD, always use `--print` and `--max-turns` to avoid infinite sessions. Set
 
 ---
 
+## Subcommand: `claude agents`
+
+Lists all configured and running Background Agents with their status, Git branch, and duration.
+
+```bash
+claude agents
+```
+
+```bash
+# Example output
+# ID          STATUS      BRANCH                    SINCE
+# agent-a3f2  running     feat/refactor-auth        5m ago
+# agent-b8c1  running     feat/add-tests            2m ago
+# agent-d9e4  completed   fix/memory-leak           12m ago
+```
+
+See the [Background Agents](/agents/background-agents) page for usage with Git Worktree.
+
+---
+
 ## Subcommand: `claude config`
 
 Manages Claude Code configuration (`~/.claude/settings.json` file by default).
@@ -156,9 +176,9 @@ claude config [SUBCOMMAND] [OPTIONS]
 claude config list
 
 claude config get model
-# -> claude-sonnet-4-5
+# -> claude-sonnet-4-6
 
-claude config set model claude-opus-4-5
+claude config set model claude-opus-4-6
 
 claude config add allowedTools "Bash"
 claude config remove allowedTools "Bash"
@@ -322,8 +342,32 @@ done
 
 ---
 
+## Interactive session slash commands
+
+These commands are typed directly in an interactive Claude Code session (not from the command line):
+
+| Command | Description |
+|---------|-------------|
+| `/voice` | Enable/disable Voice Mode (push-to-talk with Space) |
+| `/loop <interval> <task>` | Launch a recurring task (e.g., `/loop 5m /review-pr`) |
+| `/help` | Show help and list of available commands |
+| `/compact` | Compress the conversation context |
+| `/memory` | Show persistent memory (CLAUDE.md) |
+| `/init` | Initialize a CLAUDE.md file in the current project |
+| `/review` | Launch a code review of the project |
+| `/cost` | Show the current session cost |
+| `/clear` | Clear the conversation and start fresh |
+
+<Callout type="info" title="/loop: recurring tasks">
+The `/loop` command turns Claude Code into a background monitoring system. For example, `/loop 10m "Check if new PRs need review"` checks every 10 minutes and acts accordingly. The default interval is 10 minutes.
+</Callout>
+
+---
+
 ## Next steps
 
 - [Cheatsheet: Quick reference](/reference/cheatsheet): Slash commands and shortcuts
 - [settings.json: Complete guide](/reference/settings): All configuration options
 - [Environment variables](/reference/environment): Variables recognized by Claude Code
+- [Voice Mode](/reference/voice-mode): Dictate tasks out loud
+- [Background Agents](/agents/background-agents): Parallel execution with Git Worktree

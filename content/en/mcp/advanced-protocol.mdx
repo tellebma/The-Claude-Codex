@@ -240,6 +240,114 @@ The **Streamable HTTP** transport is the successor to SSE for remote MCPs. It co
 Streamable HTTP transport is newer than SSE. Check that the MCP server you're targeting supports it. The official SDK (TypeScript and Python) supports it in recent versions.
 </Callout>
 
+## MCP Elicitation: requesting input mid-task
+
+**Elicitation** is a feature introduced in 2026 that allows an MCP Server to request structured input from the user during execution, via an interactive dialog. A tool no longer needs to anticipate everything in its input parameters.
+
+### Use cases
+
+- A deployment MCP that asks for confirmation before going to production
+- An email-sending MCP that asks the user to choose from several templates
+- A database migration MCP that asks the user to validate transformed data before applying it
+
+### Communication flow
+
+```
+Claude Code                MCP Server
+     |                         |
+     |--- tools/call --------->|
+     |                         |--- (needs a user decision)
+     |<-- elicitation/request--|
+     |                         |
+     | [dialog in the terminal]
+     | User provides input
+     |                         |
+     |--- elicitation/response >|
+     |                         |--- (continues execution)
+     |<-- final result ---------|
+```
+
+### Implementing Elicitation in your MCP
+
+```typescript
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { ElicitRequest } from "@modelcontextprotocol/sdk/types.js";
+
+const server = new Server(
+  { name: "deploy-mcp", version: "1.0.0" },
+  { capabilities: { tools: {}, elicitation: {} } }  // Declare the capability
+);
+
+server.tool(
+  "deploy-to-production",
+  "Deploy the application to production",
+  {
+    version: z.string(),
+    environment: z.enum(["staging", "production"]),
+  },
+  async ({ version, environment }, { elicit }) => {
+    // Ask the user for confirmation before critical deployment
+    if (environment === "production") {
+      const confirmation = await elicit({
+        message: `Confirm deployment of version ${version} to production?`,
+        requestedSchema: {
+          type: "object",
+          properties: {
+            confirmed: {
+              type: "boolean",
+              title: "Confirm",
+              description: "Type true to confirm the deployment",
+            },
+            rollbackPlan: {
+              type: "string",
+              title: "Rollback plan",
+              description: "Describe your rollback plan in case of issues",
+            },
+          },
+          required: ["confirmed"],
+        },
+      });
+
+      if (!confirmation.confirmed) {
+        return {
+          content: [{ type: "text", text: "Deployment cancelled by user." }],
+        };
+      }
+    }
+
+    // Proceed with deployment
+    const result = await doDeployment(version, environment);
+    return {
+      content: [{ type: "text", text: `Deployed: ${result.url}` }],
+    };
+  }
+);
+```
+
+### What the user sees in Claude Code
+
+When an MCP triggers an Elicitation, Claude Code shows an interactive dialog in the terminal:
+
+```
+╔══════════════════════════════════════════════════╗
+║  MCP deploy-mcp — Input required                 ║
+╠══════════════════════════════════════════════════╣
+║                                                  ║
+║  Confirm deployment of version v2.3.1            ║
+║  to production?                                  ║
+║                                                  ║
+║  Confirm [true/false]: _                         ║
+║  Rollback plan (optional): _                     ║
+║                                                  ║
+╚══════════════════════════════════════════════════╝
+```
+
+<Callout type="tip" title="Best practice">
+Use Elicitation sparingly: each interruption breaks the user's workflow. Reserve it for irreversible decisions (deployment, data deletion, sending emails) — not for parameters your MCP could infer on its own.
+</Callout>
+
+---
+
 ## Sampling: when the MCP asks the LLM
 
 **Sampling** is a special capability: it lets the MCP Server ask Claude to complete a prompt. It's a reversed flow where the server temporarily becomes a "client" of the LLM.

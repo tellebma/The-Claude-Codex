@@ -1,0 +1,179 @@
+---
+title: "Voice Mode : dicter des tâches à voix haute"
+description: "Activez le mode voix de Claude Code pour dicter vos prompts sans taper : commande /voice, push-to-talk avec Espace, cas d'usage et limitations."
+badge: "NEW"
+section: "reference"
+order: 5
+datePublished: "2026-03-25"
+dateModified: "2026-03-25"
+---
+
+## Parler à Claude Code
+
+Le Voice Mode transforme votre microphone en interface de saisie. Maintenez la barre espace, parlez, relâchez : votre dictée devient un prompt envoyé à Claude Code. C'est utile pour les tâches longues à décrire, les contextes où taper est inconfortable, ou simplement pour gagner du temps sur les requêtes complexes.
+
+<Callout type="info" title="Disponibilité">
+Le Voice Mode est disponible depuis la version 2.1.x de Claude Code. Il fonctionne sur macOS, Linux et Windows (WSL). Un microphone est requis.
+</Callout>
+
+## Activer le Voice Mode
+
+```bash
+# Dans une session Claude Code interactive, tapez :
+/voice
+```
+
+Claude Code confirme l'activation du mode voix et vous indique comment l'utiliser.
+
+<TerminalScreenshot
+  title="Terminal - activation du Voice Mode"
+  lines={[
+    { type: "prompt", content: "> /voice" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ✓ Voice Mode activé" },
+    { type: "output", content: "  Maintenez [Espace] pour parler, relâchez pour envoyer." },
+    { type: "output", content: "  Tapez /voice à nouveau pour désactiver." },
+    { type: "empty", content: "" },
+    { type: "output", content: "  🎤 Prêt — appuyez sur Espace pour commencer" }
+  ]}
+/>
+
+## Utilisation : push-to-talk
+
+Le Voice Mode fonctionne en **push-to-talk** : vous maintenez la barre espace pendant que vous parlez, puis relâchez pour envoyer le prompt.
+
+<Steps>
+<Step title="Maintenez Espace" stepNumber={1}>
+Appuyez et maintenez la **barre espace** dans le terminal. Claude Code commence à écouter. Un indicateur visuel confirme que l'enregistrement est actif.
+</Step>
+
+<Step title="Parlez clairement" stepNumber={2}>
+Dictez votre instruction en français ou en anglais. Parlez normalement, à vitesse normale. Pas besoin de crier ni d'articuler exagérément.
+
+Exemple : *"Crée un composant React de tableau de bord avec trois widgets : graphique de lignes, carte de statistiques et liste d'activité récente. Utilise Recharts pour les graphiques."*
+</Step>
+
+<Step title="Relâchez Espace" stepNumber={3} isLast>
+Relâchez la barre espace. Claude Code transcrit votre dictée et l'envoie comme prompt. La transcription s'affiche dans le terminal avant l'envoi.
+</Step>
+</Steps>
+
+<Callout type="tip" title="Vérifier avant d'envoyer">
+La transcription s'affiche brièvement avant l'envoi. Si elle est incorrecte, tapez `Ctrl+C` pour l'annuler et recommencer. Vous pouvez aussi éditer le texte transcrit si votre terminal le permet.
+</Callout>
+
+## Désactiver le Voice Mode
+
+```bash
+# Désactiver dans la session courante
+/voice
+
+# Le Voice Mode se désactive aussi automatiquement
+# à la fin de chaque session Claude Code
+```
+
+## Cas d'usage
+
+### Décrire des tâches complexes
+
+Les prompts longs et détaillés sont souvent plus naturels à dicter qu'à taper. La voix permet de décrire des contraintes, des contextes et des exigences avec plus de fluidité :
+
+```text
+[Dictée voice mode]
+"Refactorise le service d'authentification pour supporter
+OAuth2 avec Google et GitHub en plus du login email actuel.
+Garde la compatibilité ascendante avec les sessions existantes,
+ajoute des tests pour chaque provider, et documente les
+variables d'environnement nécessaires dans le README."
+```
+
+### Debugging à voix haute
+
+Décrire un bug pendant qu'on l'observe est plus naturel que de taper tout en cherchant :
+
+```text
+"J'ai une fuite mémoire sur la page dashboard. Le profiler
+montre que le composant ChartWidget ne se démonte pas
+correctement. Les event listeners ne sont probablement
+pas nettoyés. Analyse le composant et corrige ça."
+```
+
+### Sessions de review
+
+Commenter du code à voix haute pendant une revue :
+
+```text
+"Regarde les fonctions dans le fichier utils slash validation
+point ts. Ajoute des types TypeScript stricts partout où
+il manque des annotations, et propose des tests unitaires
+pour les cas limites."
+```
+
+## Langues supportées
+
+Le Voice Mode supporte la transcription en **français et en anglais** nativement, ainsi que les principaux langages européens. La détection de langue est automatique.
+
+<Callout type="tip" title="Mélange de langues">
+Vous pouvez dicter en français même si votre codebase est en anglais. Claude Code comprend les deux langues dans le même prompt : "Ajoute une fonction `parseDate` qui prend un string ISO 8601 et retourne un objet Date avec gestion des timezones."
+</Callout>
+
+## Limitations connues
+
+| Limitation | Détail |
+|-----------|--------|
+| **Latence** | La transcription ajoute ~1-2 secondes avant l'envoi du prompt |
+| **Bruits de fond** | Les environnements bruyants dégradent la qualité de transcription |
+| **Termes techniques** | Les noms de variables, URLs et chemins de fichiers peuvent être mal transcrits |
+| **Longueur** | Les dictées très longues (> 2 minutes) peuvent être tronquées |
+| **CI/CD** | Le Voice Mode n'est pas disponible en mode headless (`--print`) |
+
+### Contourner les erreurs de transcription
+
+Pour les termes très techniques, plusieurs approches :
+
+```text
+# 1. Épeler les noms critiques
+"Crée une variable nommée — je dis l'épeler : A-U-T-H underscore T-O-K-E-N"
+
+# 2. Combiner voix et texte
+# Dictez la structure générale, puis complétez manuellement
+# les noms de variables exacts dans le terminal
+
+# 3. Utiliser des descriptions
+"La variable qui stocke le token d'authentification JWT"
+```
+
+## Combinaison avec d'autres fonctionnalités
+
+### Voice Mode + Extended Thinking
+
+Dictez des questions d'architecture complexes avec l'Extended Thinking activé pour obtenir une analyse en profondeur sans avoir à taper de longs prompts :
+
+```bash
+# Activer les deux
+/voice    # Active le voice mode
+Alt+T     # Active l'Extended Thinking (Linux/Windows)
+          # Option+T sur macOS
+
+# Puis dictez votre question d'architecture
+```
+
+### Voice Mode + Plan Mode
+
+Demandez un plan complet à voix haute avant de commencer une implémentation :
+
+```text
+[Dictée]
+"Avant de coder quoi que ce soit, fais-moi un plan détaillé
+pour migrer notre API Express vers Fastify. J'ai besoin de
+connaître l'ordre des migrations, les risques de chaque étape
+et les points de non-retour. Attends ma validation avant de
+commencer."
+```
+
+## Prochaines étapes
+
+- [Cheatsheet : Référence rapide](/reference/cheatsheet) : Toutes les commandes slash en un coup d'œil
+- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) : Combinez voix et raisonnement profond
+- [CLI : Référence complète](/reference/cli) : Tous les flags et sous-commandes
+- [settings.json : Configuration](/reference/settings) : Paramétrez Claude Code selon vos besoins

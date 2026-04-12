@@ -29,7 +29,7 @@ Les options définies au niveau projet surchargent celles du niveau utilisateur.
 ```json
 {
   // Modèle par défaut pour toutes les sessions
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
 
   // Activation de l'Extended Thinking
   "alwaysThinkingEnabled": false,
@@ -81,12 +81,12 @@ Le modèle Claude à utiliser par défaut pour toutes les sessions.
 | Valeur | Description |
 |--------|-------------|
 | `claude-haiku-4-5` | Rapide et économique, 90% des capacités de Sonnet |
-| `claude-sonnet-4-5` | Meilleur équilibre qualité/coût (recommandé) |
-| `claude-opus-4-5` | Raisonnement le plus profond, plus lent |
+| `claude-sonnet-4-6` | Meilleur équilibre qualité/coût (recommandé) |
+| `claude-opus-4-6` | Raisonnement le plus profond, plus lent |
 
 ```json
 {
-  "model": "claude-sonnet-4-5"
+  "model": "claude-sonnet-4-6"
 }
 ```
 
@@ -343,7 +343,7 @@ Configuration des serveurs MCP. Chaque entrée est un serveur MCP nommé.
 ```json
 // ~/.claude/settings.json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "alwaysThinkingEnabled": false,
   "autoCompact": true,
   "permissions": {
@@ -364,7 +364,7 @@ Configuration des serveurs MCP. Chaque entrée est un serveur MCP nommé.
 ```json
 // .claude/settings.json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "allowedTools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
   "permissions": {
     "deny": ["Bash(rm -rf:*)", "Bash(sudo:*)", "WebFetch"]

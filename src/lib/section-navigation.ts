@@ -69,6 +69,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "agents.orchestration", href: "/agents/orchestration" },
       { labelKey: "agents.agent-sdk", href: "/agents/agent-sdk" },
       { labelKey: "agents.performance-limits", href: "/agents/performance-limits" },
+      { labelKey: "agents.background-agents", href: "/agents/background-agents" },
     ],
   },
   prompting: {
@@ -140,6 +141,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "reference.cli", href: "/reference/cli" },
       { labelKey: "reference.settings", href: "/reference/settings" },
       { labelKey: "reference.environment", href: "/reference/environment" },
+      { labelKey: "reference.voice-mode", href: "/reference/voice-mode" },
     ],
   },
   limits: {

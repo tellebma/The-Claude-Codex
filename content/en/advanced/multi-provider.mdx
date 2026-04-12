@@ -225,17 +225,17 @@ One advantage of multi-provider is being able to choose the model based on task 
 claude --print --model claude-haiku-4-5 "Generate a JSDoc comment for this function"
 
 # Sonnet for everyday development (default)
-claude --print --model claude-sonnet-4-5 "Implement this feature with tests"
+claude --print --model claude-sonnet-4-6 "Implement this feature with tests"
 
 # Opus for complex decisions
-claude --print --model claude-opus-4-5 "Design the architecture for this distributed system"
+claude --print --model claude-opus-4-6 "Design the architecture for this distributed system"
 ```
 
 ### Via settings.json (permanent configuration)
 
 ```json
 {
-  "model": "claude-sonnet-4-5"
+  "model": "claude-sonnet-4-6"
 }
 ```
 
@@ -245,7 +245,7 @@ For teams that want to use Haiku in CI/CD (savings) and Sonnet in dev:
 
 ```json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "apiProvider": "anthropic"
 }
 ```
@@ -279,7 +279,7 @@ Project configuration in `.claude/settings.json` (committable):
 
 ```json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "apiProvider": "bedrock",
   "awsRegion": "eu-west-1"
 }

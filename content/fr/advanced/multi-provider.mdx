@@ -225,17 +225,17 @@ L'un des avantages du multi-provider est de pouvoir choisir le modèle selon la 
 claude --print --model claude-haiku-4-5 "Génère un commentaire JSDoc pour cette fonction"
 
 # Sonnet pour le développement courant (défaut)
-claude --print --model claude-sonnet-4-5 "Implémente cette feature avec des tests"
+claude --print --model claude-sonnet-4-6 "Implémente cette feature avec des tests"
 
 # Opus pour des décisions complexes
-claude --print --model claude-opus-4-5 "Conçois l'architecture de ce système distribué"
+claude --print --model claude-opus-4-6 "Conçois l'architecture de ce système distribué"
 ```
 
 ### Via settings.json (configuration permanente)
 
 ```json
 {
-  "model": "claude-sonnet-4-5"
+  "model": "claude-sonnet-4-6"
 }
 ```
 
@@ -245,7 +245,7 @@ Pour les équipes qui veulent utiliser Haiku en CI/CD (économies) et Sonnet en 
 
 ```json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "apiProvider": "anthropic"
 }
 ```
@@ -279,7 +279,7 @@ Configuration projet dans `.claude/settings.json` (commitable) :
 
 ```json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "apiProvider": "bedrock",
   "awsRegion": "eu-west-1"
 }

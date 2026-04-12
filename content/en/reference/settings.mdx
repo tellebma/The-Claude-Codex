@@ -29,7 +29,7 @@ Project-level options override user-level ones. The local file (`.local.json`) o
 ```json
 {
   // Default model for all sessions
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
 
   // Enable Extended Thinking
   "alwaysThinkingEnabled": false,
@@ -81,12 +81,12 @@ The default Claude model for all sessions.
 | Value | Description |
 |-------|-------------|
 | `claude-haiku-4-5` | Fast and affordable, 90% of Sonnet's capabilities |
-| `claude-sonnet-4-5` | Best quality/cost balance (recommended) |
-| `claude-opus-4-5` | Deepest reasoning, slower |
+| `claude-sonnet-4-6` | Best quality/cost balance (recommended) |
+| `claude-opus-4-6` | Deepest reasoning, slower |
 
 ```json
 {
-  "model": "claude-sonnet-4-5"
+  "model": "claude-sonnet-4-6"
 }
 ```
 
@@ -343,7 +343,7 @@ MCP server configuration. Each entry is a named MCP server.
 ```json
 // ~/.claude/settings.json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "alwaysThinkingEnabled": false,
   "autoCompact": true,
   "permissions": {
@@ -364,7 +364,7 @@ MCP server configuration. Each entry is a named MCP server.
 ```json
 // .claude/settings.json
 {
-  "model": "claude-sonnet-4-5",
+  "model": "claude-sonnet-4-6",
   "allowedTools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
   "permissions": {
     "deny": ["Bash(rm -rf:*)", "Bash(sudo:*)", "WebFetch"]

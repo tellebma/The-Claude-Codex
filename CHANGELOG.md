@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.0...v1.1.1) (2026-04-12)
+
+
+### Bug Fixes
+
+* **csp:** autoriser matomo.tellebma.fr dans Content-Security-Policy ([4d81871](https://github.com/tellebma/The-Claude-Codex/commit/4d81871e4b2b71849b000bd0a9396d4131c0ad8d))
+
 # [1.1.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.0.0...v1.1.0) (2026-04-12)
 
 

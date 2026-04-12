@@ -6,6 +6,15 @@ import { SITE_NAME, SITE_URL } from "@/lib/metadata";
  */
 
 /**
+ * Ensures a URL ends with a trailing slash to match the
+ * Next.js trailingSlash: true configuration.
+ * Skips URLs that are just a domain (no path segments).
+ */
+function ensureTrailingSlash(url: string): string {
+  return url.endsWith("/") ? url : `${url}/`;
+}
+
+/**
  * Maps a locale code to a BCP 47 language tag for schema.org inLanguage.
  */
 export function localeToLanguageTag(locale: string): string {
@@ -99,13 +108,13 @@ export function createDefinedTermSetSchema(
     "@context": "https://schema.org",
     "@type": "DefinedTermSet",
     name: locale === "en" ? "Claude Code & AI Glossary" : "Glossaire Claude Code et IA",
-    url: `${SITE_URL}/${locale}/glossary`,
+    url: `${SITE_URL}/${locale}/glossary/`,
     inLanguage: localeToLanguageTag(locale),
     hasDefinedTerm: terms.map((term) => ({
       "@type": "DefinedTerm",
       name: term.name,
       description: term.description,
-      url: `${SITE_URL}/glossary#${term.anchor}`,
+      url: `${SITE_URL}/${locale}/glossary/#${term.anchor}`,
     })),
   };
 }
@@ -121,7 +130,7 @@ export function createCollectionPageSchema(options: {
     "@type": "CollectionPage",
     name: options.name,
     description: options.description,
-    url: options.url,
+    url: ensureTrailingSlash(options.url),
     inLanguage: localeToLanguageTag(options.locale ?? "fr"),
     isPartOf: {
       "@type": "WebSite",
@@ -150,12 +159,13 @@ export function createArticleSchema({
   dateModified,
   image,
 }: ArticleSchemaOptions): Record<string, unknown> {
+  const canonicalUrl = ensureTrailingSlash(url);
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: title,
     description,
-    url,
+    url: canonicalUrl,
     inLanguage: localeToLanguageTag(locale),
     ...(image
       ? {
@@ -176,7 +186,7 @@ export function createArticleSchema({
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": url,
+      "@id": canonicalUrl,
     },
   };
 }
@@ -208,7 +218,7 @@ export function createHowToSchema({
     "@type": "HowTo",
     name: title,
     description,
-    url,
+    url: ensureTrailingSlash(url),
     inLanguage: localeToLanguageTag(locale),
     ...(image
       ? {
@@ -244,7 +254,7 @@ export function createBreadcrumbSchema(
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: `${SITE_URL}${item.href}`,
+      item: ensureTrailingSlash(`${SITE_URL}${item.href}`),
     })),
   };
 }

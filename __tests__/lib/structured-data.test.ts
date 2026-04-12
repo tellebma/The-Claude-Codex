@@ -55,7 +55,7 @@ describe("createArticleSchema", () => {
     expect(schema["@type"]).toBe("Article");
     expect(schema.headline).toBe("Test Article");
     expect(schema.description).toBe("Article description");
-    expect(schema.url).toBe("https://claude-codex.fr/test");
+    expect(schema.url).toBe("https://claude-codex.fr/test/");
     expect(schema.inLanguage).toBe("fr-FR");
   });
 
@@ -119,7 +119,7 @@ describe("createArticleSchema", () => {
 
     const mainEntity = schema.mainEntityOfPage as Record<string, unknown>;
     expect(mainEntity["@type"]).toBe("WebPage");
-    expect(mainEntity["@id"]).toBe("https://claude-codex.fr/test");
+    expect(mainEntity["@id"]).toBe("https://claude-codex.fr/test/");
 
     const publisher = schema.publisher as Record<string, unknown>;
     expect(publisher["@type"]).toBe("Organization");
@@ -209,7 +209,7 @@ describe("createBreadcrumbSchema", () => {
       item: `${SITE_URL}/`,
     });
     expect(items[1].position).toBe(2);
-    expect(items[1].item).toBe(`${SITE_URL}/mcp`);
+    expect(items[1].item).toBe(`${SITE_URL}/mcp/`);
     expect(items[2].position).toBe(3);
   });
 });

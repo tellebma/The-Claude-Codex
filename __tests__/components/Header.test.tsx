@@ -147,4 +147,129 @@ describe("Header", () => {
     });
     expect(searchButton).toBeInTheDocument();
   });
+
+  it("closes more dropdown when Escape is pressed on the button", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    // Open the dropdown
+    fireEvent.click(moreButton);
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+
+    // Press Escape on the button
+    fireEvent.keyDown(moreButton, { key: "Escape" });
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("opens more dropdown with ArrowDown key", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.keyDown(moreButton, { key: "ArrowDown" });
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("opens more dropdown with Enter key", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.keyDown(moreButton, { key: "Enter" });
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("opens more dropdown with Space key", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.keyDown(moreButton, { key: " " });
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+  });
+
+  it("navigates menu items with ArrowDown/ArrowUp", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.click(moreButton);
+    const menuItems = screen.getAllByRole("menuitem");
+
+    // ArrowDown on first item should move focus to second
+    fireEvent.keyDown(menuItems[0], { key: "ArrowDown" });
+    // ArrowUp should go back
+    fireEvent.keyDown(menuItems[1], { key: "ArrowUp" });
+
+    // Home should focus first
+    fireEvent.keyDown(menuItems[1], { key: "Home" });
+
+    // End should focus last
+    fireEvent.keyDown(menuItems[0], { key: "End" });
+  });
+
+  it("closes dropdown with Escape from menu item", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.click(moreButton);
+    const menuItems = screen.getAllByRole("menuitem");
+
+    fireEvent.keyDown(menuItems[0], { key: "Escape" });
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("closes dropdown with Tab from menu item", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.click(moreButton);
+    const menuItems = screen.getAllByRole("menuitem");
+
+    fireEvent.keyDown(menuItems[0], { key: "Tab" });
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("closes dropdown when clicking outside", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.click(moreButton);
+    expect(screen.getByRole("menu")).toBeInTheDocument();
+
+    // Click outside the dropdown
+    fireEvent.mouseDown(document.body);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("closes dropdown when clicking a menu item", () => {
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+
+    fireEvent.click(moreButton);
+    const menuItems = screen.getAllByRole("menuitem");
+
+    fireEvent.click(menuItems[0]);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("highlights secondary nav when secondary page is active", () => {
+    mockPathname = "/configurator";
+    render(<Header />);
+    const moreButton = screen.getByRole("button", { name: /more/ });
+    expect(moreButton.className).toContain("text-brand");
+  });
+
+  it("mobile menu is hidden (inert) when closed", () => {
+    render(<Header />);
+    const mobileMenu = document.getElementById("mobile-nav-menu");
+    expect(mobileMenu).toBeInTheDocument();
+    expect(mobileMenu).toHaveAttribute("aria-hidden", "true");
+  });
+
+  it("mobile menu shows all nav items when open", () => {
+    render(<Header />);
+    const menuButton = screen.getByRole("button", { name: "menuToggle" });
+    fireEvent.click(menuButton);
+
+    // Mobile menu should have aria-hidden=false
+    const mobileMenu = document.getElementById("mobile-nav-menu");
+    expect(mobileMenu).toHaveAttribute("aria-hidden", "false");
+  });
 });

@@ -637,6 +637,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-11",
   },
   {
+    path: "/advanced/mcp-profiles",
+    title: "Profils MCP : un Claude par mission",
+    description:
+      "Créez des profils spécialisés (SEO, UX, sécurité, dev) en combinant .mcp.json, CLAUDE.md et des alias shell. Chaque mission a son propre Claude.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-12",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

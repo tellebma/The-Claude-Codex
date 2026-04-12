@@ -304,7 +304,8 @@
       "overview": "Overview",
       "hooks": "Hooks system",
       "headless-ci": "Headless mode & CI/CD",
-      "multi-provider": "Multi-provider & Enterprise"
+      "multi-provider": "Multi-provider & Enterprise",
+      "mcp-profiles": "MCP profiles per mission"
     },
     "reference": {
       "title": "Reference",

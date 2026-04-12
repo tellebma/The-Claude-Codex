@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "test:mutation": "stryker run",
     "docker:build": "docker build -t tellebma/the-claude-codex .",
     "docker:push": "docker push tellebma/the-claude-codex",
     "docker:release": "npm run docker:build && npm run docker:push"
@@ -33,6 +34,9 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
+    "@stryker-mutator/core": "^9.6.1",
+    "@stryker-mutator/typescript-checker": "^9.6.1",
+    "@stryker-mutator/vitest-runner": "^9.6.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "^20.17.10",

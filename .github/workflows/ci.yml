@@ -68,6 +68,34 @@ jobs:
       - name: Run tests with coverage
         run: npm run test:coverage -- --coverage.thresholds.lines=30 --coverage.thresholds.functions=30 --coverage.thresholds.branches=30 --coverage.thresholds.statements=30
 
+  mutation:
+    name: Mutation testing
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run mutation testing
+        run: npm run test:mutation
+
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: mutation-report
+          path: reports/mutation/
+          retention-days: 14
+
   audit:
     name: Security audit
     runs-on: ubuntu-latest

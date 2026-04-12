@@ -146,16 +146,21 @@ export function Footer() {
               <CopyrightYear /> The Claude Codex. {tCommon("openSource")}
             </p>
           </div>
-          <a
-            href="https://github.com/tellebma/The-Claude-Codex"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex min-h-[44px] items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
-          >
-            <Github className="h-4 w-4" aria-hidden="true" />
-            GitHub
-            <span className="sr-only"> {tCommon("opensNewTab")}</span>
-          </a>
+          <div className="flex items-center gap-4">
+            <span className="rounded-md bg-slate-200/50 px-2 py-0.5 font-mono text-xs text-slate-400 dark:bg-slate-800/50 dark:text-slate-500">
+              v{process.env.NEXT_PUBLIC_APP_VERSION}
+            </span>
+            <a
+              href="https://github.com/tellebma/The-Claude-Codex"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex min-h-[44px] items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+            >
+              <Github className="h-4 w-4" aria-hidden="true" />
+              GitHub
+              <span className="sr-only"> {tCommon("opensNewTab")}</span>
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -406,10 +406,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/skills/what-are-skills",
     title: "Qu’est-ce qu’un Skill Claude Code ?",
     description:
-      "Comprendre les Skills Claude Code : concept, types, fonctionnement et différences avec les instructions du CLAUDE.md. Guide complet pour maîtriser les slash commands.",
+      "Les Skills Claude Code expliqués : workflows Markdown réutilisables déclenchés par slash commands. Fonctionnement, création, et différences avec les MCP et plugins.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-04-13",
   },
   {
     path: "/skills/best-skills",
@@ -683,12 +683,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/reference/environment",
-    title: "Variables d’environnement : Référence Claude Code",
+    title: "Variables d’environnement Claude Code : liste complète et exemples",
     description:
-      "Toutes les variables d’environnement reconnues par Claude Code : clé API, modèle, proxy, tokens, répertoire de config et exemples CI/CD.",
+      "ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL, CLAUDE_MODEL, proxy, MAX_THINKING_TOKENS : chaque variable documentée avec exemples bash et configuration CI/CD.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-13",
   },
   {
     path: "/configurator",
@@ -773,12 +773,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/limits/vs-copilot",
-    title: "Claude Code vs GitHub Copilot : comparaison honnête",
+    title: "Claude Code vs GitHub Copilot : comparatif honnête (2026)",
     description:
-      "Comparaison équilibrée entre Claude Code et GitHub Copilot. Approche agent vs autocomplétion, forces et faiblesses de chacun, cas d'usage.",
+      "Agent CLI vs autocomplétion IDE : prix, mode agent, intégration IDE et qualité du code comparés. Forces, faiblesses, et quel outil choisir selon votre cas d'usage.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-04-13",
   },
   {
     path: "/limits/vs-cursor",
@@ -818,12 +818,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/content/bonnes-pratiques-securite",
-    title: "Guide de sécurité Claude Code : bonnes pratiques",
+    title: "Sécurité Claude Code : bonnes pratiques et checklist copiable",
     description:
-      "Guide complet de sécurité pour Claude Code : principe du moindre privilège, audit des MCP, profils de configuration, monitoring et checklist copiable.",
+      "Moindre privilège, audit MCP, profils sandboxés, scan des secrets : guide pratique avec checklist prête à l'emploi pour sécuriser Claude Code en équipe.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-13",
   },
   {
     path: "/about",

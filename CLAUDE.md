@@ -166,7 +166,7 @@ Chaque section l'utilise via son `layout.tsx` : `<SectionLayout>{children}</Sect
 ```javascript
 output: 'export'                    // Export statique HTML
 images: { unoptimized: true }       // Pas d'optimisation next/image (statique)
-trailingSlash: false                // URLs sans slash final
+trailingSlash: true                 // URLs avec slash final (requis pour i18n)
 experimental.optimizePackageImports: ['lucide-react', 'framer-motion']
 ```
 

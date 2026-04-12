@@ -41,21 +41,21 @@ export default async function SectionSlugContent({
   const articleJsonLd = createArticleSchema({
     title: frontmatter.title,
     description: frontmatter.description,
-    url: `${SITE_URL}/${locale}/${section}/${slug}`,
+    url: `${SITE_URL}/${locale}/${section}/${slug}/`,
     locale,
     datePublished: frontmatter.datePublished,
     dateModified: frontmatter.dateModified,
   });
 
   const breadcrumbJsonLd = createBreadcrumbSchema([
-    { name: tCommon("home"), href: `/${locale}` },
+    { name: tCommon("home"), href: `/${locale}/` },
     {
       name: tBreadcrumb(`sections.${section}`),
-      href: `/${locale}/${section}`,
+      href: `/${locale}/${section}/`,
     },
     {
       name: frontmatter.title,
-      href: `/${locale}/${section}/${slug}`,
+      href: `/${locale}/${section}/${slug}/`,
     },
   ]);
 

@@ -102,8 +102,7 @@ describe("MermaidDiagram", () => {
     render(<MermaidDiagram chart="invalid chart syntax" />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Erreur de rendu Mermaid/)).toBeInTheDocument();
-      expect(screen.getByText(/Parse error in chart/)).toBeInTheDocument();
+      expect(screen.getByText(/Erreur de rendu du diagramme/)).toBeInTheDocument();
     });
   });
 

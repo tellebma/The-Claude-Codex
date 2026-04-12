@@ -9,7 +9,7 @@ const mockNextThemesProvider = vi.fn(({ children }: { children: React.ReactNode 
 ));
 
 vi.mock("next-themes", () => ({
-  ThemeProvider: (props: Record<string, unknown>) => mockNextThemesProvider(props),
+  ThemeProvider: (props: { children: React.ReactNode } & Record<string, unknown>) => mockNextThemesProvider(props),
   useTheme: () => ({ theme: "light", setTheme: vi.fn() }),
 }));
 

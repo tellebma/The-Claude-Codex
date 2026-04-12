@@ -1,0 +1,288 @@
+---
+title: "Workflows avancés"
+description: "Research, Plan, Execute, Review, Ship : le workflow en 5 étapes pour structurer votre travail avec Claude Code. Cross-model et parallélisme."
+section: "advanced"
+order: 6
+datePublished: "2026-03-30"
+dateModified: "2026-03-30"
+badge: "WORKFLOW"
+---
+
+## Pourquoi la structure change tout
+
+Utiliser Claude Code sans méthode, c'est comme demander à un architecte de construire une maison sans plan : il peut faire quelque chose, mais vous ne serez probablement pas content du résultat. Les modèles de langage sont très bons pour exécuter des instructions précises. Ils sont moins bons pour deviner ce que vous voulez vraiment.
+
+Un workflow structuré résout ce problème. Pas parce qu'il ajoute de la bureaucratie, mais parce qu'il aligne vos intentions et celles de Claude avant que le premier fichier soit touché. La différence entre un résultat moyen et un résultat excellent tient souvent à dix minutes de planification qui évitent une heure de corrections.
+
+<Callout type="info" title="Ce workflow vient du terrain">
+Ce pattern Research → Plan → Execute → Review → Ship vient directement des retours de l'équipe Anthropic et des utilisateurs avancés de Claude Code. Il n'est pas théorique : c'est ce que les gens font quand ils obtiennent de bons résultats de façon répétable.
+</Callout>
+
+## Le workflow en 5 étapes
+
+### Research : comprendre avant d'agir
+
+Avant d'écrire la moindre ligne de code, Claude doit comprendre le contexte. Sur un projet existant, cela signifie parcourir le codebase, lire les fichiers de configuration, identifier les patterns déjà en place.
+
+Vous pouvez utiliser le mode Explore ou simplement donner à Claude des instructions de lecture :
+
+```bash
+# Lancer une session de Research
+claude
+
+# Dans la session, demandez à Claude d'explorer
+> Lis le fichier src/auth/middleware.ts, le README et package.json.
+  Je vais ensuite te demander d'ajouter un système de rate limiting.
+  Pour l'instant, contente-toi de comprendre l'architecture existante.
+```
+
+Pour les codebases volumineuses, des subagents sont utiles : vous pouvez demander à Claude de lancer plusieurs lectures en parallèle via des appels d'outils simultanés.
+
+**Ce que vous cherchez pendant la Research :**
+- Quels patterns sont déjà utilisés (fetch natif ou axios ? Tests avec Jest ou Vitest ?)
+- Quelles contraintes existent (TypeScript strict ? Conventions de nommage ?)
+- Quels fichiers seront touchés par votre changement
+- Ce qui risque de casser si vous modifiez telle ou telle partie
+
+### Plan : itérer sur papier avant de coder
+
+La phase Plan est la plus importante et la plus souvent sautée. C'est dommage, parce qu'un bon plan évite 80% des retours.
+
+Pour entrer en Plan Mode dans Claude Code, appuyez deux fois sur **Shift+Tab**. Claude passe en mode exploratoire : il pose des questions, propose une structure, mais n'écrit pas de code. Vous itérez sur le plan jusqu'à être d'accord.
+
+```bash
+# Activer le Plan Mode via le raccourci clavier
+# Shift+Tab × 2 dans l'interface Claude Code
+
+# Vous pouvez aussi être explicite dans votre prompt
+> Je veux implémenter un rate limiting sur l'API auth.
+  Ne commence pas à coder. D'abord, propose-moi un plan détaillé
+  des fichiers à modifier, des étapes dans l'ordre, et des risques potentiels.
+```
+
+<Callout type="tip" title="Itérez sur le plan, pas sur le code">
+Changer d'avis sur une approche quand vous êtes encore en mode texte coûte zéro. Changer d'avis après que Claude a modifié 15 fichiers coûte beaucoup plus. Prenez le temps d'affiner le plan jusqu'à ce qu'il soit vraiment solide.
+</Callout>
+
+Un bon plan contient :
+1. La liste des fichiers à créer ou modifier
+2. Les étapes dans l'ordre logique (avec les dépendances)
+3. Les points de risque identifiés
+4. Les tests à écrire ou mettre à jour
+
+Quand le plan vous convient, vous donnez le feu vert : "Ce plan me semble bon, tu peux commencer l'implémentation."
+
+### Execute : laisser Claude travailler
+
+Une fois le plan validé, passez en mode auto-accept (touche `a` dans l'interface, ou `--dangerously-skip-permissions` en CLI pour les environnements automatisés). Claude implémente les étapes dans l'ordre, en s'appuyant sur le plan comme guide.
+
+Votre rôle pendant l'exécution : ne pas interrompre sauf si Claude part dans la mauvaise direction. Laissez-le finir une étape avant de commenter.
+
+Pour les implémentations longues, les worktrees permettent de paralléliser. Pendant qu'une session Execute un plan, une autre peut déjà travailler sur une seconde feature.
+
+```bash
+# Exécution dans un worktree dédié
+git worktree add ../mon-projet-rate-limiting feat/rate-limiting
+cd ../mon-projet-rate-limiting
+claude
+```
+
+### Review : challenger les choix
+
+L'implémentation est terminée. Avant de merger, c'est le moment de faire jouer l'esprit critique.
+
+```bash
+# Dans la session Claude, après l'implémentation
+> Passe en revue tous les changements que tu viens de faire.
+  Identifie les edge cases que tu n'aurais pas traités,
+  les choix discutables et ce qui pourrait casser en production.
+```
+
+La phrase "Grill me on these changes" (ou "Questionne ces changements") est efficace : elle pousse Claude à sortir du mode "je valide ce que j'ai fait" pour entrer dans un mode critique.
+
+**Checklist de Review :**
+- Les tests passent (`npm test` ou équivalent)
+- Les edge cases sont couverts (entrées nulles, erreurs réseau, timeouts)
+- Les changements ne cassent pas l'existant
+- Le code respecte les conventions du projet
+- La performance n'est pas dégradée
+
+<Callout type="warning" title="Ne jamais skipper la Review">
+L'auto-accept en mode Execute est puissant, mais il peut introduire des régressions silencieuses. Prenez systématiquement le temps de relire les diffs avant de committer.
+</Callout>
+
+### Ship : commit, PR, merge
+
+La dernière étape est souvent bâclée. Claude peut vous aider à la faire bien.
+
+```bash
+# Demandez à Claude de rédiger le message de commit et la PR
+> Rédige un message de commit conventionnel (feat:, fix:, etc.)
+  pour ces changements, avec un résumé en une ligne
+  et une description des modifications importantes.
+
+> Rédige aussi la description de la PR avec :
+  - Ce qui a changé et pourquoi
+  - Les points d'attention pour le reviewer
+  - Les tests à lancer pour valider
+```
+
+## Cross-model : le bon modèle pour chaque étape
+
+Toutes les étapes ne nécessitent pas la même puissance de raisonnement. Adapter le modèle à la tâche optimise à la fois la vitesse et la qualité.
+
+| Étape | Modèle recommandé | Pourquoi |
+|-------|------------------|----------|
+| Research | Haiku | Rapide pour lire des fichiers, grepper du code, indexer des structures |
+| Plan | Opus | Raisonnement complexe, arbitrages d'architecture, anticipation des risques |
+| Execute | Sonnet | Bon rapport qualité/vitesse pour l'implémentation courante |
+| Review | Opus | Détection de bugs subtils, edge cases, régressions |
+| Ship | Sonnet | Rédaction de PR et de messages de commit : pas besoin d'Opus |
+
+```bash
+# Changer de modèle selon l'étape (flag --model)
+claude --model claude-haiku-4-5     # Research rapide
+claude --model claude-opus-4-5      # Plan et Review
+claude --model claude-sonnet-4-5    # Execute et Ship
+```
+
+<Callout type="tip" title="Configurer le modèle par défaut">
+Vous pouvez définir un modèle par défaut dans `~/.claude/settings.json` avec la clé `"model"`. Pour les sessions interactives, `Sonnet` est souvent le meilleur compromis. Gardez `Opus` pour les tâches qui méritent vraiment un raisonnement approfondi.
+</Callout>
+
+## Workflow parallèle avec worktrees
+
+Les worktrees combinés au workflow 5 étapes permettent une organisation en parallèle très efficace. Ouvrez trois terminaux :
+
+```
+Terminal 1 : Plan (Opus)
+Terminal 2 : Execute (Sonnet)
+Terminal 3 : Review (Opus)
+```
+
+Un pattern particulièrement puissant est le **"double validation"** : un Claude planifie, un second relit ce plan indépendamment avant que l'exécution commence.
+
+```bash
+# Terminal 1 : Claude A prépare un plan
+cd mon-projet
+claude --model claude-opus-4-5
+> Plan pour implémenter le rate limiting. Ne code pas encore.
+
+# Terminal 2 : Claude B relit le plan indépendamment
+git worktree add ../mon-projet-review main
+cd ../mon-projet-review
+claude --model claude-opus-4-5
+> Lis CLAUDE.md et ce plan [coller le plan].
+  Identifie les failles ou ce qui n'a pas été pris en compte.
+
+# Terminal 3 : Exécution une fois le plan validé
+git worktree add ../mon-projet-feat feat/rate-limiting
+cd ../mon-projet-feat
+claude --model claude-sonnet-4-5
+> [coller le plan validé]. Implémente-le.
+```
+
+## Le Plan Mode en détail
+
+Le Plan Mode mérite une section à part parce que beaucoup d'utilisateurs ne l'utilisent pas assez.
+
+**Comment y accéder :**
+- Raccourci clavier : **Shift+Tab** deux fois dans l'interface Claude Code
+- Dans un prompt : demandez explicitement à Claude de ne pas coder et de proposer un plan
+
+**Ce que fait Claude en Plan Mode :**
+- Il explore les fichiers pertinents pour comprendre le contexte
+- Il pose des questions si des éléments sont ambigus
+- Il propose un plan structuré avec les étapes dans l'ordre
+- Il attend votre validation avant de passer à l'action
+
+**La commande `/plan` :**
+
+Si vous avez déjà commencé une session et voulez consulter ou modifier le plan en cours :
+
+```bash
+/plan
+# Claude affiche le plan actuel et vous pouvez demander des ajustements
+```
+
+<Callout type="tip" title="Le plan comme documentation">
+Un plan bien rédigé en Plan Mode est aussi une documentation de votre décision technique. Vous pouvez le coller dans la description de votre PR pour expliquer l'approche choisie.
+</Callout>
+
+## Patterns concrets selon le type de tâche
+
+### Feature classique
+
+```
+Research  : 5 min   — explorer le codebase, identifier les fichiers concernés
+Plan      : 10 min  — itérer sur l'approche avec Claude en Plan Mode
+Execute   : 20 min  — auto-accept, laisser Claude implémenter
+Review    : 10 min  — relire les diffs, lancer les tests, challengeur les choix
+Ship      : 5 min   — message de commit, description de PR
+```
+
+```bash
+# Exemple complet pour une feature
+claude --model claude-opus-4-5
+
+> [RESEARCH] Lis src/api/, src/middleware/ et les tests existants.
+  Je vais te demander d'ajouter du rate limiting.
+  Pour l'instant, comprends seulement l'architecture.
+
+> [PLAN] Propose un plan détaillé pour ajouter un rate limiting
+  basé sur l'IP, configurable par route. Pas de code encore.
+
+# ... itération sur le plan ...
+# ... validation du plan ...
+
+> [EXECUTE] Le plan me convient. Implémente-le étape par étape.
+
+# ... auto-accept activé ...
+
+> [REVIEW] Passe en revue les changements. Edge cases ? Risques ?
+
+> [SHIP] Rédige le message de commit et la description de PR.
+```
+
+### Bug fix
+
+Pour un bug, le workflow est plus court. La Research se fait en collant directement l'erreur :
+
+```bash
+claude
+
+> Voici l'erreur que j'obtiens :
+  TypeError: Cannot read property 'id' of undefined
+    at UserService.getProfile (src/services/user.ts:42)
+
+  Identifie la cause probable et propose un fix.
+  Explique ton raisonnement avant de modifier quoi que ce soit.
+```
+
+La phase "explique avant de modifier" remplace le Plan Mode pour les fixes simples.
+
+### Refactoring
+
+Le refactoring est le cas où le Plan Mode est le plus indispensable. Sans plan, Claude a tendance à tout refactoriser d'un coup, ce qui produit des diffs énormes et difficiles à reviewer.
+
+```bash
+claude --model claude-opus-4-5
+
+> Je veux refactoriser src/services/user.ts pour séparer
+  les responsabilités (actuellement 500 lignes, tout mélangé).
+  Propose un plan en étapes atomiques, chaque étape devant
+  rester mergeable indépendamment.
+```
+
+<Callout type="warning" title="Refactoring : une étape à la fois">
+Un refactoring découpé en 5 PRs de 100 lignes est infiniment plus facile à reviewer et à merger qu'une PR de 500 lignes. Insistez sur ce découpage dans votre plan.
+</Callout>
+
+## Prochaines étapes
+
+Ces techniques atteignent leur plein potentiel combinées aux autres features avancées.
+
+- [Git Worktrees](/fr/advanced/worktrees) : maîtrisez le parallélisme pour exécuter plusieurs étapes simultanément
+- [Système de Hooks](/fr/advanced/hooks) : automatisez les phases Review avec des hooks PostToolUse
+- [Mode Headless et CI/CD](/fr/advanced/headless-ci) : intégrez le workflow 5 étapes dans vos pipelines automatisés
+- [Multi-provider](/fr/advanced/multi-provider) : distribuez les étapes cross-model sur différents providers pour optimiser les coûts

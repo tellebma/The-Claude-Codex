@@ -4,7 +4,7 @@ description: "Maîtrisez les directives avancées de prompting : rôles, contrai
 section: "prompting"
 order: 2
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-03-30"
 ---
 
 ## Qu'est-ce qu'une directive ?
@@ -188,6 +188,105 @@ DON'T:
 - N'utilise pas useEffect pour du fetching (utilise useSWR ou React Query)
 - Ne fais pas de prop drilling sur plus de 2 niveaux
 - N'utilise pas d'index comme clé dans les listes dynamiques
+```
+
+## Dictée vocale : coder en parlant
+
+Boris Cherny, le créateur de Claude Code, code principalement en dictant ses prompts. La dictée est environ trois fois plus rapide que la frappe pour décrire des intentions complexes, et elle force naturellement à parler en termes d'intention plutôt qu'en termes d'implémentation.
+
+### Comment activer la dictée
+
+**Claude Code natif :**
+
+```bash
+# Dans Claude Code, tapez simplement :
+/voice
+# Le microphone s'active, parlez, puis appuyez sur Entrée
+```
+
+**macOS (dictée système) :**
+
+```bash
+# Double-tap sur la touche Fn
+# La dictée système macOS s'active dans n'importe quelle application
+# Fonctionne directement dans le terminal Claude Code
+```
+
+**Wispr Flow (application tierce) :**
+
+```bash
+# La plus utilisée dans la communauté
+# Avantage : ponctuation automatique, contexte applicatif
+# Installation : wispr.flow
+```
+
+### Quand dicter, quand taper
+
+La dictée n'est pas adaptée à tout. Voici comment combiner les deux pour des résultats optimaux :
+
+| Mode | Idéal pour | Moins adapté pour |
+|------|-----------|-------------------|
+| **Dictée** | Décrire une intention, expliquer un contexte, formuler une question | Noms de variables, chemins de fichiers, code technique exact |
+| **Frappe** | Contraintes précises, snippets de code, instructions ALWAYS/NEVER | Longues descriptions de fonctionnalités |
+
+<Callout type="tip" title="La combinaison gagnante">
+Dictez l'intention ("je veux un composant de navigation responsive qui se replie en menu hamburger sur mobile"), puis tapez les contraintes techniques précises. La dictée capture le "quoi et pourquoi", la frappe capture le "comment exactement".
+</Callout>
+
+## Diagrammes ASCII : visualiser avant de coder
+
+Demander à Claude de dessiner un diagramme ASCII est l'une des techniques les plus sous-estimées. En quelques secondes, vous obtenez une représentation visuelle de l'architecture, du flux de données ou de la structure d'un composant, sans avoir besoin d'un outil externe.
+
+```markdown
+"Avant de coder, dessine un diagramme ASCII de l'architecture
+de ce projet : les modules principaux, les flux de données entre eux,
+et les points d'entrée externes (API, utilisateur, cron)."
+```
+
+Claude produira quelque chose comme :
+
+```
+┌─────────────────────────────────────────────────┐
+│                   Client (Browser)               │
+└──────────────────────┬──────────────────────────┘
+                       │ HTTP
+                       ▼
+┌─────────────────────────────────────────────────┐
+│              Next.js App (App Router)            │
+│  ┌──────────────┐    ┌────────────────────────┐ │
+│  │  Server      │    │  Client Components     │ │
+│  │  Components  │    │  (React state, hooks)  │ │
+│  └──────┬───────┘    └────────────┬───────────┘ │
+└─────────┼────────────────────────┼──────────────┘
+          │ SQL                    │ tRPC
+          ▼                        ▼
+   ┌─────────────┐        ┌──────────────────┐
+   │  PostgreSQL  │        │   API Routes     │
+   └─────────────┘        └──────────────────┘
+```
+
+<Callout type="info" title="Pourquoi ça aide">
+Un diagramme ASCII est une forme de prompt contextuel inversé : vous donnez à Claude l'occasion de vous montrer sa compréhension du système avant de l'y faire toucher. Si le diagramme est faux, c'est le bon moment pour corriger, pas après 200 lignes de code.
+</Callout>
+
+### Prompts de diagramme utiles
+
+```markdown
+# Architecture globale
+"Dessine un diagramme ASCII de l'architecture de ce projet,
+avec les flux de données principaux."
+
+# Flux d'authentification
+"Montre-moi le flux d'authentification en ASCII :
+de la saisie du mot de passe jusqu'au token JWT en base de données."
+
+# Dépendances entre modules
+"Dessine un graphe ASCII des dépendances entre les fichiers
+du dossier src/services/. Identifie les dépendances circulaires."
+
+# Modèle de données
+"Représente le modèle de données en ASCII (comme un schéma ERD simplifié) :
+tables, colonnes principales, et relations."
 ```
 
 ## Combiner les directives : un prompt complet

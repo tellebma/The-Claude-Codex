@@ -1,25 +1,71 @@
 ---
 title: "Settings reference"
-description: "Complete reference for Claude Code settings.json: all options, permissions, and configuration examples."
+description: "Complete reference for Claude Code settings.json: 5 precedence levels (managed, CLI, local, project, global), permissions, MCP servers, and enterprise examples."
 badge: "Config"
 section: "reference"
 order: 3
 datePublished: "2026-03-11"
-dateModified: "2026-03-11"
+dateModified: "2026-03-30"
 ---
 
-## The 3 configuration levels
+## The 5 configuration levels
 
-Claude Code merges configuration files in this order of precedence (highest to lowest priority):
+Claude Code resolves its final configuration by merging five sources, from highest to lowest priority. When an option is set at multiple levels, the value from the highest level always wins.
 
-| Level | File | Scope |
-|-------|------|-------|
-| **1. Project local** | `.claude/settings.local.json` | This project only (not committed, gitignored) |
-| **2. Project** | `.claude/settings.json` | This project (committable, shareable with the team) |
-| **3. User** | `~/.claude/settings.json` | All of the user's projects |
+| Priority | Source | File / mechanism | User can override |
+|----------|--------|------------------|-------------------|
+| **1. Managed** | Organization (admin) | Deployed via Anthropic dashboard | No |
+| **2. CLI** | Command line | `claude --model opus` | Yes (intentional) |
+| **3. Project local** | Developer | `.claude/settings.local.json` | Yes |
+| **4. Project shared** | Team | `.claude/settings.json` | Yes |
+| **5. Global** | User | `~/.claude/settings.json` | Yes |
 
-<Callout type="info" title="Precedence">
-Project-level options override user-level ones. The local file (`.local.json`) overrides both. This lets you share a baseline configuration via Git while allowing personal overrides.
+<Callout type="info" title="How to read this table">
+A setting at level 3 (project local) beats level 4 (project shared), which beats level 5 (global). Level 1 (managed) is the only source that users cannot override.
+</Callout>
+
+### Level 1: Managed settings
+
+Managed settings are deployed by an Anthropic organization admin from the dashboard. They apply to all members regardless of their local configuration.
+
+Typical use cases:
+- Enforce a specific model across the team
+- Block tools considered risky (`Bash`, `WebFetch`)
+- Force an enterprise proxy via `customApiUrl`
+
+Users cannot override managed settings, even with a CLI flag or a local file.
+
+### Level 2: CLI arguments
+
+Flags passed directly to the `claude` command have the second-highest priority. They are useful for one-off sessions without touching any config files.
+
+```bash
+# Use Opus for this session only
+claude --model claude-opus-4-5
+
+# Disable a tool for this invocation
+claude --disallowedTools Bash
+
+# Point to a different config file
+claude --settings /path/to/settings.json
+```
+
+<Callout type="tip" title="Explicit override">
+A CLI argument always overrides whatever is written in any config file. It is the most direct way to adjust behavior for a single session.
+</Callout>
+
+### Levels 3 to 5: Configuration files
+
+The three remaining levels correspond to JSON files. They are merged at the start of each session.
+
+| Level | File | Recommended use |
+|-------|------|-----------------|
+| **Project local** | `.claude/settings.local.json` | Personal preferences on a project (gitignored) |
+| **Project shared** | `.claude/settings.json` | Team conventions, committed to Git |
+| **Global** | `~/.claude/settings.json` | Personal preferences, across all projects |
+
+<Callout type="warning" title="Never commit secrets">
+`.claude/settings.local.json` is gitignored by default. That is where tokens, private URLs, and other sensitive values belong. Never put secrets in `.claude/settings.json`, which will be committed.
 </Callout>
 
 ---
@@ -265,6 +311,127 @@ The API key (`ANTHROPIC_API_KEY`) is still required even with a custom URL.
 
 ---
 
+## Option: `effortLevel`
+
+Controls the cognitive effort Claude allocates to each response. Useful for tuning the speed/quality trade-off without switching models.
+
+| Value | Behavior |
+|-------|----------|
+| `"low"` | Fast responses, less reasoning |
+| `"medium"` | Default balance |
+| `"high"` | Deep reasoning, slower |
+
+```json
+{
+  "effortLevel": "medium"
+}
+```
+
+Can be overridden in-session or via `--effort-level` in the CLI.
+
+---
+
+## Option: `attribution`
+
+Customizes or removes the `Co-Authored-By` lines that Claude adds to commits and pull requests.
+
+```json
+{
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <claude@anthropic.com>",
+    "pr": false
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `attribution.commit` | `string` or `false` | Line appended to commit messages. `false` to disable |
+| `attribution.pr` | `string` or `false` | Line appended to PR descriptions. `false` to disable |
+
+<Callout type="tip" title="Remove all attribution">
+To leave no trace of Claude usage in commits and PRs:
+```json
+{ "attribution": { "commit": false, "pr": false } }
+```
+</Callout>
+
+---
+
+## Option: `worktree`
+
+Configuration for Git repositories using worktrees. Particularly useful in monorepos.
+
+```json
+{
+  "worktree": {
+    "symlinkDirectories": ["node_modules", ".next", "dist"],
+    "sparsePaths": ["packages/my-service/**", "shared/**"]
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `worktree.symlinkDirectories` | `string[]` | Directories to symlink between worktrees (avoids duplicating `node_modules`) |
+| `worktree.sparsePaths` | `string[]` | Patterns for sparse-checkout (partial checkout on large monorepos) |
+
+<Callout type="info" title="When to use symlinkDirectories">
+In a Git worktree, each branch has its own copy of the working directory. Symlinking `node_modules` avoids running `npm install` on every branch switch and saves significant disk space.
+</Callout>
+
+---
+
+## Option: `sandbox`
+
+Enables sandbox mode to isolate Claude's executions in a controlled environment.
+
+```json
+{
+  "sandbox": {
+    "enabled": true
+  }
+}
+```
+
+When sandboxing is active, Bash commands run in a restricted environment with no network access and no writes outside the project directory.
+
+---
+
+## Option: `autoMode`
+
+Customizes the permission classifier used in auto mode. Adjusts the threshold at which Claude asks for confirmation before executing an action.
+
+```json
+{
+  "autoMode": {
+    "permissionLevel": "default"
+  }
+}
+```
+
+| Value | Behavior |
+|-------|----------|
+| `"default"` | Standard behavior (asks for risky actions) |
+| `"strict"` | Asks for confirmation on any write action |
+| `"relaxed"` | Fewer interruptions, more autonomy |
+
+---
+
+## Option: `companyAnnouncements`
+
+Displays a custom message at the start of each session. Useful for broadcasting instructions or reminders to the whole team via the committed `settings.json`.
+
+```json
+{
+  "companyAnnouncements": "Reminder: this project runs on Node 22. Run 'nvm use' before starting."
+}
+```
+
+The message appears once in the terminal when Claude Code launches.
+
+---
+
 ## Option: `mcpServers`
 
 MCP server configuration. Each entry is a named MCP server.
@@ -331,6 +498,77 @@ MCP server configuration. Each entry is a named MCP server.
       "url": "https://my-server.com/mcp"
     }
   }
+}
+```
+
+---
+
+## Enterprise configuration
+
+Managed settings let an administrator enforce configuration across the entire organization. Here are the most common use cases.
+
+### Enforce a model across the team
+
+```json
+// Managed settings (deployed via the Anthropic dashboard)
+{
+  "model": "claude-sonnet-4-5",
+  "effortLevel": "medium"
+}
+```
+
+Developers can still choose a different model via `--model` in the CLI, unless that option is locked by the admin.
+
+### Block dangerous commands
+
+```json
+// Managed settings
+{
+  "permissions": {
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Bash(curl:*)",
+      "WebFetch"
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="Managed deny rules are absolute">
+`deny` rules from managed settings apply as a final layer. A developer cannot work around them by adding an `allow` in their local file or passing a CLI flag.
+</Callout>
+
+### Enforce attribution in commits
+
+```json
+// Managed settings
+{
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <claude@anthropic.com>",
+    "pr": "Generated with assistance from Claude Code"
+  }
+}
+```
+
+### Force an enterprise proxy
+
+```json
+// Managed settings
+{
+  "apiProvider": "anthropic",
+  "customApiUrl": "https://api-gateway.my-company.com/anthropic"
+}
+```
+
+All calls to the Anthropic API will route through the proxy, regardless of the developer's local config file.
+
+### Broadcast instructions to the team
+
+```json
+// .claude/settings.json (committed to the repo)
+{
+  "companyAnnouncements": "Sprint 14 in progress. Main branch: main. No merges without 2 reviews."
 }
 ```
 

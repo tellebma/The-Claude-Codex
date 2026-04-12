@@ -17,16 +17,18 @@ Unlike MCPs (which extend Claude's capabilities) or Skills (which define behavio
 Hooks have been available since Claude Code 1.x. Check your version with `claude --version` and update via `npm update -g @anthropic-ai/claude-code`.
 </Callout>
 
-## The 4 types of hooks
+## The 6 types of hooks
 
-Claude Code exposes four hook points in its lifecycle:
+Claude Code exposes six hook points in its lifecycle:
 
 | Type | Trigger | Typical usage |
 |------|---------|---------------|
+| `SessionStart` | When a session starts | Check prerequisites, load config |
 | `PreToolUse` | Before a tool executes | Validate parameters, block actions |
 | `PostToolUse` | After a tool executes | Auto-format, notifications, logs |
 | `Stop` | When Claude ends the session | Session report, cleanup |
 | `Notification` | When Claude sends a notification | Slack alerts, emails |
+| `PermissionRequest` | Before a permission is requested | Auto-approve certain actions, route to a model |
 
 ## Configuration in settings.json
 
@@ -82,7 +84,7 @@ hooks:
           command: "..."  # Shell command to execute
 ```
 
-The **matcher** accepts the exact name of a Claude Code tool: `Bash`, `Write`, `Edit`, `Read`, `WebFetch`, etc. It's omitted for `Stop` and `Notification`.
+The **matcher** accepts the exact name of a Claude Code tool: `Bash`, `Write`, `Edit`, `Read`, `WebFetch`, etc. It's omitted for `Stop`, `Notification`, and `SessionStart`.
 
 ## Available environment variables
 
@@ -241,6 +243,108 @@ Then in `settings.json`:
   }
 }
 ```
+
+### SessionStart: check prerequisites at startup
+
+This hook verifies that Docker is running before starting a development session. If Docker is stopped, Claude knows about it from the start rather than discovering it mid-task.
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/check-prerequisites.sh
+
+# Check that Docker is running
+if ! docker info > /dev/null 2>&1; then
+  echo "WARNING: Docker is not running. Container-related commands will fail." >&2
+fi
+
+# Show project context at startup
+echo "Project: $(basename $(pwd))"
+echo "Branch: $(git branch --show-current 2>/dev/null || echo 'N/A')"
+echo "Node: $(node --version 2>/dev/null || echo 'Not installed')"
+
+exit 0
+```
+
+Then in `settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/check-prerequisites.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="SessionStart for project context">
+SessionStart is ideal for automatically injecting context at startup: project metrics, open tickets, last deployment version. Claude has all the context it needs from the very first interaction.
+</Callout>
+
+### PermissionRequest: manage approvals automatically
+
+The `PermissionRequest` hook runs when Claude asks the user for permission. An exit code of `0` auto-approves, while `1` forces manual confirmation.
+
+This script auto-approves read-only Git commands (safe) and blocks network write commands to require confirmation:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/smart-permissions.sh
+
+TOOL=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('tool_name', ''))
+" 2>/dev/null)
+
+COMMAND=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('command', ''))
+" 2>/dev/null)
+
+# Auto-approve read-only Git commands
+SAFE_GIT_CMDS="git status|git diff|git log|git branch|git show"
+if echo "$COMMAND" | grep -qE "$SAFE_GIT_CMDS"; then
+  exit 0  # Automatically approved
+fi
+
+# Require confirmation for git push and force operations
+if echo "$COMMAND" | grep -qE "git push|git force|git reset --hard"; then
+  exit 1  # Requires manual confirmation
+fi
+
+# Default: let Claude Code handle it
+exit 0
+```
+
+```json
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/smart-permissions.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="PermissionRequest and security">
+A PermissionRequest hook that always returns `exit 0` effectively disables all confirmation prompts. Be specific in your conditions to avoid auto-approving destructive actions.
+</Callout>
 
 ## Advanced patterns
 

@@ -4,7 +4,7 @@ description: "Step-by-step guide to creating Claude Code sub-agents: configurati
 section: "agents"
 order: 2
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-03-30"
 ---
 
 ## Why create a custom agent?
@@ -48,6 +48,84 @@ How the agent should structure its report or result.
 ## Constraints
 What the agent must never do.
 ```
+
+## Complete frontmatter reference
+
+The real starting point of an agent is its frontmatter: the YAML block at the top of the file that configures behavior before the first line of the prompt. Here are the 16 available fields.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `name` | string | Agent name, used to invoke it |
+| `description` | string | Description Claude reads to decide whether to use this agent automatically. Adding "PROACTIVELY" encourages auto-invocation. |
+| `tools` | string[] | Allowed tools: `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, `Agent`, etc. |
+| `disallowedTools` | string[] | Explicitly forbidden tools, even if the agent would try to use them |
+| `model` | string | Model to use: `"haiku"`, `"sonnet"`, `"opus"` or a full model ID |
+| `permissionMode` | string | Permission level: `"default"`, `"acceptEdits"`, `"bypassPermissions"`, `"auto"` |
+| `maxTurns` | number | Maximum number of agentic turns before forced stop |
+| `skills` | string[] | Skills to preload into the agent's context |
+| `mcpServers` | string[] | MCP servers available to this agent |
+| `hooks` | object | Agent-specific hooks (pre/post-execution) |
+| `memory` | string | Memory type: `"user"`, `"project"`, `"local"` |
+| `background` | boolean | `true` to run the agent in the background |
+| `effort` | string | Cognitive effort level: `"low"`, `"medium"`, `"high"` |
+| `isolation` | string | `"worktree"` for an isolated Git environment |
+| `initialPrompt` | string | Additional system prompt injected before the instructions |
+| `color` | string | Display color in the statusline (hex or name) |
+
+<Callout type="info" title="All fields are optional except name and description">
+A valid agent file only needs `name` and `description`. Other fields are added based on the agent's requirements.
+</Callout>
+
+### The PROACTIVELY keyword
+
+The `description` field serves two purposes: documenting the agent for humans, and telling Claude when to use it automatically. Adding "PROACTIVELY" to the description signals that Claude should invoke this agent on its own, without waiting for an explicit instruction.
+
+```yaml
+# The agent waits to be asked
+description: "Performs a code review after modifications."
+
+# The agent activates automatically
+description: "Expert code reviewer. Use PROACTIVELY after writing or modifying code."
+```
+
+### Choosing the right model for each agent
+
+The `model` field is one of the most impactful settings: it directly affects speed, quality, and cost for every execution.
+
+| Agent type | Recommended model | Why |
+|------------|-------------------|-----|
+| Exploration, grep, file reading | `haiku` | Fast, minimal cost for simple tasks |
+| Code review, everyday development | `sonnet` | Good quality/speed balance for most cases |
+| Architecture, complex debugging, security | `opus` | Deep reasoning when it matters |
+
+A well-designed pipeline uses `haiku` to explore, `sonnet` to code, and `opus` only for critical decisions.
+
+### Example agent with full frontmatter
+
+```markdown
+---
+name: code-reviewer
+description: "Expert code reviewer. Use PROACTIVELY after writing or modifying code."
+model: opus
+tools: [Read, Grep, Glob, Bash]
+disallowedTools: [Write, Edit]
+permissionMode: default
+maxTurns: 20
+memory: project
+effort: high
+isolation: worktree
+skills: [code-quality, security-scan]
+color: "#f59e0b"
+---
+
+You are a senior code reviewer. For each review, you analyze the quality,
+security, and maintainability of changes. You propose concrete fixes,
+ranked by severity.
+```
+
+<Callout type="tip" title="isolation: worktree">
+The `isolation: "worktree"` field creates a dedicated Git worktree for the agent. This is useful when running multiple agents in parallel on the same repository: each one works in its own space with no risk of conflicts.
+</Callout>
 
 ## Example 1: Code review agent
 

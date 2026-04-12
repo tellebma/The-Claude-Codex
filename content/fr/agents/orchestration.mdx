@@ -489,6 +489,216 @@ async function ciReview() {
 ciReview();
 ```
 
+## Command, Agent, Skill : lequel choisir ?
+
+Claude Code propose trois mécanismes complémentaires pour structurer vos workflows. Ils ne font pas la même chose, et bien les différencier vous évitera de reconstruire en Agent ce qui aurait suffi en Skill.
+
+### Le tableau comparatif
+
+| Critère | **Skill** (`.claude/skills/`) | **Agent** (`.claude/agents/`) | **Command** (`.claude/commands/`) |
+|---------|-------------------------------|-------------------------------|-----------------------------------|
+| **Déclenchement** | Slash command manuelle (`/skill`) | Auto (Claude décide) ou via `Agent tool` | Slash command manuelle (`/project:cmd`) |
+| **Contexte** | Partagé avec la session principale | Isolé (fenêtre propre) | Partagé avec la session principale |
+| **Autonomie** | Instructions suivies par l'orchestrateur | Sous-agent autonome, prend ses propres décisions | Instructions suivies par l'orchestrateur |
+| **Persistence** | Non, chargé à la demande | Mémoire possible (fichiers, notes) | Non, chargé à la demande |
+| **Cas d'usage** | Workflows répétitifs, recettes de travail | Tâches complexes qui ne doivent pas polluer le contexte principal | Scripts de projet partagés en équipe |
+
+<Callout type="info" title="Skill vs Command : une distinction de portée">
+Dans ce projet, on distingue les **Skills** (fichiers personnels dans `~/.claude/skills/`, disponibles partout) des **Commands** (fichiers projet dans `.claude/commands/`, partagés via git). Fonctionnellement, les deux sont des slash commands : la différence est leur portée (globale vs projet).
+</Callout>
+
+### L'arbre de décision
+
+Avant de choisir, posez-vous ces trois questions dans l'ordre.
+
+```
+Je veux automatiser quelque chose. C'est quoi exactement ?
+
+1. C'est une tâche que je lance moi-même, de façon répétitive ?
+   └─ Oui → Skill ou Command (selon si c'est personnel ou partagé)
+   └─ Non → question suivante
+
+2. La tâche est complexe et je veux qu'elle s'exécute sans polluer
+   mon contexte principal ?
+   └─ Oui → Agent (contexte isolé, autonome)
+   └─ Non → question suivante
+
+3. Je veux juste donner des connaissances permanentes à Claude
+   sur ce projet ?
+   └─ Oui → CLAUDE.md (pas un agent, pas un skill : du contexte)
+```
+
+En pratique, le principe est simple : **privilégier le mécanisme le plus léger**. Un Skill suffit pour 80% des cas. Un Agent s'impose quand vous avez besoin d'isolation ou d'autonomie réelle.
+
+## Le pattern Command + Agent + Skill
+
+Ces trois mécanismes fonctionnent ensemble. Le schéma le plus puissant ressemble à ceci.
+
+```
+Utilisateur
+    │
+    └─ /project:pre-commit  ← Command (déclencheur manuel)
+            │
+            ├─ Agent code-reviewer  ← Agent (contexte isolé, autonome)
+            │       │
+            │       └─ Skill tdd-guide  ← Skill préchargé (connaissance domaine)
+            │
+            └─ Skill changelog-format  ← Skill invoqué inline pour formater l'output
+```
+
+La **Command** est le point d'entrée : l'utilisateur la déclenche, elle orchestre le reste. L'**Agent** prend en charge la partie complexe dans son propre contexte. Le **Skill** apporte les connaissances spécialisées dont l'agent a besoin.
+
+<Callout type="tip" title="Règle de préférence">
+Claude choisit toujours le mécanisme le plus léger adapté à la tâche. Un Skill bien écrit sera préféré à un Agent si la tâche ne nécessite pas d'isolation. Réservez les Agents pour ce qui est vraiment autonome et complexe.
+</Callout>
+
+## Le même besoin, trois approches
+
+Prenons un cas concret : **vérifier la qualité du code avant un commit**. On peut résoudre ce problème avec chacun des trois mécanismes. Voici comment, et surtout pourquoi on choisirait l'un plutôt que l'autre.
+
+### Approche 1 : un Skill `/pre-commit`
+
+La solution la plus simple. Un fichier Markdown dans `~/.claude/skills/` qui décrit les étapes à suivre.
+
+```markdown
+# Pre-commit Quality Check
+
+Tu es un reviewer de code rigoureux. Avant chaque commit, vérifie les points suivants.
+
+## Étapes
+
+1. Lance les tests : `npm test`
+   - Si un test échoue, arrête-toi et explique le problème
+2. Vérifie le lint : `npm run lint`
+   - Liste les erreurs par fichier et sévérité
+3. Vérifie les types TypeScript : `npm run type-check`
+4. Analyse le diff (`git diff --staged`) et cherche :
+   - Secrets ou tokens en dur
+   - `console.log` oubliés
+   - Imports non utilisés
+
+## Format de sortie
+
+Pour chaque problème trouvé :
+- **Fichier** : chemin
+- **Type** : TEST / LINT / TYPE / SECURITE
+- **Sévérité** : BLOQUANT / AVERTISSEMENT
+- **Description** : ce qui ne va pas
+
+Si tout est propre : "Prêt à committer."
+```
+
+```bash
+# Utilisation
+/user:pre-commit
+```
+
+**Quand choisir cette approche** : pour une utilisation personnelle, sur n'importe quel projet. Le Skill s'exécute dans votre contexte principal, vous voyez chaque étape en temps réel. C'est rapide à créer et à modifier.
+
+**Limite** : si la vérification prend du temps ou génère beaucoup de texte, elle charge votre fenêtre de contexte.
+
+### Approche 2 : un Agent `code-reviewer`
+
+Même objectif, mais cette fois le travail s'effectue dans un contexte isolé. L'agent est plus autonome : il peut relancer des commandes, corriger des problèmes mineurs lui-même, et ne vous présente qu'un rapport final.
+
+```markdown
+# Code Reviewer Agent
+
+## Rôle
+Tu es un reviewer de code senior. Tu travailles de manière autonome pour
+vérifier la qualité du code avant commit. Tu peux corriger les problèmes
+mineurs (lint auto-fixable, imports non utilisés) sans demander confirmation.
+
+## Outils disponibles
+- Bash (exécution de commandes)
+- Read / Edit (lecture et correction de fichiers)
+- Grep (recherche dans le code)
+
+## Instructions
+
+1. Récupère le diff staged : `git diff --staged`
+2. Lance les tests : `npm test -- --passWithNoTests`
+3. Lance le lint avec auto-fix : `npm run lint -- --fix`
+4. Vérifie les types : `npm run type-check`
+5. Cherche les patterns problématiques dans les fichiers modifiés :
+   - Regex secrets : `(api_key|password|token)\s*=\s*['"][^'"]+['"]`
+   - `console\.log` dans les fichiers non-test
+6. Si des problèmes BLOQUANTS subsistent, liste-les avec leurs solutions.
+   Sinon, confirme que le code est prêt.
+
+## Contraintes
+- Ne committe jamais toi-même
+- Ne modifie que les fichiers déjà dans le diff staged
+- Rapport concis : une ligne par problème maximum
+```
+
+```bash
+# L'agent est invoqué automatiquement par Claude quand le contexte s'y prête,
+# ou explicitement :
+> Utilise l'agent code-reviewer sur le diff en cours
+```
+
+**Quand choisir cette approche** : quand vous voulez déléguer complètement la vérification. L'agent travaille dans son propre contexte, vous continuez à travailler sur autre chose. Idéal pour les codebases volumineuses où la vérification génère beaucoup de texte.
+
+**Limite** : plus lent à mettre en place, moins de visibilité sur ce qui se passe en cours de route.
+
+### Approche 3 : un Skill de projet `code-quality`
+
+Cette fois, l'objectif n'est pas d'exécuter des commandes mais de **fournir des connaissances** sur les standards de qualité du projet. Ce Skill sera lu par d'autres agents ou invoqué directement pour obtenir un avis contextuel.
+
+```markdown
+# Standards de qualité du projet
+
+## Règles TypeScript
+
+- Pas de `any` explicite. Utiliser `unknown` si le type est vraiment inconnu.
+- Les interfaces préfixées `I` sont interdites (convention : `type` ou interface sans préfixe).
+- Chaque fonction publique doit avoir une JSDoc minimale (description + `@param` + `@returns`).
+
+## Règles de tests
+
+- Couverture minimum : 80% sur les branches.
+- Un fichier `utils/format.ts` doit avoir un fichier `utils/format.test.ts` correspondant.
+- Les mocks sont dans `__mocks__/`, jamais inline dans les tests.
+
+## Sécurité
+
+- Aucune clé API ne doit apparaître dans le code (utiliser les variables d'environnement).
+- Les endpoints API doivent valider leurs inputs avec Zod avant traitement.
+- Pas de `dangerouslySetInnerHTML` sans revue explicite.
+
+## Commit message
+
+Format : `type(scope): description` (Conventional Commits).
+Types valides : feat, fix, docs, chore, refactor, test, perf.
+```
+
+```bash
+# Invocation directe pour un avis
+/project:code-quality
+
+# Ou utilisé comme référence dans un prompt d'agent
+> En suivant les standards définis dans le skill code-quality,
+> vérifie ce fichier : src/api/users.ts
+```
+
+**Quand choisir cette approche** : quand vous voulez centraliser les règles du projet et les rendre accessibles à tous (agents, développeurs, revues). Ce Skill ne fait rien par lui-même, c'est une source de vérité. Il se combine naturellement avec l'agent `code-reviewer` qui peut le lire avant de travailler.
+
+### Récapitulatif des trois approches
+
+| | **Skill `/pre-commit`** | **Agent `code-reviewer`** | **Skill `code-quality`** |
+|---|---|---|---|
+| **Ce qu'il fait** | Exécute la vérification | Exécute et corrige de façon autonome | Documente les standards |
+| **Contexte** | Principal (visible) | Isolé (transparent) | Principal ou référence |
+| **Correction auto** | Non | Oui (problèmes mineurs) | Non applicable |
+| **Temps de setup** | 5 minutes | 15 minutes | 10 minutes |
+| **Combinable** | Seul ou avec d'autres | Peut lire le Skill `code-quality` | Référencé par d'autres |
+| **Idéal pour** | Usage personnel rapide | Délégation complète | Standardiser l'équipe |
+
+<Callout type="tip" title="La combinaison gagnante">
+En pratique, les trois se complètent. Le Skill `code-quality` documente vos standards. L'agent `code-reviewer` lit ces standards pour travailler. La Command `/pre-commit` orchestre l'agent avant chaque commit. Vous écrivez une fois, vous utilisez partout.
+</Callout>
+
 ## Prochaines étapes
 
 Vous maîtrisez maintenant l'orchestration multi-agents. Continuez votre apprentissage avec ces ressources complémentaires.

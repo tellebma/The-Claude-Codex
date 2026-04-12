@@ -20,8 +20,7 @@
     "resources": "Ressources",
     "pageNotFound": "Page introuvable",
     "pageNotFoundDescription": "La page que vous cherchez n'existe pas ou a été déplacée.",
-    "backToHome": "Retour à l'accueil",
-    "opensNewTab": "(ouvre un nouvel onglet)"
+    "backToHome": "Retour à l'accueil"
   },
   "navigation": {
     "mainNav": "Navigation principale",
@@ -57,24 +56,18 @@
     "placeholder": "Rechercher un sujet, une page...",
     "inputLabel": "Rechercher",
     "close": "Fermer la recherche",
-    "noResults": "Aucun résultat pour \"{query}\"",
-    "typeToSearch": "Tapez un mot-clé pour rechercher dans le site",
+    "noResults": "Aucun resultat pour \"{query}\"",
+    "typeToSearch": "Tapez un mot-cle pour rechercher dans le site",
     "resultsLabel": "Resultats de recherche",
     "escToClose": "pour fermer",
     "arrowsToNavigate": "naviguer",
-    "enterToOpen": "ouvrir",
-    "resultCount": "{count, plural, one {# résultat} other {# résultats}}",
-    "suggestions": "Pages populaires",
-    "suggestGettingStarted": "Démarrer avec Claude Code",
-    "suggestMcp": "Connecter des outils (MCP)",
-    "suggestPrompting": "Techniques de prompting",
-    "suggestSkills": "Skills et automatisation"
+    "enterToOpen": "ouvrir"
   },
   "breadcrumb": {
     "ariaLabel": "Fil d'Ariane",
     "home": "Accueil",
     "sections": {
-      "getting-started": "Démarrer",
+      "getting-started": "Demarrer",
       "mcp": "MCP",
       "plugins": "Plugins",
       "skills": "Skills",
@@ -271,7 +264,8 @@
       "context-management": "Gestion du contexte",
       "thinking-and-planning": "Extended Thinking & Plan Mode",
       "chaining-and-agents": "Chaining & multi-agents",
-      "non-dev-prompting": "Prompting non-développeurs"
+      "non-dev-prompting": "Prompting non-développeurs",
+      "power-tips": "Power Tips"
     },
     "future": {
       "title": "Vision",
@@ -306,7 +300,10 @@
       "hooks": "Système de Hooks",
       "headless-ci": "Mode Headless et CI/CD",
       "multi-provider": "Multi-provider et Enterprise",
-      "mcp-profiles": "Profils MCP par mission"
+      "worktrees": "Git Worktrees",
+      "permissions-sandbox": "Permissions et Sandbox",
+      "workflows": "Workflows avancés",
+      "browser-automation": "Browser Automation"
     },
     "reference": {
       "title": "Référence",
@@ -346,44 +343,5 @@
       "mythes": "8 idées reçues sur Claude Code",
       "securite": "Guide de sécurité"
     }
-  },
-  "about": {
-    "badge": "Open-source",
-    "title": "À propos du",
-    "titleHighlight": "Claude Codex",
-    "subtitle": "Un guide complet, gratuit et en français pour apprendre à utiliser Claude Code. Créé par des utilisateurs, pour des utilisateurs.",
-    "missionBadge": "Notre mission",
-    "missionTitle": "Rendre l'IA accessible à tous",
-    "missionDescription": "Claude Code est un outil puissant, mais sa documentation officielle est en anglais et orientée développeurs. Nous avons créé The Claude Codex pour changer ça.",
-    "missionP1": "The Claude Codex est né d'un constat simple : l'IA générative transforme le travail quotidien de millions de personnes, mais les ressources pour apprendre à l'utiliser correctement restent fragmentées, souvent en anglais, et rarement adaptées aux non-développeurs.",
-    "missionP2": "Ce guide couvre tout l'écosystème Claude Code : de l'installation à l'orchestration multi-agents, en passant par les MCP, les Skills, le prompting avancé et les cas d'usage concrets. Chaque page est rédigée pour être compréhensible par quelqu'un qui découvre le sujet.",
-    "missionP3": "Le projet est entièrement open-source sous licence MIT. Vous pouvez lire le code, proposer des améliorations, signaler des erreurs ou contribuer de nouvelles pages. Toute contribution est la bienvenue.",
-    "valuesBadge": "Valeurs",
-    "valuesTitle": "Ce qui guide le projet",
-    "valueFreeTitle": "Gratuit et ouvert",
-    "valueFreeDesc": "Tout le contenu est libre d'accès. Pas de paywall, pas de compte obligatoire, pas de contenu verrouillé. Le savoir doit circuler.",
-    "valueForAllTitle": "Pour tous les profils",
-    "valueForAllDesc": "Développeur senior ou entrepreneur qui n'a jamais codé : chaque guide est pensé pour être accessible quel que soit votre niveau technique.",
-    "valueIndependentTitle": "Indépendant",
-    "valueIndependentDesc": "Ce projet n'est pas affilié à Anthropic. Le contenu reflète l'expérience terrain de la communauté, pas un discours marketing.",
-    "valueFrenchTitle": "Francophone d'abord",
-    "valueFrenchDesc": "La documentation IA de qualité en français est rare. Ce guide comble ce manque pour la communauté francophone.",
-    "authorBadge": "Auteur",
-    "authorTitle": "Qui est derrière le projet ?",
-    "authorName": "tellebma",
-    "authorRole": "Développeur fullstack & utilisateur quotidien de Claude Code",
-    "authorP1": "Passionné par les outils qui améliorent la productivité des développeurs, j'utilise Claude Code au quotidien dans des projets Next.js, Python et DevOps. Ce guide est le résultat de centaines d'heures d'expérimentation et de documentation.",
-    "authorP2": "L'objectif : partager ce que j'ai appris pour que d'autres gagnent du temps. Pas de théorie abstraite, que des conseils testés en conditions réelles.",
-    "github": "GitHub",
-    "sourceCode": "Code source",
-    "ctaTitle": "Envie de",
-    "ctaHighlight": "contribuer",
-    "ctaDescription": "Le projet est open-source. Vous pouvez proposer des corrections, ajouter du contenu ou signaler des erreurs sur GitHub.",
-    "ctaGithub": "Voir sur GitHub",
-    "ctaGuide": "Commencer le guide"
-  },
-  "videoEmbed": {
-    "play": "Lancer la vidéo : {title}",
-    "thumbnail": "Miniature de la vidéo : {title}"
   }
 }

@@ -6,7 +6,9 @@ import { TerminalScreenshot } from "@/components/ui/TerminalScreenshot";
 import { Screenshot } from "@/components/ui/Screenshot";
 import { VideoEmbed } from "@/components/ui/VideoEmbed";
 import { GlossaryTooltip } from "@/components/ui/GlossaryTooltip";
+import { KeyboardShortcut } from "@/components/ui/KeyboardShortcut";
 import { PricingTable } from "@/components/ui/PricingTable";
+import { ComparisonTable } from "@/components/ui/ComparisonTable";
 import { TcoCalculator } from "@/components/ui/TcoCalculator";
 import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
@@ -49,7 +51,9 @@ export const mdxComponents: MDXComponents = {
   Screenshot,
   VideoEmbed,
   GlossaryTooltip,
+  KeyboardShortcut,
   PricingTable,
+  ComparisonTable,
   TcoCalculator,
   Tabs,
   Steps,

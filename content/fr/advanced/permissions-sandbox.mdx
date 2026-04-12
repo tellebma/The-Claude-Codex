@@ -1,0 +1,265 @@
+---
+title: "Permissions et Sandbox"
+description: "Configurez les permissions avec wildcards, activez le sandbox et sécurisez vos sessions Claude Code. Exemples pour dev, senior et CI/CD."
+section: "advanced"
+order: 5
+datePublished: "2026-03-30"
+dateModified: "2026-03-30"
+badge: "SÉCURITÉ"
+---
+
+## Contrôler ce que Claude Code peut faire
+
+Par défaut, Claude Code demande confirmation avant chaque action sensible : exécuter une commande shell, écrire un fichier, appeler un MCP. C'est sûr, mais ça interrompt le flow.
+
+Le système de permissions vous donne un contrôle fin : vous décidez ce qui est autorisé automatiquement, ce qui demande confirmation, et ce qui est interdit. Le sandbox ajoute une couche de protection en isolant les commandes dans un environnement restreint.
+
+## Le système de permissions
+
+### Les trois niveaux
+
+| Niveau | Comportement | Usage |
+|--------|-------------|-------|
+| `allow` | Exécution automatique sans confirmation | Commandes sûres et répétitives |
+| `ask` | Demande confirmation à chaque fois | Commandes à risque modéré |
+| `deny` | Bloqué, même si Claude le demande | Commandes dangereuses ou données sensibles |
+
+### Syntaxe des wildcards
+
+Les permissions utilisent un système de patterns avec wildcards :
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(src/**)",
+      "Edit(src/**)",
+      "Bash(npm run *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "mcp__github__*"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(git commit *)",
+      "Bash(rm *)",
+      "Write(package.json)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(./secrets/**)",
+      "Bash(curl *)",
+      "Bash(wget *)"
+    ]
+  }
+}
+```
+
+### Les patterns disponibles
+
+| Pattern | Match | Exemple |
+|---------|-------|---------|
+| `*` | N'importe quelle chaîne (un niveau) | `Bash(npm run *)` matche `npm run dev`, `npm run build` |
+| `**` | N'importe quelle chaîne (récursif) | `Write(src/**)` matche `src/a.ts`, `src/deep/b.ts` |
+| Texte exact | Correspondance stricte | `Bash(git status)` ne matche que cette commande |
+
+Les outils concernés : `Read`, `Write`, `Edit`, `Bash`, `mcp__*` (tous les MCP).
+
+<Callout type="warning" title="Ordre de précédence">
+`deny` gagne toujours. Si une règle `allow` et une règle `deny` matchent la même action, c'est le `deny` qui s'applique. Mettez les deny en premier pour les cas critiques.
+</Callout>
+
+## La commande /permissions
+
+Pour gérer les permissions interactivement pendant une session :
+
+```bash
+# Voir les permissions actuelles
+/permissions
+
+# Ajouter une permission allow
+/permissions allow "Bash(npm run *)"
+
+# Ajouter une permission deny
+/permissions deny "Read(.env)"
+```
+
+Les changements via `/permissions` sont sauvegardés dans `.claude/settings.local.json` (personnel, gitignored).
+
+## Le sandbox
+
+### Qu'est-ce que le sandbox ?
+
+Le sandbox isole les commandes Bash de Claude Code dans un environnement restreint. Concrètement :
+- Accès en lecture seule au système de fichiers (sauf le répertoire de travail)
+- Pas d'accès réseau sortant
+- Pas d'installation de packages système
+- Pas de modification de fichiers en dehors du projet
+
+### Activer le sandbox
+
+```bash
+# Via la commande interactive
+/sandbox
+
+# Via settings.json
+{
+  "sandbox": {
+    "enabled": true
+  }
+}
+```
+
+<Callout type="tip" title="84% de prompts en moins">
+Selon les mesures de l'équipe Claude Code, activer le sandbox réduit les demandes de confirmation de 84%. Claude Code sait que les commandes sont isolées, il n'a plus besoin de demander permission pour les opérations courantes.
+</Callout>
+
+### Sandbox + permissions : le combo
+
+Le sandbox et les permissions sont complémentaires :
+- Le sandbox protège au niveau système (isolation)
+- Les permissions protègent au niveau outil (contrôle d'accès)
+
+Vous pouvez utiliser les deux ensemble pour un contrôle maximal.
+
+## Profils de permissions par contexte
+
+### Profil développeur junior
+
+Sécurité maximale, confirmation pour la plupart des actions :
+
+```json
+{
+  "sandbox": { "enabled": true },
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Bash(npm run dev)",
+      "Bash(npm run lint)",
+      "Bash(npm run test)"
+    ],
+    "ask": [
+      "Write(*)",
+      "Edit(*)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Read(.env*)",
+      "Bash(rm -rf *)",
+      "Bash(git push --force *)",
+      "Bash(DROP *)"
+    ]
+  }
+}
+```
+
+### Profil développeur senior
+
+Confiance élevée, interruptions minimales :
+
+```json
+{
+  "sandbox": { "enabled": false },
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(src/**)",
+      "Edit(src/**)",
+      "Bash(npm run *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(npx prettier *)",
+      "Bash(npx eslint *)",
+      "mcp__*"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Write(package.json)",
+      "Write(*.config.*)",
+      "Bash(rm *)"
+    ],
+    "deny": [
+      "Read(.env*)",
+      "Read(./secrets/**)",
+      "Bash(git push --force *)",
+      "Bash(curl * | bash)"
+    ]
+  }
+}
+```
+
+### Profil CI/CD
+
+Automatisation totale, pas d'interaction possible :
+
+```json
+{
+  "sandbox": { "enabled": true },
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Bash(npm run *)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Read(.env*)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(rm -rf /)",
+      "Bash(git push --force *)"
+    ]
+  }
+}
+```
+
+<Callout type="info" title="En CI/CD, combinez avec --dangerously-skip-permissions">
+En pipeline CI/CD, les permissions `ask` bloquent le pipeline (personne pour confirmer). Utilisez le flag `--dangerously-skip-permissions` avec un fichier de deny strict pour automatiser tout en gardant les garde-fous.
+</Callout>
+
+## Le mode auto (/permissions auto)
+
+Le mode auto utilise un classifieur qui évalue automatiquement le risque de chaque action :
+
+```bash
+# Activer le mode auto
+claude --permission-mode auto
+```
+
+En mode auto, Claude Code classe chaque action en `safe` (exécution automatique) ou `risky` (demande confirmation). Vous pouvez ajuster le seuil dans settings.json :
+
+```json
+{
+  "autoMode": {
+    "permissionLevel": "default"
+  }
+}
+```
+
+Les trois niveaux : `conservative` (peu d'auto-approve), `default` (équilibré), `permissive` (beaucoup d'auto-approve).
+
+## Où stocker les permissions
+
+| Fichier | Partagé | Gitignored | Usage |
+|---------|---------|------------|-------|
+| `.claude/settings.json` | Oui (équipe) | Non | Règles communes du projet |
+| `.claude/settings.local.json` | Non (personnel) | Oui | Préférences personnelles |
+| `~/.claude/settings.json` | Non (global) | N/A | Valeurs par défaut pour tous les projets |
+
+<Callout type="tip" title="Bonne pratique">
+Mettez les `deny` critiques dans `.claude/settings.json` (partagé) pour que toute l'équipe soit protégée. Les `allow` de confort dans `.claude/settings.local.json` (personnel) pour ne pas imposer votre style aux autres.
+</Callout>
+
+## Prochaines étapes
+
+- [Settings.json avancé](/reference/settings) pour la hiérarchie complète de configuration
+- [Système de Hooks](/advanced/hooks) pour automatiser les contrôles de sécurité
+- [Mode Headless et CI/CD](/advanced/headless-ci) pour l'intégration en pipeline
+- [Référence CLI](/reference/cli) pour les flags de sécurité (`--sandbox`, `--permission-mode`)

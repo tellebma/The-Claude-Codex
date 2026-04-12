@@ -1,0 +1,199 @@
+---
+title: "Browser Automation"
+description: "Playwright MCP, Chrome DevTools MCP and Claude in Chrome: comparison and usage guide for the three browser automation tools for Claude Code."
+section: "advanced"
+order: 7
+datePublished: "2026-03-30"
+dateModified: "2026-03-30"
+badge: "BROWSER"
+---
+
+## Giving Claude Code a browser
+
+Claude Code reads your code, edits files, and runs commands. But until now, it couldn't see what actually renders in the browser. Browser automation tools fill that gap: Claude can open a page, click around, fill in a form, capture a screenshot, inspect network requests, and catch console errors.
+
+In practice, this unlocks workflows that the terminal alone can't handle:
+- Checking that your UI actually looks right after a change
+- Testing a login flow from start to finish
+- Catching a network error without opening Chrome manually
+- Generating screenshots for documentation or bug reports
+
+Three tools exist for this, each with a distinct sweet spot.
+
+## The three tools
+
+### Playwright MCP (`@playwright/mcp`)
+
+Playwright MCP gives Claude control over a headless browser (Chrome, Firefox, or Safari) through the Playwright API. It's the most complete option for automation: navigate, fill forms, click, take screenshots, and wait for elements to appear.
+
+Its main strength is CI/CD compatibility. The browser runs in the background with no UI, which makes it ideal for automated testing pipelines.
+
+Token cost: roughly 13,700 per request — the most efficient of the three.
+
+### Chrome DevTools MCP (`chrome-devtools-mcp`)
+
+Chrome DevTools MCP connects Claude to the Chrome DevTools Protocol (CDP). Where Playwright interacts with a page like a user, DevTools MCP opens the hood: network requests with timing and headers, performance traces, memory inspection, console errors.
+
+26 tools available, covering everything you'd find in Chrome's DevTools panel. This is the right tool when a bug isn't visible in the DOM but shows up in the browser's internals.
+
+Token cost: roughly 19,000 per request.
+
+### Claude in Chrome (extension)
+
+The "Claude in Chrome" extension takes a different approach: it runs inside your actual browser, with your existing sessions, cookies, and authentication state. No separate browser, no extra setup.
+
+It's the right choice for quick visual checks or pages that require authentication — your admin panel, a production app, a third-party service you're already logged into.
+
+Token cost: roughly 15,400 per request.
+
+## Comparison table
+
+| Criteria | Playwright MCP | Chrome DevTools | Claude in Chrome |
+|----------|---------------|-----------------|-----------------|
+| Cross-browser | Yes (Chrome, Firefox, Safari) | Chrome only | Chrome only |
+| CI/CD compatible | Yes | No | No |
+| Authenticated session | No (headless browser) | Yes | Yes (your browser) |
+| Network debugging | Basic | Advanced (requests, timing) | No |
+| Performance profiling | No | Yes (traces, memory) | No |
+| Screenshots | Yes | Yes | Yes |
+| DOM inspection | Via selectors | Full DevTools access | Via DOM |
+| Tokens per request | ~13,700 (most efficient) | ~19,000 | ~15,400 |
+| Installation | `@playwright/mcp` | `chrome-devtools-mcp` | Chrome extension |
+
+## When to use which
+
+**Playwright MCP** is the default for anything that needs to run unattended: E2E tests in CI, cross-browser checks, form automation, bulk screenshot generation. If the task description includes the word "automated", Playwright is probably the right call.
+
+**Chrome DevTools MCP** takes over when the problem isn't visible on screen: a slow request, a memory leak, console errors that don't surface in your code. It's the network and performance debugging tool.
+
+**Claude in Chrome** is the fastest path to a one-off check. You're already logged in, you open the extension, you ask a question. No configuration, immediate result.
+
+<Callout type="tip" title="Simple rule">
+Automated tests and CI/CD: Playwright. Debugging a network or performance issue: Chrome DevTools. Quick visual check in your own browser: Claude in Chrome.
+</Callout>
+
+## Configuration
+
+### Playwright MCP
+
+Add the server to your `.claude.json` (or `~/.claude.json` for a global setup):
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    }
+  }
+}
+```
+
+Playwright automatically installs the required browsers on first run. To target a specific browser:
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--browser", "firefox"]
+    }
+  }
+}
+```
+
+### Chrome DevTools MCP
+
+Chrome DevTools MCP connects to an already-running Chrome instance via the remote debugging protocol. Start Chrome with the appropriate flag first:
+
+```bash
+# macOS
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
+  --remote-debugging-port=9222
+
+# Linux
+google-chrome --remote-debugging-port=9222
+```
+
+Then configure the MCP:
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"],
+      "env": {
+        "CHROME_DEBUGGING_PORT": "9222"
+      }
+    }
+  }
+}
+```
+
+### Claude in Chrome
+
+Install the extension from the Chrome Web Store (search for "Claude in Chrome" by Anthropic). Once installed, it appears in your Chrome toolbar. No `.claude.json` changes needed — the extension communicates directly with claude.ai.
+
+<Callout type="warning" title="Anthropic account required">
+Claude in Chrome requires a connected Anthropic account and uses your regular token quota.
+</Callout>
+
+## Concrete examples
+
+The following prompts work directly in Claude Code once the relevant tool is configured.
+
+### Verify a component visually
+
+```
+Open http://localhost:3000 with Playwright, take a screenshot of the homepage,
+and check that the header contains the text "Welcome" and that the CTA button is visible.
+```
+
+### Test a login form
+
+```
+With Playwright, go to http://localhost:3000/login, fill in the email field with
+"test@example.com" and the password with "testpassword123", click "Sign in",
+and confirm that you're redirected to /dashboard.
+```
+
+### Catch console errors
+
+```
+With Chrome DevTools MCP, open the /dashboard page and list all JavaScript
+errors and warnings in the console.
+```
+
+### Audit network performance
+
+```
+With Chrome DevTools MCP, load the homepage and give me the 5 slowest requests
+with their duration and size.
+```
+
+### Quick check on production
+
+```
+[From the Claude in Chrome extension, on your authenticated app]
+Take a screenshot of the current page and check that the user menu
+shows my username in the top-right corner.
+```
+
+## Combining tools
+
+In practice, Playwright and Chrome DevTools MCP work well together. A typical workflow looks like this:
+
+1. Playwright runs in CI and flags a failing test on `/checkout`
+2. You launch Chrome DevTools MCP locally to investigate: it shows that a `POST /api/payment` request is returning a 500 with a specific error payload
+3. You fix the bug, re-run Playwright, and confirm the test passes
+
+<Callout type="info" title="Tokens and context">
+Using multiple browser automation tools in the same session adds up quickly. Keep sessions short and focused: one tool, one question, one answer.
+</Callout>
+
+## Next steps
+
+- [Headless CI/CD](/en/advanced/headless-ci): integrate Playwright into a GitHub Actions pipeline
+- [Hooks](/en/advanced/hooks): automatically trigger browser tests after each change
+- [MCP](/en/mcp): explore more MCP servers to extend Claude Code's capabilities

@@ -4,7 +4,7 @@ description: "Techniques avancées de prompting Claude Code : patterns debugging
 section: "prompting"
 order: 6
 datePublished: "2026-03-10"
-dateModified: "2026-03-11"
+dateModified: "2026-03-30"
 ---
 
 ## Au-delà des bases
@@ -481,6 +481,75 @@ La seule différence : ajoute un filtre par statut (query param ?status=todo)
 et une pagination cursor-based."
 ```
 
+## Output styles : contrôler le format de réponse
+
+Claude Code propose différents styles de sortie qui changent la façon dont il présente ses réponses. Vous pouvez les configurer via la commande `/output-style` ou les mentionner directement dans votre prompt.
+
+| Style | Comportement | Quand l'utiliser |
+|-------|-------------|-----------------|
+| **Default** | Réponses concises, orientées action | Travail quotidien, tâches claires |
+| **Explanatory** | Réponses détaillées avec le raisonnement | Apprentissage d'un nouveau codebase |
+| **Learning** | Réponses pédagogiques avec analogies et contexte | Découverte d'un concept inconnu |
+| **Custom** | Style défini par vous via un prompt | Besoins très spécifiques |
+
+```bash
+# Changer le style de sortie dans Claude Code
+/output-style explanatory
+
+# Ou le préciser directement dans le prompt
+"Réponds en mode explanatory : explique ton raisonnement à chaque étape."
+```
+
+<Callout type="tip" title="Le style Explanatory pour les codebases inconnus">
+Quand vous arrivez sur un nouveau projet, passez en mode Explanatory pendant les premières sessions. Claude expliquera pourquoi il fait chaque choix, ce qui accélère votre montée en compétence sur le codebase. Une fois à l'aise, repassez en Default pour retrouver la vitesse.
+</Callout>
+
+### Définir un style personnalisé
+
+Si aucun style natif ne correspond, définissez le vôtre directement dans le prompt ou dans votre CLAUDE.md.
+
+```markdown
+# Style personnalisé dans CLAUDE.md
+## Style de réponse
+- Commence toujours par un résumé en une phrase de ce que tu vas faire
+- Explique les décisions d'architecture mais pas les détails syntaxiques
+- Termine chaque réponse par "Points à valider :" avec 2-3 questions
+- Si tu as un doute sur mon intention, demande avant de coder
+```
+
+## Prototyper plutôt que spécifier
+
+Un conseil de Boris Cherny : construire 20 à 30 versions rapides d'un concept est plus productif qu'écrire un PRD (Product Requirements Document) détaillé. Claude Code excelle à itérer vite, profitez-en.
+
+L'idée est simple : au lieu de passer du temps à spécifier précisément ce que vous voulez (ce qui est souvent difficile avant de voir quelque chose de concret), vous demandez une première version rapide, vous réagissez à ce que vous voyez, et vous affinez. Chaque itération prend quelques minutes.
+
+```markdown
+# Itération 1 : poser la base
+"Fais-moi une v1 rapide d'un composant de dashboard analytics.
+Pas besoin que ce soit parfait, je veux juste voir une direction."
+
+# Itération 2 : ajuster l'angle
+"Bien. Maintenant change l'approche des graphiques : plutôt que
+des barres, utilise des sparklines inline dans les cartes de KPI."
+
+# Itération 3 : explorer une alternative
+"Intéressant. Essaie une approche complètement différente :
+un layout en tableau dense comme Linear, pas de graphiques du tout,
+juste des chiffres et des tendances en texte."
+
+# Itération 4 : converger
+"Le tableau dense est mieux. Reprends-le et ajoute la comparaison
+période précédente avec des indicateurs de progression colorés."
+```
+
+<Card title="Pourquoi c'est plus efficace qu'un PRD" variant="highlight">
+Avec un PRD de 10 pages, vous spécifiez ce que vous croyez vouloir. Avec 5 itérations rapides, vous découvrez ce que vous voulez vraiment en le voyant. Claude ne se fatigue pas de refaire, ne juge pas les changements de direction, et chaque itération prend moins de temps que de relire un PRD.
+</Card>
+
+<Callout type="warning" title="Savoir quand arrêter d'itérer">
+Le risque de cette approche : itérer indéfiniment sans jamais converger. Fixez-vous une règle : après 5 itérations, choisissez la meilleure direction et commencez à construire sérieusement. La v6 doit être une version de production, pas une autre exploration.
+</Callout>
+
 ## Récapitulatif des techniques avancées
 
 | Technique | Cas d'usage | Complexité |
@@ -495,6 +564,8 @@ et une pagination cursor-based."
 | Décomposition | Features complexes, migrations | Forte en impact |
 | Multi-agents | Revue de code, audits, gros projets | Élevée |
 | Prompting contextuel | Respect des patterns du projet | Faible |
+| Output styles | Adapter le niveau d'explication | Faible |
+| Prototypage rapide | Explorer un concept, trouver la bonne direction | Faible à utiliser |
 
 ## Prochaines étapes
 

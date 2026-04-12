@@ -4,7 +4,7 @@ description: "Guide complet pour créer des agents custom dans Claude Code. Stru
 section: "agents"
 order: 2
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-03-30"
 ---
 
 ## Pourquoi créer un agent custom ?
@@ -48,6 +48,84 @@ Comment l'agent doit structurer son rapport ou résultat.
 ## Contraintes
 Ce que l'agent ne doit jamais faire.
 ```
+
+## Référence complète du frontmatter
+
+Le vrai point de départ d'un agent, c'est son frontmatter : le bloc YAML en début de fichier qui configure son comportement avant même la première ligne de prompt. Voici les 16 champs disponibles.
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `name` | string | Nom de l'agent, utilisé pour l'invoquer |
+| `description` | string | Description que Claude lit pour décider d'utiliser cet agent automatiquement. Mettre "PROACTIVELY" encourage l'auto-invocation. |
+| `tools` | string[] | Outils autorisés : `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep`, `Agent`, etc. |
+| `disallowedTools` | string[] | Outils explicitement interdits, même si l'agent voulait les utiliser |
+| `model` | string | Modèle à utiliser : `"haiku"`, `"sonnet"`, `"opus"` ou un ID complet de modèle |
+| `permissionMode` | string | Niveau de permissions : `"default"`, `"acceptEdits"`, `"bypassPermissions"`, `"auto"` |
+| `maxTurns` | number | Nombre maximum de tours agentiques avant arrêt forcé |
+| `skills` | string[] | Skills à précharger dans le contexte de l'agent |
+| `mcpServers` | string[] | MCP servers accessibles depuis cet agent |
+| `hooks` | object | Hooks spécifiques à cet agent (pre/post-execution) |
+| `memory` | string | Type de mémoire : `"user"`, `"project"`, `"local"` |
+| `background` | boolean | `true` pour exécuter l'agent en arrière-plan |
+| `effort` | string | Niveau d'effort cognitif : `"low"`, `"medium"`, `"high"` |
+| `isolation` | string | `"worktree"` pour un environnement Git isolé |
+| `initialPrompt` | string | Prompt système additionnel injecté avant les instructions |
+| `color` | string | Couleur d'affichage dans la statusline (hex ou nom) |
+
+<Callout type="info" title="Tous les champs sont optionnels sauf name et description">
+Un fichier agent valide peut se contenter de `name` et `description`. Les autres champs s'ajoutent selon les besoins de l'agent.
+</Callout>
+
+### Le mot-clé PROACTIVELY
+
+Le champ `description` sert à deux choses : documenter l'agent pour les humains, et indiquer à Claude quand l'utiliser automatiquement. En ajoutant le mot "PROACTIVELY" dans la description, vous signalez que Claude doit invoquer cet agent de lui-même, sans attendre une instruction explicite.
+
+```yaml
+# L'agent attend qu'on lui demande
+description: "Effectue une review de code après modification."
+
+# L'agent s'active automatiquement
+description: "Expert code reviewer. Use PROACTIVELY after writing or modifying code."
+```
+
+### Choisir le bon modèle pour chaque agent
+
+Le champ `model` est l'un des leviers les plus importants : il influence directement la vitesse, la qualité et le coût de chaque exécution.
+
+| Type d'agent | Modèle recommandé | Pourquoi |
+|--------------|-------------------|----------|
+| Exploration, grep, lecture de fichiers | `haiku` | Rapide, coût minimal pour les tâches simples |
+| Code review, développement courant | `sonnet` | Bon rapport qualité/vitesse pour la majorité des cas |
+| Architecture, debugging complexe, sécurité | `opus` | Raisonnement approfondi quand c'est nécessaire |
+
+Un pipeline bien conçu utilise `haiku` pour explorer, `sonnet` pour coder, et `opus` uniquement pour les décisions critiques.
+
+### Exemple d'agent avec frontmatter complet
+
+```markdown
+---
+name: code-reviewer
+description: "Expert code reviewer. Use PROACTIVELY after writing or modifying code."
+model: opus
+tools: [Read, Grep, Glob, Bash]
+disallowedTools: [Write, Edit]
+permissionMode: default
+maxTurns: 20
+memory: project
+effort: high
+isolation: worktree
+skills: [code-quality, security-scan]
+color: "#f59e0b"
+---
+
+Tu es un reviewer de code senior. Pour chaque revue, tu analyses la qualité,
+la sécurité et la maintenabilité des changements. Tu proposes des corrections
+concrètes, classées par sévérité.
+```
+
+<Callout type="tip" title="isolation: worktree">
+Le champ `isolation: "worktree"` crée un worktree Git dédié pour l'agent. C'est utile quand vous lancez plusieurs agents en parallèle sur le même dépôt : chacun travaille dans son propre espace sans risque de conflit.
+</Callout>
 
 ## Exemple 1 : Agent de review de code
 

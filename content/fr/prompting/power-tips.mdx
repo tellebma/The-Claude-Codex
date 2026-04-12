@@ -1,0 +1,198 @@
+---
+title: "Power Tips : raccourcis et commandes secrètes"
+description: "Ultrathink, Esc Esc, /rewind, /compact : les raccourcis et techniques avancées que les power users de Claude Code utilisent au quotidien."
+section: "prompting"
+order: 8
+datePublished: "2026-03-30"
+dateModified: "2026-03-30"
+badge: "TIPS"
+---
+
+## Les raccourcis que personne ne vous montre
+
+Claude Code regorge de fonctionnalités cachées qui changent radicalement la façon de travailler. Ces raccourcis et commandes ne sont pas toujours documentés de manière visible, mais les power users les connaissent par coeur.
+
+Cette page rassemble les techniques les plus utiles, testées et validées par l'équipe qui a créé Claude Code.
+
+## Contrôler la profondeur de réflexion
+
+### ultrathink et ses variantes
+
+Quand Claude Code doit résoudre un problème complexe (architecture, debugging multi-fichiers, refactoring délicat), vous pouvez lui demander de réfléchir plus intensément en ajoutant des mots-clés dans votre prompt :
+
+| Mot-clé | Effet | Quand l'utiliser |
+|---------|-------|-----------------|
+| `think` | Réflexion standard étendue | Questions modérément complexes |
+| `think harder` | Réflexion approfondie | Problèmes avec plusieurs solutions possibles |
+| `ultrathink` | Réflexion maximale | Architecture, debugging complexe, décisions critiques |
+| `megathink` | Synonyme d'ultrathink | Au choix |
+
+```bash
+# Debugging complexe
+"ultrathink : pourquoi ce test passe en local mais échoue en CI ? Voici le log d'erreur..."
+
+# Décision d'architecture
+"think harder : on doit choisir entre Redis et un cache in-memory pour ce use case. Voici les contraintes..."
+```
+
+<Callout type="tip" title="Quand utiliser ultrathink">
+Réservez ultrathink aux vrais problèmes complexes. Pour une question simple, Claude Code réfléchit déjà suffisamment. En abuser ralentit les réponses sans améliorer la qualité.
+</Callout>
+
+### Extended thinking (mode thinking)
+
+Le mode thinking force Claude à montrer son raisonnement avant de répondre. C'est activable :
+- Dans settings.json : `"alwaysThinkingEnabled": true`
+- Via le raccourci <KeyboardShortcut keys={["Alt", "T"]} /> en cours de session
+- Avec le flag `--thinking` au lancement
+
+## Naviguer dans la conversation
+
+### Esc Esc : interrompre proprement
+
+Quand Claude Code part dans une mauvaise direction ou prend trop de temps, appuyez deux fois sur <KeyboardShortcut keys={["Esc", "Esc"]} separator=" " /> :
+
+- Le premier <KeyboardShortcut keys={["Esc"]} /> signale l'interruption
+- Le deuxième <KeyboardShortcut keys={["Esc"]} /> confirme l'arrêt
+
+Claude s'arrête proprement et vous redonne la main. Vous pouvez alors reformuler votre demande ou corriger le cap.
+
+<Callout type="info" title="Différence avec Ctrl+C">
+<KeyboardShortcut keys={["Ctrl", "C"]} /> annule complètement la réponse en cours. <KeyboardShortcut keys={["Esc", "Esc"]} separator=" " /> est plus doux : Claude termine sa phrase et garde le contexte de ce qu'il a commencé.
+</Callout>
+
+### /rewind : revenir en arrière
+
+Quand une réponse ne convient pas, au lieu de demander "non, recommence", utilisez `/rewind` :
+
+```bash
+# Revient au tour précédent (supprime la dernière réponse + votre dernier message)
+/rewind
+
+# Revient de 3 tours en arrière
+/rewind 3
+```
+
+C'est plus propre que de corriger dans le même contexte : ça libère de la fenêtre de contexte et repart d'un état sain.
+
+### /branch : forker la conversation
+
+Quand vous voulez essayer deux approches différentes sans perdre votre travail :
+
+```bash
+/branch
+```
+
+Claude crée une copie de la conversation. Vous pouvez explorer l'approche A dans la session principale et l'approche B dans le fork.
+
+## Gérer la fenêtre de contexte
+
+### /compact : compacter avant qu'il soit trop tard
+
+La règle d'or : compactez manuellement à 50% de la fenêtre de contexte. N'attendez pas que Claude Code le fasse automatiquement (il le fait vers 95%, quand la qualité a déjà baissé).
+
+```bash
+/compact
+```
+
+Le compactage résume la conversation pour libérer de l'espace tout en gardant le contexte important.
+
+<Callout type="warning" title="Les 20% finaux sont dangereux">
+Quand la fenêtre de contexte dépasse 80%, la qualité des réponses se dégrade visiblement. Les refactorings larges et les modifications multi-fichiers sont les premiers touchés. Compactez AVANT d'arriver là.
+</Callout>
+
+### /rename et /resume : garder ses sessions
+
+Pour les sessions longues ou importantes :
+
+```bash
+# Donner un nom à la session courante
+/rename "refactoring auth module"
+
+# Plus tard, reprendre cette session
+claude -c  # reprend la dernière session
+/resume    # liste les sessions disponibles
+```
+
+## Techniques de prompting avancé
+
+### "Grill me" : se faire challenger
+
+Au lieu de merger directement, demandez à Claude de challenger votre code :
+
+```bash
+"Grill me on these changes and don't make a PR until I pass your test"
+```
+
+Claude va :
+1. Relire tous les changements
+2. Poser des questions pointues sur les edge cases
+3. Identifier les faiblesses
+4. Ne valider que quand vous avez répondu de manière satisfaisante
+
+C'est comme avoir un reviewer exigeant disponible 24/7.
+
+### "Scrap this" : repartir de zéro proprement
+
+Quand un fix devient un pansement sur un pansement :
+
+```bash
+"Knowing everything you know now, scrap this and implement the elegant solution"
+```
+
+Claude garde le contexte de ce qui n'a PAS marché et propose une approche propre. C'est plus efficace que de micro-corriger un code bancal.
+
+### Coller un bug et dire "fix"
+
+Pas besoin d'un prompt élaboré. Copiez-collez l'erreur ou le thread Slack et dites :
+
+```bash
+"fix"
+```
+
+Claude comprend le contexte, identifie le problème, et corrige. Pas la peine de micro-manager.
+
+### Demander des diagrammes ASCII
+
+Pour comprendre une architecture complexe :
+
+```bash
+"Dessine un diagramme ASCII de l'architecture de ce projet"
+```
+
+Claude produit un schéma en texte directement dans le terminal, ce qui est souvent plus rapide qu'un outil de diagramme.
+
+## Raccourcis clavier utiles
+
+| Raccourci | Action |
+|-----------|--------|
+| <KeyboardShortcut keys={["Esc", "Esc"]} separator=" " /> | Interrompre Claude proprement |
+| <KeyboardShortcut keys={["Ctrl", "C"]} /> | Annuler la réponse en cours |
+| <KeyboardShortcut keys={["Shift", "Tab"]} /> | Basculer entre les modes (normal, plan, auto-accept) |
+| <KeyboardShortcut keys={["Alt", "T"]} /> | Activer/désactiver le mode thinking |
+| <KeyboardShortcut keys={["Fn", "Fn"]} separator=" " /> | Activer la dictée vocale (macOS) |
+| <KeyboardShortcut keys={["/"]} /> | Ouvrir la liste des slash commands |
+
+<Callout type="tip" title="La dictée vocale, c'est 3x plus rapide">
+Boris Cherny, le créateur de Claude Code, code principalement en dictant ses prompts. Activez la dictée avec <KeyboardShortcut keys={["Fn", "Fn"]} separator=" " /> sur macOS, ou utilisez `/voice` dans Claude Code. C'est surprenant à quel point c'est efficace pour décrire ce qu'on veut.
+</Callout>
+
+## Commandes slash méconnues
+
+| Commande | Fonction |
+|----------|----------|
+| `/btw` | Poser une question rapide sans interrompre la tâche en cours |
+| `/rename` | Renommer la session pour la retrouver facilement |
+| `/resume` | Reprendre une session sauvegardée |
+| `/rewind` | Revenir en arrière de N tours |
+| `/branch` | Forker la conversation |
+| `/compact` | Compacter le contexte manuellement |
+| `/statusline` | Afficher des infos en temps réel (contexte, modèle, coût) |
+| `/voice` | Passer en mode dictée vocale |
+
+## Prochaines étapes
+
+- [Prompting avancé](/prompting/advanced) pour les patterns par cas d'usage (code review, refactoring, tests)
+- [CLAUDE.md : personnaliser Claude Code](/prompting/claude-md) pour configurer le comportement par défaut
+- [Référence CLI](/reference/cli) pour la liste complète des flags
+- [Système de Hooks](/advanced/hooks) pour automatiser ces workflows

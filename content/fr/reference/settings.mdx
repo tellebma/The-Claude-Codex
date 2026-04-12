@@ -1,25 +1,71 @@
 ---
 title: "settings.json : Référence complète de la configuration"
-description: "Toutes les options du fichier settings.json de Claude Code : 3 niveaux de configuration, permissions, MCP, modèles, outils et exemples complets."
+description: "Toutes les options du fichier settings.json de Claude Code : 5 niveaux de précédence (managed, CLI, local, projet, global), permissions, MCP, modèles et exemples enterprise."
 badge: "Config"
 section: "reference"
 order: 3
 datePublished: "2026-03-11"
-dateModified: "2026-03-11"
+dateModified: "2026-03-30"
 ---
 
-## Les 3 niveaux de configuration
+## Les 5 niveaux de configuration
 
-Claude Code fusionne les fichiers de configuration dans cet ordre de précédence (du plus prioritaire au moins prioritaire) :
+Claude Code résout la configuration finale en fusionnant cinq sources, du plus prioritaire au moins prioritaire. Quand une option est définie à plusieurs niveaux, c'est toujours la valeur du niveau le plus haut qui s'applique.
 
-| Niveau | Fichier | Portée |
-|--------|---------|--------|
-| **1. Projet local** | `.claude/settings.local.json` | Ce projet uniquement (non commité, gitignored) |
-| **2. Projet** | `.claude/settings.json` | Ce projet (commitable, partageable avec l'équipe) |
-| **3. Utilisateur** | `~/.claude/settings.json` | Tous les projets de l'utilisateur |
+| Priorité | Source | Fichier / mécanisme | Surchargeable par l'utilisateur |
+|----------|--------|---------------------|--------------------------------|
+| **1. Managed** | Organisation (admin) | Déployé via le dashboard Anthropic | Non |
+| **2. CLI** | Ligne de commande | `claude --model opus` | Oui (intentionnel) |
+| **3. Projet local** | Développeur | `.claude/settings.local.json` | Oui |
+| **4. Projet partagé** | Équipe | `.claude/settings.json` | Oui |
+| **5. Global** | Utilisateur | `~/.claude/settings.json` | Oui |
 
-<Callout type="info" title="Précédence">
-Les options définies au niveau projet surchargent celles du niveau utilisateur. Le fichier local (`.local.json`) surcharge les deux autres. C'est le mécanisme qui permet de partager une configuration de base via Git tout en autorisant des surcharges personnelles.
+<Callout type="info" title="Comment lire ce tableau">
+Un réglage au niveau 3 (projet local) l'emporte sur un réglage au niveau 4 (projet partagé), qui lui-même l'emporte sur le niveau 5 (global). Le niveau 1 (managed) est la seule source que l'utilisateur ne peut pas contourner.
+</Callout>
+
+### Niveau 1 : Managed settings
+
+Les managed settings sont déployés par un administrateur Anthropic depuis le dashboard de l'organisation. Ils s'appliquent à tous les membres, quelle que soit leur configuration locale.
+
+Cas d'usage typiques :
+- Imposer un modèle précis à toute l'équipe
+- Interdire des outils jugés risqués (`Bash`, `WebFetch`)
+- Forcer un proxy d'entreprise via `customApiUrl`
+
+L'utilisateur ne peut pas les surcharger, même avec un argument CLI ou un fichier local.
+
+### Niveau 2 : Arguments CLI
+
+Les flags passés directement à la commande `claude` ont la deuxième priorité. Ils sont utiles pour des sessions ponctuelles sans toucher aux fichiers de configuration.
+
+```bash
+# Utiliser Opus pour cette session uniquement
+claude --model claude-opus-4-5
+
+# Désactiver un outil pour cette invocation
+claude --disallowedTools Bash
+
+# Spécifier un fichier de configuration différent
+claude --settings /chemin/vers/settings.json
+```
+
+<Callout type="tip" title="Priorité explicite">
+Un argument CLI surcharge toujours ce qui est écrit dans n'importe quel fichier de configuration. C'est le moyen le plus direct d'ajuster un comportement pour une session unique.
+</Callout>
+
+### Niveaux 3 à 5 : Fichiers de configuration
+
+Les trois niveaux restants correspondent à des fichiers JSON. Ils sont fusionnés au démarrage de chaque session.
+
+| Niveau | Fichier | Usage recommandé |
+|--------|---------|------------------|
+| **Projet local** | `.claude/settings.local.json` | Préférences personnelles sur un projet (gitignored) |
+| **Projet partagé** | `.claude/settings.json` | Conventions de l'équipe, commité dans Git |
+| **Global** | `~/.claude/settings.json` | Préférences personnelles, tous projets confondus |
+
+<Callout type="warning" title="Ne pas versionner les secrets">
+Le fichier `.claude/settings.local.json` est gitignored par défaut. C'est là que vont les tokens, URLs privées et autres valeurs sensibles. Ne mettez jamais de secret dans `.claude/settings.json` qui sera commité.
 </Callout>
 
 ---
@@ -265,6 +311,127 @@ La clé API (`ANTHROPIC_API_KEY`) reste nécessaire même avec une URL personnal
 
 ---
 
+## Option : `effortLevel`
+
+Contrôle l'effort cognitif que Claude alloue à chaque réponse. Utile pour calibrer le rapport vitesse/qualité sans changer de modèle.
+
+| Valeur | Comportement |
+|--------|-------------|
+| `"low"` | Réponses rapides, moins de raisonnement |
+| `"medium"` | Équilibre par défaut |
+| `"high"` | Raisonnement approfondi, plus lent |
+
+```json
+{
+  "effortLevel": "medium"
+}
+```
+
+Peut être surchargé en session ou via `--effort-level` en CLI.
+
+---
+
+## Option : `attribution`
+
+Personnalise ou supprime les mentions `Co-Authored-By` que Claude ajoute dans les commits et pull requests.
+
+```json
+{
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <claude@anthropic.com>",
+    "pr": false
+  }
+}
+```
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `attribution.commit` | `string` ou `false` | Ligne ajoutée au message de commit. `false` pour désactiver |
+| `attribution.pr` | `string` ou `false` | Ligne ajoutée à la description de PR. `false` pour désactiver |
+
+<Callout type="tip" title="Supprimer toute attribution">
+Pour ne laisser aucune trace d'utilisation de Claude dans les commits et PRs :
+```json
+{ "attribution": { "commit": false, "pr": false } }
+```
+</Callout>
+
+---
+
+## Option : `worktree`
+
+Configuration pour les dépôts Git utilisant des worktrees. Particulièrement utile dans les monorepos.
+
+```json
+{
+  "worktree": {
+    "symlinkDirectories": ["node_modules", ".next", "dist"],
+    "sparsePaths": ["packages/mon-service/**", "shared/**"]
+  }
+}
+```
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `worktree.symlinkDirectories` | `string[]` | Répertoires à symlinkés entre worktrees (évite de dupliquer `node_modules`) |
+| `worktree.sparsePaths` | `string[]` | Patterns pour le sparse-checkout (checkout partiel sur gros monorepos) |
+
+<Callout type="info" title="Quand utiliser symlinkDirectories">
+Dans un worktree Git, chaque branche a sa propre copie du répertoire de travail. Symlinkés `node_modules` évite de relancer `npm install` à chaque changement de branche et économise de l'espace disque.
+</Callout>
+
+---
+
+## Option : `sandbox`
+
+Active le mode sandbox pour isoler les exécutions de Claude dans un environnement contrôlé.
+
+```json
+{
+  "sandbox": {
+    "enabled": true
+  }
+}
+```
+
+Quand le sandbox est activé, les commandes Bash s'exécutent dans un environnement restreint sans accès réseau ni écriture en dehors du répertoire de projet.
+
+---
+
+## Option : `autoMode`
+
+Personnalise le classifieur de permissions utilisé en mode automatique. Permet d'ajuster le seuil à partir duquel Claude demande confirmation avant d'exécuter une action.
+
+```json
+{
+  "autoMode": {
+    "permissionLevel": "default"
+  }
+}
+```
+
+| Valeur | Comportement |
+|--------|-------------|
+| `"default"` | Comportement standard (demande pour les actions risquées) |
+| `"strict"` | Demande confirmation pour toute action d'écriture |
+| `"relaxed"` | Moins d'interruptions, autonomie accrue |
+
+---
+
+## Option : `companyAnnouncements`
+
+Affiche un message personnalisé au démarrage de chaque session. Utile pour communiquer des instructions ou des rappels à toute l'équipe via le fichier settings.json commité.
+
+```json
+{
+  "companyAnnouncements": "Rappel : ce projet utilise Node 22. Lancer 'nvm use' avant toute session."
+}
+```
+
+Le message s'affiche une fois dans le terminal, au lancement de Claude Code.
+
+---
+
 ## Option : `mcpServers`
 
 Configuration des serveurs MCP. Chaque entrée est un serveur MCP nommé.
@@ -331,6 +498,77 @@ Configuration des serveurs MCP. Chaque entrée est un serveur MCP nommé.
       "url": "https://mon-serveur.com/mcp"
     }
   }
+}
+```
+
+---
+
+## Configuration en entreprise
+
+Les managed settings permettent à un administrateur d'imposer une configuration à toute l'organisation. Voici les cas d'usage les plus courants.
+
+### Imposer un modèle à toute l'équipe
+
+```json
+// Managed settings (déployé via le dashboard Anthropic)
+{
+  "model": "claude-sonnet-4-5",
+  "effortLevel": "medium"
+}
+```
+
+Les développeurs peuvent encore choisir un modèle différent via `--model` en CLI, sauf si cette option est verrouillée par l'admin.
+
+### Interdire des commandes dangereuses
+
+```json
+// Managed settings
+{
+  "permissions": {
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Bash(curl:*)",
+      "WebFetch"
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="Les deny managed sont absolus">
+Les règles `deny` des managed settings s'appliquent en dernier recours. Un développeur ne peut pas les contourner en ajoutant un `allow` dans son fichier local ou en passant un flag CLI.
+</Callout>
+
+### Forcer l'attribution dans les commits
+
+```json
+// Managed settings
+{
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <claude@anthropic.com>",
+    "pr": "Generated with assistance from Claude Code"
+  }
+}
+```
+
+### Forcer un proxy d'entreprise
+
+```json
+// Managed settings
+{
+  "apiProvider": "anthropic",
+  "customApiUrl": "https://api-gateway.mon-entreprise.com/anthropic"
+}
+```
+
+Tous les appels à l'API Anthropic passeront par le proxy, quel que soit le fichier de configuration local du développeur.
+
+### Diffuser des instructions à l'équipe
+
+```json
+// .claude/settings.json (commité dans le repo)
+{
+  "companyAnnouncements": "Sprint 14 en cours. Branche principale : main. Ne pas merger sans review de 2 personnes."
 }
 ```
 

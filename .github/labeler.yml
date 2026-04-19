@@ -1,0 +1,24 @@
+content:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "content/**"
+          - "messages/**"
+
+ui:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/components/**"
+
+infra:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "Dockerfile"
+          - "docker-compose.yml"
+          - ".github/**"
+
+config:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "*.config.*"
+          - "package.json"
+          - "tsconfig.json"

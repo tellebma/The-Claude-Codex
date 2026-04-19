@@ -6,6 +6,10 @@ on:
     branches: [main]
     types: [completed]
 
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+
 permissions:
   contents: read
 
@@ -43,6 +47,7 @@ jobs:
             type=sha,prefix=
 
       - name: Build and push
+        id: build
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
         with:
           context: .
@@ -52,3 +57,25 @@ jobs:
           cache-to: type=gha,mode=max
           provenance: true
           sbom: true
+
+      - name: Verify pushed image size
+        run: |
+          docker pull tellebma/how_to_use_claude:latest
+          SIZE=$(docker image inspect tellebma/how_to_use_claude:latest --format='{{.Size}}')
+          SIZE_MB=$((SIZE / 1024 / 1024))
+          echo "Image size: ${SIZE_MB} MB"
+          if [ "$SIZE_MB" -gt 50 ]; then
+            echo "::warning::Docker image exceeds 50 MB target (${SIZE_MB} MB)"
+          fi
+
+      - name: Deployment summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Image** | \`tellebma/how_to_use_claude\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tags** | \`${{ steps.meta.outputs.tags }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Digest** | \`${{ steps.build.outputs.digest }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Triggered by** | CI on \`main\` |" >> $GITHUB_STEP_SUMMARY

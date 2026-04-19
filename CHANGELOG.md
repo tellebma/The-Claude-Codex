@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.1...v1.1.2) (2026-04-19)
+
+
+### Bug Fixes
+
+* **docker:** injecter les variables Matomo au build (SSG) ([3f7bd66](https://github.com/tellebma/The-Claude-Codex/commit/3f7bd6652ab0b9a970c7b2c65f31983d434e696f))
+
 ## [1.1.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.0...v1.1.1) (2026-04-12)
 
 

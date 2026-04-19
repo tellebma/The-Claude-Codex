@@ -10,6 +10,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Matomo analytics — NEXT_PUBLIC_* vars are inlined at build time by Next.js
+# (static export reads them during `npm run build`, not at runtime)
+ARG NEXT_PUBLIC_MATOMO_URL=https://matomo.tellebma.fr
+ARG NEXT_PUBLIC_MATOMO_SITE_ID=3
+ENV NEXT_PUBLIC_MATOMO_URL=$NEXT_PUBLIC_MATOMO_URL
+ENV NEXT_PUBLIC_MATOMO_SITE_ID=$NEXT_PUBLIC_MATOMO_SITE_ID
+
 RUN npm run build
 
 # Stage 3: Production — serve static files with `serve`

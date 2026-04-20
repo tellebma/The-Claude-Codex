@@ -1,0 +1,307 @@
+---
+title: "Ne donnez jamais vos clés API ni vos vaults à Claude Code : ce qui peut vraiment mal tourner"
+description: "Partager une clé API ou un fichier vault avec Claude Code peut entraîner exfiltration, leak dans les logs ou commit public. Guide pratique pour cloisonner proprement."
+badge: "Sécurité"
+section: "content"
+order: 11
+datePublished: "2026-04-21"
+dateModified: "2026-04-21"
+---
+
+<Callout type="warning" title="La règle en une phrase">
+Claude Code est un outil formidable, mais il ne doit jamais voir de secret en clair : pas vos clés API, pas vos fichiers `vault`, pas vos mots de passe. Donnez-lui un environnement qui pointe vers les secrets, jamais les secrets eux-mêmes.
+</Callout>
+
+## Pourquoi c'est un problème, concrètement
+
+Demander à Claude Code d'éditer un fichier `vault`, de lire un `.env` en clair, ou de coller une clé API dans un prompt expose ces secrets à plusieurs vecteurs qui sont souvent invisibles au moment où on les crée.
+
+### 1. Le secret entre dans votre historique de session
+
+Chaque prompt et chaque fichier lu par Claude Code passe par l'API Anthropic. Anthropic conserve les échanges selon sa politique de rétention (voir [Anthropic Trust Center](https://trust.anthropic.com)). Même si le fournisseur est sérieux, vous avez élargi la surface : un secret qui ne devait exister que sur votre machine vit maintenant sur des serveurs tiers.
+
+### 2. Les logs locaux le capturent
+
+Claude Code écrit des logs dans `~/.claude/` pour le debugging. Si vous avez activé le mode verbose, collé une clé dans un prompt, ou si un fichier `.env` a été lu pendant la session, il peut apparaître dans ces logs. Un backup automatique de votre home, un script d'upload de logs pour un bug report, et la clé fuite sans que vous le remarquiez.
+
+### 3. L'auto-complétion et l'historique shell
+
+Si vous collez une clé dans un prompt via `claude --prompt "voici ma clé sk-ant-..."`, elle atterrit dans `~/.bash_history` ou `~/.zsh_history`. Ce fichier est souvent sauvegardé, synchronisé (dotfiles sur GitHub par exemple), ou accessible à toute personne qui prend la main sur votre session.
+
+### 4. Claude peut décider de committer le secret
+
+C'est le cas le plus violent. Vous ouvrez un `vault.yml` pour demander une refactorisation. Claude lit le fichier, traite la demande, et pour être serviable, propose un `git commit -am "refactor vault"`. Si vous acceptez sans relire, la clé part sur le remote. Le [programme GitHub Secret Scanning](https://docs.github.com/fr/code-security/secret-scanning/about-secret-scanning) peut vous sauver la mise pour les patterns connus (clés Stripe, AWS, Anthropic), mais pas pour un secret maison ou un token JWT custom.
+
+### 5. Les MCP élargissent la surface d'attaque
+
+Si vous utilisez un MCP qui interroge un service externe (GitHub, Notion, base de données), et que le contexte de la conversation contient un secret, ce secret peut se retrouver dans une requête sortante. Un MCP mal conçu ou compromis peut exfiltrer ce qu'il voit passer. Voir [Sécurité des MCP](/mcp/securite-mcp) pour les principes de cloisonnement.
+
+### 6. Les copies temporaires dans les snapshots
+
+Claude Code crée des snapshots de votre working directory lors de certaines opérations (agents parallèles, worktrees). Ces copies héritent des fichiers sensibles s'ils sont dans le répertoire. Un `.env` committé par erreur dans un worktree temporaire peut se propager.
+
+---
+
+## Les erreurs concrètes à éviter
+
+### ❌ Donner la clé directement dans un prompt
+
+```
+# Ne jamais faire ça
+claude "ma clé OpenAI est sk-proj-abc123def, utilise-la pour tester l'API"
+```
+
+La clé part dans les logs, l'historique shell et la session API. Elle est "publiée" dans cinq endroits en une seconde.
+
+### ❌ Demander à Claude de lire un fichier `vault`
+
+```
+# À éviter
+claude "lis production.vault.yml et corrige la syntaxe YAML"
+```
+
+Même si le vault est chiffré au repos, le déchiffrement pour la lecture expose le contenu à la session. Si le fichier contient 40 secrets, les 40 sont maintenant dans le contexte.
+
+### ❌ Coller le contenu d'un `.env` pour débugger
+
+```
+# À éviter
+claude "voici mon .env, pourquoi Docker ne démarre pas ?
+
+DATABASE_URL=postgres://user:password123@prod-db..."
+```
+
+### ❌ Laisser Claude accéder aux secrets via un MCP générique
+
+Un MCP filesystem avec accès à `/home/user/` lit aussi bien `~/.aws/credentials` et `~/.ssh/id_rsa` que votre projet. Toujours restreindre le scope.
+
+### ❌ Committer sans relire quand Claude a touché à de la config
+
+C'est l'erreur la plus fréquente. Claude propose un commit qui inclut des fichiers `.env` ou `config/secrets.yml` modifiés. Vous faites confiance au diff récapitulatif et vous poussez. La clé est maintenant dans l'historique Git public.
+
+---
+
+## Ce qu'il faut faire à la place
+
+### ✅ Utiliser des variables d'environnement qui pointent, jamais des valeurs en clair
+
+Dans le code, ne jamais hardcoder. Claude lit le code, pas les valeurs d'exécution :
+
+```typescript
+// Ce que Claude doit voir
+const apiKey = process.env.ANTHROPIC_API_KEY;
+if (!apiKey) throw new Error("ANTHROPIC_API_KEY is required");
+
+// Pas ça
+const apiKey = "sk-ant-api03-abc...";
+```
+
+### ✅ Cloisonner les secrets dans un fichier `.env.local` gitignoré, jamais ouvert dans Claude
+
+```bash
+# .gitignore doit contenir au minimum
+.env
+.env.local
+.env.*.local
+*.vault.yml
+*.vault
+secrets/
+credentials/
+```
+
+Si Claude demande à lire votre `.env`, refusez. Explique-lui que le fichier existe mais que le contenu ne doit pas entrer dans le contexte :
+
+```
+Mon .env contient des secrets que je ne veux pas partager.
+Les variables disponibles sont : DATABASE_URL, REDIS_URL, ANTHROPIC_API_KEY.
+Peux-tu corriger la config sans que je te montre les valeurs ?
+```
+
+### ✅ Utiliser un secrets manager avec accès runtime
+
+Plutôt que des fichiers `.env`, pointez vers un gestionnaire de secrets au runtime :
+
+| Outil | Avantage pour un usage avec Claude Code |
+|-------|------------------------------------------|
+| [Doppler](https://www.doppler.com) | `doppler run -- npm start` injecte les secrets sans les écrire dans un fichier |
+| [HashiCorp Vault](https://www.vaultproject.io) | Accès via agent, secrets montés en tmpfs |
+| [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) | Récupération via SDK avec IAM role, aucun secret en code |
+| [1Password CLI](https://developer.1password.com/docs/cli/) | `op run -- node script.js` avec références `op://vault/item/field` |
+
+Avec ces outils, le code contient des **références** (`op://prod/database/url`) que Claude peut lire sans problème, pas des valeurs.
+
+### ✅ Restreindre le scope d'accès de Claude Code
+
+Dans votre `~/.claude/settings.json`, limitez ce que Claude peut lire :
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read(~/projects/my-app/**)",
+      "Write(~/projects/my-app/**)"
+    ],
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.kube/**)",
+      "Read(**/.env*)",
+      "Read(**/*.vault.yml)",
+      "Read(**/credentials/**)",
+      "Bash(cat ~/.env*)",
+      "Bash(env)"
+    ]
+  }
+}
+```
+
+Voir [Permissions et sandbox](/advanced/permissions-sandbox) pour les patterns complets.
+
+### ✅ Relire chaque commit avant de pousser, surtout quand Claude a touché à la config
+
+Quand vous acceptez un `git commit` proposé par Claude, **ne sautez pas la revue du diff**. Utilisez `git diff --cached` avant le commit, et `git log -p HEAD` après, pour valider que rien de sensible n'est parti dans l'arbre.
+
+### ✅ Activer git-secrets ou trufflehog en pre-commit
+
+Avant même que Claude entre dans le flow, mettez un garde-fou au niveau de Git :
+
+```bash
+# Installer git-secrets
+brew install git-secrets
+git secrets --install
+git secrets --register-aws
+git secrets --add 'sk-ant-[A-Za-z0-9]{32,}'
+git secrets --add 'sk-proj-[A-Za-z0-9]{32,}'
+```
+
+Toute tentative de commit contenant un pattern sensible sera bloquée, y compris si c'est Claude qui tente le commit.
+
+### ✅ Si vous avez besoin que Claude teste un appel API, utilisez une clé dédiée throwaway
+
+Créez une clé API **à la durée de vie limitée** avec un quota bas, utilisez-la uniquement pour les tests avec Claude, révoquez-la en fin de session. Jamais la clé de prod, jamais la clé personnelle premium.
+
+---
+
+## Plan d'action pas à pas
+
+<Steps>
+<Step title="Auditer ce que Claude Code peut déjà voir" stepNumber={1}>
+Vérifiez votre `~/.claude/settings.json` et les fichiers sensibles qui sont dans le scope actuel.
+
+```bash
+# Lister les fichiers sensibles dans le répertoire où vous lancez Claude
+find . -type f \( -name ".env*" -o -name "*.vault.yml" -o -name "*.pem" -o -name "credentials*" \) 2>/dev/null
+```
+
+Si la liste n'est pas vide, continuez aux étapes suivantes avant de relancer Claude dans ce répertoire.
+</Step>
+
+<Step title="Mettre à jour le .gitignore" stepNumber={2}>
+Assurez-vous que tous les patterns sensibles sont gitignorés. Copier ce bloc si vous partez de zéro :
+
+```gitignore
+# Secrets et credentials
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+*.vault
+*.vault.yml
+*.vault.yaml
+secrets/
+credentials/
+*.pem
+*.key
+id_rsa*
+.aws/
+.kube/config
+```
+</Step>
+
+<Step title="Ajouter les règles deny dans Claude Code" stepNumber={3}>
+Éditer `~/.claude/settings.json` pour bloquer explicitement l'accès aux secrets, même si Claude le demande :
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env*)",
+      "Read(**/*.vault.yml)",
+      "Read(**/credentials/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Bash(cat ~/.env*)",
+      "Bash(env)",
+      "Bash(printenv)"
+    ]
+  }
+}
+```
+
+Voir [Permissions et sandbox](/advanced/permissions-sandbox) pour les patterns complets.
+</Step>
+
+<Step title="Installer un garde-fou git-secrets" stepNumber={4}>
+Bloquez les commits de secrets au niveau de Git, y compris ceux proposés par Claude :
+
+```bash
+brew install git-secrets
+cd votre-projet
+git secrets --install
+git secrets --register-aws
+git secrets --add 'sk-ant-[A-Za-z0-9]{32,}'
+git secrets --add 'sk-proj-[A-Za-z0-9]{32,}'
+git secrets --add 'ghp_[A-Za-z0-9]{36}'
+git secrets --add 'AKIA[0-9A-Z]{16}'
+```
+</Step>
+
+<Step title="Migrer vers un secrets manager si vous êtes encore en .env partout" stepNumber={5}>
+Pour un projet en prod, le `.env` est un anti-pattern à terme. Choisissez un gestionnaire (Doppler le plus simple pour démarrer, 1Password CLI si vous en avez déjà une licence équipe, Vault si infrastructure complexe) et migrez progressivement.
+
+La règle cible : **aucun secret ne doit jamais être écrit sur le disque de la machine de dev**, ni lisible par un agent IA.
+</Step>
+
+<Step title="Si vous avez déjà donné une clé à Claude, révoquez immédiatement" stepNumber={6} isLast>
+Si vous avez partagé une clé API dans un prompt ou laissé Claude lire un `.env`, considérez-la comme compromise. Procédure complète : [Clé API Anthropic fuitée ? Plan d'action en 5 étapes](/content/fuite-cle-api).
+
+Le même principe vaut pour toute autre clé (OpenAI, GitHub, AWS). Rotation immédiate, audit des logs d'utilisation, nettoyage de l'historique Git si nécessaire.
+</Step>
+</Steps>
+
+---
+
+## Cas limite : "mais j'ai besoin que Claude comprenne mon infra de prod"
+
+Oui, mais il peut comprendre sans voir les secrets. Donnez-lui :
+
+- La **structure** du fichier de config (clés sans valeurs)
+- La **liste des variables d'environnement** attendues
+- Des **valeurs de test** (les vraies valeurs restent locales)
+
+Exemple concret :
+
+```yaml
+# À partager avec Claude : schema.yml (safe)
+database:
+  url: "<postgres URL, format: postgres://user:pass@host:port/db>"
+  pool_size: 20
+redis:
+  url: "<redis URL, format: redis://host:port>"
+api:
+  anthropic_key: "<sk-ant-... key>"
+  openai_key: "<sk-... key>"
+```
+
+Claude a toutes les infos pour proposer une refactor, générer un `docker-compose.yml`, écrire un parser, sans jamais voir les vraies valeurs.
+
+---
+
+## Pour aller plus loin
+
+- [Clé API Anthropic fuitée ? Plan d'action en 5 étapes](/content/fuite-cle-api) — que faire si une fuite a déjà eu lieu
+- [Variables d'environnement Claude Code](/reference/environment) — référence complète
+- [Sécurité des MCP](/mcp/securite-mcp) — cloisonnement des MCP et leurs risques
+- [Permissions et sandbox](/advanced/permissions-sandbox) — configuration fine des règles `allow`/`deny`
+- [Sécurité Claude Code : bonnes pratiques](/content/bonnes-pratiques-securite) — la checklist sécurité générale

@@ -291,7 +291,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Maîtrisez l'Extended Thinking et le Plan Mode de Claude Code. Activation, cas d'usage, chain-of-thought, différences entre Haiku, Sonnet et Opus, impact sur les coûts.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-20",
   },
   {
     path: "/prompting/chaining-and-agents",
@@ -853,6 +853,46 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-04-20",
+  },
+  {
+    path: "/content/fuite-cle-api",
+    pathsByLocale: { en: "/content/leaked-api-key-recovery" },
+    title: "Clé API Anthropic fuitée ? Plan d'action en 5 étapes (2026)",
+    description:
+      "Votre clé API Anthropic sk-ant a fuité dans un commit, screenshot ou log ? Révoquez-la, faites la rotation, auditez les dégâts. Guide de récupération pas à pas.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-20",
+  },
+  {
+    path: "/content/mode-plan-vs-thinking",
+    pathsByLocale: { en: "/content/plan-vs-thinking-mode" },
+    title: "Mode Plan vs Mode Thinking dans Claude Code : les différences clés",
+    description:
+      "Le mode Plan fait proposer un plan à Claude avant de toucher au code. Le mode Thinking lui fait raisonner plus longtemps. Deux leviers distincts, deux objectifs différents.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-20",
+  },
+  {
+    path: "/content/ne-pas-donner-cles-api-a-claude-code",
+    pathsByLocale: { en: "/content/do-not-give-api-keys-to-claude-code" },
+    title: "Ne donnez jamais vos clés API ni vos vaults à Claude Code : ce qui peut vraiment mal tourner",
+    description:
+      "Partager une clé API ou un fichier vault avec Claude Code peut entraîner exfiltration, leak dans les logs ou commit public. Guide pratique pour cloisonner proprement.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-21",
+  },
+  {
+    path: "/content/ci-cd-cyber-securite",
+    pathsByLocale: { en: "/content/ci-cd-cyber-security" },
+    title: "CI/CD et cybersécurité en 2026 : pourquoi c'est devenu non-négociable avec les agents IA",
+    description:
+      "Avec l'explosion du code généré par IA, une CI/CD robuste n'est plus un bonus : c'est la ligne de défense. Guide pratique avec Red Team, Blue Team et Purple Team.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-21",
   },
   {
     path: "/about",

@@ -1,0 +1,311 @@
+---
+title: "Leaked Anthropic API key? Step-by-step recovery (2026)"
+description: "Your Anthropic API key sk-ant was leaked in a commit, screenshot, or log? Revoke it now, rotate it, audit the damage. Step-by-step recovery guide."
+badge: "Security"
+section: "content"
+order: 9
+datePublished: "2026-04-20"
+dateModified: "2026-04-20"
+---
+
+<Callout type="warning" title="Act in the next 5 minutes">
+A leaked API key can be used by automated bots within minutes of being discovered. Every second counts. Skip straight to the checklist below, read the rest after.
+</Callout>
+
+## The 5-minute emergency checklist
+
+Do these steps in order, right now.
+
+<Steps>
+<Step title="Revoke the leaked key" stepNumber={1}>
+Go to [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys), find the compromised key, and click **Revoke**. The key stops working immediately.
+
+If you are not sure which key leaked, revoke all keys that have access you cannot account for. You can generate new ones right after.
+</Step>
+
+<Step title="Generate a new key" stepNumber={2}>
+On the same page, click **Create Key**. Give it a descriptive name so you can identify it later (for example: `prod-server-2026-04` or `github-actions-deploy`).
+
+Copy the new key immediately, it is only shown once.
+</Step>
+
+<Step title="Update all environments" stepNumber={3}>
+Replace the old key everywhere it was used:
+
+```bash
+# Local development
+# Edit your .env file or export the variable
+export ANTHROPIC_API_KEY="sk-ant-your-new-key"
+
+# Verify the old key is gone from your shell history
+grep -r "sk-ant-" ~/.bash_history ~/.zsh_history 2>/dev/null
+```
+
+Typical places to update: local `.env`, CI/CD secrets (GitHub Actions, GitLab CI, CircleCI), hosting platforms (Vercel, Railway, Render, Heroku), Docker Compose, Kubernetes secrets, and any `.env.production` files on servers.
+</Step>
+
+<Step title="Check your usage logs" stepNumber={4}>
+In [console.anthropic.com](https://console.anthropic.com), go to **Usage**. Look at the last 24-48 hours:
+
+- Is the volume consistent with your normal usage?
+- Any requests at unusual hours (e.g. 3am in your timezone)?
+- Any model you do not normally use (claude-3-5-opus, etc.)?
+
+Unusual spikes or unfamiliar patterns suggest someone else has used the key.
+</Step>
+
+<Step title="Contact Anthropic support if there is suspicious usage" stepNumber={5} isLast>
+If you spot charges or usage that are not yours, contact Anthropic support at [support.anthropic.com](https://support.anthropic.com) with:
+- The key ID (not the value)
+- The time window of suspicious activity
+- A short description of what you found
+
+Anthropic reviews fraudulent usage cases. There is no guaranteed refund policy, but they do investigate and have helped users in documented fraud cases.
+</Step>
+</Steps>
+
+---
+
+## Where did the key leak?
+
+Once the immediate fire is out, figure out the source. Here are the most common vectors.
+
+### Committed to Git (the most frequent cause)
+
+Someone added a `.env` file, hardcoded the key in a config file, or left it in a test script. Even if you delete the file or edit the commit, **the key is still in Git history**. Anyone who clones the repo or has already cloned it has access to the full history.
+
+GitHub's [Secret Scanning](https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning) program automatically detects `sk-ant-` patterns in public repositories and notifies Anthropic. Anthropic may proactively revoke keys found this way. But for private repos, there is no such safety net unless you enable it explicitly.
+
+### Screenshot shared in a chat or on social media
+
+A screenshot of your terminal or IDE showing the key, shared in Slack, Discord, Twitter, or anywhere public. Screenshots get indexed. Reverse image search engines and OCR bots scan them.
+
+### Unfiltered error log
+
+An application that logs the full request headers or environment variables when crashing. If those logs end up in Sentry, Datadog, Papertrail, or any log aggregator, the key is exposed to everyone with log access.
+
+### Public Docker image
+
+A Docker image built with the key baked into a layer. Even if you remove it in a later layer, Docker history preserves every intermediate layer. `docker history your-image:tag` will reveal it.
+
+### `.env` file accidentally pushed
+
+The classic mistake: `.env` is not in `.gitignore`, someone runs `git add .`, and the key goes up with everything else.
+
+---
+
+## Cleaning Git history
+
+If the key was committed to Git, simply deleting it in a new commit is not enough. You need to rewrite history.
+
+<Callout type="warning" title="Force-push rewrites shared history">
+These operations rewrite Git history. If others have cloned the repository, they will need to re-clone or reset their local copy after you force-push. Communicate before you do this on a shared repo.
+</Callout>
+
+### Option 1: git-filter-repo (recommended)
+
+`git-filter-repo` is the current recommended tool for this kind of operation. It is faster and safer than the older `git filter-branch`.
+
+```bash
+# Install git-filter-repo
+pip install git-filter-repo
+# or: brew install git-filter-repo
+
+# Replace all occurrences of the leaked key with a placeholder
+# Replace YOUR_LEAKED_KEY with the actual key value
+git filter-repo --replace-text <(echo "sk-ant-YOUR_LEAKED_KEY==>REDACTED_API_KEY")
+
+# Force-push all branches to remote
+git push origin --force --all
+git push origin --force --tags
+```
+
+### Option 2: BFG Repo-Cleaner
+
+BFG is a simpler alternative for removing specific text patterns.
+
+```bash
+# Download BFG from https://rtyley.github.io/bfg-repo-cleaner/
+java -jar bfg.jar --replace-text secrets.txt your-repo.git
+
+# secrets.txt should contain the leaked key on a single line:
+# sk-ant-YOUR_LEAKED_KEY
+
+cd your-repo.git
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+git push origin --force --all
+```
+
+### After force-pushing
+
+```bash
+# Notify collaborators to re-clone
+# On GitHub/GitLab, go to Settings > Danger Zone
+# and consider rotating the repository deploy keys as well
+
+# Check that the key no longer appears in history
+git log --all -p | grep "sk-ant-" || echo "Clean"
+```
+
+<Callout type="tip" title="GitHub cached views">
+Even after force-pushing, GitHub may cache the old commit view for a few hours. Use GitHub support to request immediate cache invalidation if the key was in a public repo. The URL pattern is: github.com/OWNER/REPO/commit/OLD_SHA
+</Callout>
+
+---
+
+## Auditing the impact
+
+You have revoked the key and cleaned the repo. Now assess the damage.
+
+### What to look for in usage logs
+
+```
+Normal patterns to compare against:
+- Typical request volume per hour
+- Models you actually use (claude-3-5-sonnet, haiku, etc.)
+- Your usual input/output token ratio
+- Requests originating from your known IP ranges
+```
+
+Red flags in the Anthropic usage dashboard:
+- Requests to models you have never used
+- Token consumption 10x or more above your baseline
+- Activity during hours when your system is normally idle
+- Sudden spikes followed by normal activity (bot testing, then stopping)
+
+### Check for secondary exposure
+
+The key may have been used to fingerprint your account or probe for other information. Review:
+
+- Whether the key had access to any other Anthropic APIs or resources
+- Whether the same `.env` file contained other secrets (database URLs, other API keys, OAuth tokens)
+
+If other secrets were in the same file or the same commit, treat all of them as compromised and rotate them too.
+
+---
+
+## Prevention: never again
+
+A leaked key is a symptom of a missing process. Here is what to put in place.
+
+### The basics
+
+```bash
+# Add .env to .gitignore before creating it
+echo ".env" >> .gitignore
+echo ".env.*" >> .gitignore
+echo "!.env.example" >> .gitignore
+
+# Create a .env.example with fake values as documentation
+cp .env .env.example
+sed -i 's/sk-ant-.*/sk-ant-YOUR_KEY_HERE/g' .env.example
+```
+
+### Pre-commit scanning with git-secrets or trufflehog
+
+```bash
+# Install git-secrets (AWS-originated but works for any pattern)
+brew install git-secrets
+# or: https://github.com/awslabs/git-secrets
+
+# Add the Anthropic pattern
+git secrets --add "sk-ant-[a-zA-Z0-9\-_]{20,}"
+
+# Install the hook in your repo
+git secrets --install
+
+# Now any commit containing sk-ant-... will be blocked
+```
+
+```bash
+# Alternatively: trufflehog, which scans Git history and detects 800+ secret types
+pip install trufflehog
+trufflehog git file://. --only-verified
+```
+
+### Store secrets in CI/CD, not in code
+
+#### GitHub Actions
+
+```yaml
+# In your workflow file: reference the secret, never hardcode it
+- name: Run Claude integration
+  env:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  run: node my-script.js
+```
+
+Add the secret at: `github.com/OWNER/REPO/settings/secrets/actions`
+
+#### Vercel
+
+```bash
+# Add via Vercel CLI
+vercel env add ANTHROPIC_API_KEY production
+
+# Or in the Vercel dashboard: Project > Settings > Environment Variables
+# Set scope to Production / Preview / Development as needed
+```
+
+#### Doppler (secrets manager)
+
+```bash
+# Doppler syncs secrets to all environments without storing them in files
+doppler setup
+doppler run -- node my-script.js
+
+# Secrets stay in Doppler, your code never sees the raw value
+```
+
+### Enable GitHub Secret Scanning
+
+For GitHub repositories, Anthropic is a [partner of the GitHub Secret Scanning program](https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning). GitHub automatically scans public repos for `sk-ant-` patterns and can notify Anthropic. Enable push protection to block pushes containing secrets before they reach the remote:
+
+```
+Settings > Code security and analysis > Secret scanning > Enable push protection
+```
+
+For private repositories, push protection requires GitHub Advanced Security (available with GitHub Enterprise or as a paid add-on).
+
+### Use a secrets manager for production
+
+For teams, a centralized secrets manager eliminates `.env` files entirely from production:
+
+| Tool | Best for |
+|------|----------|
+| [Doppler](https://www.doppler.com) | Small to mid-size teams, multi-environment sync |
+| [HashiCorp Vault](https://www.vaultproject.io) | Self-hosted, complex access policies |
+| [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) | AWS-native stacks |
+| [1Password Secrets Automation](https://1password.com/secrets) | Teams already on 1Password |
+
+---
+
+## FAQ
+
+**Does Anthropic reimburse fraudulent usage?**
+
+Anthropic does not have a published automatic refund policy for leaked keys. However, their support team reviews cases where keys were clearly stolen and used fraudulently. Your chances improve if you can show: when the key was created, when it leaked, and clear evidence the usage was not yours. Contact [support.anthropic.com](https://support.anthropic.com) with as much detail as possible.
+
+**How long does Google keep a leaked key indexed?**
+
+If the key appeared in a public page (GitHub commit, paste site, screenshot), Google may cache it for days to weeks. You can request removal via [Google's Remove Outdated Content tool](https://search.google.com/search-console/remove-outdated-content) once the source page is gone. This speeds up de-indexing but is not instant.
+
+**How do I know if a bot has already used my key?**
+
+Look at the Anthropic usage dashboard for the period between when the key was created and when you revoked it. Bots typically make many small requests rapidly (testing the key), then either stop or run heavy workloads. If your usage shows any activity you cannot attribute to your own code, assume the key was used.
+
+**My key leaked in a private repo. Am I safe?**
+
+Less exposed than a public repo, but not safe. Anyone with read access to the repo has the key. This includes current and former collaborators, CI/CD systems, and anyone who cloned it. Rotate the key and clean the history regardless.
+
+---
+
+## Next steps
+
+<Callout type="tip" title="Build the habit before the incident">
+The best time to set up `.gitignore`, pre-commit hooks, and CI secrets was before this happened. The second best time is right now.
+</Callout>
+
+- [Environment variables reference](/reference/environment): How to correctly configure `ANTHROPIC_API_KEY` in all environments
+- [Claude Code security best practices](/content/security-best-practices): Broader security guide for Claude Code setups

@@ -1,0 +1,306 @@
+---
+title: "Never give Claude Code your API keys or vault files: what can actually go wrong"
+description: "Sharing an API key or vault file with Claude Code can lead to exfiltration, log leaks, or public commits. Practical guide to proper isolation."
+badge: "Security"
+section: "content"
+order: 11
+datePublished: "2026-04-21"
+dateModified: "2026-04-21"
+---
+
+<Callout type="warning" title="The rule in one sentence">
+Claude Code is a powerful tool, but it must never see a secret in clear text: not your API keys, not your `vault` files, not your passwords. Give it an environment that points to secrets, never the secrets themselves.
+</Callout>
+
+## Why this is a real problem
+
+Asking Claude Code to edit a `vault` file, read a plaintext `.env`, or pasting an API key into a prompt exposes those secrets to several vectors that are often invisible at the moment you create the leak.
+
+### 1. The secret enters your session history
+
+Every prompt and every file Claude Code reads goes through the Anthropic API. Anthropic retains exchanges according to its retention policy (see [Anthropic Trust Center](https://trust.anthropic.com)). Even with a trustworthy provider, you widened the surface: a secret that should only have existed on your machine now lives on third-party servers.
+
+### 2. Local logs capture it
+
+Claude Code writes logs to `~/.claude/` for debugging. If you enabled verbose mode, pasted a key into a prompt, or if a `.env` was read during the session, it can appear in those logs. An automatic home backup, a log upload script for a bug report, and the key leaks without you noticing.
+
+### 3. Shell autocomplete and history
+
+If you paste a key into a prompt via `claude --prompt "my key is sk-ant-..."`, it lands in `~/.bash_history` or `~/.zsh_history`. This file is often backed up, synced (dotfiles on GitHub for example), or accessible to anyone who gets a session on your machine.
+
+### 4. Claude may decide to commit the secret
+
+This is the worst case. You open a `vault.yml` to ask for a refactor. Claude reads the file, processes the request, and helpfully proposes `git commit -am "refactor vault"`. If you accept without re-reviewing, the key goes to the remote. The [GitHub Secret Scanning program](https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning) may save you for known patterns (Stripe, AWS, Anthropic keys), but not for a custom secret or a homegrown JWT token.
+
+### 5. MCPs widen the attack surface
+
+If you use an MCP that queries an external service (GitHub, Notion, a database), and the conversation context contains a secret, that secret can end up in an outbound request. A poorly designed or compromised MCP can exfiltrate what it sees. See [MCP security](/mcp/mcp-security) for isolation principles.
+
+### 6. Temporary copies in snapshots
+
+Claude Code creates snapshots of your working directory during some operations (parallel agents, worktrees). These copies inherit sensitive files if they are in the directory. A `.env` mistakenly committed in a temporary worktree can propagate.
+
+---
+
+## Concrete mistakes to avoid
+
+### ❌ Giving the key directly in a prompt
+
+```
+# Never do this
+claude "my OpenAI key is sk-proj-abc123def, use it to test the API"
+```
+
+The key goes into logs, shell history and the API session. It is "published" in five places in one second.
+
+### ❌ Asking Claude to read a vault file
+
+```
+# Avoid
+claude "read production.vault.yml and fix the YAML syntax"
+```
+
+Even if the vault is encrypted at rest, decrypting it for reading exposes the content to the session. If the file contains 40 secrets, all 40 are now in context.
+
+### ❌ Pasting a .env content to debug
+
+```
+# Avoid
+claude "here is my .env, why does Docker not start?
+
+DATABASE_URL=postgres://user:password123@prod-db..."
+```
+
+### ❌ Letting Claude access secrets through a generic MCP
+
+A filesystem MCP with access to `/home/user/` reads `~/.aws/credentials` and `~/.ssh/id_rsa` as easily as your project. Always restrict scope.
+
+### ❌ Committing without review when Claude touched config
+
+This is the most frequent mistake. Claude proposes a commit that includes modified `.env` or `config/secrets.yml` files. You trust the summary diff and push. The key is now in public Git history.
+
+---
+
+## What to do instead
+
+### ✅ Use environment variables that point, never plain values
+
+In code, never hardcode. Claude reads the code, not runtime values:
+
+```typescript
+// What Claude should see
+const apiKey = process.env.ANTHROPIC_API_KEY;
+if (!apiKey) throw new Error("ANTHROPIC_API_KEY is required");
+
+// Not this
+const apiKey = "sk-ant-api03-abc...";
+```
+
+### ✅ Isolate secrets in a gitignored .env.local, never opened in Claude
+
+```bash
+# .gitignore minimum
+.env
+.env.local
+.env.*.local
+*.vault.yml
+*.vault
+secrets/
+credentials/
+```
+
+If Claude asks to read your `.env`, refuse. Tell it the file exists but the content must not enter the context:
+
+```
+My .env contains secrets I do not want to share.
+The available variables are: DATABASE_URL, REDIS_URL, ANTHROPIC_API_KEY.
+Can you fix the config without me showing you the values?
+```
+
+### ✅ Use a secrets manager with runtime access
+
+Instead of `.env` files, point to a secrets manager at runtime:
+
+| Tool | Advantage for use with Claude Code |
+|------|-------------------------------------|
+| [Doppler](https://www.doppler.com) | `doppler run -- npm start` injects secrets without writing them to a file |
+| [HashiCorp Vault](https://www.vaultproject.io) | Agent-based access, secrets mounted on tmpfs |
+| [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) | SDK retrieval with IAM role, no secret in code |
+| [1Password CLI](https://developer.1password.com/docs/cli/) | `op run -- node script.js` with `op://vault/item/field` references |
+
+With these tools, the code contains **references** (`op://prod/database/url`) that Claude can read without issue, not values.
+
+### ✅ Restrict Claude Code access scope
+
+In your `~/.claude/settings.json`, limit what Claude can read:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "Read(~/projects/my-app/**)",
+      "Write(~/projects/my-app/**)"
+    ],
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.kube/**)",
+      "Read(**/.env*)",
+      "Read(**/*.vault.yml)",
+      "Read(**/credentials/**)",
+      "Bash(cat ~/.env*)",
+      "Bash(env)"
+    ]
+  }
+}
+```
+
+See [Permissions and sandbox](/advanced/permissions-sandbox) for the complete patterns.
+
+### ✅ Review every commit before pushing, especially when Claude touched config
+
+When you accept a `git commit` proposed by Claude, **do not skip the diff review**. Use `git diff --cached` before commit, and `git log -p HEAD` after, to validate nothing sensitive ended up in the tree.
+
+### ✅ Enable git-secrets or trufflehog as pre-commit
+
+Before Claude is even in the flow, put a guard at the Git level:
+
+```bash
+brew install git-secrets
+git secrets --install
+git secrets --register-aws
+git secrets --add 'sk-ant-[A-Za-z0-9]{32,}'
+git secrets --add 'sk-proj-[A-Za-z0-9]{32,}'
+```
+
+Any commit attempt containing a sensitive pattern is blocked, including one Claude tried to make.
+
+### ✅ If Claude needs to test an API call, use a dedicated throwaway key
+
+Create an API key with a **short lifetime** and a low quota, use it only for Claude tests, revoke it at session end. Never the prod key, never the personal premium key.
+
+---
+
+## Step-by-step action plan
+
+<Steps>
+<Step title="Audit what Claude Code can already see" stepNumber={1}>
+Check your `~/.claude/settings.json` and sensitive files in the current scope.
+
+```bash
+# List sensitive files in the directory where you run Claude
+find . -type f \( -name ".env*" -o -name "*.vault.yml" -o -name "*.pem" -o -name "credentials*" \) 2>/dev/null
+```
+
+If the list is not empty, complete the following steps before relaunching Claude in that directory.
+</Step>
+
+<Step title="Update .gitignore" stepNumber={2}>
+Make sure all sensitive patterns are gitignored. Copy this block if starting from scratch:
+
+```gitignore
+# Secrets and credentials
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+*.vault
+*.vault.yml
+*.vault.yaml
+secrets/
+credentials/
+*.pem
+*.key
+id_rsa*
+.aws/
+.kube/config
+```
+</Step>
+
+<Step title="Add deny rules in Claude Code" stepNumber={3}>
+Edit `~/.claude/settings.json` to explicitly block secret access, even if Claude asks:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env*)",
+      "Read(**/*.vault.yml)",
+      "Read(**/credentials/**)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Bash(cat ~/.env*)",
+      "Bash(env)",
+      "Bash(printenv)"
+    ]
+  }
+}
+```
+
+See [Permissions and sandbox](/advanced/permissions-sandbox) for the complete patterns.
+</Step>
+
+<Step title="Install a git-secrets guard" stepNumber={4}>
+Block secret commits at the Git level, including those proposed by Claude:
+
+```bash
+brew install git-secrets
+cd your-project
+git secrets --install
+git secrets --register-aws
+git secrets --add 'sk-ant-[A-Za-z0-9]{32,}'
+git secrets --add 'sk-proj-[A-Za-z0-9]{32,}'
+git secrets --add 'ghp_[A-Za-z0-9]{36}'
+git secrets --add 'AKIA[0-9A-Z]{16}'
+```
+</Step>
+
+<Step title="Migrate to a secrets manager if you still have .env everywhere" stepNumber={5}>
+For a production project, `.env` is a long-term antipattern. Pick a manager (Doppler is simplest to start, 1Password CLI if you already have a team license, Vault for complex infrastructure) and migrate progressively.
+
+The target rule: **no secret should ever be written to the dev machine disk**, nor readable by an AI agent.
+</Step>
+
+<Step title="If you already gave Claude a key, revoke it immediately" stepNumber={6} isLast>
+If you shared an API key in a prompt or let Claude read a `.env`, treat it as compromised. Full procedure: [Leaked Anthropic API key? Step-by-step recovery](/content/leaked-api-key-recovery).
+
+The same principle applies to any other key (OpenAI, GitHub, AWS). Immediate rotation, audit usage logs, clean Git history if needed.
+</Step>
+</Steps>
+
+---
+
+## Edge case: "but I need Claude to understand my production infra"
+
+Yes, but it can understand without seeing secrets. Give it:
+
+- The **structure** of the config file (keys without values)
+- The **list of environment variables** expected
+- **Test values** (real values stay local)
+
+Concrete example:
+
+```yaml
+# Safe to share with Claude: schema.yml
+database:
+  url: "<postgres URL, format: postgres://user:pass@host:port/db>"
+  pool_size: 20
+redis:
+  url: "<redis URL, format: redis://host:port>"
+api:
+  anthropic_key: "<sk-ant-... key>"
+  openai_key: "<sk-... key>"
+```
+
+Claude has all the info needed to propose a refactor, generate a `docker-compose.yml`, write a parser, without ever seeing real values.
+
+---
+
+## Further reading
+
+- [Leaked Anthropic API key? Step-by-step recovery](/content/leaked-api-key-recovery) — what to do if a leak already happened
+- [Claude Code environment variables](/reference/environment) — complete reference
+- [MCP security](/mcp/mcp-security) — MCP isolation and risks
+- [Permissions and sandbox](/advanced/permissions-sandbox) — fine-grained `allow`/`deny` configuration
+- [Claude Code security best practices](/content/security-best-practices) — general security checklist

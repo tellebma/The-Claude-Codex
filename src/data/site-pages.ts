@@ -875,6 +875,26 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-20",
   },
   {
+    path: "/content/ne-pas-donner-cles-api-a-claude-code",
+    pathsByLocale: { en: "/content/do-not-give-api-keys-to-claude-code" },
+    title: "Ne donnez jamais vos clés API ni vos vaults à Claude Code : ce qui peut vraiment mal tourner",
+    description:
+      "Partager une clé API ou un fichier vault avec Claude Code peut entraîner exfiltration, leak dans les logs ou commit public. Guide pratique pour cloisonner proprement.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-21",
+  },
+  {
+    path: "/content/ci-cd-cyber-securite",
+    pathsByLocale: { en: "/content/ci-cd-cyber-security" },
+    title: "CI/CD et cybersécurité en 2026 : pourquoi c'est devenu non-négociable avec les agents IA",
+    description:
+      "Avec l'explosion du code généré par IA, une CI/CD robuste n'est plus un bonus : c'est la ligne de défense. Guide pratique avec Red Team, Blue Team et Purple Team.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-21",
+  },
+  {
     path: "/about",
     title: "À propos du Claude Codex",
     description:

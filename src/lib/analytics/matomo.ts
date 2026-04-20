@@ -17,7 +17,7 @@
 type MatomoCommand = ReadonlyArray<unknown>;
 
 interface MatomoWindow extends Window {
-  _paq?: MatomoCommand[];
+  _paq?: Array<unknown[]>;
 }
 
 /**
@@ -28,7 +28,7 @@ export function pushMatomoCommand(command: MatomoCommand): void {
   if (typeof window === "undefined") return;
   const w = window as MatomoWindow;
   if (!Array.isArray(w._paq)) return;
-  w._paq.push(command);
+  w._paq.push(command as unknown[]);
 }
 
 /**

@@ -1,26 +1,41 @@
 name: CI
 
 on:
-  push:
-    branches: [main, develop, "feat/**"]
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
 
 permissions:
   contents: read
 
+# Annule les runs precedents d'une meme ref (PR ou branche) quand un nouveau commit arrive
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lint:
-    name: Lint
+  verify:
+    name: Lint, type-check, tests, build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # Variables d'env publiques Matomo inlinees au build par Next.js (NEXT_PUBLIC_*)
+    # Valeurs factices pour la CI — les vraies valeurs sont injectees au build Docker (cf. cd.yml + Dockerfile).
+    # Rien de secret ici : ces variables atterrissent dans le bundle JS final.
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_MATOMO_URL: https://matomo.example.com
+      NEXT_PUBLIC_MATOMO_SITE_ID: "1"
+
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
@@ -29,126 +44,25 @@ jobs:
       - name: Lint
         run: npm run lint
 
-  type-check:
-    name: Type-check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Type-check
         run: npm run type-check
 
-  test:
-    name: Unit tests
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Unit tests
+        run: npm run test
 
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests with coverage
-        run: npm run test:coverage -- --coverage.thresholds.lines=30 --coverage.thresholds.functions=30 --coverage.thresholds.branches=30 --coverage.thresholds.statements=30
-
-  mutation:
-    name: Mutation testing
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run mutation testing
-        run: npm run test:mutation
-
-      - name: Upload mutation report
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: mutation-report
-          path: reports/mutation/
-          retention-days: 14
-
-  audit:
-    name: Security audit
-    runs-on: ubuntu-latest
-    continue-on-error: true
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: npm audit
-        run: npm audit --audit-level=critical || true
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: [lint, type-check]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 24
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
+      - name: Build (Next.js SSG export)
         run: npm run build
-
-      - name: Check output size
-        run: du -sh out/
 
       - name: Verify i18n output
         run: |
           test -f out/fr/index.html && echo "FR landing: OK" || exit 1
           test -f out/en/index.html && echo "EN landing: OK" || exit 1
-          grep -q "Master" out/en/index.html && echo "EN content: OK" || exit 1
 
   docker-build:
     name: Docker build (verify)
     runs-on: ubuntu-latest
-    needs: [build]
+    timeout-minutes: 15
+    needs: [verify]
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

@@ -147,6 +147,24 @@ docker-compose.yml        Déploiement one-click
 | `npm run docker:release` | Build + Push en une commande |
 | `docker compose up -d --build` | Déploiement production |
 
+## Intégration continue (GitHub Actions)
+
+Le workflow `.github/workflows/ci.yml` s'exécute sur chaque `pull_request` vers `main` et chaque `push` sur `main`. Il enchaîne :
+
+1. `npm ci` (avec cache npm via `actions/setup-node@v4`, Node 20)
+2. `npm run lint`
+3. `npm run type-check`
+4. `npm run test`
+5. `npm run build` (avec valeurs Matomo factices, injectées au build pour le SSG)
+6. Vérification du build Docker (image construite puis démarrée pour tester `/fr/` et `/en/`)
+
+Points clés :
+
+- **Fail-fast** : la première étape qui échoue stoppe le run
+- **Concurrency** : les anciens runs d'une même PR/branche sont annulés automatiquement
+- **Timeout** : 15 minutes max par job
+- **Pas de déploiement automatique** : le déploiement production se fait manuellement via Docker sur Unraid. Les workflows `cd.yml` (push Docker Hub) et `release.yml` (semantic-release) se déclenchent uniquement sur succès du CI sur `main`.
+
 ## Sécurité
 
 Le site est déployé avec une configuration Nginx durcie incluant :

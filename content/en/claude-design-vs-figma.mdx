@@ -1,0 +1,131 @@
+---
+title: "Claude Design vs Figma: who wins the AI design race in 2026?"
+description: "Claude Design (Anthropic Labs, April 2026) takes on Figma AI directly. Honest comparison: conversation vs canvas, iteration, brand system, dev handoff."
+badge: "New"
+section: "content"
+order: 10
+datePublished: "2026-04-20"
+dateModified: "2026-04-20"
+---
+
+## What just happened
+
+On April 17, 2026, Anthropic launched **Claude Design** inside its new division Anthropic Labs. A tool that generates designs, prototypes, slides and one-pagers through a conversation, not on a canvas. On paper, this is the most serious frontal attack on Figma since First Draft shipped.
+
+The question on everyone's mind in the design industry: is this a real competitor or a toy for drafting slides? Short answer: it's both, depending on the angle you look at.
+
+<Callout type="info" title="Read this article in context">
+If you are a pro designer producing production-ready mockups, the answer leans toward "complement". If you are a PM, dev or freelancer who needs credible visuals without learning Figma, the answer leans toward "replacement".
+</Callout>
+
+## What Claude Design does
+
+You open [claude.ai/design](https://claude.ai/design), you write a description, you get a design. You refine it by continuing the conversation: "make the button smaller", "change the tone for an enterprise audience", "add a three-column pricing section". Under the hood, Claude Opus 4.7 powers the vision.
+
+Three capabilities stand out:
+
+1. **Auto brand system from your codebase**: Claude reads your GitHub repo and your design files to extract tokens, typography, spacing. No manual config. The generated design stays consistent with your existing product.
+2. **Multi-input**: text, image, document (DOCX, PPTX, XLSX), web capture. You can upload a Google Docs slide and ask for a redesign.
+3. **Direct handoff to Claude Code**: once a design is validated, you package it to Claude Code which implements it. No Dev Mode, no Code Connect to set up.
+
+Customer testimonials from Anthropic: Datadog went from "a week of back-and-forth" to "a single conversation". Brilliant went from "20+ prompts to recreate a page" to "2 prompts". These numbers are flattering, obviously. But the idea holds: iteration flows more smoothly in language than in object manipulation.
+
+## What Figma offers in 2026
+
+Figma has not been standing still. In 2026, its AI offering hinges on:
+
+- **First Draft**: generates an initial wireframe or design from a prompt. Uses a "Simple Design System" library of 372 pre-built components.
+- **Figma Make**: generates complete interactive prototypes with states and transitions, from natural language.
+- **Dev Mode + Code Connect**: the design→code bridge, mapping Figma components to your real React/Vue/Swift components.
+
+Figma's big advantage: 10 years of community, plugins, mature pro platform. First Draft's big limitation: once you make a manual edit, **you can no longer refine with a prompt**. First Draft is a starting point, not an iterative tool.
+
+## Head to head
+
+| Criterion | Claude Design | Figma AI |
+|-----------|---------------|----------|
+| **Philosophy** | Conversational | Visual (canvas) |
+| **Iteration after edit** | ✅ Continues via chat | ❌ Stops after manual edit |
+| **Brand system** | Auto-extracted from codebase + files | Figma default library, custom libs for enterprise |
+| **Inputs** | Text, image, DOCX, PPTX, XLSX, web capture | Text, image |
+| **Export** | Canva, PDF, PPTX, HTML, internal URL | Figma file, Dev Mode, 3rd-party plugins |
+| **Dev handoff** | Direct to Claude Code | Dev Mode + Code Connect (more setup, more precise) |
+| **Target user** | PMs, devs, non-designers, rapid prototyping | Pro designers, product teams |
+| **Learning curve** | Near zero (you know how to speak) | Medium to high |
+| **Ecosystem** | Young (April 2026) | Mature, plugins, community |
+| **Pricing** | Included in Claude Pro/Max/Team/Enterprise | Paid Figma plans |
+| **Collaboration** | Org sharing with view/edit permissions | Strong: multi-cursor, comments, branches |
+| **Pixel-perfect** | Limited, ideation-oriented | Strong, production-ready |
+
+## Concrete scenarios
+
+### You are prepping an investor pitch
+
+**Claude Design.** Start from a doc, ask for a one-pager and 5 slides. Iterate by talking. Export PPTX, done. Figma for this is overkill.
+
+### You are redesigning your product dashboard
+
+**Figma, with Claude Design upstream.** Use Claude Design to explore 3-4 directions in 15 minutes. When one direction stands out, bring it into Figma to push it to pixel-perfect and hand it over to your dev team.
+
+### You are a solo dev who wants a credible landing page
+
+**Claude Design → Claude Code.** Describe what you want, iterate, hand off to Claude Code for implementation. No need to learn Figma.
+
+### You are a designer at a scale-up
+
+**Figma stays at the core.** Your team workflow, code-linked components, annotations: nothing replaces that. Claude Design can serve as a draft for early explorations you refine afterwards.
+
+### You are building a cross-team design system
+
+**Figma.** Claude Design extracts a design system from a codebase, but governing and versioning a design system happens in Figma (or dedicated tools like Zeroheight). Claude is not mature enough here.
+
+## Blind spots of Claude Design
+
+Be honest with yourself before adopting. Four blind spots today:
+
+1. **Research preview**: the API and behavior can change. No stability commitment.
+2. **No realtime multi-cursor**: sharing is "view or edit", not the synchronous collaboration Figma pioneered.
+3. **Pixel-perfect is not at par**: Claude Design is ideational. For a spec ready to ship to a dev, Figma keeps the edge.
+4. **Inline comments are thinner than Figma threads**: they exist but are less mature.
+
+## Blind spots of Figma facing this
+
+1. **No conversation**: First Draft is one-shot. You do not iterate with Figma AI, you edit manually.
+2. **Design silo**: Figma lives in Figma. Claude Design lives in the broader Claude flow (doc, code, design together).
+3. **Adoption curve**: a non-designer takes days to become productive on Figma. They are productive on Claude Design in 10 minutes.
+4. **Pricing**: Claude Design is included in Claude Pro ($20/month). Figma Organization starts higher.
+
+## Honest verdict
+
+This is not a knockout match. The two tools serve different audiences:
+
+- **Claude Design takes the ideation + rapid prototyping + non-designer layer.** A big segment that Figma addressed imperfectly.
+- **Figma keeps pro production + team collaboration + ecosystem maturity.** Nobody migrates a mature design workflow with 500 components to Claude Design in 2026.
+
+In 18-24 months, Claude Design could bite seriously into the "amateur and semi-pro design" segment if Anthropic iterates fast (auto brand system is very strong) and if pricing stays bundled with Claude. Figma will stay dominant for pro designers, especially if they keep strengthening the design→code bridge (Code Connect).
+
+The real short-term winner: **teams using both**. Claude Design upstream for ideation, Figma downstream for production. The workflow hybridizes, it does not get replaced.
+
+## Further reading
+
+- [Official Anthropic announcement](https://www.anthropic.com/news/claude-design-anthropic-labs)
+- [Claude Design (research preview)](https://claude.ai/design)
+- Internal guide: [Using Claude Code to implement a design](/advanced/ultraplan)
+- [Claude Opus 4.7](https://www.anthropic.com/claude) — the vision model powering Claude Design
+
+## FAQ
+
+**Does Claude Design replace Figma?**
+No, not today. It takes an upstream layer (ideation, prototyping, non-designers) that Figma addressed weakly. For production-ready team design, Figma remains the reference.
+
+**Can I use Claude Design for free?**
+No, a Claude Pro, Max, Team or Enterprise subscription is required. But it is bundled at no extra cost.
+
+**Does Claude Design really read my codebase?**
+Yes, that is the key differentiator. It extracts the design system (tokens, typography, components) from your files to stay consistent with your existing product.
+
+**Can I export to Figma?**
+Not as of today. Exports are Canva, PDF, PPTX, HTML, internal URL. No `.fig` export. A limit if you plan to enrich downstream in Figma.
+
+**Which integrations should I wait for?**
+Canva and Brilliant are confirmed. Anthropic announces more integrations "in the coming weeks". No precise public roadmap.

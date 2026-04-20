@@ -846,6 +846,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-20",
   },
   {
+    path: "/content/claude-design-vs-figma",
+    title: "Claude Design vs Figma : qui va gagner la guerre du design IA en 2026 ?",
+    description:
+      "Claude Design (Anthropic Labs, avril 2026) attaque frontalement Figma AI. Comparatif honnête : conversation vs toile, itération, brand system, handoff dev.",
+    priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-20",
+  },
+  {
     path: "/about",
     title: "À propos du Claude Codex",
     description:

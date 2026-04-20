@@ -5,6 +5,8 @@
   "description": "The Claude Codex - Guide de reference pour maitriser Claude Code",
   "scripts": {
     "dev": "next dev",
+    "build:llms": "node scripts/generate-llms-txt.ts",
+    "prebuild": "npm run build:llms",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

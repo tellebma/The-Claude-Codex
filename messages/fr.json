@@ -198,6 +198,16 @@
     "fr": "Français",
     "en": "English"
   },
+  "notFound": {
+    "title": "Page introuvable",
+    "subtitle": "Cette page n'existe pas ou a été déplacée.",
+    "suggestionsTitle": "Vous cherchiez peut-être...",
+    "fallbackTitle": "Par où commencer ?",
+    "searchHint": "Utilisez la recherche pour trouver ce que vous cherchez :",
+    "backToHome": "Retour à l'accueil",
+    "openSearch": "Ouvrir la recherche",
+    "urlLabel": "URL demandée :"
+  },
   "sectionNav": {
     "getting-started": {
       "title": "Démarrer",

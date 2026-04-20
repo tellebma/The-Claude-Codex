@@ -198,6 +198,16 @@
     "fr": "Français",
     "en": "English"
   },
+  "notFound": {
+    "title": "Page not found",
+    "subtitle": "This page does not exist or has been moved.",
+    "suggestionsTitle": "Were you looking for...",
+    "fallbackTitle": "Where to start?",
+    "searchHint": "Use search to find what you're looking for:",
+    "backToHome": "Back to home",
+    "openSearch": "Open search",
+    "urlLabel": "Requested URL:"
+  },
   "sectionNav": {
     "getting-started": {
       "title": "Getting Started",

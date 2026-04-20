@@ -1516,6 +1516,34 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "development",
     ],
   },
+  // Claude Design vs Figma
+  {
+    title: "Claude Design vs Figma: who wins the AI design race in 2026?",
+    description:
+      "Claude Design (Anthropic Labs, April 2026) takes on Figma AI directly. Honest comparison: conversation vs canvas, iteration, brand system, dev handoff.",
+    href: "/content/claude-design-vs-figma",
+    section: "Content",
+    keywords: [
+      "claude design",
+      "figma",
+      "anthropic labs",
+      "first draft",
+      "figma make",
+      "ai design",
+      "design generation",
+      "prototype",
+      "brand system",
+      "claude opus 4.7",
+      "dev mode",
+      "code connect",
+      "handoff",
+      "mockup",
+      "ui",
+      "ux",
+      "comparison",
+      "2026",
+    ],
+  },
   // About
   {
     title: "About The Claude Codex",

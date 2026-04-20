@@ -187,6 +187,22 @@ experimental.optimizePackageImports: ['lucide-react', 'framer-motion']
 | prism-react-renderer | Syntax highlighting |
 | clsx | Classes CSS conditionnelles |
 
+## Analytics
+
+Matomo cookieless est initialisé dans `src/app/[locale]/layout.tsx` (script injecté quand `NEXT_PUBLIC_MATOMO_URL` et `NEXT_PUBLIC_MATOMO_SITE_ID` sont définis). Il gère le pageview et le tracking de liens natif (`enableLinkTracking`).
+
+En plus du pageview, les événements suivants sont envoyés via `window._paq` (module `src/lib/analytics/matomo.ts`) :
+
+| Catégorie | Action | Label | Source |
+|-----------|--------|-------|--------|
+| `engagement` | `scroll_depth` | `25` / `50` / `75` / `100` | `useScrollDepthTracking` (hook dans `src/hooks/`) actif sur toutes les pages utilisant `SectionLayout`. Débounce 150 ms, chaque seuil tiré une seule fois par page |
+| `navigation` | `external_link_click` | URL absolue cible | `useExternalLinkTracking` via un listener délégué `click` capture-phase |
+| `configurator` | `configurator_start` | — | `trackConfigurator.start()` au mount de `ConfiguratorWizard` |
+| `configurator` | `configurator_step` | `1` .. `4` | à chaque changement d'étape |
+| `configurator` | `configurator_complete` | — | premier affichage du preview (preset ou étape 4 validée) |
+
+Ces hooks sont montés via `<AnalyticsTracker />` (composant `"use client"` invisible) inclus dans `SectionLayout`. Pour instrumenter une page hors `SectionLayout`, importer et monter le composant côté client. Tous les helpers sont SSR-safe : garde `typeof window !== 'undefined'` et `Array.isArray(window._paq)`. Aucune donnée personnelle n'est envoyée : uniquement des URLs cibles et des labels contrôlés côté code.
+
 ## Docker & déploiement
 
 - Dockerfile multi-stage : étape build (node:20-alpine) → étape serve (nginx:alpine)

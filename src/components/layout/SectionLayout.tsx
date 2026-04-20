@@ -2,6 +2,7 @@ import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ScrollToTop } from "@/components/ui/ScrollToTop";
 import { TableOfContents } from "@/components/ui/TableOfContents";
 import { SectionSidebar } from "@/components/layout/SectionSidebar";
+import { AnalyticsTracker } from "@/components/layout/AnalyticsTracker";
 
 interface SectionLayoutProps {
   readonly children: React.ReactNode;
@@ -10,6 +11,7 @@ interface SectionLayoutProps {
 export function SectionLayout({ children }: SectionLayoutProps) {
   return (
     <>
+      <AnalyticsTracker />
       <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
         <Breadcrumb />
       </div>

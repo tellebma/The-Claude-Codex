@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { ArrowLeft, ArrowRight, RotateCcw, Eye, EyeOff } from "lucide-react";
 import type {
   ConfigState,
@@ -14,6 +14,7 @@ import type {
 import { WIZARD_STEP_LABELS } from "@/lib/configurator/types";
 import { PRESETS } from "@/lib/configurator/presets";
 import { generateAll } from "@/lib/configurator/generator";
+import { trackConfigurator } from "@/lib/analytics/trackConfigurator";
 import { StepProfile } from "./StepProfile";
 import { StepStack } from "./StepStack";
 import { StepSubscription } from "./StepSubscription";
@@ -35,9 +36,30 @@ export function ConfiguratorWizard() {
   const [showPreview, setShowPreview] = useState(false);
   const [showPreviewMobile, setShowPreviewMobile] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
+  const hasStartedRef = useRef(false);
+  const hasCompletedRef = useRef(false);
 
   // Memoize generated config
   const generatedConfig = useMemo(() => generateAll(config), [config]);
+
+  // Fire `configurator_start` on mount (once per page view).
+  useEffect(() => {
+    if (hasStartedRef.current) return;
+    hasStartedRef.current = true;
+    trackConfigurator.start();
+  }, []);
+
+  // Fire `configurator_step` whenever the current step changes.
+  useEffect(() => {
+    trackConfigurator.step(step);
+  }, [step]);
+
+  // Fire `configurator_complete` the first time the preview is shown.
+  useEffect(() => {
+    if (!showPreview || hasCompletedRef.current) return;
+    hasCompletedRef.current = true;
+    trackConfigurator.complete();
+  }, [showPreview]);
 
   // Profile selection
   const handleProfileSelect = useCallback((profile: Profile) => {

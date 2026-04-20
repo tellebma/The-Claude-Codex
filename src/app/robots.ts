@@ -6,9 +6,13 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        // `/` implicitly covers every path, including /llms.txt and
+        // /llms-full.txt. We list them explicitly so the intent is obvious
+        // to anyone inspecting robots.txt (including AI crawlers).
+        allow: ["/", "/llms.txt", "/llms-full.txt"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

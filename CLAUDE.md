@@ -129,6 +129,17 @@ Chaque section l'utilise via son `layout.tsx` : `<SectionLayout>{children}</Sect
 - `createWebSiteSchema()` : JSON-LD WebSite (homepage)
 - `serializeJsonLd()` : sérialisation sécurisée pour `<script type="application/ld+json">`
 
+### Fichiers pour crawlers IA (`/llms.txt` et `/llms-full.txt`)
+
+Suivent la spec [llmstxt.org](https://llmstxt.org) pour faciliter la citation du site par ChatGPT, Claude, Perplexity et Gemini.
+
+- `/llms.txt` : index court (H1 titre, blockquote description, sections H2 avec listes de liens), FR et EN, avec les sections principales et les pages essentielles
+- `/llms-full.txt` : compilation markdown de tous les fichiers `.mdx` de `content/fr/` et `content/en/`, composants MDX strippés pour rester lisible par une IA
+
+**Génération** : `scripts/generate-llms-txt.ts`, appelé automatiquement via le hook `prebuild` du `package.json` (donc avant chaque `next build`). Peut aussi être lancé à la main avec `npm run build:llms`. Les fichiers sont écrits dans `public/` puis copiés dans `out/` par Next.js.
+
+**Maintenance** : la liste des sections et pages "essentielles" de `llms.txt` est codée en dur dans le script (`SECTION_LANDINGS_FR`, `SECTION_LANDINGS_EN`, `POPULAR_SLUGS_FR`, `POPULAR_SLUGS_EN`). Mettre à jour quand une nouvelle section ou une page cornerstone est ajoutée.
+
 ## Style de code
 
 - TypeScript strict, jamais de `any`

@@ -48,3 +48,7 @@ next-env.d.ts
 # claude code local settings
 .claude/settings.local.json
 doc/settings.local.json
+
+# Generated at build time by scripts/generate-llms-txt.ts
+/public/llms.txt
+/public/llms-full.txt

@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.3...v1.2.0) (2026-04-20)
+
+
+### Features
+
+* **analytics:** add Matomo tracking events for retention analysis ([#37](https://github.com/tellebma/The-Claude-Codex/issues/37)) ([097ac4f](https://github.com/tellebma/The-Claude-Codex/commit/097ac4fb8a92c059e6867b8b026f2295a3e6b7a5))
+* **content:** add 2 SEO-driven articles (leaked API key, plan vs thinking) ([#43](https://github.com/tellebma/The-Claude-Codex/issues/43)) ([2942e00](https://github.com/tellebma/The-Claude-Codex/commit/2942e007745ba20d5558dac6f38a3fc235637336))
+* **content:** add Claude Design vs Figma comparison article (FR + EN) ([#45](https://github.com/tellebma/The-Claude-Codex/issues/45)) ([c3eea72](https://github.com/tellebma/The-Claude-Codex/commit/c3eea721fc7ba4606858c7ae1c35954e9cd4886b))
+* **content:** expand environment variables reference for SEO queries ([#44](https://github.com/tellebma/The-Claude-Codex/issues/44)) ([b06b0a3](https://github.com/tellebma/The-Claude-Codex/commit/b06b0a353d62df472f9e61abc7f117619dc2e219))
+* **seo:** generate llms.txt and llms-full.txt for AI crawlers ([#39](https://github.com/tellebma/The-Claude-Codex/issues/39)) ([22a429c](https://github.com/tellebma/The-Claude-Codex/commit/22a429cb959d963698a98ee684decac88bbe7955))
+* **ux:** implement smart 404 page with contextual suggestions ([#38](https://github.com/tellebma/The-Claude-Codex/issues/38)) ([b8c7f39](https://github.com/tellebma/The-Claude-Codex/commit/b8c7f390370fc66f7ad860d9207efa0a89a4b967))
+
 ## [1.1.3](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.2...v1.1.3) (2026-04-20)
 
 

@@ -1190,7 +1190,7 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     title: "MCP security: real dangers and how to protect yourself",
     description:
       "Prompt injection, data exfiltration, supply chain attacks, permission confusion. Copyable security checklist for CLAUDE.md.",
-    href: "/mcp/securite-mcp",
+    href: "/mcp/mcp-security",
     section: "MCP",
     keywords: [
       "security",
@@ -1447,7 +1447,7 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     title: "Real costs of Claude Code: tokens, MCPs, and subscriptions",
     description:
       "Current Anthropic pricing, concrete per-session calculations, MCP impact on consumption, plan comparison, and optimization strategies.",
-    href: "/content/couts-reels-claude-code",
+    href: "/content/real-costs-claude-code",
     section: "Content",
     keywords: [
       "cost",
@@ -1473,7 +1473,7 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     title: "8 misconceptions about Claude Code - Myths and realities",
     description:
       "The most common myths debunked: MCP security, real costs, correct terminology, auto mode risks, and context limits.",
-    href: "/content/mythes-claude-code",
+    href: "/content/claude-code-myths",
     section: "Content",
     keywords: [
       "myths",
@@ -1496,7 +1496,7 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     title: "Claude Code security guide: principles and best practices",
     description:
       "Least privilege, audit before installation, configuration profiles, monitoring, session rotation, and complete copyable checklist.",
-    href: "/content/bonnes-pratiques-securite",
+    href: "/content/security-best-practices",
     section: "Content",
     keywords: [
       "security",

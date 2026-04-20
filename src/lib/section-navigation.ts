@@ -1,11 +1,26 @@
 export interface SectionNavItem {
   readonly labelKey: string;
   readonly href: string;
+  /**
+   * Per-locale href overrides. When a locale uses a different slug than
+   * the canonical `href` (typically because the slug has been translated),
+   * list its locale-specific href here. Locales absent from this map fall
+   * back to `href`. Keys are locale codes (e.g. "fr", "en").
+   */
+  readonly hrefByLocale?: Readonly<Record<string, string>>;
 }
 
 export interface SectionNavConfig {
   readonly titleKey: string;
   readonly items: ReadonlyArray<SectionNavItem>;
+}
+
+/**
+ * Returns the href for a nav item in a given locale, falling back to the
+ * canonical `href` when no locale-specific override is defined.
+ */
+export function resolveNavHref(item: SectionNavItem, locale: string): string {
+  return item.hrefByLocale?.[locale] ?? item.href;
 }
 
 export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
@@ -31,7 +46,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "mcp.best-development", href: "/mcp/best-development" },
       { labelKey: "mcp.best-design", href: "/mcp/best-design" },
       { labelKey: "mcp.first-workflow", href: "/mcp/first-workflow" },
-      { labelKey: "mcp.securite-mcp", href: "/mcp/securite-mcp" },
+      {
+        labelKey: "mcp.securite-mcp",
+        href: "/mcp/securite-mcp",
+        hrefByLocale: { en: "/mcp/mcp-security" },
+      },
       { labelKey: "mcp.create-mcp-typescript", href: "/mcp/create-mcp-typescript" },
       { labelKey: "mcp.create-mcp-python", href: "/mcp/create-mcp-python" },
       { labelKey: "mcp.advanced-protocol", href: "/mcp/advanced-protocol" },
@@ -180,9 +199,21 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "content.skills-guide", href: "/content/skills-guide" },
       { labelKey: "content.prompting-guide", href: "/content/prompting-guide" },
       { labelKey: "content.future-vision", href: "/content/future-vision" },
-      { labelKey: "content.couts-reels", href: "/content/couts-reels-claude-code" },
-      { labelKey: "content.mythes", href: "/content/mythes-claude-code" },
-      { labelKey: "content.securite", href: "/content/bonnes-pratiques-securite" },
+      {
+        labelKey: "content.couts-reels",
+        href: "/content/couts-reels-claude-code",
+        hrefByLocale: { en: "/content/real-costs-claude-code" },
+      },
+      {
+        labelKey: "content.mythes",
+        href: "/content/mythes-claude-code",
+        hrefByLocale: { en: "/content/claude-code-myths" },
+      },
+      {
+        labelKey: "content.securite",
+        href: "/content/bonnes-pratiques-securite",
+        hrefByLocale: { en: "/content/security-best-practices" },
+      },
     ],
   },
 };

@@ -1,10 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import {
   sectionNavigation,
   getSectionFromPathname,
+  resolveNavHref,
 } from "@/lib/section-navigation";
 import clsx from "clsx";
 
@@ -12,6 +13,7 @@ export function SectionSidebar() {
   const pathname = usePathname();
   const sectionKey = getSectionFromPathname(pathname);
   const t = useTranslations("sectionNav");
+  const locale = useLocale();
 
   if (!sectionKey) {
     return null;
@@ -32,7 +34,7 @@ export function SectionSidebar() {
   const normalizedPathname = pathname.replace(/\/$/, "");
   const totalPages = config.items.length;
   const currentIndex = config.items.findIndex(
-    (item) => normalizedPathname === item.href.replace(/\/$/, "")
+    (item) => normalizedPathname === resolveNavHref(item, locale).replace(/\/$/, "")
   );
   const currentPage = currentIndex >= 0 ? currentIndex + 1 : 0;
 
@@ -72,13 +74,14 @@ export function SectionSidebar() {
         )}
         <ul className="space-y-1">
           {config.items.map((item) => {
-            const normalizedHref = item.href.replace(/\/$/, "");
+            const localeHref = resolveNavHref(item, locale);
+            const normalizedHref = localeHref.replace(/\/$/, "");
             const isActive = normalizedPathname === normalizedHref;
 
             return (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={localeHref}
                   aria-current={isActive ? "page" : undefined}
                   className={clsx(
                     "block rounded-lg px-3 py-2 text-sm transition-colors",

@@ -12,6 +12,13 @@ export interface PageInfo {
     | "yearly"
     | "never";
   readonly lastModified?: string;
+  /**
+   * Per-locale path overrides. When a locale diverges from the canonical
+   * `path` (for example when a slug has been translated), list its
+   * locale-specific path here. Locales absent from this map fall back to
+   * `path`. The keys are locale codes (e.g. "fr", "en").
+   */
+  readonly pathsByLocale?: Readonly<Record<string, string>>;
 }
 
 export const SITE_PAGES: ReadonlyArray<PageInfo> = [
@@ -161,12 +168,13 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/mcp/securite-mcp",
+    pathsByLocale: { en: "/mcp/mcp-security" },
     title: "Sécurité des MCP : dangers réels et comment s’en protéger",
     description:
       "Guide complet de sécurité pour les MCP Claude Code : prompt injection, exfiltration de données, supply chain attacks, permissions et checklist de sécurité.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-20",
   },
   {
     path: "/mcp/create-mcp-typescript",
@@ -809,30 +817,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/content/couts-reels-claude-code",
+    pathsByLocale: { en: "/content/real-costs-claude-code" },
     title: "Coûts réels de Claude Code : tokens, MCP et abonnements",
     description:
       "Calcul concret des coûts Claude Code selon votre usage : prix Anthropic à jour, impact des MCP, comparatif des plans, et stratégies pour optimiser votre budget.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-20",
   },
   {
     path: "/content/mythes-claude-code",
+    pathsByLocale: { en: "/content/claude-code-myths" },
     title: "8 idées reçues sur Claude Code : Mythes et réalités",
     description:
       "Les 8 mythes les plus répandus sur Claude Code démystifiés : sécurité des MCP, coûts, terminologie, risques du mode auto et limites du contexte.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-20",
   },
   {
     path: "/content/bonnes-pratiques-securite",
+    pathsByLocale: { en: "/content/security-best-practices" },
     title: "Sécurité Claude Code : bonnes pratiques et checklist copiable",
     description:
       "Moindre privilège, audit MCP, profils sandboxés, scan des secrets : guide pratique avec checklist prête à l'emploi pour sécuriser Claude Code en équipe.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-13",
+    lastModified: "2026-04-20",
   },
   {
     path: "/about",

@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.2...v1.1.3) (2026-04-20)
+
+
+### Bug Fixes
+
+* **i18n:** rename 4 EN slugs from French to English ([#35](https://github.com/tellebma/The-Claude-Codex/issues/35)) ([f6e2fd5](https://github.com/tellebma/The-Claude-Codex/commit/f6e2fd51e09c08209e597aebb37fac3a458e4955))
+
 ## [1.1.2](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.1...v1.1.2) (2026-04-19)
 
 

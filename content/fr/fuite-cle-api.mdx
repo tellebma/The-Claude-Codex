@@ -226,8 +226,8 @@ trufflehog git file://. --only-verified
 
 ### Stocker les secrets dans le CI/CD, pas dans le code
 
-<Tabs>
-<Tab label="GitHub Actions">
+#### GitHub Actions
+
 ```yaml
 # Dans votre fichier workflow : référencer le secret, jamais le coder en dur
 - name: Lancer l'intégration Claude
@@ -237,8 +237,9 @@ trufflehog git file://. --only-verified
 ```
 
 Ajouter le secret sur : `github.com/OWNER/REPO/settings/secrets/actions`
-</Tab>
-<Tab label="Vercel">
+
+#### Vercel
+
 ```bash
 # Ajouter via Vercel CLI
 vercel env add ANTHROPIC_API_KEY production
@@ -246,8 +247,9 @@ vercel env add ANTHROPIC_API_KEY production
 # Ou dans le dashboard Vercel : Project > Settings > Environment Variables
 # Définir le scope selon Production / Preview / Development
 ```
-</Tab>
-<Tab label="Doppler (gestionnaire de secrets)">
+
+#### Doppler (gestionnaire de secrets)
+
 ```bash
 # Doppler synchronise les secrets dans tous les environnements
 # sans les stocker dans des fichiers
@@ -256,8 +258,6 @@ doppler run -- node mon-script.js
 
 # Les secrets restent dans Doppler, votre code ne voit jamais la valeur brute
 ```
-</Tab>
-</Tabs>
 
 ### Activer GitHub Secret Scanning
 

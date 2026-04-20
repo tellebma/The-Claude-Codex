@@ -151,7 +151,7 @@ docker-compose.yml        Déploiement one-click
 
 Le workflow `.github/workflows/ci.yml` s'exécute sur chaque `pull_request` vers `main` et chaque `push` sur `main`. Il enchaîne :
 
-1. `npm ci` (avec cache npm via `actions/setup-node@v4`, Node 20)
+1. `npm ci` (Node 22 aligné avec le Dockerfile, `actions/setup-node` SHA-pinné pour la supply-chain)
 2. `npm run lint`
 3. `npm run type-check`
 4. `npm run test`

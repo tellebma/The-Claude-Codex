@@ -1,0 +1,243 @@
+---
+title: "Plan mode vs Thinking mode in Claude Code: the key differences"
+description: "Plan mode makes Claude propose a plan before touching code. Thinking mode makes Claude reason longer internally. Two distinct levers, two different goals."
+badge: "GUIDE"
+datePublished: "2026-04-20"
+dateModified: "2026-04-20"
+---
+
+**The primary difference**: Plan mode tells Claude to propose a step-by-step plan and wait for your approval before executing anything. Thinking mode (Extended Thinking) allocates extra internal reasoning tokens so Claude thinks more deeply before answering. Plan mode controls *what Claude does next*. Thinking mode controls *how carefully Claude reasons*. You can use one, the other, or both at the same time.
+
+## Quick comparison
+
+| | Plan mode | Thinking mode (Extended Thinking) |
+|---|---|---|
+| **What it changes** | The workflow (plan first, act second) | The depth of internal reasoning |
+| **Activation** | `Shift+Tab` or explicit prompt request | `Alt+T` / `Option+T`, or `think hard` / `ultrathink` in the prompt |
+| **Extra time** | Yes, waiting for your approval | Yes, token budget for silent reasoning |
+| **Visible output** | A structured plan you can approve or reject | The final answer (reasoning hidden by default) |
+| **Cost impact** | No direct token increase | Yes, up to 31,999 extra reasoning tokens |
+| **Best for** | Multi-file changes, risky refactoring, new features | Complex bugs, architecture decisions, in-depth analysis |
+| **Works without the other** | Yes | Yes |
+| **Can combine both** | Yes | Yes |
+
+## Plan mode in detail
+
+### What it actually does
+
+Plan mode is a workflow gate. When you activate it, Claude produces a structured plan describing what it intends to do, lists the files it will touch, explains the risks, and then stops. Nothing gets modified until you give the go-ahead. If you reject the plan, you can ask for a revision without any code having been written.
+
+Think of it like asking a contractor for a quote before signing anything. The contractor surveys the job, writes up a scope of work, and hands it to you. You decide whether to proceed.
+
+### How to activate it
+
+```bash
+# Keyboard shortcut in the Claude Code interface
+Shift+Tab    # cycles through modes including Plan mode
+```
+
+You can also trigger it through your prompt without touching any shortcuts:
+
+```markdown
+"Before writing anything, propose a detailed plan.
+List the files you will modify, what you will change in each,
+and the risks involved. Wait for my approval before starting."
+```
+
+Or more concisely:
+
+```markdown
+"Plan first, then wait for my go-ahead."
+```
+
+### A concrete example: multi-file refactoring
+
+Your prompt:
+```markdown
+"I want to extract our authentication logic from UserController.ts
+into a dedicated AuthService. There are currently 12 components
+importing from UserController. Plan the migration before touching anything."
+```
+
+What Claude produces in Plan mode:
+```markdown
+## Migration plan: UserController.ts -> AuthService
+
+### Scope
+- Create AuthService.ts (new file)
+- Modify UserController.ts (remove auth methods, import AuthService)
+- Update 12 import sites
+
+### Step 1: Create AuthService.ts
+Files: src/services/AuthService.ts (new)
+Changes: Extract login(), logout(), verifyToken(), refreshToken()
+Risk: none (additive only)
+
+### Step 2: Update UserController.ts
+Files: src/controllers/UserController.ts
+Changes: Remove 4 methods, add import, delegate calls
+Risk: low (existing tests cover this path)
+
+### Step 3: Update import sites
+Files: 12 components listed below
+[...]
+
+Ready to proceed with Step 1?
+```
+
+Claude will not write a single line of code until you respond. You can approve all steps, adjust the plan, or cancel entirely.
+
+<Callout type="tip" title="Plan mode is not limited to code">
+You can use Plan mode for any multi-step task: database migrations, documentation restructuring, configuration changes. Any time you want a preview before execution, ask for a plan.
+</Callout>
+
+## Thinking mode in detail
+
+### What it actually does
+
+Extended Thinking (Thinking mode) reserves a portion of the context window for internal reasoning before Claude writes its response. That reasoning is not shown to you by default, but it structures Claude's thinking more rigorously: Claude considers multiple approaches, evaluates trade-offs, spots edge cases, then produces a more thorough answer.
+
+The analogy: instead of speaking the first thing that comes to mind, Claude pauses, thinks through the problem on a mental whiteboard, then gives you its considered answer.
+
+### How to activate it
+
+```bash
+# Keyboard toggle in Claude Code
+Alt+T        # Linux / Windows
+Option+T     # macOS
+
+# View the internal reasoning (verbose mode)
+Ctrl+O
+
+# Environment variable: cap the reasoning token budget
+export MAX_THINKING_TOKENS=10000
+```
+
+You can also trigger deeper thinking directly in your prompt:
+
+```markdown
+# Mild increase
+"Think carefully before answering."
+"think hard"
+
+# Maximum reasoning budget
+"ultrathink"
+"Think step by step, take the time you need."
+```
+
+<Callout type="info" title="Enabled by default">
+Extended Thinking is on by default in Claude Code, with up to 31,999 tokens reserved for internal reasoning. You can disable it for simple tasks where speed matters more than depth.
+</Callout>
+
+### When to use it
+
+Thinking mode earns its cost when the problem is genuinely hard:
+
+- A bug you have tried to fix twice already and cannot understand
+- Choosing between architectural approaches with real trade-offs
+- Security analysis that needs to go beyond the obvious checklist
+- Refactoring decisions that affect many layers of the codebase
+
+For a typo fix or a simple CRUD endpoint, it adds latency without adding value.
+
+### Cost impact
+
+Each reasoning token is billed like any other token. With up to 31,999 reasoning tokens per request, a single response with Extended Thinking at full budget on Sonnet can cost noticeably more than the same request without it. For critical decisions, the investment is usually worth it. For routine tasks, disable it.
+
+```bash
+# Reduce the budget to keep costs reasonable on less complex tasks
+export MAX_THINKING_TOKENS=5000
+```
+
+## When to use which
+
+### Scenario 1: multi-file refactoring
+
+**Use Plan mode.**
+
+You are moving code across 20 files. The risk is accidental breakage, missed imports, or a half-finished state if something goes wrong mid-way. Plan mode shows you the full scope before any file is touched, so you can spot problems in the plan rather than in the code.
+
+```markdown
+"Migrate our state management from Redux to Zustand.
+There are 25 components using Redux, 8 slices, and 15 selectors.
+Plan the migration phase by phase, list affected files per phase,
+and wait for my go-ahead before starting."
+```
+
+### Scenario 2: a bug you cannot understand
+
+**Use Thinking mode.**
+
+The bug is intermittent, the logs are confusing, and you have already tried the obvious fixes. Thinking mode gives Claude a longer runway to consider less obvious causes: race conditions, edge cases in async flows, interaction between two modules that seem unrelated.
+
+```markdown
+"[ultrathink]
+
+Our Node.js API drops roughly 1 in 500 requests silently.
+No error in the logs, status 200 returned, but the action did not persist.
+Redis for sessions, 3 app instances behind Nginx, PostgreSQL.
+Analyze all realistic causes including race conditions and connection pool exhaustion."
+```
+
+### Scenario 3: designing a new feature from scratch
+
+**Use both.**
+
+New architecture decisions benefit from deep reasoning (Thinking mode to weigh options) and from a visible plan (Plan mode so you can validate the chosen approach before any code is written).
+
+```markdown
+"[Extended Thinking on]
+
+I need to add a real-time notification system.
+Requirements: WebSocket with SSE fallback, auto-reconnect,
+unread count, Redis-backed persistence.
+
+First reason deeply about the architecture options.
+Then propose a phased implementation plan.
+Wait for my approval before writing any code."
+```
+
+## Can you use both at the same time?
+
+Yes. They are independent features that complement each other:
+
+- **Thinking mode** improves the quality of Claude's reasoning when it drafts the plan
+- **Plan mode** ensures you see and approve that plan before execution begins
+
+The combination is most useful for tasks where both the *analysis* and the *execution* carry risk: architecture migrations, security-sensitive features, anything touching shared infrastructure.
+
+<Callout type="warning" title="More tokens, more cost">
+Combining both increases session cost. Thinking mode adds reasoning tokens; Plan mode adds a full planning exchange before the implementation exchange. Reserve the combination for tasks that genuinely warrant it.
+</Callout>
+
+## FAQ
+
+**What is the primary difference between Plan mode and Thinking mode in Claude Code?**
+
+Plan mode is a workflow control: Claude stops after writing a plan and does nothing until you approve. Thinking mode is a reasoning control: Claude thinks longer internally before answering, but does not pause or ask for approval. Plan mode changes the sequence of actions. Thinking mode changes the quality of reasoning behind those actions.
+
+**Does Thinking mode show me Claude's reasoning?**
+
+Not by default. The reasoning happens internally and is not included in the response. You can expose it by pressing `Ctrl+O` (verbose mode), which shows the internal thought process. Some find this useful for debugging why Claude reached a particular conclusion.
+
+**Can I set a default for these modes?**
+
+Yes. In `~/.claude/settings.json`:
+
+```json
+{
+  "alwaysThinkingEnabled": true
+}
+```
+
+For Plan mode, there is no persistent toggle equivalent; it is either activated per-session via `Shift+Tab` or per-request via prompt phrasing.
+
+**Does Plan mode prevent Claude from writing code?**
+
+Yes, in that session flow. Claude will not create, edit, or delete any file until you explicitly approve the plan. If you type "go ahead" or "start with step 1", execution begins. If you say "revise step 3" or "cancel", Claude adjusts or stops without having touched anything.
+
+## Further reading
+
+- [Extended Thinking and Plan Mode: deep dive](/prompting/thinking-and-planning) - The complete reference page with activation details, model comparison (Haiku / Sonnet / Opus), and chain-of-thought techniques
+- [Advanced prompting techniques](/prompting/advanced) - Chain-of-thought, few-shot patterns, and complex task decomposition
+- [Ultraplan: planning in the cloud](/advanced/ultraplan) - Take Plan mode further with cloud-based collaborative plan review

@@ -1,0 +1,243 @@
+---
+title: "Mode Plan vs Mode Thinking dans Claude Code : les différences clés"
+description: "Le mode Plan fait proposer un plan à Claude avant de toucher au code. Le mode Thinking lui fait raisonner plus longtemps. Deux leviers distincts, deux objectifs différents."
+badge: "GUIDE"
+datePublished: "2026-04-20"
+dateModified: "2026-04-20"
+---
+
+**La différence principale** : le mode Plan demande à Claude de proposer un plan étape par étape et d'attendre votre validation avant d'exécuter quoi que ce soit. Le mode Thinking (Extended Thinking) alloue des tokens de raisonnement supplémentaires pour que Claude réfléchisse plus profondément avant de répondre. Le mode Plan contrôle *ce que Claude fait ensuite*. Le mode Thinking contrôle *avec quelle rigueur Claude raisonne*. Vous pouvez utiliser l'un, l'autre, ou les deux ensemble.
+
+## Comparatif rapide
+
+| | Mode Plan | Mode Thinking (Extended Thinking) |
+|---|---|---|
+| **Ce que ça change** | Le déroulement (plan d'abord, action ensuite) | La profondeur du raisonnement interne |
+| **Activation** | `Shift+Tab` ou demande explicite dans le prompt | `Alt+T` / `Option+T`, ou `think hard` / `ultrathink` dans le prompt |
+| **Temps supplémentaire** | Oui, attente de votre validation | Oui, budget de tokens pour le raisonnement silencieux |
+| **Output visible** | Un plan structuré à approuver ou rejeter | La réponse finale (le raisonnement est masqué par défaut) |
+| **Impact sur les coûts** | Pas d'augmentation directe des tokens | Oui, jusqu'à 31 999 tokens de raisonnement supplémentaires |
+| **Idéal pour** | Modifications multi-fichiers, refactoring risqué, nouvelles fonctionnalités | Bugs complexes, décisions d'architecture, analyses approfondies |
+| **Fonctionne sans l'autre** | Oui | Oui |
+| **Combinables** | Oui | Oui |
+
+## Le mode Plan en détail
+
+### Ce qu'il fait concrètement
+
+Le mode Plan est une porte de validation dans votre workflow. Lorsqu'il est actif, Claude produit un plan structuré décrivant ce qu'il compte faire, liste les fichiers qu'il touchera, explique les risques, puis s'arrête. Rien n'est modifié tant que vous n'avez pas donné le feu vert. Si vous rejetez le plan, vous pouvez demander une révision sans qu'une seule ligne de code ait été écrite.
+
+Pensez à demander un devis à un artisan avant de signer quoi que ce soit. L'artisan évalue le chantier, rédige un descriptif des travaux et vous le remet. C'est vous qui décidez de la suite.
+
+### Comment l'activer
+
+```bash
+# Raccourci clavier dans l'interface Claude Code
+Shift+Tab    # passe en revue les modes, dont le mode Plan
+```
+
+Vous pouvez aussi le déclencher directement dans votre prompt :
+
+```markdown
+"Avant d'écrire quoi que ce soit, propose un plan détaillé.
+Liste les fichiers que tu vas modifier, ce que tu vas y changer
+et les risques impliqués. Attends mon accord avant de commencer."
+```
+
+Ou plus simplement :
+
+```markdown
+"Plan d'abord, puis attends mon feu vert."
+```
+
+### Un exemple concret : refactoring multi-fichiers
+
+Votre prompt :
+```markdown
+"Je veux extraire la logique d'authentification de UserController.ts
+dans un AuthService dédié. Il y a actuellement 12 composants
+qui importent depuis UserController. Planifie la migration avant de toucher quoi que ce soit."
+```
+
+Ce que Claude produit en mode Plan :
+```markdown
+## Plan de migration : UserController.ts -> AuthService
+
+### Périmètre
+- Créer AuthService.ts (nouveau fichier)
+- Modifier UserController.ts (supprimer les méthodes auth, importer AuthService)
+- Mettre à jour 12 points d'import
+
+### Étape 1 : Créer AuthService.ts
+Fichiers : src/services/AuthService.ts (nouveau)
+Changements : Extraire login(), logout(), verifyToken(), refreshToken()
+Risque : aucun (ajout pur)
+
+### Étape 2 : Mettre à jour UserController.ts
+Fichiers : src/controllers/UserController.ts
+Changements : Supprimer 4 méthodes, ajouter l'import, déléguer les appels
+Risque : faible (les tests existants couvrent ce chemin)
+
+### Étape 3 : Mettre à jour les points d'import
+Fichiers : 12 composants listés ci-dessous
+[...]
+
+Prêt à démarrer l'étape 1 ?
+```
+
+Claude n'écrira pas une seule ligne de code tant que vous ne répondez pas. Vous pouvez approuver toutes les étapes, ajuster le plan, ou annuler complètement.
+
+<Callout type="tip" title="Le mode Plan ne se limite pas au code">
+Vous pouvez l'utiliser pour n'importe quelle tâche en plusieurs étapes : migrations de base de données, restructuration de documentation, modifications de configuration. Dès que vous voulez un aperçu avant l'exécution, demandez un plan.
+</Callout>
+
+## Le mode Thinking en détail
+
+### Ce qu'il fait concrètement
+
+L'Extended Thinking (mode Thinking) réserve une partie de la fenêtre de contexte pour un raisonnement interne avant que Claude ne rédige sa réponse. Ce raisonnement ne vous est pas montré par défaut, mais il structure la réflexion de Claude de façon plus rigoureuse : Claude envisage plusieurs approches, évalue les compromis, repère les cas limites, puis formule une réponse plus élaborée.
+
+L'analogie : au lieu de dire la première chose qui lui vient à l'esprit, Claude marque une pause, réfléchit au problème sur un tableau blanc mental, puis vous donne sa réponse réfléchie.
+
+### Comment l'activer
+
+```bash
+# Raccourci clavier dans Claude Code
+Alt+T        # Linux / Windows
+Option+T     # macOS
+
+# Afficher le raisonnement interne (mode verbeux)
+Ctrl+O
+
+# Variable d'environnement : plafonner le budget de tokens de raisonnement
+export MAX_THINKING_TOKENS=10000
+```
+
+Vous pouvez aussi déclencher un raisonnement plus approfondi directement dans votre prompt :
+
+```markdown
+# Augmentation modérée
+"Réfléchis bien avant de répondre."
+"think hard"
+
+# Budget de raisonnement maximum
+"ultrathink"
+"Réfléchis étape par étape, prends le temps qu'il te faut."
+```
+
+<Callout type="info" title="Activé par défaut">
+L'Extended Thinking est actif par défaut dans Claude Code, avec jusqu'à 31 999 tokens réservés pour le raisonnement interne. Vous pouvez le désactiver pour les tâches simples où la rapidité prime sur la profondeur.
+</Callout>
+
+### Quand l'utiliser
+
+Le mode Thinking vaut son coût quand le problème est réellement difficile :
+
+- Un bug que vous avez déjà tenté de corriger deux fois sans succès
+- Un choix entre plusieurs approches architecturales avec de vrais compromis
+- Une analyse de sécurité qui doit aller au-delà de la checklist habituelle
+- Des décisions de refactoring qui impactent de nombreuses couches du codebase
+
+Pour une faute de frappe ou un simple endpoint CRUD, il ajoute de la latence sans apporter de valeur.
+
+### Impact sur les coûts
+
+Chaque token de raisonnement est facturé comme n'importe quel autre token. Avec jusqu'à 31 999 tokens de raisonnement par requête, une seule réponse avec Extended Thinking à plein budget sur Sonnet peut coûter sensiblement plus qu'une requête sans. Pour les décisions critiques, l'investissement est généralement justifié. Pour les tâches routinières, désactivez-le.
+
+```bash
+# Réduire le budget pour maîtriser les coûts sur les tâches moins complexes
+export MAX_THINKING_TOKENS=5000
+```
+
+## Quand utiliser quoi
+
+### Scénario 1 : refactoring multi-fichiers
+
+**Utilisez le mode Plan.**
+
+Vous déplacez du code dans 20 fichiers. Le risque, c'est une casse accidentelle, des imports oubliés, ou un état à moitié terminé si quelque chose tourne mal en cours de route. Le mode Plan vous montre l'ensemble du périmètre avant qu'un seul fichier soit touché, ce qui vous permet de détecter les problèmes dans le plan plutôt que dans le code.
+
+```markdown
+"Migre notre gestion d'état de Redux vers Zustand.
+Il y a 25 composants qui utilisent Redux, 8 slices et 15 sélecteurs.
+Planifie la migration phase par phase, liste les fichiers concernés par phase,
+et attends mon feu vert avant de commencer."
+```
+
+### Scénario 2 : un bug que vous ne comprenez pas
+
+**Utilisez le mode Thinking.**
+
+Le bug est intermittent, les logs sont confus et vous avez déjà essayé les corrections évidentes. Le mode Thinking donne à Claude une plus grande marge de manœuvre pour envisager des causes moins évidentes : race conditions, cas limites dans les flux asynchrones, interactions entre deux modules en apparence sans rapport.
+
+```markdown
+"[ultrathink]
+
+Notre API Node.js perd environ 1 requête sur 500 en silence.
+Pas d'erreur dans les logs, status 200 retourné, mais l'action n'a pas persisté.
+Redis pour les sessions, 3 instances de l'application derrière Nginx, PostgreSQL.
+Analyse toutes les causes réalistes, y compris les race conditions et l'épuisement du pool de connexions."
+```
+
+### Scénario 3 : concevoir une nouvelle fonctionnalité de zéro
+
+**Utilisez les deux.**
+
+Les décisions d'architecture inédite bénéficient d'un raisonnement profond (mode Thinking pour peser les options) et d'un plan visible (mode Plan pour valider l'approche retenue avant qu'une seule ligne de code soit écrite).
+
+```markdown
+"[Extended Thinking activé]
+
+Je dois ajouter un système de notifications en temps réel.
+Exigences : WebSocket avec fallback SSE, reconnexion automatique,
+compteur de non-lus, persistance Redis.
+
+D'abord, raisonne en profondeur sur les options d'architecture.
+Puis propose un plan d'implémentation par phases.
+Attends mon accord avant d'écrire du code."
+```
+
+## Peut-on les utiliser en même temps ?
+
+Oui. Ce sont deux fonctionnalités indépendantes qui se complètent :
+
+- **Le mode Thinking** améliore la qualité du raisonnement de Claude quand il rédige le plan
+- **Le mode Plan** garantit que vous voyez et approuvez ce plan avant l'exécution
+
+La combinaison est la plus utile pour les tâches où l'*analyse* et l'*exécution* présentent toutes les deux un risque : migrations d'architecture, fonctionnalités à fort impact sur la sécurité, tout ce qui touche à une infrastructure partagée.
+
+<Callout type="warning" title="Plus de tokens, plus de coût">
+Combiner les deux augmente le coût de la session. Le mode Thinking ajoute des tokens de raisonnement ; le mode Plan ajoute un échange complet de planification avant l'échange d'implémentation. Réservez la combinaison aux tâches qui le justifient vraiment.
+</Callout>
+
+## Questions fréquentes
+
+**Quelle est la différence principale entre le mode Plan et le mode Thinking dans Claude Code ?**
+
+Le mode Plan est un contrôle de workflow : Claude s'arrête après avoir écrit un plan et ne fait rien tant que vous n'avez pas approuvé. Le mode Thinking est un contrôle du raisonnement : Claude réfléchit plus longtemps en interne avant de répondre, mais ne s'arrête pas et ne demande pas de validation. Le mode Plan modifie la séquence des actions. Le mode Thinking modifie la qualité du raisonnement qui sous-tend ces actions.
+
+**Le mode Thinking me montre-t-il le raisonnement de Claude ?**
+
+Pas par défaut. Le raisonnement se déroule en interne et n'est pas inclus dans la réponse. Vous pouvez le faire apparaître en appuyant sur `Ctrl+O` (mode verbeux), qui affiche le processus de réflexion interne. Certains trouvent cela utile pour comprendre pourquoi Claude est arrivé à une conclusion particulière.
+
+**Puis-je définir un comportement par défaut pour ces modes ?**
+
+Oui. Dans `~/.claude/settings.json` :
+
+```json
+{
+  "alwaysThinkingEnabled": true
+}
+```
+
+Pour le mode Plan, il n'y a pas d'équivalent de bascule persistante ; il s'active soit par session via `Shift+Tab`, soit par requête via la formulation du prompt.
+
+**Le mode Plan empêche-t-il Claude d'écrire du code ?**
+
+Oui, dans le déroulement de cette session. Claude ne créera, modifiera ni supprimera aucun fichier tant que vous n'avez pas explicitement approuvé le plan. Si vous tapez "vas-y" ou "démarre l'étape 1", l'exécution commence. Si vous dites "révise l'étape 3" ou "annule", Claude ajuste ou s'arrête sans avoir rien touché.
+
+## Pour aller plus loin
+
+- [Extended Thinking et Plan Mode : guide complet](/prompting/thinking-and-planning) - La page de référence complète avec les détails d'activation, la comparaison des modèles (Haiku / Sonnet / Opus) et les techniques de chain-of-thought
+- [Prompting avancé et multi-agents](/prompting/advanced) - Chain-of-thought, patterns few-shot et décomposition de tâches complexes
+- [Ultraplan : planifier dans le cloud](/advanced/ultraplan) - Aller plus loin avec le mode Plan grâce à une revue collaborative du plan dans le navigateur

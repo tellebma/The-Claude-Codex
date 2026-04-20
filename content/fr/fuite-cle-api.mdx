@@ -1,0 +1,312 @@
+---
+title: "Clé API Anthropic fuitée ? Plan d'action en 5 étapes (2026)"
+description: "Votre clé API Anthropic sk-ant a fuité dans un commit, screenshot ou log ? Révoquez-la maintenant, faites la rotation, auditez les dégâts. Guide de récupération."
+badge: "Sécurité"
+section: "content"
+order: 9
+datePublished: "2026-04-20"
+dateModified: "2026-04-20"
+---
+
+<Callout type="warning" title="Agissez dans les 5 prochaines minutes">
+Une clé API compromise peut être exploitée par des bots automatisés en quelques minutes après sa découverte. Chaque seconde compte. Allez directement à la checklist ci-dessous, lisez le reste ensuite.
+</Callout>
+
+## La checklist d'urgence en 5 minutes
+
+Faites ces étapes dans l'ordre, maintenant.
+
+<Steps>
+<Step title="Révoquer la clé compromise" stepNumber={1}>
+Allez sur [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys), trouvez la clé compromise, et cliquez sur **Revoke**. La clé cesse de fonctionner immédiatement.
+
+Si vous n'êtes pas sûr de quelle clé a fuité, révoquez toutes celles dont vous ne pouvez pas tracer l'usage. Vous pourrez en générer de nouvelles juste après.
+</Step>
+
+<Step title="Générer une nouvelle clé" stepNumber={2}>
+Sur la même page, cliquez sur **Create Key**. Donnez-lui un nom descriptif pour pouvoir l'identifier plus tard (par exemple : `prod-server-2026-04` ou `github-actions-deploy`).
+
+Copiez la nouvelle clé immédiatement, elle n'est affichée qu'une seule fois.
+</Step>
+
+<Step title="Mettre à jour tous les environnements" stepNumber={3}>
+Remplacez l'ancienne clé partout où elle était utilisée :
+
+```bash
+# Développement local
+# Modifiez votre fichier .env ou exportez la variable
+export ANTHROPIC_API_KEY="sk-ant-votre-nouvelle-cle"
+
+# Vérifiez que l'ancienne clé n'est plus dans votre historique shell
+grep -r "sk-ant-" ~/.bash_history ~/.zsh_history 2>/dev/null
+```
+
+Les endroits typiques à mettre à jour : `.env` local, secrets CI/CD (GitHub Actions, GitLab CI, CircleCI), plateformes d'hébergement (Vercel, Railway, Render, Heroku), Docker Compose, secrets Kubernetes, et tout fichier `.env.production` sur vos serveurs.
+</Step>
+
+<Step title="Vérifier vos logs d'utilisation" stepNumber={4}>
+Sur [console.anthropic.com](https://console.anthropic.com), allez dans **Usage**. Regardez les dernières 24-48 heures :
+
+- Le volume est-il cohérent avec votre usage habituel ?
+- Des requêtes à des heures inhabituelles (par exemple 3h du matin dans votre fuseau) ?
+- Un modèle que vous n'utilisez pas normalement ?
+
+Des pics inhabituels ou des patterns inconnus indiquent que quelqu'un d'autre a utilisé la clé.
+</Step>
+
+<Step title="Contacter le support Anthropic si l'usage est suspect" stepNumber={5} isLast>
+Si vous repérez des charges ou une utilisation qui ne vient pas de vous, contactez le support Anthropic sur [support.anthropic.com](https://support.anthropic.com) avec :
+- L'identifiant de la clé (pas sa valeur)
+- La fenêtre temporelle de l'activité suspecte
+- Une description courte de ce que vous avez trouvé
+
+Anthropic examine les cas d'usage frauduleux. Il n'y a pas de politique de remboursement automatique garantie, mais ils enquêtent et ont aidé des utilisateurs dans des cas de fraude documentés.
+</Step>
+</Steps>
+
+---
+
+## D'où vient la fuite ?
+
+Une fois l'urgence gérée, identifiez la source. Voici les vecteurs les plus fréquents.
+
+### Commité dans Git (la cause la plus courante)
+
+Quelqu'un a ajouté un fichier `.env`, codé la clé en dur dans un fichier de config, ou l'a laissée dans un script de test. Même si vous supprimez le fichier ou modifiez le commit, **la clé est toujours dans l'historique Git**. Quiconque clone le repo ou l'a déjà cloné a accès à tout l'historique.
+
+Le programme [Secret Scanning de GitHub](https://docs.github.com/fr/code-security/secret-scanning/about-secret-scanning) détecte automatiquement les patterns `sk-ant-` dans les dépôts publics et notifie Anthropic. Anthropic peut révoquer proactivement les clés trouvées de cette façon. Mais pour les dépôts privés, ce filet de sécurité n'existe pas sans configuration explicite.
+
+### Screenshot partagé dans un chat ou sur les réseaux
+
+Une capture d'écran de votre terminal ou IDE montrant la clé, partagée sur Slack, Discord, Twitter, ou n'importe quelle plateforme publique. Les screenshots sont indexés. Des bots OCR les scannent en permanence.
+
+### Log d'erreur non censuré
+
+Une application qui logue les headers complets des requêtes ou les variables d'environnement lors d'un crash. Si ces logs arrivent dans Sentry, Datadog, Papertrail, ou n'importe quel agrégateur de logs, la clé est exposée à tous ceux qui ont accès aux logs.
+
+### Image Docker publique
+
+Une image Docker construite avec la clé intégrée dans une couche. Même si vous la supprimez dans une couche ultérieure, l'historique Docker conserve chaque couche intermédiaire. `docker history votre-image:tag` la révèle.
+
+### Fichier `.env` poussé par accident
+
+L'erreur classique : `.env` n'est pas dans `.gitignore`, quelqu'un fait `git add .`, et la clé part avec tout le reste.
+
+---
+
+## Nettoyer l'historique Git
+
+Si la clé a été committée dans Git, supprimer l'occurrence dans un nouveau commit ne suffit pas. Il faut réécrire l'historique.
+
+<Callout type="warning" title="Le force-push réécrit l'historique partagé">
+Ces opérations réécrivent l'historique Git. Si d'autres personnes ont cloné le dépôt, elles devront re-cloner ou réinitialiser leur copie locale après votre force-push. Prévenez votre équipe avant de le faire sur un dépôt partagé.
+</Callout>
+
+### Option 1 : git-filter-repo (recommandé)
+
+`git-filter-repo` est l'outil recommandé actuellement pour ce type d'opération. Il est plus rapide et plus sûr que l'ancien `git filter-branch`.
+
+```bash
+# Installer git-filter-repo
+pip install git-filter-repo
+# ou : brew install git-filter-repo
+
+# Remplacer toutes les occurrences de la clé fuitée par un placeholder
+# Remplacez VOTRE_CLE_FUITEE par la valeur réelle de la clé
+git filter-repo --replace-text <(echo "sk-ant-VOTRE_CLE_FUITEE==>CLE_API_SUPPRIMEE")
+
+# Force-push toutes les branches vers le remote
+git push origin --force --all
+git push origin --force --tags
+```
+
+### Option 2 : BFG Repo-Cleaner
+
+BFG est une alternative plus simple pour supprimer des patterns de texte spécifiques.
+
+```bash
+# Télécharger BFG depuis https://rtyley.github.io/bfg-repo-cleaner/
+java -jar bfg.jar --replace-text secrets.txt votre-repo.git
+
+# secrets.txt doit contenir la clé fuitée sur une seule ligne :
+# sk-ant-VOTRE_CLE_FUITEE
+
+cd votre-repo.git
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+git push origin --force --all
+```
+
+### Après le force-push
+
+```bash
+# Prévenez les collaborateurs de re-cloner
+# Sur GitHub/GitLab, allez dans Settings > Danger Zone
+# et pensez à faire tourner les deploy keys du dépôt aussi
+
+# Vérifiez que la clé n'apparaît plus dans l'historique
+git log --all -p | grep "sk-ant-" || echo "Propre"
+```
+
+<Callout type="tip" title="Vues en cache sur GitHub">
+Même après un force-push, GitHub peut cacher l'ancienne vue de commit pendant quelques heures. Utilisez le support GitHub pour demander une invalidation immédiate du cache si la clé était dans un repo public. L'URL à cibler : github.com/OWNER/REPO/commit/ANCIEN_SHA
+</Callout>
+
+---
+
+## Auditer l'impact
+
+Vous avez révoqué la clé et nettoyé le repo. Évaluez maintenant les dégâts.
+
+### Ce qu'il faut chercher dans les logs d'utilisation
+
+```
+Patterns normaux à comparer :
+- Volume de requêtes habituel par heure
+- Modèles que vous utilisez réellement (claude-3-5-sonnet, haiku, etc.)
+- Votre ratio habituel tokens input/output
+- Requêtes venant de vos plages IP habituelles
+```
+
+Signaux d'alarme dans le dashboard d'utilisation Anthropic :
+- Requêtes vers des modèles que vous n'avez jamais utilisés
+- Consommation de tokens 10x ou plus au-dessus de votre baseline
+- Activité pendant des heures où votre système est normalement inactif
+- Pics soudains suivis d'une activité normale (test du bot, puis arrêt)
+
+### Vérifier l'exposition secondaire
+
+La clé a peut-être été utilisée pour sonder votre compte ou récupérer d'autres informations. Vérifiez :
+
+- Si la clé donnait accès à d'autres APIs ou ressources Anthropic
+- Si le même fichier `.env` contenait d'autres secrets (URLs de base de données, autres clés API, tokens OAuth)
+
+Si d'autres secrets se trouvaient dans le même fichier ou le même commit, traitez-les tous comme compromis et faites-les tourner aussi.
+
+---
+
+## Prévention : ne plus jamais subir ça
+
+Une clé qui fuite est le symptôme d'un processus manquant. Voici ce qu'il faut mettre en place.
+
+### Les bases
+
+```bash
+# Ajouter .env au .gitignore avant de le créer
+echo ".env" >> .gitignore
+echo ".env.*" >> .gitignore
+echo "!.env.example" >> .gitignore
+
+# Créer un .env.example avec de fausses valeurs comme documentation
+cp .env .env.example
+sed -i 's/sk-ant-.*/sk-ant-VOTRE_CLE_ICI/g' .env.example
+```
+
+### Scan en pre-commit avec git-secrets ou trufflehog
+
+```bash
+# Installer git-secrets (originaire d'AWS, fonctionne pour tout pattern)
+brew install git-secrets
+# ou : https://github.com/awslabs/git-secrets
+
+# Ajouter le pattern Anthropic
+git secrets --add "sk-ant-[a-zA-Z0-9\-_]{20,}"
+
+# Installer le hook dans votre repo
+git secrets --install
+
+# Désormais tout commit contenant sk-ant-... sera bloqué
+```
+
+```bash
+# Alternative : trufflehog, qui scanne l'historique Git et détecte 800+ types de secrets
+pip install trufflehog
+trufflehog git file://. --only-verified
+```
+
+### Stocker les secrets dans le CI/CD, pas dans le code
+
+<Tabs>
+<Tab label="GitHub Actions">
+```yaml
+# Dans votre fichier workflow : référencer le secret, jamais le coder en dur
+- name: Lancer l'intégration Claude
+  env:
+    ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  run: node mon-script.js
+```
+
+Ajouter le secret sur : `github.com/OWNER/REPO/settings/secrets/actions`
+</Tab>
+<Tab label="Vercel">
+```bash
+# Ajouter via Vercel CLI
+vercel env add ANTHROPIC_API_KEY production
+
+# Ou dans le dashboard Vercel : Project > Settings > Environment Variables
+# Définir le scope selon Production / Preview / Development
+```
+</Tab>
+<Tab label="Doppler (gestionnaire de secrets)">
+```bash
+# Doppler synchronise les secrets dans tous les environnements
+# sans les stocker dans des fichiers
+doppler setup
+doppler run -- node mon-script.js
+
+# Les secrets restent dans Doppler, votre code ne voit jamais la valeur brute
+```
+</Tab>
+</Tabs>
+
+### Activer GitHub Secret Scanning
+
+Pour les dépôts GitHub, Anthropic est [partenaire du programme Secret Scanning de GitHub](https://docs.github.com/fr/code-security/secret-scanning/about-secret-scanning). GitHub scanne automatiquement les dépôts publics pour les patterns `sk-ant-` et peut notifier Anthropic. Activez la protection push pour bloquer les pushes contenant des secrets avant qu'ils n'atteignent le remote :
+
+```
+Settings > Code security and analysis > Secret scanning > Enable push protection
+```
+
+Pour les dépôts privés, la protection push nécessite GitHub Advanced Security (disponible avec GitHub Enterprise ou en option payante).
+
+### Utiliser un gestionnaire de secrets en production
+
+Pour les équipes, un gestionnaire de secrets centralisé élimine complètement les fichiers `.env` de la production :
+
+| Outil | Idéal pour |
+|-------|-----------|
+| [Doppler](https://www.doppler.com) | Petites et moyennes équipes, synchronisation multi-environnement |
+| [HashiCorp Vault](https://www.vaultproject.io) | Auto-hébergé, politiques d'accès complexes |
+| [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) | Stacks AWS-native |
+| [1Password Secrets Automation](https://1password.com/secrets) | Équipes déjà sur 1Password |
+
+---
+
+## Questions fréquentes
+
+**Est-ce qu'Anthropic rembourse les coûts frauduleux ?**
+
+Anthropic n'a pas de politique de remboursement automatique publiée pour les clés compromises. Cependant, l'équipe support examine les cas où les clés ont visiblement été volées et utilisées frauduleusement. Vos chances s'améliorent si vous pouvez montrer : quand la clé a été créée, quand elle a fuité, et des preuves claires que l'usage n'était pas le vôtre. Contactez [support.anthropic.com](https://support.anthropic.com) avec le maximum de détails.
+
+**Combien de temps Google garde-t-il une clé indexée ?**
+
+Si la clé est apparue sur une page publique (commit GitHub, site de paste, screenshot), Google peut la cacher pendant des jours à des semaines. Vous pouvez demander la suppression via l'[outil Remove Outdated Content de Google](https://search.google.com/search-console/remove-outdated-content) une fois que la page source a disparu. Ça accélère la désindexation mais ce n'est pas immédiat.
+
+**Comment savoir si un bot a déjà utilisé ma clé ?**
+
+Regardez le dashboard d'utilisation Anthropic pour la période entre la création de la clé et sa révocation. Les bots font généralement beaucoup de petites requêtes rapidement (test de la clé), puis s'arrêtent ou lancent des workloads lourds. Si votre usage montre une activité que vous ne pouvez pas attribuer à votre propre code, considérez que la clé a été utilisée.
+
+**Ma clé a fuité dans un repo privé. Suis-je en sécurité ?**
+
+Moins exposé qu'avec un repo public, mais pas en sécurité pour autant. Toute personne ayant accès en lecture au repo détient la clé. Cela inclut les collaborateurs actuels et passés, les systèmes CI/CD, et quiconque l'a cloné. Faites tourner la clé et nettoyez l'historique dans tous les cas.
+
+---
+
+## Prochaines étapes
+
+<Callout type="tip" title="Créez l'habitude avant l'incident">
+Le meilleur moment pour configurer `.gitignore`, les hooks pre-commit et les secrets CI était avant que ça n'arrive. Le deuxième meilleur moment, c'est maintenant.
+</Callout>
+
+- [Variables d'environnement : référence complète](/reference/environment) : Comment configurer correctement `ANTHROPIC_API_KEY` dans tous les environnements
+- [Bonnes pratiques de sécurité Claude Code](/content/bonnes-pratiques-securite) : Guide de sécurité plus large pour vos configurations Claude Code

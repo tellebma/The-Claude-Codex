@@ -291,7 +291,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Maîtrisez l'Extended Thinking et le Plan Mode de Claude Code. Activation, cas d'usage, chain-of-thought, différences entre Haiku, Sonnet et Opus, impact sur les coûts.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-20",
   },
   {
     path: "/prompting/chaining-and-agents",
@@ -851,6 +851,26 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     description:
       "Claude Design (Anthropic Labs, avril 2026) attaque frontalement Figma AI. Comparatif honnête : conversation vs toile, itération, brand system, handoff dev.",
     priority: 0.85,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-20",
+  },
+  {
+    path: "/content/fuite-cle-api",
+    pathsByLocale: { en: "/content/leaked-api-key-recovery" },
+    title: "Clé API Anthropic fuitée ? Plan d'action en 5 étapes (2026)",
+    description:
+      "Votre clé API Anthropic sk-ant a fuité dans un commit, screenshot ou log ? Révoquez-la, faites la rotation, auditez les dégâts. Guide de récupération pas à pas.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-20",
+  },
+  {
+    path: "/content/mode-plan-vs-thinking",
+    pathsByLocale: { en: "/content/plan-vs-thinking-mode" },
+    title: "Mode Plan vs Mode Thinking dans Claude Code : les différences clés",
+    description:
+      "Le mode Plan fait proposer un plan à Claude avant de toucher au code. Le mode Thinking lui fait raisonner plus longtemps. Deux leviers distincts, deux objectifs différents.",
+    priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-04-20",
   },

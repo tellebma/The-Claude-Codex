@@ -12,11 +12,19 @@ interface ContentPageProps {
 }
 
 /**
- * Generate static params for all MDX content files.
- * Required for SSG with `output: 'export'`.
+ * Generate static params for all MDX content files in the target locale.
+ * Required for SSG with `output: 'export'`. Reading per-locale directories
+ * ensures URLs stay in sync with the locale-specific slugs on disk, which
+ * matters when slugs diverge between languages (for example when a French
+ * slug has been translated to English).
  */
-export function generateStaticParams(): Array<{ slug: string }> {
-  const slugs = getAllMdxSlugs();
+export async function generateStaticParams({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Array<{ slug: string }>> {
+  const { locale } = await params;
+  const slugs = getAllMdxSlugs(locale);
   return [...slugs].map((slug) => ({ slug }));
 }
 

@@ -11,8 +11,13 @@ interface PageProps {
   readonly params: Promise<{ locale: string; slug: string }>;
 }
 
-export function generateStaticParams(): Array<{ slug: string }> {
-  return [...getSectionMdxSlugs(SECTION)].map((slug) => ({ slug }));
+export async function generateStaticParams({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Array<{ slug: string }>> {
+  const { locale } = await params;
+  return [...getSectionMdxSlugs(SECTION, locale)].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

@@ -52,3 +52,21 @@ doc/settings.local.json
 # Generated at build time by scripts/generate-llms-txt.ts
 /public/llms.txt
 /public/llms-full.txt
+
+# Private/local docs — kept local, never on public GitHub
+docs/TODO/
+docs/gsc-analysis/
+docs/REPORTS/
+docs/BACKLOG/EPIC-matomo-*.md
+docs/BACKLOG/MT17-*.md
+docs/BACKLOG/MT22-*.md
+
+# Root-level working files (audits, drafts, personal notes)
+/AUDIT_*.md
+/DEMANDE_UTILISATEUR.md
+/CONTENT_CURATION_FEASIBILITY.md
+/GUIDE_CAPTURES_EPIC20.md
+/EPICS.md
+/EPIC-*.md
+/EPIC_*.md
+/CI_workflow*.png

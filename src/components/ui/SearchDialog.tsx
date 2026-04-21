@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { flushSync } from "react-dom";
 import {
   Search,
   X,
@@ -54,9 +55,18 @@ export function SearchDialog() {
   }, []);
 
   const openDialog = useCallback(() => {
-    setOpen(true);
-    setQuery("");
-    setSelectedIndex(0);
+    // flushSync forces the dialog to mount synchronously, so the input
+    // exists in the DOM when we call .focus() below — still within the
+    // same user-gesture tick. iOS Safari only raises the soft keyboard
+    // when .focus() runs synchronously inside a user gesture: a
+    // setTimeout(..., 60) (or any deferred focus via useEffect) breaks
+    // that chain and the keyboard never appears on mobile.
+    flushSync(() => {
+      setOpen(true);
+      setQuery("");
+      setSelectedIndex(0);
+    });
+    inputRef.current?.focus();
   }, []);
 
   const navigateTo = useCallback(
@@ -89,11 +99,15 @@ export function SearchDialog() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, openDialog, closeDialog]);
 
-  // Focus input shortly after opening (also brings up the iOS keyboard)
+  // Desktop Ctrl/Cmd+K does NOT go through openDialog (it bypasses
+  // the click path), so we still need a focus-on-open effect for that
+  // branch. On keyboard shortcut, the soft keyboard is not relevant —
+  // iOS users don't have a physical Ctrl key — so a zero-delay
+  // microtask is fine and avoids the layout jank of a longer timeout.
   useEffect(() => {
     if (!open) return;
-    const timeout = setTimeout(() => inputRef.current?.focus(), 60);
-    return () => clearTimeout(timeout);
+    if (document.activeElement === inputRef.current) return;
+    queueMicrotask(() => inputRef.current?.focus());
   }, [open]);
 
   // Lock body scroll while keeping layout stable

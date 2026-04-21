@@ -188,19 +188,36 @@ describe("SearchDialog", () => {
     expect(options[1]).toHaveAttribute("aria-selected", "false");
   });
 
-  // 11. Closes dialog when clicking overlay (the backdrop)
-  it("closes dialog when clicking the overlay backdrop", () => {
+  // 11. Closes dialog on mouseDown on the overlay
+  //     The overlay uses onMouseDown (not onClick) to avoid the
+  //     "drag from inside the dialog -> release outside -> close"
+  //     surprise. The handler also checks e.target === e.currentTarget
+  //     so inner clicks don't bubble up to close.
+  it("closes dialog on mouseDown on the overlay backdrop", () => {
     render(<SearchDialog />);
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    // The overlay is the fixed backdrop div wrapping the dialog.
-    // Clicking directly on it (not on the dialog itself) triggers closeDialog.
     const dialog = screen.getByRole("dialog");
     const overlay = dialog.parentElement as HTMLElement;
-    fireEvent.click(overlay);
+    // Simulate a mousedown whose target IS the overlay
+    fireEvent.mouseDown(overlay, { target: overlay });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  // 12. iOS keyboard regression — focus the input synchronously on
+  //     click so iOS Safari raises the soft keyboard. Without this,
+  //     tapping the search button opens the dialog but the on-screen
+  //     keyboard never appears, making the search useless on phones.
+  it("focuses the input synchronously when trigger is clicked", () => {
+    render(<SearchDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+
+    // After click, input must exist AND be the active element
+    // within the same tick (no setTimeout, no useEffect deferred).
+    const input = screen.getByRole("combobox");
+    expect(document.activeElement).toBe(input);
   });
 });

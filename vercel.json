@@ -1,0 +1,81 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://matomo.tellebma.fr; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://img.youtube.com https://matomo.tellebma.fr; frame-src https://www.youtube-nocookie.com; connect-src 'self' https://matomo.tellebma.fr;"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/fr/",
+      "permanent": true
+    },
+    {
+      "source": "/en/content/bonnes-pratiques-securite",
+      "destination": "/en/content/security-best-practices/",
+      "permanent": true
+    },
+    {
+      "source": "/en/content/bonnes-pratiques-securite/",
+      "destination": "/en/content/security-best-practices/",
+      "permanent": true
+    },
+    {
+      "source": "/en/content/mythes-claude-code",
+      "destination": "/en/content/claude-code-myths/",
+      "permanent": true
+    },
+    {
+      "source": "/en/content/mythes-claude-code/",
+      "destination": "/en/content/claude-code-myths/",
+      "permanent": true
+    },
+    {
+      "source": "/en/content/couts-reels-claude-code",
+      "destination": "/en/content/real-costs-claude-code/",
+      "permanent": true
+    },
+    {
+      "source": "/en/content/couts-reels-claude-code/",
+      "destination": "/en/content/real-costs-claude-code/",
+      "permanent": true
+    },
+    {
+      "source": "/en/mcp/securite-mcp",
+      "destination": "/en/mcp/mcp-security/",
+      "permanent": true
+    },
+    {
+      "source": "/en/mcp/securite-mcp/",
+      "destination": "/en/mcp/mcp-security/",
+      "permanent": true
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { getAllMdxFiles } from "@/lib/mdx";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";

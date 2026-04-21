@@ -220,4 +220,40 @@ describe("SearchDialog", () => {
     const input = screen.getByRole("combobox");
     expect(document.activeElement).toBe(input);
   });
+
+  // 13. iOS prime-input pattern: a permanently mounted hidden input
+  //     receives .focus() inside the trusted gesture BEFORE the dialog
+  //     mounts. Without this, iOS 17+ refuses to raise the soft
+  //     keyboard because the focus target (the real input) was not in
+  //     the DOM at the start of the gesture.
+  //     Crucially, the input must remain in the focus tree:
+  //     visibility:hidden and display:none disqualify it from iOS
+  //     keyboard, so we hide it by moving it off-screen instead.
+  it("renders a permanently mounted prime input for iOS keyboard", () => {
+    const { container } = render(<SearchDialog />);
+    const prime = container.querySelector<HTMLInputElement>(
+      'input[tabindex="-1"][aria-hidden="true"]',
+    );
+    expect(prime).not.toBeNull();
+    // Must NOT be visibility:hidden (iOS rejects focus) or display:none.
+    expect(prime!.style.visibility).not.toBe("hidden");
+    expect(prime!.style.display).not.toBe("none");
+    // Must be moved out of sight, either by off-screen positioning OR
+    // opacity:0. Both keep it in the focus tree.
+    const hiddenByOffscreen =
+      prime!.style.left === "-9999px" || prime!.style.top === "-9999px";
+    const hiddenByOpacity = prime!.style.opacity === "0";
+    expect(hiddenByOffscreen || hiddenByOpacity).toBe(true);
+  });
+
+  // 14. Prime input must exist BEFORE the dialog opens, so that
+  //     .focus() on it can raise the iOS keyboard inside the click.
+  it("prime input exists while the dialog is closed", () => {
+    const { container } = render(<SearchDialog />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    const prime = container.querySelector(
+      'input[tabindex="-1"][aria-hidden="true"]',
+    );
+    expect(prime).not.toBeNull();
+  });
 });

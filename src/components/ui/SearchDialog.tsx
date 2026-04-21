@@ -32,6 +32,7 @@ export function SearchDialog() {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const primeInputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
@@ -55,18 +56,30 @@ export function SearchDialog() {
   }, []);
 
   const openDialog = useCallback(() => {
-    // flushSync forces the dialog to mount synchronously, so the input
-    // exists in the DOM when we call .focus() below — still within the
-    // same user-gesture tick. iOS Safari only raises the soft keyboard
-    // when .focus() runs synchronously inside a user gesture: a
-    // setTimeout(..., 60) (or any deferred focus via useEffect) breaks
-    // that chain and the keyboard never appears on mobile.
+    // iOS Safari 17+ keyboard-raising dance. Three hard requirements:
+    //   1. .focus() must run SYNCHRONOUSLY inside the trusted gesture
+    //      (no await, no setTimeout, no microtask, no rAF).
+    //   2. The focus target must be a REAL, FOCUSABLE input at the
+    //      time .focus() runs — visibility:hidden or display:none
+    //      disqualify it, even through ancestors. opacity:0 is fine.
+    //   3. The input must already be in the DOM at the start of the
+    //      gesture (iOS won't raise the keyboard for elements mounted
+    //      mid-gesture, even with flushSync).
+    //
+    // Strategy: keep a permanently mounted "prime" input (opacity:0,
+    // tiny, tabIndex -1) outside the dialog. Focus it synchronously
+    // first — that's what raises the keyboard. Then flushSync-open
+    // the dialog and transfer focus to the real input. iOS treats
+    // focus transfers between inputs (on an already-open keyboard)
+    // as benign, so the caret moves into the real input without the
+    // keyboard dropping.
+    primeInputRef.current?.focus({ preventScroll: true });
     flushSync(() => {
       setOpen(true);
       setQuery("");
       setSelectedIndex(0);
     });
-    inputRef.current?.focus();
+    inputRef.current?.focus({ preventScroll: true });
   }, []);
 
   const navigateTo = useCallback(
@@ -99,11 +112,10 @@ export function SearchDialog() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, openDialog, closeDialog]);
 
-  // Desktop Ctrl/Cmd+K does NOT go through openDialog (it bypasses
-  // the click path), so we still need a focus-on-open effect for that
-  // branch. On keyboard shortcut, the soft keyboard is not relevant —
-  // iOS users don't have a physical Ctrl key — so a zero-delay
-  // microtask is fine and avoids the layout jank of a longer timeout.
+  // Ctrl/Cmd+K path: the shortcut handler already calls openDialog
+  // which focuses the input synchronously. This effect is a fallback
+  // in case focus was lost (e.g. browser consumed the keydown before
+  // React got to run openDialog).
   useEffect(() => {
     if (!open) return;
     if (document.activeElement === inputRef.current) return;
@@ -127,16 +139,19 @@ export function SearchDialog() {
     };
   }, [open]);
 
-  // Hide background content from assistive tech and tab order
+  // Hide background content from assistive tech and tab order.
+  // The dialog is rendered INSIDE <header> (SearchDialog is a child
+  // of Header), so setting `inert` on the header would also inert the
+  // dialog and strip focus from the real input. We inert only the
+  // main content area — the dialog's own focus trap
+  // (handleDialogKeyDown) blocks Tab from escaping into the header
+  // anyway.
   useEffect(() => {
     if (!open) return;
     const main = document.getElementById("main-content");
-    const header = document.querySelector("header");
     main?.setAttribute("inert", "");
-    header?.setAttribute("inert", "");
     return () => {
       main?.removeAttribute("inert");
-      header?.removeAttribute("inert");
     };
   }, [open]);
 
@@ -212,25 +227,50 @@ export function SearchDialog() {
         </kbd>
       </button>
 
+      {/*
+       * Prime input — permanently mounted, off-screen (not hidden).
+       * iOS refuses to raise the soft keyboard when .focus() is
+       * called on an element that is display:none or
+       * visibility:hidden, OR on an element that wasn't in the DOM
+       * at the start of the gesture. Off-screen with
+       * `left: -9999px` keeps it focusable while invisible to the
+       * user. Focus this synchronously in the click handler to
+       * raise the keyboard BEFORE the real dialog mounts.
+       */}
+      <input
+        ref={primeInputRef}
+        type="text"
+        tabIndex={-1}
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          top: "auto",
+          width: "1px",
+          height: "1px",
+          overflow: "hidden",
+        }}
+      />
+
       {open && (
+      <div
+        className="fixed inset-0 z-[60] flex animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]"
+        onMouseDown={(e) => {
+          if (e.target === e.currentTarget) closeDialog();
+        }}
+      >
         <div
-          className="fixed inset-0 z-[60] flex animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) closeDialog();
+          ref={dialogRef}
+          role="dialog"
+          aria-label={t("dialogTitle")}
+          aria-modal="true"
+          onKeyDown={handleDialogKeyDown}
+          className="flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-700/40 sm:mx-4 sm:h-auto sm:max-h-[80vh] sm:w-full sm:max-w-2xl sm:animate-slide-up sm:rounded-2xl"
+          style={{
+            paddingTop: "env(safe-area-inset-top)",
+            paddingBottom: "env(safe-area-inset-bottom)",
           }}
         >
-          <div
-            ref={dialogRef}
-            role="dialog"
-            aria-label={t("dialogTitle")}
-            aria-modal="true"
-            onKeyDown={handleDialogKeyDown}
-            className="flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-700/40 sm:mx-4 sm:h-auto sm:max-h-[80vh] sm:w-full sm:max-w-2xl sm:animate-slide-up sm:rounded-2xl"
-            style={{
-              paddingTop: "env(safe-area-inset-top)",
-              paddingBottom: "env(safe-area-inset-bottom)",
-            }}
-          >
             {/* Search input */}
             <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-2 dark:border-slate-700 sm:px-4">
               <Search

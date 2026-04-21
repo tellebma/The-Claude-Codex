@@ -1,5 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
   BookOpen,
@@ -185,7 +185,7 @@ export default async function ReferencePage({
               return (
                 <AnimateOnScroll key={page.href} preset="fade-up">
                   <Link
-                    href={`/${locale}${page.href}`}
+                    href={page.href}
                     className={`group relative flex flex-col rounded-xl border border-slate-200/50 bg-white/50 p-6 transition-all hover:bg-white hover:shadow-lg dark:border-slate-700/50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80 ${styles.hoverBorder}`}
                   >
                     <div className="mb-4 flex items-center justify-between">

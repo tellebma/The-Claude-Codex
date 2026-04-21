@@ -34,7 +34,7 @@ export function Step({ title, stepNumber, isLast = false, children }: StepProps)
           <div className="mt-2 h-full w-px bg-slate-200 dark:bg-slate-700" />
         )}
       </div>
-      <div className="pb-6">
+      <div className="min-w-0 flex-1 pb-6">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white">
           {title}
         </h3>

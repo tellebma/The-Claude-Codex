@@ -76,6 +76,11 @@
       "source": "/en/mcp/securite-mcp/",
       "destination": "/en/mcp/mcp-security/",
       "permanent": true
+    },
+    {
+      "source": "/:path((?!fr/|en/|_next/|api/|icon|apple-touch|robots|sitemap|llms|og/|manifest|404|500|favicon).+)",
+      "destination": "/fr/:path",
+      "permanent": false
     }
   ]
 }

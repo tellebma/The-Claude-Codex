@@ -114,7 +114,7 @@
     "ariaLabel": "Fil d'Ariane",
     "home": "Accueil",
     "sections": {
-      "getting-started": "Demarrer",
+      "getting-started": "Démarrer",
       "mcp": "MCP",
       "plugins": "Plugins",
       "skills": "Skills",
@@ -136,6 +136,10 @@
     "info": "Information",
     "tip": "Astuce",
     "warning": "Attention"
+  },
+  "videoEmbed": {
+    "play": "Lire la vidéo : {title}",
+    "thumbnail": "Miniature de la vidéo : {title}"
   },
   "hero": {
     "badge": "Guide gratuit & open-source",

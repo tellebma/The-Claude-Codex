@@ -9,9 +9,9 @@
 | EPIC | Stories | Fait | En cours | A faire | Progression |
 |------|---------|------|----------|---------|-------------|
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
-| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 3 | 0 | 8 | 27% |
+| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 6 | 0 | 5 | 55% |
 
-**Total projet** : 19/28 stories (68%) · 73/102 SP livres (72%)
+**Total projet** : 22/28 stories (79%) · 86/102 SP livres (84%)
 
 > Note : le composant WorkflowDiagram (C4, 3 SP) reste en backlog, nice-to-have.
 
@@ -84,15 +84,15 @@
 
 **Sprint 1** : 3/3 stories · 8/8 SP · 100%
 
-### Sprint 2 : Navigation, recherche et i18n — ⬜ A faire
+### Sprint 2 : Navigation, recherche et i18n — ✅ Termine
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| US-4 | Navigation header et ARIA dropdown | 5 | ⬜ A faire |
-| US-5 | Focus trap et accessibilite recherche | 3 | ⬜ A faire |
-| US-6 | Pages hors i18n et traductions | 5 | ⬜ A faire |
+| US-4 | Navigation header et ARIA dropdown | 5 | ✅ Fait (deja en place : dropdown ARIA menu, nav clavier, menu mobile full-height, focus in/out) |
+| US-5 | Focus trap et accessibilite recherche | 3 | ✅ Fait (deja en place : focus trap, aria-live, no-results suggestions, scrollbar compensation) |
+| US-6 | Pages hors i18n et traductions | 5 | ✅ Fait (/about et 404 deja i18n, "Démarrer" accent, videoEmbed translations ajoutees, test parite namespaces) |
 
-**Sprint 2** : 0/3 stories · 0/13 SP · 0%
+**Sprint 2** : 3/3 stories · 13/13 SP · 100%
 
 ### Sprint 3 : Coherence visuelle et ergonomie — ⬜ A faire
 

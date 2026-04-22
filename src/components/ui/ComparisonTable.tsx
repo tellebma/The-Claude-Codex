@@ -7,9 +7,18 @@ interface ComparisonColumn {
   readonly recommended?: boolean;
 }
 
+/**
+ * Cell value : les 3 littéraux ci-dessous sont des icônes spéciales
+ * (yes/no/partial) — toute autre chaîne est rendue en texte brut.
+ * Le type est un string simple : TypeScript n'offre pas de narrowing
+ * utile pour ce use-case et le switch/case dans CellValue gère le
+ * dispatch à runtime.
+ */
+type ComparisonCellValue = string;
+
 interface ComparisonRow {
   readonly feature: string;
-  readonly values: Record<string, "yes" | "no" | "partial" | string>;
+  readonly values: Record<string, ComparisonCellValue>;
 }
 
 interface ComparisonTableProps {

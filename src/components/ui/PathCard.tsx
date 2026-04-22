@@ -39,6 +39,16 @@ const bulletColors = {
   purple: "bg-violet-500",
 };
 
+/**
+ * Stagger du BorderBeam par couleur de carte, pour éviter que les 3 cartes
+ * animent en synchro. Table plate pour rester lisible (ex-nested ternary).
+ */
+const BEAM_DELAY: Readonly<Record<"teal" | "amber" | "purple", number>> = {
+  teal: 0,
+  amber: 1.5,
+  purple: 3,
+};
+
 export function PathCard({
   icon: Icon,
   level,
@@ -68,7 +78,7 @@ export function PathCard({
         colorFrom={beamColors[color].from}
         colorTo={beamColors[color].to}
         duration={5}
-        delay={color === "amber" ? 1.5 : color === "purple" ? 3 : 0}
+        delay={BEAM_DELAY[color]}
       />
       <div className="mb-4 flex items-center gap-3">
         <div

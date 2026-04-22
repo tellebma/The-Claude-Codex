@@ -1,6 +1,7 @@
 "use client";
 
-import { Terminal, Github, ExternalLink } from "lucide-react";
+import { Terminal, ExternalLink } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/icons/GitHubIcon";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CopyrightYear } from "@/components/ui/CopyrightYear";
@@ -156,7 +157,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="flex min-h-[44px] items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
             >
-              <Github className="h-4 w-4" aria-hidden="true" />
+              <GitHubIcon className="h-4 w-4" aria-hidden="true" />
               GitHub
               <span className="sr-only"> {tCommon("opensNewTab")}</span>
             </a>

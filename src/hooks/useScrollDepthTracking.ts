@@ -18,10 +18,10 @@ const SCROLL_DEBOUNCE_MS = 150;
  * (nothing to scroll), we return 100 to avoid counting them as 0% depth.
  */
 function computeScrollDepth(): number {
-  if (typeof window === "undefined") return 0;
+  if (typeof globalThis.window === "undefined") return 0;
   const doc = document.documentElement;
-  const scrollTop = window.scrollY || doc.scrollTop;
-  const viewport = window.innerHeight || doc.clientHeight;
+  const scrollTop = globalThis.scrollY || doc.scrollTop;
+  const viewport = globalThis.innerHeight || doc.clientHeight;
   const fullHeight = Math.max(
     doc.scrollHeight,
     doc.offsetHeight,

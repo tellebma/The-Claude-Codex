@@ -29,9 +29,9 @@ function isExternalUrl(href: string): boolean {
   )
     return false;
   try {
-    const url = new URL(href, window.location.href);
+    const url = new URL(href, globalThis.location.href);
     if (url.protocol !== "http:" && url.protocol !== "https:") return false;
-    if (url.hostname === window.location.hostname) return false;
+    if (url.hostname === globalThis.location.hostname) return false;
     if (INTERNAL_HOSTS.has(url.hostname)) return false;
     return true;
   } catch {
@@ -73,7 +73,7 @@ export function useExternalLinkTracking(): void {
       // qualified even when the page used a protocol-relative href.
       let absoluteHref = href;
       try {
-        absoluteHref = new URL(href, window.location.href).toString();
+        absoluteHref = new URL(href, globalThis.location.href).toString();
       } catch {
         /* keep href as-is */
       }

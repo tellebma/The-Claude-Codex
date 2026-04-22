@@ -18,7 +18,7 @@ export function LanguageSwitcher() {
   const t = useTranslations("languageSwitcher");
 
   return (
-    <div className="flex items-center gap-1" role="navigation" aria-label={t("label")}>
+    <nav className="flex items-center gap-1" aria-label={t("label")}>
       <Globe className="h-4 w-4 text-slate-500 dark:text-slate-400" aria-hidden="true" />
       {locales.map((l) => {
         const isActive = l === locale;
@@ -41,6 +41,6 @@ export function LanguageSwitcher() {
           </Link>
         );
       })}
-    </div>
+    </nav>
   );
 }

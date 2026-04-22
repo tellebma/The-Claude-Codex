@@ -34,29 +34,49 @@ function escapeForShell(content: string): string {
  * Génère un script shell qui crée tous les fichiers de configuration.
  */
 export function generateShellScript(config: GeneratedConfig): string {
-  const lines: string[] = [];
+  const lines: string[] = [
+    "#!/bin/bash",
+    "# Script généré par The Claude Codex | https://claude-codex.fr/configurator",
+    "# Exécutez ce script à la racine de votre projet.",
+    "",
+    "# Créer CLAUDE.md",
+    `cat > CLAUDE.md << 'CLAUDE_EOF'`,
+    config.claudeMd,
+    "CLAUDE_EOF",
+    "",
+    "# Créer .claude/settings.json",
+    "mkdir -p .claude",
+    `cat > .claude/settings.json << 'SETTINGS_EOF'`,
+    config.settingsJson,
+    "SETTINGS_EOF",
+    "",
+    "# Créer .mcp.json",
+    `cat > .mcp.json << 'MCP_EOF'`,
+    config.mcpJson,
+    "MCP_EOF",
+    "",
+  ];
 
-  lines.push("#!/bin/bash", "# Script généré par The Claude Codex | https://claude-codex.fr/configurator", "# Exécutez ce script à la racine de votre projet.", "");
-
-  // CLAUDE.md
-  lines.push("# Créer CLAUDE.md", `cat > CLAUDE.md << 'CLAUDE_EOF'`, config.claudeMd, "CLAUDE_EOF", "");
-
-  // settings.json
-  lines.push("# Créer .claude/settings.json", "mkdir -p .claude", `cat > .claude/settings.json << 'SETTINGS_EOF'`, config.settingsJson, "SETTINGS_EOF", "");
-
-  // .mcp.json
-  lines.push("# Créer .mcp.json", `cat > .mcp.json << 'MCP_EOF'`, config.mcpJson, "MCP_EOF", "");
-
-  // Agent files
   if (config.agentFiles.length > 0) {
-    lines.push("# Créer les commandes (slash commands)", "mkdir -p .claude/commands", "");
-
+    lines.push(
+      "# Créer les commandes (slash commands)",
+      "mkdir -p .claude/commands",
+      ""
+    );
     for (const agent of config.agentFiles) {
-      lines.push(`cat > '.claude/commands/${escapeForShell(agent.name)}' << 'AGENT_EOF'`, agent.content, "AGENT_EOF", "");
+      lines.push(
+        `cat > '.claude/commands/${escapeForShell(agent.name)}' << 'AGENT_EOF'`,
+        agent.content,
+        "AGENT_EOF",
+        ""
+      );
     }
   }
 
-  lines.push('echo "Configuration Claude Code installée avec succès !"', 'echo "Lancez claude pour commencer."');
+  lines.push(
+    'echo "Configuration Claude Code installée avec succès !"',
+    'echo "Lancez claude pour commencer."'
+  );
 
   return lines.join("\n");
 }

@@ -153,7 +153,7 @@ export default function GlossaryPage() {
               aria-live="polite"
               aria-atomic="true"
             >
-              {filteredTerms.length} {filteredTerms.length !== 1 ? t.resultsForPlural : t.resultsFor} {t.resultsForPrefix} &ldquo;{query}&rdquo;
+              {filteredTerms.length} {filteredTerms.length === 1 ? t.resultsFor : t.resultsForPlural} {t.resultsForPrefix} &ldquo;{query}&rdquo;
             </p>
           )}
         </div>
@@ -190,52 +190,68 @@ export default function GlossaryPage() {
       )}
 
       {/* Termes */}
-      <section className="py-12">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          {filteredTerms.length === 0 ? (
-            <div className="py-16 text-center">
-              <p className="text-lg text-slate-500 dark:text-slate-300">
-                {t.noResults} &ldquo;{query}&rdquo;
-              </p>
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className={clsx(
-                  "mt-4 text-sm font-medium underline underline-offset-2",
-                  "text-brand-700 hover:text-brand-800",
-                  "dark:text-brand-400 dark:hover:text-brand-300",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-                )}
-              >
-                {t.showAll}
-              </button>
-            </div>
-          ) : query.trim().length > 0 ? (
-            // Résultats de recherche sans groupement par lettre
-            <div className="space-y-4">
-              {filteredTerms.map((entry) => (
-                <GlossaryCard key={entry.term} entry={entry} t={t} />
-              ))}
-            </div>
-          ) : (
-            // Groupement alphabétique
-            <div className="space-y-12">
-              {letters.map((letter) => (
-                <div key={letter} id={`letter-${letter}`}>
-                  <h2 className="mb-4 text-2xl font-extrabold text-slate-400 dark:text-slate-500">
-                    {letter}
-                  </h2>
-                  <div className="space-y-4">
-                    {(groupedTerms[letter] ?? []).map((entry) => (
-                      <GlossaryCard key={entry.term} entry={entry} t={t} />
-                    ))}
-                  </div>
+      {(() => {
+        // Extrait la cascade nested-ternary en early returns pour
+        // rester sous le seuil Sonar S3358 (max 1 niveau de ternaire).
+        if (filteredTerms.length === 0) {
+          return (
+            <section className="py-12">
+              <div className="mx-auto max-w-4xl px-4 sm:px-6">
+                <div className="py-16 text-center">
+                  <p className="text-lg text-slate-500 dark:text-slate-300">
+                    {t.noResults} &ldquo;{query}&rdquo;
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    className={clsx(
+                      "mt-4 text-sm font-medium underline underline-offset-2",
+                      "text-brand-700 hover:text-brand-800",
+                      "dark:text-brand-400 dark:hover:text-brand-300",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                    )}
+                  >
+                    {t.showAll}
+                  </button>
                 </div>
-              ))}
+              </div>
+            </section>
+          );
+        }
+        if (query.trim().length > 0) {
+          return (
+            <section className="py-12">
+              <div className="mx-auto max-w-4xl px-4 sm:px-6">
+                <div className="space-y-4">
+                  {filteredTerms.map((entry) => (
+                    <GlossaryCard key={entry.term} entry={entry} t={t} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        }
+        return (
+          <section className="py-12">
+            <div className="mx-auto max-w-4xl px-4 sm:px-6">
+              <div className="space-y-12">
+                {letters.map((letter) => (
+                  <div key={letter} id={`letter-${letter}`}>
+                    <h2 className="mb-4 text-2xl font-extrabold text-slate-400 dark:text-slate-500">
+                      {letter}
+                    </h2>
+                    <div className="space-y-4">
+                      {(groupedTerms[letter] ?? []).map((entry) => (
+                        <GlossaryCard key={entry.term} entry={entry} t={t} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          )}
-        </div>
-      </section>
+          </section>
+        );
+      })()}
     </div>
   );
 }

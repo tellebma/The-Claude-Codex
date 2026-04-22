@@ -176,7 +176,7 @@ export function MermaidDiagram({
   return (
     <figure
       className="my-6"
-      aria-label={!caption ? accessibleName : undefined}
+      aria-label={caption ? undefined : accessibleName}
       aria-labelledby={caption ? captionId : undefined}
     >
       {!rendered && !error && (

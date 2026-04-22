@@ -4,7 +4,6 @@ import {
   ArrowRight,
   Plug,
   FolderOpen,
-  Github,
   Database,
   Globe,
   MessageSquare,
@@ -24,6 +23,7 @@ import {
   Palette,
   Route,
 } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/icons/GitHubIcon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { Callout } from "@/components/ui/Callout";
@@ -616,7 +616,7 @@ function buildArticleJsonLd(locale: string) {
   });
 }
 
-const mcpIcons = [FolderOpen, Github, Database, Globe, MessageSquare, Mail];
+const mcpIcons = [FolderOpen, GitHubIcon, Database, Globe, MessageSquare, Mail];
 const mcpDifficultyColors = [
   "bg-emerald-500/10 text-emerald-500",
   "bg-accent-500/10 text-accent-500",

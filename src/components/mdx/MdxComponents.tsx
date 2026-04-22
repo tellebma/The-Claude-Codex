@@ -62,30 +62,40 @@ export const mdxComponents: MDXComponents = {
   Step,
   Card,
 
-  // Override default HTML elements for consistent styling
-  h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  // Override default HTML elements for consistent styling.
+  // Explicit {children} (vs self-closing {...props}) makes it clear to
+  // the linter (Sonar S6850) that content is passed and announced.
+  h1: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
       className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl"
-      {...props}
-    />
+      {...rest}
+    >
+      {children}
+    </h1>
   ),
-  h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h2: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
       className="mb-4 mt-10 text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl"
-      {...props}
-    />
+      {...rest}
+    >
+      {children}
+    </h2>
   ),
-  h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h3: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h3
       className="mb-3 mt-8 text-xl font-semibold text-slate-900 dark:text-white"
-      {...props}
-    />
+      {...rest}
+    >
+      {children}
+    </h3>
   ),
-  h4: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h4: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h4
       className="mb-2 mt-6 text-lg font-semibold text-slate-900 dark:text-white"
-      {...props}
-    />
+      {...rest}
+    >
+      {children}
+    </h4>
   ),
   p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
     <p

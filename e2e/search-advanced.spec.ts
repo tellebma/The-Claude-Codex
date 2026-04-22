@@ -4,7 +4,7 @@ test.describe("Search advanced behaviour", () => {
   test("trigger button has an accessible tap target (44px minimum)", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     const btn = page.getByRole("button", { name: /Rechercher/ });
     const box = await btn.boundingBox();
     expect(box).not.toBeNull();
@@ -15,7 +15,7 @@ test.describe("Search advanced behaviour", () => {
   });
 
   test("empty query shows recommended sections", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     await expect(page.getByRole("dialog")).toBeVisible();
     // At least one of the suggestion buttons should appear
@@ -24,7 +24,7 @@ test.describe("Search advanced behaviour", () => {
   });
 
   test("focus returns to trigger button after closing", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     const trigger = page.getByRole("button", { name: /Rechercher/ });
     await trigger.click();
     await expect(page.getByRole("dialog")).toBeVisible();
@@ -36,7 +36,7 @@ test.describe("Search advanced behaviour", () => {
   });
 
   test("ArrowDown selects next result", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("MCP");
@@ -57,7 +57,7 @@ test.describe("Search advanced behaviour", () => {
   });
 
   test("Enter navigates to the selected result", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("installation");
@@ -73,7 +73,7 @@ test.describe("Search advanced behaviour", () => {
   });
 
   test("clear button empties the input", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("something");
@@ -95,7 +95,7 @@ test.describe("Search on mobile viewport", () => {
   test.use({ viewport: devices["iPhone 13"].viewport });
 
   test("opens full-screen dialog on mobile", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const dialog = page.getByRole("dialog");
     await expect(dialog).toBeVisible();
@@ -111,14 +111,14 @@ test.describe("Search on mobile viewport", () => {
   test("search input has type='search' for native mobile UX", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await expect(input).toHaveAttribute("type", "search");
   });
 
   test("search input has enterKeyHint='search'", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await expect(input).toHaveAttribute("enterkeyhint", "search");

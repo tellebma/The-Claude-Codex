@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Search", () => {
   test("opens search dialog with Ctrl+K", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.keyboard.press("Control+k");
     await expect(
       page.getByRole("dialog", { name: "Recherche globale" })
@@ -12,7 +12,7 @@ test.describe("Search", () => {
   test("opens search dialog by clicking the search button", async ({
     page,
   }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     await expect(
       page.getByRole("dialog", { name: "Recherche globale" })
@@ -20,7 +20,7 @@ test.describe("Search", () => {
   });
 
   test("shows results when typing a search query", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
 
     const input = page.getByRole("combobox", { name: "Rechercher" });
@@ -28,23 +28,23 @@ test.describe("Search", () => {
 
     // Wait for results to appear in the listbox
     const listbox = page.getByRole("listbox", {
-      name: "Resultats de recherche",
+      name: "Résultats de recherche",
     });
     await expect(listbox.getByRole("option").first()).toBeVisible();
   });
 
   test("shows no-result message for unknown queries", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
 
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("xyznonexistentterm");
 
-    await expect(page.getByText(/Aucun resultat/)).toBeVisible();
+    await expect(page.getByText(/Aucun résultat/)).toBeVisible();
   });
 
   test("closes search dialog with Escape", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/fr/");
     await page.keyboard.press("Control+k");
     await expect(
       page.getByRole("dialog", { name: "Recherche globale" })

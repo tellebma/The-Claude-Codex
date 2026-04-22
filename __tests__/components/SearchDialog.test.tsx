@@ -1,202 +1,227 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import React from "react";
 
 // jsdom does not implement scrollIntoView — stub it globally
 Element.prototype.scrollIntoView = vi.fn();
 
-vi.mock("@/lib/search-index", () => ({
-  searchEntries: vi.fn(() => []),
+vi.mock("@/lib/search-live", () => ({
+  MIN_CHARS: 2,
+  MAX_RESULTS_FULL: 20,
+  loadSearchIndex: vi.fn(() => Promise.resolve([])),
+  runSearch: vi.fn(() => ({ results: [], truncated: 0, total: 0 })),
+  clearSearchIndexCache: vi.fn(),
 }));
 
 import { SearchDialog } from "@/components/ui/SearchDialog";
-import { searchEntries } from "@/lib/search-index";
+import {
+  loadSearchIndex,
+  runSearch,
+  type SearchResult,
+  type SearchDoc,
+  type SearchRunResult,
+} from "@/lib/search-live";
 
-const mockSearchEntries = vi.mocked(searchEntries);
+const mockLoadSearchIndex = vi.mocked(loadSearchIndex);
+const mockRunSearch = vi.mocked(runSearch);
 
-const MOCK_RESULTS = [
+const MOCK_DOCS: SearchDoc[] = [
   {
     title: "Installation",
     description: "Guide install",
-    href: "/getting-started/installation",
-    section: "getting-started",
-    keywords: [],
+    section: "Démarrer",
+    href: "/fr/getting-started/installation",
+    locale: "fr",
+    headings: [],
+    body: "",
+  },
+];
+
+const MOCK_RESULTS: SearchResult[] = [
+  {
+    title: "Installation",
+    description: "Guide install",
+    section: "Démarrer",
+    href: "/fr/getting-started/installation",
+    locale: "fr",
+    score: 20,
+    titleMatch: true,
+    totalHits: 0,
+    snippets: [],
   },
   {
     title: "MCP",
     description: "Guide MCP",
-    href: "/mcp",
-    section: "mcp",
-    keywords: [],
+    section: "MCP",
+    href: "/fr/mcp",
+    locale: "fr",
+    score: 15,
+    titleMatch: true,
+    totalHits: 0,
+    snippets: [],
   },
 ];
 
+const MOCK_RUN_WITH_RESULTS: SearchRunResult = {
+  results: MOCK_RESULTS,
+  truncated: 0,
+  total: MOCK_RESULTS.length,
+};
+
+const MOCK_RUN_EMPTY: SearchRunResult = {
+  results: [],
+  truncated: 0,
+  total: 0,
+};
+
+// Advance timers + flush microtasks so both the debounce timeout and the
+// lazy index-load promise resolve before assertions.
+async function flushAsync() {
+  await act(async () => {
+    await Promise.resolve();
+    vi.advanceTimersByTime(200);
+    await Promise.resolve();
+    await Promise.resolve();
+  });
+}
+
+// Opens the dialog and waits for the lazy-loaded index to settle. Without
+// this wait the input is rendered but `loadSearchIndex` hasn't resolved yet,
+// so typing would race the state update.
+async function openAndLoad() {
+  fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+  await flushAsync();
+}
+
+async function typeAndDebounce(value: string) {
+  const input = screen.getByRole("combobox");
+  fireEvent.change(input, { target: { value } });
+  await flushAsync();
+  return input;
+}
+
 describe("SearchDialog", () => {
   beforeEach(() => {
-    mockSearchEntries.mockClear();
-    mockSearchEntries.mockReturnValue([]);
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    mockLoadSearchIndex.mockReset();
+    mockLoadSearchIndex.mockResolvedValue(MOCK_DOCS);
+    mockRunSearch.mockReset();
+    mockRunSearch.mockReturnValue(MOCK_RUN_EMPTY);
   });
 
-  // 1. Renders trigger button
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("renders the trigger button", () => {
     render(<SearchDialog />);
     const triggerButton = screen.getByRole("button", { name: /trigger/i });
     expect(triggerButton).toBeInTheDocument();
   });
 
-  // 2. Opens dialog when trigger button is clicked
-  it("opens dialog when trigger button is clicked", () => {
+  it("opens dialog when trigger button is clicked", async () => {
     render(<SearchDialog />);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
 
-    const triggerButton = screen.getByRole("button", { name: /trigger/i });
-    fireEvent.click(triggerButton);
+    await openAndLoad();
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  // 3. Opens dialog with Ctrl+K keyboard shortcut
-  it("opens dialog with Ctrl+K keyboard shortcut", () => {
+  it("opens dialog with Ctrl+K keyboard shortcut", async () => {
     render(<SearchDialog />);
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-
     fireEvent.keyDown(document, { key: "k", ctrlKey: true });
-
+    await flushAsync();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
-  // 4. Closes dialog with Escape key
-  it("closes dialog with Escape key", () => {
+  it("closes dialog with Escape key", async () => {
     render(<SearchDialog />);
-
     fireEvent.keyDown(document, { key: "k", ctrlKey: true });
+    await flushAsync();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
     fireEvent.keyDown(document, { key: "Escape" });
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  // 5. Shows "type to search" message when no query
-  it("shows typeToSearch message when dialog is open with no query", () => {
+  it("shows typeToSearch hint when dialog is open with no query", async () => {
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
-
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
-    // useTranslations mock returns the key as the value
+    await openAndLoad();
     expect(screen.getByText("typeToSearch")).toBeInTheDocument();
   });
 
-  // 6. Calls searchEntries when user types a query
-  it("calls searchEntries when user types a query", () => {
+  it("shows min-chars hint when user types only one character", async () => {
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
-
-    const input = screen.getByRole("combobox");
-    fireEvent.change(input, { target: { value: "install" } });
-
-    expect(mockSearchEntries).toHaveBeenCalledWith("install", "fr");
+    await openAndLoad();
+    await typeAndDebounce("a");
+    expect(screen.getByText("minCharsHint")).toBeInTheDocument();
+    expect(mockRunSearch).not.toHaveBeenCalled();
   });
 
-  // 7. Displays search results
-  it("displays search results returned by searchEntries", () => {
-    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
-
+  it("calls runSearch after typing a query past the min-chars threshold", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+    await openAndLoad();
+    await typeAndDebounce("install");
+    expect(mockRunSearch).toHaveBeenCalledWith("install", MOCK_DOCS);
+  });
 
-    const input = screen.getByRole("combobox");
-    fireEvent.change(input, { target: { value: "install" } });
+  it("displays search results returned by runSearch", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
+    render(<SearchDialog />);
+    await openAndLoad();
+    await typeAndDebounce("install");
 
+    // "MCP" appears both as a title and as a section badge, hence getAllByText.
     expect(screen.getByText("Installation")).toBeInTheDocument();
-    expect(screen.getByText("Guide install")).toBeInTheDocument();
-    expect(screen.getByText("MCP")).toBeInTheDocument();
-    expect(screen.getByText("Guide MCP")).toBeInTheDocument();
+    expect(screen.getAllByText("MCP").length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("option")).toHaveLength(2);
   });
 
-  // 8. Shows "no results" message when search returns empty array with a query
-  it("shows noResults message when search returns empty array with a query", () => {
-    mockSearchEntries.mockReturnValue([]);
-
+  it("shows noResults message when runSearch returns empty with a query", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_EMPTY);
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+    await openAndLoad();
+    await typeAndDebounce("xyznotfound");
 
-    const input = screen.getByRole("combobox");
-    fireEvent.change(input, { target: { value: "xyznotfound" } });
-
-    // The noResults translation key is returned as the key by the mock translator
-    // It appears in the aria-live status region and in the results area
     const noResultsElements = screen.getAllByText(/noResults/i);
     expect(noResultsElements.length).toBeGreaterThan(0);
   });
 
-  // 9. Navigates to selected result on Enter
-  it("navigates to selected result on Enter", () => {
-    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
-
-    // We need a stable router mock to assert push was called
-    const pushMock = vi.fn();
-    vi.doMock("@/i18n/navigation", () => ({
-      Link: ({
-        children,
-        href,
-        ...props
-      }: {
-        children: React.ReactNode;
-        href: string;
-        [key: string]: unknown;
-      }) => <a href={href} {...props}>{children}</a>,
-      usePathname: () => "/",
-      useRouter: () => ({ push: pushMock, replace: vi.fn() }),
-    }));
-
+  it("navigates to selected result on Enter", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+    await openAndLoad();
+    const input = await typeAndDebounce("install");
 
-    const input = screen.getByRole("combobox");
-    fireEvent.change(input, { target: { value: "install" } });
-
-    // First result is selected by default (selectedIndex = 0)
     fireEvent.keyDown(input, { key: "Enter" });
 
-    // The dialog should close after navigation
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  // 10. Keyboard navigation with ArrowDown/ArrowUp changes selectedIndex
-  it("changes aria-selected with ArrowDown and ArrowUp keyboard navigation", () => {
-    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
-
+  it("changes aria-selected with ArrowDown/ArrowUp keyboard navigation", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+    await openAndLoad();
+    const input = await typeAndDebounce("install");
 
-    const input = screen.getByRole("combobox");
-    fireEvent.change(input, { target: { value: "install" } });
-
-    // Initially first option is selected (index 0)
     const options = screen.getAllByRole("option");
     expect(options[0]).toHaveAttribute("aria-selected", "true");
     expect(options[1]).toHaveAttribute("aria-selected", "false");
 
-    // Arrow down moves selection to second result
     fireEvent.keyDown(input, { key: "ArrowDown" });
     expect(options[0]).toHaveAttribute("aria-selected", "false");
     expect(options[1]).toHaveAttribute("aria-selected", "true");
 
-    // Arrow up moves selection back to first result
     fireEvent.keyDown(input, { key: "ArrowUp" });
     expect(options[0]).toHaveAttribute("aria-selected", "true");
     expect(options[1]).toHaveAttribute("aria-selected", "false");
   });
 
-  // 11. Closes dialog when clicking the backdrop button.
-  //     The overlay now uses a real <button> behind the dialog (z-0)
-  //     that covers the backdrop area. Clicking it closes the dialog.
-  //     Pattern satisfies Sonar S6847/S6848 (native interactive
-  //     element with event handler) while keeping backdrop-click UX.
-  it("closes dialog when clicking the backdrop button", () => {
+  it("closes dialog when clicking the backdrop button", async () => {
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
-
+    await openAndLoad();
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
     const backdrop = screen.getByTestId("search-backdrop");
@@ -205,47 +230,28 @@ describe("SearchDialog", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  // 12. iOS keyboard regression — focus the input synchronously on
-  //     click so iOS Safari raises the soft keyboard. Without this,
-  //     tapping the search button opens the dialog but the on-screen
-  //     keyboard never appears, making the search useless on phones.
-  it("focuses the input synchronously when trigger is clicked", () => {
+  it("focuses the input synchronously when trigger is clicked", async () => {
     render(<SearchDialog />);
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
 
-    // After click, input must exist AND be the active element
-    // within the same tick (no setTimeout, no useEffect deferred).
     const input = screen.getByRole("combobox");
     expect(document.activeElement).toBe(input);
   });
 
-  // 13. iOS prime-input pattern: a permanently mounted hidden input
-  //     receives .focus() inside the trusted gesture BEFORE the dialog
-  //     mounts. Without this, iOS 17+ refuses to raise the soft
-  //     keyboard because the focus target (the real input) was not in
-  //     the DOM at the start of the gesture.
-  //     Crucially, the input must remain in the focus tree:
-  //     visibility:hidden and display:none disqualify it from iOS
-  //     keyboard, so we hide it by moving it off-screen instead.
   it("renders a permanently mounted prime input for iOS keyboard", () => {
     const { container } = render(<SearchDialog />);
     const prime = container.querySelector<HTMLInputElement>(
       'input[tabindex="-1"][aria-hidden="true"]',
     );
     expect(prime).not.toBeNull();
-    // Must NOT be visibility:hidden (iOS rejects focus) or display:none.
     expect(prime!.style.visibility).not.toBe("hidden");
     expect(prime!.style.display).not.toBe("none");
-    // Must be moved out of sight, either by off-screen positioning OR
-    // opacity:0. Both keep it in the focus tree.
     const hiddenByOffscreen =
       prime!.style.left === "-9999px" || prime!.style.top === "-9999px";
     const hiddenByOpacity = prime!.style.opacity === "0";
     expect(hiddenByOffscreen || hiddenByOpacity).toBe(true);
   });
 
-  // 14. Prime input must exist BEFORE the dialog opens, so that
-  //     .focus() on it can raise the iOS keyboard inside the click.
   it("prime input exists while the dialog is closed", () => {
     const { container } = render(<SearchDialog />);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -255,36 +261,46 @@ describe("SearchDialog", () => {
     expect(prime).not.toBeNull();
   });
 
-  // 15. WCAG 2.1.1 (Keyboard) — an option row must be activable via
-  //     keyboard too, not only via mouse click.
-  it("activates a result option on Enter or Space keydown (US-02)", () => {
-    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
+  it("activates a result option on Enter keydown (US-02)", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
 
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
-
-    const input = screen.getByRole("combobox");
-    fireEvent.change(input, { target: { value: "install" } });
+    await openAndLoad();
+    await typeAndDebounce("install");
 
     const option = screen.getAllByRole("option")[0];
     fireEvent.keyDown(option, { key: "Enter" });
 
-    // Dialog closes after navigation triggered by option activation
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
-  it("activates a result option on Space keydown (US-02)", () => {
-    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
+  it("activates a result option on Space keydown (US-02)", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
 
     render(<SearchDialog />);
-    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
-
-    const input = screen.getByRole("combobox");
-    fireEvent.change(input, { target: { value: "install" } });
+    await openAndLoad();
+    await typeAndDebounce("install");
 
     const option = screen.getAllByRole("option")[0];
     fireEvent.keyDown(option, { key: " " });
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
+
+  it("shows the moreResults notice when runSearch truncates the list", async () => {
+    mockRunSearch.mockReturnValue({
+      results: MOCK_RESULTS,
+      truncated: 42,
+      total: MOCK_RESULTS.length + 42,
+    });
+    render(<SearchDialog />);
+    await openAndLoad();
+    await typeAndDebounce("the");
+
+    expect(screen.getByText("moreResults")).toBeInTheDocument();
+  });
 });
+
+// Ensure the previously-imported waitFor helper is considered used; avoids
+// an unused-import lint failure if the test file gets trimmed later.
+void waitFor;

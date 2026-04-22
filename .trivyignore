@@ -1,0 +1,13 @@
+# Trivy ignore file — CVE autorisées pour l'image Docker.
+#
+# Format : 1 CVE par ligne, commentaire optionnel au-dessus.
+# Documentation : https://trivy.dev/latest/docs/configuration/filtering/#by-finding-ids
+#
+# Historique : laisser ce fichier vide jusqu'à ce qu'un faux positif
+# apparaisse. Chaque entrée DOIT être justifiée en commentaire avec :
+#   1. Date d'ajout
+#   2. Raison (pas d'exploit dans notre contexte, dépendance indirecte, etc.)
+#   3. Condition de suppression (CVE fixée upstream, déprécation du paquet)
+#
+# Les CVE musl-libc / libssl d'Alpine sont fréquemment mal notées — vérifier
+# leur applicabilité réelle avant de les ajouter ici.

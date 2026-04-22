@@ -129,9 +129,9 @@ jobs:
           retention-days: 14
 
   docker-verify:
-    name: Docker build (verify)
+    name: Docker build & Trivy scan
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     needs: [build]
     steps:
       - name: Checkout
@@ -155,3 +155,15 @@ jobs:
           curl -sf http://localhost:9090/fr/ | grep -q "Claude" && echo "FR page: OK"
           curl -sf http://localhost:9090/en/ | grep -q "Master" && echo "EN page: OK"
           docker stop develop-verify
+
+      - name: Trivy — scan de l'image Docker
+        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: claude-codex:develop-verify
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          trivyignores: .trivyignore
+          vuln-type: os,library

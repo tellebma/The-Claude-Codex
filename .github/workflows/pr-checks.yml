@@ -300,3 +300,67 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+  deploy-preview:
+    # Déploie la preview Vercel uniquement si TOUS les autres jobs ont réussi.
+    # Ce job remplace le déploiement auto Vercel git-triggered, qui est désactivé
+    # côté dashboard Vercel (Settings → Git → Ignored Build Step = `exit 0`).
+    # Voir la PR d'introduction pour la checklist de configuration manuelle.
+    name: Deploy Vercel Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs:
+      - gitleaks
+      - npm-audit
+      - lint-types
+      - unit-tests
+      - build
+      - validate-seo-files
+      - lighthouse
+      - lychee
+      - e2e-smoke
+      - sonarqube
+    # Ne tourne pas sur les PR Dependabot (elles n'ont pas accès aux secrets)
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Vercel artifact
+        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel (preview)
+        id: deploy
+        run: |
+          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Comment preview URL on PR (sticky)
+        # Met à jour UN seul commentaire via `header:` — évite l'empilement à
+        # chaque push. Action maintenue, 2M+ téléchargements, pas de dépendance
+        # externe au runtime.
+        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: vercel-preview
+          message: |
+            :rocket: **Preview Vercel déployée** (après validation de la CI)
+
+            ${{ steps.deploy.outputs.url }}
+
+            _Mise à jour automatique à chaque push sur cette branche après que tous les checks passent._

@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.2.1...v1.3.0) (2026-04-22)
+
+
+### Features
+
+* **a11y:** Sprint 1 UX/UI/A11y — contrastes textuels WCAG AA ([2201041](https://github.com/tellebma/The-Claude-Codex/commit/22010410dcc9cc7c45ddafc0fc0d46f11b763520))
+
 ## [1.2.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.2.0...v1.2.1) (2026-04-21)
 
 

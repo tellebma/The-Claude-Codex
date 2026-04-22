@@ -26,7 +26,9 @@ test.describe("Search advanced behaviour", () => {
       page.getByRole("combobox", { name: "Rechercher" }),
     ).toBeVisible();
     // At least one of the suggestion buttons should appear
-    const suggestions = page.locator("button", { hasText: /MCP|Démarrer|prompting|Skills/i });
+    const suggestions = page.locator("button", {
+      hasText: /MCP|Démarrer|prompting|Skills/i,
+    });
     await expect(suggestions.first()).toBeVisible();
   });
 
@@ -37,9 +39,12 @@ test.describe("Search advanced behaviour", () => {
     const combobox = page.getByRole("combobox", { name: "Rechercher" });
     await expect(combobox).toBeVisible();
     await page.keyboard.press("Escape");
+    // Combobox proxy: getByRole("dialog") renvoie "hidden" en Chromium
+    // headless malgré un dialog ouvert (bug Playwright avec aria-modal).
     await expect(combobox).not.toBeVisible();
-    // The trigger should be the active element
-    const isFocused = await trigger.evaluate((el) => el === document.activeElement);
+    const isFocused = await trigger.evaluate(
+      (el) => el === document.activeElement,
+    );
     expect(isFocused).toBe(true);
   });
 
@@ -50,7 +55,10 @@ test.describe("Search advanced behaviour", () => {
     await input.fill("MCP");
 
     const options = page.getByRole("option");
+    // Wait for the debounced + lazy-loaded results to render.
     await expect(options.first()).toBeVisible();
+    // Need at least two results to test ArrowDown selection change.
+    await expect(options.nth(1)).toBeVisible();
 
     const initiallySelected = await options
       .first()
@@ -58,9 +66,7 @@ test.describe("Search advanced behaviour", () => {
     expect(initiallySelected).toBe("true");
 
     await page.keyboard.press("ArrowDown");
-    const secondSelected = await options
-      .nth(1)
-      .getAttribute("aria-selected");
+    const secondSelected = await options.nth(1).getAttribute("aria-selected");
     expect(secondSelected).toBe("true");
   });
 
@@ -97,13 +103,29 @@ test.describe("Search advanced behaviour", () => {
     await clearBtn.evaluate((btn: HTMLButtonElement) => btn.click());
     await expect(input).toHaveValue("");
   });
+
+  test("results can include hits from page body content, not just titles", async ({
+    page,
+  }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    // "terminal" is a prose word that typically lives in article bodies
+    // (installation, prerequisites, etc.), not in every title.
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("terminal");
+
+    const listbox = page.getByRole("listbox", {
+      name: "Résultats de recherche",
+    });
+    await expect(listbox.getByRole("option").first()).toBeVisible();
+    // A body hit surfaces a snippet, recognised by the <mark> element.
+    await expect(listbox.locator("mark").first()).toBeVisible();
+  });
 });
 
 test.describe("Search on mobile viewport", () => {
   // Ne spread pas devices["iPhone 13"] entier : inclut defaultBrowserType: 'webkit'
   // qui n'est pas autorisé dans un describe (forcerait un nouveau worker).
-  // On reproduit juste le viewport iPhone 13 — suffisant pour tester la logique
-  // responsive (dialog full-screen, type=search, enterKeyHint).
   test.use({ viewport: devices["iPhone 13"].viewport });
 
   test("opens full-screen dialog on mobile", async ({ page }) => {
@@ -143,5 +165,19 @@ test.describe("Search on mobile viewport", () => {
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await expect(input).toHaveAttribute("enterkeyhint", "search");
+  });
+
+  test("on mobile, a body-hit result displays a snippet", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("terminal");
+
+    const listbox = page.getByRole("listbox", {
+      name: "Résultats de recherche",
+    });
+    await expect(listbox.getByRole("option").first()).toBeVisible();
+    // Mobile uses a single line-clamp-1 snippet; still contains <mark>.
+    await expect(listbox.locator("mark").first()).toBeVisible();
   });
 });

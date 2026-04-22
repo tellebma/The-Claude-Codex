@@ -19,7 +19,7 @@ export function MdxRenderer({ source, locale }: MdxRendererProps) {
     : mdxComponents;
 
   return (
-    <div className="mdx-content">
+    <div className="mdx-content mx-auto max-w-3xl">
       <MDXRemote
         source={source}
         components={components}

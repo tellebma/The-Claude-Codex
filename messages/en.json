@@ -259,13 +259,15 @@
   },
   "notFound": {
     "title": "Page not found",
-    "subtitle": "This page does not exist or has been moved.",
+    "subtitle": "This page doesn't exist or has been moved. Whobee has a few ideas to help you find your way.",
     "suggestionsTitle": "Were you looking for...",
     "fallbackTitle": "Where to start?",
-    "searchHint": "Use search to find what you're looking for:",
+    "searchHint": "Open search",
     "backToHome": "Back to home",
     "openSearch": "Open search",
-    "urlLabel": "Requested URL:"
+    "urlLabel": "Requested URL:",
+    "recentTitle": "Recent articles",
+    "robotAlt": "Interactive 3D robot tracking your cursor"
   },
   "sectionNav": {
     "getting-started": {

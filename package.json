@@ -24,6 +24,7 @@
     "docker:release": "npm run docker:build && npm run docker:push"
   },
   "dependencies": {
+    "@splinetool/react-spline": "^4.1.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "gray-matter": "^4.0.3",

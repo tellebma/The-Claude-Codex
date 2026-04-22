@@ -88,7 +88,11 @@ test.describe("Search advanced behaviour", () => {
 });
 
 test.describe("Search on mobile viewport", () => {
-  test.use({ ...devices["iPhone 13"] });
+  // Ne spread pas devices["iPhone 13"] entier : inclut defaultBrowserType: 'webkit'
+  // qui n'est pas autorisé dans un describe (forcerait un nouveau worker).
+  // On reproduit juste le viewport iPhone 13 — suffisant pour tester la logique
+  // responsive (dialog full-screen, type=search, enterKeyHint).
+  test.use({ viewport: devices["iPhone 13"].viewport });
 
   test("opens full-screen dialog on mobile", async ({ page }) => {
     await page.goto("/");

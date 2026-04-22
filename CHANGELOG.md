@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.3.0...v1.4.0) (2026-04-22)
+
+
+### Features
+
+* **a11y:** Sprint 2 UX/UI/A11y — i18n completude et accents FR ([b9f8301](https://github.com/tellebma/The-Claude-Codex/commit/b9f8301cc15876c5e403af0d339494c97d7eae85))
+
 # [1.3.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.2.1...v1.3.0) (2026-04-22)
 
 

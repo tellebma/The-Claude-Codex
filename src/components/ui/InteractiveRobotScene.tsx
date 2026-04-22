@@ -13,24 +13,28 @@ interface ToasterProps {
 
 function Toaster({ mouse }: ToasterProps) {
   const { scene } = useGLTF(MODEL_URL);
-  const ref = useRef<Group>(null);
+  const groupRef = useRef<Group>(null);
 
   useFrame(() => {
-    const group = ref.current;
+    const group = groupRef.current;
     if (!group) return;
-    const targetY = mouse.x * 0.55;
+    // Keep the 90° base rotation on Y and add cursor-driven delta on top.
+    const baseY = -Math.PI / 2;
+    const targetY = baseY + mouse.x * 0.5;
     const targetX = -mouse.y * 0.18;
     group.rotation.y += (targetY - group.rotation.y) * 0.08;
     group.rotation.x += (targetX - group.rotation.x) * 0.08;
   });
 
   return (
-    <primitive
-      ref={ref}
-      object={scene}
-      scale={0.85}
+    <group
+      ref={groupRef}
+      rotation={[0, -Math.PI / 2, 0]}
       position={[0, -0.9, 0]}
-    />
+      scale={0.85}
+    >
+      <primitive object={scene} />
+    </group>
   );
 }
 

@@ -40,7 +40,11 @@ test.describe("Search", () => {
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("xyznonexistentterm");
 
-    await expect(page.getByText(/Aucun résultat/)).toBeVisible();
+    // Scope au paragraphe visible (pas à la live region sr-only qui porte
+    // le même texte pour les lecteurs d'écran — strict-mode-violation sinon).
+    await expect(
+      page.getByRole("paragraph").filter({ hasText: /Aucun résultat/ }),
+    ).toBeVisible();
   });
 
   test("closes search dialog with Escape", async ({ page }) => {

@@ -29,6 +29,12 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
+    // Désactive animations CSS en CI — évite les fausses alertes "hidden"
+    // pendant un fade-in (opacity 0) ou "not stable" pendant une translation.
+    // Requiert que les animations soient gatées par `motion-safe:` côté app.
+    contextOptions: {
+      reducedMotion: "reduce",
+    },
   },
   projects: browserProjects,
   webServer: {

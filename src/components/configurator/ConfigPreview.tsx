@@ -243,16 +243,22 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
               className={`${className} p-4 text-xs leading-relaxed sm:text-sm`}
               style={{ ...style, backgroundColor: "transparent" }}
             >
-              {tokens.map((line, i) => (
-                <div key={i} {...getLineProps({ line })}>
-                  <span className="mr-4 inline-block w-8 select-none text-right text-slate-600">
-                    {i + 1}
-                  </span>
-                  {line.map((token, j) => (
-                    <span key={j} {...getTokenProps({ token })} />
-                  ))}
-                </div>
-              ))}
+              {tokens.map((line, i) => {
+                const lineKey = `line-${i}-${line.map((t) => t.content).join("").slice(0, 40)}`;
+                return (
+                  <div key={lineKey} {...getLineProps({ line })}>
+                    <span className="mr-4 inline-block w-8 select-none text-right text-slate-600">
+                      {i + 1}
+                    </span>
+                    {line.map((token, j) => (
+                      <span
+                        key={`${lineKey}-tok-${j}-${token.content.slice(0, 16)}`}
+                        {...getTokenProps({ token })}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
             </pre>
           )}
         </Highlight>

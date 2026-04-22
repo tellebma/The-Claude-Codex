@@ -2,21 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export type TerminalLine = {
+export type TerminalLine = Readonly<{
   type: "command" | "output" | "highlight" | "comment" | "prompt" | "empty";
   content: string;
   /** Prompt symbol, default "$". Used only for type "command" */
   promptSymbol?: string;
-};
+}>;
 
-type TerminalScreenshotProps = {
+type TerminalScreenshotProps = Readonly<{
   /** Title displayed in the window title bar */
   title?: string;
   /** Array of lines to display in the terminal */
-  lines: TerminalLine[];
+  lines: ReadonlyArray<TerminalLine>;
   /** Optional CSS class name to add to the outer wrapper */
   className?: string;
-};
+}>;
 
 /**
  * Renders a simulated terminal screenshot window.
@@ -90,7 +90,10 @@ export function TerminalScreenshot({
           /* aria-hidden: the outer role="img" wrapper already provides the accessible label */
           <pre className="font-mono text-sm leading-relaxed" aria-hidden="true">
             {lines.map((line, index) => (
-              <TerminalLineComponent key={index} line={line} />
+              <TerminalLineComponent
+                key={`term-${index}-${line.type}-${line.content.slice(0, 20)}`}
+                line={line}
+              />
             ))}
           </pre>
         ) : (
@@ -98,7 +101,7 @@ export function TerminalScreenshot({
           <div className="space-y-2 py-2" aria-hidden="true">
             {Array.from({ length: Math.min(lines.length, 6) }).map((_, i) => (
               <div
-                key={i}
+                key={`skeleton-line-${i}`}
                 className={[
                   "h-4 animate-pulse rounded bg-slate-800",
                   ["w-[55%]", "w-[65%]", "w-[75%]", "w-[85%]"][i % 4],

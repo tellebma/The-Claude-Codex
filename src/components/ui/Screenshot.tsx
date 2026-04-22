@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type ScreenshotProps = {
+type ScreenshotProps = Readonly<{
   /** Path to the image (relative to /public) */
   src: string;
   /** Accessible alt text — required */
@@ -15,7 +15,7 @@ type ScreenshotProps = {
   height?: number;
   /** Additional CSS classes */
   className?: string;
-};
+}>;
 
 /**
  * Generic screenshot component with lightbox zoom on click and lazy loading.

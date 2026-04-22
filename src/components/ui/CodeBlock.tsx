@@ -90,13 +90,19 @@ export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps)
               className={`${className} overflow-x-auto p-4 text-sm leading-relaxed`}
               style={{ ...style, backgroundColor: "transparent" }}
             >
-              {tokens.map((line, i) => (
-                <div key={i} {...getLineProps({ line })}>
-                  {line.map((token, j) => (
-                    <span key={j} {...getTokenProps({ token })} />
-                  ))}
-                </div>
-              ))}
+              {tokens.map((line, i) => {
+                const lineKey = `line-${i}-${line.map((t) => t.content).join("").slice(0, 40)}`;
+                return (
+                  <div key={lineKey} {...getLineProps({ line })}>
+                    {line.map((token, j) => (
+                      <span
+                        key={`${lineKey}-tok-${j}-${token.content.slice(0, 16)}`}
+                        {...getTokenProps({ token })}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
             </pre>
           )}
         </Highlight>

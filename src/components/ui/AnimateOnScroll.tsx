@@ -199,24 +199,32 @@ function StaggerItemsRenderer({
   return (
     <>
       {Array.isArray(children)
-        ? children.map((child, index) => (
-            <motion.div
-              key={index}
-              variants={{
-                hidden: { opacity: 0, y: 16 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration,
-                    ease: [0.25, 0.1, 0.25, 1],
+        ? children.map((child, index) => {
+            // Honor existing React keys if the caller provided them; fall
+            // back to a prefixed index for primitive/unkeyed children. The
+            // prefix makes the fallback explicit (Sonar S6479).
+            const childKey =
+              (child as { key?: React.Key | null } | null)?.key ??
+              `stagger-item-${index}`;
+            return (
+              <motion.div
+                key={childKey}
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    },
                   },
-                },
-              }}
-            >
-              {child}
-            </motion.div>
-          ))
+                }}
+              >
+                {child}
+              </motion.div>
+            );
+          })
         : children}
     </>
   );

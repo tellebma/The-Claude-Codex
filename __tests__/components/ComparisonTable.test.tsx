@@ -7,11 +7,17 @@ const COLUMNS = [
   { key: "b", label: "Option B" },
 ];
 
-const ROWS = [
+// Using Record<string, string> as the fixture type matches what
+// ComparisonRow expects. Sparse rows are expressed with "" — the
+// component handles both missing keys (via ?? "") and empty strings.
+const ROWS: Array<{
+  feature: string;
+  values: Record<string, string>;
+}> = [
   { feature: "Fast", values: { a: "yes", b: "no" } },
   { feature: "Free", values: { a: "partial", b: "yes" } },
   { feature: "Custom value", values: { a: "10 MB", b: "20 MB" } },
-  { feature: "Missing value", values: { a: "yes" } },
+  { feature: "Missing value", values: { a: "yes", b: "" } },
 ];
 
 describe("ComparisonTable", () => {

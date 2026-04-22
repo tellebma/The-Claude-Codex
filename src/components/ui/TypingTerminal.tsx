@@ -75,8 +75,9 @@ export function TypingTerminal({
         const text = displayedLines[i];
         if (text === undefined && i > currentLine) return null;
 
+        const lineKey = `term-${i}-${(line.text ?? "").slice(0, 30)}`;
         return (
-          <div key={i} className={line.className ?? "text-slate-400"}>
+          <div key={lineKey} className={line.className ?? "text-slate-400"}>
             {text ?? ""}
             {i === currentLine && !isComplete && (
               <span className="inline-block h-4 w-1.5 animate-pulse bg-brand-400 align-text-bottom" />

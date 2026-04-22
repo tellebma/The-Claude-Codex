@@ -1,0 +1,117 @@
+"use client";
+
+import { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
+import type { Group, Mesh } from "three";
+
+const MODEL_URL = "/sad-toaster.glb";
+
+interface ToasterProps {
+  readonly mouse: { x: number; y: number };
+}
+
+function Toaster({ mouse }: ToasterProps) {
+  const { scene } = useGLTF(MODEL_URL);
+  const ref = useRef<Group>(null);
+
+  useFrame(() => {
+    const group = ref.current;
+    if (!group) return;
+    const targetY = mouse.x * 0.55;
+    const targetX = -mouse.y * 0.18;
+    group.rotation.y += (targetY - group.rotation.y) * 0.08;
+    group.rotation.x += (targetX - group.rotation.x) * 0.08;
+  });
+
+  return (
+    <primitive
+      ref={ref}
+      object={scene}
+      scale={0.85}
+      position={[0, -0.9, 0]}
+    />
+  );
+}
+
+useGLTF.preload(MODEL_URL);
+
+function Platform() {
+  const ref = useRef<Mesh>(null);
+
+  useFrame(({ clock }) => {
+    const mesh = ref.current;
+    if (!mesh) return;
+    mesh.rotation.z = clock.elapsedTime * 0.1;
+  });
+
+  return (
+    <mesh ref={ref} position={[0, -1.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[0.9, 2.2, 64]} />
+      <meshBasicMaterial
+        color="#06b6d4"
+        transparent
+        opacity={0.18}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
+
+function PlatformCore() {
+  return (
+    <mesh position={[0, -1.06, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <circleGeometry args={[1.1, 64]} />
+      <meshBasicMaterial
+        color="#f59e0b"
+        transparent
+        opacity={0.08}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
+
+function useMouseNormalized(): { x: number; y: number } {
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handler = (event: MouseEvent) => {
+      setMouse({
+        x: (event.clientX / window.innerWidth) * 2 - 1,
+        y: -((event.clientY / window.innerHeight) * 2 - 1),
+      });
+    };
+    window.addEventListener("mousemove", handler);
+    return () => window.removeEventListener("mousemove", handler);
+  }, []);
+
+  return mouse;
+}
+
+export default function InteractiveRobotScene() {
+  const mouse = useMouseNormalized();
+
+  return (
+    <Canvas
+      camera={{ position: [0, 0.2, 5.2], fov: 34 }}
+      gl={{ antialias: true, alpha: true }}
+      dpr={[1, 2]}
+    >
+      <color attach="background" args={["#020617"]} />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[4, 6, 5]} intensity={1.3} color="#ffffff" />
+      <directionalLight
+        position={[-4, 2, -3]}
+        intensity={0.9}
+        color="#06b6d4"
+      />
+      <pointLight position={[0, -1, 3]} intensity={0.7} color="#f59e0b" />
+      <Suspense fallback={null}>
+        <PlatformCore />
+        <Platform />
+        <Toaster mouse={mouse} />
+      </Suspense>
+    </Canvas>
+  );
+}

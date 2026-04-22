@@ -21,9 +21,6 @@ declare global {
   }
 }
 
-const ROBOT_SCENE_URL =
-  "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
-
 type SuggestionPage = Pick<SearchEntry, "title" | "description" | "href">;
 
 export interface NotFoundStrings {
@@ -130,7 +127,6 @@ export function NotFoundClient({
     >
       <div className="absolute inset-0">
         <InteractiveRobot
-          scene={ROBOT_SCENE_URL}
           className="absolute inset-0 h-full w-full"
           ariaLabel={strings.robotAlt}
         />
@@ -281,6 +277,27 @@ export function NotFoundClient({
             </section>
           ) : null}
         </div>
+
+        <p className="pointer-events-auto mt-auto text-[10px] text-white/40">
+          3D model “Sad Toaster” by{" "}
+          <a
+            href="https://sketchfab.com/tasha.lime"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-white/70"
+          >
+            Tasha Lime
+          </a>{" "}
+          · CC Attribution on{" "}
+          <a
+            href="https://sketchfab.com/tasha.lime"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-white/70"
+          >
+            Sketchfab
+          </a>
+        </p>
       </div>
     </section>
   );

@@ -1,27 +1,21 @@
 "use client";
 
-import { Suspense, lazy } from "react";
+import dynamic from "next/dynamic";
 import { clsx } from "clsx";
 
-const Spline = lazy(() => import("@splinetool/react-spline"));
-
 interface InteractiveRobotProps {
-  readonly scene: string;
   readonly className?: string;
   readonly ariaLabel?: string;
 }
 
-function RobotFallback({ className }: Readonly<{ className?: string }>) {
+function RobotFallback() {
   return (
     <div
-      className={clsx(
-        "flex h-full w-full items-center justify-center bg-slate-900/40 text-white",
-        className,
-      )}
+      className="flex h-full w-full items-center justify-center bg-slate-950"
       aria-hidden="true"
     >
       <svg
-        className="mr-3 h-6 w-6 animate-spin text-white"
+        className="h-6 w-6 animate-spin text-white/80"
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -44,19 +38,41 @@ function RobotFallback({ className }: Readonly<{ className?: string }>) {
   );
 }
 
+const Scene = dynamic(() => import("./InteractiveRobotScene"), {
+  ssr: false,
+  loading: () => <RobotFallback />,
+});
+
 export function InteractiveRobot({
-  scene,
   className,
   ariaLabel,
 }: InteractiveRobotProps) {
   return (
     <figure
-      className={clsx("relative m-0", className)}
+      className={clsx("relative m-0 overflow-hidden", className)}
       aria-label={ariaLabel ?? "Robot 3D interactif qui suit votre souris"}
     >
-      <Suspense fallback={<RobotFallback />}>
-        <Spline scene={scene} className="!h-full !w-full" />
-      </Suspense>
+      <div className="absolute inset-0">
+        <Scene />
+      </div>
+
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 mx-auto h-[55%] w-[80%] max-w-3xl"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 40% at 50% 70%, rgba(6,182,212,0.28) 0%, rgba(245,158,11,0.15) 45%, transparent 75%)",
+          filter: "blur(14px)",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute inset-0 z-10"
+        aria-hidden="true"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 55%, transparent 0%, transparent 35%, rgba(2,6,23,0.7) 75%, #020617 100%)",
+        }}
+      />
     </figure>
   );
 }

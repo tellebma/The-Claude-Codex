@@ -83,7 +83,27 @@ jobs:
             type=semver,pattern={{version}},value=${{ steps.version.outputs.version }}
             type=sha,prefix=
 
-      - name: Build and push
+      - name: Build Docker image (scan first, no push)
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+        with:
+          context: .
+          push: false
+          load: true
+          tags: tellebma/how_to_use_claude:pre-push-scan
+
+      - name: Trivy — scan avant push
+        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: tellebma/how_to_use_claude:pre-push-scan
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          trivyignores: .trivyignore
+          vuln-type: os,library
+
+      - name: Build and push (reuses cache)
         uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
         with:
           context: .

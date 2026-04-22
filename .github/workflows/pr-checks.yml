@@ -20,6 +20,46 @@ env:
   NEXT_PUBLIC_MATOMO_SITE_ID: "1"
 
 jobs:
+  gitleaks:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  npm-audit:
+    name: Dependency audit (high+)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 22
+          cache: npm
+
+      # Pourquoi --audit-level=critical :
+      # Site 100% SSG (output: 'export'). Les CVE HIGH sur next.js (DoS SSR,
+      # Image Optimizer, rewrites, RSC deserialization) ne s'appliquent pas :
+      # Next.js ne tourne qu'au build-time, pas au runtime (c'est Nginx qui sert).
+      # Les MAJ majeures (next 14→16) sont pilotées par Dependabot.
+      # On bloque donc seulement sur CRITICAL — à remonter à HIGH si le projet
+      # bascule un jour en SSR/API routes.
+      - name: npm audit (production deps only)
+        run: npm audit --omit=dev --audit-level=critical
+
   lint-types:
     name: Lint & type-check
     runs-on: ubuntu-latest

@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { Environment, useGLTF } from "@react-three/drei";
 import type { Group, Mesh } from "three";
 
 const MODEL_URL = "/sad-toaster.glb";
@@ -112,6 +112,7 @@ export default function InteractiveRobotScene() {
       />
       <pointLight position={[0, -1, 3]} intensity={0.7} color="#f59e0b" />
       <Suspense fallback={null}>
+        <Environment preset="city" />
         <PlatformCore />
         <Platform />
         <Toaster mouse={mouse} />

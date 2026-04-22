@@ -27,7 +27,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
  * Remplace les single quotes par '\'' pour la sécurité.
  */
 function escapeForShell(content: string): string {
-  return content.replace(/'/g, "'\\''");
+  return content.replaceAll("'", "'\\''");
 }
 
 /**
@@ -36,49 +36,27 @@ function escapeForShell(content: string): string {
 export function generateShellScript(config: GeneratedConfig): string {
   const lines: string[] = [];
 
-  lines.push("#!/bin/bash");
-  lines.push("# Script généré par The Claude Codex | https://claude-codex.fr/configurator");
-  lines.push("# Exécutez ce script à la racine de votre projet.");
-  lines.push("");
+  lines.push("#!/bin/bash", "# Script généré par The Claude Codex | https://claude-codex.fr/configurator", "# Exécutez ce script à la racine de votre projet.", "");
 
   // CLAUDE.md
-  lines.push("# Créer CLAUDE.md");
-  lines.push(`cat > CLAUDE.md << 'CLAUDE_EOF'`);
-  lines.push(config.claudeMd);
-  lines.push("CLAUDE_EOF");
-  lines.push("");
+  lines.push("# Créer CLAUDE.md", `cat > CLAUDE.md << 'CLAUDE_EOF'`, config.claudeMd, "CLAUDE_EOF", "");
 
   // settings.json
-  lines.push("# Créer .claude/settings.json");
-  lines.push("mkdir -p .claude");
-  lines.push(`cat > .claude/settings.json << 'SETTINGS_EOF'`);
-  lines.push(config.settingsJson);
-  lines.push("SETTINGS_EOF");
-  lines.push("");
+  lines.push("# Créer .claude/settings.json", "mkdir -p .claude", `cat > .claude/settings.json << 'SETTINGS_EOF'`, config.settingsJson, "SETTINGS_EOF", "");
 
   // .mcp.json
-  lines.push("# Créer .mcp.json");
-  lines.push(`cat > .mcp.json << 'MCP_EOF'`);
-  lines.push(config.mcpJson);
-  lines.push("MCP_EOF");
-  lines.push("");
+  lines.push("# Créer .mcp.json", `cat > .mcp.json << 'MCP_EOF'`, config.mcpJson, "MCP_EOF", "");
 
   // Agent files
   if (config.agentFiles.length > 0) {
-    lines.push("# Créer les commandes (slash commands)");
-    lines.push("mkdir -p .claude/commands");
-    lines.push("");
+    lines.push("# Créer les commandes (slash commands)", "mkdir -p .claude/commands", "");
 
     for (const agent of config.agentFiles) {
-      lines.push(`cat > '.claude/commands/${escapeForShell(agent.name)}' << 'AGENT_EOF'`);
-      lines.push(agent.content);
-      lines.push("AGENT_EOF");
-      lines.push("");
+      lines.push(`cat > '.claude/commands/${escapeForShell(agent.name)}' << 'AGENT_EOF'`, agent.content, "AGENT_EOF", "");
     }
   }
 
-  lines.push('echo "Configuration Claude Code installée avec succès !"');
-  lines.push('echo "Lancez claude pour commencer."');
+  lines.push('echo "Configuration Claude Code installée avec succès !"', 'echo "Lancez claude pour commencer."');
 
   return lines.join("\n");
 }

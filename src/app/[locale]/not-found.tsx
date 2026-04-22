@@ -61,8 +61,8 @@ function pathToQuery(pathname: string): string {
   return pathname
     .replace(/^\//, "")
     .replace(/\/$/, "")
-    .replace(/[-_]/g, " ")
-    .replace(/\//g, " ");
+    .replaceAll(/[-_]/g, " ")
+    .replaceAll("/", " ");
 }
 
 /** Push a Matomo event if the tracker is loaded. */

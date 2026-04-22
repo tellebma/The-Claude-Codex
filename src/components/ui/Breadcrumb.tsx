@@ -48,8 +48,8 @@ export function Breadcrumb() {
         return t(key);
       }
       return segment
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase());
+        .replaceAll("-", " ")
+        .replaceAll(/\b\w/g, (char) => char.toUpperCase());
     };
   }, [t]);
 

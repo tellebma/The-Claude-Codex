@@ -109,7 +109,7 @@ export function MermaidDiagram({
   const [error, setError] = useState<string | null>(null);
   const [rendered, setRendered] = useState(false);
   const { resolvedTheme } = useTheme();
-  const uniqueId = useId().replace(/:/g, "-");
+  const uniqueId = useId().replaceAll(":", "-");
   const captionId = `mermaid-caption${uniqueId}`;
 
   const isDark = resolvedTheme === "dark";

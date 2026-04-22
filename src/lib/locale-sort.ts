@@ -42,6 +42,6 @@ export function sortByKey<T>(
  * glossaire francophone : "événement" → "E", "âme" → "A".
  */
 export function initialLetter(value: string): string {
-  const stripped = value.normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const stripped = value.normalize("NFD").replaceAll(/[̀-ͯ]/g, "");
   return stripped.charAt(0).toUpperCase();
 }

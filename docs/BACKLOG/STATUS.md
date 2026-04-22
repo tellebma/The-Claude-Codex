@@ -9,11 +9,11 @@
 | EPIC | Stories | Fait | En cours | A faire | Progression |
 |------|---------|------|----------|---------|-------------|
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
-| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 10 | 0 | 1 | 91% |
+| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 11 | 0 | 0 | 100% ✅ |
 
-**Total projet** : 26/28 stories (93%) · 97/102 SP livres (95%)
+**Total projet** : 27/28 stories (96%) · 99/102 SP livres (97%)
 
-> Note : le composant WorkflowDiagram (C4, 3 SP) reste en backlog, nice-to-have.
+> EPIC **Corrections UX/UI/A11y** : cloture le 2026-04-22. Seul WorkflowDiagram (C3, 3 SP, nice-to-have) reste dans l'EPIC Best Practices.
 
 ---
 
@@ -105,13 +105,13 @@
 
 **Sprint 3** : 4/4 stories · 11/11 SP · 100%
 
-### Sprint 4 : Polish — ⬜ A faire
+### Sprint 4 : Polish — ✅ Termine
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| US-11 | Corrections mineures de polish | 2 | ⬜ A faire |
+| US-11 | Corrections mineures de polish | 2 | ✅ Fait (favicon.ico multi-size + CTA hero hover fonctionnel ; autres items deja en place) |
 
-**Sprint 4** : 0/1 stories · 0/2 SP · 0%
+**Sprint 4** : 1/1 stories · 2/2 SP · 100%
 
 ---
 

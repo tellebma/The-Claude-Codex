@@ -120,6 +120,11 @@
     background-color: var(--surface-card-hover);
   }
 
+  .hero-cta-secondary:hover {
+    border-color: var(--hero-cta-secondary-hover-border);
+    background-color: var(--hero-cta-secondary-hover-bg);
+  }
+
   .glow {
     box-shadow: 0 0 60px -12px rgba(6, 182, 212, 0.25);
   }

@@ -144,7 +144,7 @@ export default async function HomePage({
               </Link>
               <Link
                 href="/mcp"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
+                className="hero-cta-secondary inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
                 style={{
                   borderWidth: "1px",
                   borderStyle: "solid",

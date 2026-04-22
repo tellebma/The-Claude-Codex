@@ -1,3 +1,21 @@
+# [1.3.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.2.1...v1.3.0) (2026-04-22)
+
+
+### Features
+
+* **a11y:** Sprint 1 UX/UI/A11y — contrastes textuels WCAG AA ([2201041](https://github.com/tellebma/The-Claude-Codex/commit/22010410dcc9cc7c45ddafc0fc0d46f11b763520))
+
+## [1.2.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.2.0...v1.2.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* **i18n:** add missing about namespace (used by /about page) ([2fbe67b](https://github.com/tellebma/The-Claude-Codex/commit/2fbe67bee47a04c1cf2f16530231866c4405d9bc))
+* **i18n:** generate locale-prefixed hrefs on content and reference pages ([fa5b4a6](https://github.com/tellebma/The-Claude-Codex/commit/fa5b4a6d882b3fd378ec4a09868ed66ef6a36b39))
+* **search:** iOS soft keyboard — prime-input pattern + inert scope fix ([b69a177](https://github.com/tellebma/The-Claude-Codex/commit/b69a177f69679a93184d750043936836b7bbab86)), closes [#13](https://github.com/tellebma/The-Claude-Codex/issues/13)
+* **search:** raise iOS soft keyboard on mobile tap ([ad155c4](https://github.com/tellebma/The-Claude-Codex/commit/ad155c484cef79f56885b16000802d1a435ad044))
+* **search:** repair mobile UX and add missing translation keys ([621360c](https://github.com/tellebma/The-Claude-Codex/commit/621360c13f14ad89e2de42b3740b70e5683920a3))
+
 # [1.2.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.1.3...v1.2.0) (2026-04-20)
 
 

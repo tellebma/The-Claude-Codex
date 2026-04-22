@@ -263,7 +263,7 @@ export function TcoCalculator() {
                 className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 pr-8 text-sm text-slate-900 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-slate-600 dark:bg-slate-700 dark:text-white dark:focus:border-brand-400"
                 aria-describedby={`${inputIdPrefix}-salary-desc`}
               />
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-400">
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-slate-500 dark:text-slate-400">
                 {"€"}
               </span>
             </div>

@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-03-30
+> Derniere mise a jour : 2026-04-22
 
 ---
 
@@ -9,9 +9,9 @@
 | EPIC | Stories | Fait | En cours | A faire | Progression |
 |------|---------|------|----------|---------|-------------|
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
-| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 0 | 0 | 11 | 0% |
+| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 10 | 0 | 1 | 91% |
 
-**Total projet** : 16/28 stories (57%) · 65/102 SP livres (64%)
+**Total projet** : 26/28 stories (93%) · 97/102 SP livres (95%)
 
 > Note : le composant WorkflowDiagram (C4, 3 SP) reste en backlog, nice-to-have.
 
@@ -74,36 +74,36 @@
 > Source : audit multi-agents (3 agents : UX/Nielsen, UI/Design, A11y/WCAG)
 > Lighthouse automatise = 100/100 — tous les problemes sont manuels
 
-### Sprint 1 : Critiques visuels et contrastes — ⬜ A faire
+### Sprint 1 : Critiques visuels et contrastes — ✅ Termine
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| US-1 | Hierarchie visuelle sections/cartes landing | 3 | ⬜ A faire |
-| US-2 | Contrastes textuels WCAG AA | 3 | ⬜ A faire |
-| US-3 | Coherence styles interactifs cartes | 2 | ⬜ A faire |
+| US-1 | Hierarchie visuelle sections/cartes landing | 3 | ✅ Fait (deja en place : surface-card CSS vars, sections alternees, icones opaques) |
+| US-2 | Contrastes textuels WCAG AA | 3 | ✅ Fait (MDX blockquote + Footer + TcoCalculator + skills label + content prev/next) |
+| US-3 | Coherence styles interactifs cartes | 2 | ✅ Fait (deja en place : FeatureCard hover conditionnel, AudienceCard sans hover) |
 
-**Sprint 1** : 0/3 stories · 0/8 SP · 0%
+**Sprint 1** : 3/3 stories · 8/8 SP · 100%
 
-### Sprint 2 : Navigation, recherche et i18n — ⬜ A faire
-
-| ID | Story | SP | Statut |
-|----|-------|----|--------|
-| US-4 | Navigation header et ARIA dropdown | 5 | ⬜ A faire |
-| US-5 | Focus trap et accessibilite recherche | 3 | ⬜ A faire |
-| US-6 | Pages hors i18n et traductions | 5 | ⬜ A faire |
-
-**Sprint 2** : 0/3 stories · 0/13 SP · 0%
-
-### Sprint 3 : Coherence visuelle et ergonomie — ⬜ A faire
+### Sprint 2 : Navigation, recherche et i18n — ✅ Termine
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| US-7 | Coherence dark/light pages section | 3 | ⬜ A faire |
-| US-8 | Indicateur de progression parcours | 3 | ⬜ A faire |
-| US-9 | Espacement vertical et responsive | 2 | ⬜ A faire |
-| US-10 | Liens externes et semantique ARIA | 3 | ⬜ A faire |
+| US-4 | Navigation header et ARIA dropdown | 5 | ✅ Fait (deja en place : dropdown ARIA menu, nav clavier, menu mobile full-height, focus in/out) |
+| US-5 | Focus trap et accessibilite recherche | 3 | ✅ Fait (deja en place : focus trap, aria-live, no-results suggestions, scrollbar compensation) |
+| US-6 | Pages hors i18n et traductions | 5 | ✅ Fait (/about et 404 deja i18n, "Démarrer" accent, videoEmbed translations ajoutees, test parite namespaces) |
 
-**Sprint 3** : 0/4 stories · 0/11 SP · 0%
+**Sprint 2** : 3/3 stories · 13/13 SP · 100%
+
+### Sprint 3 : Coherence visuelle et ergonomie — ✅ Termine
+
+| ID | Story | SP | Statut |
+|----|-------|----|--------|
+| US-7 | Coherence dark/light pages section | 3 | ✅ Fait (getting-started et /about deja adaptatifs ; hero MDX sombre = pattern design intentionnel) |
+| US-8 | Indicateur de progression parcours | 3 | ✅ Fait (deja en place : SectionSidebar "Page X/Y" + progressbar ARIA + sr-only %) |
+| US-9 | Espacement vertical et responsive | 2 | ✅ Fait (MdxRenderer max-w-3xl ajoute ; padding landing + Footer grid deja OK) |
+| US-10 | Liens externes et semantique ARIA | 3 | ✅ Fait (deja en place : Callout aside, PathCard aria-label, liens externes sr-only, pas de h3 orphelin) |
+
+**Sprint 3** : 4/4 stories · 11/11 SP · 100%
 
 ### Sprint 4 : Polish — ⬜ A faire
 

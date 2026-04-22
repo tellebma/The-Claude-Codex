@@ -137,6 +137,10 @@
     "tip": "Tip",
     "warning": "Warning"
   },
+  "videoEmbed": {
+    "play": "Play video: {title}",
+    "thumbnail": "Video thumbnail: {title}"
+  },
   "hero": {
     "badge": "Free & open-source guide",
     "title": "Master",

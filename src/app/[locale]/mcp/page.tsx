@@ -660,9 +660,9 @@ const colorStyles = {
 
 export default async function McpPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"] ?? translations.fr;

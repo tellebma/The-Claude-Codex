@@ -11,7 +11,7 @@ interface CodeBlockProps {
   filename?: string;
 }
 
-export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps) {
+export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBlockProps>) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const t = useTranslations("common");

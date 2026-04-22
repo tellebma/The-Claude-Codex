@@ -76,7 +76,7 @@ const colorStyles = {
   accent: { iconBg: "bg-accent-500/10", iconText: "text-accent-600 dark:text-accent-400", hoverBorder: "hover:border-accent-500/30", linkText: "text-accent-600 dark:text-accent-400", linkHover: "group-hover:text-accent-500 dark:group-hover:text-accent-300", step: "text-accent-500/40" },
 };
 
-export default async function LimitsPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function LimitsPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params; setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"];
   /* JSON-LD: safe -- static schema from our own constants, serialized via JSON.stringify. No user input. */

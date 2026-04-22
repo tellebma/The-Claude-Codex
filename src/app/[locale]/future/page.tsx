@@ -295,7 +295,7 @@ const professionIcons = [Code2, Palette, GraduationCap, TrendingUp];
 const professionGradientKeys: Array<"teal" | "amber" | "purple" | "green"> = ["teal", "amber", "purple", "green"];
 const preparationIcons = [Target, BookOpen, Compass, Users];
 const trendIcons = [Bot, Puzzle, Zap, Image, Wrench];
-const trendColorKeys: Array<"brand" | "accent" | "violet" | "emerald" | "brand"> = ["brand", "accent", "violet", "emerald", "brand"];
+const trendColorKeys: Array<"brand" | "accent" | "violet" | "emerald"> = ["brand", "accent", "violet", "emerald", "brand"];
 const roadmapIcons = [MonitorSmartphone, Video, Users, GalleryVerticalEnd, Globe];
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -368,9 +368,9 @@ const trendColorMap = {
 
 export default async function FuturePage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"] ?? translations.fr;

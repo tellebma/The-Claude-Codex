@@ -70,9 +70,9 @@ function buildCollectionJsonLd(locale: string) {
 
 export default async function ContentIndexPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"];

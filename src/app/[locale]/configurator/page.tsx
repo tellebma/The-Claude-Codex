@@ -44,9 +44,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function ConfiguratorPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"];

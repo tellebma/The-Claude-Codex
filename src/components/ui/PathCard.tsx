@@ -48,7 +48,7 @@ export function PathCard({
   href,
   color,
   ctaLabel,
-}: PathCardProps) {
+}: Readonly<PathCardProps>) {
   const beamColors = {
     teal: { from: "#06b6d4", to: "#22d3ee" },
     amber: { from: "#f59e0b", to: "#fbbf24" },

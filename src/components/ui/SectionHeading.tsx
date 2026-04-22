@@ -12,7 +12,7 @@ export function SectionHeading({
   title,
   description,
   centered = true,
-}: SectionHeadingProps) {
+}: Readonly<SectionHeadingProps>) {
   return (
     <div className={clsx("max-w-3xl", centered && "mx-auto text-center")}>
       {badge && (

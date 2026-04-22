@@ -108,9 +108,9 @@ const colorStyles = {
 
 export default async function ReferencePage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   return (

@@ -126,7 +126,7 @@ export function TerminalScreenshot({
   );
 }
 
-function TerminalLineComponent({ line }: { line: TerminalLine }) {
+function TerminalLineComponent({ line }: Readonly<{ line: TerminalLine }>) {
   if (line.type === "empty") {
     return <span className="block">&nbsp;</span>;
   }

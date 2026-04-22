@@ -102,7 +102,7 @@ describe("Screenshot", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("clicking overlay closes lightbox", () => {
+  it("clicking overlay backdrop closes lightbox", () => {
     render(<Screenshot {...DEFAULT_PROPS} />);
     fireEvent.click(
       screen.getByRole("button", {
@@ -113,9 +113,29 @@ describe("Screenshot", () => {
     const dialog = screen.getByRole("dialog");
     expect(dialog).toBeInTheDocument();
 
-    fireEvent.click(dialog);
+    // Backdrop close uses mousedown on the overlay itself (not its children).
+    fireEvent.mouseDown(dialog, { target: dialog });
 
     expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
+  it("clicking inner image content does not close lightbox", () => {
+    render(<Screenshot {...DEFAULT_PROPS} />);
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Agrandir l'image : Test screenshot",
+      })
+    );
+
+    const dialog = screen.getByRole("dialog");
+    const imageInside = dialog.querySelector("img");
+    expect(imageInside).not.toBeNull();
+
+    if (imageInside) {
+      fireEvent.mouseDown(imageInside);
+    }
+
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 
   it("image has lazy loading attribute", () => {

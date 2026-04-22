@@ -423,6 +423,12 @@ export function SearchDialog() {
                         role="option"
                         aria-selected={isActive}
                         onClick={() => navigateTo(result.href)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            navigateTo(result.href);
+                          }
+                        }}
                         onMouseEnter={() => setSelectedIndex(index)}
                         className={`group flex cursor-pointer items-start gap-3 rounded-lg px-3 py-3 transition-colors ${
                           isActive

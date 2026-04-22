@@ -256,4 +256,37 @@ describe("SearchDialog", () => {
     );
     expect(prime).not.toBeNull();
   });
+
+  // 15. WCAG 2.1.1 (Keyboard) — an option row must be activable via
+  //     keyboard too, not only via mouse click.
+  it("activates a result option on Enter or Space keydown (US-02)", () => {
+    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
+
+    render(<SearchDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "install" } });
+
+    const option = screen.getAllByRole("option")[0];
+    fireEvent.keyDown(option, { key: "Enter" });
+
+    // Dialog closes after navigation triggered by option activation
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("activates a result option on Space keydown (US-02)", () => {
+    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
+
+    render(<SearchDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "install" } });
+
+    const option = screen.getAllByRole("option")[0];
+    fireEvent.keyDown(option, { key: " " });
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
 });

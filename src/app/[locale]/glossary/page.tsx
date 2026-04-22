@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { Search, BookOpen, ArrowRight } from "lucide-react";
 import { glossaryTerms, searchGlossary } from "@/data/glossary";
+import { initialLetter, sortByKey, sortStrings } from "@/lib/locale-sort";
 import clsx from "clsx";
 
 const translations = {
@@ -72,20 +73,22 @@ export default function GlossaryPage() {
     [query]
   );
 
-  // Regrouper par lettre initiale
+  // Regrouper par lettre initiale, en normalisant les accents
+  // pour que "événement" soit rangé sous "E" et non sous "É".
   const groupedTerms = useMemo(() => {
     const groups: Record<string, typeof filteredTerms> = {};
-    for (const entry of filteredTerms) {
-      const letter = entry.term[0].toUpperCase();
+    const sortedEntries = sortByKey(filteredTerms, (e) => e.term, locale);
+    for (const entry of sortedEntries) {
+      const letter = initialLetter(entry.term);
       if (!groups[letter]) {
         groups[letter] = [];
       }
       groups[letter] = [...(groups[letter] ?? []), entry];
     }
     return groups;
-  }, [filteredTerms]);
+  }, [filteredTerms, locale]);
 
-  const letters = Object.keys(groupedTerms).sort();
+  const letters = sortStrings(Object.keys(groupedTerms), locale);
 
   return (
     <div className="min-h-screen">

@@ -114,7 +114,11 @@ export function Screenshot({
       {lightboxOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
-          onClick={closeLightbox}
+          // Close on backdrop click only (not on inner content). Pairs with
+          // Escape key (handled via document listener) for keyboard users.
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) closeLightbox();
+          }}
           role="dialog"
           aria-modal="true"
           aria-label={`Image agrandie : ${alt}`}
@@ -147,11 +151,12 @@ export function Screenshot({
             </svg>
           </button>
 
-          {/* Image container — stops click from propagating to the overlay */}
-          <div
-            className="max-h-[90vh] max-w-[90vw] overflow-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
+          {/*
+           * Image container — purely presentational wrapper. No click
+           * handler needed: the overlay uses onMouseDown with a target
+           * check, so clicks on the image don't bubble up as a close.
+           */}
+          <div className="max-h-[90vh] max-w-[90vw] overflow-auto">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={src}

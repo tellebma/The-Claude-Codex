@@ -107,6 +107,87 @@ jobs:
           path: out/
           retention-days: 3
 
+  validate-seo-files:
+    name: Validate SEO/IA files
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 22
+
+      - name: Download build artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: next-out
+          path: out/
+
+      - name: Validate sitemap / robots / llms.txt
+        run: node scripts/validate-static-output.ts
+
+  lighthouse:
+    name: Lighthouse CI (SEO / a11y / perf)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 22
+
+      - name: Download build artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: next-out
+          path: out/
+
+      - name: Run Lighthouse CI
+        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          temporaryPublicStorage: true
+
+  lychee:
+    name: Broken links (lychee)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Download build artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: next-out
+          path: out/
+
+      - name: Restore lychee cache
+        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
+        uses: actions/cache@v4
+        with:
+          path: .lycheecache
+          key: lychee-${{ github.sha }}
+          restore-keys: lychee-
+
+      - name: Lychee link check
+        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --config .lychee.toml --cache --base ./out './out/**/*.html'
+          fail: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
   e2e-smoke:
     name: E2E smoke (chromium)
     runs-on: ubuntu-latest

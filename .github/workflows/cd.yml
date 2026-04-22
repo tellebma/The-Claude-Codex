@@ -92,8 +92,7 @@ jobs:
           tags: tellebma/how_to_use_claude:pre-push-scan
 
       - name: Trivy — scan avant push
-        # TODO: SHA-pin via Dependabot (github-actions group) après 1er run.
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: tellebma/how_to_use_claude:pre-push-scan
           format: table

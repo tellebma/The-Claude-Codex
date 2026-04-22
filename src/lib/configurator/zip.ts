@@ -16,6 +16,10 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     textArea.style.opacity = "0";
     document.body.appendChild(textArea);
     textArea.select();
+    // execCommand est déprécié mais reste le seul fallback pour les
+    // navigateurs sans navigator.clipboard (http://, iframe sandbox…).
+    // Pas d'alternative moderne pour ce cas, on l'accepte explicitement.
+    // NOSONAR typescript:S1874 — fallback browser-compat intentionnel
     const success = document.execCommand("copy");
     textArea.remove();
     return success;

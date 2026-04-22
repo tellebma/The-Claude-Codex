@@ -84,7 +84,7 @@ export default async function SectionSlugContent({
         // sérialisé si @type est absent (cas édge).
         const schemaType =
           typeof schema["@type"] === "string"
-            ? (schema["@type"] as string)
+            ? schema["@type"]
             : `extra-${JSON.stringify(schema).length}`;
         return (
           <script

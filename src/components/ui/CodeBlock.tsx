@@ -42,6 +42,8 @@ export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBl
       document.body.appendChild(textArea);
       textArea.select();
       // execCommand is deprecated but retained as a best-effort fallback
+      // for browsers without navigator.clipboard (http://, iframe sandbox).
+      // NOSONAR typescript:S1874 — intentional browser-compat fallback
       const success = document.execCommand("copy");
       textArea.remove();
       if (success) {

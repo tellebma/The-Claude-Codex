@@ -105,7 +105,7 @@ export function MermaidDiagram({
   ariaLabel,
   handDrawn,
 }: MermaidDiagramProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [rendered, setRendered] = useState(false);
   const { resolvedTheme } = useTheme();
@@ -186,15 +186,13 @@ export function MermaidDiagram({
         />
       )}
       {/*
-       * Conteneur scrollable du SVG Mermaid. role="region" + tabIndex=0
-       * est le pattern WAI-ARIA pour un bloc de contenu focusable au
+       * Conteneur scrollable du SVG Mermaid. <section> + tabIndex=0 est
+       * le pattern sémantique HTML pour un bloc de contenu focusable au
        * clavier (utile quand le diagramme déborde horizontalement sur
-       * mobile). Sonar S6845 accepte tabIndex sur un élément avec rôle
-       * interactif / région explicite.
+       * mobile). Le <section> remplace <div role="region"> (Sonar S6819).
        */}
-      <div
+      <section
         ref={containerRef}
-        role="region"
         tabIndex={0}
         aria-label={accessibleName}
         aria-hidden={!rendered}

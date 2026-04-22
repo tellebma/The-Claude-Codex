@@ -11,13 +11,15 @@ interface KeyboardShortcutProps {
  *   <KeyboardShortcut keys={["Ctrl", "C"]} />          → Ctrl + C
  *   <KeyboardShortcut keys={["Esc", "Esc"]} separator=" " /> → Esc  Esc
  */
-export function KeyboardShortcut({ keys, separator = "+" }: KeyboardShortcutProps) {
+export function KeyboardShortcut({ keys, separator = "+" }: Readonly<KeyboardShortcutProps>) {
   const keyList = Array.isArray(keys) ? keys : String(keys).split(",").map((k) => k.trim());
 
+  // <span> avec aria-label suffit : le raccourci est annoncé comme
+  // un tout par les lecteurs d'écran. Le role="group" (S6819) était
+  // redondant pour ce cas inline.
   return (
     <span
       className={`inline-flex items-center ${separator === " " ? "gap-2" : "gap-1"}`}
-      role="group"
       aria-label={keyList.join(separator === "+" ? " + " : " then ")}
     >
       {keyList.map((key, index) => (

@@ -343,14 +343,22 @@ export function ConfiguratorWizard() {
           {WIZARD_STEP_LABELS[step]}
         </p>
 
-        {/* Progress bar */}
-        <div
-          className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700 sm:h-1"
-          role="progressbar"
-          aria-valuenow={step}
-          aria-valuemin={1}
-          aria-valuemax={4}
+        {/*
+         * Progress bar — élément natif <progress>. Il est masqué
+         * visuellement (sr-only) et doublé d'une représentation
+         * stylée (div + bar colorée) : le DOM natif porte la
+         * sémantique pour les lecteurs d'écran, le visuel reste
+         * entièrement stylable (Sonar S6819).
+         */}
+        <progress
+          value={step - 1}
+          max={3}
           aria-label={`Étape ${step} sur 4`}
+          className="sr-only"
+        />
+        <div
+          aria-hidden="true"
+          className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700 sm:h-1"
         >
           <div
             className="h-full rounded-full bg-brand-500 transition-all duration-500"

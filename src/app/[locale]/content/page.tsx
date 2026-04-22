@@ -1,5 +1,4 @@
 import { setRequestLocale } from "next-intl/server";
-import type { Metadata } from "next";
 import { Link } from "@/i18n/navigation";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { getAllMdxFiles } from "@/lib/mdx";
@@ -70,9 +69,9 @@ function buildCollectionJsonLd(locale: string) {
 
 export default async function ContentIndexPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"];

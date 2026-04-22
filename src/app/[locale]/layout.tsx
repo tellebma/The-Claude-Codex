@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale, getTranslations } from "next-intl/server";
-import { hasLocale } from "next-intl";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import {
+  getMessages,
+  setRequestLocale,
+  getTranslations,
+} from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
@@ -44,14 +47,10 @@ const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
 const matomoTrackingScript = MATOMO_ENABLED
   ? `
   var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies']);
-  _paq.push(['setDoNotTrack', true]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
+  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['trackPageView'], ['enableLinkTracking']);
   (function() {
     var u = '${MATOMO_URL}/';
-    _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '${MATOMO_SITE_ID}']);
+    _paq.push(['setTrackerUrl', u + 'matomo.php'], ['setSiteId', '${MATOMO_SITE_ID}']);
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
     g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
   })();
@@ -130,10 +129,10 @@ export async function generateMetadata({
 export default async function LocaleLayout({
   children,
   params,
-}: {
+}: Readonly<{
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
 
   if (!hasLocale(routing.locales, locale)) {

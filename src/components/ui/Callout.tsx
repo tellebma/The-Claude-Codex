@@ -28,7 +28,7 @@ const styles = {
   },
 };
 
-export function Callout({ type = "info", title, children }: CalloutProps) {
+export function Callout({ type = "info", title, children }: Readonly<CalloutProps>) {
   const style = styles[type];
   const { IconComponent } = style;
   const t = useTranslations("callout");

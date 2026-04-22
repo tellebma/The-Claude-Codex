@@ -27,7 +27,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     title: "Maîtrisez Claude Code",
     description:
       "Le guide de référence gratuit pour maîtriser Claude Code. MCP, Skills, Prompting avancé, pour développeurs et non-développeurs.",
-    priority: 1.0,
+    priority: 1,
     changeFrequency: "weekly",
     lastModified: "2026-03-07",
   },

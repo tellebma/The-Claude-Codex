@@ -11,6 +11,21 @@ interface StepSubscriptionProps {
   readonly onSelect: (subscription: Subscription) => void;
 }
 
+/**
+ * Classes visuelles d'une carte abonnement : extraites pour éviter
+ * le ternaire imbriqué et rester lisible (Sonar S3358).
+ */
+function subscriptionCardClasses(
+  isSelected: boolean,
+  isRecommended: boolean
+): string {
+  if (isSelected)
+    return "border-brand-500 bg-brand-500/10 shadow-md shadow-brand-500/10";
+  if (isRecommended)
+    return "border-accent-400 bg-accent-500/5 hover:border-accent-500 dark:border-accent-600 dark:bg-accent-500/10";
+  return "border-slate-200 bg-white hover:border-brand-300 hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-brand-600";
+}
+
 export function StepSubscription({
   selected,
   recommended = "pro",
@@ -37,11 +52,7 @@ export function StepSubscription({
               aria-pressed={isSelected}
               className={clsx(
                 "relative flex flex-col rounded-xl border-2 p-4 text-left transition-all duration-200",
-                isSelected
-                  ? "border-brand-500 bg-brand-500/10 shadow-md shadow-brand-500/10"
-                  : isRecommended
-                    ? "border-accent-400 bg-accent-500/5 hover:border-accent-500 dark:border-accent-600 dark:bg-accent-500/10"
-                    : "border-slate-200 bg-white hover:border-brand-300 hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/50 dark:hover:border-brand-600"
+                subscriptionCardClasses(isSelected, isRecommended)
               )}
             >
               {isRecommended && (

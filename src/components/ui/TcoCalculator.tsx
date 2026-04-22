@@ -68,8 +68,8 @@ export function TcoCalculator() {
 
   const handleDevCountChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 1 && value <= 1000) {
+      const value = Number.parseInt(e.target.value, 10);
+      if (!Number.isNaN(value) && value >= 1 && value <= 1000) {
         setDevCount(value);
       }
     },
@@ -85,8 +85,8 @@ export function TcoCalculator() {
 
   const handleSalaryChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 20000 && value <= 300000) {
+      const value = Number.parseInt(e.target.value, 10);
+      if (!Number.isNaN(value) && value >= 20000 && value <= 300000) {
         setAnnualSalary(value);
       }
     },
@@ -95,8 +95,8 @@ export function TcoCalculator() {
 
   const handleHoursChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseInt(e.target.value, 10);
-      if (!isNaN(value) && value >= 1 && value <= 30) {
+      const value = Number.parseInt(e.target.value, 10);
+      if (!Number.isNaN(value) && value >= 1 && value <= 30) {
         setHoursGainedPerWeek(value);
       }
     },

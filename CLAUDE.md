@@ -234,10 +234,43 @@ Ces hooks sont montés via `<AnalyticsTracker />` (composant `"use client"` invi
 ## Workflow de développement
 
 1. Toujours créer une branche par feature (`feat/nom-feature`)
-2. Lancer `npm run lint && npm run type-check` avant tout commit
-3. Tester le build Docker localement avant de considérer une feature comme terminée
-4. Committer souvent avec des messages conventionnels (feat:, fix:, docs:, chore:)
-5. **Vérifier les deux versions FR et EN** après chaque feature : naviguer sur `/fr/` et `/en/`, vérifier que le contenu est dans la bonne langue, que le LanguageSwitcher fonctionne, et que les liens internes sont préfixés par la locale
+2. Lancer `npm run lint && npm run type-check && npm run test` avant tout commit
+3. Pour un changement qui touche la logique métier : `npm run test:coverage` et vérifier que la couverture ne chute pas en dessous de 80 %
+4. Tester le build Docker localement avant de considérer une feature comme terminée
+5. Committer souvent avec des messages conventionnels (feat:, fix:, docs:, chore:)
+6. **Vérifier les deux versions FR et EN** après chaque feature : naviguer sur `/fr/` et `/en/`, vérifier que le contenu est dans la bonne langue, que le LanguageSwitcher fonctionne, et que les liens internes sont préfixés par la locale
+
+## Standards qualité (zéro-tolérance)
+
+Le dashboard SonarQube suivi pour ce projet applique des règles strictes. Toute PR qui viole une des règles zéro-tolérance ci-dessous est refusée :
+
+- **0 bug** ouvert (sévérité Reliability)
+- **0 code smell BLOCKER ou CRITICAL** (incluant la règle `S3776` complexité cognitive)
+- **Couverture de lignes ≥ 80 %**, branches ≥ 80 % (configuré dans `vitest.config.ts`)
+- **Aucun `any`** en TypeScript (strict mode obligatoire)
+- **Aucun hotspot de sécurité** ouvert (doit être audité et marqué `Safe` avec une note écrite, ou corrigé)
+- **A11y WCAG 2.1 AA** : tout élément interactif répond au clavier (Enter/Espace/Tab), pas de `role="img"` sur `<div>`, contrastes vérifiés
+
+Règles complémentaires appliquées dans ce projet :
+
+- Props React : wrapper `Readonly<>` ou champs `readonly`
+- Clés React : jamais l'index seul, toujours un id stable ou une clé composite explicite
+- `.push()` consécutifs : les grouper en un seul appel variadique
+- `.replace(/x/g, …)` → `.replaceAll(…)` (string ou regex /g)
+
+### Scan local
+
+La config du scanner vit dans `sonar-project.properties` (exclusions documentées en commentaires). Pour lancer un scan local contre une instance SonarQube en Docker :
+
+```bash
+# 1. Générer le rapport de coverage LCOV que le scanner va ingérer
+npm run test:coverage
+
+# 2. Lancer le scanner dockerisé (variables SONAR_HOST_URL + SONAR_TOKEN requises)
+SONAR_HOST_URL=http://localhost:9000 SONAR_TOKEN=<token> npm run sonar:local
+```
+
+Le fichier `sonar-project.properties` exclut légitimement `content/fr/**`, `content/en/**`, et `messages/**` du calcul de duplication : ces fichiers bilingues sont dupliqués par construction (cf. US-09 de l'EPIC qualité).
 
 ## i18n (internationalisation)
 

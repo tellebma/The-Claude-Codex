@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import path from "path";
+import path from "node:path";
 
 const mockExistsSync = vi.fn<(p: string) => boolean>();
 const mockReadFileSync = vi.fn<(p: string, enc?: string) => string>();
 const mockReaddirSync = vi.fn<(p: string) => string[]>();
 
-vi.mock("fs", () => ({
+vi.mock("node:fs", () => ({
   default: {
     existsSync: (...args: Parameters<typeof mockExistsSync>) => mockExistsSync(...args),
     readFileSync: (...args: Parameters<typeof mockReadFileSync>) => mockReadFileSync(...args),

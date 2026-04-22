@@ -9,7 +9,14 @@ interface ComparisonColumn {
 
 interface ComparisonRow {
   readonly feature: string;
-  readonly values: Record<string, "yes" | "no" | "partial" | string>;
+  /**
+   * Cell value : 3 littéraux spéciaux sont rendus en icône
+   * (yes → ✓ vert, no → ✗ rouge, partial → ~ ambre). Toute autre
+   * chaîne est rendue en texte brut. Le switch/case dans CellValue
+   * fait le dispatch à runtime — pas de narrowing TypeScript utile
+   * ici, donc on type simplement en string.
+   */
+  readonly values: Record<string, string>;
 }
 
 interface ComparisonTableProps {

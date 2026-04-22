@@ -125,10 +125,11 @@ describe("ConfiguratorWizard", () => {
 
   it("renders progress bar", () => {
     render(<ConfiguratorWizard />);
-    const progressBar = screen.getByRole("progressbar");
+    // Native <progress> : value = step - 1 (0-indexed), max = 3 (4 étapes - 1)
+    const progressBar = screen.getByRole("progressbar") as HTMLProgressElement;
     expect(progressBar).toBeInTheDocument();
-    expect(progressBar).toHaveAttribute("aria-valuenow", "1");
-    expect(progressBar).toHaveAttribute("aria-valuemax", "4");
+    expect(progressBar.value).toBe(0);
+    expect(progressBar.max).toBe(3);
   });
 
   it("applies a preset and shows preview", () => {

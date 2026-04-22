@@ -188,21 +188,19 @@ describe("SearchDialog", () => {
     expect(options[1]).toHaveAttribute("aria-selected", "false");
   });
 
-  // 11. Closes dialog on mouseDown on the overlay
-  //     The overlay uses onMouseDown (not onClick) to avoid the
-  //     "drag from inside the dialog -> release outside -> close"
-  //     surprise. The handler also checks e.target === e.currentTarget
-  //     so inner clicks don't bubble up to close.
-  it("closes dialog on mouseDown on the overlay backdrop", () => {
+  // 11. Closes dialog when clicking the backdrop button.
+  //     The overlay now uses a real <button> behind the dialog (z-0)
+  //     that covers the backdrop area. Clicking it closes the dialog.
+  //     Pattern satisfies Sonar S6847/S6848 (native interactive
+  //     element with event handler) while keeping backdrop-click UX.
+  it("closes dialog when clicking the backdrop button", () => {
     render(<SearchDialog />);
     fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    const dialog = screen.getByRole("dialog");
-    const overlay = dialog.parentElement as HTMLElement;
-    // Simulate a mousedown whose target IS the overlay
-    fireEvent.mouseDown(overlay, { target: overlay });
+    const backdrop = screen.getByTestId("search-backdrop");
+    fireEvent.click(backdrop);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
@@ -255,5 +253,38 @@ describe("SearchDialog", () => {
       'input[tabindex="-1"][aria-hidden="true"]',
     );
     expect(prime).not.toBeNull();
+  });
+
+  // 15. WCAG 2.1.1 (Keyboard) — an option row must be activable via
+  //     keyboard too, not only via mouse click.
+  it("activates a result option on Enter or Space keydown (US-02)", () => {
+    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
+
+    render(<SearchDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "install" } });
+
+    const option = screen.getAllByRole("option")[0];
+    fireEvent.keyDown(option, { key: "Enter" });
+
+    // Dialog closes after navigation triggered by option activation
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("activates a result option on Space keydown (US-02)", () => {
+    mockSearchEntries.mockReturnValue(MOCK_RESULTS);
+
+    render(<SearchDialog />);
+    fireEvent.click(screen.getByRole("button", { name: /trigger/i }));
+
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "install" } });
+
+    const option = screen.getAllByRole("option")[0];
+    fireEvent.keyDown(option, { key: " " });
+
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 });

@@ -164,9 +164,9 @@ const benefits = [
 
 export default async function AgentsPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   /*

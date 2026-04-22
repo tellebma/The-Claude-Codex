@@ -30,7 +30,7 @@ export function FeatureCard({
   description,
   gradient = "teal",
   href,
-}: FeatureCardProps) {
+}: Readonly<FeatureCardProps>) {
   const baseClassName = "glass-card group h-full p-6 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950";
 
   const interactiveClassName = "hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] cursor-pointer";

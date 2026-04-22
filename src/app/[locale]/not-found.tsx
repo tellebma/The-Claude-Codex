@@ -61,15 +61,16 @@ function pathToQuery(pathname: string): string {
   return pathname
     .replace(/^\//, "")
     .replace(/\/$/, "")
-    .replace(/[-_]/g, " ")
-    .replace(/\//g, " ");
+    .replaceAll(/[-_]/g, " ")
+    .replaceAll("/", " ");
 }
 
 /** Push a Matomo event if the tracker is loaded. */
 function trackMatomo404(requestedUrl: string): void {
-  if (typeof window !== "undefined" && window._paq) {
-    window._paq.push(["trackEvent", "404", "404_visit", requestedUrl]);
-  }
+  if (globalThis.window === undefined) return;
+  const g = globalThis as unknown as { _paq?: Array<unknown[]> };
+  if (!Array.isArray(g._paq)) return;
+  g._paq.push(["trackEvent", "404", "404_visit", requestedUrl]);
 }
 
 export default function NotFound() {
@@ -79,9 +80,9 @@ export default function NotFound() {
 
   // Track the 404 visit once on mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       const fullUrl =
-        window.location.pathname + window.location.search;
+        globalThis.location.pathname + globalThis.location.search;
       trackMatomo404(fullUrl);
     }
   }, []);
@@ -106,7 +107,7 @@ export default function NotFound() {
 
   // Open the global search dialog via keyboard event
   const openSearch = useCallback(() => {
-    if (typeof window !== "undefined") {
+    if (globalThis.window !== undefined) {
       const event = new KeyboardEvent("keydown", {
         key: "k",
         ctrlKey: true,

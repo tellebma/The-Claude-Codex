@@ -1,0 +1,1920 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generator — preset snapshots (US-04 regression guard) > backend-node: generateAll output is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+    {
+      "content": "# Agent : TDD Guide
+
+Tu es un expert en Test-Driven Development. Tu guides le développeur
+dans l'écriture de tests avant l'implémentation.
+
+## Processus
+
+1. Comprendre la fonctionnalité à implémenter
+2. Écrire le test en premier (RED)
+3. Vérifier que le test échoue
+4. Écrire l'implémentation minimale (GREEN)
+5. Vérifier que le test passe
+6. Refactorer si nécessaire (IMPROVE)
+
+## Règles
+
+- Couverture minimum visée : 80%
+- Tests unitaires + tests d'intégration
+- Ne jamais modifier un test pour le faire passer artificiellement",
+      "name": "tdd-guide.md",
+    },
+    {
+      "content": "# Agent : Security Reviewer
+
+Tu es un expert en sécurité applicative. Tu analyses le code
+pour détecter les vulnérabilités potentielles.
+
+## Checklist
+
+- [ ] Pas de secrets hardcodés
+- [ ] Validation des entrées utilisateur
+- [ ] Protection contre les injections SQL
+- [ ] Protection XSS
+- [ ] Protection CSRF
+- [ ] Authentification et autorisation vérifiées
+- [ ] Rate limiting configuré
+- [ ] Messages d'erreur sans fuite de données sensibles
+
+## Règles
+
+- Stopper immédiatement si une faille critique est trouvée
+- Proposer un fix pour chaque problème identifié
+- Vérifier l'ensemble du codebase pour des patterns similaires",
+      "name": "security-reviewer.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Développeur Backend
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Développeur Backend | Stacks : Node.js, Express, PostgreSQL, Docker, TypeScript
+
+## Stack technique
+
+- Node.js
+- Express
+- PostgreSQL
+- Docker
+- TypeScript
+
+## Commandes
+
+- \`npm run dev\` : Serveur de développement
+- \`npm run build\` : Build de production
+- \`npm test\` : Lancer les tests
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/src/routes       → Routes API
+/src/services     → Logique métier
+/src/models       → Modèles de données
+/tests            → Tests
+\`\`\`
+
+## Style de code
+
+- TypeScript strict, jamais de \`any\`
+- Exports nommés uniquement (sauf pages/composants racine)
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### MCP (Model Context Protocol)
+Connectez Claude Code à vos outils : GitHub, Slack, bases de données, Figma, etc.
+
+### Hooks
+Exécutez des scripts automatiquement avant/après les actions de Claude Code.
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Pro (20 $/mois)
+
+Pour un usage régulier avec plus de capacité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .mcp.json              # Configuration des MCP
+├── .claude/commands/
+│   └── code-reviewer.md
+│   └── tdd-guide.md
+│   └── security-reviewer.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 7. Configurer les MCP
+
+N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    },
+    "sentry": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sentry/mcp-server"
+      ],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    }
+  }
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)",
+      "Bash(docker *)",
+      "Bash(curl *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > backend-python: generateAll output is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+    {
+      "content": "# Agent : TDD Guide
+
+Tu es un expert en Test-Driven Development. Tu guides le développeur
+dans l'écriture de tests avant l'implémentation.
+
+## Processus
+
+1. Comprendre la fonctionnalité à implémenter
+2. Écrire le test en premier (RED)
+3. Vérifier que le test échoue
+4. Écrire l'implémentation minimale (GREEN)
+5. Vérifier que le test passe
+6. Refactorer si nécessaire (IMPROVE)
+
+## Règles
+
+- Couverture minimum visée : 80%
+- Tests unitaires + tests d'intégration
+- Ne jamais modifier un test pour le faire passer artificiellement",
+      "name": "tdd-guide.md",
+    },
+    {
+      "content": "# Agent : Security Reviewer
+
+Tu es un expert en sécurité applicative. Tu analyses le code
+pour détecter les vulnérabilités potentielles.
+
+## Checklist
+
+- [ ] Pas de secrets hardcodés
+- [ ] Validation des entrées utilisateur
+- [ ] Protection contre les injections SQL
+- [ ] Protection XSS
+- [ ] Protection CSRF
+- [ ] Authentification et autorisation vérifiées
+- [ ] Rate limiting configuré
+- [ ] Messages d'erreur sans fuite de données sensibles
+
+## Règles
+
+- Stopper immédiatement si une faille critique est trouvée
+- Proposer un fix pour chaque problème identifié
+- Vérifier l'ensemble du codebase pour des patterns similaires",
+      "name": "security-reviewer.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Développeur Backend
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Développeur Backend | Stacks : Python, FastAPI, SQLAlchemy, Docker, PostgreSQL
+
+## Stack technique
+
+- Python
+- FastAPI
+- SQLAlchemy
+- Docker
+- PostgreSQL
+
+## Commandes
+
+- \`python -m pytest\` : Lancer les tests
+- \`uvicorn main:app --reload\` : Serveur de développement
+- \`pip install -r requirements.txt\` : Installer les dépendances
+
+## Architecture
+
+\`\`\`
+/app              → Module principal
+/api              → Routes et endpoints
+/models           → Modèles de données
+/services         → Logique métier
+/tests            → Tests
+\`\`\`
+
+## Style de code
+
+- Suivre PEP 8 pour le style de code
+- Utiliser des type hints systématiquement
+- Docstrings pour toutes les fonctions publiques
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### MCP (Model Context Protocol)
+Connectez Claude Code à vos outils : GitHub, Slack, bases de données, Figma, etc.
+
+### Hooks
+Exécutez des scripts automatiquement avant/après les actions de Claude Code.
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Pro (20 $/mois)
+
+Pour un usage régulier avec plus de capacité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .mcp.json              # Configuration des MCP
+├── .claude/commands/
+│   └── code-reviewer.md
+│   └── tdd-guide.md
+│   └── security-reviewer.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 7. Configurer les MCP
+
+N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    },
+    "sentry": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sentry/mcp-server"
+      ],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    }
+  }
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)",
+      "Bash(docker *)",
+      "Bash(curl *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > backlog feature enabled snapshot is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+    {
+      "content": "# Agent : TDD Guide
+
+Tu es un expert en Test-Driven Development. Tu guides le développeur
+dans l'écriture de tests avant l'implémentation.
+
+## Processus
+
+1. Comprendre la fonctionnalité à implémenter
+2. Écrire le test en premier (RED)
+3. Vérifier que le test échoue
+4. Écrire l'implémentation minimale (GREEN)
+5. Vérifier que le test passe
+6. Refactorer si nécessaire (IMPROVE)
+
+## Règles
+
+- Couverture minimum visée : 80%
+- Tests unitaires + tests d'intégration
+- Ne jamais modifier un test pour le faire passer artificiellement",
+      "name": "tdd-guide.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Développeur Frontend
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Développeur Frontend | Stacks : React, TypeScript
+
+## Stack technique
+
+- React
+- TypeScript
+
+## Commandes
+
+- \`npm run dev\` : Serveur de développement
+- \`npm run build\` : Build de production
+- \`npm run test\` : Lancer les tests
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/tests            → Tests
+/docs             → Documentation
+\`\`\`
+
+## Style de code
+
+- TypeScript strict, jamais de \`any\`
+- Exports nommés uniquement (sauf pages/composants racine)
+- Composants fonctionnels avec hooks
+- Un composant par fichier
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+
+## Backlog & Suivi des demandes
+
+### Structure
+
+Le backlog est géré localement dans \`BACKLOG/\` (gitignored). Il centralise EPICs, features et user stories :
+
+\`\`\`
+BACKLOG/
+  README.md                        # Vue macro de toutes les EPICs
+  EPIC-{nom}/
+    README.md                      # Objectif, périmètre, tableau de progression
+    FEATURES/{feature}/
+      README.md                    # Routes, branche git, progression par US
+      us-{sujet}.md                # User Story : rôle / action / bénéfice + critères
+    ENABLERS/{enabler}/
+      README.md                    # Contexte technique, progression par US
+      us-{sujet}.md                # Découpage technique
+\`\`\`
+
+### Suivi de progression
+
+Chaque README contient un tableau avec 4 colonnes :
+
+| Colonne | Responsable | Signification |
+|---|---|---|
+| 🤖 Claude | Claude | Implémenté et fonctionnel (auto-évaluation) |
+| ✅ PO | Product Owner | Validation métier acceptée |
+| 🧪 Tests | QA | Tests unitaires/intégration couvrant la feature |
+| 🚀 Shipped | DevOps | Mergé sur main, déployable |
+
+États : \`✅ Done\` · \`🔄 In Progress\` · \`⬜ To Do\` · \`❌ Blocked\`
+
+### Mises à jour (Claude)
+
+Claude met à jour la colonne 🤖 en temps réel :
+- US terminée : \`✅ Done\` dans \`us-{sujet}.md\` ET dans le README parent
+- Feature complète : mise à jour du README de l'EPIC
+- US en cours : \`🔄 In Progress\`
+- US bloquée : \`❌ Blocked\` + note explicative
+
+### Quand un besoin non suivi est exprimé
+
+Si l'utilisateur mentionne une feature, amélioration ou correction non encore suivie, Claude doit :
+
+1. **Identifier** l'EPIC concernée (ou en créer une nouvelle)
+2. **Créer** le fichier \`us-{sujet}.md\` avec rôle / action / bénéfice + critères d'acceptation
+3. **Mettre à jour** les README de la feature/enabler et de l'EPIC
+4. **Confirmer** à l'utilisateur que la US a été créée avant de commencer l'implémentation
+
+> Ne jamais ignorer un besoin en supposant qu'il sera suivi plus tard. Chaque demande reçoit une user story immédiatement.
+
+### Format de User Story
+
+\`\`\`markdown
+# US : {Titre}
+
+**En tant que** {rôle},
+**je veux** {action},
+**afin de** {bénéfice}.
+
+## Critères d'acceptation
+
+- [ ] {critère 1}
+- [ ] {critère 2}
+- [ ] {critère 3}
+
+## Notes techniques
+
+{Notes optionnelles : contraintes, dépendances, contexte technique}
+\`\`\`
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Pro (20 $/mois)
+
+Pour un usage régulier avec plus de capacité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .claude/commands/
+│   └── code-reviewer.md
+│   └── tdd-guide.md
+├── BACKLOG/               # Backlog EPICs & User Stories (gitignored)
+│   └── README.md          # Vue macro de toutes les EPICs
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 8. Initialiser le backlog
+
+\`\`\`bash
+mkdir -p BACKLOG
+echo "BACKLOG/" >> .gitignore
+\`\`\`
+
+Le dossier \`BACKLOG/\` est local et gitignored. Claude créera automatiquement les EPICs et user stories au fil de vos demandes.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {}
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > beginner profile fallback commands are stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Débutant
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Débutant | Stacks : HTML, CSS, JavaScript
+
+## Stack technique
+
+- HTML
+- CSS
+- JavaScript
+
+## Commandes
+
+- Adaptez ces commandes à votre projet
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/tests            → Tests
+/docs             → Documentation
+\`\`\`
+
+## Style de code
+
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Free (Gratuit)
+
+Inclus avec un compte claude.ai gratuit, usage limité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .claude/commands/
+│   └── code-reviewer.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {}
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > data profile snapshot is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+    {
+      "content": "# Agent : TDD Guide
+
+Tu es un expert en Test-Driven Development. Tu guides le développeur
+dans l'écriture de tests avant l'implémentation.
+
+## Processus
+
+1. Comprendre la fonctionnalité à implémenter
+2. Écrire le test en premier (RED)
+3. Vérifier que le test échoue
+4. Écrire l'implémentation minimale (GREEN)
+5. Vérifier que le test passe
+6. Refactorer si nécessaire (IMPROVE)
+
+## Règles
+
+- Couverture minimum visée : 80%
+- Tests unitaires + tests d'intégration
+- Ne jamais modifier un test pour le faire passer artificiellement",
+      "name": "tdd-guide.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Data / ML
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Data / ML | Stacks : Python, Jupyter, Pandas
+
+## Stack technique
+
+- Python
+- Jupyter
+- Pandas
+
+## Commandes
+
+- \`jupyter notebook\` : Lancer Jupyter
+- \`python -m pytest\` : Lancer les tests
+- \`pip install -r requirements.txt\` : Installer les dépendances
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/tests            → Tests
+/docs             → Documentation
+\`\`\`
+
+## Style de code
+
+- Suivre PEP 8 pour le style de code
+- Utiliser des type hints systématiquement
+- Docstrings pour toutes les fonctions publiques
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### MCP (Model Context Protocol)
+Connectez Claude Code à vos outils : GitHub, Slack, bases de données, Figma, etc.
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+
+### Extended Thinking
+Activez la réflexion approfondie pour les tâches complexes nécessitant plus de raisonnement.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Pro (20 $/mois)
+
+Pour un usage régulier avec plus de capacité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .mcp.json              # Configuration des MCP
+├── .claude/commands/
+│   └── code-reviewer.md
+│   └── tdd-guide.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 7. Configurer les MCP
+
+N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    }
+  }
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)",
+      "Bash(python *)",
+      "Bash(jupyter *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > designer profile with frontend commands is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Designer UI/UX
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Designer UI/UX | Stacks : Figma, Tailwind CSS, React
+
+## Stack technique
+
+- Figma
+- Tailwind CSS
+- React
+
+## Commandes
+
+- \`npm run dev\` : Serveur de développement
+- \`npm run build\` : Build de production
+- \`npm run test\` : Lancer les tests
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/tests            → Tests
+/docs             → Documentation
+\`\`\`
+
+## Style de code
+
+- Composants fonctionnels avec hooks
+- Un composant par fichier
+- Tailwind utility classes, pas de CSS custom
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### MCP (Model Context Protocol)
+Connectez Claude Code à vos outils : GitHub, Slack, bases de données, Figma, etc.
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Pro (20 $/mois)
+
+Pour un usage régulier avec plus de capacité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .mcp.json              # Configuration des MCP
+├── .claude/commands/
+│   └── code-reviewer.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 7. Configurer les MCP
+
+N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    }
+  }
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > devops: generateAll output is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+    {
+      "content": "# Agent : Security Reviewer
+
+Tu es un expert en sécurité applicative. Tu analyses le code
+pour détecter les vulnérabilités potentielles.
+
+## Checklist
+
+- [ ] Pas de secrets hardcodés
+- [ ] Validation des entrées utilisateur
+- [ ] Protection contre les injections SQL
+- [ ] Protection XSS
+- [ ] Protection CSRF
+- [ ] Authentification et autorisation vérifiées
+- [ ] Rate limiting configuré
+- [ ] Messages d'erreur sans fuite de données sensibles
+
+## Règles
+
+- Stopper immédiatement si une faille critique est trouvée
+- Proposer un fix pour chaque problème identifié
+- Vérifier l'ensemble du codebase pour des patterns similaires",
+      "name": "security-reviewer.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : DevOps / SRE
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : DevOps / SRE | Stacks : Docker, Kubernetes, Terraform, GitHub Actions, AWS
+
+## Stack technique
+
+- Docker
+- Kubernetes
+- Terraform
+- GitHub Actions
+- AWS
+
+## Commandes
+
+- \`docker compose up -d\` : Démarrer les services
+- \`terraform plan\` : Planifier les changements infra
+- \`kubectl get pods\` : Vérifier l'état des pods
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/tests            → Tests
+/docs             → Documentation
+\`\`\`
+
+## Style de code
+
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### MCP (Model Context Protocol)
+Connectez Claude Code à vos outils : GitHub, Slack, bases de données, Figma, etc.
+
+### Hooks
+Exécutez des scripts automatiquement avant/après les actions de Claude Code.
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+
+### Extended Thinking
+Activez la réflexion approfondie pour les tâches complexes nécessitant plus de raisonnement.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Max 5x (100 $/mois)
+
+Pour les professionnels avec Agent Teams et Opus.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .mcp.json              # Configuration des MCP
+├── .claude/commands/
+│   └── code-reviewer.md
+│   └── security-reviewer.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 7. Configurer les MCP
+
+N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    },
+    "sentry": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sentry/mcp-server"
+      ],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    }
+  }
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)",
+      "Bash(docker *)",
+      "Bash(curl *)",
+      "Bash(terraform *)",
+      "Bash(kubectl *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > empty-stacks fallback is stable 1`] = `
+{
+  "agentFiles": [],
+  "claudeMd": "# Configuration Claude Code : Développeur Frontend
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Développeur Frontend | Stacks : Non spécifié
+
+## Stack technique
+
+- Aucune stack spécifiée
+
+## Commandes
+
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/tests            → Tests
+/docs             → Documentation
+\`\`\`
+
+## Style de code
+
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Free (Gratuit)
+
+Inclus avec un compte claude.ai gratuit, usage limité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {}
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > frontend-react: generateAll output is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+    {
+      "content": "# Agent : TDD Guide
+
+Tu es un expert en Test-Driven Development. Tu guides le développeur
+dans l'écriture de tests avant l'implémentation.
+
+## Processus
+
+1. Comprendre la fonctionnalité à implémenter
+2. Écrire le test en premier (RED)
+3. Vérifier que le test échoue
+4. Écrire l'implémentation minimale (GREEN)
+5. Vérifier que le test passe
+6. Refactorer si nécessaire (IMPROVE)
+
+## Règles
+
+- Couverture minimum visée : 80%
+- Tests unitaires + tests d'intégration
+- Ne jamais modifier un test pour le faire passer artificiellement",
+      "name": "tdd-guide.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Développeur Frontend
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Développeur Frontend | Stacks : React, Next.js, TypeScript, Tailwind CSS
+
+## Stack technique
+
+- React
+- Next.js
+- TypeScript
+- Tailwind CSS
+
+## Commandes
+
+- \`npm run dev\` : Serveur de développement
+- \`npm run build\` : Build de production
+- \`npm run lint\` : Vérification du code
+
+## Architecture
+
+\`\`\`
+/app              → Pages et layouts
+/components       → Composants réutilisables
+/lib              → Utilitaires et helpers
+/public           → Assets statiques
+\`\`\`
+
+## Style de code
+
+- TypeScript strict, jamais de \`any\`
+- Exports nommés uniquement (sauf pages/composants racine)
+- Composants fonctionnels avec hooks
+- Un composant par fichier
+- Tailwind utility classes, pas de CSS custom
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### MCP (Model Context Protocol)
+Connectez Claude Code à vos outils : GitHub, Slack, bases de données, Figma, etc.
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Pro (20 $/mois)
+
+Pour un usage régulier avec plus de capacité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .mcp.json              # Configuration des MCP
+├── .claude/commands/
+│   └── code-reviewer.md
+│   └── tdd-guide.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 7. Configurer les MCP
+
+N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    }
+  }
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;
+
+exports[`generator — preset snapshots (US-04 regression guard) > mobile-rn: generateAll output is stable 1`] = `
+{
+  "agentFiles": [
+    {
+      "content": "# Agent : Code Reviewer
+
+Tu es un expert en revue de code. Ton rôle est d'analyser le code modifié
+et de fournir des suggestions d'amélioration.
+
+## Processus
+
+1. Lire les fichiers modifiés (git diff)
+2. Vérifier la qualité du code :
+   - Lisibilité et nommage
+   - Gestion des erreurs
+   - Performance
+   - Sécurité
+3. Classer les problèmes : CRITICAL, HIGH, MEDIUM, LOW
+4. Proposer des corrections concrètes
+
+## Règles
+
+- Ne jamais modifier le code directement
+- Toujours expliquer le « pourquoi » d'une suggestion
+- Prioriser les problèmes de sécurité",
+      "name": "code-reviewer.md",
+    },
+    {
+      "content": "# Agent : TDD Guide
+
+Tu es un expert en Test-Driven Development. Tu guides le développeur
+dans l'écriture de tests avant l'implémentation.
+
+## Processus
+
+1. Comprendre la fonctionnalité à implémenter
+2. Écrire le test en premier (RED)
+3. Vérifier que le test échoue
+4. Écrire l'implémentation minimale (GREEN)
+5. Vérifier que le test passe
+6. Refactorer si nécessaire (IMPROVE)
+
+## Règles
+
+- Couverture minimum visée : 80%
+- Tests unitaires + tests d'intégration
+- Ne jamais modifier un test pour le faire passer artificiellement",
+      "name": "tdd-guide.md",
+    },
+  ],
+  "claudeMd": "# Configuration Claude Code : Développeur Mobile
+
+Ce fichier a été généré par le Configurateur Interactif de The Claude Codex.
+Profil : Développeur Mobile | Stacks : React Native, Expo, TypeScript, React Navigation
+
+## Stack technique
+
+- React Native
+- Expo
+- TypeScript
+- React Navigation
+
+## Commandes
+
+- \`npx expo start\` : Démarrer le serveur Expo
+- \`npx expo run:ios\` : Lancer sur iOS
+- \`npx expo run:android\` : Lancer sur Android
+
+## Architecture
+
+\`\`\`
+/src              → Code source
+/tests            → Tests
+/docs             → Documentation
+\`\`\`
+
+## Style de code
+
+- TypeScript strict, jamais de \`any\`
+- Exports nommés uniquement (sauf pages/composants racine)
+- Composants fonctionnels avec hooks
+- Un composant par fichier
+- Immutabilité : créer de nouveaux objets, ne jamais muter
+- Fichiers courts et focalisés (< 400 lignes)
+- Fonctions courtes (< 50 lignes)
+- Gestion d'erreurs explicite à chaque niveau
+
+## Sécurité
+
+- JAMAIS de secrets ou clés API dans le code source
+- Utiliser des variables d'environnement pour les secrets
+- Valider toutes les entrées utilisateur
+- Prévenir les injections SQL (requêtes paramétrées)
+
+## Features activées
+
+### MCP (Model Context Protocol)
+Connectez Claude Code à vos outils : GitHub, Slack, bases de données, Figma, etc.
+
+### Skills (slash commands)
+Créez des commandes personnalisées pour automatiser vos workflows récurrents.
+",
+  "installGuide": "# Guide d'installation de votre configuration Claude Code
+
+## 1. Prérequis
+
+- Node.js 18+ installé
+- npm ou yarn installé
+- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude
+
+## 2. Installer Claude Code
+
+\`\`\`bash
+npm install -g @anthropic-ai/claude-code
+\`\`\`
+
+## 3. Abonnement recommandé : Pro (20 $/mois)
+
+Pour un usage régulier avec plus de capacité.
+
+## 4. Placer les fichiers
+
+Copiez les fichiers générés à la racine de votre projet :
+
+\`\`\`
+votre-projet/
+├── CLAUDE.md              # Instructions pour Claude Code
+├── .claude/
+│   └── settings.json      # Paramètres Claude Code
+├── .mcp.json              # Configuration des MCP
+├── .claude/commands/
+│   └── code-reviewer.md
+│   └── tdd-guide.md
+└── ...
+\`\`\`
+
+## 5. Lancer Claude Code
+
+\`\`\`bash
+cd votre-projet
+claude
+\`\`\`
+
+## 6. Vérifier la configuration
+
+Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."
+
+## 7. Configurer les MCP
+
+N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.
+
+---
+Configuration générée par The Claude Codex | https://claude-codex.fr/configurator",
+  "mcpJson": "{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "VOTRE_TOKEN_ICI"
+      }
+    }
+  }
+}",
+  "settingsJson": "{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "Bash(npm run *)",
+      "Bash(git *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ]
+  }
+}",
+}
+`;

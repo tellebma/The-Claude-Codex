@@ -219,9 +219,9 @@ const colorStyles = {
 
 export default async function GettingStartedPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"];

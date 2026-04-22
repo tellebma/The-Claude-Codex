@@ -178,24 +178,33 @@ export function SearchDialog() {
     }
   };
 
-  const handleDialogKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key !== "Tab") return;
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    const focusable = dialog.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  }, []);
+  // Focus trap — on attache le listener au document (gated par open)
+  // plutôt que sur le <div role="dialog"> : ça satisfait Sonar S6847
+  // (pas d'event handler sur un élément non-interactif) sans changer
+  // le comportement.
+  useEffect(() => {
+    if (!open) return;
+    const handleTabTrap = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const dialog = dialogRef.current;
+      if (!dialog) return;
+      const focusable = dialog.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", handleTabTrap);
+    return () => document.removeEventListener("keydown", handleTabTrap);
+  }, [open]);
 
   const activeDescendant =
     results.length > 0 ? getOptionId(selectedIndex) : undefined;
@@ -253,19 +262,27 @@ export function SearchDialog() {
       />
 
       {open && (
-      <div
-        className="fixed inset-0 z-[60] flex animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]"
-        onMouseDown={(e) => {
-          if (e.target === e.currentTarget) closeDialog();
-        }}
-      >
+      <div className="fixed inset-0 z-[60] flex animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]">
+        {/*
+         * Backdrop button — invisible full-screen button covering the
+         * overlay. Clicking the backdrop (outside the dialog) closes it.
+         * Using a <button> satisfies Sonar S6847/S6848 (native interactive
+         * element with event handlers) while keeping the same UX.
+         */}
+        <button
+          type="button"
+          aria-label={t("close")}
+          tabIndex={-1}
+          onClick={closeDialog}
+          className="absolute inset-0 z-0 cursor-default"
+          data-testid="search-backdrop"
+        />
         <div
           ref={dialogRef}
           role="dialog"
           aria-label={t("dialogTitle")}
           aria-modal="true"
-          onKeyDown={handleDialogKeyDown}
-          className="flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-700/40 sm:mx-4 sm:h-auto sm:max-h-[80vh] sm:w-full sm:max-w-2xl sm:animate-slide-up sm:rounded-2xl"
+          className="relative z-10 flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-700/40 sm:mx-4 sm:h-auto sm:max-h-[80vh] sm:w-full sm:max-w-2xl sm:animate-slide-up sm:rounded-2xl"
           style={{
             paddingTop: "env(safe-area-inset-top)",
             paddingBottom: "env(safe-area-inset-bottom)",
@@ -408,7 +425,12 @@ export function SearchDialog() {
               )}
 
               {showResults && (
-                <ul
+                // Custom combobox listbox : on utilise <div role="listbox">
+                // + <div role="option"> plutôt que <ul>/<li role="option">.
+                // Les éléments <ul>/<li> sont considérés "non-interactifs"
+                // par Sonar S6842, alors que <div> est neutre (pas de rôle
+                // implicite en conflit avec role="option").
+                <div
                   id={RESULTS_LISTBOX_ID}
                   role="listbox"
                   aria-label={t("resultsLabel")}
@@ -417,12 +439,19 @@ export function SearchDialog() {
                   {results.map((result, index) => {
                     const isActive = index === selectedIndex;
                     return (
-                      <li
+                      <div
                         key={result.href}
                         id={getOptionId(index)}
                         role="option"
+                        tabIndex={isActive ? 0 : -1}
                         aria-selected={isActive}
                         onClick={() => navigateTo(result.href)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            navigateTo(result.href);
+                          }
+                        }}
                         onMouseEnter={() => setSelectedIndex(index)}
                         className={`group flex cursor-pointer items-start gap-3 rounded-lg px-3 py-3 transition-colors ${
                           isActive
@@ -467,10 +496,10 @@ export function SearchDialog() {
                           }`}
                           aria-hidden="true"
                         />
-                      </li>
+                      </div>
                     );
                   })}
-                </ul>
+                </div>
               )}
             </div>
 

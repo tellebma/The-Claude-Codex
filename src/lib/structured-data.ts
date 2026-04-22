@@ -265,5 +265,5 @@ export function createBreadcrumbSchema(
  * statically-built schema objects (no user input).
  */
 export function serializeJsonLd(schema: Record<string, unknown>): string {
-  return JSON.stringify(schema).replace(/<\//g, "<\\/");
+  return JSON.stringify(schema).replaceAll("</", String.raw`<\/`);
 }

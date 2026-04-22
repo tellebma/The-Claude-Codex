@@ -2,7 +2,7 @@ interface LogoProps {
   size?: "sm" | "md";
 }
 
-export function Logo({ size = "md" }: LogoProps) {
+export function Logo({ size = "md" }: Readonly<LogoProps>) {
   const dimension = size === "sm" ? "h-7 w-7" : "h-8 w-8";
 
   return (

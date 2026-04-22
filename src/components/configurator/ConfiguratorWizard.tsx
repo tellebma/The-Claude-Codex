@@ -5,7 +5,6 @@ import { ArrowLeft, ArrowRight, RotateCcw, Eye, EyeOff } from "lucide-react";
 import type {
   ConfigState,
   Profile,
-  Stack,
   Subscription,
   Feature,
   WizardStep,
@@ -22,6 +21,28 @@ import { StepFeatures } from "./StepFeatures";
 import { ConfigPreview } from "./ConfigPreview";
 import { PresetCard } from "./PresetCard";
 import clsx from "clsx";
+
+/**
+ * Classes Tailwind pour l'état visuel d'un step du wizard.
+ * Extraites en fonctions dédiées pour éviter les ternaires imbriqués
+ * (Sonar S3358) et rester lisibles lors d'ajout d'un nouvel état.
+ */
+function stepLabelClasses(
+  isReachable: boolean,
+  isCurrent: boolean,
+  isCompleted: boolean
+): string {
+  if (!isReachable) return "cursor-not-allowed text-slate-300 dark:text-slate-600";
+  if (isCurrent) return "bg-brand-500/10 text-brand-700 dark:text-brand-400";
+  if (isCompleted) return "text-emerald-600 dark:text-emerald-400";
+  return "text-slate-400 dark:text-slate-500";
+}
+
+function stepBadgeClasses(isCurrent: boolean, isCompleted: boolean): string {
+  if (isCurrent) return "bg-brand-500 text-white";
+  if (isCompleted) return "bg-emerald-500 text-white";
+  return "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-300";
+}
 
 const INITIAL_STATE: ConfigState = {
   profile: null,
@@ -71,7 +92,7 @@ export function ConfiguratorWizard() {
   }, []);
 
   // Stack toggle
-  const handleStackToggle = useCallback((stack: Stack) => {
+  const handleStackToggle = useCallback((stack: string) => {
     setConfig((prev) => {
       const isSelected = prev.stacks.includes(stack);
       return {
@@ -277,27 +298,17 @@ export function ConfiguratorWizard() {
               type="button"
               onClick={() => handleStepClick(s)}
               disabled={!isReachable}
-              aria-label={`Aller à l'étape ${s} : ${WIZARD_STEP_LABELS[s]}${!isReachable ? " (complétez les étapes précédentes)" : ""}`}
+              aria-label={`Aller à l'étape ${s} : ${WIZARD_STEP_LABELS[s]}${isReachable ? "" : " (complétez les étapes précédentes)"}`}
               aria-current={step === s ? "step" : undefined}
               className={clsx(
                 "flex items-center gap-2 rounded-lg px-1.5 py-2 text-sm font-medium transition-colors sm:px-3",
-                !isReachable
-                  ? "cursor-not-allowed text-slate-300 dark:text-slate-600"
-                  : step === s
-                    ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
-                    : s < step
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-slate-400 dark:text-slate-500"
+                stepLabelClasses(isReachable, step === s, s < step)
               )}
             >
               <span
                 className={clsx(
                   "flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold",
-                  step === s
-                    ? "bg-brand-500 text-white"
-                    : s < step
-                      ? "bg-emerald-500 text-white"
-                      : "bg-slate-200 text-slate-500 dark:bg-slate-700 dark:text-slate-300"
+                  stepBadgeClasses(step === s, s < step)
                 )}
               >
                 {s < step ? (
@@ -332,14 +343,22 @@ export function ConfiguratorWizard() {
           {WIZARD_STEP_LABELS[step]}
         </p>
 
-        {/* Progress bar */}
-        <div
-          className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700 sm:h-1"
-          role="progressbar"
-          aria-valuenow={step}
-          aria-valuemin={1}
-          aria-valuemax={4}
+        {/*
+         * Progress bar — élément natif <progress>. Il est masqué
+         * visuellement (sr-only) et doublé d'une représentation
+         * stylée (div + bar colorée) : le DOM natif porte la
+         * sémantique pour les lecteurs d'écran, le visuel reste
+         * entièrement stylable (Sonar S6819).
+         */}
+        <progress
+          value={step - 1}
+          max={3}
           aria-label={`Étape ${step} sur 4`}
+          className="sr-only"
+        />
+        <div
+          aria-hidden="true"
+          className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700 sm:h-1"
         >
           <div
             className="h-full rounded-full bg-brand-500 transition-all duration-500"

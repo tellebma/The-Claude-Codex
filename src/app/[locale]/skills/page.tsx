@@ -566,9 +566,9 @@ const useCaseIcons = [Rocket, Layers, Sparkles];
 
 export default async function SkillsPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"] ?? translations.fr;
@@ -756,9 +756,8 @@ export default async function SkillsPage({
                 Crees par vous dans le dossier{" "}
                 <code className="rounded bg-slate-200/80 px-1.5 py-0.5 text-xs font-mono dark:bg-slate-700/80">
                   ~/.claude/commands/
-                </code>
-                . Ils sont disponibles dans tous vos projets et refletent vos
-                preferences personnelles.
+                </code>. Ils sont disponibles dans tous vos projets et refletent
+                vos preferences personnelles.
               </p>
               <CodeBlock
                 code={`# Structure des custom skills

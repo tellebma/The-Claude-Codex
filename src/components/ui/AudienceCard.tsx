@@ -6,7 +6,7 @@ interface AudienceCardProps {
   description: string;
 }
 
-export function AudienceCard({ icon: Icon, title, description }: AudienceCardProps) {
+export function AudienceCard({ icon: Icon, title, description }: Readonly<AudienceCardProps>) {
   return (
     <div className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:shadow-none">
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-100 to-accent-50">

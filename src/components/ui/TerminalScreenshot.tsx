@@ -2,21 +2,35 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export type TerminalLine = {
+export type TerminalLine = Readonly<{
   type: "command" | "output" | "highlight" | "comment" | "prompt" | "empty";
   content: string;
   /** Prompt symbol, default "$". Used only for type "command" */
   promptSymbol?: string;
-};
+}>;
 
-type TerminalScreenshotProps = {
+type TerminalScreenshotProps = Readonly<{
   /** Title displayed in the window title bar */
   title?: string;
   /** Array of lines to display in the terminal */
-  lines: TerminalLine[];
+  lines: ReadonlyArray<TerminalLine>;
   /** Optional CSS class name to add to the outer wrapper */
   className?: string;
-};
+}>;
+
+/**
+ * Stable skeleton placeholders — 6 rows pre-defined with unique ids
+ * and alternating widths. Stable keys keep Sonar S6479 happy and avoid
+ * React re-keying when a skeleton briefly renders during hydration.
+ */
+const SKELETON_ROWS = [
+  { id: "skel-a", width: "w-[55%]" },
+  { id: "skel-b", width: "w-[65%]" },
+  { id: "skel-c", width: "w-[75%]" },
+  { id: "skel-d", width: "w-[85%]" },
+  { id: "skel-e", width: "w-[55%]" },
+  { id: "skel-f", width: "w-[65%]" },
+] as const;
 
 /**
  * Renders a simulated terminal screenshot window.
@@ -90,19 +104,19 @@ export function TerminalScreenshot({
           /* aria-hidden: the outer role="img" wrapper already provides the accessible label */
           <pre className="font-mono text-sm leading-relaxed" aria-hidden="true">
             {lines.map((line, index) => (
-              <TerminalLineComponent key={index} line={line} />
+              <TerminalLineComponent
+                key={`term-${index}-${line.type}-${line.content.slice(0, 20)}`}
+                line={line}
+              />
             ))}
           </pre>
         ) : (
           /* Skeleton placeholder while waiting for IntersectionObserver trigger */
           <div className="space-y-2 py-2" aria-hidden="true">
-            {Array.from({ length: Math.min(lines.length, 6) }).map((_, i) => (
+            {SKELETON_ROWS.slice(0, Math.min(lines.length, 6)).map((row) => (
               <div
-                key={i}
-                className={[
-                  "h-4 animate-pulse rounded bg-slate-800",
-                  ["w-[55%]", "w-[65%]", "w-[75%]", "w-[85%]"][i % 4],
-                ].join(" ")}
+                key={row.id}
+                className={`h-4 animate-pulse rounded bg-slate-800 ${row.width}`}
               />
             ))}
           </div>
@@ -112,7 +126,7 @@ export function TerminalScreenshot({
   );
 }
 
-function TerminalLineComponent({ line }: { line: TerminalLine }) {
+function TerminalLineComponent({ line }: Readonly<{ line: TerminalLine }>) {
   if (line.type === "empty") {
     return <span className="block">&nbsp;</span>;
   }

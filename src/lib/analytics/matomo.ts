@@ -25,8 +25,8 @@ interface MatomoWindow extends Window {
  * Safe to call on the server (it simply does nothing).
  */
 export function pushMatomoCommand(command: MatomoCommand): void {
-  if (typeof window === "undefined") return;
-  const w = window as MatomoWindow;
+  if (globalThis.window === undefined) return;
+  const w = globalThis as unknown as MatomoWindow;
   if (!Array.isArray(w._paq)) return;
   w._paq.push(command as unknown[]);
 }

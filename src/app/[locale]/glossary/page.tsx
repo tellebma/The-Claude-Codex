@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { Search, BookOpen, ArrowRight } from "lucide-react";
 import { glossaryTerms, searchGlossary } from "@/data/glossary";
+import { initialLetter, sortByKey, sortStrings } from "@/lib/locale-sort";
 import clsx from "clsx";
 
 const translations = {
@@ -72,20 +73,22 @@ export default function GlossaryPage() {
     [query]
   );
 
-  // Regrouper par lettre initiale
+  // Regrouper par lettre initiale, en normalisant les accents
+  // pour que "événement" soit rangé sous "E" et non sous "É".
   const groupedTerms = useMemo(() => {
     const groups: Record<string, typeof filteredTerms> = {};
-    for (const entry of filteredTerms) {
-      const letter = entry.term[0].toUpperCase();
+    const sortedEntries = sortByKey(filteredTerms, (e) => e.term, locale);
+    for (const entry of sortedEntries) {
+      const letter = initialLetter(entry.term);
       if (!groups[letter]) {
         groups[letter] = [];
       }
       groups[letter] = [...(groups[letter] ?? []), entry];
     }
     return groups;
-  }, [filteredTerms]);
+  }, [filteredTerms, locale]);
 
-  const letters = Object.keys(groupedTerms).sort();
+  const letters = sortStrings(Object.keys(groupedTerms), locale);
 
   return (
     <div className="min-h-screen">
@@ -150,7 +153,7 @@ export default function GlossaryPage() {
               aria-live="polite"
               aria-atomic="true"
             >
-              {filteredTerms.length} {filteredTerms.length !== 1 ? t.resultsForPlural : t.resultsFor} {t.resultsForPrefix} &ldquo;{query}&rdquo;
+              {filteredTerms.length} {filteredTerms.length === 1 ? t.resultsFor : t.resultsForPlural} {t.resultsForPrefix} &ldquo;{query}&rdquo;
             </p>
           )}
         </div>
@@ -163,7 +166,7 @@ export default function GlossaryPage() {
             <nav
               aria-label={t.alphabeticNavLabel}
             >
-              <ul className="flex flex-wrap gap-0.5" role="list">
+              <ul className="flex flex-wrap gap-0.5">
                 {letters.map((letter) => (
                   <li key={letter}>
                     <a
@@ -187,52 +190,68 @@ export default function GlossaryPage() {
       )}
 
       {/* Termes */}
-      <section className="py-12">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          {filteredTerms.length === 0 ? (
-            <div className="py-16 text-center">
-              <p className="text-lg text-slate-500 dark:text-slate-300">
-                {t.noResults} &ldquo;{query}&rdquo;
-              </p>
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className={clsx(
-                  "mt-4 text-sm font-medium underline underline-offset-2",
-                  "text-brand-700 hover:text-brand-800",
-                  "dark:text-brand-400 dark:hover:text-brand-300",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-                )}
-              >
-                {t.showAll}
-              </button>
-            </div>
-          ) : query.trim().length > 0 ? (
-            // Résultats de recherche sans groupement par lettre
-            <div className="space-y-4">
-              {filteredTerms.map((entry) => (
-                <GlossaryCard key={entry.term} entry={entry} t={t} />
-              ))}
-            </div>
-          ) : (
-            // Groupement alphabétique
-            <div className="space-y-12">
-              {letters.map((letter) => (
-                <div key={letter} id={`letter-${letter}`}>
-                  <h2 className="mb-4 text-2xl font-extrabold text-slate-400 dark:text-slate-500">
-                    {letter}
-                  </h2>
-                  <div className="space-y-4">
-                    {(groupedTerms[letter] ?? []).map((entry) => (
-                      <GlossaryCard key={entry.term} entry={entry} t={t} />
-                    ))}
-                  </div>
+      {(() => {
+        // Extrait la cascade nested-ternary en early returns pour
+        // rester sous le seuil Sonar S3358 (max 1 niveau de ternaire).
+        if (filteredTerms.length === 0) {
+          return (
+            <section className="py-12">
+              <div className="mx-auto max-w-4xl px-4 sm:px-6">
+                <div className="py-16 text-center">
+                  <p className="text-lg text-slate-500 dark:text-slate-300">
+                    {t.noResults} &ldquo;{query}&rdquo;
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    className={clsx(
+                      "mt-4 text-sm font-medium underline underline-offset-2",
+                      "text-brand-700 hover:text-brand-800",
+                      "dark:text-brand-400 dark:hover:text-brand-300",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+                    )}
+                  >
+                    {t.showAll}
+                  </button>
                 </div>
-              ))}
+              </div>
+            </section>
+          );
+        }
+        if (query.trim().length > 0) {
+          return (
+            <section className="py-12">
+              <div className="mx-auto max-w-4xl px-4 sm:px-6">
+                <div className="space-y-4">
+                  {filteredTerms.map((entry) => (
+                    <GlossaryCard key={entry.term} entry={entry} t={t} />
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        }
+        return (
+          <section className="py-12">
+            <div className="mx-auto max-w-4xl px-4 sm:px-6">
+              <div className="space-y-12">
+                {letters.map((letter) => (
+                  <div key={letter} id={`letter-${letter}`}>
+                    <h2 className="mb-4 text-2xl font-extrabold text-slate-400 dark:text-slate-500">
+                      {letter}
+                    </h2>
+                    <div className="space-y-4">
+                      {(groupedTerms[letter] ?? []).map((entry) => (
+                        <GlossaryCard key={entry.term} entry={entry} t={t} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          )}
-        </div>
-      </section>
+          </section>
+        );
+      })()}
     </div>
   );
 }

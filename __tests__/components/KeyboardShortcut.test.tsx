@@ -36,12 +36,12 @@ describe("KeyboardShortcut", () => {
 
   it("sets aria-label joining keys with ' + ' by default", () => {
     render(<KeyboardShortcut keys={["Ctrl", "K"]} />);
-    expect(screen.getByRole("group")).toHaveAttribute("aria-label", "Ctrl + K");
+    expect(screen.getByLabelText("Ctrl + K")).toBeInTheDocument();
   });
 
   it("sets aria-label joining keys with ' then ' for space separator", () => {
     render(<KeyboardShortcut keys={["Esc", "Esc"]} separator=" " />);
-    expect(screen.getByRole("group")).toHaveAttribute("aria-label", "Esc then Esc");
+    expect(screen.getByLabelText("Esc then Esc")).toBeInTheDocument();
   });
 
   it("renders a single key without separator", () => {

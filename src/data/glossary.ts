@@ -341,7 +341,7 @@ export function searchGlossary(query: string): ReadonlyArray<GlossaryTerm> {
   const normalizedQuery = query
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replaceAll(/[̀-ͯ]/g, "")
     .trim();
 
   if (normalizedQuery.length === 0) {
@@ -352,15 +352,15 @@ export function searchGlossary(query: string): ReadonlyArray<GlossaryTerm> {
     const termNorm = entry.term
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "");
+      .replaceAll(/[̀-ͯ]/g, "");
     const defNorm = entry.definition
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "");
+      .replaceAll(/[̀-ͯ]/g, "");
     const analogyNorm = entry.analogy
       .toLowerCase()
       .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "");
+      .replaceAll(/[̀-ͯ]/g, "");
 
     return (
       termNorm.includes(normalizedQuery) ||

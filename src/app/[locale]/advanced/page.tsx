@@ -120,9 +120,9 @@ const benefits = [
 
 export default async function AdvancedPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   /*

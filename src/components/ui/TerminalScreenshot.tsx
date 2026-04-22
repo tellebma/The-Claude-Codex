@@ -19,6 +19,20 @@ type TerminalScreenshotProps = Readonly<{
 }>;
 
 /**
+ * Stable skeleton placeholders — 6 rows pre-defined with unique ids
+ * and alternating widths. Stable keys keep Sonar S6479 happy and avoid
+ * React re-keying when a skeleton briefly renders during hydration.
+ */
+const SKELETON_ROWS = [
+  { id: "skel-a", width: "w-[55%]" },
+  { id: "skel-b", width: "w-[65%]" },
+  { id: "skel-c", width: "w-[75%]" },
+  { id: "skel-d", width: "w-[85%]" },
+  { id: "skel-e", width: "w-[55%]" },
+  { id: "skel-f", width: "w-[65%]" },
+] as const;
+
+/**
  * Renders a simulated terminal screenshot window.
  * Always has a dark background (terminal), but the outer frame adapts to dark/light mode.
  * Lazy-loaded via IntersectionObserver.
@@ -99,13 +113,10 @@ export function TerminalScreenshot({
         ) : (
           /* Skeleton placeholder while waiting for IntersectionObserver trigger */
           <div className="space-y-2 py-2" aria-hidden="true">
-            {Array.from({ length: Math.min(lines.length, 6) }).map((_, i) => (
+            {SKELETON_ROWS.slice(0, Math.min(lines.length, 6)).map((row) => (
               <div
-                key={`skeleton-line-${i}`}
-                className={[
-                  "h-4 animate-pulse rounded bg-slate-800",
-                  ["w-[55%]", "w-[65%]", "w-[75%]", "w-[85%]"][i % 4],
-                ].join(" ")}
+                key={row.id}
+                className={`h-4 animate-pulse rounded bg-slate-800 ${row.width}`}
               />
             ))}
           </div>

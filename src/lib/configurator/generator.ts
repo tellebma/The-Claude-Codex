@@ -464,20 +464,31 @@ export function generateAgentFiles(
 export function generateInstallGuide(config: ConfigState): string {
   const lines: string[] = [];
 
-  lines.push("# Guide d'installation de votre configuration Claude Code", "", "## 1. Prérequis", "", "- Node.js 18+ installé", "- npm ou yarn installé");
   lines.push(
-    "- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude"
+    "# Guide d'installation de votre configuration Claude Code",
+    "",
+    "## 1. Prérequis",
+    "",
+    "- Node.js 18+ installé",
+    "- npm ou yarn installé",
+    "- Un compte Anthropic (https://console.anthropic.com) ou un abonnement Claude",
+    "",
+    "## 2. Installer Claude Code",
+    "",
+    "```bash",
+    "npm install -g @anthropic-ai/claude-code",
+    "```",
+    ""
   );
-  lines.push("");
-
-  lines.push("## 2. Installer Claude Code", "", "```bash", "npm install -g @anthropic-ai/claude-code", "```", "");
 
   const subInfo = SUBSCRIPTIONS.find((s) => s.id === config.subscription);
   if (subInfo) {
     lines.push(
-      `## 3. Abonnement recommandé : ${subInfo.label} (${subInfo.price})`
+      `## 3. Abonnement recommandé : ${subInfo.label} (${subInfo.price})`,
+      "",
+      subInfo.description,
+      ""
     );
-    lines.push("", subInfo.description, "");
   }
 
   lines.push("## 4. Placer les fichiers", "", "Copiez les fichiers générés à la racine de votre projet :", "", "```", "votre-projet/", "├── CLAUDE.md              # Instructions pour Claude Code", "├── .claude/", "│   └── settings.json      # Paramètres Claude Code");
@@ -496,39 +507,53 @@ export function generateInstallGuide(config: ConfigState): string {
 
   if (config.features.includes("backlog")) {
     lines.push(
-      "├── BACKLOG/               # Backlog EPICs & User Stories (gitignored)"
+      "├── BACKLOG/               # Backlog EPICs & User Stories (gitignored)",
+      "│   └── README.md          # Vue macro de toutes les EPICs"
     );
-    lines.push("│   └── README.md          # Vue macro de toutes les EPICs");
   }
 
-  lines.push("└── ...", "```", "");
-
-  lines.push("## 5. Lancer Claude Code", "", "```bash", "cd votre-projet", "claude", "```", "");
-
-  lines.push("## 6. Vérifier la configuration", "");
   lines.push(
-    'Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."'
+    "└── ...",
+    "```",
+    "",
+    "## 5. Lancer Claude Code",
+    "",
+    "```bash",
+    "cd votre-projet",
+    "claude",
+    "```",
+    "",
+    "## 6. Vérifier la configuration",
+    "",
+    'Tapez dans Claude Code : "Lis mon CLAUDE.md et confirme que tu comprends ma configuration."',
+    ""
   );
-  lines.push("");
 
   if (config.features.includes("mcp")) {
-    lines.push("## 7. Configurer les MCP", "");
     lines.push(
-      "N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens."
+      "## 7. Configurer les MCP",
+      "",
+      "N'oubliez pas de remplacer les tokens placeholder (VOTRE_TOKEN_ICI) dans .mcp.json par vos vrais tokens.",
+      ""
     );
-    lines.push("");
   }
 
   if (config.features.includes("backlog")) {
-    lines.push("## 8. Initialiser le backlog", "", "```bash", "mkdir -p BACKLOG", 'echo "BACKLOG/" >> .gitignore', "```", "");
     lines.push(
-      "Le dossier `BACKLOG/` est local et gitignored. Claude créera automatiquement les EPICs et user stories au fil de vos demandes."
+      "## 8. Initialiser le backlog",
+      "",
+      "```bash",
+      "mkdir -p BACKLOG",
+      'echo "BACKLOG/" >> .gitignore',
+      "```",
+      "",
+      "Le dossier `BACKLOG/` est local et gitignored. Claude créera automatiquement les EPICs et user stories au fil de vos demandes.",
+      ""
     );
-    lines.push("");
   }
 
-  lines.push("---");
   lines.push(
+    "---",
     "Configuration générée par The Claude Codex | https://claude-codex.fr/configurator"
   );
 

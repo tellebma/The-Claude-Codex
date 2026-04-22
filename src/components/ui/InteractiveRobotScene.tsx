@@ -9,9 +9,10 @@ const MODEL_URL = "/sad-toaster.glb";
 
 interface ToasterProps {
   readonly mouse: { x: number; y: number };
+  readonly scale: number;
 }
 
-function Toaster({ mouse }: ToasterProps) {
+function Toaster({ mouse, scale }: ToasterProps) {
   const { scene } = useGLTF(MODEL_URL);
   const groupRef = useRef<Group>(null);
 
@@ -31,7 +32,7 @@ function Toaster({ mouse }: ToasterProps) {
       ref={groupRef}
       rotation={[0, -Math.PI / 2, 0]}
       position={[0, -0.9, 0]}
-      scale={0.85}
+      scale={scale}
     >
       <primitive object={scene} />
     </group>
@@ -76,6 +77,24 @@ function PlatformCore() {
   );
 }
 
+function useResponsiveScale(): number {
+  const [scale, setScale] = useState(0.85);
+
+  useEffect(() => {
+    const compute = (width: number) => {
+      if (width < 640) return 0.45;
+      if (width < 1024) return 0.6;
+      return 0.85;
+    };
+    const apply = () => setScale(compute(window.innerWidth));
+    apply();
+    window.addEventListener("resize", apply);
+    return () => window.removeEventListener("resize", apply);
+  }, []);
+
+  return scale;
+}
+
 function useMouseNormalized(): { x: number; y: number } {
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
 
@@ -95,6 +114,7 @@ function useMouseNormalized(): { x: number; y: number } {
 
 export default function InteractiveRobotScene() {
   const mouse = useMouseNormalized();
+  const scale = useResponsiveScale();
 
   return (
     <Canvas
@@ -115,7 +135,7 @@ export default function InteractiveRobotScene() {
         <Environment preset="city" />
         <PlatformCore />
         <Platform />
-        <Toaster mouse={mouse} />
+        <Toaster mouse={mouse} scale={scale} />
       </Suspense>
     </Canvas>
   );

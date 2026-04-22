@@ -1,0 +1,41 @@
+# Lychee — configuration pour la vérification de liens cassés sur le build statique.
+# Documentation : https://github.com/lycheeverse/lychee
+
+# Cache pour accélérer les runs consécutifs (CI artifact ou local)
+cache = true
+max_cache_age = "1d"
+
+# Performance — parallélisme raisonnable, timeout court
+max_concurrency = 16
+timeout = 20
+retry_wait_time = 2
+max_retries = 2
+
+# Comportement HTTP
+accept = ["200..=299", "301", "302", "307", "308", "403", "429"]
+insecure = false
+follow_redirects = true
+
+# Exclusions — liens externes connus pour être flaky ou limités en CI
+exclude = [
+  # GitHub rate-limit agressif en CI sans token
+  "^https://github\\.com/.*#L\\d+",
+  # Domaines avec anti-bot strict (renvoient 403 aux runners GHA)
+  "^https://(www\\.)?(linkedin|twitter|x|facebook|instagram)\\.com/",
+  # Exemples fictifs dans les docs
+  "example\\.com",
+  "example\\.org",
+  # localhost et intranet (tests, snippets)
+  "^https?://localhost",
+  "^https?://127\\.",
+  "^https?://0\\.0\\.0\\.0",
+  "^https?://.*\\.local/",
+  # URLs ancres-only qui seront vérifiées côté HTML
+  "^#",
+]
+
+# Schémas acceptés
+scheme = ["https", "http"]
+
+# Ignorer les erreurs de liens mailto / tel (pas vérifiables)
+exclude_mail = true

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale, getTranslations } from "next-intl/server";
-import { hasLocale } from "next-intl";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import {
+  getMessages,
+  setRequestLocale,
+  getTranslations,
+} from "next-intl/server";
 import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";

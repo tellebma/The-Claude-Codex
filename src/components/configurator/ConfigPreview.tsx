@@ -50,7 +50,7 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
   const handleTabKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLButtonElement>) => {
       const currentIndex = TABS.findIndex((t) => t.id === activeTab);
-      let nextIndex = currentIndex;
+      let nextIndex: number;
 
       switch (e.key) {
         case "ArrowRight":

@@ -166,7 +166,7 @@ export default function GlossaryPage() {
             <nav
               aria-label={t.alphabeticNavLabel}
             >
-              <ul className="flex flex-wrap gap-0.5" role="list">
+              <ul className="flex flex-wrap gap-0.5">
                 {letters.map((letter) => (
                   <li key={letter}>
                     <a

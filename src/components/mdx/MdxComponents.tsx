@@ -159,7 +159,7 @@ export const mdxComponents: MDXComponents = {
         children?: ReactNode;
       }>;
       const className = codeElement.props.className ?? "";
-      const languageMatch = className.match(/language-(\w+)/);
+      const languageMatch = /language-(\w+)/.exec(className);
 
       if (languageMatch) {
         const language = languageMatch[1];

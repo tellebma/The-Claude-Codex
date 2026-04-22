@@ -17,7 +17,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     document.body.appendChild(textArea);
     textArea.select();
     const success = document.execCommand("copy");
-    document.body.removeChild(textArea);
+    textArea.remove();
     return success;
   }
 }
@@ -27,7 +27,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
  * Remplace les single quotes par '\'' pour la sécurité.
  */
 function escapeForShell(content: string): string {
-  return content.replaceAll("'", "'\\''");
+  return content.replaceAll("'", String.raw`'\''`);
 }
 
 /**

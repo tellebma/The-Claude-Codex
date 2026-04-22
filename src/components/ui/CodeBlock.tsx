@@ -43,7 +43,7 @@ export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBl
       textArea.select();
       // execCommand is deprecated but retained as a best-effort fallback
       const success = document.execCommand("copy");
-      document.body.removeChild(textArea);
+      textArea.remove();
       if (success) {
         setCopied(true);
         timeoutRef.current = setTimeout(() => setCopied(false), 2000);

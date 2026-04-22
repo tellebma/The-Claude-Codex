@@ -79,8 +79,10 @@ describe("Screenshot", () => {
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
 
+    // The visible close button (X icon) — exact match (the backdrop
+    // button has a longer aria-label with "(arrière-plan)").
     const closeBtn = screen.getByRole("button", {
-      name: "Fermer l'image agrandie",
+      name: /^Fermer l'image agrandie$/,
     });
     fireEvent.click(closeBtn);
 
@@ -102,7 +104,7 @@ describe("Screenshot", () => {
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("clicking overlay backdrop closes lightbox", () => {
+  it("clicking backdrop button closes lightbox", () => {
     render(<Screenshot {...DEFAULT_PROPS} />);
     fireEvent.click(
       screen.getByRole("button", {
@@ -110,16 +112,15 @@ describe("Screenshot", () => {
       })
     );
 
-    const dialog = screen.getByRole("dialog");
-    expect(dialog).toBeInTheDocument();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
 
-    // Backdrop close uses mousedown on the overlay itself (not its children).
-    fireEvent.mouseDown(dialog, { target: dialog });
+    const backdrop = screen.getByTestId("lightbox-backdrop");
+    fireEvent.click(backdrop);
 
     expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("clicking inner image content does not close lightbox", () => {
+  it("clicking the image does not close lightbox (image is above backdrop)", () => {
     render(<Screenshot {...DEFAULT_PROPS} />);
     fireEvent.click(
       screen.getByRole("button", {
@@ -132,9 +133,11 @@ describe("Screenshot", () => {
     expect(imageInside).not.toBeNull();
 
     if (imageInside) {
-      fireEvent.mouseDown(imageInside);
+      fireEvent.click(imageInside);
     }
 
+    // The image sits above the backdrop (z-10 vs z-0), clicking the
+    // image should not bubble to the backdrop button.
     expect(screen.getByRole("dialog")).toBeInTheDocument();
   });
 

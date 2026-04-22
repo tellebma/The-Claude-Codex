@@ -5,7 +5,6 @@ import { ArrowLeft, ArrowRight, RotateCcw, Eye, EyeOff } from "lucide-react";
 import type {
   ConfigState,
   Profile,
-  Stack,
   Subscription,
   Feature,
   WizardStep,
@@ -93,7 +92,7 @@ export function ConfiguratorWizard() {
   }, []);
 
   // Stack toggle
-  const handleStackToggle = useCallback((stack: Stack) => {
+  const handleStackToggle = useCallback((stack: string) => {
     setConfig((prev) => {
       const isSelected = prev.stacks.includes(stack);
       return {

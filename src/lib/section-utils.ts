@@ -28,5 +28,5 @@ export function getAdjacentPages(
  */
 export function extractSimpleSlug(fullSlug: string): string {
   const parts = fullSlug.split("/");
-  return parts[parts.length - 1];
+  return parts.at(-1) ?? "";
 }

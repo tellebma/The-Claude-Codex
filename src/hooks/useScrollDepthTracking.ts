@@ -18,7 +18,7 @@ const SCROLL_DEBOUNCE_MS = 150;
  * (nothing to scroll), we return 100 to avoid counting them as 0% depth.
  */
 function computeScrollDepth(): number {
-  if (typeof globalThis.window === "undefined") return 0;
+  if (globalThis.window === undefined) return 0;
   const doc = document.documentElement;
   const scrollTop = globalThis.scrollY || doc.scrollTop;
   const viewport = globalThis.innerHeight || doc.clientHeight;

@@ -9,9 +9,6 @@ export type Profile =
   | "data"
   | "beginner";
 
-/** Stack technologique (framework, langage, outil) */
-export type Stack = string;
-
 /** Niveau d'abonnement Claude */
 export type Subscription = "free" | "pro" | "max-100" | "max-200" | "api";
 
@@ -27,7 +24,7 @@ export type Feature =
 /** État courant du configurateur */
 export interface ConfigState {
   readonly profile: Profile | null;
-  readonly stacks: ReadonlyArray<Stack>;
+  readonly stacks: ReadonlyArray<string>;
   readonly subscription: Subscription | null;
   readonly features: ReadonlyArray<Feature>;
 }
@@ -53,7 +50,7 @@ export interface Preset {
   readonly name: string;
   readonly description: string;
   readonly profile: Profile;
-  readonly stacks: ReadonlyArray<Stack>;
+  readonly stacks: ReadonlyArray<string>;
   readonly subscription: Subscription;
   readonly features: ReadonlyArray<Feature>;
   readonly icon: string;
@@ -65,7 +62,7 @@ export interface ProfileInfo {
   readonly label: string;
   readonly description: string;
   readonly icon: string;
-  readonly stacks: ReadonlyArray<Stack>;
+  readonly stacks: ReadonlyArray<string>;
 }
 
 /** Informations de description d'un abonnement */

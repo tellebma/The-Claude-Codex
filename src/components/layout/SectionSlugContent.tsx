@@ -78,13 +78,22 @@ export default async function SectionSlugContent({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbJsonLdHtml }}
       />
-      {extraJsonLd?.map((schema, i) => (
-        <script
-          key={`extra-jsonld-${i}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
-        />
-      ))}
+      {extraJsonLd?.map((schema) => {
+        // Les schémas JSON-LD ont un "@type" unique par slot (Article, FAQ,
+        // HowTo…) qui fait une clé stable. Fallback sur le hash du schéma
+        // sérialisé si @type est absent (cas édge).
+        const schemaType =
+          typeof schema["@type"] === "string"
+            ? (schema["@type"] as string)
+            : `extra-${JSON.stringify(schema).length}`;
+        return (
+          <script
+            key={`jsonld-${schemaType}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
+          />
+        );
+      })}
 
       {/* Hero section */}
       <section className="relative overflow-hidden bg-slate-950">

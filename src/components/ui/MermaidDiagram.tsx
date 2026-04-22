@@ -185,9 +185,18 @@ export function MermaidDiagram({
           className="h-32 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800"
         />
       )}
+      {/*
+       * Conteneur scrollable du SVG Mermaid. role="region" + tabIndex=0
+       * est le pattern WAI-ARIA pour un bloc de contenu focusable au
+       * clavier (utile quand le diagramme déborde horizontalement sur
+       * mobile). Sonar S6845 accepte tabIndex sur un élément avec rôle
+       * interactif / région explicite.
+       */}
       <div
         ref={containerRef}
+        role="region"
         tabIndex={0}
+        aria-label={accessibleName}
         aria-hidden={!rendered}
         className={`overflow-x-auto rounded-xl border border-slate-200/50 bg-white p-6 dark:border-slate-700/50 dark:bg-slate-900 motion-safe:transition-opacity motion-safe:duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
           rendered ? "opacity-100" : "opacity-0"

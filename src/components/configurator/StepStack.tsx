@@ -1,13 +1,13 @@
 "use client";
 
-import type { Profile, Stack } from "@/lib/configurator/types";
+import type { Profile } from "@/lib/configurator/types";
 import { PROFILES } from "@/lib/configurator/presets";
 import clsx from "clsx";
 
 interface StepStackProps {
   readonly profile: Profile | null;
-  readonly selected: ReadonlyArray<Stack>;
-  readonly onToggle: (stack: Stack) => void;
+  readonly selected: ReadonlyArray<string>;
+  readonly onToggle: (stack: string) => void;
 }
 
 export function StepStack({ profile, selected, onToggle }: StepStackProps) {

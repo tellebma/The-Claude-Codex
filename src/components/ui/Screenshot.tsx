@@ -114,15 +114,24 @@ export function Screenshot({
       {lightboxOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
-          // Close on backdrop click only (not on inner content). Pairs with
-          // Escape key (handled via document listener) for keyboard users.
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) closeLightbox();
-          }}
           role="dialog"
           aria-modal="true"
           aria-label={`Image agrandie : ${alt}`}
         >
+          {/*
+           * Invisible backdrop button — covers the overlay behind the
+           * image + close button and handles the click-to-close UX via
+           * a native <button> (satisfies Sonar S6847/S6848). Escape
+           * closes via the document-level keydown listener above.
+           */}
+          <button
+            type="button"
+            aria-label="Fermer l'image agrandie (arrière-plan)"
+            tabIndex={-1}
+            onClick={closeLightbox}
+            className="absolute inset-0 z-0 cursor-default"
+            data-testid="lightbox-backdrop"
+          />
           {/*
            * Close button — p-3 gives 24px icon + 12px padding on each axis = 48px touch target.
            * Meets WCAG 2.5.5 (44px minimum) on all sides.
@@ -131,7 +140,7 @@ export function Screenshot({
             ref={closeButtonRef}
             type="button"
             onClick={closeLightbox}
-            className="absolute right-3 top-3 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+            className="absolute right-3 top-3 z-10 rounded-full bg-white/10 p-3 text-white transition-colors hover:bg-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
             aria-label="Fermer l'image agrandie"
           >
             <svg
@@ -152,11 +161,11 @@ export function Screenshot({
           </button>
 
           {/*
-           * Image container — purely presentational wrapper. No click
-           * handler needed: the overlay uses onMouseDown with a target
-           * check, so clicks on the image don't bubble up as a close.
+           * Image container — positioned above the backdrop button so
+           * clicks on the image don't trigger close. z-10 > z-0 of the
+           * backdrop button.
            */}
-          <div className="max-h-[90vh] max-w-[90vw] overflow-auto">
+          <div className="relative z-10 max-h-[90vh] max-w-[90vw] overflow-auto">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={src}

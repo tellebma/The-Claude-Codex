@@ -52,6 +52,9 @@ next-env.d.ts
 # sonarqube scanner workdir
 .scannerwork/
 
+# git worktrees (superpowers skill)
+.worktrees/
+
 # claude code local settings
 .claude/settings.local.json
 doc/settings.local.json

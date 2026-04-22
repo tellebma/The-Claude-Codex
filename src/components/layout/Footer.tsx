@@ -147,7 +147,7 @@ export function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <span className="rounded-md bg-slate-200/50 px-2 py-0.5 font-mono text-xs text-slate-400 dark:bg-slate-800/50 dark:text-slate-500">
+            <span className="rounded-md bg-slate-200/50 px-2 py-0.5 font-mono text-xs text-slate-600 dark:bg-slate-800/50 dark:text-slate-400">
               v{process.env.NEXT_PUBLIC_APP_VERSION}
             </span>
             <a

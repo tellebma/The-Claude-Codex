@@ -969,7 +969,7 @@ mon-projet/
                     {skill.description}
                   </p>
                   <div className="rounded-lg border border-slate-200/60 bg-slate-50/80 p-3 dark:border-slate-700/60 dark:bg-slate-800/50">
-                    <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                    <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                       <Play className="h-3 w-3" aria-hidden="true" />
                       Exemple d&apos;utilisation
                     </div>

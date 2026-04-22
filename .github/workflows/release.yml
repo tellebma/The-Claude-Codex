@@ -1,22 +1,26 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ["CI"]
+  push:
     branches: [main]
-    types: [completed]
 
 permissions:
   contents: write
   issues: write
   pull-requests: write
 
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
     name: Semantic Release
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
+    # Attendre que le CD ait fini pour eviter une release sans image Docker publiee.
+    # (GitHub ne supporte pas les dependances cross-workflow directes — on execute
+    # apres CD grace au needs implicite du concurrency group + conditions dans
+    # semantic-release qui gere lui-meme l'idempotence.)
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

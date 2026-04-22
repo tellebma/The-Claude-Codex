@@ -44,6 +44,10 @@ next-env.d.ts
 
 # playwright
 .playwright-mcp/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # sonarqube scanner workdir
 .scannerwork/

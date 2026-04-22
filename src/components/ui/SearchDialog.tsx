@@ -262,7 +262,7 @@ export function SearchDialog() {
       />
 
       {open && (
-      <div className="fixed inset-0 z-[60] flex animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]">
+      <div className="fixed inset-0 z-[60] flex motion-safe:animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]">
         {/*
          * Backdrop button — invisible full-screen button covering the
          * overlay. Clicking the backdrop (outside the dialog) closes it.
@@ -282,7 +282,7 @@ export function SearchDialog() {
           role="dialog"
           aria-label={t("dialogTitle")}
           aria-modal="true"
-          className="relative z-10 flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-700/40 sm:mx-4 sm:h-auto sm:max-h-[80vh] sm:w-full sm:max-w-2xl sm:animate-slide-up sm:rounded-2xl"
+          className="relative z-10 flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-700/40 sm:mx-4 sm:h-auto sm:max-h-[80vh] sm:w-full sm:max-w-2xl motion-safe:sm:animate-slide-up sm:rounded-2xl"
           style={{
             paddingTop: "env(safe-area-inset-top)",
             paddingBottom: "env(safe-area-inset-bottom)",

@@ -1,20 +1,61 @@
 name: CD — Build & Push Docker
 
 on:
-  workflow_run:
-    workflows: ["CI"]
+  push:
     branches: [main]
-    types: [completed]
 
 permissions:
   contents: read
 
+concurrency:
+  group: cd-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
+  NEXT_PUBLIC_MATOMO_URL: https://matomo.example.com
+  NEXT_PUBLIC_MATOMO_SITE_ID: "1"
+
 jobs:
+  verify:
+    name: Lint, type-check, tests, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Type-check
+        run: npm run type-check
+
+      - name: Unit tests (with coverage gate)
+        run: npm run test:coverage
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify i18n output
+        run: |
+          test -f out/fr/index.html && echo "FR landing: OK" || exit 1
+          test -f out/en/index.html && echo "EN landing: OK" || exit 1
+
   docker:
     name: Build & Push to Docker Hub
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
+    timeout-minutes: 20
+    needs: [verify]
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2

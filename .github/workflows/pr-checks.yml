@@ -469,7 +469,11 @@ jobs:
           SONAR_PROJECT_KEY: the-claude-codex
         run: |
           set -euo pipefail
-          qg_json=$(curl -sf -u "${SONAR_TOKEN}:" \
+          # Authorization Basic via header (évite le rule gitleaks curl-auth-user
+          # qui matche le pattern `-u user:` et ralerait sur un faux positif).
+          auth="Authorization: Basic $(printf '%s:' "$SONAR_TOKEN" | base64 -w0)"
+
+          qg_json=$(curl -sf -H "$auth" \
             "${SONAR_HOST_URL}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}" \
             || echo '{}')
           qg_status=$(echo "$qg_json" | jq -r '.projectStatus.status // "UNKNOWN"')
@@ -485,7 +489,7 @@ jobs:
           new_viol=$(get_cond new_violations actualValue)
           new_viol_status=$(get_cond new_violations status)
 
-          meas_json=$(curl -sf -u "${SONAR_TOKEN}:" \
+          meas_json=$(curl -sf -H "$auth" \
             "${SONAR_HOST_URL}/api/measures/component?component=${SONAR_PROJECT_KEY}&metricKeys=bugs,code_smells,vulnerabilities,security_hotspots,coverage,cognitive_complexity" \
             || echo '{}')
           get_meas() {

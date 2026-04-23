@@ -1,0 +1,117 @@
+name: Weekly analytics
+
+on:
+  schedule:
+    # Lundi 06:00 UTC = 07:00/08:00 Paris (ete/hiver)
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      period_days:
+        description: "Nombre de jours a analyser (default 7)"
+        required: false
+        default: "7"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: weekly-analytics
+  cancel-in-progress: false
+
+jobs:
+  analyze:
+    name: Fetch GSC + Matomo, detect alerts, push to vault, notify Discord
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      GSC_SITE_URL: ${{ vars.GSC_SITE_URL || 'sc-domain:claude-codex.fr' }}
+      GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+      MATOMO_BASE_URL: ${{ vars.MATOMO_BASE_URL || 'https://matomo.tellebma.fr' }}
+      MATOMO_SITE_ID: ${{ secrets.MATOMO_SITE_ID }}
+      MATOMO_TOKEN_AUTH: ${{ secrets.MATOMO_TOKEN_AUTH }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      ANALYTICS_PERIOD_DAYS: ${{ github.event.inputs.period_days || '7' }}
+      BRAIN_REPO: ${{ vars.BRAIN_REPO || 'tellebma/claude-code-obsidian-brain' }}
+      BRAIN_BRANCH: ${{ vars.BRAIN_BRANCH || 'main' }}
+      BRAIN_RAW_DIR: ${{ vars.BRAIN_RAW_DIR || 'raw/analytics' }}
+
+    steps:
+      - name: Checkout claude-codex
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: "22"
+
+      - name: Compute report URL
+        id: meta
+        run: |
+          # URL publique du REPORT.md dans le vault, integrable comme lien de titre de l'embed Discord
+          # On ne connait la date de fin qu'apres le run, donc on laisse le pipeline la deviner.
+          # La variable est consommee par scripts/analytics/run.ts via ANALYTICS_REPORT_URL.
+          echo "brain_repo_url=https://github.com/${BRAIN_REPO}/blob/${BRAIN_BRANCH}" >> "$GITHUB_OUTPUT"
+
+      - name: Run analytics pipeline
+        id: run
+        env:
+          ANALYTICS_REPORT_URL_PREFIX: ${{ steps.meta.outputs.brain_repo_url }}/${{ env.BRAIN_RAW_DIR }}
+        run: |
+          # On lance une premiere fois pour connaitre la end_date, puis on re-run avec l'URL exacte
+          # Alternative plus simple : on calcule la end_date a la volee cote shell
+          END_GUESS=$(date -u -d "3 days ago" +%Y-%m-%d)
+          export ANALYTICS_REPORT_URL="${ANALYTICS_REPORT_URL_PREFIX}/${END_GUESS}/REPORT.md"
+          node scripts/analytics/run.ts
+          END_DATE=$(ls -1 docs/analytics | sort | tail -n1)
+          echo "end_date=${END_DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: analytics-${{ steps.run.outputs.end_date }}
+          path: docs/analytics/${{ steps.run.outputs.end_date }}/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Checkout brain vault
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: ${{ env.BRAIN_REPO }}
+          ref: ${{ env.BRAIN_BRANCH }}
+          token: ${{ secrets.BRAIN_REPO_TOKEN }}
+          path: brain-vault
+          persist-credentials: true
+
+      - name: Sync report into brain vault
+        id: sync
+        working-directory: brain-vault
+        run: |
+          set -euo pipefail
+          END_DATE="${{ steps.run.outputs.end_date }}"
+          TARGET_DIR="${BRAIN_RAW_DIR}/${END_DATE}"
+          SOURCE_DIR="${GITHUB_WORKSPACE}/docs/analytics/${END_DATE}"
+
+          if [ ! -d "${SOURCE_DIR}" ]; then
+            echo "::error::Source directory ${SOURCE_DIR} not found"
+            exit 1
+          fi
+
+          mkdir -p "${TARGET_DIR}"
+          cp -R "${SOURCE_DIR}/." "${TARGET_DIR}/"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${TARGET_DIR}"
+
+          if git diff --cached --quiet; then
+            echo "Aucun changement dans le vault"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git commit -m "chore(analytics): weekly report ${END_DATE} (source: ${{ github.repository }}@${GITHUB_SHA::7} | run: ${RUN_URL})"
+          git push origin "HEAD:${BRAIN_BRANCH}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"

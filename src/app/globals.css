@@ -1,7 +1,150 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* Tailwind v4 : dark mode piloté par la classe `.dark` (cf. next-themes) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Sources explicites — équivalent du `content` de la config v3 */
+@source "../**/*.{js,ts,jsx,tsx,mdx}";
+
+/* -------------------------------------------------------------------------- */
+/*  Design tokens — exposés comme utilitaires Tailwind via @theme             */
+/* -------------------------------------------------------------------------- */
+@theme {
+  /* Palette brand (cyan) */
+  --color-brand-50: #ecfeff;
+  --color-brand-100: #cffafe;
+  --color-brand-200: #a5f3fc;
+  --color-brand-300: #67e8f9;
+  --color-brand-400: #22d3ee;
+  --color-brand-500: #06b6d4;
+  --color-brand-600: #0891b2;
+  --color-brand-700: #0e7490;
+  --color-brand-800: #155e75;
+  --color-brand-900: #164e63;
+  --color-brand-950: #083344;
+
+  /* Palette accent (ambre) */
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+  --color-accent-950: #451a03;
+
+  /* Typographie */
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* Animations — chaque `--animate-*` génère l'utilitaire `animate-*` correspondant */
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-slide-up: slideUp 0.6s ease-out;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-gradient-shimmer: gradient-shimmer 4s ease-in-out infinite;
+  --animate-border-beam: border-beam 4s linear infinite;
+  --animate-grid-fade: grid-fade 6s ease-in-out infinite;
+  --animate-beam-flow: beam-flow 2s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes slideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes gradient-shimmer {
+    0%,
+    100% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+  }
+  @keyframes border-beam {
+    0% {
+      offset-distance: 0%;
+    }
+    100% {
+      offset-distance: 100%;
+    }
+  }
+  @keyframes grid-fade {
+    0%,
+    100% {
+      opacity: 0.03;
+    }
+    50% {
+      opacity: 0.07;
+    }
+  }
+  @keyframes beam-flow {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Compat v3 : les utilitaires `border-*` / `divide-*` / `ring-*` sans       */
+/*  couleur explicite utilisaient `gray-200` par défaut. v4 casse ce contrat, */
+/*  on restaure le comportement pour ne pas toucher aux composants.           */
+/* -------------------------------------------------------------------------- */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Variables applicatives (surfaces, dégradés, hero) — inchangées            */
+/* -------------------------------------------------------------------------- */
 @layer base {
   :root {
     --color-success: #22c55e;
@@ -135,9 +278,19 @@
 }
 
 @layer utilities {
-  .animate-delay-100 { animation-delay: 100ms; }
-  .animate-delay-200 { animation-delay: 200ms; }
-  .animate-delay-300 { animation-delay: 300ms; }
-  .animate-delay-500 { animation-delay: 500ms; }
-  .animate-delay-700 { animation-delay: 700ms; }
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+  .animate-delay-700 {
+    animation-delay: 700ms;
+  }
 }

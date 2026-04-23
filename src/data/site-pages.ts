@@ -390,7 +390,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les plugins Claude Code incontournables en 2026 : Everything Claude Code, Context7, Prompt Improver, Repomix et Ralph Loop.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-04-23",
   },
   {
     path: "/plugins/best-design",

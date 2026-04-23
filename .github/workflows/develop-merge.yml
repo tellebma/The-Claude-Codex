@@ -128,6 +128,32 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
+  notify-vercel:
+    # Notifie Vercel du statut de la CI pour son feature "Connect GitHub Actions"
+    # (Settings → Git → Connected GitHub Actions). Vercel attend ce check avant
+    # de promouvoir le deploy de l'environnement "dev" (branche develop).
+    # `if: always()` fait tourner le job quel que soit le résultat des `needs:`,
+    # le step suivant fail si un job needs est KO → l'action vercel (post:)
+    # envoie alors un status "failure" à Vercel, qui abandonne le deploy.
+    name: Notify Vercel (CI gate)
+    runs-on: ubuntu-latest
+    needs: [build, e2e-full, docker-verify]
+    if: always()
+    steps:
+      - name: Notify Vercel (register check)
+        uses: vercel/repository-dispatch/actions/status@30f760c6640485cd92f8c785ef361382555fb712 # v1
+        with:
+          name: 'Vercel - the-claude-codex: ci'
+      - name: Reflect CI result
+        run: |
+          b="${{ needs.build.result }}"
+          e="${{ needs.e2e-full.result }}"
+          d="${{ needs.docker-verify.result }}"
+          echo "build=$b e2e-full=$e docker-verify=$d"
+          if [ "$b" != "success" ] || [ "$e" != "success" ] || [ "$d" != "success" ]; then
+            exit 1
+          fi
+
   docker-verify:
     name: Docker build & Trivy scan
     runs-on: ubuntu-latest

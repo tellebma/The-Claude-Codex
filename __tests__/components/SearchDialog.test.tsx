@@ -299,6 +299,80 @@ describe("SearchDialog", () => {
 
     expect(screen.getByText("moreResults")).toBeInTheDocument();
   });
+
+  it("renders <mark> highlights inside body snippets", async () => {
+    mockRunSearch.mockReturnValue({
+      results: [
+        {
+          ...MOCK_RESULTS[0]!,
+          titleMatch: false,
+          totalHits: 3,
+          snippets: [
+            { pre: "Open a ", match: "terminal", post: " and run npm." },
+          ],
+        },
+      ],
+      truncated: 0,
+      total: 1,
+    });
+    render(<SearchDialog />);
+    await openAndLoad();
+    await typeAndDebounce("terminal");
+
+    const listbox = screen.getByRole("listbox");
+    const marks = listbox.querySelectorAll("mark");
+    expect(marks.length).toBeGreaterThan(0);
+    expect(marks[0]?.textContent).toBe("terminal");
+  });
+
+  it("displays matchesInPage counter when totalHits > 1", async () => {
+    mockRunSearch.mockReturnValue({
+      results: [
+        {
+          ...MOCK_RESULTS[0]!,
+          titleMatch: false,
+          totalHits: 5,
+          snippets: [{ pre: "", match: "foo", post: "" }],
+        },
+      ],
+      truncated: 0,
+      total: 1,
+    });
+    render(<SearchDialog />);
+    await openAndLoad();
+    await typeAndDebounce("foo");
+
+    expect(screen.getByText("matchesInPage")).toBeInTheDocument();
+  });
+
+  it("updates selectedIndex on option mouseEnter", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
+    render(<SearchDialog />);
+    await openAndLoad();
+    await typeAndDebounce("th");
+
+    const options = screen.getAllByRole("option");
+    expect(options.length).toBeGreaterThanOrEqual(2);
+    // Hovering the second option should switch aria-selected to it.
+    fireEvent.mouseEnter(options[1]!);
+    await flushAsync();
+    expect(options[1]!.getAttribute("aria-selected")).toBe("true");
+    expect(options[0]!.getAttribute("aria-selected")).toBe("false");
+  });
+
+  it("clears the query when the clear button is clicked", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_EMPTY);
+    render(<SearchDialog />);
+    await openAndLoad();
+    const input = await typeAndDebounce("anything");
+    expect((input as HTMLInputElement).value).toBe("anything");
+
+    const clearBtn = screen.getByRole("button", { name: "clear" });
+    fireEvent.click(clearBtn);
+    await flushAsync();
+
+    expect((input as HTMLInputElement).value).toBe("");
+  });
 });
 
 // Ensure the previously-imported waitFor helper is considered used; avoids

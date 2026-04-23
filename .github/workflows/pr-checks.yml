@@ -360,60 +360,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-  deploy-preview:
-    # Déploie la preview Vercel uniquement si TOUS les autres jobs ont réussi.
-    # Ce job remplace le déploiement auto Vercel git-triggered, qui est désactivé
-    # côté dashboard Vercel (Settings → Git → Ignored Build Step = `exit 0`).
-    # L'URL de preview est exposée comme output du job (utilisée par le comment
-    # sticky pr-metrics-comment). Le comment Vercel lui-même est consolidé
-    # dans le commentaire unique "📊 Métriques CI" — une seule notification
-    # sur la PR, pas d'empilement.
-    name: Deploy Vercel Preview
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs:
-      - gitleaks
-      - npm-audit
-      - lint-types
-      - unit-tests
-      - build
-      - validate-seo-files
-      - lighthouse
-      - lychee
-      - e2e-smoke
-      - sonarqube
-    # Ne tourne pas sur les PR Dependabot (elles n'ont pas accès aux secrets)
-    if: github.event.pull_request.head.repo.full_name == github.repository
-    outputs:
-      url: ${{ steps.deploy.outputs.url }}
-    env:
-      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install Vercel CLI
-        run: npm install --global vercel@latest
-
-      - name: Pull Vercel environment
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Build Vercel artifact
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy to Vercel (preview)
-        id: deploy
-        run: |
-          url=$(vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$url" >> "$GITHUB_OUTPUT"
-
   pr-metrics-comment:
     # Commentaire sticky unique qui consolide toutes les métriques d'analyse
     # (Sonar, Lighthouse, Lychee, tests, Vercel). Tourne avec if: always()
@@ -432,7 +378,6 @@ jobs:
       - lychee
       - e2e-smoke
       - lighthouse
-      - deploy-preview
     if: |
       always() &&
       github.event_name == 'pull_request' &&
@@ -614,15 +559,11 @@ jobs:
       - name: Compute Vercel preview block
         id: vercel
         run: |
-          url="${{ needs.deploy-preview.outputs.url }}"
-          result="${{ needs.deploy-preview.result }}"
-          if [[ -n "$url" && "$result" == "success" ]]; then
-            echo "block=🚀 **Preview Vercel** → [${url}](${url})" >> "$GITHUB_OUTPUT"
-          elif [[ "$result" == "skipped" ]]; then
-            echo "block=⏭️ Preview Vercel non déployée (job skipped — probablement une PR Dependabot)." >> "$GITHUB_OUTPUT"
-          else
-            echo "block=⏸️ Preview Vercel non disponible (deploy-preview : \`${result}\`)." >> "$GITHUB_OUTPUT"
-          fi
+          # Vercel déploie désormais de lui-même via son intégration GitHub
+          # (Connect GitHub Actions, cf. notify-vercel dans cd.yml et
+          # develop-merge.yml). L'URL précise de la preview est publiée par
+          # l'action "Vercel Preview Comments" directement sur la PR.
+          echo "block=🚀 **Preview Vercel** déployée automatiquement par l'intégration GitHub. URL publiée par le commentaire Vercel natif ci-dessus." >> "$GITHUB_OUTPUT"
 
       - name: Compute CI job icons
         id: jobs
@@ -637,7 +578,6 @@ jobs:
             echo "lychee=$(icon '${{ needs.lychee.result }}')"
             echo "e2e=$(icon '${{ needs.e2e-smoke.result }}')"
             echo "lhjob=$(icon '${{ needs.lighthouse.result }}')"
-            echo "vercel=$(icon '${{ needs.deploy-preview.result }}')"
           } >> "$GITHUB_OUTPUT"
 
       - name: Post/update consolidated metrics comment
@@ -675,8 +615,8 @@ jobs:
 
             ### 🏁 Jobs CI
 
-            | Lint | Tests | Build | SEO/IA | Sonar | Lychee | E2E | Lighthouse | Vercel |
-            |:----:|:-----:|:-----:|:------:|:-----:|:------:|:---:|:----------:|:------:|
-            | ${{ steps.jobs.outputs.lint }} | ${{ steps.jobs.outputs.tests }} | ${{ steps.jobs.outputs.build }} | ${{ steps.jobs.outputs.seo }} | ${{ steps.jobs.outputs.sonar }} | ${{ steps.jobs.outputs.lychee }} | ${{ steps.jobs.outputs.e2e }} | ${{ steps.jobs.outputs.lhjob }} | ${{ steps.jobs.outputs.vercel }} |
+            | Lint | Tests | Build | SEO/IA | Sonar | Lychee | E2E | Lighthouse |
+            |:----:|:-----:|:-----:|:------:|:-----:|:------:|:---:|:----------:|
+            | ${{ steps.jobs.outputs.lint }} | ${{ steps.jobs.outputs.tests }} | ${{ steps.jobs.outputs.build }} | ${{ steps.jobs.outputs.seo }} | ${{ steps.jobs.outputs.sonar }} | ${{ steps.jobs.outputs.lychee }} | ${{ steps.jobs.outputs.e2e }} | ${{ steps.jobs.outputs.lhjob }} |
 
             <sub>🔄 Commentaire mis à jour à chaque push. Toutes les métriques sont agrégées automatiquement depuis les jobs CI.</sub>

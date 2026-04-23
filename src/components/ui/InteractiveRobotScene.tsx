@@ -86,10 +86,10 @@ function useResponsiveScale(): number {
       if (width < 1024) return 0.6;
       return 0.85;
     };
-    const apply = () => setScale(compute(window.innerWidth));
+    const apply = () => setScale(compute(globalThis.innerWidth));
     apply();
-    window.addEventListener("resize", apply);
-    return () => window.removeEventListener("resize", apply);
+    globalThis.addEventListener("resize", apply);
+    return () => globalThis.removeEventListener("resize", apply);
   }, []);
 
   return scale;
@@ -101,12 +101,12 @@ function useMouseNormalized(): { x: number; y: number } {
   useEffect(() => {
     const handler = (event: MouseEvent) => {
       setMouse({
-        x: (event.clientX / window.innerWidth) * 2 - 1,
-        y: -((event.clientY / window.innerHeight) * 2 - 1),
+        x: (event.clientX / globalThis.innerWidth) * 2 - 1,
+        y: -((event.clientY / globalThis.innerHeight) * 2 - 1),
       });
     };
-    window.addEventListener("mousemove", handler);
-    return () => window.removeEventListener("mousemove", handler);
+    globalThis.addEventListener("mousemove", handler);
+    return () => globalThis.removeEventListener("mousemove", handler);
   }, []);
 
   return mouse;

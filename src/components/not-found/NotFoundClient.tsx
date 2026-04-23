@@ -139,9 +139,7 @@ export function NotFoundClient({
             id="not-found-title"
             className="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
           >
-            <span className="bg-gradient-to-r from-brand-300 to-accent-300 bg-clip-text text-transparent">
-              {strings.title}
-            </span>
+            <span className="text-gradient">{strings.title}</span>
           </h1>
 
           <p className="mt-4 max-w-xl text-base text-white/80 sm:text-lg">

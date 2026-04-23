@@ -19,13 +19,12 @@ interface ContentPageProps {
  * matters when slugs diverge between languages (for example when a French
  * slug has been translated to English).
  */
-export async function generateStaticParams({
+export function generateStaticParams({
   params,
 }: {
-  params: Promise<{ locale: string }>;
-}): Promise<Array<{ slug: string }>> {
-  const { locale } = await params;
-  const slugs = getAllMdxSlugs(locale);
+  params: { locale: string };
+}): Array<{ slug: string }> {
+  const slugs = getAllMdxSlugs(params.locale);
   return [...slugs].map((slug) => ({ slug }));
 }
 

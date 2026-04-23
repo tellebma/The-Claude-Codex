@@ -11,14 +11,21 @@ interface PageProps {
   readonly params: Promise<{ locale: string; slug: string }>;
 }
 
-export function generateStaticParams(): Array<{ slug: string }> {
-  return [...getSectionMdxSlugs(SECTION)].map((slug) => ({ slug }));
+export function generateStaticParams({
+  params,
+}: {
+  params: { locale: string };
+}): Array<{ slug: string }> {
+  return [...getSectionMdxSlugs(SECTION, params.locale)].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
+  if (!getSectionMdxSlugs(SECTION, locale).includes(slug)) {
+    return {};
+  }
   const { frontmatter } = getSectionMdxBySlug(SECTION, slug, locale);
 
   return createPageMetadata({

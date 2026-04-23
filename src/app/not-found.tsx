@@ -28,9 +28,14 @@ export default function NotFound() {
   const bundles = getNotFoundBundles();
 
   return (
-    <html lang="fr" suppressHydrationWarning>
+    <html
+      lang="fr"
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+    >
       <body
         className={`${jakarta.variable} ${mono.variable} font-sans antialiased`}
+        suppressHydrationWarning
       >
         <NotFoundClient defaultLocale="fr" bundles={bundles} />
       </body>

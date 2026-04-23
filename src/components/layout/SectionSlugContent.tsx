@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -10,7 +11,7 @@ import {
   createBreadcrumbSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
-import { getSectionMdxBySlug } from "@/lib/mdx";
+import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import {
   extractSimpleSlug,
   getAdjacentPages,
@@ -37,6 +38,16 @@ export default async function SectionSlugContent({
   icon: Icon,
   extraJsonLd,
 }: SectionSlugContentProps) {
+  // Slug inconnu pour cette locale -> 404 Next (app/not-found.tsx).
+  // Necessaire car generateStaticParams() est par-locale et les slugs
+  // peuvent diverger entre FR et EN. Visiter un slug non liste hors du
+  // build pre-rendu (dev mode, ou URL tappee a la main) doit tomber sur
+  // la page 404 stylisee au lieu de crasher via le throw de getMdxBySlug.
+  const availableSlugs = getSectionMdxSlugs(section, locale);
+  if (!availableSlugs.includes(slug)) {
+    notFound();
+  }
+
   const { frontmatter, content } = getSectionMdxBySlug(section, slug, locale);
   const { prev, next } = getAdjacentPages(section, slug, locale);
   const tCommon = await getTranslations("common");

@@ -276,7 +276,7 @@ export function Header() {
             ? "max-h-[calc(100vh-4rem)] overflow-y-auto"
             : "max-h-0"
         )}
-        {...(mobileOpen ? {} : { inert: "" as unknown as boolean })}
+        inert={!mobileOpen}
         aria-hidden={!mobileOpen}
       >
         <div className="space-y-1 px-4 py-3">

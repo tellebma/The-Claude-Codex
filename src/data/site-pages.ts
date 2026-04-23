@@ -790,12 +790,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/limits/vs-copilot",
-    title: "Claude Code vs GitHub Copilot : comparatif honnête (2026)",
+    title: "Claude Code vs GitHub Copilot 2026 : fonctionnalités, prix, performance",
     description:
-      "Agent CLI vs autocomplétion IDE : prix, mode agent, intégration IDE et qualité du code comparés. Forces, faiblesses, et quel outil choisir selon votre cas d'usage.",
+      "Agent CLI ou autocomplétion IDE en 2026 ? Comparatif complet Claude Code vs GitHub Copilot : mode agent, intégration IDE, tarifs, fenêtre de contexte, et cas d'usage où chaque outil fait vraiment la différence.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-13",
+    lastModified: "2026-04-23",
   },
   {
     path: "/limits/vs-cursor",

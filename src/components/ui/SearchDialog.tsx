@@ -110,8 +110,18 @@ export function SearchDialog() {
     setQuery("");
     setDebouncedQuery("");
     setSelectedIndex(0);
-    requestAnimationFrame(() => triggerRef.current?.focus());
   }, []);
+
+  // Return focus to the trigger after the dialog closes.
+  // Using an effect guarantees the DOM has committed the unmount before
+  // we re-focus, which keeps Playwright's actionability checks happy.
+  const wasOpenRef = useRef(false);
+  useEffect(() => {
+    if (wasOpenRef.current && !open) {
+      triggerRef.current?.focus();
+    }
+    wasOpenRef.current = open;
+  }, [open]);
 
   const openDialog = useCallback(() => {
     // iOS Safari 17+ keyboard-raising dance: prime input first, then

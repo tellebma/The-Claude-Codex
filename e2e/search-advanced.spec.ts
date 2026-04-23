@@ -42,10 +42,9 @@ test.describe("Search advanced behaviour", () => {
     // Combobox proxy: getByRole("dialog") renvoie "hidden" en Chromium
     // headless malgré un dialog ouvert (bug Playwright avec aria-modal).
     await expect(combobox).not.toBeVisible();
-    const isFocused = await trigger.evaluate(
-      (el) => el === document.activeElement,
-    );
-    expect(isFocused).toBe(true);
+    // toBeFocused() fait son propre retry — évite la course entre le commit
+    // React (unmount du portal) et la restauration du focus sur le trigger.
+    await expect(trigger).toBeFocused();
   });
 
   test("ArrowDown selects next result", async ({ page }) => {
@@ -269,13 +268,19 @@ test.describe("Search advanced behaviour", () => {
 
   // Backdrop click closes the dialog without navigating away.
   test("clicking the backdrop closes the dialog", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/fr/");
     const url = page.url();
     await page.getByRole("button", { name: /Rechercher/ }).click();
     await expect(
       page.getByRole("combobox", { name: "Rechercher" }),
     ).toBeVisible();
-    await page.getByTestId("search-backdrop").click();
+    // Le backdrop (z-0, inset-0) est recouvert au centre par le dialog (z-10).
+    // Clique volontairement en haut-gauche, hors du dialog, pour viser la
+    // zone réellement cliquable du backdrop.
+    await page
+      .getByTestId("search-backdrop")
+      .click({ position: { x: 10, y: 10 } });
     await expect(
       page.getByRole("combobox", { name: "Rechercher" }),
     ).not.toBeVisible();

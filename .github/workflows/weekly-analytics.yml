@@ -12,8 +12,7 @@ on:
         default: "7"
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: weekly-analytics
@@ -21,7 +20,7 @@ concurrency:
 
 jobs:
   analyze:
-    name: Fetch GSC + Matomo, detect alerts, open PR, notify Discord
+    name: Fetch GSC + Matomo, detect alerts, push to vault, notify Discord
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -33,13 +32,16 @@ jobs:
       MATOMO_TOKEN_AUTH: ${{ secrets.MATOMO_TOKEN_AUTH }}
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
       ANALYTICS_PERIOD_DAYS: ${{ github.event.inputs.period_days || '7' }}
+      BRAIN_REPO: ${{ vars.BRAIN_REPO || 'tellebma/claude-code-obsidian-brain' }}
+      BRAIN_BRANCH: ${{ vars.BRAIN_BRANCH || 'main' }}
+      BRAIN_RAW_DIR: ${{ vars.BRAIN_RAW_DIR || 'raw/analytics' }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout claude-codex
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: "22"
 
@@ -49,48 +51,55 @@ jobs:
           node scripts/analytics/run.ts
           END_DATE=$(ls -1 docs/analytics | sort | tail -n1)
           echo "end_date=${END_DATE}" >> "$GITHUB_OUTPUT"
-          echo "branch=auto/analytics-${END_DATE}" >> "$GITHUB_OUTPUT"
 
       - name: Upload report artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: analytics-${{ steps.run.outputs.end_date }}
           path: docs/analytics/${{ steps.run.outputs.end_date }}/
           if-no-files-found: warn
           retention-days: 30
 
-      - name: Commit and push report
-        id: commit
+      - name: Checkout brain vault
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: ${{ env.BRAIN_REPO }}
+          ref: ${{ env.BRAIN_BRANCH }}
+          token: ${{ secrets.BRAIN_REPO_TOKEN }}
+          path: brain-vault
+          persist-credentials: true
+
+      - name: Sync report into brain vault
+        id: sync
+        working-directory: brain-vault
         run: |
-          if [ -z "$(git status --porcelain docs/analytics)" ]; then
-            echo "Pas de changement a committer"
+          set -euo pipefail
+          END_DATE="${{ steps.run.outputs.end_date }}"
+          TARGET_DIR="${BRAIN_RAW_DIR}/${END_DATE}"
+          SOURCE_DIR="${GITHUB_WORKSPACE}/docs/analytics/${END_DATE}"
+
+          if [ ! -d "${SOURCE_DIR}" ]; then
+            echo "::error::Source directory ${SOURCE_DIR} not found"
+            exit 1
+          fi
+
+          mkdir -p "${TARGET_DIR}"
+          cp -R "${SOURCE_DIR}/." "${TARGET_DIR}/"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${TARGET_DIR}"
+
+          if git diff --cached --quiet; then
+            echo "Aucun changement dans le vault"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          BRANCH="${{ steps.run.outputs.branch }}"
-          git checkout -B "$BRANCH"
-          git add docs/analytics
-          git commit -m "chore(analytics): report ${{ steps.run.outputs.end_date }}"
-          git push -f -u origin "$BRANCH"
-          echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Open or update PR
-        if: steps.commit.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          BRANCH="${{ steps.run.outputs.branch }}"
-          END_DATE="${{ steps.run.outputs.end_date }}"
-          EXISTING=$(gh pr list --head "$BRANCH" --state open --json number -q ".[0].number" || true)
-          if [ -z "$EXISTING" ]; then
-            gh pr create \
-              --base develop \
-              --head "$BRANCH" \
-              --title "chore(analytics): rapport hebdo ${END_DATE}" \
-              --body "Rapport analytics genere automatiquement. Voir \`docs/analytics/${END_DATE}/REPORT.md\`."
-          else
-            gh pr comment "$EXISTING" --body "Report mis a jour : docs/analytics/${END_DATE}/REPORT.md"
-          fi
+          git commit -m "chore(analytics): weekly report ${END_DATE}
+
+Source: ${{ github.repository }}@${{ github.sha }}
+Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git push origin "HEAD:${BRAIN_BRANCH}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"

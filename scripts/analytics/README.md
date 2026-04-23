@@ -1,7 +1,7 @@
 # Weekly analytics pipeline
 
 Cron hebdo qui croise **Google Search Console** et **Matomo** pour produire un rapport
-d'alertes actionnables, le committer sur une branche dediee et notifier Discord.
+d'alertes actionnables, le pousse dans le vault Obsidian personnel et notifie Discord.
 
 Ticket backlog : **MT21** (voir `docs/gsc-analysis/2026-04-20/ANALYSIS.md`).
 
@@ -20,14 +20,22 @@ scripts/analytics/run.ts              -> orchestrateur
   +-- notify-discord.ts               -> POST webhook
   +-- types.ts                        -> types partages
 
-docs/analytics/<YYYY-MM-DD>/          -> sortie committee
+docs/analytics/<YYYY-MM-DD>/          -> sortie temporaire dans le runner CI
   +-- gsc-queries.csv
   +-- gsc-pages.csv
   +-- matomo-pages.csv
   +-- matomo-events.csv
   +-- alerts.json
   +-- REPORT.md
+          |
+          v
+tellebma/claude-code-obsidian-brain   -> repo vault (push final)
+  raw/analytics/<YYYY-MM-DD>/         -> fichiers copies ici, immuables
 ```
+
+Le workflow ne touche plus au repo `claude-codex` : aucune PR, aucune branche `auto/`.
+Les artefacts du run restent disponibles 30 jours via **Actions -> run -> Artifacts**
+pour debug.
 
 ## Declencheurs
 
@@ -47,6 +55,7 @@ Repo -> Settings -> Secrets and variables -> Actions
 | `MATOMO_SITE_ID` | Matomo UI (idSite en haut a gauche) | - |
 | `MATOMO_TOKEN_AUTH` | Matomo UI -> Personal -> Security -> Auth tokens | Read sur le site Claude Codex |
 | `DISCORD_WEBHOOK_URL` | Discord -> canal -> Integrations -> Webhooks | Send only |
+| `BRAIN_REPO_TOKEN` | GitHub -> Settings -> Developer settings -> Personal access tokens (fine-grained) | `Contents: Read and write` sur le repo vault uniquement |
 
 ### Variables (non sensibles, overridables)
 
@@ -54,6 +63,9 @@ Repo -> Settings -> Secrets and variables -> Actions
 |----------|---------|
 | `GSC_SITE_URL` | `sc-domain:claude-codex.fr` |
 | `MATOMO_BASE_URL` | `https://matomo.tellebma.fr` |
+| `BRAIN_REPO` | `tellebma/claude-code-obsidian-brain` |
+| `BRAIN_BRANCH` | `main` |
+| `BRAIN_RAW_DIR` | `raw/analytics` |
 
 ## Setup detaillle
 
@@ -86,16 +98,17 @@ Repo -> Settings -> Secrets and variables -> Actions
 
 ## Premier lancement
 
-Une fois les 4 secrets en place :
+Une fois les 5 secrets en place :
 
 1. Repo -> Actions -> **Weekly analytics**
 2. Run workflow -> bouton vert, optionnel `period_days=30` pour le 1er run (donnees
    plus riches)
 3. Attendre ~1 min, verifier :
    - le job est vert
-   - une PR `auto/analytics-<date>` a ete ouverte
    - le message Discord est arrive
-   - `docs/analytics/<date>/REPORT.md` est lisible
+   - dans le repo vault : commit `chore(analytics): weekly report <date>` sur `main`
+   - dans Obsidian apres pull : `raw/analytics/<date>/REPORT.md` est visible
+   - (optionnel debug) l'artefact `analytics-<date>` du run Actions contient la meme chose
 
 ## Alertes (niveau 3)
 
@@ -140,6 +153,6 @@ npx vitest run __tests__/analytics/
   Version 2 : utiliser `Events.getNameFromActionId` pour descendre a la page.
 - L'alerte `position_drop` reutilise le meme endpoint GSC pour la periode N-1, donc
   consomme 2x les quotas (largement suffisant : 25 000 requetes/jour gratuit).
-- Le workflow utilise `git push -f` sur la branche `auto/analytics-<date>` : si un
-  humain a edite cette branche entre-temps, ses changements sont ecrases. Ne pas
-  editer manuellement cette branche, utiliser la PR.
+- Le push dans le vault cible `main` directement (pas de PR) : c'est un fichier de
+  donnees, pas du code. Respecte la regle "Ne jamais modifier `raw/`" : chaque run
+  ajoute un nouveau dossier horodate, aucun fichier existant n'est touche.

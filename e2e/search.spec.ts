@@ -30,7 +30,8 @@ test.describe("Search", () => {
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("MCP");
 
-    // Wait for results to appear in the listbox
+    // Live search is debounced (150ms) and the index is fetched lazily;
+    // Playwright auto-waits up to 5s for the first option to appear.
     const listbox = page.getByRole("listbox", {
       name: "Résultats de recherche",
     });
@@ -49,6 +50,36 @@ test.describe("Search", () => {
     await expect(
       page.getByRole("paragraph").filter({ hasText: /Aucun résultat/ }),
     ).toBeVisible();
+  });
+
+  test("shows min-chars hint when a single character is typed", async ({
+    page,
+  }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("a");
+
+    await expect(
+      page.getByText(/Tapez au moins 2 caractères/i),
+    ).toBeVisible();
+  });
+
+  test("highlights the query inside snippets with <mark>", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("installation");
+
+    const listbox = page.getByRole("listbox", {
+      name: "Résultats de recherche",
+    });
+    await expect(listbox.getByRole("option").first()).toBeVisible();
+    // At least one <mark> must be present inside the results — that's how
+    // the matched substring is highlighted. Works for any locale.
+    await expect(listbox.locator("mark:visible").first()).toBeVisible();
   });
 
   test("closes search dialog with Escape", async ({ page }) => {

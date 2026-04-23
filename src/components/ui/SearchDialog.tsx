@@ -9,12 +9,22 @@ import {
   FileText,
   CornerDownLeft,
   Sparkles,
+  Loader2,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
-import { searchEntries, type SearchEntry } from "@/lib/search-index";
+import {
+  loadSearchIndex,
+  runSearch,
+  MIN_CHARS,
+  type SearchDoc,
+  type SearchResult,
+  type SearchRunResult,
+  type SearchSnippet,
+} from "@/lib/search-live";
 
 const RESULTS_LISTBOX_ID = "search-results-listbox";
+const DEBOUNCE_MS = 150;
 
 function getOptionId(index: number): string {
   return `search-option-${index}`;
@@ -27,10 +37,16 @@ const SUGGESTION_HREFS = [
   { href: "/skills", labelKey: "suggestSkills" as const },
 ];
 
+const EMPTY_RUN: SearchRunResult = { results: [], truncated: 0, total: 0 };
+
 export function SearchDialog() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [index, setIndex] = useState<ReadonlyArray<SearchDoc> | null>(null);
+  const [indexLoading, setIndexLoading] = useState(false);
+  const [indexError, setIndexError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const primeInputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -39,60 +55,114 @@ export function SearchDialog() {
   const locale = useLocale();
   const t = useTranslations("search");
 
-  const results = useMemo<ReadonlyArray<SearchEntry>>(
-    () => searchEntries(query, locale),
-    [query, locale]
-  );
+  const run: SearchRunResult = useMemo(() => {
+    if (!index || debouncedQuery.trim().length < MIN_CHARS) return EMPTY_RUN;
+    return runSearch(debouncedQuery, index);
+  }, [debouncedQuery, index]);
 
+  const results = run.results;
+  const hasQuery = query.trim().length > 0;
+  const hasValidQuery = query.trim().length >= MIN_CHARS;
+  const isDebouncing = hasValidQuery && debouncedQuery !== query.trim();
+  const showMinChars = hasQuery && !hasValidQuery;
+  const showResults = hasValidQuery && results.length > 0;
+  const showNoResults =
+    hasValidQuery && !isDebouncing && !indexLoading && results.length === 0 && !indexError;
+  const showEmptyState = !hasQuery;
+  const showError = hasValidQuery && indexError;
+
+  // Lazy-load the search index the first time the dialog opens.
+  const ensureIndex = useCallback(async () => {
+    if (index || indexLoading) return;
+    setIndexLoading(true);
+    setIndexError(false);
+    try {
+      const docs = await loadSearchIndex(locale);
+      setIndex(docs);
+    } catch {
+      setIndexError(true);
+    } finally {
+      setIndexLoading(false);
+    }
+  }, [index, indexLoading, locale]);
+
+  // Reset selection when results change.
   useEffect(() => {
     setSelectedIndex(0);
+  }, [debouncedQuery, results.length]);
+
+  // Debounce query -> debouncedQuery.
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < MIN_CHARS) {
+      setDebouncedQuery("");
+      return;
+    }
+    const handle = globalThis.setTimeout(() => {
+      setDebouncedQuery(trimmed);
+    }, DEBOUNCE_MS);
+    return () => globalThis.clearTimeout(handle);
   }, [query]);
 
   const closeDialog = useCallback(() => {
     setOpen(false);
     setQuery("");
+    setDebouncedQuery("");
     setSelectedIndex(0);
     requestAnimationFrame(() => triggerRef.current?.focus());
   }, []);
 
   const openDialog = useCallback(() => {
-    // iOS Safari 17+ keyboard-raising dance. Three hard requirements:
-    //   1. .focus() must run SYNCHRONOUSLY inside the trusted gesture
-    //      (no await, no setTimeout, no microtask, no rAF).
-    //   2. The focus target must be a REAL, FOCUSABLE input at the
-    //      time .focus() runs — visibility:hidden or display:none
-    //      disqualify it, even through ancestors. opacity:0 is fine.
-    //   3. The input must already be in the DOM at the start of the
-    //      gesture (iOS won't raise the keyboard for elements mounted
-    //      mid-gesture, even with flushSync).
-    //
-    // Strategy: keep a permanently mounted "prime" input (opacity:0,
-    // tiny, tabIndex -1) outside the dialog. Focus it synchronously
-    // first — that's what raises the keyboard. Then flushSync-open
-    // the dialog and transfer focus to the real input. iOS treats
-    // focus transfers between inputs (on an already-open keyboard)
-    // as benign, so the caret moves into the real input without the
-    // keyboard dropping.
+    // iOS Safari 17+ keyboard-raising dance (see legacy comment): prime input
+    // first, then flushSync-open the dialog and transfer focus.
     primeInputRef.current?.focus({ preventScroll: true });
     flushSync(() => {
       setOpen(true);
       setQuery("");
+      setDebouncedQuery("");
       setSelectedIndex(0);
     });
     inputRef.current?.focus({ preventScroll: true });
-  }, []);
+    ensureIndex().catch(() => undefined);
+  }, [ensureIndex]);
 
   const navigateTo = useCallback(
     (href: string) => {
       setOpen(false);
       setQuery("");
+      setDebouncedQuery("");
       setSelectedIndex(0);
       router.push(href);
     },
     [router]
   );
 
-  // Global shortcut: Ctrl/Cmd+K toggles, Escape closes
+  // Result hrefs include the locale prefix (e.g. /fr/mcp/setup). next-intl's
+  // router will re-add the prefix based on the target locale, so strip it
+  // before pushing. If the result points to a different locale than the
+  // current one, we pass the `locale` option so next-intl switches language.
+  const navigateToResult = useCallback(
+    (href: string) => {
+      const match = /^\/(fr|en)(\/.*)?$/.exec(href);
+      if (!match) {
+        navigateTo(href);
+        return;
+      }
+      const targetLocale = match[1];
+      const pathWithoutLocale = match[2] ?? "/";
+      setOpen(false);
+      setQuery("");
+      setDebouncedQuery("");
+      setSelectedIndex(0);
+      if (targetLocale === locale) {
+        router.push(pathWithoutLocale);
+      } else {
+        router.push(pathWithoutLocale, { locale: targetLocale as "fr" | "en" });
+      }
+    },
+    [navigateTo, router, locale]
+  );
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -112,17 +182,12 @@ export function SearchDialog() {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, openDialog, closeDialog]);
 
-  // Ctrl/Cmd+K path: the shortcut handler already calls openDialog
-  // which focuses the input synchronously. This effect is a fallback
-  // in case focus was lost (e.g. browser consumed the keydown before
-  // React got to run openDialog).
   useEffect(() => {
     if (!open) return;
     if (document.activeElement === inputRef.current) return;
     queueMicrotask(() => inputRef.current?.focus());
   }, [open]);
 
-  // Lock body scroll while keeping layout stable
   useEffect(() => {
     if (!open) return;
     const scrollbarWidth =
@@ -139,13 +204,6 @@ export function SearchDialog() {
     };
   }, [open]);
 
-  // Hide background content from assistive tech and tab order.
-  // The dialog is rendered INSIDE <header> (SearchDialog is a child
-  // of Header), so setting `inert` on the header would also inert the
-  // dialog and strip focus from the real input. We inert only the
-  // main content area — the dialog's own focus trap
-  // (handleDialogKeyDown) blocks Tab from escaping into the header
-  // anyway.
   useEffect(() => {
     if (!open) return;
     const main = document.getElementById("main-content");
@@ -155,7 +213,6 @@ export function SearchDialog() {
     };
   }, [open]);
 
-  // Auto-scroll active option into view
   useEffect(() => {
     if (!open || results.length === 0) return;
     const optionEl = document.getElementById(getOptionId(selectedIndex));
@@ -174,14 +231,10 @@ export function SearchDialog() {
     } else if (e.key === "Enter" && results.length > 0) {
       e.preventDefault();
       const selected = results[selectedIndex];
-      if (selected) navigateTo(selected.href);
+      if (selected) navigateToResult(selected.href);
     }
   };
 
-  // Focus trap — on attache le listener au document (gated par open)
-  // plutôt que sur le <div role="dialog"> : ça satisfait Sonar S6847
-  // (pas d'event handler sur un élément non-interactif) sans changer
-  // le comportement.
   useEffect(() => {
     if (!open) return;
     const handleTabTrap = (e: KeyboardEvent) => {
@@ -208,14 +261,9 @@ export function SearchDialog() {
 
   const activeDescendant =
     results.length > 0 ? getOptionId(selectedIndex) : undefined;
-  const hasQuery = query.trim().length > 0;
-  const showEmptyState = !hasQuery;
-  const showNoResults = hasQuery && results.length === 0;
-  const showResults = hasQuery && results.length > 0;
 
   return (
     <>
-      {/* Trigger button — icon-only on mobile, label + shortcut on larger screens */}
       <button
         ref={triggerRef}
         onClick={openDialog}
@@ -236,16 +284,6 @@ export function SearchDialog() {
         </kbd>
       </button>
 
-      {/*
-       * Prime input — permanently mounted, off-screen (not hidden).
-       * iOS refuses to raise the soft keyboard when .focus() is
-       * called on an element that is display:none or
-       * visibility:hidden, OR on an element that wasn't in the DOM
-       * at the start of the gesture. Off-screen with
-       * `left: -9999px` keeps it focusable while invisible to the
-       * user. Focus this synchronously in the click handler to
-       * raise the keyboard BEFORE the real dialog mounts.
-       */}
       <input
         ref={primeInputRef}
         type="text"
@@ -263,12 +301,6 @@ export function SearchDialog() {
 
       {open && (
       <div className="fixed inset-0 z-[60] flex motion-safe:animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]">
-        {/*
-         * Backdrop button — invisible full-screen button covering the
-         * overlay. Clicking the backdrop (outside the dialog) closes it.
-         * Using a <button> satisfies Sonar S6847/S6848 (native interactive
-         * element with event handlers) while keeping the same UX.
-         */}
         <button
           type="button"
           aria-label={t("close")}
@@ -288,8 +320,13 @@ export function SearchDialog() {
             paddingBottom: "env(safe-area-inset-bottom)",
           }}
         >
-            {/* Search input */}
-            <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-2 dark:border-slate-700 sm:px-4">
+            <div
+              className={`relative flex items-center gap-2 border-b px-3 py-2 sm:px-4 ${
+                isDebouncing || indexLoading
+                  ? "border-brand-400/40 dark:border-brand-400/40"
+                  : "border-slate-200 dark:border-slate-700"
+              }`}
+            >
               <Search
                 className="h-5 w-5 shrink-0 text-slate-400"
                 aria-hidden="true"
@@ -314,6 +351,15 @@ export function SearchDialog() {
                 spellCheck={false}
                 enterKeyHint="search"
               />
+              {(isDebouncing || indexLoading) && (
+                <span
+                  className="hidden items-center gap-1 text-xs text-slate-500 dark:text-slate-400 sm:inline-flex"
+                  aria-hidden="true"
+                >
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  {t("searching")}
+                </span>
+              )}
               {hasQuery && (
                 <button
                   type="button"
@@ -345,14 +391,12 @@ export function SearchDialog() {
               </button>
             </div>
 
-            {/* Live region for screen readers */}
             <div role="status" aria-live="polite" className="sr-only">
-              {hasQuery && results.length > 0 &&
-                t("resultCount", { count: results.length })}
+              {showResults && t("resultCount", { count: run.total })}
               {showNoResults && t("noResults", { query })}
+              {showError && t("loadError")}
             </div>
 
-            {/* Body */}
             <div className="flex-1 overflow-y-auto overscroll-contain">
               {showEmptyState && (
                 <div className="px-3 py-4 sm:px-4">
@@ -392,6 +436,22 @@ export function SearchDialog() {
                 </div>
               )}
 
+              {showMinChars && (
+                <div className="px-3 py-12 text-center sm:px-4">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    {t("minCharsHint")}
+                  </p>
+                </div>
+              )}
+
+              {showError && (
+                <div className="px-3 py-10 text-center sm:px-4">
+                  <p className="text-sm font-medium text-slate-900 dark:text-white">
+                    {t("loadError")}
+                  </p>
+                </div>
+              )}
+
               {showNoResults && (
                 <div className="px-3 py-6 text-center sm:px-4">
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
@@ -425,85 +485,34 @@ export function SearchDialog() {
               )}
 
               {showResults && (
-                // Custom combobox listbox : on utilise <div role="listbox">
-                // + <div role="option"> plutôt que <ul>/<li role="option">.
-                // Les éléments <ul>/<li> sont considérés "non-interactifs"
-                // par Sonar S6842, alors que <div> est neutre (pas de rôle
-                // implicite en conflit avec role="option").
                 <div
                   id={RESULTS_LISTBOX_ID}
                   role="listbox"
                   aria-label={t("resultsLabel")}
                   className="space-y-0.5 px-2 py-2"
                 >
-                  {results.map((result, index) => {
-                    const isActive = index === selectedIndex;
-                    return (
-                      <div
-                        key={result.href}
-                        id={getOptionId(index)}
-                        role="option"
-                        tabIndex={isActive ? 0 : -1}
-                        aria-selected={isActive}
-                        onClick={() => navigateTo(result.href)}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            navigateTo(result.href);
-                          }
-                        }}
-                        onMouseEnter={() => setSelectedIndex(index)}
-                        className={`group flex cursor-pointer items-start gap-3 rounded-lg px-3 py-3 transition-colors ${
-                          isActive
-                            ? "bg-brand-50 dark:bg-brand-500/10"
-                            : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
-                        }`}
-                      >
-                        <span
-                          className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md ${
-                            isActive
-                              ? "bg-brand-500/15 text-brand-600 dark:bg-brand-500/20 dark:text-brand-300"
-                              : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
-                          }`}
-                          aria-hidden="true"
-                        >
-                          <FileText className="h-3.5 w-3.5" />
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                            <span
-                              className={`truncate text-sm font-semibold ${
-                                isActive
-                                  ? "text-brand-700 dark:text-brand-300"
-                                  : "text-slate-900 dark:text-white"
-                              }`}
-                            >
-                              {result.title}
-                            </span>
-                            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-300">
-                              {result.section}
-                            </span>
-                          </div>
-                          <p className="mt-0.5 line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
-                            {result.description}
-                          </p>
-                        </div>
-                        <ArrowRight
-                          className={`mt-2 h-4 w-4 shrink-0 transition-transform ${
-                            isActive
-                              ? "translate-x-0.5 text-brand-500"
-                              : "text-slate-300 dark:text-slate-600"
-                          }`}
-                          aria-hidden="true"
-                        />
-                      </div>
-                    );
-                  })}
+                  {results.map((result, idx) => (
+                    <SearchResultRow
+                      key={result.href}
+                      result={result}
+                      index={idx}
+                      isActive={idx === selectedIndex}
+                      onSelect={() => navigateToResult(result.href)}
+                      onMouseEnter={() => setSelectedIndex(idx)}
+                      titleBadgeLabel={t("titleBadge")}
+                      matchesLabel={(n) => t("matchesInPage", { count: n })}
+                      currentLocale={locale}
+                    />
+                  ))}
+                  {run.truncated > 0 && (
+                    <p className="mt-2 px-3 py-2 text-center text-xs text-slate-500 dark:text-slate-400">
+                      {t("moreResults", { count: run.truncated })}
+                    </p>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Footer — desktop only (mobile uses cancel button at top) */}
             <div className="hidden border-t border-slate-200 px-4 py-2 text-xs text-slate-500 dark:border-slate-700 dark:text-slate-400 sm:flex sm:items-center sm:justify-between">
               <div className="flex items-center gap-2">
                 <kbd className="rounded border border-slate-300 px-1.5 py-0.5 font-mono dark:border-slate-600">
@@ -530,5 +539,133 @@ export function SearchDialog() {
         </div>
       )}
     </>
+  );
+}
+
+interface SearchResultRowProps {
+  readonly result: SearchResult;
+  readonly index: number;
+  readonly isActive: boolean;
+  readonly currentLocale: string;
+  readonly onSelect: () => void;
+  readonly onMouseEnter: () => void;
+  readonly titleBadgeLabel: string;
+  readonly matchesLabel: (count: number) => string;
+}
+
+function SearchResultRow({
+  result,
+  index,
+  isActive,
+  currentLocale,
+  onSelect,
+  onMouseEnter,
+  titleBadgeLabel,
+  matchesLabel,
+}: SearchResultRowProps) {
+  const showLocaleBadge = result.locale !== currentLocale;
+
+  return (
+    <div
+      id={getOptionId(index)}
+      role="option"
+      tabIndex={isActive ? 0 : -1}
+      aria-selected={isActive}
+      onClick={onSelect}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect();
+        }
+      }}
+      onMouseEnter={onMouseEnter}
+      className={`group flex cursor-pointer items-start gap-3 rounded-lg px-3 py-2.5 transition-colors sm:py-3 ${
+        isActive
+          ? "bg-brand-50 dark:bg-brand-500/10"
+          : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
+      }`}
+    >
+      <span
+        className={`mt-0.5 hidden h-7 w-7 shrink-0 items-center justify-center rounded-md sm:flex ${
+          isActive
+            ? "bg-brand-500/15 text-brand-600 dark:bg-brand-500/20 dark:text-brand-300"
+            : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
+        }`}
+        aria-hidden="true"
+      >
+        <FileText className="h-3.5 w-3.5" />
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span
+            className={`truncate text-sm font-semibold ${
+              isActive
+                ? "text-brand-700 dark:text-brand-300"
+                : "text-slate-900 dark:text-white"
+            }`}
+          >
+            {result.title}
+          </span>
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:bg-slate-800 dark:text-slate-300">
+            {result.section}
+          </span>
+          {result.titleMatch && (
+            <span className="rounded-full bg-brand-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-brand-600 dark:bg-brand-500/20 dark:text-brand-300">
+              {titleBadgeLabel}
+            </span>
+          )}
+          {showLocaleBadge && (
+            <span className="rounded-full bg-accent-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-700 dark:bg-accent-500/20 dark:text-accent-300">
+              {result.locale.toUpperCase()}
+            </span>
+          )}
+        </div>
+        {result.snippets.length > 0 ? (
+          <div className="mt-1 space-y-1 sm:mt-1.5">
+            <SnippetLine snippet={result.snippets[0]} mobileOnly />
+            {result.snippets.map((s) => (
+              <SnippetLine key={`${s.pre}|${s.match}|${s.post}`} snippet={s} />
+            ))}
+          </div>
+        ) : (
+          <p className="mt-0.5 line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
+            {result.description}
+          </p>
+        )}
+        {result.totalHits > 1 && (
+          <p className="mt-1 text-[11px] text-slate-400 dark:text-slate-500">
+            {matchesLabel(result.totalHits)}
+          </p>
+        )}
+      </div>
+      <ArrowRight
+        className={`mt-2 hidden h-4 w-4 shrink-0 transition-transform sm:block ${
+          isActive
+            ? "translate-x-0.5 text-brand-500"
+            : "text-slate-300 dark:text-slate-600"
+        }`}
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
+
+interface SnippetLineProps {
+  readonly snippet: SearchSnippet;
+  readonly mobileOnly?: boolean;
+}
+
+function SnippetLine({ snippet, mobileOnly = false }: SnippetLineProps) {
+  const className = mobileOnly
+    ? "line-clamp-1 text-xs text-slate-500 dark:text-slate-400 sm:hidden"
+    : "hidden line-clamp-2 text-xs text-slate-500 dark:text-slate-400 sm:block";
+  return (
+    <p className={className}>
+      <span>{snippet.pre}</span>
+      <mark className="rounded-sm bg-accent-200/60 px-0.5 text-inherit dark:bg-accent-500/30">
+        {snippet.match}
+      </mark>
+      <span>{snippet.post}</span>
+    </p>
   );
 }

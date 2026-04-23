@@ -220,7 +220,7 @@ jobs:
       - name: Lychee link check
         uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
         with:
-          args: --config .lychee.toml --cache --base ./out './out/**/*.html'
+          args: --config .lychee.toml --cache --root-dir ${{ github.workspace }}/out './out/**/*.html'
           fail: true
           token: ${{ secrets.GITHUB_TOKEN }}
 

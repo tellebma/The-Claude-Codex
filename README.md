@@ -251,4 +251,27 @@ Les contributions sont les bienvenues. Pour contribuer :
 
 ## Licence
 
-Projet open-source.
+Ce projet utilise une **double licence** pour distinguer le code du contenu éditorial.
+
+### Code source — MIT
+
+Tout le code source (TypeScript, TSX, scripts, configuration Next.js, Docker, CI/CD, Tailwind, etc.) est publié sous licence [MIT](./LICENSE). Tu peux le réutiliser, le modifier et le redistribuer librement, y compris dans un projet commercial, à condition de conserver la mention de copyright.
+
+### Contenu éditorial — CC BY-NC-SA 4.0
+
+Tout le contenu éditorial est publié sous licence [Creative Commons Attribution - Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International](./LICENSE-CONTENT) (CC BY-NC-SA 4.0). Cela concerne :
+
+- les fichiers Markdown/MDX sous `content/fr/` et `content/en/`
+- les catalogues de traduction sous `messages/`
+
+Tu peux donc **partager** et **adapter** ce contenu, à condition de :
+
+- **créditer** l'auteur avec un lien vers le site d'origine (`https://claude-codex.fr`) et vers la licence,
+- ne pas l'utiliser à des **fins commerciales**,
+- redistribuer toute adaptation sous la **même licence** (CC BY-NC-SA 4.0).
+
+**Attribution suggérée** :
+
+> « The Claude Codex » par Maxime Bellet, sous licence CC BY-NC-SA 4.0 — https://claude-codex.fr
+
+En cas de doute sur la licence applicable à un fichier précis, regarde son emplacement : tout ce qui est dans `content/` ou `messages/` relève de CC BY-NC-SA 4.0, le reste relève de MIT.

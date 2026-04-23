@@ -862,7 +862,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Votre clé API Anthropic sk-ant a fuité dans un commit, screenshot ou log ? Révoquez-la, faites la rotation, auditez les dégâts. Guide de récupération pas à pas.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-04-23",
   },
   {
     path: "/content/mode-plan-vs-thinking",

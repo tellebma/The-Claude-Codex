@@ -19,6 +19,8 @@ max_redirects = 10
 
 # Exclusions — liens externes connus pour être flaky ou limités en CI
 exclude = [
+  # Self : la prod retarde sur develop, inutile de checker nos propres pages en PR
+  "^https://claude-codex\\.fr/",
   # GitHub rate-limit agressif en CI sans token
   "^https://github\\.com/.*#L\\d+",
   # Domaines avec anti-bot strict (renvoient 403 aux runners GHA)

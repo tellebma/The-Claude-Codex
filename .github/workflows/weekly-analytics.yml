@@ -97,9 +97,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore(analytics): weekly report ${END_DATE}
-
-Source: ${{ github.repository }}@${{ github.sha }}
-Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git commit -m "chore(analytics): weekly report ${END_DATE} (source: ${{ github.repository }}@${GITHUB_SHA::7} | run: ${RUN_URL})"
           git push origin "HEAD:${BRAIN_BRANCH}"
           echo "changed=true" >> "$GITHUB_OUTPUT"

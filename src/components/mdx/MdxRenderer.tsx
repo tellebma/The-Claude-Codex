@@ -1,4 +1,4 @@
-import { evaluate } from "@mdx-js/mdx";
+import { evaluate, type EvaluateOptions } from "@mdx-js/mdx";
 import * as jsxRuntime from "react/jsx-runtime";
 import * as devJsxRuntime from "react/jsx-dev-runtime";
 import remarkGfm from "remark-gfm";
@@ -12,7 +12,9 @@ interface MdxRendererProps {
 // On importe les deux runtimes statiquement pour permettre le tree-shake de
 // Next. En dev on pointe `jsx`/`jsxs` sur `jsxDEV` (qui gere les warnings
 // dev-only), en prod on utilise les vraies versions optimisees.
-const runtime =
+// Le cast final contourne les petites divergences de types entre les APIs
+// publiques de @mdx-js/mdx et les types TS de `react/jsx-runtime`.
+const runtime = (
   process.env.NODE_ENV === "development"
     ? {
         Fragment: devJsxRuntime.Fragment,
@@ -24,7 +26,8 @@ const runtime =
         Fragment: jsxRuntime.Fragment,
         jsx: jsxRuntime.jsx,
         jsxs: jsxRuntime.jsxs,
-      };
+      }
+) as unknown as Pick<EvaluateOptions, "Fragment" | "jsx" | "jsxs" | "jsxDEV">;
 
 /**
  * Server-side MDX renderer.

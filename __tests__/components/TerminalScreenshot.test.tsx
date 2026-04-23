@@ -13,9 +13,10 @@ beforeEach(() => {
   mockDisconnect.mockClear();
   mockObserve.mockClear();
 
-  class MockIntersectionObserver implements IntersectionObserver {
+  class MockIntersectionObserver {
     readonly root = null;
     readonly rootMargin = "";
+    readonly scrollMargin = "";
     readonly thresholds: ReadonlyArray<number> = [];
     constructor(callback: IntersectionObserverCallback) {
       intersectionCallback = callback;
@@ -26,7 +27,8 @@ beforeEach(() => {
     takeRecords(): IntersectionObserverEntry[] { return []; }
   }
 
-  global.IntersectionObserver = MockIntersectionObserver;
+  global.IntersectionObserver =
+    MockIntersectionObserver as unknown as typeof IntersectionObserver;
 });
 
 const sampleLines: TerminalLine[] = [

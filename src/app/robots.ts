@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/metadata";
 
+// Requis par Next 15 pour exporter les routes Metadata en SSG (`output: 'export'`).
+export const dynamic = "force-static";
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [

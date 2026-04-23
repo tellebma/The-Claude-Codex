@@ -259,13 +259,15 @@
   },
   "notFound": {
     "title": "Page introuvable",
-    "subtitle": "Cette page n'existe pas ou a été déplacée.",
+    "subtitle": "Cette page n'existe pas ou a été déplacée. Whobee vous propose quelques pistes pour retrouver votre chemin.",
     "suggestionsTitle": "Vous cherchiez peut-être...",
     "fallbackTitle": "Par où commencer ?",
-    "searchHint": "Utilisez la recherche pour trouver ce que vous cherchez :",
+    "searchHint": "Ouvrir la recherche",
     "backToHome": "Retour à l'accueil",
     "openSearch": "Ouvrir la recherche",
-    "urlLabel": "URL demandée :"
+    "urlLabel": "URL demandée :",
+    "recentTitle": "Articles récents",
+    "robotAlt": "Robot 3D interactif qui suit votre souris"
   },
   "sectionNav": {
     "getting-started": {

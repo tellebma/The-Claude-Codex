@@ -11,7 +11,7 @@
     "build": "next build",
     "validate:static": "node scripts/validate-static-output.ts",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

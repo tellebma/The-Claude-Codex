@@ -98,10 +98,10 @@ export function SearchDialog() {
       setDebouncedQuery("");
       return;
     }
-    const handle = window.setTimeout(() => {
+    const handle = globalThis.setTimeout(() => {
       setDebouncedQuery(trimmed);
     }, DEBOUNCE_MS);
-    return () => window.clearTimeout(handle);
+    return () => globalThis.clearTimeout(handle);
   }, [query]);
 
   const closeDialog = useCallback(() => {
@@ -123,7 +123,7 @@ export function SearchDialog() {
       setSelectedIndex(0);
     });
     inputRef.current?.focus({ preventScroll: true });
-    void ensureIndex();
+    ensureIndex().catch(() => undefined);
   }, [ensureIndex]);
 
   const navigateTo = useCallback(
@@ -154,10 +154,10 @@ export function SearchDialog() {
       setQuery("");
       setDebouncedQuery("");
       setSelectedIndex(0);
-      if (targetLocale !== locale) {
-        router.push(pathWithoutLocale, { locale: targetLocale as "fr" | "en" });
-      } else {
+      if (targetLocale === locale) {
         router.push(pathWithoutLocale);
+      } else {
+        router.push(pathWithoutLocale, { locale: targetLocale as "fr" | "en" });
       }
     },
     [navigateTo, router, locale]
@@ -622,9 +622,9 @@ function SearchResultRow({
         </div>
         {result.snippets.length > 0 ? (
           <div className="mt-1 space-y-1 sm:mt-1.5">
-            <SnippetLine snippet={result.snippets[0]!} mobileOnly />
-            {result.snippets.map((s, i) => (
-              <SnippetLine key={`desk-${i}`} snippet={s} />
+            <SnippetLine snippet={result.snippets[0]} mobileOnly />
+            {result.snippets.map((s) => (
+              <SnippetLine key={`${s.pre}|${s.match}|${s.post}`} snippet={s} />
             ))}
           </div>
         ) : (

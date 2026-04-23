@@ -21,10 +21,10 @@ max_redirects = 10
 exclude = [
   # Self : la prod retarde sur develop, inutile de checker nos propres pages en PR
   "^https://claude-codex\\.fr/",
-  # TODO — dette à traiter en PR dédiée (contenu) : 3 URLs externes 404
-  # dans 16 fichiers MDX. Exclues ici pour ne pas bloquer la CI des autres PR.
+  # TODO — 2 URLs externes 404 à remplacer dans le contenu MDX :
+  # - 1password.com/secrets (produit renommé)
+  # - github.com/anthropics/prompt-improver (repo inexistant)
   "^https://1password\\.com/secrets",
-  "^https://github\\.com/punkpeye/everything-claude-code",
   "^https://github\\.com/anthropics/prompt-improver",
   # GitHub rate-limit agressif en CI sans token
   "^https://github\\.com/.*#L\\d+",

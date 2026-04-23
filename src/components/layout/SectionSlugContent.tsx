@@ -11,7 +11,11 @@ import {
   serializeJsonLd,
 } from "@/lib/structured-data";
 import { getSectionMdxBySlug } from "@/lib/mdx";
-import { getAdjacentPages, extractSimpleSlug } from "@/lib/section-utils";
+import {
+  extractSimpleSlug,
+  getAdjacentPages,
+  sanitizeSlugForHref,
+} from "@/lib/section-utils";
 
 interface SectionSlugContentProps {
   readonly section: string;
@@ -159,7 +163,7 @@ export default async function SectionSlugContent({
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
             {prev ? (
               <Link
-                href={`/${locale}/${section}/${extractSimpleSlug(prev.slug)}`}
+                href={`/${locale}/${section}/${sanitizeSlugForHref(extractSimpleSlug(prev.slug))}`}
                 className="group flex items-center gap-2 rounded-xl border border-slate-200/50 px-6 py-4 transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <ArrowLeft
@@ -194,7 +198,7 @@ export default async function SectionSlugContent({
             )}
             {next ? (
               <Link
-                href={`/${locale}/${section}/${extractSimpleSlug(next.slug)}`}
+                href={`/${locale}/${section}/${sanitizeSlugForHref(extractSimpleSlug(next.slug))}`}
                 className="group flex items-center justify-end gap-2 rounded-xl border border-slate-200/50 px-6 py-4 text-right transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <div>

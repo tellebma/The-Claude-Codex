@@ -163,7 +163,11 @@ export default async function LocaleLayout({
   const organizationJsonLdHtml = serializeJsonLd(organizationJsonLd);
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+    >
       <head>
         {/* JSON-LD structured data — safe: static schema via JSON.stringify */}
         <script

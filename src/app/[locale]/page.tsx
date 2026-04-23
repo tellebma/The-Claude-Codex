@@ -19,6 +19,11 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { PathCard } from "@/components/ui/PathCard";

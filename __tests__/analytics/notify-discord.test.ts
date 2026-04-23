@@ -29,7 +29,7 @@ describe("notifyDiscord", () => {
   it("rejects webhook URLs that do not match Discord's hostname", async () => {
     await expect(
       notifyDiscord("https://example.com/api/webhook", sampleEmbed),
-    ).rejects.toThrow(/\bdiscord\.com\b/);
+    ).rejects.toThrow("discord.com webhook endpoint");
   });
 
   it("posts JSON payload with a single embed", async () => {

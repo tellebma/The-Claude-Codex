@@ -15,3 +15,4 @@
 # original reste scanné par le diff de la PR.
 # Introduit : PR #66 (chore/pr-metrics-comment)
 74905d1c651489938be8040ade3a026de00c123f:.github/workflows/pr-checks.yml:curl-auth-user:337
+74905d1c651489938be8040ade3a026de00c123f:.github/workflows/pr-checks.yml:curl-auth-user:352

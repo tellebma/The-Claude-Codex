@@ -38,4 +38,5 @@ exclude = [
 scheme = ["https", "http"]
 
 # Ignorer les erreurs de liens mailto / tel (pas vérifiables)
-exclude_mail = true
+# lychee >= 0.19 : exclude_mail → include_mail (inversé, défaut = false)
+include_mail = false

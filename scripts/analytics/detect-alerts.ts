@@ -34,10 +34,9 @@ interface PageKey {
 }
 
 function normalizePath(raw: string): PageKey {
-  let normalized = raw;
+  let normalized: string;
   try {
-    const url = new URL(raw, "https://claude-codex.fr");
-    normalized = url.pathname;
+    normalized = new URL(raw, "https://claude-codex.fr").pathname;
   } catch {
     normalized = raw;
   }

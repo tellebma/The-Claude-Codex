@@ -1,5 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
-import { extractSimpleSlug, getAdjacentPages } from "@/lib/section-utils";
+import {
+  extractSimpleSlug,
+  getAdjacentPages,
+  sanitizeSlugForHref,
+} from "@/lib/section-utils";
 
 // Mock the mdx module to avoid filesystem access
 vi.mock("@/lib/mdx", () => ({
@@ -81,5 +85,33 @@ describe("getAdjacentPages", () => {
     const result = getAdjacentPages("unknown-section", "any", "fr");
     expect(result.prev).toBeNull();
     expect(result.next).toBeNull();
+  });
+});
+
+describe("sanitizeSlugForHref", () => {
+  it("returns valid slugs unchanged", () => {
+    expect(sanitizeSlugForHref("setup")).toBe("setup");
+    expect(sanitizeSlugForHref("best-design")).toBe("best-design");
+    expect(sanitizeSlugForHref("intro-to-mcp-v2")).toBe("intro-to-mcp-v2");
+    expect(sanitizeSlugForHref("a1")).toBe("a1");
+  });
+
+  it("rejects slugs with special characters used for XSS", () => {
+    expect(sanitizeSlugForHref("../../etc/passwd")).toBe("");
+    expect(sanitizeSlugForHref('"><script>')).toBe("");
+    expect(sanitizeSlugForHref("javascript:alert(1)")).toBe("");
+    expect(sanitizeSlugForHref("slug onload=alert")).toBe("");
+  });
+
+  it("rejects slugs with uppercase or underscores", () => {
+    expect(sanitizeSlugForHref("Setup")).toBe("");
+    expect(sanitizeSlugForHref("with_underscore")).toBe("");
+  });
+
+  it("rejects edge cases", () => {
+    expect(sanitizeSlugForHref("")).toBe("");
+    expect(sanitizeSlugForHref("-starts-with-dash")).toBe("");
+    expect(sanitizeSlugForHref("ends-with-dash-")).toBe("");
+    expect(sanitizeSlugForHref("double--dash")).toBe("");
   });
 });

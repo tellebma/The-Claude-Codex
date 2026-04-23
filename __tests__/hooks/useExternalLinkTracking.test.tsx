@@ -63,6 +63,15 @@ describe("useExternalLinkTracking", () => {
     expect(getExternalLinkEvents()).toHaveLength(0);
   });
 
+  it("ignores dangerous non-http schemes (javascript:, data:, vbscript:)", () => {
+    renderHook(() => useExternalLinkTracking());
+    clickAnchor("javascript:alert(1)");
+    clickAnchor("data:text/html,<script>alert(1)</script>");
+    clickAnchor("vbscript:msgbox('x')");
+
+    expect(getExternalLinkEvents()).toHaveLength(0);
+  });
+
   it("ignores anchors without href", () => {
     renderHook(() => useExternalLinkTracking());
     const a = document.createElement("a");

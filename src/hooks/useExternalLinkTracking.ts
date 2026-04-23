@@ -22,12 +22,9 @@ function isExternalUrl(href: string): boolean {
   if (!href) return false;
   if (href.startsWith("#")) return false;
   if (href.startsWith("/")) return false;
-  if (
-    href.startsWith("mailto:") ||
-    href.startsWith("tel:") ||
-    href.startsWith("javascript:")
-  )
-    return false;
+  // Whitelist-based protocol check: we only consider http/https as external
+  // links to track. Any other scheme (mailto, tel, javascript, data,
+  // vbscript, etc.) is rejected by the `new URL().protocol` test below.
   try {
     const url = new URL(href, globalThis.location.href);
     if (url.protocol !== "http:" && url.protocol !== "https:") return false;

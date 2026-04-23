@@ -24,7 +24,7 @@ import {
 } from "@/lib/search-live";
 
 const RESULTS_LISTBOX_ID = "search-results-listbox";
-const DEBOUNCE_MS = 150;
+const DEBOUNCE_MS = 120;
 
 function getOptionId(index: number): string {
   return `search-option-${index}`;
@@ -71,7 +71,6 @@ export function SearchDialog() {
   const showEmptyState = !hasQuery;
   const showError = hasValidQuery && indexError;
 
-  // Lazy-load the search index the first time the dialog opens.
   const ensureIndex = useCallback(async () => {
     if (index || indexLoading) return;
     setIndexLoading(true);
@@ -86,12 +85,10 @@ export function SearchDialog() {
     }
   }, [index, indexLoading, locale]);
 
-  // Reset selection when results change.
   useEffect(() => {
     setSelectedIndex(0);
   }, [debouncedQuery, results.length]);
 
-  // Debounce query -> debouncedQuery.
   useEffect(() => {
     const trimmed = query.trim();
     if (trimmed.length < MIN_CHARS) {
@@ -113,8 +110,8 @@ export function SearchDialog() {
   }, []);
 
   const openDialog = useCallback(() => {
-    // iOS Safari 17+ keyboard-raising dance (see legacy comment): prime input
-    // first, then flushSync-open the dialog and transfer focus.
+    // iOS Safari 17+ keyboard-raising dance: prime input first, then
+    // flushSync-open the dialog and transfer focus synchronously.
     primeInputRef.current?.focus({ preventScroll: true });
     flushSync(() => {
       setOpen(true);
@@ -137,10 +134,6 @@ export function SearchDialog() {
     [router]
   );
 
-  // Result hrefs include the locale prefix (e.g. /fr/mcp/setup). next-intl's
-  // router will re-add the prefix based on the target locale, so strip it
-  // before pushing. If the result points to a different locale than the
-  // current one, we pass the `locale` option so next-intl switches language.
   const navigateToResult = useCallback(
     (href: string) => {
       const match = /^\/(fr|en)(\/.*)?$/.exec(href);
@@ -270,14 +263,14 @@ export function SearchDialog() {
         aria-label={t("triggerShort")}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="group inline-flex h-11 min-w-[44px] items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white/80 px-3 text-sm text-slate-500 transition-all hover:border-brand-500/40 hover:bg-slate-100 hover:text-slate-700 dark:border-slate-700 dark:bg-slate-800/80 dark:text-slate-300 dark:hover:border-brand-400/40 dark:hover:bg-slate-700 dark:hover:text-white md:min-w-[200px] md:justify-between md:pr-1.5"
+        className="group inline-flex h-11 min-w-[44px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/70 px-3 text-sm text-slate-500 backdrop-blur transition-all hover:border-brand-500/40 hover:bg-white hover:text-slate-700 hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:border-brand-400/40 dark:hover:bg-slate-700/80 dark:hover:text-white md:min-w-[220px] md:justify-between md:pr-1.5"
       >
         <span className="flex items-center gap-2">
           <Search className="h-4 w-4" aria-hidden="true" />
           <span className="hidden sm:inline">{t("trigger")}</span>
         </span>
         <kbd
-          className="hidden items-center gap-0.5 rounded border border-slate-300 bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 md:inline-flex"
+          className="hidden items-center gap-0.5 rounded-md border border-slate-300 bg-slate-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-slate-600 dark:border-slate-600 dark:bg-slate-700 dark:text-slate-300 md:inline-flex"
           aria-hidden="true"
         >
           <span className="text-[11px]">⌘</span>K
@@ -300,35 +293,35 @@ export function SearchDialog() {
       />
 
       {open && (
-      <div className="fixed inset-0 z-[60] flex motion-safe:animate-fade-in flex-col bg-slate-900/60 backdrop-blur-sm sm:items-start sm:justify-center sm:pt-[12vh]">
-        <button
-          type="button"
-          aria-label={t("close")}
-          tabIndex={-1}
-          onClick={closeDialog}
-          className="absolute inset-0 z-0 cursor-default"
-          data-testid="search-backdrop"
-        />
-        <div
-          ref={dialogRef}
-          role="dialog"
-          aria-label={t("dialogTitle")}
-          aria-modal="true"
-          className="relative z-10 flex h-full w-full flex-col overflow-hidden bg-white shadow-2xl ring-1 ring-slate-200/50 dark:bg-slate-900 dark:ring-slate-700/40 sm:mx-4 sm:h-auto sm:max-h-[80vh] sm:w-full sm:max-w-2xl motion-safe:sm:animate-slide-up sm:rounded-2xl"
-          style={{
-            paddingTop: "env(safe-area-inset-top)",
-            paddingBottom: "env(safe-area-inset-bottom)",
-          }}
-        >
+        <div className="fixed inset-0 z-[60] flex motion-safe:animate-fade-in flex-col bg-slate-900/50 backdrop-blur-md sm:items-start sm:justify-center sm:pt-[14vh]">
+          <button
+            type="button"
+            aria-label={t("close")}
+            tabIndex={-1}
+            onClick={closeDialog}
+            className="absolute inset-0 z-0 cursor-default"
+            data-testid="search-backdrop"
+          />
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-label={t("dialogTitle")}
+            aria-modal="true"
+            className="relative z-10 flex h-full w-full flex-col overflow-hidden bg-white/95 shadow-2xl ring-1 ring-slate-900/10 backdrop-blur-xl dark:bg-slate-900/90 dark:ring-white/10 sm:mx-4 sm:h-auto sm:max-h-[72vh] sm:w-full sm:max-w-2xl motion-safe:sm:animate-slide-up sm:rounded-2xl"
+            style={{
+              paddingTop: "env(safe-area-inset-top)",
+              paddingBottom: "env(safe-area-inset-bottom)",
+            }}
+          >
             <div
-              className={`relative flex items-center gap-2 border-b px-3 py-2 sm:px-4 ${
+              className={`relative flex items-center gap-3 border-b px-4 py-2 sm:px-5 ${
                 isDebouncing || indexLoading
                   ? "border-brand-400/40 dark:border-brand-400/40"
-                  : "border-slate-200 dark:border-slate-700"
+                  : "border-slate-200/70 dark:border-slate-700/60"
               }`}
             >
               <Search
-                className="h-5 w-5 shrink-0 text-slate-400"
+                className="h-5 w-5 shrink-0 text-slate-400 sm:h-[22px] sm:w-[22px]"
                 aria-hidden="true"
               />
               <input
@@ -339,7 +332,7 @@ export function SearchDialog() {
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={handleInputKeyDown}
                 placeholder={t("placeholder")}
-                className="min-w-0 flex-1 bg-transparent py-3 text-base text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-white dark:placeholder:text-slate-500 sm:text-sm"
+                className="min-w-0 flex-1 bg-transparent py-3 text-base font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:outline-none dark:text-white dark:placeholder:text-slate-500 sm:py-4 sm:text-lg"
                 aria-label={t("inputLabel")}
                 aria-expanded={results.length > 0}
                 aria-controls={RESULTS_LISTBOX_ID}
@@ -368,24 +361,22 @@ export function SearchDialog() {
                     inputRef.current?.focus();
                   }}
                   aria-label={t("clear")}
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
                 >
                   <X className="h-4 w-4" aria-hidden="true" />
                 </button>
               )}
-              <button
-                type="button"
-                onClick={closeDialog}
-                aria-label={t("close")}
-                className="ml-1 hidden h-9 shrink-0 items-center rounded-md px-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white sm:flex"
+              <kbd
+                className="ml-1 hidden h-6 shrink-0 items-center rounded-md border border-slate-300 bg-slate-100 px-1.5 font-mono text-[10px] font-semibold text-slate-500 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400 sm:inline-flex"
+                aria-hidden="true"
               >
-                {t("cancel")}
-              </button>
+                esc
+              </kbd>
               <button
                 type="button"
                 onClick={closeDialog}
                 aria-label={t("close")}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white sm:hidden"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white sm:hidden"
               >
                 <X className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -400,7 +391,7 @@ export function SearchDialog() {
             <div className="flex-1 overflow-y-auto overscroll-contain">
               {showEmptyState && (
                 <div className="px-3 py-4 sm:px-4">
-                  <div className="mb-2 flex items-center gap-2 px-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  <div className="mb-2 flex items-center gap-2 px-2 text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">
                     <Sparkles
                       className="h-3.5 w-3.5 text-accent-500"
                       aria-hidden="true"
@@ -413,12 +404,11 @@ export function SearchDialog() {
                         <button
                           type="button"
                           onClick={() => navigateTo(link.href)}
-                          className="group flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left text-sm text-slate-700 transition-colors hover:bg-brand-50 hover:text-brand-700 dark:text-slate-200 dark:hover:bg-brand-500/10 dark:hover:text-brand-300"
+                          className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-slate-700 transition-colors hover:bg-brand-50/80 hover:text-brand-700 dark:text-slate-200 dark:hover:bg-brand-500/10 dark:hover:text-brand-300"
                         >
-                          <FileText
-                            className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-brand-500"
-                            aria-hidden="true"
-                          />
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 group-hover:bg-brand-500/10 group-hover:text-brand-600 dark:bg-slate-800 dark:text-slate-400 dark:group-hover:bg-brand-500/20 dark:group-hover:text-brand-300">
+                            <FileText className="h-4 w-4" aria-hidden="true" />
+                          </span>
                           <span className="flex-1 truncate font-medium">
                             {t(link.labelKey)}
                           </span>
@@ -453,7 +443,7 @@ export function SearchDialog() {
               )}
 
               {showNoResults && (
-                <div className="px-3 py-6 text-center sm:px-4">
+                <div className="px-3 py-8 text-center sm:px-4">
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800">
                     <Search
                       className="h-5 w-5 text-slate-400"
@@ -467,7 +457,7 @@ export function SearchDialog() {
                     {t("noResultsHint")}
                   </p>
                   <div className="mt-5 space-y-1">
-                    <p className="px-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    <p className="px-2 text-left text-[11px] font-semibold uppercase tracking-[0.08em] text-slate-500 dark:text-slate-400">
                       {t("suggestions")}
                     </p>
                     {SUGGESTION_HREFS.map((link) => (
@@ -513,13 +503,7 @@ export function SearchDialog() {
               )}
             </div>
 
-            <div className="hidden border-t border-slate-200 px-4 py-2 text-xs text-slate-500 dark:border-slate-700 dark:text-slate-400 sm:flex sm:items-center sm:justify-between">
-              <div className="flex items-center gap-2">
-                <kbd className="rounded border border-slate-300 px-1.5 py-0.5 font-mono dark:border-slate-600">
-                  Esc
-                </kbd>
-                <span>{t("escToClose")}</span>
-              </div>
+            <div className="hidden border-t border-slate-200/70 bg-slate-50/60 px-4 py-2 text-xs text-slate-500 dark:border-slate-700/60 dark:bg-slate-900/40 dark:text-slate-400 sm:flex sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
                 <span className="flex items-center gap-1">
                   <kbd className="rounded border border-slate-300 px-1.5 py-0.5 font-mono dark:border-slate-600">
@@ -533,6 +517,12 @@ export function SearchDialog() {
                   </kbd>
                   <span>{t("enterToOpen")}</span>
                 </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <kbd className="rounded border border-slate-300 px-1.5 py-0.5 font-mono dark:border-slate-600">
+                  Esc
+                </kbd>
+                <span>{t("escToClose")}</span>
               </div>
             </div>
           </div>
@@ -579,21 +569,21 @@ function SearchResultRow({
         }
       }}
       onMouseEnter={onMouseEnter}
-      className={`group flex cursor-pointer items-start gap-3 rounded-lg px-3 py-2.5 transition-colors sm:py-3 ${
+      className={`group flex cursor-pointer items-start gap-3 rounded-xl px-3 py-2.5 transition-colors sm:py-3 ${
         isActive
           ? "bg-brand-50 dark:bg-brand-500/10"
           : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
       }`}
     >
       <span
-        className={`mt-0.5 hidden h-7 w-7 shrink-0 items-center justify-center rounded-md sm:flex ${
+        className={`mt-0.5 hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg sm:flex ${
           isActive
             ? "bg-brand-500/15 text-brand-600 dark:bg-brand-500/20 dark:text-brand-300"
             : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"
         }`}
         aria-hidden="true"
       >
-        <FileText className="h-3.5 w-3.5" />
+        <FileText className="h-4 w-4" />
       </span>
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1">

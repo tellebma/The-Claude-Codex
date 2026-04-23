@@ -121,6 +121,43 @@ test.describe("Search advanced behaviour", () => {
     // A body hit surfaces a snippet, recognised by the <mark> element.
     await expect(listbox.locator("mark:visible").first()).toBeVisible();
   });
+
+  test("live search: results appear character-by-character without pressing Enter", async ({
+    page,
+  }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+
+    // Use pressSequentially so each keystroke fires a real input event.
+    // Debounced live search must surface results without Enter being pressed.
+    await input.pressSequentially("mcp", { delay: 40 });
+
+    const listbox = page.getByRole("listbox", {
+      name: "Résultats de recherche",
+    });
+    await expect(listbox.getByRole("option").first()).toBeVisible();
+
+    // Sanity: no Enter key was sent between pressSequentially and assertion.
+    // The combobox still holds the typed query.
+    await expect(input).toHaveValue("mcp");
+  });
+
+  test("spotlight: dialog floats centered-top, not at y=0", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const dialog = page.locator('[role="dialog"][aria-modal="true"]');
+    await expect(dialog).toBeVisible();
+    const box = await dialog.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      // Spotlight floats: at least ~10vh padding above the dialog on desktop.
+      expect(box.y).toBeGreaterThan(60);
+      // And never spans full height on desktop.
+      expect(box.height).toBeLessThan(900);
+    }
+  });
 });
 
 test.describe("Search on mobile viewport", () => {

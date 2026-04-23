@@ -373,6 +373,44 @@ describe("SearchDialog", () => {
 
     expect((input as HTMLInputElement).value).toBe("");
   });
+
+  // Spotlight-style UI contract: live search must fire as soon as typing
+  // crosses MIN_CHARS, without requiring Enter.
+  it("runs a live search on each keystroke (no Enter required)", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
+    render(<SearchDialog />);
+    await openAndLoad();
+
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "in" } });
+    await flushAsync();
+    expect(mockRunSearch).toHaveBeenCalledWith("in", MOCK_DOCS);
+
+    fireEvent.change(input, { target: { value: "inst" } });
+    await flushAsync();
+    expect(mockRunSearch).toHaveBeenCalledWith("inst", MOCK_DOCS);
+
+    // At least one call per distinct debounced query; Enter was never pressed.
+    expect(mockRunSearch.mock.calls.length).toBeGreaterThanOrEqual(2);
+  });
+
+  // Spotlight dialog carries role="dialog" + aria-modal="true" + aria-label
+  it("renders the dialog with aria-modal and an accessible name", async () => {
+    render(<SearchDialog />);
+    await openAndLoad();
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog).toHaveAttribute("aria-label");
+  });
+
+  // type=search + enterKeyHint=search keep native mobile keyboard UX clean
+  it("uses type=search and enterKeyHint=search for native mobile UX", async () => {
+    render(<SearchDialog />);
+    await openAndLoad();
+    const input = screen.getByRole("combobox");
+    expect(input).toHaveAttribute("type", "search");
+    expect(input).toHaveAttribute("enterKeyHint", "search");
+  });
 });
 
 // Ensure the previously-imported waitFor helper is considered used; avoids

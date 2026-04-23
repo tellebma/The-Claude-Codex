@@ -158,6 +158,141 @@ test.describe("Search advanced behaviour", () => {
       expect(box.height).toBeLessThan(900);
     }
   });
+
+  // Spotlight dialog is horizontally centered on desktop (within ~20px).
+  test("spotlight: dialog is horizontally centered on desktop", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const dialog = page.locator('[role="dialog"][aria-modal="true"]');
+    await expect(dialog).toBeVisible();
+    const box = await dialog.boundingBox();
+    expect(box).not.toBeNull();
+    if (box) {
+      const dialogCenter = box.x + box.width / 2;
+      const viewportCenter = 1440 / 2;
+      // Center within 20px — accounts for scrollbar padding compensation.
+      expect(Math.abs(dialogCenter - viewportCenter)).toBeLessThan(20);
+    }
+  });
+
+  // Portal: the dialog must NOT be a descendant of the header (otherwise the
+  // header's backdrop-filter would clip it). It must live on document.body.
+  test("portal: dialog is attached to document.body, not inside the header", async ({
+    page,
+  }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    await expect(
+      page.getByRole("combobox", { name: "Rechercher" }),
+    ).toBeVisible();
+
+    const dialogInsideHeader = await page.locator(
+      'header [role="dialog"][aria-modal="true"]',
+    ).count();
+    expect(dialogInsideHeader).toBe(0);
+
+    const dialogOnBody = await page.locator(
+      'body > [role="dialog"][aria-modal="true"], body > div > [role="dialog"][aria-modal="true"]',
+    ).count();
+    // Portal target = body (Next.js may wrap with a div for RSC hydration);
+    // either way the dialog must not be inside the header.
+    expect(dialogOnBody).toBeGreaterThan(0);
+  });
+
+  // Negative: pressing letter keys without Ctrl/Cmd must NOT open the dialog.
+  test("plain letter keys do not open the dialog", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.keyboard.press("k");
+    await page.keyboard.press("/");
+    await page.keyboard.press("Enter");
+    // Short wait — if the dialog were going to open it would be visible by now.
+    await page.waitForTimeout(150);
+    await expect(
+      page.getByRole("combobox", { name: "Rechercher" }),
+    ).not.toBeVisible();
+  });
+
+  // Negative: 1-char queries must NOT show results (min-chars gate).
+  test("a 1-char query never surfaces results", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("m");
+    // Wait past the debounce window.
+    await page.waitForTimeout(250);
+    await expect(
+      page.getByRole("listbox", { name: "Résultats de recherche" }),
+    ).not.toBeVisible();
+  });
+
+  // Negative: whitespace-only queries must behave like empty queries.
+  test("whitespace-only query does not trigger a search", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("     ");
+    await page.waitForTimeout(250);
+    // Suggestions (empty-state) still visible; no listbox, no noResults.
+    await expect(
+      page.getByRole("listbox", { name: "Résultats de recherche" }),
+    ).not.toBeVisible();
+  });
+
+  // Negative: Enter with no results does not close the dialog.
+  test("Enter with no matching results does not close the dialog", async ({
+    page,
+  }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("qwertyzzzunlikely");
+    await expect(
+      page.getByRole("paragraph").filter({ hasText: /Aucun résultat/ }),
+    ).toBeVisible();
+    await page.keyboard.press("Enter");
+    // Combobox still visible = dialog still open.
+    await expect(input).toBeVisible();
+  });
+
+  // Cmd+K / Ctrl+K toggles: first press opens, second press closes.
+  test("Ctrl+K twice toggles the dialog open then closed", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.keyboard.press("Control+k");
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await expect(input).toBeVisible();
+    await page.keyboard.press("Control+k");
+    await expect(input).not.toBeVisible();
+  });
+
+  // Backdrop click closes the dialog without navigating away.
+  test("clicking the backdrop closes the dialog", async ({ page }) => {
+    await page.goto("/fr/");
+    const url = page.url();
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    await expect(
+      page.getByRole("combobox", { name: "Rechercher" }),
+    ).toBeVisible();
+    await page.getByTestId("search-backdrop").click();
+    await expect(
+      page.getByRole("combobox", { name: "Rechercher" }),
+    ).not.toBeVisible();
+    expect(page.url()).toBe(url);
+  });
+
+  // Unicode / emojis / special chars must not crash the search runtime.
+  test("special chars and emojis do not crash the search", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("🚀 é~!@#$");
+    await page.waitForTimeout(250);
+    // Either noResults OR still open — the key assertion is the dialog is
+    // still alive (no crash, no white screen).
+    await expect(input).toBeVisible();
+  });
 });
 
 test.describe("Search on mobile viewport", () => {
@@ -216,5 +351,41 @@ test.describe("Search on mobile viewport", () => {
     await expect(listbox.getByRole("option").first()).toBeVisible();
     // Mobile uses a single line-clamp-1 snippet; still contains <mark>.
     await expect(listbox.locator("mark:visible").first()).toBeVisible();
+  });
+
+  // Mobile "3 X" fix: when a query is typed, at most ONE X icon is visible
+  // inside the dialog (the clear button). The mobile close button is hidden
+  // and the native webkit-search-cancel-button is CSS-suppressed.
+  test("mobile: a query renders a single visible clear X (no triple X)", async ({
+    page,
+  }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const input = page.getByRole("combobox", { name: "Rechercher" });
+    await input.fill("mcp");
+    await expect(
+      page.getByRole("listbox", { name: "Résultats de recherche" })
+        .getByRole("option").first(),
+    ).toBeVisible();
+
+    const dialog = page.locator('[role="dialog"][aria-modal="true"]');
+    // Count accessible buttons whose aria-label resolves to "clear"/"close"
+    // and that are currently visible. We expect exactly 1 (the clear button).
+    const clearBtn = dialog.getByRole("button", { name: /effacer|clear/i });
+    await expect(clearBtn).toBeVisible();
+    const closeBtns = dialog.getByRole("button", { name: /fermer|close/i });
+    // The mobile close button is removed from the DOM while a query exists,
+    // so count must be 0.
+    await expect(closeBtns).toHaveCount(0);
+  });
+
+  // Mobile: no query → close button is available (needed to dismiss).
+  test("mobile: no query shows the close button", async ({ page }) => {
+    await page.goto("/fr/");
+    await page.getByRole("button", { name: /Rechercher/ }).click();
+    const dialog = page.locator('[role="dialog"][aria-modal="true"]');
+    await expect(dialog).toBeVisible();
+    const closeBtn = dialog.getByRole("button", { name: /fermer|close/i });
+    await expect(closeBtn.first()).toBeVisible();
   });
 });

@@ -79,7 +79,7 @@ test.describe("Search", () => {
     await expect(listbox.getByRole("option").first()).toBeVisible();
     // At least one <mark> must be present inside the results — that's how
     // the matched substring is highlighted. Works for any locale.
-    await expect(listbox.locator("mark").first()).toBeVisible();
+    await expect(listbox.locator("mark:visible").first()).toBeVisible();
   });
 
   test("closes search dialog with Escape", async ({ page }) => {

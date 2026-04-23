@@ -119,7 +119,7 @@ test.describe("Search advanced behaviour", () => {
     });
     await expect(listbox.getByRole("option").first()).toBeVisible();
     // A body hit surfaces a snippet, recognised by the <mark> element.
-    await expect(listbox.locator("mark").first()).toBeVisible();
+    await expect(listbox.locator("mark:visible").first()).toBeVisible();
   });
 });
 
@@ -178,6 +178,6 @@ test.describe("Search on mobile viewport", () => {
     });
     await expect(listbox.getByRole("option").first()).toBeVisible();
     // Mobile uses a single line-clamp-1 snippet; still contains <mark>.
-    await expect(listbox.locator("mark").first()).toBeVisible();
+    await expect(listbox.locator("mark:visible").first()).toBeVisible();
   });
 });

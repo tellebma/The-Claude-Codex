@@ -51,6 +51,30 @@ jobs:
           test -f out/fr/index.html && echo "FR landing: OK" || exit 1
           test -f out/en/index.html && echo "EN landing: OK" || exit 1
 
+  notify-vercel:
+    # Notifie Vercel du statut de la CI pour son feature "Connect GitHub Actions"
+    # (Settings → Git → Connected GitHub Actions). Vercel attend ce check avant
+    # de promouvoir le deploy Production (branche main, claude-codex.fr).
+    # `if: always()` fait tourner le job quel que soit le résultat de `verify`,
+    # le step suivant fail si verify est KO → l'action vercel (post:) envoie
+    # alors un status "failure" à Vercel, qui abandonne le deploy.
+    name: Notify Vercel (CI gate)
+    runs-on: ubuntu-latest
+    needs: [verify]
+    if: always()
+    steps:
+      - name: Notify Vercel (register check)
+        uses: vercel/repository-dispatch/actions/status@30f760c6640485cd92f8c785ef361382555fb712 # v1
+        with:
+          name: 'Vercel - the-claude-codex: ci'
+      - name: Reflect CI result
+        run: |
+          v="${{ needs.verify.result }}"
+          echo "verify=$v"
+          if [ "$v" != "success" ]; then
+            exit 1
+          fi
+
   docker:
     name: Build & Push to Docker Hub
     runs-on: ubuntu-latest

@@ -14,6 +14,12 @@ import {
 import { InteractiveRobot } from "@/components/ui/InteractiveRobot";
 import { searchEntries, type SearchEntry } from "@/lib/search-index";
 import type { RecentArticle } from "@/lib/recent-articles";
+import {
+  detectLocaleFromPath,
+  pathToQuery,
+  prefixWithLocale,
+  type Locale,
+} from "@/lib/not-found-utils";
 
 declare global {
   interface Window {
@@ -41,25 +47,9 @@ export interface NotFoundBundle {
   readonly recentArticles: ReadonlyArray<RecentArticle>;
 }
 
-type Locale = "fr" | "en";
-
 interface NotFoundClientProps {
   readonly defaultLocale: Locale;
   readonly bundles: Readonly<Record<Locale, NotFoundBundle>>;
-}
-
-function pathToQuery(pathname: string): string {
-  return pathname
-    .replace(/^\//, "")
-    .replace(/\/$/, "")
-    .replaceAll(/[-_]/g, " ")
-    .replaceAll("/", " ");
-}
-
-function detectLocaleFromPath(pathname: string): Locale | null {
-  if (pathname.startsWith("/en/") || pathname === "/en") return "en";
-  if (pathname.startsWith("/fr/") || pathname === "/fr") return "fr";
-  return null;
 }
 
 function trackMatomo404(requestedUrl: string): void {
@@ -67,13 +57,6 @@ function trackMatomo404(requestedUrl: string): void {
   const g = globalThis as unknown as { _paq?: Array<unknown[]> };
   if (!Array.isArray(g._paq)) return;
   g._paq.push(["trackEvent", "404", "404_visit", requestedUrl]);
-}
-
-function prefixWithLocale(href: string, locale: Locale): string {
-  if (href.startsWith(`/${locale}/`) || href === `/${locale}`) return href;
-  if (href.startsWith("http")) return href;
-  const cleaned = href.startsWith("/") ? href : `/${href}`;
-  return `/${locale}${cleaned === "/" ? "" : cleaned}`;
 }
 
 export function NotFoundClient({

@@ -14,7 +14,8 @@ max_retries = 2
 # Comportement HTTP
 accept = ["200..=299", "301", "302", "307", "308", "403", "429"]
 insecure = false
-follow_redirects = true
+# lychee >= 0.22 : follow_redirects retiré (redirects suivis par défaut)
+max_redirects = 10
 
 # Exclusions — liens externes connus pour être flaky ou limités en CI
 exclude = [

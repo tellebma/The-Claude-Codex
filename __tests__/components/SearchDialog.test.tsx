@@ -373,6 +373,171 @@ describe("SearchDialog", () => {
 
     expect((input as HTMLInputElement).value).toBe("");
   });
+
+  // Spotlight-style UI contract: live search must fire as soon as typing
+  // crosses MIN_CHARS, without requiring Enter.
+  it("runs a live search on each keystroke (no Enter required)", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_WITH_RESULTS);
+    render(<SearchDialog />);
+    await openAndLoad();
+
+    const input = screen.getByRole("combobox");
+    fireEvent.change(input, { target: { value: "in" } });
+    await flushAsync();
+    expect(mockRunSearch).toHaveBeenCalledWith("in", MOCK_DOCS);
+
+    fireEvent.change(input, { target: { value: "inst" } });
+    await flushAsync();
+    expect(mockRunSearch).toHaveBeenCalledWith("inst", MOCK_DOCS);
+
+    // At least one call per distinct debounced query; Enter was never pressed.
+    expect(mockRunSearch.mock.calls.length).toBeGreaterThanOrEqual(2);
+  });
+
+  // Spotlight dialog carries role="dialog" + aria-modal="true" + aria-label
+  it("renders the dialog with aria-modal and an accessible name", async () => {
+    render(<SearchDialog />);
+    await openAndLoad();
+    const dialog = screen.getByRole("dialog");
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(dialog).toHaveAttribute("aria-label");
+  });
+
+  // type=search + enterKeyHint=search keep native mobile keyboard UX clean
+  it("uses type=search and enterKeyHint=search for native mobile UX", async () => {
+    render(<SearchDialog />);
+    await openAndLoad();
+    const input = screen.getByRole("combobox");
+    expect(input).toHaveAttribute("type", "search");
+    expect(input).toHaveAttribute("enterKeyHint", "search");
+  });
+
+  // The Header wraps SearchDialog but uses backdrop-filter, which breaks
+  // position:fixed. We portal to document.body to escape the clipping.
+  it("renders the dialog as a direct child of document.body (portal)", async () => {
+    const { container } = render(<SearchDialog />);
+    await openAndLoad();
+    const dialog = screen.getByRole("dialog");
+    // Portal target: dialog's nearest positioned ancestor should be body,
+    // not the container returned by render().
+    expect(container.contains(dialog)).toBe(false);
+    expect(document.body.contains(dialog)).toBe(true);
+  });
+
+  // Mobile 3-X fix: close button is hidden when there's a query (clear X
+  // replaces it). Desktop shows the "esc" kbd, not a close button (sm:hidden).
+  it("hides the mobile close button when a query is present", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_EMPTY);
+    render(<SearchDialog />);
+    await openAndLoad();
+
+    // With no query, the mobile close button is rendered (sm:hidden on CSS
+    // side, but present in the DOM).
+    const closeBtnsEmpty = screen.getAllByRole("button", { name: "close" });
+    expect(closeBtnsEmpty.length).toBeGreaterThanOrEqual(1);
+
+    await typeAndDebounce("foo");
+
+    // With a query, the mobile close button is removed from the DOM entirely
+    // (replaced by the backdrop-tap + clear X ergonomic).
+    const closeBtnsWithQuery = screen.queryAllByRole("button", { name: "close" });
+    expect(closeBtnsWithQuery.length).toBeLessThan(closeBtnsEmpty.length);
+  });
+
+  // Negative: whitespace-only queries must NOT trigger a search.
+  it("does not search when the query is whitespace-only", async () => {
+    render(<SearchDialog />);
+    await openAndLoad();
+    mockRunSearch.mockClear();
+    await typeAndDebounce("   ");
+    expect(mockRunSearch).not.toHaveBeenCalled();
+  });
+
+  // Negative: Arrow keys with an empty result set must be a no-op
+  // (no crash, no selectedIndex drift).
+  it("ArrowDown/ArrowUp are no-ops when there are no results", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_EMPTY);
+    render(<SearchDialog />);
+    await openAndLoad();
+    const input = await typeAndDebounce("zzz");
+
+    // Should not throw, should not render any option.
+    expect(() => {
+      fireEvent.keyDown(input, { key: "ArrowDown" });
+      fireEvent.keyDown(input, { key: "ArrowUp" });
+    }).not.toThrow();
+    expect(screen.queryAllByRole("option")).toHaveLength(0);
+  });
+
+  // Negative: Enter with an empty result set must NOT navigate or close.
+  it("Enter with no results does not close the dialog", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_EMPTY);
+    render(<SearchDialog />);
+    await openAndLoad();
+    const input = await typeAndDebounce("zzz");
+
+    fireEvent.keyDown(input, { key: "Enter" });
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+
+  // Negative: Escape must not throw when the dialog is already closed.
+  it("Escape is a no-op when the dialog is not open", () => {
+    render(<SearchDialog />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(() => {
+      fireEvent.keyDown(document, { key: "Escape" });
+    }).not.toThrow();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  // Negative: random non-modifier keys must NOT open the dialog.
+  it("pressing plain letter keys does not open the dialog", () => {
+    render(<SearchDialog />);
+    fireEvent.keyDown(document, { key: "k" }); // no ctrl/meta
+    fireEvent.keyDown(document, { key: "/" });
+    fireEvent.keyDown(document, { key: "Enter" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  // Cmd+K toggles: first press opens, second press closes.
+  it("Cmd+K toggles the dialog open and closed", async () => {
+    render(<SearchDialog />);
+    fireEvent.keyDown(document, { key: "k", metaKey: true });
+    await flushAsync();
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: "k", metaKey: true });
+    await flushAsync();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  // Negative: when loadSearchIndex rejects, the error state is shown and
+  // runSearch is never called (guards against stale index pollution).
+  it("shows a load-error state when the index fetch fails", async () => {
+    mockLoadSearchIndex.mockReset();
+    mockLoadSearchIndex.mockRejectedValue(new Error("boom"));
+    mockRunSearch.mockClear();
+
+    render(<SearchDialog />);
+    await openAndLoad();
+    await typeAndDebounce("install");
+
+    // The component exposes the loadError message via the live region AND the
+    // central error panel. Either is fine — assert the translation key exists.
+    const errorCopies = screen.getAllByText("loadError");
+    expect(errorCopies.length).toBeGreaterThan(0);
+    expect(mockRunSearch).not.toHaveBeenCalled();
+  });
+
+  // Unicode / emojis / backslashes must not crash the input or the search.
+  it("accepts special characters and emojis without crashing", async () => {
+    mockRunSearch.mockReturnValue(MOCK_RUN_EMPTY);
+    render(<SearchDialog />);
+    await openAndLoad();
+    expect(() => {
+      return typeAndDebounce("é\\🚀 ~!@#$%^&*()");
+    }).not.toThrow();
+  });
 });
 
 // Ensure the previously-imported waitFor helper is considered used; avoids

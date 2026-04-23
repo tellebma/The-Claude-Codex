@@ -9,6 +9,7 @@
  *  - Raw Matomo events summary (engagement / navigation / configurator)
  */
 
+import type { DiscordEmbed } from "./notify-discord.ts";
 import type {
   Alert,
   AlertSeverity,
@@ -181,6 +182,51 @@ export function renderReportMarkdown(report: AnalyticsReport): string {
   ].join("\n");
 }
 
+const SEVERITY_COLOR: Readonly<Record<AlertSeverity, number>> = {
+  critical: 0xdc2626, // red-600
+  warning: 0xf59e0b, // amber-500
+  info: 0x0ea5e9, // sky-500
+};
+
+const OK_COLOR = 0x10b981; // emerald-500 — no alerts
+
+function pickEmbedColor(alerts: readonly Alert[]): number {
+  if (alerts.some((a) => a.severity === "critical")) return SEVERITY_COLOR.critical;
+  if (alerts.some((a) => a.severity === "warning")) return SEVERITY_COLOR.warning;
+  if (alerts.some((a) => a.severity === "info")) return SEVERITY_COLOR.info;
+  return OK_COLOR;
+}
+
+function sumGsc(snap: AnalyticsSnapshot): { clicks: number; impressions: number } {
+  let clicks = 0;
+  let impressions = 0;
+  for (const row of snap.gscQueries) {
+    clicks += row.clicks;
+    impressions += row.impressions;
+  }
+  return { clicks, impressions };
+}
+
+function sumMatomo(snap: AnalyticsSnapshot): { pageviews: number; events: number } {
+  let pageviews = 0;
+  for (const row of snap.matomoPages) pageviews += row.nb_hits;
+  let events = 0;
+  for (const row of snap.matomoEvents) events += row.nb_events;
+  return { pageviews, events };
+}
+
+function renderAlertsField(alerts: readonly Alert[]): string {
+  if (alerts.length === 0) return "Aucune alerte cette semaine.";
+  const top = sortBySeverity(alerts).slice(0, 5);
+  const lines = top.map(
+    (a) => `${SEVERITY_EMOJI[a.severity]} \`${a.kind}\` — ${a.subject}`,
+  );
+  if (alerts.length > top.length) {
+    lines.push(`... et ${alerts.length - top.length} autres (voir rapport complet)`);
+  }
+  return lines.join("\n");
+}
+
 export function renderDiscordSummary(report: AnalyticsReport, prUrl: string | null): string {
   const counts = { critical: 0, warning: 0, info: 0 };
   for (const a of report.alerts) counts[a.severity]++;
@@ -202,4 +248,57 @@ export function renderDiscordSummary(report: AnalyticsReport, prUrl: string | nu
     lines.push("", `Rapport complet : ${prUrl}`);
   }
   return lines.join("\n");
+}
+
+export function renderDiscordEmbed(
+  report: AnalyticsReport,
+  reportUrl: string | null,
+): DiscordEmbed {
+  const counts = { critical: 0, warning: 0, info: 0 };
+  for (const a of report.alerts) counts[a.severity]++;
+
+  const gsc = sumGsc(report.current);
+  const matomo = sumMatomo(report.current);
+
+  const { startDate, endDate } = report.current.range;
+  const summary = report.alerts.length === 0
+    ? "Aucune alerte declenchee, trafic suivi sur la periode."
+    : `${counts.critical} critiques, ${counts.warning} a surveiller, ${counts.info} infos.`;
+
+  const embed: DiscordEmbed = {
+    title: `Rapport analytics hebdo ${endDate}`,
+    description: summary,
+    color: pickEmbedColor(report.alerts),
+    ...(reportUrl ? { url: reportUrl } : {}),
+    fields: [
+      {
+        name: "Periode",
+        value: `${startDate} -> ${endDate}`,
+        inline: true,
+      },
+      {
+        name: "Alertes",
+        value: `${counts.critical} crit / ${counts.warning} warn / ${counts.info} info`,
+        inline: true,
+      },
+      {
+        name: "GSC",
+        value: `${gsc.clicks} clics / ${gsc.impressions} imp`,
+        inline: true,
+      },
+      {
+        name: "Matomo",
+        value: `${matomo.pageviews} pageviews / ${matomo.events} events`,
+        inline: true,
+      },
+      {
+        name: "Top alertes",
+        value: renderAlertsField(report.alerts),
+        inline: false,
+      },
+    ],
+    footer: { text: `Genere le ${report.generatedAt}` },
+    timestamp: report.generatedAt,
+  };
+  return embed;
 }

@@ -45,9 +45,23 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Compute report URL
+        id: meta
+        run: |
+          # URL publique du REPORT.md dans le vault, integrable comme lien de titre de l'embed Discord
+          # On ne connait la date de fin qu'apres le run, donc on laisse le pipeline la deviner.
+          # La variable est consommee par scripts/analytics/run.ts via ANALYTICS_REPORT_URL.
+          echo "brain_repo_url=https://github.com/${BRAIN_REPO}/blob/${BRAIN_BRANCH}" >> "$GITHUB_OUTPUT"
+
       - name: Run analytics pipeline
         id: run
+        env:
+          ANALYTICS_REPORT_URL_PREFIX: ${{ steps.meta.outputs.brain_repo_url }}/${{ env.BRAIN_RAW_DIR }}
         run: |
+          # On lance une premiere fois pour connaitre la end_date, puis on re-run avec l'URL exacte
+          # Alternative plus simple : on calcule la end_date a la volee cote shell
+          END_GUESS=$(date -u -d "3 days ago" +%Y-%m-%d)
+          export ANALYTICS_REPORT_URL="${ANALYTICS_REPORT_URL_PREFIX}/${END_GUESS}/REPORT.md"
           node scripts/analytics/run.ts
           END_DATE=$(ls -1 docs/analytics | sort | tail -n1)
           echo "end_date=${END_DATE}" >> "$GITHUB_OUTPUT"

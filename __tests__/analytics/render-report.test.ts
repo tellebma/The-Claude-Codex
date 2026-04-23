@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  renderDiscordEmbed,
   renderDiscordSummary,
   renderReportMarkdown,
 } from "../../scripts/analytics/render-report.ts";
@@ -166,5 +167,113 @@ describe("renderDiscordSummary", () => {
   it("does not mention a PR URL when it is null", () => {
     const text = renderDiscordSummary(report(), null);
     expect(text).not.toContain("Rapport complet");
+  });
+});
+
+describe("renderDiscordEmbed", () => {
+  it("colors the embed green when there are no alerts", () => {
+    const embed = renderDiscordEmbed(report(), null);
+    expect(embed.color).toBe(0x10b981);
+    expect(embed.title).toContain("Rapport analytics hebdo 2026-04-21");
+  });
+
+  it("colors the embed red when a critical alert is present", () => {
+    const alerts: Alert[] = [
+      {
+        kind: "ctr_urgent",
+        severity: "critical",
+        subject: "/a/",
+        message: "crit",
+        metrics: {},
+      },
+    ];
+    const embed = renderDiscordEmbed(report({ alerts }), null);
+    expect(embed.color).toBe(0xdc2626);
+  });
+
+  it("colors the embed amber when only warnings are present", () => {
+    const alerts: Alert[] = [
+      {
+        kind: "ctr_anomaly",
+        severity: "warning",
+        subject: "/b/",
+        message: "warn",
+        metrics: {},
+      },
+    ];
+    const embed = renderDiscordEmbed(report({ alerts }), null);
+    expect(embed.color).toBe(0xf59e0b);
+  });
+
+  it("exposes period / alerts / GSC / Matomo as embed fields", () => {
+    const embed = renderDiscordEmbed(
+      report({
+        current: {
+          range: { startDate: "2026-04-15", endDate: "2026-04-21" },
+          gscQueries: [
+            { query: "a", clicks: 10, impressions: 100, ctr: 0.1, position: 3 },
+          ],
+          gscPages: [],
+          matomoPages: [
+            {
+              label: "/",
+              nb_visits: 40,
+              nb_hits: 50,
+              bounce_rate: 0,
+              avg_time_on_page: 0,
+            },
+          ],
+          matomoEvents: [
+            {
+              category: "engagement",
+              action: "scroll_depth",
+              name: "50",
+              nb_events: 3,
+              nb_visits: 3,
+            },
+          ],
+        },
+      }),
+      null,
+    );
+    const byName = Object.fromEntries(
+      (embed.fields ?? []).map((f) => [f.name, f.value]),
+    );
+    expect(byName["Periode"]).toBe("2026-04-15 -> 2026-04-21");
+    expect(byName["Alertes"]).toBe("0 crit / 0 warn / 0 info");
+    expect(byName["GSC"]).toBe("10 clics / 100 imp");
+    expect(byName["Matomo"]).toBe("50 pageviews / 3 events");
+  });
+
+  it("attaches the report URL when provided", () => {
+    const embed = renderDiscordEmbed(
+      report(),
+      "https://github.com/x/y/blob/main/raw/analytics/2026-04-21/REPORT.md",
+    );
+    expect(embed.url).toBe(
+      "https://github.com/x/y/blob/main/raw/analytics/2026-04-21/REPORT.md",
+    );
+  });
+
+  it("lists at most 5 alerts and notes remaining count", () => {
+    const alerts: Alert[] = Array.from({ length: 8 }, (_, i) => ({
+      kind: "ctr_anomaly",
+      severity: "warning",
+      subject: `/page-${i}/`,
+      message: "x",
+      metrics: {},
+    }));
+    const embed = renderDiscordEmbed(report({ alerts }), null);
+    const topField = (embed.fields ?? []).find((f) => f.name === "Top alertes");
+    expect(topField).toBeDefined();
+    const matches = topField!.value.match(/\/page-\d+\//g);
+    expect(matches).toHaveLength(5);
+    expect(topField!.value).toContain("3 autres");
+  });
+
+  it("shows an empty-alert message when there are no alerts", () => {
+    const embed = renderDiscordEmbed(report(), null);
+    const topField = (embed.fields ?? []).find((f) => f.name === "Top alertes");
+    expect(topField?.value).toBe("Aucune alerte cette semaine.");
   });
 });

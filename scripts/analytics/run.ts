@@ -22,7 +22,7 @@ import { detectAlerts } from "./detect-alerts.ts";
 import { fetchGsc } from "./fetch-gsc.ts";
 import { fetchMatomo } from "./fetch-matomo.ts";
 import { notifyDiscord } from "./notify-discord.ts";
-import { renderDiscordSummary, renderReportMarkdown } from "./render-report.ts";
+import { renderDiscordEmbed, renderReportMarkdown } from "./render-report.ts";
 import type {
   AnalyticsReport,
   AnalyticsSnapshot,
@@ -186,10 +186,10 @@ async function main(): Promise<void> {
   console.log(`[analytics] wrote report to ${outDir}`);
 
   if (config.discordWebhookUrl) {
-    const prUrl = process.env.GITHUB_PR_URL ?? null;
-    const summary = renderDiscordSummary(report, prUrl);
+    const reportUrl = process.env.ANALYTICS_REPORT_URL ?? null;
+    const embed = renderDiscordEmbed(report, reportUrl);
     try {
-      await notifyDiscord(config.discordWebhookUrl, summary);
+      await notifyDiscord(config.discordWebhookUrl, embed);
       console.log("[analytics] Discord notification sent");
     } catch (err) {
       console.warn(`[analytics] Discord notification failed: ${(err as Error).message}`);

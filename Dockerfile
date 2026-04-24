@@ -1,11 +1,11 @@
 # Stage 1: Dependencies
-FROM node:22-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install --ignore-scripts
 
 # Stage 2: Build
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -24,11 +24,14 @@ RUN npm run build
 # Using serve instead of Nginx because Next.js static export
 # generates RSC payloads (.txt files) that must be served as-is
 # for proper i18n hydration. Nginx's try_files mishandles these.
-FROM node:22-alpine AS runner
+FROM node:24-alpine AS runner
 LABEL maintainer="The Claude Codex Team"
 LABEL description="The Claude Codex - Guide de reference pour maitriser Claude Code"
 
-RUN npm install -g http-server@14
+RUN npm install -g http-server@14 \
+ && rm -rf /usr/local/lib/node_modules/npm \
+           /usr/local/bin/npm /usr/local/bin/npx \
+           /root/.npm
 
 WORKDIR /app
 COPY --from=builder /app/out ./out

@@ -1,3 +1,15 @@
+# [1.6.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.5.0...v1.6.0) (2026-04-24)
+
+
+### Bug Fixes
+
+* **sonar:** prefer globalThis over window in FooterVersion ([0e64784](https://github.com/tellebma/The-Claude-Codex/commit/0e647842e1d49b130607169563335d4055306684)), closes [#86](https://github.com/tellebma/The-Claude-Codex/issues/86)
+
+
+### Features
+
+* **footer:** version dynamique via GitHub Releases API ([#85](https://github.com/tellebma/The-Claude-Codex/issues/85)) ([efd0881](https://github.com/tellebma/The-Claude-Codex/commit/efd0881ab15abea5523043b7518509a71da99cd3))
+
 # [1.5.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.4.0...v1.5.0) (2026-04-24)
 
 

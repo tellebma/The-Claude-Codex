@@ -5,6 +5,7 @@ import { GitHubIcon } from "@/components/ui/icons/GitHubIcon";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CopyrightYear } from "@/components/ui/CopyrightYear";
+import { FooterVersion } from "@/components/layout/FooterVersion";
 
 const guidesNavKeys = [
   { key: "gettingStarted", href: "/getting-started" },
@@ -148,9 +149,7 @@ export function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-4">
-            <span className="rounded-md bg-slate-200/50 px-2 py-0.5 font-mono text-xs text-slate-600 dark:bg-slate-800/50 dark:text-slate-400">
-              v{process.env.NEXT_PUBLIC_APP_VERSION}
-            </span>
+            <FooterVersion />
             <a
               href="https://github.com/tellebma/The-Claude-Codex"
               target="_blank"

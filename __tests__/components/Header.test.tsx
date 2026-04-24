@@ -185,23 +185,24 @@ describe("Header", () => {
     expect(screen.getByRole("menu")).toBeInTheDocument();
   });
 
-  it("navigates menu items with ArrowDown/ArrowUp", () => {
+  it("does not crash on keyboard navigation in menu (ArrowDown/ArrowUp/Home/End)", () => {
     render(<Header />);
     const moreButton = screen.getByRole("button", { name: /more/ });
 
     fireEvent.click(moreButton);
     const menuItems = screen.getAllByRole("menuitem");
+    expect(menuItems.length).toBeGreaterThan(0);
 
-    // ArrowDown on first item should move focus to second
-    fireEvent.keyDown(menuItems[0], { key: "ArrowDown" });
-    // ArrowUp should go back
-    fireEvent.keyDown(menuItems[1], { key: "ArrowUp" });
+    // The keyboard handlers must not throw and the menu must stay open
+    // while the user navigates.
+    expect(() => {
+      fireEvent.keyDown(menuItems[0], { key: "ArrowDown" });
+      fireEvent.keyDown(menuItems[menuItems.length - 1], { key: "ArrowUp" });
+      fireEvent.keyDown(menuItems[0], { key: "Home" });
+      fireEvent.keyDown(menuItems[0], { key: "End" });
+    }).not.toThrow();
 
-    // Home should focus first
-    fireEvent.keyDown(menuItems[1], { key: "Home" });
-
-    // End should focus last
-    fireEvent.keyDown(menuItems[0], { key: "End" });
+    expect(screen.getByRole("menu")).toBeInTheDocument();
   });
 
   it("closes dropdown with Escape from menu item", () => {

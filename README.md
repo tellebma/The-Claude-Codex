@@ -1,5 +1,21 @@
 # The Claude Codex
 
+[![PR Checks](https://github.com/tellebma/The-Claude-Codex/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/tellebma/The-Claude-Codex/actions/workflows/pr-checks.yml)
+[![Develop Merge](https://github.com/tellebma/The-Claude-Codex/actions/workflows/develop-merge.yml/badge.svg)](https://github.com/tellebma/The-Claude-Codex/actions/workflows/develop-merge.yml)
+[![CodeQL](https://github.com/tellebma/The-Claude-Codex/actions/workflows/codeql.yml/badge.svg)](https://github.com/tellebma/The-Claude-Codex/actions/workflows/codeql.yml)
+[![CD — Docker Hub](https://github.com/tellebma/The-Claude-Codex/actions/workflows/cd.yml/badge.svg)](https://github.com/tellebma/The-Claude-Codex/actions/workflows/cd.yml)
+[![Release](https://github.com/tellebma/The-Claude-Codex/actions/workflows/release.yml/badge.svg)](https://github.com/tellebma/The-Claude-Codex/actions/workflows/release.yml)
+
+[![Quality Gate](https://sonarqube.tellebma.fr/api/project_badges/measure?project=the-claude-codex&metric=alert_status&token=sqb_aa2be756f3c995c628c5e0fd7c1e506af46a5b1c)](https://sonarqube.tellebma.fr/dashboard?id=the-claude-codex)
+[![Coverage](https://sonarqube.tellebma.fr/api/project_badges/measure?project=the-claude-codex&metric=coverage&token=sqb_aa2be756f3c995c628c5e0fd7c1e506af46a5b1c)](https://sonarqube.tellebma.fr/component_measures?id=the-claude-codex&metric=coverage)
+[![Bugs](https://sonarqube.tellebma.fr/api/project_badges/measure?project=the-claude-codex&metric=bugs&token=sqb_aa2be756f3c995c628c5e0fd7c1e506af46a5b1c)](https://sonarqube.tellebma.fr/project/issues?id=the-claude-codex&types=BUG)
+[![Code Smells](https://sonarqube.tellebma.fr/api/project_badges/measure?project=the-claude-codex&metric=code_smells&token=sqb_aa2be756f3c995c628c5e0fd7c1e506af46a5b1c)](https://sonarqube.tellebma.fr/project/issues?id=the-claude-codex&types=CODE_SMELL)
+[![Security Rating](https://sonarqube.tellebma.fr/api/project_badges/measure?project=the-claude-codex&metric=security_rating&token=sqb_aa2be756f3c995c628c5e0fd7c1e506af46a5b1c)](https://sonarqube.tellebma.fr/project/issues?id=the-claude-codex&types=VULNERABILITY)
+
+[![Next.js 14](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org)
+[![TypeScript Strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![License: open source](https://img.shields.io/badge/license-open--source-brightgreen)](#licence)
+
 Le guide de référence gratuit pour maîtriser Claude Code. Créé par la communauté, pour la communauté.
 
 ## À propos
@@ -149,21 +165,62 @@ docker-compose.yml        Déploiement one-click
 
 ## Intégration continue (GitHub Actions)
 
-Le workflow `.github/workflows/ci.yml` s'exécute sur chaque `pull_request` vers `main` et chaque `push` sur `main`. Il enchaîne :
+Le pipeline CI/CD est réparti sur cinq workflows :
 
-1. `npm ci` (Node 22 aligné avec le Dockerfile, `actions/setup-node` SHA-pinné pour la supply-chain)
-2. `npm run lint`
-3. `npm run type-check`
-4. `npm run test`
-5. `npm run build` (avec valeurs Matomo factices, injectées au build pour le SSG)
-6. Vérification du build Docker (image construite puis démarrée pour tester `/fr/` et `/en/`)
+### `.github/workflows/pr-checks.yml` — sur chaque PR vers `develop` / `main`
 
-Points clés :
+Exécuté en parallèle pour un feedback rapide (≈ 4–6 min total) :
 
-- **Fail-fast** : la première étape qui échoue stoppe le run
-- **Concurrency** : les anciens runs d'une même PR/branche sont annulés automatiquement
-- **Timeout** : 15 minutes max par job
-- **Pas de déploiement automatique** : le déploiement production se fait manuellement via Docker sur Unraid. Les workflows `cd.yml` (push Docker Hub) et `release.yml` (semantic-release) se déclenchent uniquement sur succès du CI sur `main`.
+- **gitleaks** — secret-scan sur l'historique complet
+- **npm-audit** — dépendances prod (`--omit=dev --audit-level=critical`)
+- **lint-types** — ESLint + `tsc --noEmit`
+- **unit-tests** — Vitest avec gate coverage ≥ 80 % (config `vitest.config.ts`)
+- **build** — export Next.js SSG + vérif i18n (présence `out/fr/index.html` et `out/en/index.html`)
+- **validate-seo-files** — sitemap, robots, llms.txt, llms-full.txt (structure + URLs FR/EN)
+- **lighthouse** — 6 pages × 3 runs, budgets perf ≥ 0.9 (warn), SEO ≥ 0.95 (error), a11y ≥ 0.95 (error)
+- **lychee** — vérif liens cassés sur `out/**/*.html` avec cache 1 jour
+- **e2e-smoke** — Playwright chromium sur le build statique (smoke tests)
+- **sonarqube** — scan self-hosted + quality gate bloquant
+- **deploy-preview** — déploiement Vercel preview **uniquement après** validation de tous les autres jobs
+
+### `.github/workflows/develop-merge.yml` — sur `push develop`
+
+Suite complète après merge sur `develop` :
+
+- **build** réutilisable via artifact
+- **e2e-full** matrix 3 browsers (chromium/firefox/webkit) × 2 shards, blob-report mergé en HTML
+- **docker-verify** — build + smoke-run + scan Trivy (CRITICAL/HIGH bloquant, `.trivyignore` documenté)
+
+### `.github/workflows/codeql.yml` — PR + push + nightly
+
+SAST JavaScript/TypeScript, query set `security-and-quality`. Cron hebdo le lundi 06:00 UTC.
+
+### `.github/workflows/cd.yml` — sur `push main`
+
+1. Verify inline (lint + types + tests + build)
+2. Build image Docker + scan Trivy **avant push** (bloque les CVE CRITICAL/HIGH)
+3. Push Docker Hub avec provenance + SBOM + tags `latest`/`vX.Y.Z`/`<sha>`
+
+### `.github/workflows/release.yml` — sur `push main`
+
+Semantic-release (changelog + tag git + release GitHub).
+
+---
+
+### Qualité & sécurité — standards zéro-tolérance
+
+- Coverage ≥ 80 % (statements / branches / functions / lines) appliqué par Vitest
+- SonarQube Quality Gate bloquant : 0 bug, 0 hotspot, duplication < 3 % sur le new code
+- axe-core intégré à Playwright (règles WCAG 2.1 A/AA)
+- Budgets Lighthouse stricts sur SEO et a11y (error), permissifs sur perf / best-practices (warn)
+- Secret-scan + SAST + container-scan sur chaque PR
+
+### Pièges évités
+
+- Concurrency : anciens runs PR annulés (`cancel-in-progress: true`)
+- Sharding E2E avec `blob` reporter + `merge-reports` pour un rapport HTML unique malgré 6 jobs
+- Animations Tailwind gatées par `motion-safe:` + `reducedMotion: 'reduce'` en CI pour éviter les flakes Playwright (opacity 0, not stable)
+- Dependabot (npm + github-actions) hebdo : les actions externes pinnées par tag seront SHA-pinnées automatiquement
 
 ## Sécurité
 
@@ -194,4 +251,27 @@ Les contributions sont les bienvenues. Pour contribuer :
 
 ## Licence
 
-Projet open-source.
+Ce projet utilise une **double licence** pour distinguer le code du contenu éditorial.
+
+### Code source — MIT
+
+Tout le code source (TypeScript, TSX, scripts, configuration Next.js, Docker, CI/CD, Tailwind, etc.) est publié sous licence [MIT](./LICENSE). Tu peux le réutiliser, le modifier et le redistribuer librement, y compris dans un projet commercial, à condition de conserver la mention de copyright.
+
+### Contenu éditorial — CC BY-NC-SA 4.0
+
+Tout le contenu éditorial est publié sous licence [Creative Commons Attribution - Pas d'Utilisation Commerciale - Partage dans les Mêmes Conditions 4.0 International](./LICENSE-CONTENT) (CC BY-NC-SA 4.0). Cela concerne :
+
+- les fichiers Markdown/MDX sous `content/fr/` et `content/en/`
+- les catalogues de traduction sous `messages/`
+
+Tu peux donc **partager** et **adapter** ce contenu, à condition de :
+
+- **créditer** l'auteur avec un lien vers le site d'origine (`https://claude-codex.fr`) et vers la licence,
+- ne pas l'utiliser à des **fins commerciales**,
+- redistribuer toute adaptation sous la **même licence** (CC BY-NC-SA 4.0).
+
+**Attribution suggérée** :
+
+> « The Claude Codex » par Maxime Bellet, sous licence CC BY-NC-SA 4.0 — https://claude-codex.fr
+
+En cas de doute sur la licence applicable à un fichier précis, regarde son emplacement : tout ce qui est dans `content/` ou `messages/` relève de CC BY-NC-SA 4.0, le reste relève de MIT.

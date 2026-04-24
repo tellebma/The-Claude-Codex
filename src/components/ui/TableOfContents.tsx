@@ -124,10 +124,14 @@ export function TableOfContents() {
                     e.preventDefault();
                     const target = document.getElementById(heading.id);
                     if (target) {
-                      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-                      target.scrollIntoView({ behavior: prefersReducedMotion ? "instant" : "smooth" });
+                      const prefersReducedMotion = globalThis.matchMedia(
+                        "(prefers-reduced-motion: reduce)"
+                      ).matches;
+                      target.scrollIntoView({
+                        behavior: prefersReducedMotion ? "instant" : "smooth",
+                      });
                       // Update URL hash without jumping
-                      window.history.replaceState(null, "", `#${heading.id}`);
+                      globalThis.history.replaceState(null, "", `#${heading.id}`);
                     }
                   }}
                   aria-current={isActive ? "location" : undefined}

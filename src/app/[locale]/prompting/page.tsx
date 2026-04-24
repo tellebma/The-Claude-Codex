@@ -786,9 +786,9 @@ function buildArticleJsonLd(locale: string) {
 
 export default async function PromptingPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = translations[locale as "fr" | "en"] ?? translations.fr;

@@ -4,13 +4,14 @@ import { searchIndexEn } from "@/data/search-index-en";
 
 // Re-export for backward compatibility
 export type { SearchEntry } from "@/data/search-index-fr";
-export { searchIndexFr, searchIndexEn };
+export { searchIndexFr } from "@/data/search-index-fr";
+export { searchIndexEn } from "@/data/search-index-en";
 
 function normalizeText(text: string): string {
   return text
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replaceAll(/[\u0300-\u036f]/g, "")
     .trim();
 }
 

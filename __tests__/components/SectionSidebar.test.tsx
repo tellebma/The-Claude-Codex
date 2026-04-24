@@ -159,14 +159,14 @@ describe("SectionSidebar", () => {
     expect(screen.getByText("Page 7 / 7")).toBeInTheDocument();
   });
 
-  it("sets correct aria attributes on the progress bar", () => {
+  it("sets correct value/max on the progress bar", () => {
     mockPathname = "/getting-started/what-is-claude-code";
     render(<SectionSidebar />);
 
-    const progressbar = screen.getByRole("progressbar");
-    expect(progressbar).toHaveAttribute("aria-valuenow", "3");
-    expect(progressbar).toHaveAttribute("aria-valuemin", "1");
-    expect(progressbar).toHaveAttribute("aria-valuemax", "7");
+    // Native <progress> element carries value/max (not aria-valuenow).
+    const progressbar = screen.getByRole("progressbar") as HTMLProgressElement;
+    expect(progressbar.value).toBe(3);
+    expect(progressbar.max).toBe(7);
   });
 
   it("does not render the progress bar when on a page not in the section item list", () => {

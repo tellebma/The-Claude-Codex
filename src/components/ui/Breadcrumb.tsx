@@ -48,8 +48,8 @@ export function Breadcrumb() {
         return t(key);
       }
       return segment
-        .replace(/-/g, " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase());
+        .replaceAll("-", " ")
+        .replaceAll(/\b\w/g, (char) => char.toUpperCase());
     };
   }, [t]);
 
@@ -66,10 +66,9 @@ export function Breadcrumb() {
   }
 
   return (
-    <>
-      <nav aria-label={t("ariaLabel")} className="mb-6">
-        <ol className="flex flex-wrap items-center gap-1 text-sm">
-          <li>
+    <nav aria-label={t("ariaLabel")} className="mb-6">
+      <ol className="flex flex-wrap items-center gap-1 text-sm">
+        <li>
             <Link
               href="/"
               className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
@@ -104,8 +103,7 @@ export function Breadcrumb() {
               </li>
             );
           })}
-        </ol>
-      </nav>
-    </>
+      </ol>
+    </nav>
   );
 }

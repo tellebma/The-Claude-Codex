@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -10,8 +11,12 @@ import {
   createBreadcrumbSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
-import { getSectionMdxBySlug } from "@/lib/mdx";
-import { getAdjacentPages, extractSimpleSlug } from "@/lib/section-utils";
+import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
+import {
+  extractSimpleSlug,
+  getAdjacentPages,
+  sanitizeSlugForHref,
+} from "@/lib/section-utils";
 
 interface SectionSlugContentProps {
   readonly section: string;
@@ -33,6 +38,16 @@ export default async function SectionSlugContent({
   icon: Icon,
   extraJsonLd,
 }: SectionSlugContentProps) {
+  // Slug inconnu pour cette locale -> 404 Next (app/not-found.tsx).
+  // Necessaire car generateStaticParams() est par-locale et les slugs
+  // peuvent diverger entre FR et EN. Visiter un slug non liste hors du
+  // build pre-rendu (dev mode, ou URL tappee a la main) doit tomber sur
+  // la page 404 stylisee au lieu de crasher via le throw de getMdxBySlug.
+  const availableSlugs = getSectionMdxSlugs(section, locale);
+  if (!availableSlugs.includes(slug)) {
+    notFound();
+  }
+
   const { frontmatter, content } = getSectionMdxBySlug(section, slug, locale);
   const { prev, next } = getAdjacentPages(section, slug, locale);
   const tCommon = await getTranslations("common");
@@ -78,13 +93,22 @@ export default async function SectionSlugContent({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbJsonLdHtml }}
       />
-      {extraJsonLd?.map((schema, i) => (
-        <script
-          key={`extra-jsonld-${i}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
-        />
-      ))}
+      {extraJsonLd?.map((schema) => {
+        // Les schémas JSON-LD ont un "@type" unique par slot (Article, FAQ,
+        // HowTo…) qui fait une clé stable. Fallback sur le hash du schéma
+        // sérialisé si @type est absent (cas édge).
+        const schemaType =
+          typeof schema["@type"] === "string"
+            ? schema["@type"]
+            : `extra-${JSON.stringify(schema).length}`;
+        return (
+          <script
+            key={`jsonld-${schemaType}`}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: serializeJsonLd(schema) }}
+          />
+        );
+      })}
 
       {/* Hero section */}
       <section className="relative overflow-hidden bg-slate-950">
@@ -150,15 +174,15 @@ export default async function SectionSlugContent({
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
             {prev ? (
               <Link
-                href={`/${locale}/${section}/${extractSimpleSlug(prev.slug)}`}
+                href={`/${locale}/${section}/${sanitizeSlugForHref(extractSimpleSlug(prev.slug))}`}
                 className="group flex items-center gap-2 rounded-xl border border-slate-200/50 px-6 py-4 transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <ArrowLeft
-                  className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-x-1"
+                  className="h-4 w-4 text-slate-500 transition-transform group-hover:-translate-x-1 dark:text-slate-400"
                   aria-hidden="true"
                 />
                 <div>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
                     {tCommon("previous")}
                   </p>
                   <p className="text-sm font-semibold">
@@ -172,11 +196,11 @@ export default async function SectionSlugContent({
                 className="group flex items-center gap-2 rounded-xl border border-slate-200/50 px-6 py-4 transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <ArrowLeft
-                  className="h-4 w-4 text-slate-400 transition-transform group-hover:-translate-x-1"
+                  className="h-4 w-4 text-slate-500 transition-transform group-hover:-translate-x-1 dark:text-slate-400"
                   aria-hidden="true"
                 />
                 <div>
-                  <p className="text-xs text-slate-400">{tCommon("back")}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">{tCommon("back")}</p>
                   <p className="text-sm font-semibold">
                     {tCommon("overview")}
                   </p>
@@ -185,17 +209,17 @@ export default async function SectionSlugContent({
             )}
             {next ? (
               <Link
-                href={`/${locale}/${section}/${extractSimpleSlug(next.slug)}`}
+                href={`/${locale}/${section}/${sanitizeSlugForHref(extractSimpleSlug(next.slug))}`}
                 className="group flex items-center justify-end gap-2 rounded-xl border border-slate-200/50 px-6 py-4 text-right transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <div>
-                  <p className="text-xs text-slate-400">{tCommon("next")}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-400">{tCommon("next")}</p>
                   <p className="text-sm font-semibold">
                     {next.frontmatter.title}
                   </p>
                 </div>
                 <ArrowRight
-                  className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-1"
+                  className="h-4 w-4 text-slate-500 transition-transform group-hover:translate-x-1 dark:text-slate-400"
                   aria-hidden="true"
                 />
               </Link>

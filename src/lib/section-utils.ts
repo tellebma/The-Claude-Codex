@@ -28,5 +28,17 @@ export function getAdjacentPages(
  */
 export function extractSimpleSlug(fullSlug: string): string {
   const parts = fullSlug.split("/");
-  return parts[parts.length - 1];
+  return parts.at(-1) ?? "";
+}
+
+const SAFE_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/**
+ * Whitelist-validate a slug before interpolating it into an href to defuse
+ * stored-XSS attack paths flagged by CodeQL. Slugs that do not match the
+ * canonical pattern (lowercase alphanumerics and dashes) return "" which
+ * produces a link to the section landing page, a graceful fallback.
+ */
+export function sanitizeSlugForHref(slug: string): string {
+  return SAFE_SLUG_PATTERN.test(slug) ? slug : "";
 }

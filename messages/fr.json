@@ -108,7 +108,15 @@
     "resultCount": "{count, plural, =0 {Aucun résultat} =1 {1 résultat} other {# résultats}}",
     "escToClose": "pour fermer",
     "arrowsToNavigate": "naviguer",
-    "enterToOpen": "ouvrir"
+    "enterToOpen": "ouvrir",
+    "minCharsHint": "Tapez au moins 2 caractères",
+    "searching": "Recherche…",
+    "loadError": "Impossible de charger l'index de recherche. Réessayez dans un instant.",
+    "matchesInPage": "{count, plural, =1 {1 occurrence} other {# occurrences}}",
+    "titleBadge": "Titre",
+    "moreResults": "+ {count} autres résultats. Affinez votre recherche.",
+    "browseAll": "Parcourir la doc",
+    "browseAllAria": "Parcourir la documentation"
   },
   "breadcrumb": {
     "ariaLabel": "Fil d'Ariane",
@@ -251,13 +259,15 @@
   },
   "notFound": {
     "title": "Page introuvable",
-    "subtitle": "Cette page n'existe pas ou a été déplacée.",
+    "subtitle": "Cette page n'existe pas ou a été déplacée. Whobee vous propose quelques pistes pour retrouver votre chemin.",
     "suggestionsTitle": "Vous cherchiez peut-être...",
     "fallbackTitle": "Par où commencer ?",
-    "searchHint": "Utilisez la recherche pour trouver ce que vous cherchez :",
+    "searchHint": "Ouvrir la recherche",
     "backToHome": "Retour à l'accueil",
     "openSearch": "Ouvrir la recherche",
-    "urlLabel": "URL demandée :"
+    "urlLabel": "URL demandée :",
+    "recentTitle": "Articles récents",
+    "robotAlt": "Robot 3D interactif qui suit votre souris"
   },
   "sectionNav": {
     "getting-started": {

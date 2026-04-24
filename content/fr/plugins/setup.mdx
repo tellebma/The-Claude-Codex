@@ -40,7 +40,7 @@ Claude Code propose une commande native pour installer des ressources depuis Git
 
 ```bash
 # Installer depuis un repo GitHub (chemin relatif à la racine)
-/install-github punkpeye/everything-claude-code
+/install-github affaan-m/everything-claude-code
 ```
 
 <Callout type="info" title="Ce que fait /install-github">
@@ -54,7 +54,7 @@ La méthode la plus transparente. Vous voyez exactement ce qui est installé.
 <Steps>
 <Step title="Trouver une extension" stepNumber={1}>
 Cherchez sur GitHub des repos communautaires. Les bons endroits de départ :
-- [punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code) : collection complète d'agents et de rules
+- [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) : collection complète d'agents et de rules
 - La documentation officielle Anthropic : https://docs.anthropic.com/en/docs/claude-code
 </Step>
 
@@ -62,11 +62,11 @@ Cherchez sur GitHub des repos communautaires. Les bons endroits de départ :
 
 ```bash
 # Cloner le repo communautaire
-git clone https://github.com/punkpeye/everything-claude-code /tmp/ecc
+git clone https://github.com/affaan-m/everything-claude-code /tmp/ecc
 
 # Ou télécharger un fichier spécifique
 curl -o .claude/commands/tdd-guide.md \
-  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
+  https://raw.githubusercontent.com/affaan-m/everything-claude-code/main/commands/tdd-guide.md
 ```
 
 </Step>
@@ -260,7 +260,7 @@ rm .claude/commands/skill-a-supprimer.md
 
 # Mettre à jour (re-télécharger depuis le repo source)
 curl -o .claude/commands/tdd-guide.md \
-  https://raw.githubusercontent.com/punkpeye/everything-claude-code/main/commands/tdd-guide.md
+  https://raw.githubusercontent.com/affaan-m/everything-claude-code/main/commands/tdd-guide.md
 ```
 
 ## Bonnes pratiques

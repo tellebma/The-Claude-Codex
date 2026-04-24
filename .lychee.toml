@@ -1,0 +1,45 @@
+# Lychee — configuration pour la vérification de liens cassés sur le build statique.
+# Documentation : https://github.com/lycheeverse/lychee
+
+# Cache pour accélérer les runs consécutifs (CI artifact ou local)
+cache = true
+max_cache_age = "1d"
+
+# Performance — parallélisme raisonnable, timeout court
+max_concurrency = 16
+timeout = 20
+retry_wait_time = 2
+max_retries = 2
+
+# Comportement HTTP
+accept = ["200..=299", "301", "302", "307", "308", "403", "429"]
+insecure = false
+# lychee >= 0.22 : follow_redirects retiré (redirects suivis par défaut)
+max_redirects = 10
+
+# Exclusions — liens externes connus pour être flaky ou limités en CI
+exclude = [
+  # Self : la prod retarde sur develop, inutile de checker nos propres pages en PR
+  "^https://claude-codex\\.fr/",
+  # GitHub rate-limit agressif en CI sans token
+  "^https://github\\.com/.*#L\\d+",
+  # Domaines avec anti-bot strict (renvoient 403 aux runners GHA)
+  "^https://(www\\.)?(linkedin|twitter|x|facebook|instagram)\\.com/",
+  # Exemples fictifs dans les docs
+  "example\\.com",
+  "example\\.org",
+  # localhost et intranet (tests, snippets)
+  "^https?://localhost",
+  "^https?://127\\.",
+  "^https?://0\\.0\\.0\\.0",
+  "^https?://.*\\.local/",
+  # URLs ancres-only qui seront vérifiées côté HTML
+  "^#",
+]
+
+# Schémas acceptés
+scheme = ["https", "http"]
+
+# Ignorer les erreurs de liens mailto / tel (pas vérifiables)
+# lychee >= 0.19 : exclude_mail → include_mail (inversé, défaut = false)
+include_mail = false

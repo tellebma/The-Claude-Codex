@@ -4,7 +4,7 @@ description: "Les ressources communautaires Claude Code incontournables : Everyt
 section: "plugins"
 order: 3
 datePublished: "2026-03-09"
-dateModified: "2026-03-11"
+dateModified: "2026-04-23"
 ---
 
 ## Les ressources que tout développeur Claude Code devrait connaître
@@ -21,10 +21,10 @@ Les ressources présentées sur cette page sont des **projets communautaires**, 
 
 **Projet communautaire** | Catégorie : Agents, Rules & Skills | Auteur : [punkpeye](https://github.com/punkpeye)
 
-[Everything Claude Code](https://github.com/punkpeye/everything-claude-code) est l'une des collections communautaires les plus connues de l'écosystème. Elle regroupe une **collection d'agents spécialisés, de règles et de skills** prêts à l'emploi qui couvrent les cas d'usage les plus courants du développement.
+[Everything Claude Code](https://github.com/affaan-m/everything-claude-code) est l'une des collections communautaires les plus connues de l'écosystème. Elle regroupe une **collection d'agents spécialisés, de règles et de skills** prêts à l'emploi qui couvrent les cas d'usage les plus courants du développement.
 
 <Callout type="info" title="Projet communautaire open source">
-Everything Claude Code est hébergé sur GitHub à l'adresse [github.com/punkpeye/everything-claude-code](https://github.com/punkpeye/everything-claude-code). C'est un projet de la communauté, non affilié à Anthropic.
+Everything Claude Code est hébergé sur GitHub à l'adresse [github.com/affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code). C'est un projet de la communauté, non affilié à Anthropic.
 </Callout>
 
 ### Ce qu'il apporte
@@ -38,10 +38,10 @@ Everything Claude Code est hébergé sur GitHub à l'adresse [github.com/punkpey
 
 ```bash
 # Via /install-github (recommandé)
-/install-github punkpeye/everything-claude-code
+/install-github affaan-m/everything-claude-code
 
 # Ou manuellement
-git clone https://github.com/punkpeye/everything-claude-code /tmp/ecc
+git clone https://github.com/affaan-m/everything-claude-code /tmp/ecc
 mkdir -p .claude/agents .claude/rules .claude/commands
 cp -r /tmp/ecc/agents/ .claude/
 cp -r /tmp/ecc/rules/ .claude/
@@ -149,19 +149,19 @@ repomix --output context.txt
 
 ## Prompt Improver : Des prompts optimisés
 
-**Projet Anthropic** | Catégorie : Prompting | Auteur : [Anthropic](https://github.com/anthropics)
+**Artefact The Claude Codex** | Catégorie : Prompting | Propulsé par Claude
 
-[Prompt Improver](https://github.com/anthropics/prompt-improver) est un outil développé par Anthropic qui aide à rédiger de meilleurs prompts. Ce n'est pas un plugin au sens d'une extension installée dans Claude Code, c'est un outil web ou CLI qui analyse vos prompts et propose des améliorations.
+[Prompt Improver](https://claude.ai/public/artifacts/bda730ce-564e-4bc6-80a7-7767bba5bafd) est un Artefact Claude interactif que nous avons créé pour vous aider à rédiger de meilleurs prompts. Collez un brouillon, récupérez une version restructurée qui applique les techniques de prompting présentées dans ce guide.
 
-<Callout type="warning" title="Vérifiez l'existence du dépôt">
-Prompt Improver est un outil d'Anthropic. Le dépôt GitHub exact peut avoir changé de nom ou de structure. Vérifiez sur [github.com/anthropics](https://github.com/anthropics) avant de cloner. Anthropic propose également un outil d'amélioration de prompts intégré à la [Console Anthropic](https://console.anthropic.com).
+<Callout type="info" title="Zéro install, tout en navigateur">
+Publié publiquement sur claude.ai, l'artefact tourne côté client : rien à cloner, rien à déployer. Vous pouvez aussi l'ouvrir dans votre propre compte Claude pour le forker et personnaliser ses règles.
 </Callout>
 
 ### Ce qu'il apporte
 
 - **Analyse de structure** : identifie si votre prompt manque de contexte, de contraintes ou de format cible
 - **Suggestions concrètes** : reformule les parties vagues en instructions précises et structurées
-- **Bonnes pratiques** : applique les techniques de prompting recommandées par Anthropic (XML tags, chain-of-thought, exemples)
+- **Bonnes pratiques appliquées** : XML tags, chain-of-thought, role assignment, exemples
 
 ### Cas d'usage manuel
 
@@ -176,10 +176,10 @@ Même sans outil automatisé, vous pouvez améliorer vos prompts dans Claude Cod
 
 | Ressource | Type | Source | Meilleur pour |
 |--------|------|---------|---------------|
-| **Everything Claude Code** | Agents, Rules, Skills | [GitHub](https://github.com/punkpeye/everything-claude-code) | Workflow complet de développement |
+| **Everything Claude Code** | Agents, Rules, Skills | [GitHub](https://github.com/affaan-m/everything-claude-code) | Workflow complet de développement |
 | **Context7** | MCP Server | [GitHub](https://github.com/upstash/context7) | Documentation à jour, migration |
 | **Repomix** | CLI npm | [GitHub](https://github.com/yamadashy/repomix) | Analyser et comprendre une codebase |
-| **Prompt Improver** | Outil web/CLI | [GitHub](https://github.com/anthropics/prompt-improver) | Améliorer la qualité des prompts |
+| **Prompt Improver** | Artefact Claude | [Ouvrir](https://claude.ai/public/artifacts/bda730ce-564e-4bc6-80a7-7767bba5bafd) | Améliorer la qualité des prompts |
 
 ## Prochaines étapes
 

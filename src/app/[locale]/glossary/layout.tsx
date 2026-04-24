@@ -31,7 +31,7 @@ export default async function GlossaryLayout({
     glossaryTerms.map((t) => ({
       name: t.term,
       description: t.definition,
-      anchor: t.term.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      anchor: t.term.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-"),
     })),
     locale
   );

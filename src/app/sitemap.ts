@@ -3,6 +3,9 @@ import { SITE_URL, SITE_PAGES } from "@/lib/metadata";
 import type { PageInfo } from "@/data/site-pages";
 import { locales, defaultLocale } from "@/i18n/config";
 
+// Requis par Next 15 pour exporter les routes Metadata en SSG (`output: 'export'`).
+export const dynamic = "force-static";
+
 /** Ensures a URL path ends with / to match trailingSlash: true. */
 function withSlash(url: string): string {
   return url.endsWith("/") ? url : `${url}/`;

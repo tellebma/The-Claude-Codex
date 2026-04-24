@@ -44,6 +44,16 @@ next-env.d.ts
 
 # playwright
 .playwright-mcp/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# sonarqube scanner workdir
+.scannerwork/
+
+# git worktrees (superpowers skill)
+.worktrees/
 
 # claude code local settings
 .claude/settings.local.json
@@ -52,6 +62,10 @@ doc/settings.local.json
 # Generated at build time by scripts/generate-llms-txt.ts
 /public/llms.txt
 /public/llms-full.txt
+
+# Generated at build time by scripts/generate-search-index.ts
+/public/search-index-fr.json
+/public/search-index-en.json
 
 # Private/local docs — kept local, never on public GitHub
 docs/TODO/
@@ -70,3 +84,5 @@ docs/BACKLOG/MT22-*.md
 /EPIC-*.md
 /EPIC_*.md
 /CI_workflow*.png
+/sonarqube
+/docs/SONAR

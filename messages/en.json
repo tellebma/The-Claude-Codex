@@ -108,7 +108,15 @@
     "resultCount": "{count, plural, =0 {No results} =1 {1 result} other {# results}}",
     "escToClose": "to close",
     "arrowsToNavigate": "navigate",
-    "enterToOpen": "open"
+    "enterToOpen": "open",
+    "minCharsHint": "Type at least 2 characters",
+    "searching": "Searching…",
+    "loadError": "Could not load the search index. Please try again shortly.",
+    "matchesInPage": "{count, plural, =1 {1 match} other {# matches}}",
+    "titleBadge": "Title",
+    "moreResults": "+ {count} more results. Refine your search.",
+    "browseAll": "Browse the docs",
+    "browseAllAria": "Browse the documentation"
   },
   "breadcrumb": {
     "ariaLabel": "Breadcrumb",
@@ -251,13 +259,15 @@
   },
   "notFound": {
     "title": "Page not found",
-    "subtitle": "This page does not exist or has been moved.",
+    "subtitle": "This page doesn't exist or has been moved. Whobee has a few ideas to help you find your way.",
     "suggestionsTitle": "Were you looking for...",
     "fallbackTitle": "Where to start?",
-    "searchHint": "Use search to find what you're looking for:",
+    "searchHint": "Open search",
     "backToHome": "Back to home",
     "openSearch": "Open search",
-    "urlLabel": "Requested URL:"
+    "urlLabel": "Requested URL:",
+    "recentTitle": "Recent articles",
+    "robotAlt": "Interactive 3D robot tracking your cursor"
   },
   "sectionNav": {
     "getting-started": {

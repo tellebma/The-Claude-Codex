@@ -42,6 +42,36 @@ const LIGHT_VARS = {
   signalTextColor: "#1e293b",
 } as const;
 
+/**
+ * xychart-beta ignores Mermaid's themeCSS — apply per-node overrides after
+ * the SVG is injected into the DOM. Extracted as a named function to keep
+ * the main render effect readable (max 2 levels of nesting).
+ */
+function applyXyChartOverrides(container: HTMLElement, isDark: boolean): void {
+  const bgRect = container.querySelector(".background") as SVGElement | null;
+  if (bgRect) {
+    bgRect.style.fill = isDark ? "#1e293b" : "#f8fafc";
+  }
+
+  container.querySelectorAll<SVGElement>(".line-plot-0 path").forEach((el) => {
+    el.style.stroke = "#06b6d4";
+    el.style.strokeWidth = "2.5";
+  });
+
+  const labelFill = isDark ? "#cbd5e1" : "#334155";
+  container.querySelectorAll<SVGElement>(".label text").forEach((el) => {
+    el.style.fill = labelFill;
+  });
+
+  const title = container.querySelector(
+    ".chart-title text"
+  ) as SVGElement | null;
+  if (title) {
+    title.style.fill = isDark ? "#e2e8f0" : "#0f172a";
+    title.style.fontWeight = "600";
+  }
+}
+
 /** CSS injected into the SVG to override Mermaid's defaults */
 function getOverrideCss(isDark: boolean): string {
   if (isDark) {
@@ -75,11 +105,11 @@ export function MermaidDiagram({
   ariaLabel,
   handDrawn,
 }: MermaidDiagramProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [rendered, setRendered] = useState(false);
   const { resolvedTheme } = useTheme();
-  const uniqueId = useId().replace(/:/g, "-");
+  const uniqueId = useId().replaceAll(":", "-");
   const captionId = `mermaid-caption${uniqueId}`;
 
   const isDark = resolvedTheme === "dark";
@@ -91,58 +121,33 @@ export function MermaidDiagram({
 
     let cancelled = false;
 
-    import("mermaid").then(({ default: mermaid }) => {
-      if (cancelled) return;
+    async function renderChart() {
+      try {
+        const { default: mermaid } = await import("mermaid");
+        if (cancelled) return;
 
-      mermaid.initialize({
-        startOnLoad: false,
-        look: handDrawn ? "handDrawn" : "classic",
-        theme: "base",
-        fontFamily: "var(--font-jakarta), system-ui, sans-serif",
-        themeVariables: isDark ? DARK_VARS : LIGHT_VARS,
-        themeCSS: getOverrideCss(isDark),
-      });
-
-      const id = `mermaid${uniqueId}${Date.now()}`;
-
-      mermaid
-        .render(id, chart)
-        .then(({ svg }) => {
-          if (cancelled || !containerRef.current) return;
-          containerRef.current.innerHTML = svg;
-
-          // xychart-beta ignores themeCSS — fix post-render
-          const bgRect = containerRef.current.querySelector(
-            ".background"
-          ) as SVGElement | null;
-          if (bgRect) {
-            bgRect.style.fill = isDark ? "#1e293b" : "#f8fafc";
-          }
-          containerRef.current
-            .querySelectorAll(".line-plot-0 path")
-            .forEach((el) => {
-              (el as SVGElement).style.stroke = "#06b6d4";
-              (el as SVGElement).style.strokeWidth = "2.5";
-            });
-          containerRef.current
-            .querySelectorAll(".label text")
-            .forEach((el) => {
-              (el as SVGElement).style.fill = isDark ? "#cbd5e1" : "#334155";
-            });
-          const title = containerRef.current.querySelector(
-            ".chart-title text"
-          ) as SVGElement | null;
-          if (title) {
-            title.style.fill = isDark ? "#e2e8f0" : "#0f172a";
-            title.style.fontWeight = "600";
-          }
-
-          setRendered(true);
-        })
-        .catch((err) => {
-          if (!cancelled) setError(String(err));
+        mermaid.initialize({
+          startOnLoad: false,
+          look: handDrawn ? "handDrawn" : "classic",
+          theme: "base",
+          fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+          themeVariables: isDark ? DARK_VARS : LIGHT_VARS,
+          themeCSS: getOverrideCss(isDark),
         });
-    });
+
+        const id = `mermaid${uniqueId}${Date.now()}`;
+        const { svg } = await mermaid.render(id, chart);
+        if (cancelled || !containerRef.current) return;
+
+        containerRef.current.innerHTML = svg;
+        applyXyChartOverrides(containerRef.current, isDark);
+        setRendered(true);
+      } catch (err) {
+        if (!cancelled) setError(String(err));
+      }
+    }
+
+    renderChart();
 
     return () => {
       cancelled = true;
@@ -160,20 +165,36 @@ export function MermaidDiagram({
     );
   }
 
+  /*
+   * Accessibility: the <figure> provides the semantic grouping. Its
+   * aria-label (or aria-labelledby pointing to the figcaption) gives
+   * the diagram an accessible name that screen readers announce as a
+   * single graphical unit. No role="img" on the inner <div> — Sonar
+   * S6819 flags that pattern, and it's redundant with a labeled
+   * <figure>.
+   */
   return (
-    <figure className="my-6">
+    <figure
+      className="my-6"
+      aria-label={caption ? undefined : accessibleName}
+      aria-labelledby={caption ? captionId : undefined}
+    >
       {!rendered && !error && (
         <div
           aria-hidden="true"
           className="h-32 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800"
         />
       )}
-      <div
+      {/*
+       * Conteneur scrollable du SVG Mermaid. <section> + tabIndex=0 est
+       * le pattern sémantique HTML pour un bloc de contenu focusable au
+       * clavier (utile quand le diagramme déborde horizontalement sur
+       * mobile). Le <section> remplace <div role="region"> (Sonar S6819).
+       */}
+      <section
         ref={containerRef}
-        role="img"
         tabIndex={0}
-        aria-labelledby={caption ? captionId : undefined}
-        aria-label={!caption ? accessibleName : undefined}
+        aria-label={accessibleName}
         aria-hidden={!rendered}
         className={`overflow-x-auto rounded-xl border border-slate-200/50 bg-white p-6 dark:border-slate-700/50 dark:bg-slate-900 motion-safe:transition-opacity motion-safe:duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
           rendered ? "opacity-100" : "opacity-0"

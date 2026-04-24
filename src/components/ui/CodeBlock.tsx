@@ -11,7 +11,7 @@ interface CodeBlockProps {
   filename?: string;
 }
 
-export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps) {
+export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBlockProps>) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const t = useTranslations("common");
@@ -42,8 +42,10 @@ export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps)
       document.body.appendChild(textArea);
       textArea.select();
       // execCommand is deprecated but retained as a best-effort fallback
+      // for browsers without navigator.clipboard (http://, iframe sandbox).
+      // NOSONAR typescript:S1874 — intentional browser-compat fallback
       const success = document.execCommand("copy");
-      document.body.removeChild(textArea);
+      textArea.remove();
       if (success) {
         setCopied(true);
         timeoutRef.current = setTimeout(() => setCopied(false), 2000);
@@ -90,13 +92,19 @@ export function CodeBlock({ code, language = "bash", filename }: CodeBlockProps)
               className={`${className} overflow-x-auto p-4 text-sm leading-relaxed`}
               style={{ ...style, backgroundColor: "transparent" }}
             >
-              {tokens.map((line, i) => (
-                <div key={i} {...getLineProps({ line })}>
-                  {line.map((token, j) => (
-                    <span key={j} {...getTokenProps({ token })} />
-                  ))}
-                </div>
-              ))}
+              {tokens.map((line, i) => {
+                const lineKey = `line-${i}-${line.map((t) => t.content).join("").slice(0, 40)}`;
+                return (
+                  <div key={lineKey} {...getLineProps({ line })}>
+                    {line.map((token, j) => (
+                      <span
+                        key={`${lineKey}-tok-${j}-${token.content.slice(0, 16)}`}
+                        {...getTokenProps({ token })}
+                      />
+                    ))}
+                  </div>
+                );
+              })}
             </pre>
           )}
         </Highlight>

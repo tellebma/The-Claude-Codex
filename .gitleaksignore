@@ -1,0 +1,18 @@
+# Gitleaks false-positive fingerprints.
+# Format : <commit-sha>:<path>:<rule>:<line>
+#
+# Les entrées ici sont des FAUX POSITIFS explicitement audités. Toute nouvelle
+# entrée DOIT être justifiée par un commentaire précisant :
+#   1. Pourquoi ce n'est pas un vrai secret
+#   2. Le lien vers la PR d'audit
+#
+# Documentation : https://github.com/gitleaks/gitleaks#gitleaksignore
+
+# Faux positif curl-auth-user : `curl -u "${SONAR_TOKEN}:"` avec une variable
+# d'environnement. Aucun secret en clair dans le fichier — le token est injecté
+# au runtime depuis les GitHub secrets. Le commit suivant (5b9b061) a migré
+# vers un header Authorization pour contourner la règle, mais le commit
+# original reste scanné par le diff de la PR.
+# Introduit : PR #66 (chore/pr-metrics-comment)
+74905d1c651489938be8040ade3a026de00c123f:.github/workflows/pr-checks.yml:curl-auth-user:337
+74905d1c651489938be8040ade3a026de00c123f:.github/workflows/pr-checks.yml:curl-auth-user:352

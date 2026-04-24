@@ -33,7 +33,7 @@ export function TestimonialCard({
   role,
   result,
   avatarColor = "teal",
-}: TestimonialCardProps) {
+}: Readonly<TestimonialCardProps>) {
   const initials = getInitials(author);
 
   return (

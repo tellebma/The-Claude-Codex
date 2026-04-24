@@ -35,6 +35,8 @@ export function DecryptedText({
         .map((char, i) => {
           if (char === " ") return " ";
           if (i < revealCount) return char;
+          // Non-cryptographic: purely visual scramble effect.
+          // NOSONAR typescript:S2245 — not used for tokens, secrets, or any security context.
           return chars[Math.floor(Math.random() * chars.length)];
         })
         .join("");
@@ -56,7 +58,7 @@ export function DecryptedText({
     const el = ref.current;
     if (!el || hasAnimated) return;
 
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mq = globalThis.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) {
       setHasAnimated(true);
       return;

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-type VideoEmbedProps = {
+type VideoEmbedProps = Readonly<{
   /** YouTube video ID (the part after ?v= in the URL) */
   videoId: string;
   /** Accessible title for the video */
@@ -12,7 +12,7 @@ type VideoEmbedProps = {
   caption?: string;
   /** Additional CSS classes */
   className?: string;
-};
+}>;
 
 /**
  * Lazy-loading YouTube embed with a click-to-play placeholder.

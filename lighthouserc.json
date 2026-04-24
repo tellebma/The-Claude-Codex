@@ -1,0 +1,32 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./out",
+      "url": [
+        "http://localhost/fr/",
+        "http://localhost/en/",
+        "http://localhost/fr/getting-started/",
+        "http://localhost/en/getting-started/",
+        "http://localhost/fr/mcp/",
+        "http://localhost/en/mcp/"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "desktop",
+        "throttlingMethod": "simulate",
+        "chromeFlags": "--no-sandbox --headless=new"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.9 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "categories:seo": ["error", { "minScore": 0.95 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

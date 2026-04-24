@@ -9,11 +9,11 @@
 | EPIC | Stories | Fait | En cours | A faire | Progression |
 |------|---------|------|----------|---------|-------------|
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
-| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 6 | 0 | 5 | 55% |
+| [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 11 | 0 | 0 | 100% ✅ |
 
-**Total projet** : 22/28 stories (79%) · 86/102 SP livres (84%)
+**Total projet** : 27/28 stories (96%) · 99/102 SP livres (97%)
 
-> Note : le composant WorkflowDiagram (C4, 3 SP) reste en backlog, nice-to-have.
+> EPIC **Corrections UX/UI/A11y** : cloture le 2026-04-22. Seul WorkflowDiagram (C3, 3 SP, nice-to-have) reste dans l'EPIC Best Practices.
 
 ---
 
@@ -94,24 +94,24 @@
 
 **Sprint 2** : 3/3 stories · 13/13 SP · 100%
 
-### Sprint 3 : Coherence visuelle et ergonomie — ⬜ A faire
+### Sprint 3 : Coherence visuelle et ergonomie — ✅ Termine
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| US-7 | Coherence dark/light pages section | 3 | ⬜ A faire |
-| US-8 | Indicateur de progression parcours | 3 | ⬜ A faire |
-| US-9 | Espacement vertical et responsive | 2 | ⬜ A faire |
-| US-10 | Liens externes et semantique ARIA | 3 | ⬜ A faire |
+| US-7 | Coherence dark/light pages section | 3 | ✅ Fait (getting-started et /about deja adaptatifs ; hero MDX sombre = pattern design intentionnel) |
+| US-8 | Indicateur de progression parcours | 3 | ✅ Fait (deja en place : SectionSidebar "Page X/Y" + progressbar ARIA + sr-only %) |
+| US-9 | Espacement vertical et responsive | 2 | ✅ Fait (MdxRenderer max-w-3xl ajoute ; padding landing + Footer grid deja OK) |
+| US-10 | Liens externes et semantique ARIA | 3 | ✅ Fait (deja en place : Callout aside, PathCard aria-label, liens externes sr-only, pas de h3 orphelin) |
 
-**Sprint 3** : 0/4 stories · 0/11 SP · 0%
+**Sprint 3** : 4/4 stories · 11/11 SP · 100%
 
-### Sprint 4 : Polish — ⬜ A faire
+### Sprint 4 : Polish — ✅ Termine
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| US-11 | Corrections mineures de polish | 2 | ⬜ A faire |
+| US-11 | Corrections mineures de polish | 2 | ✅ Fait (favicon.ico multi-size + CTA hero hover fonctionnel ; autres items deja en place) |
 
-**Sprint 4** : 0/1 stories · 0/2 SP · 0%
+**Sprint 4** : 1/1 stories · 2/2 SP · 100%
 
 ---
 

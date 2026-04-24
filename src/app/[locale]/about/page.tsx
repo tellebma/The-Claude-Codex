@@ -2,7 +2,6 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
-  Github,
   Heart,
   BookOpen,
   Users,
@@ -10,6 +9,7 @@ import {
   Globe,
   ExternalLink,
 } from "lucide-react";
+import { GitHubIcon } from "@/components/ui/icons/GitHubIcon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { AnimateOnScroll } from "@/components/ui/AnimateOnScroll";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
@@ -59,9 +59,9 @@ const valueKeys = [
 
 export default async function AboutPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "about" });
@@ -188,7 +188,7 @@ export default async function AboutPage({
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
                 >
-                  <Github className="h-4 w-4" aria-hidden="true" />
+                  <GitHubIcon className="h-4 w-4" aria-hidden="true" />
                   {t("github")}
                   <ExternalLink className="h-3 w-3" aria-hidden="true" />
                 </a>
@@ -228,7 +228,7 @@ export default async function AboutPage({
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-xl bg-slate-900 px-8 py-3.5 text-sm font-semibold text-white shadow-lg transition-all hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100"
             >
-              <Github className="h-4 w-4" aria-hidden="true" />
+              <GitHubIcon className="h-4 w-4" aria-hidden="true" />
               {t("ctaGithub")}
               <ArrowRight
                 className="h-4 w-4 transition-transform group-hover:translate-x-1"

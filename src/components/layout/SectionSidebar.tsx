@@ -57,13 +57,15 @@ export function SectionSidebar() {
                 {Math.round((currentPage / totalPages) * 100)}% complete
               </span>
             </div>
-            <div
-              className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
-              role="progressbar"
-              aria-valuenow={currentPage}
-              aria-valuemin={1}
-              aria-valuemax={totalPages}
+            <progress
+              value={currentPage}
+              max={totalPages}
               aria-label={`Progress: page ${currentPage} of ${totalPages}`}
+              className="sr-only"
+            />
+            <div
+              aria-hidden="true"
+              className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
             >
               <div
                 className="h-full rounded-full bg-brand-500 transition-all duration-300"

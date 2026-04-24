@@ -6,6 +6,7 @@ import { getMdxBySlug, getAllMdxSlugs, getAllMdxFiles } from "@/lib/mdx";
 import { MdxRenderer } from "@/components/mdx/MdxRenderer";
 import { ArticleDates } from "@/components/ui/ArticleDates";
 import { createPageMetadata } from "@/lib/metadata";
+import { sanitizeSlugForHref } from "@/lib/section-utils";
 
 interface ContentPageProps {
   readonly params: Promise<{ locale: string; slug: string }>;
@@ -18,13 +19,12 @@ interface ContentPageProps {
  * matters when slugs diverge between languages (for example when a French
  * slug has been translated to English).
  */
-export async function generateStaticParams({
+export function generateStaticParams({
   params,
 }: {
-  params: Promise<{ locale: string }>;
-}): Promise<Array<{ slug: string }>> {
-  const { locale } = await params;
-  const slugs = getAllMdxSlugs(locale);
+  params: { locale: string };
+}): Array<{ slug: string }> {
+  const slugs = getAllMdxSlugs(params.locale);
   return [...slugs].map((slug) => ({ slug }));
 }
 
@@ -109,7 +109,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
             {prev ? (
               <Link
-                href={`/${resolvedParams.locale}/content/${prev.slug}`}
+                href={`/${resolvedParams.locale}/content/${sanitizeSlugForHref(prev.slug)}`}
                 className="group flex items-center gap-2 rounded-xl border border-slate-200/50 px-6 py-4 transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <ArrowLeft className="h-4 w-4 text-slate-500 transition-transform group-hover:-translate-x-1 dark:text-slate-400" aria-hidden="true" />
@@ -123,7 +123,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
             )}
             {next ? (
               <Link
-                href={`/${resolvedParams.locale}/content/${next.slug}`}
+                href={`/${resolvedParams.locale}/content/${sanitizeSlugForHref(next.slug)}`}
                 className="group flex items-center justify-end gap-2 rounded-xl border border-slate-200/50 px-6 py-4 text-right transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
               >
                 <div>

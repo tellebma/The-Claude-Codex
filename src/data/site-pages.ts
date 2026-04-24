@@ -27,7 +27,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     title: "Maîtrisez Claude Code",
     description:
       "Le guide de référence gratuit pour maîtriser Claude Code. MCP, Skills, Prompting avancé, pour développeurs et non-développeurs.",
-    priority: 1.0,
+    priority: 1,
     changeFrequency: "weekly",
     lastModified: "2026-03-07",
   },
@@ -390,7 +390,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les plugins Claude Code incontournables en 2026 : Everything Claude Code, Context7, Prompt Improver, Repomix et Ralph Loop.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-04-23",
   },
   {
     path: "/plugins/best-design",
@@ -790,12 +790,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/limits/vs-copilot",
-    title: "Claude Code vs GitHub Copilot : comparatif honnête (2026)",
+    title: "Claude Code vs GitHub Copilot 2026 : fonctionnalités, prix, performance",
     description:
-      "Agent CLI vs autocomplétion IDE : prix, mode agent, intégration IDE et qualité du code comparés. Forces, faiblesses, et quel outil choisir selon votre cas d'usage.",
+      "Agent CLI ou autocomplétion IDE en 2026 ? Comparatif complet Claude Code vs GitHub Copilot : mode agent, intégration IDE, tarifs, fenêtre de contexte, et cas d'usage où chaque outil fait vraiment la différence.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-13",
+    lastModified: "2026-04-23",
   },
   {
     path: "/limits/vs-cursor",
@@ -862,7 +862,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Votre clé API Anthropic sk-ant a fuité dans un commit, screenshot ou log ? Révoquez-la, faites la rotation, auditez les dégâts. Guide de récupération pas à pas.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-04-23",
   },
   {
     path: "/content/mode-plan-vs-thinking",

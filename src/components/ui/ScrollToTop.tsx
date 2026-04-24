@@ -20,8 +20,13 @@ export function ScrollToTop() {
   }, [handleScroll]);
 
   const scrollToTop = () => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "instant" : "smooth" });
+    const prefersReducedMotion = globalThis.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    globalThis.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion ? "instant" : "smooth",
+    });
   };
 
   return (

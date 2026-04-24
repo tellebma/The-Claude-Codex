@@ -19,6 +19,11 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FeatureCard } from "@/components/ui/FeatureCard";
 import { PathCard } from "@/components/ui/PathCard";
@@ -33,9 +38,9 @@ import {
 
 export default async function HomePage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   setRequestLocale(locale);
   const tHero = await getTranslations("hero");
@@ -144,7 +149,7 @@ export default async function HomePage({
               </Link>
               <Link
                 href="/mcp"
-                className="inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
+                className="hero-cta-secondary inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
                 style={{
                   borderWidth: "1px",
                   borderStyle: "solid",

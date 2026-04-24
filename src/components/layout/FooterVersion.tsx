@@ -10,7 +10,7 @@ type Cached = { version: string; ts: number };
 
 function readCache(): string | null {
   try {
-    const raw = window.localStorage.getItem(CACHE_KEY);
+    const raw = globalThis.localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Cached;
     if (Date.now() - parsed.ts > TTL_MS) return null;
@@ -23,7 +23,7 @@ function readCache(): string | null {
 function writeCache(version: string): void {
   try {
     const payload: Cached = { version, ts: Date.now() };
-    window.localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+    globalThis.localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
   } catch {
     /* localStorage indisponible (mode privé, quota plein) — on ignore */
   }

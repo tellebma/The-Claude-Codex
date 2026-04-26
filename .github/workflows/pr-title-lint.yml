@@ -1,0 +1,72 @@
+name: PR Title Lint
+
+# Valide que le titre de chaque PR suit Conventional Commits
+# (https://www.conventionalcommits.org). Le titre devient le message du
+# commit squash sur develop puis sur main, et c'est ce message qui pilote
+# semantic-release. Un titre non conforme = pas de release auto.
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+    branches: [develop, main]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: pr-title-lint-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint-pr-title:
+    name: Validate PR title (Conventional Commits)
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Lint PR title
+        uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Types autorisés (Angular Convention + ci/build/revert).
+          # Les types feat/fix/perf déclenchent une release auto via semantic-release ;
+          # les autres (docs/chore/style/refactor/test/ci/build/revert) ne créent pas de tag.
+          types: |
+            feat
+            fix
+            perf
+            docs
+            style
+            refactor
+            test
+            chore
+            ci
+            build
+            revert
+          # Le scope est optionnel mais conseillé : feat(footer): ..., fix(mcp): ...
+          requireScope: false
+          # Le sujet doit exister et ne pas se finir par un point.
+          subjectPattern: ^(?!.*\.$).+$
+          subjectPatternError: |
+            Le sujet du titre de PR ne doit pas être vide ni se terminer par un point.
+
+            Exemples valides :
+              feat: ajouter la page context-rot
+              fix(footer): corriger l'affichage de la version
+              chore(deps): bump next-mdx-remote vers 5.0
+              docs: clarifier la section sur les hooks
+
+            Reçu : "{subject}"
+          # Message d'erreur principal en français
+          headerPattern: '^(\w+)(?:\(([^)]+)\))?(!)?: (.+)$'
+          headerPatternCorrespondence: type, scope, breaking, subject
+          # Permet d'identifier "(!)" comme breaking change.
+          # On valide aussi explicitement les longueurs raisonnables.
+          validateSingleCommit: false
+          ignoreLabels: |
+            bot
+            ignore-pr-title-lint

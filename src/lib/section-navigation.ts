@@ -86,6 +86,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "agents.agent-teams", href: "/agents/agent-teams" },
       { labelKey: "agents.best-agents", href: "/agents/best-agents" },
       { labelKey: "agents.orchestration", href: "/agents/orchestration" },
+      { labelKey: "agents.orchestration-patterns", href: "/agents/orchestration-patterns" },
       { labelKey: "agents.agent-sdk", href: "/agents/agent-sdk" },
       { labelKey: "agents.performance-limits", href: "/agents/performance-limits" },
       { labelKey: "agents.background-agents", href: "/agents/background-agents" },

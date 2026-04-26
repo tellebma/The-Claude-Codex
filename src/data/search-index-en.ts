@@ -1085,6 +1085,30 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Orchestration patterns: Command, Agent, and Skill",
+    description:
+      "The Command/Agent/Skill triangle, the fetch/render pattern, the Execution Contract, and the defensive tool allowlist for clean, auditable Claude Code workflows.",
+    href: "/agents/orchestration-patterns",
+    section: "Agents",
+    keywords: [
+      "command",
+      "agent",
+      "skill",
+      "orchestration patterns",
+      "fetch render",
+      "execution contract",
+      "tool allowlist",
+      "fail-closed",
+      "agent skill",
+      "standalone skill",
+      "frontmatter",
+      "boris cherny",
+      "anti-pattern",
+      "subagent",
+      "primitive",
+    ],
+  },
+  {
     title: "Claude Agent SDK: programmatic agents",
     description:
       "Create agents in TypeScript and Python with the official SDK. Custom tools, automated monitoring, deploy pipeline, and bug triage.",

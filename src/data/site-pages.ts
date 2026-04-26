@@ -510,6 +510,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/agents/orchestration-patterns",
+    title: "Patterns d'orchestration : Command, Agent et Skill",
+    description:
+      "Le triangle Command/Agent/Skill, le pattern fetch/render, l'Execution Contract et la tool allowlist défensive pour structurer un workflow Claude Code clair et auditable.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
+  },
+  {
     path: "/agents/agent-sdk",
     title: "Claude Agent SDK : construire des agents programmatiques",
     description:

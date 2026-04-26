@@ -319,6 +319,7 @@
       "agent-teams": "Agent Teams",
       "best-agents": "Top agents par cas d'usage",
       "orchestration": "Orchestration avancée",
+      "orchestration-patterns": "Patterns Command/Agent/Skill",
       "agent-sdk": "Claude Agent SDK",
       "performance-limits": "Performance et limites",
       "background-agents": "Background Agents"

@@ -1,0 +1,189 @@
+---
+title: "RPI Workflow : Research, Plan, Implement avec validation gates"
+description: "Méthodologie en trois phases pour les features complexes. Structure feature-folder, six subagents spécialisés, validation humaine entre chaque phase. Quand l'utiliser plutôt qu'Ultraplan ou Plan Mode."
+section: "advanced"
+order: 11
+datePublished: "2026-04-26"
+dateModified: "2026-04-26"
+badge: "NEW"
+---
+
+## Pourquoi RPI
+
+Plan Mode est parfait pour une feature qui tient en 30 lignes. Ultraplan déporte le travail dans le cloud quand le plan devient long. Mais pour une feature qui touche cinq équipes (PM, UX, sécurité, infra, qualité), aucune des deux ne suffit. Vous avez besoin d'un workflow qui sépare les angles, force la validation humaine entre chaque phase, et laisse une trace écrite de chaque décision.
+
+C'est ce que fait **RPI** : Research → Plan → Implement. Trois phases, trois commands, six subagents spécialisés, et un dossier qui capture tout le raisonnement.
+
+## La structure feature-folder
+
+RPI vit dans un dossier `rpi/` à la racine du projet. Une feature = un sous-dossier.
+
+```
+rpi/
+└── auth-jwt-rotation/
+    ├── REQUEST.md                # Phase 0 : la demande initiale
+    ├── research/
+    │   └── RESEARCH.md           # Phase 1 : exploration
+    ├── plan/
+    │   ├── pm.md                 # Phase 2 : angle produit
+    │   ├── ux.md                 # Phase 2 : angle utilisateur
+    │   ├── eng.md                # Phase 2 : angle technique
+    │   └── PLAN.md               # Phase 2 : synthèse validée
+    └── implement/
+        └── IMPLEMENT.md          # Phase 3 : exécution + journal
+```
+
+Cette arborescence n'est pas cosmétique. Chaque fichier est un **artefact** que Claude lit en début de phase et écrit en fin de phase. La trace est versionnée, relisible, partageable.
+
+<Callout type="info" title="Pourquoi des fichiers ?">
+Stocker chaque phase dans un fichier permet de la relire dans une session différente sans payer le coût de tokens du raisonnement initial. Vous reprenez RESEARCH.md trois jours plus tard, vous lancez la phase 2, Claude n'a pas besoin de re-explorer.
+</Callout>
+
+## Phase 0 : la demande
+
+Vous écrivez `REQUEST.md` à la main. Une page max. Trois sections :
+
+```markdown
+# REQUEST: auth-jwt-rotation
+
+## Pourquoi
+Décrire le besoin métier ou la douleur observée.
+
+## Ce qu'on attend
+Le résultat fonctionnel attendu, sans détails techniques.
+
+## Contraintes connues
+Deadlines, dépendances, sécurité, limites de budget.
+```
+
+Pas de solution technique ici. C'est volontaire. Si vous écrivez la solution, vous biaisez les phases suivantes.
+
+## Phase 1 : Research
+
+Vous lancez `/rpi:research`. La command appelle deux agents en parallèle :
+
+- **Agent(requirement-parser)** : lit REQUEST.md, identifie les ambiguïtés, pose des questions
+- **Agent(Explore)** : explore le code existant, repère les fichiers concernés, dresse la cartographie
+
+```bash
+/rpi:research auth-jwt-rotation
+```
+
+Sortie : `rpi/auth-jwt-rotation/research/RESEARCH.md` avec deux sections :
+
+- **Questions ouvertes** : ambiguïtés identifiées (à valider à la main par vous)
+- **État de l'art interne** : fichiers existants, patterns en place, dépendances
+
+<Callout type="warning" title="Validation gate">
+Ne passez PAS à la phase 2 sans avoir lu et amendé RESEARCH.md à la main. C'est la première porte de validation. Si une question est mal résolue ici, le plan partira sur de mauvaises bases.
+</Callout>
+
+## Phase 2 : Plan multi-rôles
+
+Vous lancez `/rpi:plan`. La command appelle trois agents en parallèle, un par angle métier :
+
+```bash
+/rpi:plan auth-jwt-rotation
+```
+
+| Agent | Fichier produit | Angle |
+|---|---|---|
+| **product-manager** | `plan/pm.md` | Valeur business, prioritisation, métriques de succès |
+| **ux-designer** | `plan/ux.md` | Parcours utilisateur, états d'erreur, accessibilité |
+| **senior-software-engineer** | `plan/eng.md` | Architecture, dépendances, tests, risques techniques |
+
+Trois fichiers, trois points de vue. Aucun n'a la vérité complète.
+
+Une fois les trois sortis, la command appelle un quatrième agent :
+
+- **Agent(technical-cto-advisor)** : lit les trois fichiers, identifie les conflits, propose une synthèse dans `PLAN.md`
+
+```
+plan/pm.md      ─┐
+plan/ux.md      ─┼─→ Agent(technical-cto-advisor) ─→ plan/PLAN.md
+plan/eng.md     ─┘
+```
+
+<Callout type="warning" title="Deuxième validation gate">
+Relisez PLAN.md à la main. Comparez-le aux trois fichiers d'origine. Si la synthèse a écrasé un point UX important au profit d'un raccourci eng, corrigez à la main avant de continuer.
+</Callout>
+
+## Phase 3 : Implement
+
+Vous lancez `/rpi:implement`. La command lit `PLAN.md` et exécute :
+
+```bash
+/rpi:implement auth-jwt-rotation
+```
+
+Deux agents en séquence :
+
+- **Agent(senior-software-engineer)** : implémente le plan, fichier par fichier, en suivant les étapes de PLAN.md
+- **Agent(code-reviewer)** : review le diff produit, propose des corrections
+
+Le résultat est consigné dans `IMPLEMENT.md` : pour chaque étape, ce qui a été fait, ce qui a posé problème, et la décision finale.
+
+```markdown
+## Étape 3 : Ajout du middleware refresh
+
+**Fait** : src/middleware/auth.ts modifié, ajout de la fonction rotateToken
+**Problème** : conflit avec le cache Redis sur clés expirées
+**Décision** : invalidation explicite avant rotation (TTL=0)
+**Tests** : 4 tests passent, coverage +6 %
+```
+
+Cette trace journalière est précieuse pour la PR : vous avez déjà le changelog rédigé.
+
+## Quand utiliser RPI
+
+RPI a un coût d'amorçage non négligeable (3 commands, 6 agents, 4 validations humaines). Il ne se justifie pas pour tout :
+
+| Type de tâche | Workflow recommandé |
+|---|---|
+| Bug fix de moins d'une heure | Conversation directe |
+| Feature simple, 1 à 5 fichiers | **Plan Mode** standard |
+| Feature complexe, multi-fichiers, mais une seule équipe concernée | **Ultraplan** |
+| Feature touchant plusieurs équipes ou angles métier | **RPI** |
+| Refactoring d'architecture critique | **RPI** |
+| Spike d'exploration, prototype jetable | Conversation directe |
+
+La règle simple : si vous avez besoin que **trois rôles métier différents** valident la feature avant l'implémentation, RPI est le bon choix.
+
+## Adapter RPI à votre contexte
+
+Le pattern de référence est trois rôles dans la phase 2 (PM, UX, eng). Vous pouvez l'adapter :
+
+- **Sécurité critique** : ajoutez un agent `security-reviewer` dans la phase 2, fichier `plan/sec.md`
+- **Données / privacy** : ajoutez un agent `data-governance-reviewer`, fichier `plan/data.md`
+- **Performance** : ajoutez un agent `perf-engineer`, fichier `plan/perf.md`
+
+La synthèse `PLAN.md` consolide tous les angles. Plus vous ajoutez d'agents, plus la phase 2 prend de tokens, mais plus la phase 3 a de chances de réussir du premier coup.
+
+## Le pattern de validation gates
+
+Les gates sont la valeur centrale de RPI. Sans elles, vous obtenez juste un workflow agentique long et coûteux. Avec elles, vous obtenez un workflow **collaboratif humain-IA** où chaque phase est une livraison à valider.
+
+Trois gates obligatoires :
+
+1. Après Phase 1 : valider RESEARCH.md (questions résolues, exploration suffisante)
+2. Après Phase 2 (multi-rôle) : valider chaque fichier d'angle individuellement
+3. Après Phase 2 (synthèse) : valider PLAN.md final
+
+Une gate, c'est cinq minutes de relecture humaine. C'est ce qui fait la différence entre un plan généré et un plan **validé**.
+
+## Combiner RPI avec d'autres workflows
+
+RPI ne remplace pas les autres méthodologies, il les compose :
+
+- **TDD (Superpowers)** : appliquer les Iron Laws de TDD dans la phase 3 (tests d'abord)
+- **Cross-Model** : faire reviewer PLAN.md par Codex CLI ou Gemini avant la phase 3
+- **Ultraplan** : utiliser Ultraplan dans la phase 2 si la synthèse est trop volumineuse pour le terminal
+
+Le coeur de RPI, ce n'est pas les outils, c'est la séquence Research → Plan → Implement avec gates. Vous gardez la même discipline en changeant les outils.
+
+## Prochaines étapes
+
+- [Cross-Model Workflow](/advanced/cross-model-workflow) pour faire reviewer le PLAN par un autre modèle
+- [Ultraplan](/advanced/ultraplan) pour les phases 2 trop longues pour le terminal
+- [Patterns d'orchestration](/agents/orchestration-patterns) pour structurer les commands `/rpi:*`
+- [Workflows avancés](/advanced/workflows) pour les autres méthodologies (Research/Plan/Execute/Review/Ship)

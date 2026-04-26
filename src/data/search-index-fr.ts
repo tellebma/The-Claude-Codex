@@ -779,6 +779,31 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "codebase",
     ],
   },
+  {
+    title: "RPI Workflow : Research, Plan, Implement",
+    description:
+      "Methodologie en trois phases pour features complexes : structure feature-folder, six subagents specialises (PM, UX, eng, CTO advisor), validation humaine entre chaque phase.",
+    href: "/advanced/rpi-workflow",
+    section: "Avance",
+    keywords: [
+      "rpi",
+      "research",
+      "plan",
+      "implement",
+      "validation gate",
+      "feature folder",
+      "subagent",
+      "product manager",
+      "ux designer",
+      "senior engineer",
+      "cto advisor",
+      "code reviewer",
+      "methodologie",
+      "workflow complexe",
+      "REQUEST.md",
+      "PLAN.md",
+    ],
+  },
   // Reference
   {
     title: "Reference technique : Claude Code",

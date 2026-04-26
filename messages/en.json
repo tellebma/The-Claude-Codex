@@ -378,7 +378,8 @@
       "permissions-sandbox": "Permissions & Sandbox",
       "workflows": "Advanced Workflows",
       "browser-automation": "Browser Automation",
-      "ultraplan": "Ultraplan: plan in the cloud"
+      "ultraplan": "Ultraplan: plan in the cloud",
+      "rpi-workflow": "RPI: Research, Plan, Implement"
     },
     "reference": {
       "title": "Reference",

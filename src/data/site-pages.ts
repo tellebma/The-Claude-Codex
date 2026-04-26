@@ -681,6 +681,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-12",
   },
   {
+    path: "/advanced/rpi-workflow",
+    title: "RPI Workflow : Research, Plan, Implement avec validation gates",
+    description:
+      "Méthodologie en trois phases pour les features complexes : structure feature-folder, six subagents spécialisés (PM, UX, eng, CTO advisor), validation humaine entre chaque phase.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

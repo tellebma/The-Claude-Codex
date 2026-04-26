@@ -818,6 +818,30 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "challenge",
     ],
   },
+  {
+    title: "Claude Code methodologies ecosystem: Superpowers, BMAD, Spec Kit",
+    description:
+      "Overview of major open-source methodologies. Superpowers (TDD), Everything Claude Code (instinct scoring), Spec Kit (constitution), BMAD-METHOD (SDLC), OpenSpec (delta specs), gstack (role personas).",
+    href: "/advanced/methodologies-ecosystem",
+    section: "Advanced",
+    keywords: [
+      "superpowers",
+      "everything claude code",
+      "spec kit",
+      "bmad-method",
+      "bmad",
+      "openspec",
+      "gstack",
+      "agent shield",
+      "tdd",
+      "iron laws",
+      "constitution",
+      "delta specs",
+      "instinct scoring",
+      "methodology",
+      "comparison",
+    ],
+  },
   // Reference
   {
     title: "Technical reference: Claude Code",

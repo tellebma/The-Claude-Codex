@@ -380,7 +380,8 @@
       "browser-automation": "Browser Automation",
       "ultraplan": "Ultraplan : planifier dans le cloud",
       "rpi-workflow": "RPI : Research, Plan, Implement",
-      "cross-model-workflow": "Cross-Model : Claude + Codex/Gemini"
+      "cross-model-workflow": "Cross-Model : Claude + Codex/Gemini",
+      "methodologies-ecosystem": "Écosystème des méthodologies"
     },
     "reference": {
       "title": "Référence",

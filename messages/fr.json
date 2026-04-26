@@ -379,7 +379,8 @@
       "workflows": "Workflows avancés",
       "browser-automation": "Browser Automation",
       "ultraplan": "Ultraplan : planifier dans le cloud",
-      "rpi-workflow": "RPI : Research, Plan, Implement"
+      "rpi-workflow": "RPI : Research, Plan, Implement",
+      "cross-model-workflow": "Cross-Model : Claude + Codex/Gemini"
     },
     "reference": {
       "title": "Référence",

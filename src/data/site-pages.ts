@@ -690,6 +690,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-26",
   },
   {
+    path: "/advanced/cross-model-workflow",
+    title: "Cross-Model Workflow : faire reviewer Claude par un autre modèle",
+    description:
+      "Split tmux entre Claude Code et Codex CLI ou Gemini. Pattern test-time compute, format des Codex Findings sans réécriture, et limites concrètes du workflow multi-modèles.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

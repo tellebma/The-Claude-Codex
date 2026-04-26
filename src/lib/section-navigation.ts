@@ -159,6 +159,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.browser-automation", href: "/advanced/browser-automation" },
       { labelKey: "advanced.ultraplan", href: "/advanced/ultraplan" },
       { labelKey: "advanced.rpi-workflow", href: "/advanced/rpi-workflow" },
+      { labelKey: "advanced.cross-model-workflow", href: "/advanced/cross-model-workflow" },
     ],
   },
   reference: {

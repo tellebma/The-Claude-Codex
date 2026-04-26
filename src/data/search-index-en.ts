@@ -794,6 +794,30 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "PLAN.md",
     ],
   },
+  {
+    title: "Cross-Model Workflow: Claude + Codex/Gemini",
+    description:
+      "tmux split between Claude Code and Codex CLI or Gemini to have a plan reviewed by a second model. Test-time compute pattern, Codex Findings format.",
+    href: "/advanced/cross-model-workflow",
+    section: "Advanced",
+    keywords: [
+      "cross-model",
+      "codex cli",
+      "gemini cli",
+      "tmux",
+      "split",
+      "review",
+      "test-time compute",
+      "boris cherny",
+      "second opinion",
+      "qa review",
+      "codex finding",
+      "gpt-5",
+      "models",
+      "multi-model",
+      "challenge",
+    ],
+  },
   // Reference
   {
     title: "Technical reference: Claude Code",

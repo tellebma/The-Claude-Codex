@@ -639,10 +639,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/advanced/hooks",
     title: "Système de Hooks : Claude Code",
     description:
-      "Automatisez vos workflows avec les hooks PreToolUse, PostToolUse et Stop. Auto-format avec Prettier, notifications Slack, rapports de session et patterns avancés.",
-    priority: 0.75,
+      "Automatisez vos workflows avec les 32 événements de hooks Claude Code. PreToolUse, SubagentStart, WorktreeCreate, ChannelMessage. Auto-format, notifications Slack, audit log et patterns avancés.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-26",
   },
   {
     path: "/advanced/headless-ci",

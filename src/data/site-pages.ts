@@ -477,10 +477,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/agents/create-subagent",
     title: "Créer un subagent spécialisé",
     description:
-      "Guide complet pour créer des agents custom dans Claude Code. Structure d’un agent, exemples concrets, configuration et bonnes pratiques d’écriture de prompts pour agents.",
-    priority: 0.75,
+      "Guide complet pour créer des agents custom dans Claude Code. Frontmatter exhaustif (16 champs), focus sur effort, background, isolation worktree, initialPrompt et hooks par agent.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-04-26",
   },
   {
     path: "/agents/agent-teams",

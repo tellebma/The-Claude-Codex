@@ -1,0 +1,118 @@
+---
+title: "Context rot: why 1M tokens isn't 1M useful tokens"
+description: "The longer a Claude Code session runs, the less the context stays useful. Understanding the degradation, measuring the dumb zone, and using directed /compact and rewind instead of corrections."
+section: "prompting"
+order: 13
+datePublished: "2026-04-26"
+dateModified: "2026-04-26"
+badge: "NEW"
+---
+
+## The problem: a context that rots
+
+You've had a Claude Code session open for three hours. 600,000 tokens accumulated. Claude starts forgetting conventions you mentioned at the start, suggests solutions already tried and rejected, mixes up files between two features. You restart. Magic: it's lucid again.
+
+That's **context rot**. The term was popularized by Thariq (Claude Code team) and Dex (MLOps). The idea: model quality doesn't degrade linearly with context size. It collapses in stages, in a zone the community calls the **dumb zone**.
+
+<Callout type="info" title="The notebook analogy">
+Picture a notebook where you jot down every thought. The first 50 pages, you find everything. By page 200, flipping through takes longer to find a piece of info. By page 800, you give up and grab a new notebook. That's what Claude does with context.
+</Callout>
+
+## The dumb zone, in numbers
+
+On the 1M token window (Opus 4.7), observed useful quality varies by profile:
+
+| User profile / task | Dumb zone starts around |
+|---|---|
+| Claude Code beginner, vague prompts | 30 % of context filled |
+| Experienced user, structured prompts | 60 % of context filled |
+| Simple task (single file edit) | 60 % |
+| Complex task (multi-file refactor) | 30 to 40 % |
+
+On the standard 200K window, translate: the dumb zone hits between 60K and 150K tokens. Boris Cherny said it publicly: "Claude loses precision well before the hard limit. The advertised window isn't the usable window."
+
+## Three symptoms to spot it
+
+Before Claude starts hallucinating, it sends you signals:
+
+1. **It suggests a solution already rejected**. You said no 100,000 tokens ago. It forgot.
+2. **It mixes up files**. It imports a function from another module for no reason, or cites a variable name that doesn't exist.
+3. **It loops on a detail**. It rephrases the same answer over and over instead of moving forward.
+
+If you see two of those three signals within an hour, your context has entered the dumb zone.
+
+## Why automatic `/compact` isn't enough
+
+Claude Code automatically compresses context when it nears the cap. The summary it generates on its own is generic: it preserves open files, the latest diff, the latest question. It throws away half of your business reasoning.
+
+**Directed** `/compact` does much better:
+
+```bash
+/compact I'm starting phase 3 of the auth refactor. Keep only:
+1. The API contract defined at session start
+2. The 3 architectural decisions validated (JWT, refresh token, rotation)
+3. The list of files to modify in phase 3
+Forget all the failed attempts from phases 1 and 2.
+```
+
+You give Claude a spec of what to remember. The summary that comes out is five times more useful.
+
+<Callout type="tip" title="When to compact">
+Compact proactively at 50 % fill if the task is complex, 70 % if it's simple. Don't wait for auto-compact, which kicks in too late, when you're already in the dumb zone.
+</Callout>
+
+## Rewind beats correct
+
+Boris formalized a rule that changes everything: **when Claude goes the wrong way, don't correct, rewind**.
+
+Concretely: double-Esc to go back to the previous turn and rephrase your initial prompt, instead of adding "no, do it like this instead". Correcting leaves the failed attempt in the context, plus your frustration, plus the new instruction. Three turns wasted. Rewind erases the wrong path, as if it never happened.
+
+| Approach | Token cost | Context quality |
+|---|---|---|
+| **Correct**: "No, do X instead of Y" | +800 to +2000 tokens, 3 messages in history | Polluted by the wrong path |
+| **Rewind** (double-Esc + rephrase) | 0 tokens added, history stays clean | As if the error never happened |
+
+Rewind doesn't erase your work. It erases a failed attempt. Your commits, files, file tree: untouched.
+
+## Test-time compute: one agent creates the bug, another finds it
+
+Boris shared a surprising pattern: to find your own bugs, separate the contexts. One agent codes the feature, another reviews it. Same model, different contexts.
+
+Why does it work? The first agent is anchored in its reasoning, decisions, biases. The second arrives blank, doesn't have the first one's "conviction", and sees what's wrong. It's cheaper than asking the first one to re-read itself.
+
+```bash
+# 1. Code the feature in one session
+/agent code-implementer add rate limiting to the auth middleware
+
+# 2. Review in ANOTHER session, with only the diff as context
+claude --new-session
+/agent code-reviewer review only the diff of commit abc123
+```
+
+The second agent sees the diff without all the saga that led to it. That's exactly what makes it effective.
+
+## Myth: "agentic search > RAG"
+
+To handle massive codebases, many teams tried to index their code in vector databases to "augment" Claude's context. Anthropic tried, then dropped it.
+
+The reason, per Boris: code drifts faster than the index. Permissions are complex (who can see what). And mostly, Claude is better when it **actively searches** the repo (with `grep`, `find`, `ls`) than when you serve it vectorized chunks. Agentic search keeps context control; RAG dilutes it.
+
+Practical consequence: let Claude explore. Point it to the right folders via `CLAUDE.md`. Don't try to "load everything" at session start.
+
+## Anti-rot habits
+
+A few reflexes that delay the dumb zone:
+
+1. **Start each session with a clear goal**. One session = one mission. No zigzag between features.
+2. **Compact proactively with a directed hint** at 50 % fill.
+3. **Prefer several short sessions** over a marathon session. A new session is a fresh brain.
+4. **For tasks > 2 hours, use Plan Mode**: the plan stays compact even after 50 subtasks.
+5. **No copy-paste of full files** in the prompt if Claude can read them with Read. Read is lazy, copy-paste eats input context.
+6. **Use `/rewind` on every wrong path**. No additive correction.
+
+## Next steps
+
+- [Context management and 200K window](/prompting/context-management) for the basics of context handling
+- [Power Tips](/prompting/power-tips) for Esc Esc, /rewind, ultrathink shortcuts
+- [Extended Thinking and Plan Mode](/prompting/thinking-and-planning) for long sessions
+- [Multi-agent orchestration](/agents/orchestration) to structure test-time compute

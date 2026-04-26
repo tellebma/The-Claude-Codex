@@ -86,6 +86,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "agents.agent-teams", href: "/agents/agent-teams" },
       { labelKey: "agents.best-agents", href: "/agents/best-agents" },
       { labelKey: "agents.orchestration", href: "/agents/orchestration" },
+      { labelKey: "agents.orchestration-patterns", href: "/agents/orchestration-patterns" },
       { labelKey: "agents.agent-sdk", href: "/agents/agent-sdk" },
       { labelKey: "agents.performance-limits", href: "/agents/performance-limits" },
       { labelKey: "agents.background-agents", href: "/agents/background-agents" },
@@ -106,6 +107,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "prompting.chaining-and-agents", href: "/prompting/chaining-and-agents" },
       { labelKey: "prompting.non-dev-prompting", href: "/prompting/non-dev-prompting" },
       { labelKey: "prompting.power-tips", href: "/prompting/power-tips" },
+      { labelKey: "prompting.context-rot", href: "/prompting/context-rot" },
     ],
   },
   future: {
@@ -156,6 +158,9 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.workflows", href: "/advanced/workflows" },
       { labelKey: "advanced.browser-automation", href: "/advanced/browser-automation" },
       { labelKey: "advanced.ultraplan", href: "/advanced/ultraplan" },
+      { labelKey: "advanced.rpi-workflow", href: "/advanced/rpi-workflow" },
+      { labelKey: "advanced.cross-model-workflow", href: "/advanced/cross-model-workflow" },
+      { labelKey: "advanced.methodologies-ecosystem", href: "/advanced/methodologies-ecosystem" },
     ],
   },
   reference: {

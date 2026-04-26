@@ -1,0 +1,177 @@
+---
+title: "Écosystème des méthodologies Claude Code : Superpowers, BMAD, Spec Kit et compagnie"
+description: "Panorama des grandes méthodologies open-source qui structurent les workflows Claude Code. Superpowers, Everything Claude Code, Spec Kit, BMAD-METHOD, OpenSpec, gstack, et comment les composer."
+section: "advanced"
+order: 13
+datePublished: "2026-04-26"
+dateModified: "2026-04-26"
+badge: "NEW"
+---
+
+## Pourquoi un panorama
+
+L'écosystème Claude Code a vu apparaître une poignée de méthodologies open-source qui essaient de répondre toutes à la même question : **comment industrialiser un workflow agentique ?** Chacune a sa réponse, ses dogmes, et son public.
+
+Ce guide les compare honnêtement. Pas pour désigner un gagnant : aucune n'est universelle, et la plupart se composent. Pour vous aider à choisir celle qui colle à votre projet, ou à les mixer intelligemment.
+
+## Vue d'ensemble
+
+| Méthodologie | Star count GH | Philosophie | Audience |
+|---|---|---|---|
+| **Superpowers** | 12k+ | TDD agentique avec Iron Laws | Ingénieurs qualité, équipes test-first |
+| **Everything Claude Code** | 8k+ | Instinct scoring, AgentShield | Power users, scripteurs |
+| **Spec Kit** | 9k+ | Spec-first, constitution projet | Architectes, équipes greenfield |
+| **BMAD-METHOD** | 7k+ | SDLC complet avec personas | Équipes produit-eng |
+| **OpenSpec** | 5k+ | Delta specs, brownfield | Équipes legacy, refactoring |
+| **gstack** | 4k+ | Role personas, parallel sprints | Solo dev, équipes restreintes |
+
+Chiffres approximatifs au 2026-04-26. La hiérarchie change tous les mois.
+
+## Superpowers : la discipline TDD
+
+Superpowers est probablement la méthodologie la plus radicale de la liste. Sa proposition tient en trois Iron Laws :
+
+1. **Tests first, always** : aucun code de production n'est écrit avant que le test correspondant n'existe et n'échoue
+2. **Red-Green-Refactor strict** : pas de refactor avant le green, pas de feature avant le refactor
+3. **Coverage > 80 %** ou la PR est bloquée
+
+Côté Claude Code, Superpowers fournit un agent `tdd-guide` qui refuse littéralement de coder une feature sans test préexistant. Le prompt du subagent contient une garde explicite :
+
+```yaml
+---
+name: tdd-guide
+description: TDD enforcer. PROACTIVELY refuse to write code without a failing test first.
+---
+```
+
+**Pour qui ?** Les équipes qui ont déjà une culture test-first et veulent enforcer chez les agents la même discipline qu'elles s'imposent. Pas idéal pour un prototype où le test est une nuisance.
+
+## Everything Claude Code : la boite à outils
+
+Everything Claude Code est moins une méthodologie qu'une **collection** de patterns réutilisables. Le concept central est l'**instinct scoring** : chaque session est notée selon des critères (qualité du plan, respect du DoD, propreté du diff), et un agent `instinct-import` extrait les patterns qui ont marché pour les promouvoir en skills réutilisables.
+
+Côté outillage, le repo fournit aussi **AgentShield**, un scanner de sécurité qui audite les hooks, les MCP servers et les agent definitions à la recherche d'injections de prompt ou de fuites de credentials.
+
+```bash
+# Scan de la config locale
+npx everything-claude-code:security-scan
+```
+
+**Pour qui ?** Les power users qui veulent capitaliser sur ce qui marche dans leurs sessions, et les sécurité-paranoïaques qui veulent auditer leur stack agent.
+
+## Spec Kit : la constitution
+
+Spec Kit retourne le problème : avant de coder quoi que ce soit, vous écrivez une **constitution** (`SPEC.md`) qui décrit ce que le système **fait**, pas comment il le fait. La constitution est versionnée. Toute feature passe par une révision de la constitution avant l'implémentation.
+
+```
+SPEC.md
+├── 1. Domaine métier
+├── 2. Acteurs et leurs intentions
+├── 3. Invariants (jamais violés)
+├── 4. Capacités (les verbes du système)
+└── 5. Limites (ce que le système ne fera jamais)
+```
+
+L'idée : une constitution stable empêche les dérives. Si une feature voulue par le PM enfreint un invariant, la feature n'est pas implémentée. Point.
+
+**Pour qui ?** Greenfield, projets où l'architecture est encore plastique. Mauvaise idée sur un legacy de 5 ans : votre constitution sera incohérente avec le code existant.
+
+## BMAD-METHOD : le SDLC complet
+
+BMAD-METHOD est la plus ambitieuse : elle modélise le **cycle de développement complet** avec des **personas-agents** spécialisés (Business analyst, Project manager, Developer, QA, Architect, etc.). Chaque persona a son propre prompt, ses propres outils, et ses propres artefacts.
+
+Le workflow type :
+
+```
+Business Analyst → ANALYSIS.md
+        ↓
+Project Manager → PLAN.md
+        ↓
+Architect → ARCHITECTURE.md
+        ↓
+Developer → CODE
+        ↓
+QA → TEST_REPORT.md
+```
+
+C'est lourd. C'est lent. C'est complet. Vous obtenez à la sortie un dossier de 12 fichiers documentant tout le raisonnement.
+
+**Pour qui ?** Équipes produit-eng qui ont besoin de traçabilité forte (médical, finance, secteur réglementé). Overkill pour une PR de bug fix.
+
+## OpenSpec : les delta specs
+
+OpenSpec part du constat que la plupart des projets sont **brownfield** : un legacy existe, et on ne va pas écrire une constitution complète pour un repo de 200k lignes de code. La méthodologie propose des **delta specs** : on ne spécifie que ce qui change.
+
+```
+delta-2026-04-jwt-rotation.md
+├── Ce qui change : authentification stateless → stateless avec rotation
+├── Ce qui reste invariant : interface publique d'auth
+└── Ce qui doit être migré : tables de session existantes
+```
+
+Les delta specs s'empilent dans le repo. On peut, à tout moment, reconstituer l'historique des décisions architecturales.
+
+**Pour qui ?** Équipes sur du legacy, refactorings lourds, projets en migration progressive. Très complémentaire avec [RPI](/advanced/rpi-workflow).
+
+## gstack : les role personas
+
+gstack est la méthodologie la plus **légère** de la liste. Pas de constitution, pas de SDLC, pas d'Iron Laws. Juste : **assignez un role persona à chaque session**.
+
+```bash
+# Session matin : codez en mode "ingénieur senior"
+claude --persona senior-engineer
+
+# Session aprem : reviewez en mode "code reviewer"
+claude --persona code-reviewer
+```
+
+Le persona injecte un prompt système qui contraint le ton, les priorités et les outils. C'est tout. La méthodologie tient sur deux pages.
+
+**Pour qui ?** Solo devs, équipes restreintes, projets perso. Pas industrialisable pour de gros projets, mais imbattable en prise en main.
+
+## Comment les composer
+
+Aucune méthodologie n'est exclusive. Voici quelques compositions qui fonctionnent en pratique :
+
+### "Discipline" : Superpowers + RPI
+
+TDD strict en phase 3 de RPI. La phase 2 reste libre, mais dès qu'on entre en implémentation, c'est tests first. Les Iron Laws de Superpowers complètent les validation gates de RPI.
+
+### "Architecture longue" : Spec Kit + BMAD
+
+Spec Kit fournit la constitution invariante. BMAD-METHOD fournit le cycle de livraison. Adapté aux projets greenfield avec une équipe complète.
+
+### "Refactor legacy" : OpenSpec + Cross-Model
+
+OpenSpec capture les decisions de refactor. Cross-Model les fait reviewer par un second modèle avant l'implémentation. Très efficace pour casser un monolithe.
+
+### "Solo prod ready" : gstack + Everything Claude Code
+
+gstack pour les role personas du quotidien. Everything Claude Code pour capitaliser sur les patterns qui marchent et auditer la sécurité des configs. Le combo des freelances.
+
+## Arbre de décision
+
+Si vous ne savez pas par où commencer :
+
+| Votre situation | Méthodologie de départ |
+|---|---|
+| Solo dev, side project | **gstack** |
+| Équipe restreinte, prototype | **gstack** ou rien |
+| Équipe restreinte, prod | **Superpowers** |
+| Refactor d'un legacy | **OpenSpec** + RPI |
+| Greenfield avec constitution forte | **Spec Kit** |
+| Secteur réglementé, traçabilité forte | **BMAD-METHOD** |
+| Power user qui veut capitaliser | **Everything Claude Code** |
+
+## Le risque commun : la lourdeur
+
+Toutes ces méthodologies ont un coût. Plus vous outillez, plus vous mettez de friction entre l'idée et le code livré. Les meilleures équipes ne sont pas celles qui adoptent une méthodologie en bloc, mais celles qui en piquent les bonnes pratiques en gardant un workflow fluide.
+
+Si votre méthodologie ralentit vos PRs sans réduire vos bugs, elle est trop lourde pour vous. Reculez d'un cran.
+
+## Prochaines étapes
+
+- [RPI Workflow](/advanced/rpi-workflow) pour la méthodologie maison du Codex
+- [Cross-Model Workflow](/advanced/cross-model-workflow) pour la review multi-modèles
+- [Workflows avancés](/advanced/workflows) pour la séquence Research/Plan/Execute/Review/Ship
+- [Patterns d'orchestration](/agents/orchestration-patterns) pour les briques techniques sous-jacentes

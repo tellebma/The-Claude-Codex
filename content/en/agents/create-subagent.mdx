@@ -4,7 +4,7 @@ description: "Step-by-step guide to creating Claude Code sub-agents: configurati
 section: "agents"
 order: 2
 datePublished: "2026-03-10"
-dateModified: "2026-03-30"
+dateModified: "2026-04-26"
 ---
 
 ## Why create a custom agent?
@@ -124,8 +124,78 @@ ranked by severity.
 ```
 
 <Callout type="tip" title="isolation: worktree">
-The `isolation: "worktree"` field creates a dedicated Git worktree for the agent. This is useful when running multiple agents in parallel on the same repository: each one works in its own space with no risk of conflicts.
+The `isolation: "worktree"` field creates a dedicated Git worktree for the agent. This is useful when running multiple agents in parallel on the same repository: each one works in its own space with no risk of conflicts. Available since Claude Code v2.1.106.
 </Callout>
+
+### Advanced fields in detail
+
+A few fields deserve a deeper explanation because they radically change the agent's behavior.
+
+#### `effort`: tuning reasoning
+
+The `effort` field controls how many "thinking" tokens the agent can spend before acting.
+
+| Value | Max thinking tokens | When to use |
+|---|---|---|
+| `low` | ~500 | Mechanical tasks (lint, format, lookup) |
+| `medium` | ~5000 (default) | Day-to-day dev, light code review |
+| `high` | ~20000 | Architecture, complex debugging, security audit |
+
+An `effort: high` agent costs more but avoids mistakes on critical calls. A `low` agent is nearly free but only fits unambiguous tasks.
+
+#### `background`: non-blocking execution
+
+With `background: true`, the agent runs without blocking the main session. You keep the prompt to do something else. You recover its output via `/tasks` when it's done.
+
+```yaml
+---
+name: long-research
+description: "Full tech-debt audit across 200 files."
+background: true
+isolation: worktree
+maxTurns: 200
+---
+```
+
+Combine with `isolation: worktree` to avoid conflicts if you're editing the same repo in parallel.
+
+#### `initialPrompt`: injecting stable context
+
+`initialPrompt` is concatenated **before** the user prompt on every invocation. Ideal to restate immutable conventions without repeating them on every call.
+
+```yaml
+---
+name: react-component-builder
+description: "Creates a React component compliant with the design system."
+initialPrompt: |
+  Design system conventions:
+  - All components are function components with hooks
+  - No default exports
+  - Tailwind utility-first, never custom CSS
+  - Vitest tests co-located as .test.tsx
+---
+```
+
+The advantage over putting these conventions in the main prompt: `initialPrompt` sits at the top of the agent context, so it's less likely to be ignored when the main prompt grows long.
+
+#### `hooks`: agent-specific hooks
+
+You can attach hooks to the agent's lifecycle, in addition to global hooks. Handy to log what one specific agent does without polluting other agents' logs.
+
+```yaml
+---
+name: db-migration-agent
+description: "Applies Prisma migrations."
+hooks:
+  PreToolUse:
+    - matcher: Bash
+      command: "echo '[db-migration] $(date)' >> /tmp/db-migrations.log"
+  Stop:
+    - command: "bash ~/.claude/hooks/notify-team.sh"
+---
+```
+
+These hooks only apply to invocations **of this agent**. Other agents and the main session are unaffected.
 
 ## Example 1: Code review agent
 

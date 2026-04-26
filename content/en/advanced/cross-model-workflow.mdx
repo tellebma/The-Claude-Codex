@@ -1,0 +1,162 @@
+---
+title: "Cross-Model Workflow: have Claude reviewed by another model"
+description: "tmux split between Claude Code and Codex CLI (or Gemini). Test-time compute pattern, Codex Findings format without rewriting, and concrete limits of the multi-model workflow."
+section: "advanced"
+order: 12
+datePublished: "2026-04-26"
+dateModified: "2026-04-26"
+badge: "NEW"
+---
+
+## The principle: two models, two contexts
+
+You're writing a critical architecture plan with Claude Code. The plan is solid, but you know you steered it a certain way. How do you know if another model, starting from a blank context, would see the same weak points?
+
+That's what the **Cross-Model Workflow** answers: open a second session with a different model (Codex CLI / GPT, Gemini CLI), pass it **only** your plan or diff, and ask it to point out what's wrong. Not to redo the work. To challenge the result.
+
+<Callout type="info" title="Why it works">
+Boris Cherny formalized this as **test-time compute**: the same model can create a bug, and another instance of that model can find it, as long as their contexts differ. With two different models, the effect is even stronger: their training biases don't overlap.
+</Callout>
+
+## The architecture: tmux split
+
+The reference pattern uses tmux to keep both sessions side by side:
+
+```
+┌─────────────────────────┬─────────────────────────┐
+│                         │                         │
+│   Claude Code (Opus)    │   Codex CLI (GPT-5.4)   │
+│   Plan Mode             │   QA review mode        │
+│                         │                         │
+│   plan.md (writing)     │   plan.md (reading)     │
+│                         │                         │
+└─────────────────────────┴─────────────────────────┘
+```
+
+Claude writes the plan in the left session. You copy the plan (or its path), tab to the right session, Codex reads and comments. You stay in control of both.
+
+```bash
+# Launch the tmux split
+tmux new-session -d -s cross-model
+tmux send-keys -t cross-model 'claude' C-m
+tmux split-window -h -t cross-model
+tmux send-keys -t cross-model 'codex' C-m
+tmux attach -t cross-model
+```
+
+## The Codex Finding format
+
+The typical mistake is asking Codex to **rewrite** Claude's plan. The result: a third hybrid plan, unreadable, mixing the two approaches. The good pattern is different: Codex appends **Findings** without touching the original plan.
+
+### Prompt to give Codex
+
+```markdown
+You are reviewing a plan written by another AI agent (Claude Opus).
+Your job is NOT to rewrite it. Your job is to add "Findings" to it.
+
+For each phase, append a new sub-heading:
+"### Phase X.5 — Codex Finding"
+
+In each Finding, write:
+- What this phase glosses over
+- What edge case is not addressed
+- What dependency assumption seems weak
+
+Keep findings SHORT (2-3 bullets max). Do not propose alternative
+implementations. Just point at the gaps.
+```
+
+### Sample output
+
+```markdown
+## Phase 3: Migrate the users table
+
+[Claude's original plan]
+
+### Phase 3.5 — Codex Finding
+
+- The plan doesn't mention write downtime during migration.
+  On 50M rows, this blocks writes for ~12 minutes.
+- The `email` index is rebuilt at the end: during that time,
+  login queries fall back to full scans.
+- No rollback plan if migration fails halfway through.
+```
+
+Three short, factual findings that point at gaps without proposing another solution. You, human, decide what to do: amend the plan, ignore a finding that doesn't apply in your context, or send a phase back to step 2.
+
+## The concrete benefit
+
+On 20 plans tested in-house, here are the Findings types Codex or Gemini most often raise on Claude plans:
+
+| Finding type | Frequency |
+|---|---|
+| Database edge case (concurrency, locks) | 35 % |
+| Network error / timeout handling | 25 % |
+| Security / forgotten authentication | 15 % |
+| Performance under load | 15 % |
+| Backward compatibility | 10 % |
+
+None of these are exotic: they're angles Claude covers when explicitly asked. The Cross-Model benefit is that Codex sees them **without being asked**.
+
+## Gemini CLI adaptation
+
+The workflow works the same way with Gemini CLI. Replace `codex` by `gemini` in the tmux split:
+
+```bash
+tmux send-keys -t cross-model 'gemini' C-m
+```
+
+The review prompt is identical. Gemini Findings tend to be more structural (architecture, separation of concerns) where Codex raises more concrete bugs. Combining both on critical plans isn't absurd, but doubles the cost.
+
+## When to use, when to skip
+
+The Cross-Model Workflow has a non-negligible cost:
+
+- Token cost (you pay two models)
+- Time cost (the review takes as long as the original plan)
+- Cognitive cost (you arbitrate between sometimes contradictory Findings)
+
+It's worth it when:
+
+| Case | Cross-Model recommended? |
+|---|---|
+| Critical architecture refactor (auth, payment, data) | Yes |
+| Schema migration on a big table | Yes |
+| Plan with > 4 hours of implementation | Yes |
+| Simple feature, 1 to 5 files | No |
+| Isolated bug fix | No |
+| Exploration spike, throwaway prototype | No |
+
+Simple rule: if the plan has a high error cost (downtime, security, data), the Cross-Model cost is largely amortized.
+
+## Cross-Model and RPI
+
+Cross-Model composes naturally with [RPI](/advanced/rpi-workflow). You generate `PLAN.md` in phase 2 with Claude, you pass it to Codex/Gemini before phase 3. Findings become a third validation gate before implementation:
+
+```
+Phase 2: Multi-role plan (Claude)
+      │
+      ▼
+Phase 2.5: Cross-Model review (Codex/Gemini)
+      │
+      ▼
+Phase 3: Implementation (Claude)
+```
+
+This extra gate adds 30 minutes to 1 hour to the workflow, and typically catches 1 to 3 issues that the three business angles (PM, UX, eng) didn't see.
+
+## Limits and pitfalls
+
+A few things to know before adopting the pattern:
+
+- **No automatic file sharing** between Claude Code and Codex/Gemini: you pass the plan via copy-paste or file reference
+- **CLIs have separate permissions**: Codex doesn't see your `CLAUDE.md`. You sometimes need to summarize project context for it
+- **Sometimes redundant findings**: if Codex and Gemini raise the same point, it's probably valid. If they diverge, it's probably a style question
+- **Cumulative costs**: Opus + GPT-5.4 on a 4000-token plan = ~$0.40 USD for the review. Not negligible on big sessions.
+
+## Next steps
+
+- [Context rot](/prompting/context-rot) to understand why separate contexts improve review
+- [RPI Workflow](/advanced/rpi-workflow) to integrate Cross-Model in phase 2.5
+- [Methodologies ecosystem](/advanced/methodologies-ecosystem) for an overview of other review methodologies
+- [Background Agents](/agents/background-agents) to automate part of the review in the background

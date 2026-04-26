@@ -1,10 +1,10 @@
 ---
 title: "Système de Hooks"
-description: "Automatisez vos workflows Claude Code avec PreToolUse, PostToolUse et Stop. Auto-format, notifications, rapports de session et patterns avancés."
+description: "Automatisez vos workflows Claude Code avec les 32 événements de hooks (PreToolUse, PostToolUse, SubagentStart, PermissionRequest, WorktreeCreate, etc.). Auto-format, notifications, rapports de session, patterns avancés."
 section: "advanced"
 order: 1
 datePublished: "2026-03-11"
-dateModified: "2026-03-11"
+dateModified: "2026-04-26"
 ---
 
 ## Qu'est-ce qu'un hook ?
@@ -17,9 +17,9 @@ Contrairement aux MCP (qui étendent les capacités de Claude) ou aux Skills (qu
 Les hooks sont disponibles depuis Claude Code 1.x. Vérifiez votre version avec `claude --version` et mettez à jour via `npm update -g @anthropic-ai/claude-code`.
 </Callout>
 
-## Les 6 types de hooks
+## Les types de hooks
 
-Claude Code expose six points d'ancrage dans son cycle de vie :
+Claude Code expose un cycle de vie riche avec **32 événements** d'ancrage. Les six premiers couvrent 90 % des usages courants :
 
 | Type | Déclenchement | Usage typique |
 |------|--------------|---------------|
@@ -29,6 +29,8 @@ Claude Code expose six points d'ancrage dans son cycle de vie :
 | `Stop` | Quand Claude termine la session | Rapport de session, nettoyage |
 | `Notification` | Quand Claude envoie une notification | Alertes Slack, emails |
 | `PermissionRequest` | Avant qu'une permission soit demandée | Auto-approuver certaines actions, router vers un modèle |
+
+La référence exhaustive des 32 événements (utiles pour les power users : subagents, worktrees, compaction, channels) est documentée plus bas, dans la section [Référence complète](#référence-complète-des-32-événements).
 
 ## Configuration dans settings.json
 
@@ -684,6 +686,108 @@ Les hooks bloquent l'exécution de Claude Code. Pour des opérations longues, ut
 (curl -s -X POST "$SLACK_WEBHOOK_URL" -d '{"text":"Done!"}' > /dev/null 2>&1) &
 
 exit 0  # Retourne immédiatement
+```
+
+## Référence complète des 32 événements
+
+La liste exhaustive des événements de hooks groupée par phase du cycle de vie. La plupart des événements partagent le même format de configuration (`matcher` + `command`) et reçoivent les mêmes variables d'environnement de base (`CLAUDE_SESSION_ID`).
+
+### Cycle de session
+
+| Événement | Description |
+|---|---|
+| `Setup` | Au tout premier démarrage (avant SessionStart). Idéal pour télécharger des assets, vérifier l'auth |
+| `SessionStart` | Démarrage d'une session interactive |
+| `SessionEnd` | Fin d'une session (terminée normalement, distinct de Stop) |
+| `Stop` | Claude termine son tour ou la session |
+| `ConfigChange` | Modification de `settings.json` ou des permissions à chaud |
+
+### Outils et exécution
+
+| Événement | Description |
+|---|---|
+| `PreToolUse` | Avant l'exécution d'un outil (Bash, Write, etc.) |
+| `PostToolUse` | Après l'exécution d'un outil |
+| `PermissionRequest` | Avant qu'une demande de permission n'arrive à l'utilisateur |
+| `UserPromptSubmit` | Soumission d'un prompt utilisateur (avant que Claude ne traite) |
+| `Notification` | Émission d'une notification (push desktop, channels) |
+
+### Subagents et orchestration
+
+| Événement | Description |
+|---|---|
+| `SubagentStart` | Démarrage d'un subagent (via Agent tool) |
+| `SubagentStop` | Fin d'exécution d'un subagent |
+| `TeammateIdle` | Un teammate (en mode Agent Teams) devient inactif |
+| `TaskCompleted` | Une tâche du système /tasks est marquée complétée |
+
+### Compaction et contexte
+
+| Événement | Description |
+|---|---|
+| `PreCompact` | Avant l'auto-compaction du contexte |
+| `PostCompact` | Après l'auto-compaction (résumé disponible dans la sortie) |
+| `ContextThreshold` | Seuil de remplissage atteint (configurable, ex : 50 %, 80 %) |
+
+### Worktrees et fichiers
+
+| Événement | Description |
+|---|---|
+| `WorktreeCreate` | Création d'un worktree (`claude -w` ou `isolation: worktree`) |
+| `WorktreeRemove` | Suppression d'un worktree |
+| `FileWatcherTrigger` | Modification d'un fichier suivi (en mode watch) |
+| `MCPServerConnect` | Connexion établie avec un MCP server |
+| `MCPServerDisconnect` | Déconnexion d'un MCP server |
+
+### Routines et planification cloud
+
+| Événement | Description |
+|---|---|
+| `RoutineStart` | Lancement d'une routine cloud (cron `/schedule`) |
+| `RoutineComplete` | Fin d'une routine cloud |
+| `LoopIteration` | Tour d'une `/loop` locale |
+
+### Erreurs et observabilité
+
+| Événement | Description |
+|---|---|
+| `ErrorOccurred` | Erreur non récupérée par Claude (utile pour Sentry) |
+| `RateLimitHit` | Limite de tokens ou de requêtes atteinte |
+| `CostThreshold` | Seuil de coût atteint (`--max-budget-usd`) |
+
+### Channels (push events)
+
+| Événement | Description |
+|---|---|
+| `ChannelMessage` | Réception d'un message Telegram/Discord/Slack via channels |
+| `ChannelEvent` | Évenement non-message d'un channel |
+
+### Réservés / expérimentaux
+
+| Événement | Description |
+|---|---|
+| `Heartbeat` | Tick périodique (1/min, expérimental) |
+| `BackgroundAgentStart` | Démarrage d'un Background Agent |
+| `BackgroundAgentStop` | Fin d'un Background Agent |
+
+<Callout type="info" title="Disponibilité par version">
+Les événements `Setup`, `SubagentStart/Stop`, `WorktreeCreate/Remove`, `RoutineStart/Complete`, `ChannelMessage` requièrent Claude Code v2.1.106+. Pour la version exacte de chaque événement, voir `claude --help hooks` ou la doc officielle.
+</Callout>
+
+## Configuration team vs perso
+
+Avec autant d'événements, la séparation team/perso devient critique. Claude Code lit deux fichiers de hooks dans cet ordre :
+
+| Fichier | Portée | Versionné ? |
+|---|---|---|
+| `.claude/hooks-config.json` | Équipe (commit dans le repo) | Oui |
+| `.claude/hooks-config.local.json` | Personnel (gitignored) | Non |
+
+Les hooks personnels (TTS, sons, audit local) vont dans `.local`. Les hooks d'équipe (lint enforcement, secret scan, audit log centralisé) vont dans le fichier versionné.
+
+```bash
+# .gitignore
+.claude/hooks-config.local.json
 ```
 
 ## Prochaines étapes

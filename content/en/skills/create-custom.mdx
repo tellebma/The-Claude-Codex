@@ -4,7 +4,7 @@ description: "Step-by-step guide to creating your own Claude Code Skills: struct
 section: "skills"
 order: 3
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-04-26"
 ---
 
 ## Why create a custom Skill?
@@ -42,6 +42,105 @@ Custom Skills are simple Markdown files. Their location determines their scope.
 <Callout type="tip" title="Naming convention">
 Use **kebab-case** for file names: `create-component.md`, not `createComponent.md`. The file name (without extension) becomes the slash command. Choose short, descriptive names.
 </Callout>
+
+## Complete frontmatter reference
+
+Like agents, Skills expose a YAML frontmatter that drives their behavior before they're even invoked. Here are the 15 available fields.
+
+| Field | Type | Description |
+|---|---|---|
+| `name` | string | Skill name, used to invoke it (`Skill(skill: "...")`) |
+| `description` | string | Description Claude reads to decide whether to use this Skill. The field is a **trigger**, not a summary: it must describe **when** to call the Skill |
+| `when_to_use` | string | Precise invocation conditions. More explicit than `description` |
+| `arguments` | string | Expected arguments format (free-form or pattern) |
+| `allowed-tools` | string[] | Tools the Skill can use (`Write`, `Bash`, `WebFetch`...) |
+| `disable-model-invocation` | boolean | `true` prevents Claude from auto-invoking this Skill (the user must call it explicitly) |
+| `user-invocable` | boolean | `true` makes the Skill callable as a slash command by the user |
+| `context` | string | `"fork"` loads the Skill in an isolated context (doesn't pollute the main session) |
+| `agent` | string | Name of an agent that's the only authorized invoker (Agent Skill) |
+| `paths` | string[] | Path globs where this Skill applies (e.g., `src/api/**`) |
+| `shell` | string | Shell to use for commands (`bash`, `zsh`, etc.) |
+| `model` | string | Preferred model for this Skill (`haiku`, `sonnet`, `opus`) |
+| `hooks` | object | Skill-lifecycle-specific hooks |
+| `mcp-servers` | string[] | MCP servers needed for this Skill |
+| `permission-mode` | string | Permission level applied when the Skill runs |
+
+<Callout type="info" title="description = trigger, not summary">
+Thariq (Claude Code team) insists: the `description` field is read by Claude to **decide** whether to invoke the Skill. A vague description (`"Generates a component"`) doesn't trigger. A clear one (`"Use when the user asks for a new React component in src/components/"`) does.
+</Callout>
+
+### Example of complete frontmatter
+
+```yaml
+---
+name: react-component-builder
+description: "Use PROACTIVELY when the user asks for a new React component."
+when_to_use: "Only when the request mentions a NEW component (creation), not a fix"
+arguments: "<component-name> [props] [variants]"
+allowed-tools:
+  - Write
+  - Read
+  - Bash
+user-invocable: true
+context: fork
+paths:
+  - "src/components/**"
+  - "apps/*/src/components/**"
+model: sonnet
+permission-mode: default
+---
+```
+
+## Progressive disclosure: Skills as multiple files
+
+For complex Skills, a single 500-line file becomes unreadable. The **progressive disclosure** pattern splits the Skill into several files, with SKILL.md staying as the main entry point.
+
+```
+.claude/skills/
+└── api-endpoint-builder/
+    ├── SKILL.md          # main entry, frontmatter and general flow
+    ├── reference.md      # list of conventions (HTTP codes, error format, etc.)
+    ├── examples.md       # full input → output examples
+    └── scripts/
+        ├── scaffold.sh   # reusable bash script
+        └── test.sh
+```
+
+SKILL.md stays short. When Claude needs a detail, it reads `reference.md` or `examples.md` on demand. The token cost at invocation is minimal, the token cost at use is sized to what's actually needed.
+
+### Embedding `!command` in SKILL.md
+
+Another Thariq technique: embed **dynamic** shell commands directly in the Skill markdown, prefixed with `!`. Claude runs the command at read time and inserts the result into its context.
+
+```markdown
+# API Endpoint Builder
+
+## Current endpoint state
+
+!ls src/api/
+
+## Conventions
+
+The project follows the REST pattern documented in reference.md.
+```
+
+At runtime, Claude reads the markdown, runs `ls src/api/`, and **incorporates the output** as if it were hand-written. Useful to inject dynamic context (repo state, latest migration, dependencies) without hardcoding.
+
+### Per-folder Skills with `paths`
+
+In a monorepo, you sometimes want a Skill to apply only to a part of the repo. The `paths` field filters invocations:
+
+```yaml
+---
+name: prisma-model-builder
+description: "Creates a Prisma model with associated migrations."
+paths:
+  - "apps/backend/prisma/**"
+  - "apps/api-server/prisma/**"
+---
+```
+
+The Skill triggers only when the current work touches one of these paths. On a 20-subproject monorepo, this prevents Claude from suggesting a Prisma model when you're working on the frontend.
 
 ## Anatomy of an effective Skill
 

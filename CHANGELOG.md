@@ -1,3 +1,66 @@
+# [1.6.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.5.0...v1.6.0) (2026-04-24)
+
+
+### Bug Fixes
+
+* **sonar:** prefer globalThis over window in FooterVersion ([0e64784](https://github.com/tellebma/The-Claude-Codex/commit/0e647842e1d49b130607169563335d4055306684)), closes [#86](https://github.com/tellebma/The-Claude-Codex/issues/86)
+
+
+### Features
+
+* **footer:** version dynamique via GitHub Releases API ([#85](https://github.com/tellebma/The-Claude-Codex/issues/85)) ([efd0881](https://github.com/tellebma/The-Claude-Codex/commit/efd0881ab15abea5523043b7518509a71da99cd3))
+
+# [1.5.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.4.0...v1.5.0) (2026-04-24)
+
+
+### Bug Fixes
+
+* **cd:** aligne Dockerfile sur Node 24, supprime npm runtime, fix permission Vercel ([#83](https://github.com/tellebma/The-Claude-Codex/issues/83)) ([e5713ba](https://github.com/tellebma/The-Claude-Codex/commit/e5713ba8b45929225c8b0029c4e445efbe1c9c88))
+* **ci:** lot 1 — SHAs Sonar invalides + E2E describe mobile Playwright ([a5c2a71](https://github.com/tellebma/The-Claude-Codex/commit/a5c2a7105692f0de388c1c9d6214342b1c3f45ae))
+* **ci:** retire à nouveau le job deploy-preview (régression PR [#66](https://github.com/tellebma/The-Claude-Codex/issues/66)) ([#69](https://github.com/tellebma/The-Claude-Codex/issues/69)) ([343f9da](https://github.com/tellebma/The-Claude-Codex/commit/343f9da773ba9fca62f1a8dd2fee7ef060ac0a27)), closes [#65](https://github.com/tellebma/The-Claude-Codex/issues/65) [#67](https://github.com/tellebma/The-Claude-Codex/issues/67) [#58](https://github.com/tellebma/The-Claude-Codex/issues/58) [#59](https://github.com/tellebma/The-Claude-Codex/issues/59) [#60](https://github.com/tellebma/The-Claude-Codex/issues/60)
+* **ci:** SONAR_HOST_URL configuré en secret (pas variable) ([0a9a378](https://github.com/tellebma/The-Claude-Codex/commit/0a9a378ba2367029b411b1f683f1160e2ade73f3))
+* **ci:** sync package-lock.json (@swc/helpers peer dep) ([#62](https://github.com/tellebma/The-Claude-Codex/issues/62)) ([7ac994f](https://github.com/tellebma/The-Claude-Codex/commit/7ac994f70abc786ac511cb2bfa0b7ad55e1fb608)), closes [#58](https://github.com/tellebma/The-Claude-Codex/issues/58) [#59](https://github.com/tellebma/The-Claude-Codex/issues/59) [#60](https://github.com/tellebma/The-Claude-Codex/issues/60)
+* **e2e:** aligner les tests sur le build statique i18n servi en CI ([09d287d](https://github.com/tellebma/The-Claude-Codex/commit/09d287dc714aa2b0ddb6091b518d10f4f61f3d92))
+* **e2e:** contourner le faux-hidden Playwright sur getByRole("dialog") + stabilité clear button ([acc021a](https://github.com/tellebma/The-Claude-Codex/commit/acc021ac8f2a8568897ddd5766ddfdf8882081dc))
+* **e2e:** skip les règles a11y connues dette-design sur les pages MCP overview ([1b3f6eb](https://github.com/tellebma/The-Claude-Codex/commit/1b3f6eba1c229bf973c424d1c0fecf4b4b4544ee))
+* **e2e:** supprimer les flakes Playwright liés aux animations + strict-mode ([bb2c4e0](https://github.com/tellebma/The-Claude-Codex/commit/bb2c4e032748a60643770b676fb6de28947b8e79))
+* **quality:** corrections des 4 new issues Sonar scan 2026-04-22 ([bbbb659](https://github.com/tellebma/The-Claude-Codex/commit/bbbb659ddaffd6ad9901c54bccfef8ee29197174)), closes [Array#push](https://github.com/Array/issues/push)
+* **quality:** Sonar — BLOCKER/CRITICAL + Readonly sweep + CPD exclusions ([22de610](https://github.com/tellebma/The-Claude-Codex/commit/22de6100fff4105add4c6cfde9340e4389df7efc))
+* **quality:** Sonar batch 3 — ARIA, idioms, petits nettoyages ([e4b8198](https://github.com/tellebma/The-Claude-Codex/commit/e4b8198b7473fa4dbd11a27425013e04e93a0396))
+* **quality:** Sonar batch 4 — derniers patterns ARIA & idiomes ([aae2a30](https://github.com/tellebma/The-Claude-Codex/commit/aae2a3026342038a32be528ca8cf9844dcce276e))
+* **quality:** Sonar sweep — globalThis, semantic HTML, idioms, nested ternaries ([bc0224a](https://github.com/tellebma/The-Claude-Codex/commit/bc0224a2ff49477162d86030f33e17a2c970e45b)), closes [lucide-icons/lucide#670](https://github.com/lucide-icons/lucide/issues/670)
+* **release:** debloquer la PR develop->main ([#58](https://github.com/tellebma/The-Claude-Codex/issues/58)) ([#72](https://github.com/tellebma/The-Claude-Codex/issues/72)) ([95c51c0](https://github.com/tellebma/The-Claude-Codex/commit/95c51c0381edbd8dd8622ddc4270ae84ddf748a5)), closes [62/#71](https://github.com/tellebma/The-Claude-Codex/issues/71) [#70](https://github.com/tellebma/The-Claude-Codex/issues/70)
+* **security:** corriger 4 Dependabot HIGH (undici, vite, glob, flatted) ([#78](https://github.com/tellebma/The-Claude-Codex/issues/78)) ([be98d4f](https://github.com/tellebma/The-Claude-Codex/commit/be98d4fafba95ccdc6b728d6a19f6e558699710a)), closes [#6](https://github.com/tellebma/The-Claude-Codex/issues/6) [22/#23](https://github.com/tellebma/The-Claude-Codex/issues/23) [#1](https://github.com/tellebma/The-Claude-Codex/issues/1) [#12](https://github.com/tellebma/The-Claude-Codex/issues/12) [71/#72](https://github.com/tellebma/The-Claude-Codex/issues/72)
+* **security:** corriger les 5 alertes CodeQL HIGH sur develop ([#77](https://github.com/tellebma/The-Claude-Codex/issues/77)) ([aa283a8](https://github.com/tellebma/The-Claude-Codex/commit/aa283a83178c16b0ab3da40d8b079c45e6b56bd2))
+
+
+### Features
+
+* **404:** page 404 avec toaster 3D self-hosted, suggestions URL et articles récents ([#59](https://github.com/tellebma/The-Claude-Codex/issues/59)) ([ca2cb1b](https://github.com/tellebma/The-Claude-Codex/commit/ca2cb1b6ea1823cdfa919043f00ad0ad1a9d277b))
+* **a11y:** Sprint 3 UX/UI/A11y — max-width MDX + cohérence labels ([a71a0eb](https://github.com/tellebma/The-Claude-Codex/commit/a71a0eb36d557bd43432641da925c3a0a076ee3b))
+* **a11y:** Sprint 4 US-11 polish — favicon.ico + CTA hero hover ([8553110](https://github.com/tellebma/The-Claude-Codex/commit/855311006d32d9f564a63e6d92a26c1397957864))
+* **analytics:** MT21 automatisation hebdo GSC + Matomo + Discord ([#60](https://github.com/tellebma/The-Claude-Codex/issues/60)) ([51423cf](https://github.com/tellebma/The-Claude-Codex/commit/51423cf17a9a062b38d9f6d6719430d89ed6ce90))
+* **ci:** commentaire sticky PR avec métriques Sonar + coverage ([#66](https://github.com/tellebma/The-Claude-Codex/issues/66)) ([4ac98e4](https://github.com/tellebma/The-Claude-Codex/commit/4ac98e4847c5aeff0e43cb5a2b06f41a7b4962ef))
+* **ci:** gate Vercel deploy on CI success via Connect GitHub Actions ([#67](https://github.com/tellebma/The-Claude-Codex/issues/67)) ([83e03b9](https://github.com/tellebma/The-Claude-Codex/commit/83e03b9ad51e1513f56a9e13acba29917a466af2))
+* **ci:** lot 1 — pipeline CI/CD structuré avec coverage gate, SonarQube et E2E sharding ([a1e95d6](https://github.com/tellebma/The-Claude-Codex/commit/a1e95d64b4de46b4dd08d57f2e2b123d02767234))
+* **ci:** lot 2 — Lighthouse CI, Lychee, axe-core et validateur SEO/IA ([276dfe5](https://github.com/tellebma/The-Claude-Codex/commit/276dfe50f2c7843ba3c02809d6facfa79d023ac7))
+* **ci:** lot 3 — sécurité minimale crédible (gitleaks, npm audit, CodeQL, Trivy) ([3e74a60](https://github.com/tellebma/The-Claude-Codex/commit/3e74a60040f68888ca6fdf7d2f737d69a3011a41))
+* **ci:** lot 4 — gate du déploiement Vercel preview derrière la CI ([91628b7](https://github.com/tellebma/The-Claude-Codex/commit/91628b70228c76fe3b9e7f62641bd3b0ae629515))
+* **content:** refresh SEO de l'article vs-copilot (MT3) ([#64](https://github.com/tellebma/The-Claude-Codex/issues/64)) ([95c53f1](https://github.com/tellebma/The-Claude-Codex/commit/95c53f1f9881d62dd7a1c99d24d09df63573769c))
+* **deps:** bump Next 14 -> 16 (React 19) ([#79](https://github.com/tellebma/The-Claude-Codex/issues/79)) ([7474929](https://github.com/tellebma/The-Claude-Codex/commit/747492974df3f05002fe3edd2d238167690ac2b1)), closes [#3](https://github.com/tellebma/The-Claude-Codex/issues/3) [#25](https://github.com/tellebma/The-Claude-Codex/issues/25) [72/#78](https://github.com/tellebma/The-Claude-Codex/issues/78) [#3](https://github.com/tellebma/The-Claude-Codex/issues/3) [#25](https://github.com/tellebma/The-Claude-Codex/issues/25)
+* **quality:** Sprint 24 Sonar — bugs utilisateur-visibles et filet de tests ([8a1a59b](https://github.com/tellebma/The-Claude-Codex/commit/8a1a59b7bf42556fe7e8a1f44a6f0c21e9773565))
+* **quality:** Sprint 25 Sonar — refacto sécurisé et hardening a11y ([1b95653](https://github.com/tellebma/The-Claude-Codex/commit/1b95653cb5b877c16bfa7110c89a7240acb62c66))
+* **quality:** Sprint 26 Sonar — sweep TS modernisation + documentation ([8771291](https://github.com/tellebma/The-Claude-Codex/commit/87712914d0296f917b52be55b40eea946562741d))
+* **search:** recherche live dans le contenu MDX avec snippets ([#63](https://github.com/tellebma/The-Claude-Codex/issues/63)) ([ae09df1](https://github.com/tellebma/The-Claude-Codex/commit/ae09df1742b0fb0e1884f4c92dfd35b79c81abf2))
+* **search:** Spotlight-style UI + live search contract locked ([#70](https://github.com/tellebma/The-Claude-Codex/issues/70)) ([35627e2](https://github.com/tellebma/The-Claude-Codex/commit/35627e2e7a0dad59e5c99550476f6d018fe36a55))
+
+# [1.4.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.3.0...v1.4.0) (2026-04-22)
+
+
+### Features
+
+* **a11y:** Sprint 2 UX/UI/A11y — i18n completude et accents FR ([b9f8301](https://github.com/tellebma/The-Claude-Codex/commit/b9f8301cc15876c5e403af0d339494c97d7eae85))
+
 # [1.3.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.2.1...v1.3.0) (2026-04-22)
 
 

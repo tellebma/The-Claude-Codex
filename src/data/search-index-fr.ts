@@ -363,6 +363,30 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "marketing",
     ],
   },
+  {
+    title: "Context rot : pourquoi 1M de tokens ne valent pas 1M de tokens utiles",
+    description:
+      "Comprendre la degradation du contexte Claude Code, la dumb zone, l'usage de /compact dirige, le pattern rewind plutot que correction, et le test-time compute.",
+    href: "/prompting/context-rot",
+    section: "Prompting",
+    keywords: [
+      "context rot",
+      "contexte",
+      "dumb zone",
+      "compact",
+      "rewind",
+      "test-time compute",
+      "boris cherny",
+      "thariq",
+      "1M tokens",
+      "fenetre de contexte",
+      "agentic search",
+      "session longue",
+      "performance",
+      "halluciner",
+      "memoire claude",
+    ],
+  },
   // Use Cases
   {
     title: "Claude Code pour tous : cas d'usage concrets",

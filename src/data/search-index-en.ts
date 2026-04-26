@@ -355,6 +355,30 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "marketing",
     ],
   },
+  {
+    title: "Context rot: why 1M tokens isn't 1M useful tokens",
+    description:
+      "Understanding Claude Code context degradation, the dumb zone, directed /compact usage, the rewind-over-correct pattern, and test-time compute.",
+    href: "/prompting/context-rot",
+    section: "Prompting",
+    keywords: [
+      "context rot",
+      "context",
+      "dumb zone",
+      "compact",
+      "rewind",
+      "test-time compute",
+      "boris cherny",
+      "thariq",
+      "1M tokens",
+      "context window",
+      "agentic search",
+      "long session",
+      "performance",
+      "hallucinate",
+      "claude memory",
+    ],
+  },
   // Use Cases
   {
     title: "Claude Code for everyone: real-world use cases",

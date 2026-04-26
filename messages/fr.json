@@ -336,7 +336,8 @@
       "thinking-and-planning": "Extended Thinking & Plan Mode",
       "chaining-and-agents": "Chaining & multi-agents",
       "non-dev-prompting": "Prompting non-développeurs",
-      "power-tips": "Power Tips"
+      "power-tips": "Power Tips",
+      "context-rot": "Context rot : 1M tokens utiles ?"
     },
     "future": {
       "title": "Vision",

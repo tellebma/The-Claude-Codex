@@ -1,0 +1,118 @@
+---
+title: "Context rot : pourquoi 1M de tokens ne valent pas 1M de tokens utiles"
+description: "Plus une session Claude Code s'allonge, moins le contexte reste exploitable. Comprendre la dégradation, mesurer la dumb zone, et travailler avec /compact dirigé et le rewind plutôt que la correction."
+section: "prompting"
+order: 13
+datePublished: "2026-04-26"
+dateModified: "2026-04-26"
+badge: "NEW"
+---
+
+## Le problème : un contexte qui pourrit
+
+Vous avez une session Claude Code ouverte depuis trois heures. 600 000 tokens accumulés. Claude commence à oublier des conventions évoquées au début, propose des solutions déjà testées et rejetées, mélange des fichiers entre deux features. Vous redémarrez. Magique : il redevient lucide.
+
+C'est le **context rot**. Le terme a été popularisé par Thariq (équipe Claude Code) et Dex (MLOps). L'idée : la qualité d'un modèle ne décroche pas linéairement avec la taille du contexte. Elle s'effondre par paliers, dans une zone que la communauté appelle la **dumb zone**.
+
+<Callout type="info" title="L'analogie du carnet de notes">
+Imaginez un carnet où vous notez chaque pensée. Les 50 premières pages, vous retrouvez tout. À la page 200, vous tournez les pages plus longtemps qu'avant pour retrouver une info. À la page 800, vous abandonnez et vous prenez un nouveau carnet. C'est ce que fait Claude avec le contexte.
+</Callout>
+
+## La dumb zone, en chiffres
+
+Sur la fenêtre 1M tokens (Opus 4.7), la qualité utile observée varie selon le profil :
+
+| Profil utilisateur / tâche | Dumb zone démarre vers |
+|---|---|
+| Débutant Claude Code, prompts vagues | 30 % du contexte rempli |
+| Utilisateur expérimenté, prompts structurés | 60 % du contexte rempli |
+| Tâche simple (édition d'un seul fichier) | 60 % |
+| Tâche complexe (refactoring multi-fichiers) | 30 à 40 % |
+
+Sur la fenêtre 200K standard, traduisez : la dumb zone arrive entre 60K et 150K tokens. Boris Cherny l'a évoqué publiquement : "Claude perd de la précision bien avant le hard limit. La fenêtre annoncée n'est pas la fenêtre exploitable."
+
+## Trois symptômes pour la détecter
+
+Avant que Claude commence à halluciner, il vous envoie des signaux :
+
+1. **Il propose une solution déjà rejetée**. Vous lui aviez dit non il y a 100 000 tokens. Il a oublié.
+2. **Il mélange des fichiers**. Il importe une fonction d'un autre module sans raison, ou cite un nom de variable inexistant.
+3. **Il tourne en rond sur un détail**. Il reformule la même réponse en boucle au lieu d'avancer.
+
+Si vous voyez deux de ces trois signaux dans la même heure, votre contexte est entré en dumb zone.
+
+## Pourquoi `/compact` automatique ne suffit pas
+
+Claude Code compresse automatiquement le contexte quand il approche du plafond. Le résumé qu'il génère seul est générique : il préserve les fichiers ouverts, le dernier diff, la dernière question. Il jette la moitié de votre raisonnement métier.
+
+Le `/compact` **dirigé** fait beaucoup mieux :
+
+```bash
+/compact J'attaque la phase 3 du refactoring auth. Garde uniquement :
+1. Le contrat d'API défini en début de session
+2. Les 3 décisions architecturales validées (JWT, refresh token, rotation)
+3. La liste des fichiers à modifier dans la phase 3
+Oublie tous les essais ratés des phases 1 et 2.
+```
+
+Vous donnez à Claude un cahier des charges de ce qu'il doit retenir. Le résumé qui en sort est cinq fois plus utile.
+
+<Callout type="tip" title="Quand compacter">
+Compactez de manière proactive à 50 % de remplissage si la tâche est complexe, à 70 % si elle est simple. Ne pas attendre l'auto-compact qui se déclenche trop tard, quand vous êtes déjà dans la dumb zone.
+</Callout>
+
+## Rewind plutôt que correct
+
+Boris a formalisé une règle qui change tout : **quand Claude part dans une mauvaise direction, ne corrigez pas, rembobinez**.
+
+Concrètement : double-Esc pour revenir au tour précédent et reformuler votre prompt initial, plutôt que d'ajouter "non, fais plutôt comme ça". La correction laisse dans le contexte la mauvaise tentative, plus votre frustration, plus la nouvelle instruction. Trois turns pour rien. Le rewind efface la mauvaise piste, comme si elle n'avait jamais existé.
+
+| Approche | Coût en tokens | Qualité du contexte |
+|---|---|---|
+| **Correct** : "Non, fais X au lieu de Y" | +800 à +2000 tokens, 3 messages dans l'historique | Pollué par la mauvaise piste |
+| **Rewind** (double-Esc + reformulation) | 0 token ajouté, l'historique reste propre | Comme si l'erreur n'avait jamais eu lieu |
+
+Le rewind n'efface pas votre travail. Il efface une tentative ratée. Vos commits, vos fichiers, votre arborescence : intacts.
+
+## Test-time compute : un agent crée le bug, un autre le trouve
+
+Boris a partagé un pattern surprenant : pour découvrir vos propres bugs, séparez les contextes. Un agent code la feature, un autre la review. Même modèle, contextes différents.
+
+Pourquoi ça marche ? Le premier agent est ancré dans son raisonnement, ses décisions, ses biais. Le second arrive vierge, n'a pas la "conviction" du premier, et voit ce qui cloche. C'est moins coûteux que de demander au premier de se relire.
+
+```bash
+# 1. Code la feature dans une session
+/agent code-implementer ajouter le rate limiting au middleware auth
+
+# 2. Review dans une AUTRE session, avec uniquement le diff comme contexte
+claude --new-session
+/agent code-reviewer review uniquement le diff du commit abc123
+```
+
+Le second agent voit le diff sans toute l'épopée qui a mené à ce diff. C'est précisément ce qui le rend efficace.
+
+## Mythe : "agentic search > RAG"
+
+Pour gérer des codebases massives, beaucoup d'équipes ont essayé d'indexer leur code dans des vector databases pour "augmenter" le contexte de Claude. Anthropic a essayé, puis abandonné.
+
+La raison, selon Boris : le code dérive plus vite que l'index. Les permissions sont complexes (qui peut voir quoi). Et surtout, Claude est meilleur quand il **cherche activement** dans le repo (avec `grep`, `find`, `ls`) que quand on lui sert des chunks vectorisés. La recherche agentique préserve le contrôle du contexte ; le RAG le dilue.
+
+Conséquence pratique : laissez Claude explorer. Pointez-lui les bons dossiers via `CLAUDE.md`. N'essayez pas de "tout charger" en début de session.
+
+## Bonnes pratiques antifraicheur
+
+Quelques réflexes qui retardent l'arrivée dans la dumb zone :
+
+1. **Démarrez chaque session avec un objectif clair**. Une session = une mission. Pas de zigzag entre features.
+2. **Compactez proactivement avec un hint dirigé** à 50 % de remplissage.
+3. **Préférez plusieurs sessions courtes** à une session marathon. Une nouvelle session, c'est un cerveau frais.
+4. **Pour les tâches > 2 heures, utilisez Plan Mode** : le plan reste compact même après 50 sous-tâches.
+5. **Pas de copier-coller de fichiers entiers** dans le prompt si Claude peut les lire avec Read. Le Read est lazy, le copier-coller bouffe le contexte d'entrée.
+6. **Utilisez `/rewind` à chaque fausse piste**. Pas de correction additive.
+
+## Prochaines étapes
+
+- [Gestion du contexte et fenêtre 200K](/prompting/context-management) pour les techniques de base de gestion de contexte
+- [Power Tips](/prompting/power-tips) pour les raccourcis Esc Esc, /rewind, ultrathink
+- [Extended Thinking et Plan Mode](/prompting/thinking-and-planning) pour les sessions longues
+- [Orchestration multi-agents](/agents/orchestration) pour structurer le test-time compute

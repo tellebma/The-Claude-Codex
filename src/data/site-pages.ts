@@ -312,6 +312,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-11",
   },
   {
+    path: "/prompting/context-rot",
+    title: "Context rot : pourquoi 1M de tokens ne valent pas 1M de tokens utiles",
+    description:
+      "La qualité du contexte Claude Code s'effondre par paliers. Comprendre la dumb zone, utiliser /compact dirigé, préférer le rewind à la correction, et le pattern test-time compute.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
+  },
+  {
     path: "/future",
     title: "Vision & Futur de l'IA",
     description:

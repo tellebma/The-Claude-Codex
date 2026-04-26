@@ -106,6 +106,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "prompting.chaining-and-agents", href: "/prompting/chaining-and-agents" },
       { labelKey: "prompting.non-dev-prompting", href: "/prompting/non-dev-prompting" },
       { labelKey: "prompting.power-tips", href: "/prompting/power-tips" },
+      { labelKey: "prompting.context-rot", href: "/prompting/context-rot" },
     ],
   },
   future: {

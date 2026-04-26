@@ -319,6 +319,7 @@
       "agent-teams": "Agent Teams",
       "best-agents": "Top agents par cas d'usage",
       "orchestration": "Orchestration avancée",
+      "orchestration-patterns": "Patterns Command/Agent/Skill",
       "agent-sdk": "Claude Agent SDK",
       "performance-limits": "Performance et limites",
       "background-agents": "Background Agents"
@@ -336,7 +337,8 @@
       "thinking-and-planning": "Extended Thinking & Plan Mode",
       "chaining-and-agents": "Chaining & multi-agents",
       "non-dev-prompting": "Prompting non-développeurs",
-      "power-tips": "Power Tips"
+      "power-tips": "Power Tips",
+      "context-rot": "Context rot : 1M tokens utiles ?"
     },
     "future": {
       "title": "Vision",
@@ -376,7 +378,10 @@
       "permissions-sandbox": "Permissions et Sandbox",
       "workflows": "Workflows avancés",
       "browser-automation": "Browser Automation",
-      "ultraplan": "Ultraplan : planifier dans le cloud"
+      "ultraplan": "Ultraplan : planifier dans le cloud",
+      "rpi-workflow": "RPI : Research, Plan, Implement",
+      "cross-model-workflow": "Cross-Model : Claude + Codex/Gemini",
+      "methodologies-ecosystem": "Écosystème des méthodologies"
     },
     "reference": {
       "title": "Référence",

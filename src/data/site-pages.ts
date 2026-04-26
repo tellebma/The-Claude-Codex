@@ -312,6 +312,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-11",
   },
   {
+    path: "/prompting/context-rot",
+    title: "Context rot : pourquoi 1M de tokens ne valent pas 1M de tokens utiles",
+    description:
+      "La qualité du contexte Claude Code s'effondre par paliers. Comprendre la dumb zone, utiliser /compact dirigé, préférer le rewind à la correction, et le pattern test-time compute.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
+  },
+  {
     path: "/future",
     title: "Vision & Futur de l'IA",
     description:
@@ -432,10 +441,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/skills/create-custom",
     title: "Créer un Skill custom pas à pas",
     description:
-      "Guide complet pour créer vos propres Skills Claude Code. Structure, bonnes pratiques, exemples concrets et tutoriel pas à pas pour écrire des slash commands sur mesure.",
-    priority: 0.75,
+      "Guide complet pour créer vos propres Skills Claude Code. Frontmatter exhaustif (15 champs), progressive disclosure en sous-fichiers, embed !command, paths globs pour monorepos.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-04-26",
   },
   {
     path: "/skills/comparison",
@@ -468,10 +477,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/agents/create-subagent",
     title: "Créer un subagent spécialisé",
     description:
-      "Guide complet pour créer des agents custom dans Claude Code. Structure d’un agent, exemples concrets, configuration et bonnes pratiques d’écriture de prompts pour agents.",
-    priority: 0.75,
+      "Guide complet pour créer des agents custom dans Claude Code. Frontmatter exhaustif (16 champs), focus sur effort, background, isolation worktree, initialPrompt et hooks par agent.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-04-26",
   },
   {
     path: "/agents/agent-teams",
@@ -499,6 +508,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+  },
+  {
+    path: "/agents/orchestration-patterns",
+    title: "Patterns d'orchestration : Command, Agent et Skill",
+    description:
+      "Le triangle Command/Agent/Skill, le pattern fetch/render, l'Execution Contract et la tool allowlist défensive pour structurer un workflow Claude Code clair et auditable.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
   },
   {
     path: "/agents/agent-sdk",
@@ -621,10 +639,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/advanced/hooks",
     title: "Système de Hooks : Claude Code",
     description:
-      "Automatisez vos workflows avec les hooks PreToolUse, PostToolUse et Stop. Auto-format avec Prettier, notifications Slack, rapports de session et patterns avancés.",
-    priority: 0.75,
+      "Automatisez vos workflows avec les 32 événements de hooks Claude Code. PreToolUse, SubagentStart, WorktreeCreate, ChannelMessage. Auto-format, notifications Slack, audit log et patterns avancés.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-04-26",
   },
   {
     path: "/advanced/headless-ci",
@@ -661,6 +679,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-04-12",
+  },
+  {
+    path: "/advanced/rpi-workflow",
+    title: "RPI Workflow : Research, Plan, Implement avec validation gates",
+    description:
+      "Méthodologie en trois phases pour les features complexes : structure feature-folder, six subagents spécialisés (PM, UX, eng, CTO advisor), validation humaine entre chaque phase.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
+  },
+  {
+    path: "/advanced/cross-model-workflow",
+    title: "Cross-Model Workflow : faire reviewer Claude par un autre modèle",
+    description:
+      "Split tmux entre Claude Code et Codex CLI ou Gemini. Pattern test-time compute, format des Codex Findings sans réécriture, et limites concrètes du workflow multi-modèles.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
+  },
+  {
+    path: "/advanced/methodologies-ecosystem",
+    title: "Écosystème des méthodologies Claude Code : Superpowers, BMAD, Spec Kit",
+    description:
+      "Panorama des grandes méthodologies open-source qui structurent les workflows Claude Code. Superpowers, Everything Claude Code, Spec Kit, BMAD-METHOD, OpenSpec, gstack, et comment les composer.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-04-26",
   },
   {
     path: "/reference",

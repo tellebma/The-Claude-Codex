@@ -1,0 +1,223 @@
+---
+title: "Orchestration patterns: Command, Agent, and Skill"
+description: "The fundamental triangle of Claude Code. When to use a slash command, a subagent, or a skill, how to chain them with an Execution Contract, and the fetch/render pattern."
+section: "agents"
+order: 10
+datePublished: "2026-04-26"
+dateModified: "2026-04-26"
+badge: "NEW"
+---
+
+## Three primitives, three roles
+
+Claude Code exposes three primitives to structure a workflow: **Command**, **Agent**, and **Skill**. Many beginners confuse them or use one where another would fit better. This guide lays out the reference orchestration pattern: `Command → Agent → Skill`.
+
+| Primitive | Role | Typical invocation |
+|---|---|---|
+| **Command** (slash command) | Entry point, orchestrator | User types `/my-command` |
+| **Agent** (subagent) | Autonomous execution unit with its own context | The command calls `Agent(...)` |
+| **Skill** | Reusable, deterministic recipe, optionally preloaded | The agent calls `Skill(skill: "my-skill")` or preloads it via frontmatter |
+
+The golden rule: the Command directs, the Agent decides, the Skill executes. Mixing those roles produces hard-to-maintain code and unpredictable behavior.
+
+## Standalone Skill vs Agent Skill
+
+This is the most common confusion. There are two ways to use a Skill:
+
+### Standalone Skill
+
+The Skill is invoked on demand, **from the main session**, via `Skill(skill: "weather-svg-creator")`. Its content is loaded at invocation time, then released. Useful when:
+
+- The Skill runs only once in the session
+- Multiple agents could call it independently
+- You want strict isolation between caller and Skill
+
+```yaml
+# Standalone Skill frontmatter
+---
+name: weather-svg-creator
+description: Generates a weather SVG from structured data
+allowed-tools:
+  - Write
+  - Bash
+user-invocable: true
+---
+```
+
+### Agent Skill (preloaded)
+
+The Skill is listed in an agent's `skills:` frontmatter. On every run of that agent, **the Skill is preloaded into its initial context**. No `Skill(...)` call needed. Useful when:
+
+- The agent systematically needs that capability
+- You want to cut tokens spent at invocation (preloaded once)
+- The Skill is a foundational component of the agent
+
+```yaml
+# Agent frontmatter
+---
+name: weather-agent
+model: sonnet
+skills:
+  - weather-fetcher
+allowedTools:
+  - Read
+  - Skill
+---
+```
+
+<Callout type="tip" title="Which option to pick?">
+If the Skill is used in 80 %+ of the agent's invocations, make it an Agent Skill. If usage is conditional or rare, keep it standalone and invoke it explicitly.
+</Callout>
+
+## The fetch/render pattern
+
+Boris Cherny popularized a pattern that splits two responsibilities often blended together:
+
+- **Fetch**: get the data (API, file, database)
+- **Render**: format that data into output (markdown, SVG, JSON, terminal output)
+
+The classic mistake is doing everything in a single agent. Result: a huge agent prompt doing two jobs and regularly missing one of them.
+
+### Recommended architecture
+
+```
+/weather-orchestrator (Command)
+   │
+   ├──> Agent(weather-agent)          [FETCH]
+   │       └─ skills: [weather-fetcher]
+   │           └─ allowed-tools: WebFetch
+   │
+   └──> Skill(weather-svg-creator)    [RENDER]
+           └─ allowed-tools: Write, Bash
+```
+
+The Command orchestrates the two steps. The Agent fetches data via the `weather-fetcher` Skill. The `weather-svg-creator` Skill takes structured data and produces an SVG. Each actor has a clear responsibility and a tight permission scope.
+
+## The Execution Contract
+
+When you orchestrate several primitives, some rules are **non-negotiable**: one agent should not do another's job, one step should not be skipped. The Execution Contract is a prompt pattern that locks those rules directly in the Command.
+
+### Concrete example
+
+```markdown
+# /weather-orchestrator
+
+## Execution Contract (non-negotiable)
+
+You are forbidden from:
+- Fetching weather data yourself via Bash, WebFetch, or any other tool
+- Skipping Step 1
+- Calling weather-svg-creator before the agent has returned data
+
+You MUST:
+1. Call Agent(weather-agent) with the user's location
+2. Wait for its structured output
+3. Call Skill(weather-svg-creator) with the agent's output
+
+## Steps
+...
+```
+
+The contract isn't code, it's a natural-language directive at the top of the Command's prompt. Claude respects it because it's explicit, short, and stated as binary rules (forbidden / MUST).
+
+<Callout type="warning" title="Why it matters">
+Without an Execution Contract, Claude often tries to shortcut the workflow: it calls `WebFetch` directly instead of going through the agent, or generates the SVG itself without invoking the Skill. The contract closes those shortcuts.
+</Callout>
+
+## Defensive tool allowlist
+
+The contract alone isn't enough. To guarantee an agent won't do another's job, configure its `allowedTools` **restrictively**.
+
+Example: a `weather-agent` that must go through the `weather-fetcher` Skill should not have direct access to `WebFetch`. If `WebFetch` is in its `allowedTools`, Claude might be tempted to bypass the Skill.
+
+```yaml
+---
+name: weather-agent
+model: sonnet
+skills:
+  - weather-fetcher
+allowedTools:
+  - Read
+  - Skill
+# No WebFetch here, intentionally
+disallowedTools:
+  - WebFetch
+  - Bash
+---
+```
+
+This is the **fail-closed guardrail**: by default, the tool is forbidden. If the agent needs WebFetch, it must go through the `weather-fetcher` Skill, which has the permission. The indirection makes the pattern explicit and auditable.
+
+## When to use what
+
+Here's a simplified decision grid:
+
+| You want to... | Use |
+|---|---|
+| Trigger a full workflow from a user command | **Command** |
+| Delegate an autonomous task with its own context | **Agent** |
+| Encapsulate a deterministic, reusable recipe (API, format) | **Standalone Skill** |
+| Systematically give an agent a capability | **Agent Skill** (`skills:` frontmatter) |
+| Force a multi-step mandatory workflow | **Command + Execution Contract** |
+| Prevent an agent from bypassing a Skill | **Restrictive `allowedTools`** |
+
+## Common anti-patterns
+
+A few patterns you'll often see and should avoid:
+
+### "An agent that does everything"
+
+A giant agent with a 400-line prompt covering fetch + render + validation + reporting. When something breaks, you never know where. Split into multiple agents/skills.
+
+### "Skill with business logic"
+
+A Skill that makes decisions (complex if/else). The Skill should be deterministic. If you need decisions, that's an agent's job, not a skill's.
+
+### "Command without Execution Contract"
+
+A Command that just says "call agent X, do this". Without an explicit contract, Claude takes shortcuts. Be explicit about what is mandatory and what is forbidden.
+
+### "Permissive tool allowlist"
+
+Giving `["*"]` or all tools to an agent out of laziness. Consequence: contracts aren't respected and primitive routing collapses.
+
+## Full example: bug hunting
+
+Putting it all together on a real case: a `/find-bug` workflow that takes a suspicious file and outputs a report.
+
+```
+/find-bug src/auth.ts
+   │
+   ├──> Agent(code-explorer)        [FETCH context]
+   │       allowed-tools: [Read, Grep]
+   │       skills: [astrep-parser]
+   │
+   ├──> Agent(bug-hunter)           [DECIDE: where bugs are]
+   │       allowed-tools: [Read, Skill]
+   │       skills: [vulnerability-patterns]
+   │
+   └──> Skill(report-formatter)     [RENDER the report]
+           allowed-tools: [Write]
+```
+
+The Execution Contract in `/find-bug`:
+
+```markdown
+You are forbidden from:
+- Reading the file yourself directly (must go through code-explorer)
+- Skipping bug-hunter even if you think you see the bug
+
+You MUST:
+1. Call Agent(code-explorer) with the target file
+2. Pass its output verbatim to Agent(bug-hunter)
+3. Pass bug-hunter's findings to Skill(report-formatter)
+```
+
+Three primitives, three roles, one contract. The workflow is readable, auditable, testable independently.
+
+## Next steps
+
+- [Advanced multi-agent orchestration](/agents/orchestration) for fan-out/fan-in and pipeline patterns
+- [Create a specialized subagent](/agents/create-subagent) for the full 16-field frontmatter
+- [Create a custom Skill](/skills/create-custom) for the Skill frontmatter and progressive disclosure
+- [Permissions and Sandbox](/advanced/permissions-sandbox) for `allowedTools` wildcards

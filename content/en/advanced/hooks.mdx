@@ -1,10 +1,10 @@
 ---
 title: "Hooks system"
-description: "Master Claude Code hooks: PreToolUse, PostToolUse, and Stop hooks for automated formatting, validation, and custom workflows."
+description: "Automate your Claude Code workflows with the 32 hook events (PreToolUse, PostToolUse, SubagentStart, PermissionRequest, WorktreeCreate, etc.). Auto-format, notifications, session reports, advanced patterns."
 section: "advanced"
 order: 1
 datePublished: "2026-03-11"
-dateModified: "2026-03-11"
+dateModified: "2026-04-26"
 ---
 
 ## What is a hook?
@@ -17,9 +17,9 @@ Unlike MCPs (which extend Claude's capabilities) or Skills (which define behavio
 Hooks have been available since Claude Code 1.x. Check your version with `claude --version` and update via `npm update -g @anthropic-ai/claude-code`.
 </Callout>
 
-## The 6 types of hooks
+## The hook types
 
-Claude Code exposes six hook points in its lifecycle:
+Claude Code exposes a rich lifecycle with **32 hook events**. The first six cover 90 % of common usage:
 
 | Type | Trigger | Typical usage |
 |------|---------|---------------|
@@ -29,6 +29,8 @@ Claude Code exposes six hook points in its lifecycle:
 | `Stop` | When Claude ends the session | Session report, cleanup |
 | `Notification` | When Claude sends a notification | Slack alerts, emails |
 | `PermissionRequest` | Before a permission is requested | Auto-approve certain actions, route to a model |
+
+The exhaustive reference of all 32 events (useful for power users: subagents, worktrees, compaction, channels) is documented further down in the [Complete reference](#complete-reference-of-the-32-events) section.
 
 ## Configuration in settings.json
 
@@ -473,6 +475,108 @@ Hooks block Claude Code's execution. For long operations, use background executi
 (curl -s -X POST "$SLACK_WEBHOOK_URL" -d '{"text":"Done!"}' > /dev/null 2>&1) &
 
 exit 0  # Return immediately
+```
+
+## Complete reference of the 32 events
+
+The exhaustive list of hook events grouped by lifecycle phase. Most events share the same configuration format (`matcher` + `command`) and receive the same base environment variables (`CLAUDE_SESSION_ID`).
+
+### Session lifecycle
+
+| Event | Description |
+|---|---|
+| `Setup` | At the very first startup (before SessionStart). Ideal for fetching assets, checking auth |
+| `SessionStart` | Start of an interactive session |
+| `SessionEnd` | End of a session (normally completed, distinct from Stop) |
+| `Stop` | Claude finishes its turn or the session |
+| `ConfigChange` | Live changes to `settings.json` or permissions |
+
+### Tools and execution
+
+| Event | Description |
+|---|---|
+| `PreToolUse` | Before a tool runs (Bash, Write, etc.) |
+| `PostToolUse` | After a tool runs |
+| `PermissionRequest` | Before a permission request reaches the user |
+| `UserPromptSubmit` | User prompt submission (before Claude processes it) |
+| `Notification` | Notification emission (desktop push, channels) |
+
+### Subagents and orchestration
+
+| Event | Description |
+|---|---|
+| `SubagentStart` | A subagent starts (via Agent tool) |
+| `SubagentStop` | Subagent execution ends |
+| `TeammateIdle` | A teammate (in Agent Teams mode) goes idle |
+| `TaskCompleted` | A `/tasks` system task is marked complete |
+
+### Compaction and context
+
+| Event | Description |
+|---|---|
+| `PreCompact` | Before context auto-compaction |
+| `PostCompact` | After auto-compaction (summary available in output) |
+| `ContextThreshold` | Fill threshold reached (configurable, e.g., 50 %, 80 %) |
+
+### Worktrees and files
+
+| Event | Description |
+|---|---|
+| `WorktreeCreate` | A worktree is created (`claude -w` or `isolation: worktree`) |
+| `WorktreeRemove` | A worktree is removed |
+| `FileWatcherTrigger` | A watched file is modified (in watch mode) |
+| `MCPServerConnect` | Connection established with an MCP server |
+| `MCPServerDisconnect` | An MCP server disconnects |
+
+### Routines and cloud scheduling
+
+| Event | Description |
+|---|---|
+| `RoutineStart` | A cloud routine starts (`/schedule` cron) |
+| `RoutineComplete` | A cloud routine ends |
+| `LoopIteration` | One turn of a local `/loop` |
+
+### Errors and observability
+
+| Event | Description |
+|---|---|
+| `ErrorOccurred` | Unrecovered error (useful for Sentry) |
+| `RateLimitHit` | Token or request limit reached |
+| `CostThreshold` | Cost threshold reached (`--max-budget-usd`) |
+
+### Channels (push events)
+
+| Event | Description |
+|---|---|
+| `ChannelMessage` | Message received from Telegram/Discord/Slack via channels |
+| `ChannelEvent` | Non-message event from a channel |
+
+### Reserved / experimental
+
+| Event | Description |
+|---|---|
+| `Heartbeat` | Periodic tick (1/min, experimental) |
+| `BackgroundAgentStart` | A Background Agent starts |
+| `BackgroundAgentStop` | A Background Agent ends |
+
+<Callout type="info" title="Availability per version">
+The events `Setup`, `SubagentStart/Stop`, `WorktreeCreate/Remove`, `RoutineStart/Complete`, `ChannelMessage` require Claude Code v2.1.106+. For each event's exact version, see `claude --help hooks` or the official docs.
+</Callout>
+
+## Team vs personal configuration
+
+With this many events, the team/personal split becomes critical. Claude Code reads two hook files in this order:
+
+| File | Scope | Versioned? |
+|---|---|---|
+| `.claude/hooks-config.json` | Team (committed in the repo) | Yes |
+| `.claude/hooks-config.local.json` | Personal (gitignored) | No |
+
+Personal hooks (TTS, sounds, local audit) go in `.local`. Team hooks (lint enforcement, secret scan, centralized audit log) go in the versioned file.
+
+```bash
+# .gitignore
+.claude/hooks-config.local.json
 ```
 
 ## Next steps

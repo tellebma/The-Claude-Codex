@@ -1,0 +1,189 @@
+---
+title: "RPI Workflow: Research, Plan, Implement with validation gates"
+description: "A three-phase methodology for complex features. Feature-folder structure, six specialized subagents, mandatory human validation between phases. When to use it instead of Ultraplan or Plan Mode."
+section: "advanced"
+order: 11
+datePublished: "2026-04-26"
+dateModified: "2026-04-26"
+badge: "NEW"
+---
+
+## Why RPI
+
+Plan Mode is perfect for a 30-line feature. Ultraplan moves the work to the cloud when the plan gets long. But for a feature that touches five teams (PM, UX, security, infra, quality), neither is enough. You need a workflow that separates angles, forces human validation between phases, and leaves a written record of every decision.
+
+That's what **RPI** does: Research → Plan → Implement. Three phases, three commands, six specialized subagents, and a folder that captures the entire reasoning.
+
+## The feature-folder structure
+
+RPI lives in a `rpi/` folder at the project root. One feature equals one subfolder.
+
+```
+rpi/
+└── auth-jwt-rotation/
+    ├── REQUEST.md                # Phase 0: initial request
+    ├── research/
+    │   └── RESEARCH.md           # Phase 1: exploration
+    ├── plan/
+    │   ├── pm.md                 # Phase 2: product angle
+    │   ├── ux.md                 # Phase 2: user angle
+    │   ├── eng.md                # Phase 2: tech angle
+    │   └── PLAN.md               # Phase 2: validated synthesis
+    └── implement/
+        └── IMPLEMENT.md          # Phase 3: execution + journal
+```
+
+This tree isn't cosmetic. Each file is an **artifact** that Claude reads at phase start and writes at phase end. The trace is versioned, re-readable, shareable.
+
+<Callout type="info" title="Why files?">
+Storing each phase in a file lets you re-read it in a different session without paying the token cost of the original reasoning. You reopen RESEARCH.md three days later, you launch phase 2, Claude doesn't need to re-explore.
+</Callout>
+
+## Phase 0: the request
+
+You write `REQUEST.md` by hand. One page max. Three sections:
+
+```markdown
+# REQUEST: auth-jwt-rotation
+
+## Why
+Describe the business need or the observed pain.
+
+## What we expect
+The expected functional outcome, without technical details.
+
+## Known constraints
+Deadlines, dependencies, security, budget limits.
+```
+
+No technical solution here. That's intentional. If you write the solution, you bias the next phases.
+
+## Phase 1: Research
+
+You run `/rpi:research`. The command calls two agents in parallel:
+
+- **Agent(requirement-parser)**: reads REQUEST.md, identifies ambiguities, asks questions
+- **Agent(Explore)**: explores existing code, finds the relevant files, draws the map
+
+```bash
+/rpi:research auth-jwt-rotation
+```
+
+Output: `rpi/auth-jwt-rotation/research/RESEARCH.md` with two sections:
+
+- **Open questions**: identified ambiguities (you must validate them by hand)
+- **Internal state of the art**: existing files, patterns in place, dependencies
+
+<Callout type="warning" title="Validation gate">
+Do NOT move to phase 2 without reading and amending RESEARCH.md by hand. This is the first validation gate. If a question is poorly resolved here, the plan will start on the wrong foot.
+</Callout>
+
+## Phase 2: Multi-role plan
+
+You run `/rpi:plan`. The command calls three agents in parallel, one per business angle:
+
+```bash
+/rpi:plan auth-jwt-rotation
+```
+
+| Agent | Output file | Angle |
+|---|---|---|
+| **product-manager** | `plan/pm.md` | Business value, prioritization, success metrics |
+| **ux-designer** | `plan/ux.md` | User journey, error states, accessibility |
+| **senior-software-engineer** | `plan/eng.md` | Architecture, dependencies, tests, technical risks |
+
+Three files, three viewpoints. None has the full truth.
+
+Once the three are out, the command calls a fourth agent:
+
+- **Agent(technical-cto-advisor)**: reads the three files, identifies conflicts, proposes a synthesis in `PLAN.md`
+
+```
+plan/pm.md      ─┐
+plan/ux.md      ─┼─→ Agent(technical-cto-advisor) ─→ plan/PLAN.md
+plan/eng.md     ─┘
+```
+
+<Callout type="warning" title="Second validation gate">
+Re-read PLAN.md by hand. Compare it with the three original files. If the synthesis crushed an important UX point in favor of an eng shortcut, fix it by hand before moving on.
+</Callout>
+
+## Phase 3: Implement
+
+You run `/rpi:implement`. The command reads `PLAN.md` and executes:
+
+```bash
+/rpi:implement auth-jwt-rotation
+```
+
+Two agents in sequence:
+
+- **Agent(senior-software-engineer)**: implements the plan, file by file, following PLAN.md steps
+- **Agent(code-reviewer)**: reviews the produced diff, suggests fixes
+
+The result is recorded in `IMPLEMENT.md`: for each step, what was done, what went wrong, and the final decision.
+
+```markdown
+## Step 3: Add refresh middleware
+
+**Done**: src/middleware/auth.ts modified, added rotateToken function
+**Issue**: conflict with Redis cache on expired keys
+**Decision**: explicit invalidation before rotation (TTL=0)
+**Tests**: 4 tests pass, coverage +6 %
+```
+
+This running journal is precious for the PR: you already have the changelog written.
+
+## When to use RPI
+
+RPI has a non-trivial bootstrap cost (3 commands, 6 agents, 4 human validations). It doesn't apply to everything:
+
+| Task type | Recommended workflow |
+|---|---|
+| Bug fix under one hour | Direct conversation |
+| Simple feature, 1 to 5 files | Standard **Plan Mode** |
+| Complex feature, multi-file, single team | **Ultraplan** |
+| Feature touching multiple teams or business angles | **RPI** |
+| Critical architecture refactor | **RPI** |
+| Exploration spike, throwaway prototype | Direct conversation |
+
+Simple rule: if you need **three different business roles** to validate the feature before implementation, RPI is the right call.
+
+## Adapting RPI to your context
+
+The reference pattern is three roles in phase 2 (PM, UX, eng). You can adapt it:
+
+- **Critical security**: add a `security-reviewer` agent in phase 2, file `plan/sec.md`
+- **Data / privacy**: add a `data-governance-reviewer` agent, file `plan/data.md`
+- **Performance**: add a `perf-engineer` agent, file `plan/perf.md`
+
+The `PLAN.md` synthesis consolidates all angles. The more agents you add, the more tokens phase 2 burns, but the more chance phase 3 has of succeeding on the first try.
+
+## The validation gates pattern
+
+Gates are RPI's central value. Without them, you just get a long, expensive agentic workflow. With them, you get a **human-AI collaborative workflow** where each phase is a deliverable to validate.
+
+Three mandatory gates:
+
+1. After Phase 1: validate RESEARCH.md (questions resolved, exploration sufficient)
+2. After Phase 2 (multi-role): validate each angle file individually
+3. After Phase 2 (synthesis): validate the final PLAN.md
+
+A gate is five minutes of human review. That's the difference between a generated plan and a **validated** plan.
+
+## Combining RPI with other workflows
+
+RPI doesn't replace other methodologies, it composes them:
+
+- **TDD (Superpowers)**: apply TDD Iron Laws in phase 3 (tests first)
+- **Cross-Model**: have PLAN.md reviewed by Codex CLI or Gemini before phase 3
+- **Ultraplan**: use Ultraplan in phase 2 if the synthesis is too large for the terminal
+
+The core of RPI isn't the tools, it's the Research → Plan → Implement sequence with gates. You keep the same discipline by swapping the tools.
+
+## Next steps
+
+- [Cross-Model Workflow](/advanced/cross-model-workflow) to have the PLAN reviewed by another model
+- [Ultraplan](/advanced/ultraplan) for phase 2s too long for the terminal
+- [Orchestration patterns](/agents/orchestration-patterns) to structure the `/rpi:*` commands
+- [Advanced workflows](/advanced/workflows) for other methodologies (Research/Plan/Execute/Review/Ship)

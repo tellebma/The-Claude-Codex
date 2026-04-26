@@ -441,10 +441,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/skills/create-custom",
     title: "Créer un Skill custom pas à pas",
     description:
-      "Guide complet pour créer vos propres Skills Claude Code. Structure, bonnes pratiques, exemples concrets et tutoriel pas à pas pour écrire des slash commands sur mesure.",
-    priority: 0.75,
+      "Guide complet pour créer vos propres Skills Claude Code. Frontmatter exhaustif (15 champs), progressive disclosure en sous-fichiers, embed !command, paths globs pour monorepos.",
+    priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-04-26",
   },
   {
     path: "/skills/comparison",

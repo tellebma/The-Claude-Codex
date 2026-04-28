@@ -3,7 +3,7 @@
  * Tous server-side : pas d'interactivite JS, uniquement du CSS et des classes Tailwind / tokens.
  */
 
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 /* -------------------------------------------------------------------------- */
 /*  Section wrappers                                                          */
@@ -91,7 +91,7 @@ export function SemanticTokenRow({
 }: Readonly<{
   token: string;
   usage: string;
-  swatchStyle: React.CSSProperties;
+  swatchStyle: CSSProperties;
   border?: boolean;
 }>) {
   return (

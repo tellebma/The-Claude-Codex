@@ -303,13 +303,13 @@
     --fg-primary: #f8fafc;
     --fg-secondary: #cbd5e1;
     --fg-muted: #94a3b8;
-    --fg-on-brand: #ffffff;
     --border-subtle: rgba(34, 211, 238, 0.12);
     --border-default: rgba(51, 65, 85, 0.5);
     --border-strong: rgba(51, 65, 85, 0.8);
-    /* Dark : brand-primary doit garantir AA avec fg-on-brand (#ffffff).
-       brand-500 (#06b6d4) sur blanc = 3.0:1 → KO. On utilise brand-300 #67e8f9
-       comme accent visuel mais on impose --fg-on-brand = slate-900 sur dark. */
+    /* Brand semantique dark : brand-500 (#06b6d4) reste la couleur primaire
+       d'identite visuelle. On change --fg-on-brand de blanc a slate-900 pour
+       garantir un ratio AA (7.35:1) sur ce fond cyan. --brand-700 prend
+       brand-300 (#67e8f9) comme alias d'accent pour les liens et eyebrows. */
     --brand-primary: #06b6d4;
     --brand-hover: #22d3ee;
     --fg-on-brand: #0f172a;
@@ -362,6 +362,8 @@
     --shadow-2xl: 0 35px 60px -15px rgba(0, 0, 0, 0.8);
     --shadow-focus: 0 0 0 3px rgba(34, 211, 238, 0.45);
     --glow-brand: 0 0 80px -16px rgba(34, 211, 238, 0.4);
+    /* Glow ambre intensifie sur fond tres sombre (sinon quasi invisible) */
+    --glow-amber: 0 0 80px -16px rgba(251, 191, 36, 0.35);
   }
 
   html {

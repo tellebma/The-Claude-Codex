@@ -16,8 +16,10 @@ export default [
       "playwright-report/**",
       "test-results/**",
       ".stryker-tmp/**",
+      ".worktrees/**",
       "reports/**",
       "public/**",
+      "docs/**",
     ],
   },
   {

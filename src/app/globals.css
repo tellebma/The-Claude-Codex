@@ -36,9 +36,44 @@
   --color-accent-900: #78350f;
   --color-accent-950: #451a03;
 
+  /* Palette neutre (slate) — exposee comme primitives pour usage @apply */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
   /* Typographie */
   --font-sans: var(--font-jakarta), system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, monospace;
+
+  /* Echelle typographique tokenisee (RG-04) — expose `text-display-1` etc. */
+  --text-display-1: clamp(2.75rem, 5.4vw, 4.75rem);
+  --text-display-2: clamp(2.5rem, 5vw, 4rem);
+  --text-h1: clamp(2.25rem, 5vw, 3.75rem);
+  --text-h1-doc: 2.75rem;
+  --text-h2: clamp(1.875rem, 4vw, 2.625rem);
+  --text-h2-article: 2rem;
+  --text-h2-doc: 1.625rem;
+  --text-h3: 1.375rem;
+  --text-h4: 1.125rem;
+  --text-lead: 1.1875rem;
+  --text-body: 1rem;
+  --text-body-sm: 0.9375rem;
+  --text-caption: 0.8125rem;
+  --text-eyebrow: 0.75rem;
+  --text-mono-inline: 0.9em;
+
+  /* Tracking custom (Tailwind expose `tracking-display` etc.) */
+  --tracking-display: -0.03em;
+  --tracking-tight-2: -0.02em;
+  --tracking-eyebrow: 0.08em;
 
   /* Animations — chaque `--animate-*` génère l'utilitaire `animate-*` correspondant */
   --animate-fade-in: fadeIn 0.5s ease-out;
@@ -147,18 +182,73 @@
 /* -------------------------------------------------------------------------- */
 @layer base {
   :root {
+    /* ---- Tokens semantiques (RG-03) ---- */
+    /* Backgrounds */
+    --bg-page: #ffffff;
+    --bg-subtle: #f8fafc;
+    --bg-elevated: #ffffff;
+    /* Foregrounds */
+    --fg-primary: #0f172a;
+    --fg-secondary: #475569;
+    --fg-muted: #64748b;
+    --fg-on-brand: #ffffff;
+    /* Borders */
+    --border-subtle: rgba(226, 232, 240, 0.6);
+    --border-default: #e2e8f0;
+    --border-strong: #cbd5e1;
+    /* Brand semantique
+       --brand-primary doit garantir un contraste AA (>= 4.5:1) avec --fg-on-brand
+       (#ffffff). brand-700 (#0e7490) sur blanc donne 4.95:1. */
+    --brand-primary: #0e7490;
+    --brand-hover: #155e75;
+    --brand-on-light: #0e7490;
+    --brand-on-dark: #67e8f9;
+    /* Alias pour usage en var(--brand-700) cote applicatif */
+    --brand-700: #0e7490;
+    --brand-800: #155e75;
+    /* Status */
     --color-success: #22c55e;
     --color-warning: #f59e0b;
     --color-error: #ef4444;
     --color-info: #06b6d4;
+
+    /* ---- Tokens composants (RG-03) ---- */
+    /* Code (CodeBlock toujours sombre, choix design) */
+    --code-bg: #0f172a;
+    --code-bg-deep: #0a0e1a;
+    --code-text: #e2e8f0;
+    --code-border: rgba(51, 65, 85, 0.5);
+    --code-comment: #64748b;
+    --code-keyword: #c4b5fd;
+    --code-string: #fbbf24;
+    --code-variable: #67e8f9;
+    --code-function: #5eead4;
+    /* Callouts */
+    --callout-info-bg: rgba(6, 182, 212, 0.05);
+    --callout-info-border: rgba(6, 182, 212, 0.6);
+    --callout-info-text: #0e7490;
+    --callout-tip-bg: rgba(34, 197, 94, 0.05);
+    --callout-tip-border: rgba(34, 197, 94, 0.6);
+    --callout-tip-text: #15803d;
+    --callout-warning-bg: rgba(245, 158, 11, 0.05);
+    --callout-warning-border: rgba(245, 158, 11, 0.6);
+    --callout-warning-text: #b45309;
+    --callout-error-bg: rgba(239, 68, 68, 0.05);
+    --callout-error-border: rgba(239, 68, 68, 0.6);
+    --callout-error-text: #b91c1c;
+
+    /* ---- Surfaces, gradients (existant — conserve) ---- */
     --surface-card: rgba(255, 255, 255, 1);
     --surface-card-hover: rgba(248, 250, 252, 1);
     --surface-elevated: rgba(255, 255, 255, 1);
     --gradient-brand: linear-gradient(135deg, #06b6d4, #0891b2, #f59e0b);
+    --gradient-brand-text: linear-gradient(135deg, #06b6d4, #22d3ee, #f59e0b, #06b6d4);
     --gradient-hero: linear-gradient(160deg, #f0f9ff 0%, #ecfeff 40%, #f5f3ff 100%);
     --gradient-hero-radial-1: rgba(6, 182, 212, 0.08);
     --gradient-hero-radial-2: rgba(245, 158, 11, 0.06);
     --gradient-card: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(245, 158, 11, 0.05));
+
+    /* ---- Hero (existant — conserve) ---- */
     --hero-grid-line: rgba(0, 0, 0, 0.04);
     --hero-text-primary: #0f172a;
     --hero-text-secondary: #475569;
@@ -171,19 +261,85 @@
     --hero-cta-secondary-hover-bg: rgba(0, 0, 0, 0.06);
     --hero-terminal-border: rgba(203, 213, 225, 0.5);
     --hero-terminal-bg: rgba(15, 23, 42, 0.95);
+
+    /* ---- Shadows tokenisees (RG-05) ---- */
+    --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+    --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 6px 14px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+    --shadow-lg: 0 12px 28px -10px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+    --shadow-xl: 0 24px 48px -16px rgba(15, 23, 42, 0.18);
+    --shadow-2xl: 0 35px 60px -15px rgba(15, 23, 42, 0.3);
+    --shadow-card: var(--shadow-sm);
+    --shadow-elevated: var(--shadow-lg);
+    --shadow-focus: 0 0 0 3px rgba(6, 182, 212, 0.35);
+    --glow-brand: 0 0 60px -12px rgba(6, 182, 212, 0.25);
+    --glow-amber: 0 0 60px -12px rgba(245, 158, 11, 0.2);
+
+    /* ---- Radius custom (RG-05) ---- */
+    --radius-xs: 0.25rem;
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 1.25rem;
+    --radius-full: 9999px;
+
+    /* ---- Animations / motion (RG-05) ---- */
+    --duration-instant: 80ms;
+    --duration-fast: 150ms;
+    --duration-base: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 700ms;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .dark {
+    /* ---- Tokens semantiques (RG-03) ---- */
+    --bg-page: #060912;
+    --bg-subtle: #0a0e1a;
+    --bg-elevated: rgba(15, 23, 42, 0.9);
+    --fg-primary: #f8fafc;
+    --fg-secondary: #cbd5e1;
+    --fg-muted: #94a3b8;
+    --border-subtle: rgba(34, 211, 238, 0.12);
+    --border-default: rgba(51, 65, 85, 0.5);
+    --border-strong: rgba(51, 65, 85, 0.8);
+    /* Brand semantique dark : brand-500 (#06b6d4) reste la couleur primaire
+       d'identite visuelle. On change --fg-on-brand de blanc a slate-900 pour
+       garantir un ratio AA (7.35:1) sur ce fond cyan. --brand-700 prend
+       brand-300 (#67e8f9) comme alias d'accent pour les liens et eyebrows. */
+    --brand-primary: #06b6d4;
+    --brand-hover: #22d3ee;
+    --fg-on-brand: #0f172a;
+    --brand-700: #67e8f9;
+    --brand-800: #22d3ee;
+    /* Status */
     --color-success: #4ade80;
     --color-warning: #fbbf24;
     --color-error: #f87171;
     --color-info: #22d3ee;
+
+    /* ---- Tokens composants ---- */
+    --code-bg: #0a0e1a;
+    --code-bg-deep: #04060d;
+    --code-border: rgba(34, 211, 238, 0.15);
+    /* Callouts (textes plus clairs en dark) */
+    --callout-info-text: #67e8f9;
+    --callout-tip-text: #4ade80;
+    --callout-warning-text: #fbbf24;
+    --callout-error-text: #fca5a5;
+
+    /* ---- Surfaces (existant — conserve) ---- */
     --surface-card: rgba(30, 41, 59, 1);
     --surface-card-hover: rgba(30, 41, 59, 1);
     --surface-elevated: rgba(15, 23, 42, 0.9);
     --gradient-hero: linear-gradient(160deg, #083344 0%, #0f172a 40%, #1e1b4b 100%);
     --gradient-hero-radial-1: rgba(6, 182, 212, 0.15);
     --gradient-hero-radial-2: rgba(245, 158, 11, 0.1);
+
+    /* ---- Hero (existant — conserve) ---- */
     --hero-grid-line: rgba(255, 255, 255, 0.03);
     --hero-text-primary: #ffffff;
     --hero-text-secondary: #cbd5e1;
@@ -196,6 +352,18 @@
     --hero-cta-secondary-hover-bg: rgba(255, 255, 255, 0.05);
     --hero-terminal-border: rgba(51, 65, 85, 0.5);
     --hero-terminal-bg: rgba(15, 23, 42, 0.9);
+
+    /* ---- Shadows dark-tuned ---- */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 6px 14px -4px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 12px 28px -10px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 24px 48px -16px rgba(0, 0, 0, 0.7);
+    --shadow-2xl: 0 35px 60px -15px rgba(0, 0, 0, 0.8);
+    --shadow-focus: 0 0 0 3px rgba(34, 211, 238, 0.45);
+    --glow-brand: 0 0 80px -16px rgba(34, 211, 238, 0.4);
+    /* Glow ambre intensifie sur fond tres sombre (sinon quasi invisible) */
+    --glow-amber: 0 0 80px -16px rgba(251, 191, 36, 0.35);
   }
 
   html {
@@ -217,7 +385,8 @@
   }
 
   body {
-    @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100;
+    background-color: var(--bg-page);
+    color: var(--fg-primary);
   }
 
   ::selection {
@@ -236,6 +405,103 @@
 }
 
 @layer components {
+  /* ---- Echelle typographique semantique (RG-04) ---- */
+  .cc-display-1 {
+    font-size: var(--text-display-1);
+    line-height: 1.02;
+    letter-spacing: var(--tracking-display);
+    font-weight: 800;
+    color: var(--fg-primary);
+  }
+  .cc-display-2 {
+    font-size: var(--text-display-2);
+    line-height: 1.05;
+    letter-spacing: var(--tracking-display);
+    font-weight: 800;
+    color: var(--fg-primary);
+  }
+  .cc-h1 {
+    font-size: var(--text-h1);
+    line-height: 1.05;
+    letter-spacing: var(--tracking-display);
+    font-weight: 800;
+    color: var(--fg-primary);
+  }
+  .cc-h1-doc {
+    font-size: var(--text-h1-doc);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    font-weight: 800;
+    color: var(--fg-primary);
+  }
+  .cc-h2 {
+    font-size: var(--text-h2);
+    line-height: 1.15;
+    letter-spacing: var(--tracking-tight-2);
+    font-weight: 700;
+    color: var(--fg-primary);
+  }
+  .cc-h2-article {
+    font-size: var(--text-h2-article);
+    line-height: 1.2;
+    letter-spacing: var(--tracking-tight-2);
+    font-weight: 700;
+    color: var(--fg-primary);
+  }
+  .cc-h2-doc {
+    font-size: var(--text-h2-doc);
+    line-height: 1.2;
+    letter-spacing: var(--tracking-tight-2);
+    font-weight: 700;
+    color: var(--fg-primary);
+  }
+  .cc-h3 {
+    font-size: var(--text-h3);
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    font-weight: 700;
+    color: var(--fg-primary);
+  }
+  .cc-h4 {
+    font-size: var(--text-h4);
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--fg-primary);
+  }
+  .cc-lead {
+    font-size: var(--text-lead);
+    line-height: 1.6;
+    color: var(--fg-secondary);
+  }
+  .cc-body {
+    font-size: var(--text-body);
+    line-height: 1.7;
+    color: var(--fg-primary);
+  }
+  .cc-body-sm {
+    font-size: var(--text-body-sm);
+    line-height: 1.6;
+    color: var(--fg-secondary);
+  }
+  .cc-caption {
+    font-size: var(--text-caption);
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--fg-muted);
+  }
+  .cc-eyebrow {
+    font-size: var(--text-eyebrow);
+    line-height: 1.4;
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--brand-on-light);
+  }
+  .dark .cc-eyebrow {
+    color: var(--brand-on-dark);
+  }
+
+  /* ---- Texte gradient (existant) ---- */
   .text-gradient {
     color: #0e7490; /* brand-700 fallback — ratio 5.3:1 on white */
     @apply bg-clip-text text-transparent;
@@ -269,11 +535,74 @@
   }
 
   .glow {
-    box-shadow: 0 0 60px -12px rgba(6, 182, 212, 0.25);
+    box-shadow: var(--glow-brand);
   }
 
   .glow-amber {
-    box-shadow: 0 0 60px -12px rgba(245, 158, 11, 0.2);
+    box-shadow: var(--glow-amber);
+  }
+
+  /* ---- Surfaces semantiques (RG-03) ---- */
+  .cc-surface-page {
+    background-color: var(--bg-page);
+    color: var(--fg-primary);
+  }
+  .cc-surface-subtle {
+    background-color: var(--bg-subtle);
+    color: var(--fg-primary);
+  }
+  .cc-surface-elevated {
+    background-color: var(--bg-elevated);
+    color: var(--fg-primary);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  /* ---- Card semantique (RG-03 + RG-05) ---- */
+  .cc-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
+    transition: transform var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out),
+      border-color var(--duration-base) var(--ease-out);
+  }
+  .cc-card[data-interactive="true"]:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(6, 182, 212, 0.3);
+  }
+  .dark .cc-card[data-interactive="true"]:hover {
+    border-color: rgba(34, 211, 238, 0.4);
+    box-shadow: var(--shadow-lg), 0 0 40px -18px rgba(34, 211, 238, 0.3);
+  }
+
+  /* ---- Callouts semantiques (RG-13 prepare) ---- */
+  .cc-callout {
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-radius: var(--radius-lg);
+    padding: 1rem 1.125rem;
+  }
+  .cc-callout-info {
+    background-color: var(--callout-info-bg);
+    border-left-color: var(--callout-info-border);
+    color: var(--callout-info-text);
+  }
+  .cc-callout-tip {
+    background-color: var(--callout-tip-bg);
+    border-left-color: var(--callout-tip-border);
+    color: var(--callout-tip-text);
+  }
+  .cc-callout-warning {
+    background-color: var(--callout-warning-bg);
+    border-left-color: var(--callout-warning-border);
+    color: var(--callout-warning-text);
+  }
+  .cc-callout-error {
+    background-color: var(--callout-error-bg);
+    border-left-color: var(--callout-error-border);
+    color: var(--callout-error-text);
   }
 }
 

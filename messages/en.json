@@ -421,5 +421,144 @@
       "mythes": "8 myths about Claude Code",
       "securite": "Security guide"
     }
+  },
+  "designSystem": {
+    "metaTitle": "Design System · C1 tokens (internal)",
+    "metaDescription": "Internal reference page for the Claude Codex C1 tokens: typography, palettes, surfaces, callouts, radius, shadows and motion.",
+    "hero": {
+      "eyebrow": "Internal · C1 tokens",
+      "title": "Claude Codex design system",
+      "subtitle": "This page lists every visual token of the site. It is the reference for developers and designers when checking that a new component reuses the existing system.",
+      "notice": "Page not listed in public navigation. Indexing disabled. Always prefer a semantic token over a hard-coded value."
+    },
+    "typography": {
+      "eyebrow": "01 · Typography",
+      "title": "Type scale",
+      "description": "All utility classes are defined in globals.css. They encode size, line-height, weight and the semantic color of each text role.",
+      "sample": {
+        "cc-display-1": "Display 1 : for the main hero",
+        "cc-display-2": "Display 2 : strong secondary",
+        "cc-h1": "H1 of a section landing",
+        "cc-h1-doc": "H1 of a doc page",
+        "cc-h2": "Standard section H2",
+        "cc-h2-article": "H2 of an editorial article",
+        "cc-h2-doc": "H2 of a doc page",
+        "cc-h3": "H3 : sub-section",
+        "cc-h4": "H4 : small block heading",
+        "cc-lead": "Lead paragraph that gently introduces the reader to the content.",
+        "cc-body": "Standard body copy for everyday content.",
+        "cc-body-sm": "Smaller body text, for notes or longer captions.",
+        "cc-caption": "Discreet caption for metadata",
+        "cc-eyebrow": "Section eyebrow"
+      },
+      "tracking": {
+        "tight": "display tracking, 800 weight",
+        "tightDoc": "tracking -0.025em, 800 weight",
+        "tight2": "tracking -0.02em, 700 weight",
+        "tightSmall": "tracking -0.015em, 700 weight",
+        "normal": "neutral tracking",
+        "wide": "tracking 0.08em, uppercase"
+      }
+    },
+    "palettes": {
+      "eyebrow": "02 · Palettes",
+      "title": "Primitive colors",
+      "description": "Eleven steps per palette, exposed both as CSS variables and Tailwind utilities. Components should only reach for these hex values in documented edge cases.",
+      "brand": "Brand (cyan)",
+      "accent": "Accent (amber)",
+      "slate": "Neutrals (slate)"
+    },
+    "semantic": {
+      "eyebrow": "03 · Semantic tokens",
+      "title": "Semantic colors",
+      "description": "Components should consume these tokens first. They switch automatically between light and dark via the .dark class.",
+      "bgGroup": "Backgrounds",
+      "fgGroup": "Foregrounds",
+      "borderGroup": "Borders",
+      "brandGroup": "Semantic brand",
+      "bgPageUsage": "Main page background",
+      "bgSubtleUsage": "Secondary section background",
+      "bgElevatedUsage": "Card or floating surface background",
+      "fgPrimaryUsage": "Primary text, headings",
+      "fgSecondaryUsage": "Secondary text, descriptions",
+      "fgMutedUsage": "Muted text, metadata",
+      "fgOnBrandUsage": "Text on brand background (AA contrast)",
+      "borderSubtleUsage": "Subtle border, dividers",
+      "borderDefaultUsage": "Standard card border",
+      "borderStrongUsage": "Strong border, focus",
+      "brandPrimaryUsage": "Primary action color (AA on fg-on-brand)",
+      "brandHoverUsage": "Hover state for primary actions",
+      "brand700Usage": "Legacy alias for brand-700",
+      "brand800Usage": "Legacy alias for brand-800"
+    },
+    "surfaces": {
+      "eyebrow": "04 · Surfaces",
+      "title": "Three surface levels",
+      "description": "page → subtle → elevated. The .cc-surface-* utilities handle background, text color and the optional shadow at once.",
+      "page": "Page",
+      "subtle": "Subtle",
+      "elevated": "Elevated",
+      "pageUsage": "Top-level page background, no shadow.",
+      "subtleUsage": "Softer background to break up sections.",
+      "elevatedUsage": "Floating surface, ships with --shadow-elevated."
+    },
+    "status": {
+      "eyebrow": "05 · Status",
+      "title": "Status colors",
+      "description": "The four standard statuses. Always pair the color with a label to stay accessible to color-blind users.",
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error",
+      "info": "Info"
+    },
+    "cards": {
+      "eyebrow": "06 · Cards",
+      "title": "Semantic card",
+      "description": "The .cc-card class sets a consistent background, border, radius and shadow. Adding data-interactive=\"true\" enables the hover lift.",
+      "staticLabel": "Static",
+      "interactiveLabel": "Interactive",
+      "staticDescription": "Standard presentation card, no interaction. Used for informational content.",
+      "interactiveDescription": "Hover this card to see the elevation and the brand glow."
+    },
+    "callouts": {
+      "eyebrow": "07 · Callouts",
+      "title": "Semantic callouts",
+      "description": "Four variants for MDX. Border and text colors meet AA contrast in both light and dark.",
+      "info": {
+        "title": "Info",
+        "body": "Neutral block to clarify some context or point to a resource."
+      },
+      "tip": {
+        "title": "Tip",
+        "body": "Positive block to share a best practice or a useful shortcut."
+      },
+      "warning": {
+        "title": "Warning",
+        "body": "Alert block to flag a common pitfall or something to watch out for."
+      },
+      "error": {
+        "title": "Error",
+        "body": "Red block for blocking errors or behaviors to avoid."
+      }
+    },
+    "radius": {
+      "eyebrow": "08 · Radius",
+      "title": "Border radius",
+      "description": "Seven radius steps to cover every surface, from filled badges to perfect circles."
+    },
+    "shadows": {
+      "eyebrow": "09 · Shadows",
+      "title": "Depth",
+      "description": "Six shadow levels plus two colored glows. Values are retuned in dark mode to stay perceivable on dark backgrounds."
+    },
+    "motion": {
+      "eyebrow": "10 · Motion",
+      "title": "Durations and easings",
+      "description": "Every site transition pulls from these tokens. Prefer ease-out for natural entry, ease-spring for a slight bounce.",
+      "hoverLabel": "Hover demo",
+      "hoverTitle": "Hover this card",
+      "hoverBody": "3px upward translation, base duration with an ease-out curve. Disabled when prefers-reduced-motion is active.",
+      "reducedMotion": "All animations respect prefers-reduced-motion: the translation is removed for users who request it."
+    }
   }
 }

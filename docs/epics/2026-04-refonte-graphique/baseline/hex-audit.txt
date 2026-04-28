@@ -1,0 +1,202 @@
+src/components/layout/SectionSlugContent.tsx:116:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/components/ui/TerminalScreenshot.tsx:44: * WCAG contrast on bg-slate-950 (#020617):
+src/components/ui/TerminalScreenshot.tsx:45: * - text-white (#fff)         ~21:1  ✓
+src/components/ui/TerminalScreenshot.tsx:46: * - text-green-400 (#4ade80)  ~9.6:1 ✓
+src/components/ui/TerminalScreenshot.tsx:47: * - text-brand-400 (#22d3ee)  ~7.2:1 ✓
+src/components/ui/TerminalScreenshot.tsx:48: * - text-slate-400 (#94a3b8)  ~5.9:1 ✓  (output + comment)
+src/components/ui/TerminalScreenshot.tsx:49: * - text-cyan-300  (#67e8f9)  ~9.1:1 ✓
+src/components/ui/TerminalScreenshot.tsx:145:    // text-slate-400 (#94a3b8) on bg-slate-950 (#020617) = ~5.9:1 — passes WCAG AA
+src/components/ui/TerminalScreenshot.tsx:150:    // text-brand-400 (#22d3ee) on bg-slate-950 (#020617) = ~7.2:1 — passes WCAG AA
+src/components/ui/TerminalScreenshot.tsx:155:    // Fix: was text-slate-500 (#64748b, ~3.8:1 — WCAG AA fail).
+src/components/ui/TerminalScreenshot.tsx:156:    // Raised to text-slate-400 (#94a3b8) for ~5.9:1 contrast on bg-slate-950.
+src/components/ui/TerminalScreenshot.tsx:161:    // text-cyan-300 (#67e8f9) on bg-slate-950 (#020617) = ~9.1:1 — passes WCAG AA
+src/components/ui/InteractiveRobotScene.tsx:57:        color="#06b6d4"
+src/components/ui/InteractiveRobotScene.tsx:71:        color="#f59e0b"
+src/components/ui/InteractiveRobotScene.tsx:125:      <color attach="background" args={["#020617"]} />
+src/components/ui/InteractiveRobotScene.tsx:127:      <directionalLight position={[4, 6, 5]} intensity={1.3} color="#ffffff" />
+src/components/ui/InteractiveRobotScene.tsx:131:        color="#06b6d4"
+src/components/ui/InteractiveRobotScene.tsx:133:      <pointLight position={[0, -1, 3]} intensity={0.7} color="#f59e0b" />
+src/components/ui/MermaidDiagram.tsx:14:  primaryColor: "#0891b2",
+src/components/ui/MermaidDiagram.tsx:15:  primaryTextColor: "#e2e8f0",
+src/components/ui/MermaidDiagram.tsx:16:  primaryBorderColor: "#06b6d4",
+src/components/ui/MermaidDiagram.tsx:17:  lineColor: "#64748b",
+src/components/ui/MermaidDiagram.tsx:18:  secondaryColor: "#1e293b",
+src/components/ui/MermaidDiagram.tsx:19:  tertiaryColor: "#0f172a",
+src/components/ui/MermaidDiagram.tsx:20:  noteBkgColor: "#1e293b",
+src/components/ui/MermaidDiagram.tsx:21:  noteTextColor: "#e2e8f0",
+src/components/ui/MermaidDiagram.tsx:22:  actorBkg: "#155e75",
+src/components/ui/MermaidDiagram.tsx:23:  actorBorder: "#0e7490",
+src/components/ui/MermaidDiagram.tsx:24:  actorTextColor: "#f1f5f9",
+src/components/ui/MermaidDiagram.tsx:25:  signalColor: "#94a3b8",
+src/components/ui/MermaidDiagram.tsx:26:  signalTextColor: "#e2e8f0",
+src/components/ui/MermaidDiagram.tsx:30:  primaryColor: "#a5f3fc",
+src/components/ui/MermaidDiagram.tsx:31:  primaryTextColor: "#0f172a",
+src/components/ui/MermaidDiagram.tsx:32:  primaryBorderColor: "#0891b2",
+src/components/ui/MermaidDiagram.tsx:33:  lineColor: "#334155",
+src/components/ui/MermaidDiagram.tsx:34:  secondaryColor: "#e0f2fe",
+src/components/ui/MermaidDiagram.tsx:35:  tertiaryColor: "#cffafe",
+src/components/ui/MermaidDiagram.tsx:36:  noteBkgColor: "#e0f2fe",
+src/components/ui/MermaidDiagram.tsx:37:  noteTextColor: "#0f172a",
+src/components/ui/MermaidDiagram.tsx:38:  actorBkg: "#155e75",
+src/components/ui/MermaidDiagram.tsx:39:  actorBorder: "#0e7490",
+src/components/ui/MermaidDiagram.tsx:40:  actorTextColor: "#ffffff",
+src/components/ui/MermaidDiagram.tsx:41:  signalColor: "#334155",
+src/components/ui/MermaidDiagram.tsx:42:  signalTextColor: "#1e293b",
+src/components/ui/MermaidDiagram.tsx:53:    bgRect.style.fill = isDark ? "#1e293b" : "#f8fafc";
+src/components/ui/MermaidDiagram.tsx:57:    el.style.stroke = "#06b6d4";
+src/components/ui/MermaidDiagram.tsx:61:  const labelFill = isDark ? "#cbd5e1" : "#334155";
+src/components/ui/MermaidDiagram.tsx:70:    title.style.fill = isDark ? "#e2e8f0" : "#0f172a";
+src/components/ui/MermaidDiagram.tsx:79:      .messageText { fill: #e2e8f0 !important; font-weight: 500; }
+src/components/ui/MermaidDiagram.tsx:80:      .messageLine0, .messageLine1 { stroke: #64748b !important; }
+src/components/ui/MermaidDiagram.tsx:81:      .actor-line { stroke: #475569 !important; }
+src/components/ui/MermaidDiagram.tsx:82:      text.actor { fill: #f1f5f9 !important; }
+src/components/ui/MermaidDiagram.tsx:83:      .xychart-title { fill: #e2e8f0 !important; }
+src/components/ui/MermaidDiagram.tsx:84:      .xychart-plot-line { stroke: #06b6d4 !important; stroke-width: 2.5; }
+src/components/ui/MermaidDiagram.tsx:85:      .tick text, .axis-title { fill: #94a3b8 !important; }
+src/components/ui/MermaidDiagram.tsx:86:      .tick line, .domain { stroke: #475569 !important; }
+src/components/ui/MermaidDiagram.tsx:87:      .xychart-plot-band rect { fill: #0891b2 !important; }
+src/components/ui/MermaidDiagram.tsx:91:    .messageText { fill: #1e293b !important; font-weight: 500; }
+src/components/ui/MermaidDiagram.tsx:92:    .messageLine0, .messageLine1 { stroke: #334155 !important; }
+src/components/ui/MermaidDiagram.tsx:93:    .actor-line { stroke: #cbd5e1 !important; }
+src/components/ui/MermaidDiagram.tsx:94:    text.actor { fill: #ffffff !important; }
+src/components/ui/MermaidDiagram.tsx:95:    .activation0 { fill: #e0f2fe !important; stroke: #0891b2 !important; }
+src/components/ui/MermaidDiagram.tsx:96:    .xychart-title { fill: #0f172a !important; }
+src/components/ui/MermaidDiagram.tsx:97:    .xychart-plot-line { stroke: #0891b2 !important; stroke-width: 2.5; }
+src/components/ui/MermaidDiagram.tsx:98:    .tick text, .axis-title { fill: #334155 !important; }
+src/components/ui/McpArchitectureDiagram.tsx:14:    beamColor: "#06b6d4",
+src/components/ui/McpArchitectureDiagram.tsx:23:    beamColor: "#f59e0b",
+src/components/ui/McpArchitectureDiagram.tsx:32:    beamColor: "#22c55e",
+src/app/globals.css:14:  --color-brand-50: #ecfeff;
+src/app/globals.css:15:  --color-brand-100: #cffafe;
+src/app/globals.css:16:  --color-brand-200: #a5f3fc;
+src/app/globals.css:17:  --color-brand-300: #67e8f9;
+src/app/globals.css:18:  --color-brand-400: #22d3ee;
+src/app/globals.css:19:  --color-brand-500: #06b6d4;
+src/app/globals.css:20:  --color-brand-600: #0891b2;
+src/app/globals.css:21:  --color-brand-700: #0e7490;
+src/app/globals.css:22:  --color-brand-800: #155e75;
+src/app/globals.css:23:  --color-brand-900: #164e63;
+src/app/globals.css:24:  --color-brand-950: #083344;
+src/app/globals.css:27:  --color-accent-50: #fffbeb;
+src/app/globals.css:28:  --color-accent-100: #fef3c7;
+src/app/globals.css:29:  --color-accent-200: #fde68a;
+src/app/globals.css:30:  --color-accent-300: #fcd34d;
+src/app/globals.css:31:  --color-accent-400: #fbbf24;
+src/app/globals.css:32:  --color-accent-500: #f59e0b;
+src/app/globals.css:33:  --color-accent-600: #d97706;
+src/app/globals.css:34:  --color-accent-700: #b45309;
+src/app/globals.css:35:  --color-accent-800: #92400e;
+src/app/globals.css:36:  --color-accent-900: #78350f;
+src/app/globals.css:37:  --color-accent-950: #451a03;
+src/app/globals.css:150:    --color-success: #22c55e;
+src/app/globals.css:151:    --color-warning: #f59e0b;
+src/app/globals.css:152:    --color-error: #ef4444;
+src/app/globals.css:153:    --color-info: #06b6d4;
+src/app/globals.css:154:    --surface-card: rgba(255, 255, 255, 1);
+src/app/globals.css:155:    --surface-card-hover: rgba(248, 250, 252, 1);
+src/app/globals.css:156:    --surface-elevated: rgba(255, 255, 255, 1);
+src/app/globals.css:157:    --gradient-brand: linear-gradient(135deg, #06b6d4, #0891b2, #f59e0b);
+src/app/globals.css:158:    --gradient-hero: linear-gradient(160deg, #f0f9ff 0%, #ecfeff 40%, #f5f3ff 100%);
+src/app/globals.css:159:    --gradient-hero-radial-1: rgba(6, 182, 212, 0.08);
+src/app/globals.css:160:    --gradient-hero-radial-2: rgba(245, 158, 11, 0.06);
+src/app/globals.css:161:    --gradient-card: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(245, 158, 11, 0.05));
+src/app/globals.css:162:    --hero-grid-line: rgba(0, 0, 0, 0.04);
+src/app/globals.css:163:    --hero-text-primary: #0f172a;
+src/app/globals.css:164:    --hero-text-secondary: #475569;
+src/app/globals.css:165:    --hero-badge-border: rgba(6, 182, 212, 0.25);
+src/app/globals.css:166:    --hero-badge-bg: rgba(6, 182, 212, 0.08);
+src/app/globals.css:167:    --hero-badge-text: #0e7490;
+src/app/globals.css:168:    --hero-cta-secondary-border: #cbd5e1;
+src/app/globals.css:169:    --hero-cta-secondary-text: #334155;
+src/app/globals.css:170:    --hero-cta-secondary-hover-border: #94a3b8;
+src/app/globals.css:171:    --hero-cta-secondary-hover-bg: rgba(0, 0, 0, 0.06);
+src/app/globals.css:172:    --hero-terminal-border: rgba(203, 213, 225, 0.5);
+src/app/globals.css:173:    --hero-terminal-bg: rgba(15, 23, 42, 0.95);
+src/app/globals.css:177:    --color-success: #4ade80;
+src/app/globals.css:178:    --color-warning: #fbbf24;
+src/app/globals.css:179:    --color-error: #f87171;
+src/app/globals.css:180:    --color-info: #22d3ee;
+src/app/globals.css:181:    --surface-card: rgba(30, 41, 59, 1);
+src/app/globals.css:182:    --surface-card-hover: rgba(30, 41, 59, 1);
+src/app/globals.css:183:    --surface-elevated: rgba(15, 23, 42, 0.9);
+src/app/globals.css:184:    --gradient-hero: linear-gradient(160deg, #083344 0%, #0f172a 40%, #1e1b4b 100%);
+src/app/globals.css:185:    --gradient-hero-radial-1: rgba(6, 182, 212, 0.15);
+src/app/globals.css:186:    --gradient-hero-radial-2: rgba(245, 158, 11, 0.1);
+src/app/globals.css:187:    --hero-grid-line: rgba(255, 255, 255, 0.03);
+src/app/globals.css:188:    --hero-text-primary: #ffffff;
+src/app/globals.css:189:    --hero-text-secondary: #cbd5e1;
+src/app/globals.css:190:    --hero-badge-border: rgba(6, 182, 212, 0.2);
+src/app/globals.css:191:    --hero-badge-bg: rgba(6, 182, 212, 0.1);
+src/app/globals.css:192:    --hero-badge-text: #67e8f9;
+src/app/globals.css:193:    --hero-cta-secondary-border: #475569;
+src/app/globals.css:194:    --hero-cta-secondary-text: #e2e8f0;
+src/app/globals.css:195:    --hero-cta-secondary-hover-border: #64748b;
+src/app/globals.css:196:    --hero-cta-secondary-hover-bg: rgba(255, 255, 255, 0.05);
+src/app/globals.css:197:    --hero-terminal-border: rgba(51, 65, 85, 0.5);
+src/app/globals.css:198:    --hero-terminal-bg: rgba(15, 23, 42, 0.9);
+src/app/globals.css:240:    color: #0e7490; /* brand-700 fallback — ratio 5.3:1 on white */
+src/app/globals.css:242:    background-image: linear-gradient(135deg, #06b6d4, #22d3ee, #f59e0b, #06b6d4);
+src/app/globals.css:272:    box-shadow: 0 0 60px -12px rgba(6, 182, 212, 0.25);
+src/app/globals.css:276:    box-shadow: 0 0 60px -12px rgba(245, 158, 11, 0.2);
+src/app/[locale]/page.tsx:374:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.08),_transparent_70%)] dark:bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/content/page.tsx:91:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/enterprise/page.tsx:106:      <section className="relative overflow-hidden bg-slate-950"><div className="absolute inset-0 bg-[var(--gradient-hero)]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" /><div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+src/app/[locale]/enterprise/page.tsx:156:      <section className="relative overflow-hidden py-20 sm:py-28"><div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/about/page.tsx:85:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/about/page.tsx:214:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/plugins/page.tsx:132:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/plugins/page.tsx:133:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/plugins/page.tsx:134:        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+src/app/[locale]/plugins/page.tsx:206:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/personas/page.tsx:90:      <section className="relative overflow-hidden bg-slate-950"><div className="absolute inset-0 bg-[var(--gradient-hero)]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/personas/page.tsx:113:      <section className="relative overflow-hidden py-16 sm:py-20"><div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.12),_transparent_70%)]" />
+src/app/[locale]/use-cases/page.tsx:132:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/use-cases/page.tsx:133:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/use-cases/page.tsx:225:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.12),_transparent_70%)]" />
+src/app/[locale]/prompting/page.tsx:806:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/prompting/page.tsx:807:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/prompting/page.tsx:813:              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+src/app/[locale]/prompting/page.tsx:1308:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/glossary/page.tsx:98:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/configurator/page.tsx:58:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/components/ui/AnimatedBeam.tsx:12:  color = "#06b6d4",
+src/components/ui/BorderBeam.tsx:16:  colorFrom = "#06b6d4",
+src/components/ui/BorderBeam.tsx:17:  colorTo = "#f59e0b",
+src/components/ui/BorderBeam.tsx:30:          "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+src/components/ui/PathCard.tsx:63:    teal: { from: "#06b6d4", to: "#22d3ee" },
+src/components/ui/PathCard.tsx:64:    amber: { from: "#f59e0b", to: "#fbbf24" },
+src/components/ui/PathCard.tsx:65:    purple: { from: "#8b5cf6", to: "#a78bfa" },
+src/components/ui/InteractiveRobot.tsx:64:            "radial-gradient(ellipse 55% 40% at 50% 70%, rgba(6,182,212,0.28) 0%, rgba(245,158,11,0.15) 45%, transparent 75%)",
+src/components/ui/InteractiveRobot.tsx:73:            "radial-gradient(ellipse at 50% 55%, transparent 0%, transparent 35%, rgba(2,6,23,0.7) 75%, #020617 100%)",
+src/components/not-found/NotFoundClient.tsx:126:            "radial-gradient(ellipse at top right, rgba(6,182,212,0.2), transparent 55%), radial-gradient(ellipse at bottom left, rgba(245,158,11,0.18), transparent 60%)",
+src/app/[locale]/getting-started/page.tsx:246:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/getting-started/page.tsx:247:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/getting-started/page.tsx:326:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.12),_transparent_70%)]" />
+src/app/[locale]/advanced/page.tsx:146:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/advanced/page.tsx:147:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/advanced/page.tsx:153:              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+src/app/[locale]/advanced/page.tsx:297:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/content/[slug]/page.tsx:71:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/limits/page.tsx:88:      <section className="relative overflow-hidden bg-slate-950"><div className="absolute inset-0 bg-[var(--gradient-hero)]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/limits/page.tsx:119:      <section className="relative overflow-hidden py-16 sm:py-20"><div className="absolute inset-0 bg-gradient-to-br from-brand-950 via-slate-900 to-brand-900" /><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.12),_transparent_70%)]" />
+src/app/[locale]/future/page.tsx:389:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.18),_transparent_60%)]" />
+src/app/[locale]/future/page.tsx:390:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.12),_transparent_60%)]" />
+src/app/[locale]/future/page.tsx:391:        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(139,92,246,0.08),_transparent_50%)]" />
+src/app/[locale]/future/page.tsx:398:              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+src/app/[locale]/future/page.tsx:671:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/future/page.tsx:672:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/reference/page.tsx:128:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/reference/page.tsx:129:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/reference/page.tsx:135:              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+src/app/[locale]/agents/page.tsx:190:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/agents/page.tsx:191:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/agents/page.tsx:197:              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+src/app/[locale]/agents/page.tsx:356:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/skills/page.tsx:600:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/skills/page.tsx:601:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/skills/page.tsx:607:              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+src/app/[locale]/skills/page.tsx:1254:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
+src/app/[locale]/mcp/page.tsx:694:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+src/app/[locale]/mcp/page.tsx:695:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_rgba(245,158,11,0.1),_transparent_60%)]" />
+src/app/[locale]/mcp/page.tsx:701:              "linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)",
+src/app/[locale]/mcp/page.tsx:1211:        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />

@@ -20,7 +20,10 @@ concurrency:
 
 jobs:
   analyze:
-    name: Analyze JavaScript/TypeScript
+    # Le nom du job devient le nom du check publie par GitHub Actions.
+    # La ruleset develop attend un check "CodeQL" venant d'Actions
+    # (integration_id 15368), donc on aligne ici.
+    name: CodeQL
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:

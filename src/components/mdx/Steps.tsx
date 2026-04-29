@@ -26,19 +26,22 @@ export function Step({ title, stepNumber, isLast = false, children }: StepProps)
     <div className="flex gap-4 sm:gap-6">
       <div className="flex shrink-0 flex-col items-center">
         {stepNumber !== undefined && (
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-brand-600 text-sm font-bold text-white shadow-lg shadow-brand-500/25">
+          <div
+            className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-[color:var(--fg-on-brand)] shadow-lg shadow-brand-500/25"
+            style={{ backgroundImage: "var(--gradient-brand)" }}
+          >
             {stepNumber}
           </div>
         )}
         {!isLast && (
-          <div className="mt-2 h-full w-px bg-slate-200 dark:bg-slate-700" />
+          <div className="mt-2 h-full w-px bg-[color:var(--border-default)]" />
         )}
       </div>
       <div className="min-w-0 flex-1 pb-6">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+        <h3 className="text-lg font-bold text-[color:var(--fg-primary)]">
           {title}
         </h3>
-        <div className="mt-2 leading-relaxed text-slate-600 dark:text-slate-300">
+        <div className="mt-2 leading-relaxed text-[color:var(--fg-secondary)]">
           {children}
         </div>
       </div>

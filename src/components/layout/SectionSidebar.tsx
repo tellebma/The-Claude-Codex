@@ -44,12 +44,12 @@ export function SectionSidebar() {
       className="hidden h-full lg:block"
     >
       <nav className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
+        <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[color:var(--fg-muted)]">
           {title}
         </h3>
         {currentPage > 0 && (
           <div className="mb-3">
-            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex items-center justify-between text-xs text-[color:var(--fg-muted)]">
               <span aria-live="polite">
                 Page {currentPage} / {totalPages}
               </span>
@@ -65,11 +65,15 @@ export function SectionSidebar() {
             />
             <div
               aria-hidden="true"
-              className="mt-1.5 h-1 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"
+              className="mt-1.5 h-1 overflow-hidden rounded-full bg-[color:var(--border-default)]"
             >
               <div
-                className="h-full rounded-full bg-brand-500 transition-all duration-300"
-                style={{ width: `${(currentPage / totalPages) * 100}%` }}
+                className="h-full rounded-full bg-brand-500 transition-all"
+                style={{
+                  width: `${(currentPage / totalPages) * 100}%`,
+                  transitionDuration: "var(--duration-base)",
+                  transitionTimingFunction: "var(--ease-out)",
+                }}
               />
             </div>
           </div>
@@ -87,9 +91,11 @@ export function SectionSidebar() {
                   aria-current={isActive ? "page" : undefined}
                   className={clsx(
                     "block rounded-lg px-3 py-2 text-sm transition-colors",
-                    isActive
-                      ? "bg-brand-500/10 font-medium text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                    // Indicateur lateral pour renforcer la lisibilite de l'item actif
+                    isActive &&
+                      "border-l-2 border-brand-500 -ml-0.5 bg-brand-500/10 font-medium text-[color:var(--brand-primary)]",
+                    !isActive &&
+                      "text-[color:var(--fg-secondary)] hover:bg-[color:var(--bg-subtle)] hover:text-[color:var(--fg-primary)]"
                   )}
                 >
                   {t(item.labelKey)}

@@ -20,26 +20,37 @@ describe("Card", () => {
     expect(screen.queryByRole("heading")).not.toBeInTheDocument();
   });
 
-  it("default variant applies correct classes", () => {
+  it("default variant uses semantic tokens (no hardcoded slate)", () => {
     const { container } = render(<Card variant="default">Content</Card>);
     const card = container.firstChild as HTMLElement;
-    expect(card.className).toContain("border-slate-200");
-    expect(card.className).toContain("bg-white");
-    expect(card.className).toContain("dark:border-slate-700");
-    expect(card.className).toContain("dark:bg-slate-800");
+    expect(card.className).toContain("border-[color:var(--border-default)]");
+    expect(card.className).toContain("bg-[color:var(--bg-elevated)]");
+    expect(card.className).not.toMatch(/dark:bg-slate/);
+    expect(card.className).not.toMatch(/dark:border-slate/);
   });
 
   it("accent variant applies correct classes", () => {
     const { container } = render(<Card variant="accent">Content</Card>);
     const card = container.firstChild as HTMLElement;
     expect(card.className).toContain("border-brand-500/30");
-    expect(card.className).toContain("bg-brand-50");
+    expect(card.className).toContain("bg-brand-500/10");
   });
 
   it("highlight variant applies correct classes", () => {
     const { container } = render(<Card variant="highlight">Content</Card>);
     const card = container.firstChild as HTMLElement;
     expect(card.className).toContain("border-accent-500/30");
-    expect(card.className).toContain("bg-accent-50");
+    expect(card.className).toContain("bg-accent-500/10");
+  });
+
+  it("applies hover lift transition via motion tokens", () => {
+    const { container } = render(<Card>Content</Card>);
+    const card = container.firstChild as HTMLElement;
+    expect(card.className).toContain("hover:-translate-y-px");
+    expect(card.className).toContain("hover:shadow-[var(--shadow-md)]");
+    const inlineStyle = card.getAttribute("style") ?? "";
+    expect(inlineStyle).toContain("var(--duration-fast)");
+    expect(inlineStyle).toContain("var(--ease-out)");
+    expect(inlineStyle).toContain("var(--shadow-card)");
   });
 });

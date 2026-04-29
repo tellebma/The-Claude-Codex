@@ -63,7 +63,7 @@ export function FooterVersion() {
   }, []);
 
   return (
-    <span className="rounded-md bg-slate-200/50 px-2 py-0.5 font-mono text-xs text-slate-600 dark:bg-slate-800/50 dark:text-slate-400">
+    <span className="rounded-md bg-[color:var(--bg-elevated)] px-2 py-0.5 font-mono text-xs text-[color:var(--fg-muted)] ring-1 ring-[color:var(--border-subtle)]">
       v{version}
     </span>
   );

@@ -34,6 +34,38 @@ const allNavKeys = [...primaryNavKeys, ...secondaryNavKeys];
 
 const MOBILE_MENU_ID = "mobile-nav-menu";
 
+// Classes communes pour les items de navigation. On centralise pour reduire la
+// duplication et eviter les divergences entre nav desktop / dropdown / mobile.
+const NAV_ITEM_BASE =
+  "inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors";
+const NAV_ITEM_ACTIVE =
+  "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-300";
+const NAV_ITEM_INACTIVE =
+  "text-[var(--fg-secondary)] hover:bg-[var(--bg-subtle)] hover:text-[var(--fg-primary)]";
+
+type IsActive = (href: string) => boolean;
+
+function makeIsActive(pathname: string): IsActive {
+  return (href) => pathname === href || pathname.startsWith(href + "/");
+}
+
+// Handler clavier du bouton "More" : extrait pour rester sous le seuil de
+// complexite cognitive S3776.
+function handleMoreButtonKey(
+  event: React.KeyboardEvent,
+  setOpen: (next: boolean) => void
+): void {
+  const openKeys = ["ArrowDown", "Enter", " "];
+  if (openKeys.includes(event.key)) {
+    event.preventDefault();
+    setOpen(true);
+    return;
+  }
+  if (event.key === "Escape") {
+    setOpen(false);
+  }
+}
+
 function MoreDropdown() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -41,11 +73,8 @@ function MoreDropdown() {
   const menuItemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const t = useTranslations("navigation");
   const pathname = usePathname();
-  const isSecondaryActive = secondaryNavKeys.some(
-    (item) =>
-      pathname === item.href ||
-      pathname.startsWith(item.href + "/")
-  );
+  const isActive = makeIsActive(pathname);
+  const isSecondaryActive = secondaryNavKeys.some((item) => isActive(item.href));
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -67,16 +96,6 @@ function MoreDropdown() {
       });
     }
   }, [open]);
-
-  const handleButtonKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      setOpen(true);
-    }
-    if (e.key === "Escape") {
-      setOpen(false);
-    }
-  };
 
   const handleMenuKeyDown = (e: React.KeyboardEvent, index: number) => {
     const items = menuItemRefs.current.filter(
@@ -117,12 +136,11 @@ function MoreDropdown() {
       <button
         ref={buttonRef}
         onClick={() => setOpen(!open)}
-        onKeyDown={handleButtonKeyDown}
+        onKeyDown={(e) => handleMoreButtonKey(e, setOpen)}
         className={clsx(
-          "inline-flex min-h-[44px] items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-          isSecondaryActive
-            ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
-            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+          NAV_ITEM_BASE,
+          "gap-1",
+          isSecondaryActive ? NAV_ITEM_ACTIVE : NAV_ITEM_INACTIVE
         )}
         aria-expanded={open}
         aria-haspopup="menu"
@@ -140,12 +158,10 @@ function MoreDropdown() {
         <div
           role="menu"
           aria-label={t("more")}
-          className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-slate-200/60 bg-white/95 py-1 shadow-lg backdrop-blur dark:border-slate-700/40 dark:bg-slate-800/95"
+          className="absolute right-0 top-full z-50 mt-1 w-48 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] py-1 shadow-[var(--shadow-lg)] backdrop-blur"
         >
           {secondaryNavKeys.map((item, index) => {
-            const isActive =
-              pathname === item.href ||
-              pathname.startsWith(item.href + "/");
+            const active = isActive(item.href);
             return (
               <Link
                 key={item.href}
@@ -161,9 +177,7 @@ function MoreDropdown() {
                 }
                 className={clsx(
                   "flex min-h-[44px] items-center px-4 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                  active ? NAV_ITEM_ACTIVE : NAV_ITEM_INACTIVE
                 )}
               >
                 {t(item.key)}
@@ -182,6 +196,7 @@ export function Header() {
   const t = useTranslations("navigation");
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
+  const isActive = makeIsActive(pathname);
 
   // Focus first link when mobile menu opens
   useEffect(() => {
@@ -193,6 +208,22 @@ export function Header() {
         });
       }
     }
+  }, [mobileOpen]);
+
+  // Fermeture du menu mobile sur Escape : completion du focus trap deja
+  // fourni par `inert={!mobileOpen}` sur le conteneur.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+        requestAnimationFrame(() => mobileToggleRef.current?.focus());
+      }
+    }
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, [mobileOpen]);
 
   const toggleMobile = useCallback(() => {
@@ -224,19 +255,19 @@ export function Header() {
 
         <div className="hidden items-center gap-1 lg:flex">
           {primaryNavKeys.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              pathname.startsWith(item.href + "/");
+            const active = isActive(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                aria-current={isActive ? "page" : undefined}
+                aria-current={active ? "page" : undefined}
                 className={clsx(
-                  "inline-flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                  NAV_ITEM_BASE,
+                  "relative",
+                  active ? NAV_ITEM_ACTIVE : NAV_ITEM_INACTIVE,
+                  // Underline brand pour renforcer l'indication d'item actif
+                  active &&
+                    "after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-brand-500"
                 )}
               >
                 {t(item.key)}
@@ -253,7 +284,7 @@ export function Header() {
           <button
             ref={mobileToggleRef}
             onClick={toggleMobile}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700 lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--fg-primary)] transition-colors hover:bg-[var(--bg-subtle)] lg:hidden"
             aria-label={t("menuToggle")}
             aria-expanded={mobileOpen}
             aria-controls={MOBILE_MENU_ID}
@@ -271,7 +302,7 @@ export function Header() {
         id={MOBILE_MENU_ID}
         ref={mobileMenuRef}
         className={clsx(
-          "overflow-hidden border-t border-slate-200/50 transition-all duration-300 dark:border-slate-700/50 lg:hidden",
+          "overflow-hidden border-t border-[var(--border-subtle)] transition-all duration-300 lg:hidden",
           mobileOpen
             ? "max-h-[calc(100vh-4rem)] overflow-y-auto"
             : "max-h-0"
@@ -281,20 +312,16 @@ export function Header() {
       >
         <div className="space-y-1 px-4 py-3">
           {allNavKeys.map((item) => {
-            const isActive =
-              pathname === item.href ||
-              pathname.startsWith(item.href + "/");
+            const active = isActive(item.href);
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                aria-current={isActive ? "page" : undefined}
+                aria-current={active ? "page" : undefined}
                 className={clsx(
                   "flex min-h-[44px] items-center rounded-lg px-3 py-3 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-brand-500/10 text-brand-700 dark:bg-brand-500/20 dark:text-brand-400"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                  active ? NAV_ITEM_ACTIVE : NAV_ITEM_INACTIVE
                 )}
               >
                 {t(item.key)}

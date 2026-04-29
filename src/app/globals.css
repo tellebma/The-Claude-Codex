@@ -518,7 +518,19 @@
   }
 
   .glass {
-    @apply bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-slate-700/50 shadow-sm shadow-slate-100 dark:shadow-none;
+    background-color: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-xs);
+  }
+  /* Fallback : navigateurs sans backdrop-filter (par ex. Firefox < 103
+     ou contexte ou la propriete est desactivee). On bascule sur un fond
+     opaque base sur le token de surface elevee pour preserver la lisibilite. */
+  @supports not ((backdrop-filter: blur(0)) or (-webkit-backdrop-filter: blur(0))) {
+    .glass {
+      background-color: var(--bg-elevated);
+    }
   }
 
   .glass-card {

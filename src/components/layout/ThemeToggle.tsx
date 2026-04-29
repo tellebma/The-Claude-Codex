@@ -19,13 +19,34 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="relative flex h-11 w-11 items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800/80 dark:hover:bg-slate-700"
+      className="relative flex h-11 w-11 items-center justify-center rounded-lg border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] text-[color:var(--fg-primary)] hover:bg-[color:var(--bg-subtle)]"
+      style={{
+        transitionProperty: "background-color, border-color, color",
+        transitionDuration: "var(--duration-base)",
+        transitionTimingFunction: "var(--ease-out)",
+      }}
       aria-label={
         theme === "dark" ? t("lightMode") : t("darkMode")
       }
     >
-      <Sun className="h-5 w-5 rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" aria-hidden="true" />
-      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-transform dark:rotate-0 dark:scale-100" aria-hidden="true" />
+      <Sun
+        className="h-5 w-5 rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
+        style={{
+          transitionProperty: "transform",
+          transitionDuration: "var(--duration-base)",
+          transitionTimingFunction: "var(--ease-out)",
+        }}
+        aria-hidden="true"
+      />
+      <Moon
+        className="absolute h-5 w-5 rotate-90 scale-0 dark:rotate-0 dark:scale-100"
+        style={{
+          transitionProperty: "transform",
+          transitionDuration: "var(--duration-base)",
+          transitionTimingFunction: "var(--ease-out)",
+        }}
+        aria-hidden="true"
+      />
     </button>
   );
 }

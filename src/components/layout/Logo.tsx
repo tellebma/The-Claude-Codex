@@ -7,7 +7,7 @@ export function Logo({ size = "md" }: Readonly<LogoProps>) {
 
   return (
     <div
-      className={`${dimension} relative flex items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500`}
+      className={`${dimension} relative flex items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 text-[color:var(--fg-on-brand)]`}
       aria-hidden="true"
     >
       <svg
@@ -20,14 +20,14 @@ export function Logo({ size = "md" }: Readonly<LogoProps>) {
         {/* Chevron bracket: > _ representing a terminal prompt */}
         <path
           d="M8 10L15 16L8 22"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
           d="M17 22H24"
-          stroke="white"
+          stroke="currentColor"
           strokeWidth="2.5"
           strokeLinecap="round"
         />

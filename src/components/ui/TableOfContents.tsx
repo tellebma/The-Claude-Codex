@@ -109,11 +109,11 @@ export function TableOfContents() {
       className="hidden xl:block"
     >
       <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
+        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[color:var(--fg-muted)]">
           <List className="h-3.5 w-3.5" aria-hidden="true" />
           {t("onThisPage")}
         </div>
-        <ul className="space-y-1 border-l border-slate-200 dark:border-slate-700">
+        <ul className="space-y-1 border-l border-[color:var(--border-default)]">
           {headings.map((heading) => {
             const isActive = activeId === heading.id;
             return (
@@ -139,8 +139,8 @@ export function TableOfContents() {
                     heading.level === 3 ? "pl-6" : "pl-4"
                   } ${
                     isActive
-                      ? "-ml-px border-brand-500 font-medium text-brand-700 dark:text-brand-400"
-                      : "-ml-px border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-200"
+                      ? "-ml-px border-brand-500 font-medium text-[color:var(--brand-primary)]"
+                      : "-ml-px border-transparent text-[color:var(--fg-secondary)] hover:border-[color:var(--border-strong)] hover:text-[color:var(--fg-primary)]"
                   }`}
                 >
                   {heading.text}

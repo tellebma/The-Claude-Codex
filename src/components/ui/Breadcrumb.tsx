@@ -71,7 +71,7 @@ export function Breadcrumb() {
         <li>
             <Link
               href="/"
-              className="flex items-center gap-1 text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+              className="flex items-center gap-1 text-[color:var(--fg-muted)] transition-colors hover:text-[color:var(--brand-primary)]"
               aria-label={t("home")}
             >
               <Home className="h-3.5 w-3.5" aria-hidden="true" />
@@ -82,12 +82,12 @@ export function Breadcrumb() {
             return (
               <li key={crumb.href} className="flex items-center gap-1">
                 <ChevronRight
-                  className="h-3.5 w-3.5 text-slate-400 dark:text-slate-600"
+                  className="h-3.5 w-3.5 text-[color:var(--fg-muted)]"
                   aria-hidden="true"
                 />
                 {isLast ? (
                   <span
-                    className="font-medium text-slate-900 dark:text-white"
+                    className="font-medium text-[color:var(--fg-primary)]"
                     aria-current="page"
                   >
                     {crumb.label}
@@ -95,7 +95,7 @@ export function Breadcrumb() {
                 ) : (
                   <Link
                     href={crumb.href}
-                    className="text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                    className="text-[color:var(--fg-muted)] transition-colors hover:text-[color:var(--brand-primary)]"
                   >
                     {crumb.label}
                   </Link>

@@ -1,32 +1,38 @@
 "use client";
 
-import { Info, Lightbulb, AlertTriangle } from "lucide-react";
+import { Info, Lightbulb, AlertTriangle, CircleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
 interface CalloutProps {
-  type?: "info" | "tip" | "warning";
+  type?: "info" | "tip" | "warning" | "error";
   title?: string;
   children: React.ReactNode;
 }
 
+// Chaque variante reutilise les utility classes `.cc-callout-*` definies
+// dans globals.css (RG-03). Ces classes consomment les tokens semantiques
+// --callout-*-bg / --callout-*-border / --callout-*-text qui basculent
+// automatiquement en dark via la redefinition dans .dark{}, sans prefix
+// Tailwind dark:.
 const styles = {
   info: {
-    container: "border-brand-500/30 bg-brand-500/5",
-    icon: "text-brand-700 dark:text-brand-400",
+    container: "cc-callout-info",
     IconComponent: Info,
   },
   tip: {
-    container: "border-emerald-500/30 bg-emerald-500/5",
-    icon: "text-emerald-700 dark:text-emerald-400",
+    container: "cc-callout-tip",
     IconComponent: Lightbulb,
   },
   warning: {
-    container: "border-amber-500/30 bg-amber-500/5",
-    icon: "text-amber-700 dark:text-amber-400",
+    container: "cc-callout-warning",
     IconComponent: AlertTriangle,
   },
-};
+  error: {
+    container: "cc-callout-error",
+    IconComponent: CircleAlert,
+  },
+} as const;
 
 export function Callout({ type = "info", title, children }: Readonly<CalloutProps>) {
   const style = styles[type];
@@ -42,10 +48,11 @@ export function Callout({ type = "info", title, children }: Readonly<CalloutProp
       )}
     >
       <div className="flex items-start gap-3">
-        <IconComponent className={clsx("mt-0.5 h-5 w-5 shrink-0", style.icon)} aria-hidden="true" />
+        {/* IconComponent herite de la couleur du conteneur (currentColor sur les SVG lucide) */}
+        <IconComponent className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
         <div>
           <p className="mb-1 font-semibold">{title ?? t(type)}</p>
-          <div className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+          <div className="text-sm leading-relaxed text-[color:var(--fg-secondary)]">
             {children}
           </div>
         </div>

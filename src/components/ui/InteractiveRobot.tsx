@@ -69,8 +69,12 @@ export function InteractiveRobot({
         className="pointer-events-none absolute inset-0 z-10"
         aria-hidden="true"
         style={{
-          background:
-            "radial-gradient(ellipse at 50% 55%, transparent 0%, transparent 35%, rgba(2,6,23,0.7) 75%, #020617 100%)",
+          // Le fade matche le fond slate-950 du conteneur 404 (always-dark
+          // par choix design : hero immersif sur lequel le robot 3D evolue).
+          // Les rgba(6,182,212,...) et rgba(245,158,11,...) plus haut sont
+          // les glows brand/accent du robot, laisses en valeurs litterales
+          // pour conserver le rendu PBR specifique aux materiaux Three.js.
+          background: `radial-gradient(ellipse at 50% 55%, transparent 0%, transparent 35%, rgba(2,6,23,0.7) 75%, var(--color-slate-950) 100%)`,
         }}
       />
     </figure>

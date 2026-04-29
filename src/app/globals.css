@@ -213,11 +213,13 @@
     --color-info: #06b6d4;
 
     /* ---- Tokens composants (RG-03) ---- */
-    /* Code (CodeBlock toujours sombre, choix design) */
-    --code-bg: #0f172a;
-    --code-bg-deep: #0a0e1a;
-    --code-text: #e2e8f0;
-    --code-border: rgba(51, 65, 85, 0.5);
+    /* Code (RG-14 : theme adaptatif light/dark)
+       Light : fond clair, texte sombre, themes.nightOwlLight cote prism.
+       Dark (override dans .dark{}) : fond sombre, texte clair, themes.nightOwl. */
+    --code-bg: #f8fafc;
+    --code-bg-deep: #f1f5f9;
+    --code-text: #0f172a;
+    --code-border: rgba(203, 213, 225, 0.7);
     --code-comment: #64748b;
     --code-keyword: #c4b5fd;
     --code-string: #fbbf24;
@@ -322,8 +324,10 @@
     --color-info: #22d3ee;
 
     /* ---- Tokens composants ---- */
+    /* Code dark (RG-14) : fond sombre profond, texte clair. */
     --code-bg: #0a0e1a;
     --code-bg-deep: #04060d;
+    --code-text: #e2e8f0;
     --code-border: rgba(34, 211, 238, 0.15);
     /* Callouts (textes plus clairs en dark) */
     --callout-info-text: #67e8f9;

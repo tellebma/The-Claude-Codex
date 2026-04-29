@@ -37,7 +37,8 @@ vi.mock("prism-react-renderer", () => ({
     });
   },
   themes: {
-    nightOwl: {},
+    nightOwl: { _name: "nightOwl" },
+    nightOwlLight: { _name: "nightOwlLight" },
   },
 }));
 
@@ -99,5 +100,30 @@ describe("CodeBlock", () => {
     render(<CodeBlock code="ls" />);
     // The code should still render (we trust the Highlight mock)
     expect(screen.getByText("ls")).toBeInTheDocument();
+  });
+
+  it("uses --code-bg token on the container (not hardcoded slate-950)", () => {
+    const { container } = render(<CodeBlock code="ls" />);
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.className).toContain("bg-[color:var(--code-bg)]");
+    expect(root.className).toContain("border-[color:var(--border-subtle)]");
+    expect(root.className).not.toMatch(/bg-slate-950/);
+  });
+
+  it("renders the same code on bash, typescript, tsx, json, yaml", () => {
+    // Smoke test of the 5 main languages — the mock just splits on \n,
+    // we verify the component does not crash for any of them.
+    const samples: ReadonlyArray<{ code: string; language: string }> = [
+      { code: "echo hello", language: "bash" },
+      { code: "const x: number = 1;", language: "typescript" },
+      { code: "<div>hello</div>", language: "tsx" },
+      { code: '{"a": 1}', language: "json" },
+      { code: "key: value", language: "yaml" },
+    ];
+    for (const { code, language } of samples) {
+      const { unmount } = render(<CodeBlock code={code} language={language} />);
+      expect(screen.getByText(code)).toBeInTheDocument();
+      unmount();
+    }
   });
 });

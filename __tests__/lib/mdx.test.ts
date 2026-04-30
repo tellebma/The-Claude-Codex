@@ -443,4 +443,44 @@ Content`);
     // La locale preferee FR doit gagner sur le timestamp egal.
     expect(recent[0].locale).toBe("fr");
   });
+
+  it("getMostRecentArticles retourne EN si preferredLocale='en'", () => {
+    const recent = getMostRecentArticles(3, "en");
+    expect(recent).toHaveLength(1);
+    expect(recent[0].locale).toBe("en");
+  });
+
+  it("countAllArticles retourne 0 si aucun fichier MDX", () => {
+    mockReaddirSync.mockReturnValue([]);
+    expect(countAllArticles()).toBe(0);
+  });
+
+  it("getLastModifiedDate retourne null si aucune date valide", () => {
+    mockReadFileSync.mockReturnValue(`---
+title: "Sans date"
+description: "Pas de dateModified"
+---
+Content`);
+    expect(getLastModifiedDate()).toBeNull();
+  });
+
+  it("getMostRecentArticles ignore les articles sans dateModified", () => {
+    mockReadFileSync.mockReturnValue(`---
+title: "Sans date"
+description: "Pas de dateModified"
+---
+Content`);
+    const recent = getMostRecentArticles(3, "fr");
+    expect(recent).toHaveLength(0);
+  });
+
+  it("getLastModifiedDate ignore les dateModified avec format invalide", () => {
+    mockReadFileSync.mockReturnValue(`---
+title: "Date invalide"
+description: "Date pourrie"
+dateModified: "not-a-date"
+---
+Content`);
+    expect(getLastModifiedDate()).toBeNull();
+  });
 });

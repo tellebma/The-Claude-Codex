@@ -133,6 +133,27 @@ export function getTheme(key: ThemeKey): ThemeMeta {
   return THEME_REGISTRY[key];
 }
 
+function themeError(slug: string, message: string): Error {
+  return new Error(`MDX frontmatter error in "${slug}.mdx": ${message}`);
+}
+
+function assertThemeKeys(
+  raw: ReadonlyArray<unknown>,
+  slug: string
+): ReadonlyArray<ThemeKey> {
+  const keys: ThemeKey[] = [];
+  for (const candidate of raw) {
+    if (!isThemeKey(candidate)) {
+      throw themeError(
+        slug,
+        `"themes" contains unknown key "${String(candidate)}". Valid keys: ${ALL_THEME_KEYS.join(", ")}.`
+      );
+    }
+    keys.push(candidate);
+  }
+  return keys;
+}
+
 /**
  * Valide une liste de cles thematiques :
  * - 1 a 3 entrees,
@@ -150,33 +171,23 @@ export function validateThemes(
     return null;
   }
   if (!Array.isArray(raw)) {
-    throw new Error(
-      `MDX frontmatter error in "${slug}.mdx": "themes" must be an array of strings.`
-    );
+    throw themeError(slug, `"themes" must be an array of strings.`);
   }
   if (raw.length === 0) {
     return null;
   }
   if (raw.length > 3) {
-    throw new Error(
-      `MDX frontmatter error in "${slug}.mdx": "themes" accepts at most 3 entries (got ${raw.length}).`
+    throw themeError(
+      slug,
+      `"themes" accepts at most 3 entries (got ${raw.length}).`
     );
   }
-  const keys: ThemeKey[] = [];
-  for (const candidate of raw) {
-    if (!isThemeKey(candidate)) {
-      throw new Error(
-        `MDX frontmatter error in "${slug}.mdx": "themes" contains unknown key "${String(candidate)}". Valid keys: ${ALL_THEME_KEYS.join(", ")}.`
-      );
-    }
-    keys.push(candidate);
-  }
-  const hasContentType = keys.some(
-    (k) => THEME_REGISTRY[k].kind === "type"
-  );
+  const keys = assertThemeKeys(raw, slug);
+  const hasContentType = keys.some((k) => THEME_REGISTRY[k].kind === "type");
   if (!hasContentType) {
-    throw new Error(
-      `MDX frontmatter error in "${slug}.mdx": "themes" must contain at least one content type (tutorial, guide, reference, comparison, use-case).`
+    throw themeError(
+      slug,
+      `"themes" must contain at least one content type (tutorial, guide, reference, comparison, use-case).`
     );
   }
   return keys;

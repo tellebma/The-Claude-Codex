@@ -79,6 +79,21 @@
     "about": "About",
     "more": "More"
   },
+  "themes": {
+    "badgesLabel": "Article themes",
+    "tutorial": "Tutorial",
+    "guide": "Guide",
+    "reference": "Reference",
+    "comparison": "Comparison",
+    "use-case": "Use case",
+    "security": "Security",
+    "devsecops": "DevSecOps",
+    "architecture": "Architecture",
+    "performance": "Performance",
+    "tooling": "Tooling",
+    "productivity": "Productivity",
+    "migration": "Migration"
+  },
   "footer": {
     "description": "The free reference guide to master Claude Code. Created by the community, for the community. No paywall, no tracking, just shared knowledge.",
     "visionFuture": "Vision & Future",

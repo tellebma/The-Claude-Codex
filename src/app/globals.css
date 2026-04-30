@@ -212,6 +212,11 @@
     --color-error: #ef4444;
     --color-info: #06b6d4;
 
+    /* Themes thematiques articles (RG-31) — couleur dediee pour devsecops
+       qui n'a pas d'equivalent semantique direct. Les autres themes
+       reutilisent --color-error / --color-warning / etc. */
+    --theme-devsecops: #7c3aed;
+
     /* ---- Tokens composants (RG-03) ---- */
     /* Code (RG-14 : theme adaptatif light/dark)
        Light : fond clair, texte sombre, themes.nightOwlLight cote prism.
@@ -322,6 +327,9 @@
     --color-warning: #fbbf24;
     --color-error: #f87171;
     --color-info: #22d3ee;
+
+    /* Themes thematiques articles (RG-31) override pour le mode dark. */
+    --theme-devsecops: #a78bfa;
 
     /* ---- Tokens composants ---- */
     /* Code dark (RG-14) : fond sombre profond, texte clair. */

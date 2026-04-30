@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { MdxRenderer } from "@/components/mdx/MdxRenderer";
 import { ArticleDates } from "@/components/ui/ArticleDates";
+import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import { SITE_URL } from "@/lib/metadata";
 import {
   createArticleSchema,
@@ -146,6 +147,11 @@ export default async function SectionSlugContent({
             <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
               {frontmatter.title}
             </h1>
+            {frontmatter.themes && frontmatter.themes.length > 0 && (
+              <div className="mt-5 flex justify-center">
+                <ThemeBadges themes={frontmatter.themes} />
+              </div>
+            )}
             {frontmatter.description && (
               <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
                 {frontmatter.description}

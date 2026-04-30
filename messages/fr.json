@@ -79,6 +79,21 @@
     "about": "À propos",
     "more": "Plus"
   },
+  "themes": {
+    "badgesLabel": "Thèmes de l'article",
+    "tutorial": "Tutoriel",
+    "guide": "Guide",
+    "reference": "Référence",
+    "comparison": "Comparatif",
+    "use-case": "Cas d'usage",
+    "security": "Sécurité",
+    "devsecops": "DevSecOps",
+    "architecture": "Architecture",
+    "performance": "Performance",
+    "tooling": "Outils",
+    "productivity": "Productivité",
+    "migration": "Migration"
+  },
   "footer": {
     "description": "Le guide de référence gratuit pour maîtriser Claude Code. Créé par la communauté, pour la communauté. Pas de paywall, pas de tracking, juste du savoir partagé.",
     "visionFuture": "Vision & Futur",

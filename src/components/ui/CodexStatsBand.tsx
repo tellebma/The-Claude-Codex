@@ -67,12 +67,18 @@ export async function CodexStatsBand({
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <dl className="grid grid-cols-2 gap-6 text-center sm:gap-8 lg:grid-cols-4">
+        {/*
+          Pas de <dl> ici : axe-core (only-dlitems WCAG) impose des enfants
+          directs <dt>/<dd> uniquement. Un layout <div> classique avec un
+          aria-label sur la section parente couvre la semantique sans
+          contraindre la structure HTML.
+        */}
+        <div className="grid grid-cols-2 gap-6 text-center sm:gap-8 lg:grid-cols-4">
           <Stat value={String(articlesCount)} label={t("articles")} />
           <Stat value={String(sectionsCount)} label={t("sections")} />
           <Stat value={String(LANGUAGES_COUNT)} label={t("languages")} />
           <Stat value={lastUpdateLabel} label={t("lastUpdate")} />
-        </dl>
+        </div>
       </div>
     </section>
   );
@@ -86,13 +92,12 @@ interface StatProps {
 function Stat({ value, label }: Readonly<StatProps>) {
   return (
     <div>
-      <dt className="sr-only">{label}</dt>
-      <dd
+      <p
         className="font-extrabold tabular-nums text-[color:var(--color-slate-50)]"
         style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)", lineHeight: 1.1 }}
       >
         {value}
-      </dd>
+      </p>
       <p className="mt-2 font-mono text-xs uppercase tracking-wider text-[color:var(--color-slate-400)]">
         {label}
       </p>

@@ -58,10 +58,10 @@ export function Tabs({ items }: TabsProps) {
   }
 
   return (
-    <div className="my-6 overflow-hidden rounded-xl border border-slate-200/50 dark:border-slate-700/50">
+    <div className="my-6 overflow-hidden rounded-xl border border-[color:var(--border-subtle)]">
       {/* Tab headers */}
       <div
-        className="flex border-b border-slate-200/50 bg-slate-50/80 dark:border-slate-700/50 dark:bg-slate-800/50"
+        className="flex border-b border-[color:var(--border-subtle)] bg-[color:var(--bg-subtle)]"
         role="tablist"
       >
         {items.map((item, index) => (
@@ -81,8 +81,8 @@ export function Tabs({ items }: TabsProps) {
             className={clsx(
               "px-4 py-2.5 text-sm font-medium transition-colors",
               activeIndex === index
-                ? "border-b-2 border-brand-500 text-brand-700 dark:text-brand-400"
-                : "text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"
+                ? "border-b-2 border-brand-500 text-[color:var(--brand-primary)]"
+                : "text-[color:var(--fg-muted)] hover:text-[color:var(--fg-secondary)]"
             )}
           >
             {item.label}
@@ -90,19 +90,29 @@ export function Tabs({ items }: TabsProps) {
         ))}
       </div>
 
-      {/* Tab content */}
-      {items.map((item, index) => (
-        <div
-          key={item.label}
-          id={`tabpanel-${index}`}
-          role="tabpanel"
-          aria-labelledby={`tab-${index}`}
-          hidden={activeIndex !== index}
-          className="p-4 sm:p-6"
-        >
-          {item.content}
-        </div>
-      ))}
+      {/* Tab content : transition opacity + translateY via tokens motion (RG-15 AC) */}
+      {items.map((item, index) => {
+        const isActive = activeIndex === index;
+        return (
+          <div
+            key={item.label}
+            id={`tabpanel-${index}`}
+            role="tabpanel"
+            aria-labelledby={`tab-${index}`}
+            hidden={!isActive}
+            className="p-4 sm:p-6"
+            style={{
+              opacity: isActive ? 1 : 0,
+              transform: isActive ? "translateY(0)" : "translateY(0.25rem)",
+              transitionProperty: "opacity, transform",
+              transitionDuration: "var(--duration-fast)",
+              transitionTimingFunction: "var(--ease-out)",
+            }}
+          >
+            {item.content}
+          </div>
+        );
+      })}
     </div>
   );
 }

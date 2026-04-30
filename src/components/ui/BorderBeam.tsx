@@ -3,9 +3,12 @@
 import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
 interface BorderBeamProps {
+  /** Duree en secondes ; default 4s aligne avec --animate-border-beam. */
   readonly duration?: number;
   readonly size?: number;
+  /** Couleur de depart du gradient ; default brand-500 (#06b6d4 = var(--color-brand-500)). */
   readonly colorFrom?: string;
+  /** Couleur d'arrivee ; default accent-500 (#f59e0b = var(--color-accent-500)). */
   readonly colorTo?: string;
   readonly delay?: number;
 }

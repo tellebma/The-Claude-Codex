@@ -31,6 +31,8 @@ import { AudienceCard } from "@/components/ui/AudienceCard";
 import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
 import { HeroTerminal } from "@/components/ui/HeroTerminal";
+import { CodexStatsBand } from "@/components/ui/CodexStatsBand";
+import { RecentArticlesSection } from "@/components/ui/RecentArticlesSection";
 import {
   AnimateOnScroll,
   StaggerChildren,
@@ -186,6 +188,9 @@ export default async function HomePage({
           </div>
         </div>
       </section>
+
+      {/* ===== STATS BAND (RG-32) ===== Bande always-dark factuelle */}
+      <CodexStatsBand locale={locale} />
 
       {/* ===== CE QUE VOUS POUVEZ FAIRE ===== */}
       <section className="bg-[color:var(--bg-page)] py-16 sm:py-20 lg:py-24">
@@ -380,6 +385,9 @@ export default async function HomePage({
           </AnimateOnScroll>
         </div>
       </section>
+
+      {/* ===== ARTICLES RECENTS (RG-32) ===== */}
+      <RecentArticlesSection locale={locale} />
 
       {/* ===== CTA FINAL ===== */}
       <section className="relative overflow-hidden bg-[color:var(--bg-subtle)] py-16 sm:py-20 lg:py-24">

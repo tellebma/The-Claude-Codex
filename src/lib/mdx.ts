@@ -288,6 +288,65 @@ export interface RecentArticle {
   readonly themes?: ReadonlyArray<ThemeKey>;
 }
 
+type RecentEntry = RecentArticle & { readonly ts: number };
+
+function parseTimestamp(file: MdxFile): number | null {
+  const dm = file.frontmatter.dateModified;
+  if (typeof dm !== "string") return null;
+  const ts = Date.parse(dm);
+  return Number.isNaN(ts) ? null : ts;
+}
+
+function entryKey(section: string | null, slug: string): string {
+  return section ? `${section}/${slug}` : slug;
+}
+
+function buildEntry(
+  file: MdxFile,
+  section: string | null,
+  locale: string,
+  ts: number
+): RecentEntry {
+  return {
+    title: file.frontmatter.title,
+    description: file.frontmatter.description,
+    section,
+    slug: file.slug,
+    locale,
+    dateModified: file.frontmatter.dateModified ?? "",
+    themes: file.frontmatter.themes,
+    ts,
+  };
+}
+
+function shouldReplace(
+  existing: RecentEntry | undefined,
+  ts: number,
+  locale: string,
+  preferredLocale: string
+): boolean {
+  if (!existing) return true;
+  if (ts > existing.ts) return true;
+  return ts === existing.ts && locale === preferredLocale;
+}
+
+function collectArticles(
+  files: ReadonlyArray<MdxFile>,
+  section: string | null,
+  locale: string,
+  preferredLocale: string,
+  seen: Map<string, RecentEntry>
+): void {
+  for (const file of files) {
+    const ts = parseTimestamp(file);
+    if (ts === null) continue;
+    const key = entryKey(section, file.slug);
+    if (shouldReplace(seen.get(key), ts, locale, preferredLocale)) {
+      seen.set(key, buildEntry(file, section, locale, ts));
+    }
+  }
+}
+
 /**
  * Retourne les N articles les plus recemment modifies (toutes sections,
  * toutes locales). Dedoublonne par "section/slug" en gardant la version
@@ -297,42 +356,18 @@ export function getMostRecentArticles(
   limit: number,
   preferredLocale: string = DEFAULT_LOCALE
 ): ReadonlyArray<RecentArticle> {
-  type Entry = RecentArticle & { ts: number };
-  const seen = new Map<string, Entry>();
-
-  function addEntry(file: MdxFile, section: string | null, locale: string): void {
-    const dm = file.frontmatter.dateModified;
-    if (typeof dm !== "string") return;
-    const ts = Date.parse(dm);
-    if (Number.isNaN(ts)) return;
-    const key = section ? `${section}/${file.slug}` : file.slug;
-    const existing = seen.get(key);
-    if (
-      !existing ||
-      ts > existing.ts ||
-      (ts === existing.ts && locale === preferredLocale)
-    ) {
-      seen.set(key, {
-        title: file.frontmatter.title,
-        description: file.frontmatter.description,
-        section,
-        slug: file.slug,
-        locale,
-        dateModified: dm,
-        themes: file.frontmatter.themes,
-        ts,
-      });
-    }
-  }
+  const seen = new Map<string, RecentEntry>();
 
   for (const locale of ["fr", "en"] as const) {
-    for (const file of getAllMdxFiles(locale)) {
-      addEntry(file, null, locale);
-    }
+    collectArticles(getAllMdxFiles(locale), null, locale, preferredLocale, seen);
     for (const section of SECTIONS_FOR_COUNT) {
-      for (const file of getAllSectionMdxFiles(section, locale)) {
-        addEntry(file, section, locale);
-      }
+      collectArticles(
+        getAllSectionMdxFiles(section, locale),
+        section,
+        locale,
+        preferredLocale,
+        seen
+      );
     }
   }
 

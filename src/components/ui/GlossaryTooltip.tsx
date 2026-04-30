@@ -88,9 +88,10 @@ export function GlossaryTooltip({ term, children }: GlossaryTooltipProps) {
         className={clsx(
           "inline-flex min-h-[44px] cursor-help items-center",
           "border-b border-dashed border-current font-medium transition-colors",
-          "text-brand-700 dark:text-brand-400",
-          "hover:text-brand-600 dark:hover:text-brand-300",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+          // Le trigger inline doit garder un contraste WCAG AA dans les 2 modes
+          // donc text-brand-700 (light) -> text-brand-300 (dark, plus clair).
+          "text-brand-700 hover:text-[color:var(--brand-hover)] dark:text-brand-300 dark:hover:text-brand-200",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-page)]"
         )}
       >
         {children ?? term}

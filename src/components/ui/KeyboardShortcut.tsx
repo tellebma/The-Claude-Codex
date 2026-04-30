@@ -26,14 +26,14 @@ export function KeyboardShortcut({ keys, separator = "+" }: Readonly<KeyboardSho
         <span key={`${key}-${index}`} className="inline-flex items-center gap-1">
           {index > 0 && separator === "+" && (
             <span
-              className="text-xs text-slate-400 dark:text-slate-500"
+              className="text-xs text-[color:var(--fg-muted)]"
               aria-hidden="true"
             >
               +
             </span>
           )}
           <kbd
-            className="inline-flex items-center rounded-md border border-slate-300 bg-slate-100 px-2 py-0.5 font-mono text-sm shadow-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200"
+            className="inline-flex items-center rounded-md border border-[color:var(--border-default)] bg-[color:var(--bg-subtle)] px-2 py-0.5 font-mono text-sm text-[color:var(--fg-secondary)] shadow-sm"
           >
             {key}
           </kbd>

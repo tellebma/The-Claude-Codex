@@ -81,12 +81,18 @@ interface ArticleCardProps {
   readonly ctaLabel: string;
 }
 
+// Classes communes aux 2 variantes (hero + small) — factorisees pour eviter
+// la duplication signalee par SonarQube et garder le pattern d'interactivite
+// (focus ring, hover lift, shadow tokens) coherent.
+const CARD_BASE_CLASSES =
+  "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-page)]";
+
 function ArticleHeroCard({ article, ctaLabel }: Readonly<ArticleCardProps>) {
   return (
     <Link
       href={articleHref(article)}
       aria-label={`${ctaLabel} : ${article.title}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] p-8 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-page)]"
+      className={`${CARD_BASE_CLASSES} p-8 hover:-translate-y-1 hover:shadow-[var(--shadow-lg)]`}
       style={{
         boxShadow: "var(--shadow-card)",
         transitionDuration: "var(--duration-base)",
@@ -128,7 +134,7 @@ function ArticleSmallCard({ article, ctaLabel }: Readonly<ArticleCardProps>) {
     <Link
       href={articleHref(article)}
       aria-label={`${ctaLabel} : ${article.title}`}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] p-6 transition-all hover:-translate-y-px hover:shadow-[var(--shadow-md)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-page)]"
+      className={`${CARD_BASE_CLASSES} p-6 hover:-translate-y-px hover:shadow-[var(--shadow-md)]`}
       style={{
         boxShadow: "var(--shadow-card)",
         transitionDuration: "var(--duration-fast)",

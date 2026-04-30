@@ -79,6 +79,21 @@
     "about": "About",
     "more": "More"
   },
+  "landing": {
+    "stats": {
+      "ariaLabel": "The Codex by the numbers",
+      "articles": "published articles",
+      "sections": "documentation sections",
+      "languages": "languages",
+      "lastUpdate": "last update"
+    },
+    "recent": {
+      "ariaLabel": "Recent articles",
+      "title": "Latest articles",
+      "subtitle": "The most recent additions to the Codex.",
+      "readArticle": "Read the article"
+    }
+  },
   "themes": {
     "badgesLabel": "Article themes",
     "tutorial": "Tutorial",

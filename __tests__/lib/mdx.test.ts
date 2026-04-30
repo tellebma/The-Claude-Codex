@@ -24,6 +24,10 @@ import {
   getSectionMdxSlugs,
   getSectionMdxBySlug,
   getAllSectionMdxFiles,
+  countAllArticles,
+  countAllSections,
+  getLastModifiedDate,
+  getMostRecentArticles,
 } from "@/lib/mdx";
 
 const contentDir = path.join(process.cwd(), "content");
@@ -372,5 +376,71 @@ Content`;
     expect(result).toHaveLength(2);
     expect(result[0].frontmatter.title).toBe("A Page");
     expect(result[1].frontmatter.title).toBe("B Page");
+  });
+});
+
+// ----------------------------------------------------------------------------
+// Helpers RG-32 : countAllArticles, countAllSections, getLastModifiedDate,
+// getMostRecentArticles. Mocks fs reduits a un seul article racine FR + EN
+// pour valider la deduplication par slug.
+// ----------------------------------------------------------------------------
+
+describe("countAllSections", () => {
+  it("returns 10 (les 10 sections actives definies en SECTIONS_FOR_COUNT)", () => {
+    expect(countAllSections()).toBe(10);
+  });
+});
+
+describe("countAllArticles + getLastModifiedDate + getMostRecentArticles (RG-32)", () => {
+  beforeEach(() => {
+    // Mock minimal : un seul article racine en FR et son equivalent EN.
+    // Aucun article de section. countAllArticles doit retourner 1
+    // (deduplication FR/EN sur le slug "intro").
+    mockExistsSync.mockImplementation((p: string) => {
+      const s = String(p);
+      // Repertoires racine FR + EN existent
+      if (s.endsWith("/content/fr")) return true;
+      if (s.endsWith("/content/en")) return true;
+      // Repertoires de section : aucun n'existe
+      if (s.includes("/content/fr/") || s.includes("/content/en/")) {
+        if (s.endsWith(".mdx")) return true;
+        return false;
+      }
+      return true;
+    });
+    mockReaddirSync.mockImplementation((p: string) => {
+      const s = String(p);
+      if (s.endsWith("/content/fr") || s.endsWith("/content/en")) {
+        return ["intro.mdx"];
+      }
+      return [];
+    });
+    mockReadFileSync.mockReturnValue(`---
+title: "Intro"
+description: "An intro"
+dateModified: "2026-04-15"
+---
+Content`);
+  });
+
+  it("countAllArticles deduplique FR/EN sur le slug", () => {
+    expect(countAllArticles()).toBe(1);
+  });
+
+  it("getLastModifiedDate retourne le max des dateModified (parse ISO)", () => {
+    const d = getLastModifiedDate();
+    expect(d).not.toBeNull();
+    expect(d?.getUTCFullYear()).toBe(2026);
+    expect(d?.getUTCMonth()).toBe(3); // Avril (0-indexed)
+    expect(d?.getUTCDate()).toBe(15);
+  });
+
+  it("getMostRecentArticles retourne au plus N entrees triees par dateModified", () => {
+    const recent = getMostRecentArticles(3, "fr");
+    expect(recent).toHaveLength(1);
+    expect(recent[0].slug).toBe("intro");
+    expect(recent[0].section).toBeNull();
+    // La locale preferee FR doit gagner sur le timestamp egal.
+    expect(recent[0].locale).toBe("fr");
   });
 });

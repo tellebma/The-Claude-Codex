@@ -1,0 +1,101 @@
+import { getTranslations } from "next-intl/server";
+import {
+  countAllArticles,
+  countAllSections,
+  getLastModifiedDate,
+} from "@/lib/mdx";
+
+interface CodexStatsBandProps {
+  readonly locale: string;
+}
+
+const LANGUAGES_COUNT = 2; // FR + EN
+
+/**
+ * Bande de statistiques factuelles de la landing (RG-32).
+ *
+ * Calcule au build :
+ * - Nombre d'articles publies (deduplique sur le slug, FR + EN)
+ * - Nombre de sections (10 actuellement)
+ * - Nombre de langues (2 : FR + EN)
+ * - Date de derniere mise a jour (max des dateModified MDX)
+ *
+ * En cas d'erreur de comptage (0 articles), la section est cachee plutot
+ * que d'afficher des "0 articles" qui seraient trompeurs.
+ *
+ * SSG-compatible : tous les calculs sont faits au build.
+ */
+export async function CodexStatsBand({
+  locale,
+}: Readonly<CodexStatsBandProps>) {
+  const t = await getTranslations({ locale, namespace: "landing.stats" });
+
+  const articlesCount = countAllArticles();
+  const sectionsCount = countAllSections();
+  const lastModified = getLastModifiedDate();
+
+  // Fallback gracieux : si pas d'article compte, on cache la section.
+  if (articlesCount === 0) {
+    return null;
+  }
+
+  const formatter = new Intl.DateTimeFormat(locale, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+  const lastUpdateLabel = lastModified ? formatter.format(lastModified) : "—";
+
+  return (
+    <section
+      aria-label={t("ariaLabel")}
+      // Bande always-dark (decision design RG-32) pour creer une demarcation
+      // visuelle forte avec le hero clair. Le token primitif --color-slate-900
+      // est defini dans @theme et ne bascule pas avec le mode.
+      className="relative overflow-hidden bg-[color:var(--color-slate-900)] py-12 sm:py-16"
+    >
+      {/* Halos lateraux cyan/ambre (tokens RG-32) */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full blur-3xl"
+        style={{ background: "var(--gradient-stats-glow-1)" }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full blur-3xl"
+        style={{ background: "var(--gradient-stats-glow-2)" }}
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <dl className="grid grid-cols-2 gap-6 text-center sm:gap-8 lg:grid-cols-4">
+          <Stat value={String(articlesCount)} label={t("articles")} />
+          <Stat value={String(sectionsCount)} label={t("sections")} />
+          <Stat value={String(LANGUAGES_COUNT)} label={t("languages")} />
+          <Stat value={lastUpdateLabel} label={t("lastUpdate")} />
+        </dl>
+      </div>
+    </section>
+  );
+}
+
+interface StatProps {
+  readonly value: string;
+  readonly label: string;
+}
+
+function Stat({ value, label }: Readonly<StatProps>) {
+  return (
+    <div>
+      <dt className="sr-only">{label}</dt>
+      <dd
+        className="font-extrabold tabular-nums text-[color:var(--color-slate-50)]"
+        style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)", lineHeight: 1.1 }}
+      >
+        {value}
+      </dd>
+      <p className="mt-2 font-mono text-xs uppercase tracking-wider text-[color:var(--color-slate-400)]">
+        {label}
+      </p>
+    </div>
+  );
+}

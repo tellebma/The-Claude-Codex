@@ -136,6 +136,78 @@ Content`);
     expect(result.frontmatter.dateModified).toBe("2026-02-01");
   });
 
+  it("parses optional themes field (RG-31)", () => {
+    const filePath = path.join(contentDir, "fr", "themed.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "Themed"
+description: "Desc"
+themes: ["tutorial", "security"]
+---
+Content`);
+
+    const result = getMdxBySlug("themed", "fr");
+    expect(result.frontmatter.themes).toEqual(["tutorial", "security"]);
+  });
+
+  it("returns themes undefined when not present", () => {
+    const filePath = path.join(contentDir, "fr", "no-themes.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "No themes"
+description: "Desc"
+---
+Content`);
+
+    const result = getMdxBySlug("no-themes", "fr");
+    expect(result.frontmatter.themes).toBeUndefined();
+  });
+
+  it("throws when themes contains an unknown key", () => {
+    const filePath = path.join(contentDir, "fr", "bad-theme.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "Bad theme"
+description: "Desc"
+themes: ["unknown-key"]
+---
+Content`);
+
+    expect(() => getMdxBySlug("bad-theme", "fr")).toThrow(
+      /unknown key "unknown-key"/
+    );
+  });
+
+  it("throws when themes has more than 3 entries", () => {
+    const filePath = path.join(contentDir, "fr", "too-many.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "Too many"
+description: "Desc"
+themes: ["tutorial", "security", "tooling", "performance"]
+---
+Content`);
+
+    expect(() => getMdxBySlug("too-many", "fr")).toThrow(
+      /at most 3 entries/
+    );
+  });
+
+  it("throws when themes has no content type (only domains)", () => {
+    const filePath = path.join(contentDir, "fr", "no-type.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "No type"
+description: "Desc"
+themes: ["security", "performance"]
+---
+Content`);
+
+    expect(() => getMdxBySlug("no-type", "fr")).toThrow(
+      /at least one content type/
+    );
+  });
+
   it("treats empty title as missing", () => {
     const filePath = path.join(contentDir, "fr", "empty-title.mdx");
     mockExistsSync.mockImplementation((p) => p === filePath);

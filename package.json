@@ -11,6 +11,7 @@
     "build": "next build",
     "validate:static": "node scripts/validate-static-output.ts",
     "check:contrast": "tsx scripts/check-contrast.ts",
+    "check:hex": "./scripts/check-hardcoded-colors.sh",
     "start": "next start",
     "lint": "eslint .",
     "type-check": "tsc --noEmit",

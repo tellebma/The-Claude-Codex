@@ -82,6 +82,9 @@ jobs:
       - name: Type-check
         run: npm run type-check
 
+      - name: Check hardcoded colors (RG-29)
+        run: ./scripts/check-hardcoded-colors.sh
+
   unit-tests:
     name: Unit tests (coverage 80% gate)
     runs-on: ubuntu-latest

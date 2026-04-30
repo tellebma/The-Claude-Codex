@@ -21,12 +21,13 @@ const borderColors = {
   purple: "border-violet-500/30 hover:border-violet-500",
 };
 
-// Badges saturees /10 + 700 : contraste suffisant en light et dark grace a
-// la saturation native des classes Tailwind brand/accent/violet 700.
+// Badges : sur fond dark, le texte doit passer en 300 pour preserver le
+// contraste WCAG AA 4.5:1 (verifie via axe-core E2E). Les variants 700 ne
+// passaient que 1.81-2.44:1 sur fond dark.
 const badgeColors = {
-  teal: "bg-brand-500/10 text-brand-700",
-  amber: "bg-accent-500/10 text-accent-700",
-  purple: "bg-violet-500/10 text-violet-700",
+  teal: "bg-brand-500/10 text-brand-700 dark:text-brand-300",
+  amber: "bg-accent-500/10 text-accent-700 dark:text-accent-300",
+  purple: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
 };
 
 const iconBg = {

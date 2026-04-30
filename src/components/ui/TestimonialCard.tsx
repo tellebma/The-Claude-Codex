@@ -10,15 +10,14 @@ interface TestimonialCardProps {
   avatarColor?: AvatarColor;
 }
 
-// Couleurs avatar : fond et texte semitransparents/saturés via les classes
-// Tailwind @theme. Plus de prefixe dark:* — les variantes /15 et 700 ont un
-// contraste suffisant en light comme en dark grace a leur saturation native.
+// Couleurs avatar : sur fond dark, le texte doit passer en 300 pour preserver
+// le contraste WCAG AA 4.5:1 (verifie via axe-core E2E).
 const avatarColors: Record<AvatarColor, string> = {
-  teal: "bg-brand-500/15 text-brand-700",
-  amber: "bg-accent-500/15 text-accent-700",
-  purple: "bg-violet-500/15 text-violet-700",
-  rose: "bg-rose-500/15 text-rose-700",
-  emerald: "bg-emerald-500/15 text-emerald-700",
+  teal: "bg-brand-500/15 text-brand-700 dark:text-brand-300",
+  amber: "bg-accent-500/15 text-accent-700 dark:text-accent-300",
+  purple: "bg-violet-500/15 text-violet-700 dark:text-violet-300",
+  rose: "bg-rose-500/15 text-rose-700 dark:text-rose-300",
+  emerald: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
 };
 
 function getInitials(name: string): string {
@@ -67,7 +66,7 @@ export function TestimonialCard({
             <p className="text-sm text-[color:var(--fg-muted)]">{role}</p>
           </div>
         </div>
-        <p className="mt-3 inline-block rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700">
+        <p className="mt-3 inline-block rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
           {result}
         </p>
       </figcaption>

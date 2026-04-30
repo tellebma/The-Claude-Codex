@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { validateThemes, type ThemeKey } from "./themes";
 
 /**
  * Frontmatter shape expected in MDX content files.
@@ -13,6 +14,8 @@ export interface MdxFrontmatter {
   readonly section?: string;
   readonly datePublished?: string;
   readonly dateModified?: string;
+  /** Themes thematiques (RG-31) : 1 a 3 cles, dont au moins un type de contenu. */
+  readonly themes?: ReadonlyArray<ThemeKey>;
 }
 
 /**
@@ -57,6 +60,8 @@ function validateFrontmatter(
     );
   }
 
+  const themes = validateThemes(data["themes"], slug);
+
   return {
     title: data["title"],
     description: data["description"],
@@ -74,6 +79,7 @@ function validateFrontmatter(
       typeof data["dateModified"] === "string"
         ? data["dateModified"]
         : undefined,
+    themes: themes ?? undefined,
   };
 }
 

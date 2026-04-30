@@ -57,10 +57,32 @@ order: 1                         # optionnel — tri dans la navigation
 section: "getting-started"       # optionnel — section parente
 datePublished: "2026-03-01"      # optionnel — date de publication
 dateModified: "2026-03-10"       # optionnel — date de mise à jour
+themes: ["tutorial", "security"] # optionnel — 1 à 3 badges thématiques (RG-31)
 ---
 ```
 
 La validation est stricte : `title` et `description` manquants = erreur au build.
+
+### Badges thématiques (`themes`)
+
+Champ optionnel qui affiche 1 à 3 badges sous le titre de l'article. Deux dimensions, validées au build via `src/lib/themes.ts` :
+
+| Dimension | Clés autorisées | Couleur (token) |
+|-----------|-----------------|-----------------|
+| **Type de contenu** (1 obligatoire si `themes` est présent) | `tutorial`, `guide`, `reference`, `comparison`, `use-case` | `--fg-secondary` (neutre) |
+| **Domaine** (0 à 2 optionnels) | `security`, `devsecops`, `architecture`, `performance`, `tooling`, `productivity`, `migration` | `--color-error`, `--theme-devsecops`, `--color-info`, `--color-warning`, `--color-info`, `--color-success`, `--fg-muted` |
+
+Règles :
+- Si présent : entre 1 et 3 entrées.
+- Au moins une clé de la dimension "Type de contenu".
+- Une clé inconnue ou plus de 3 entrées = erreur au build.
+
+Exemples :
+```yaml
+themes: ["tutorial", "tooling"]              # 1 type + 1 domaine
+themes: ["guide", "architecture", "security"] # 1 type + 2 domaines
+themes: ["reference"]                         # 1 type seul
+```
 
 ### Composants MDX disponibles
 

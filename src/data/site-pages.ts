@@ -29,7 +29,9 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Le guide de référence gratuit pour maîtriser Claude Code. MCP, Skills, Prompting avancé, pour développeurs et non-développeurs.",
     priority: 1,
     changeFrequency: "weekly",
-    lastModified: "2026-03-07",
+    // Mise a jour RG-30 : la landing a ete remaniee en RG-18 (hero split,
+    // typo display-1) et completee en RG-32 (CodexStatsBand, RecentArticles).
+    lastModified: "2026-04-30",
   },
   {
     path: "/getting-started",

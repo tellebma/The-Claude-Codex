@@ -21,10 +21,12 @@ const borderColors = {
   purple: "border-violet-500/30 hover:border-violet-500",
 };
 
+// Badges saturees /10 + 700 : contraste suffisant en light et dark grace a
+// la saturation native des classes Tailwind brand/accent/violet 700.
 const badgeColors = {
-  teal: "bg-brand-500/10 text-brand-700 dark:text-brand-400",
-  amber: "bg-accent-500/10 text-accent-700 dark:text-accent-400",
-  purple: "bg-violet-500/10 text-violet-700 dark:text-violet-400",
+  teal: "bg-brand-500/10 text-brand-700",
+  amber: "bg-accent-500/10 text-accent-700",
+  purple: "bg-violet-500/10 text-violet-700",
 };
 
 const iconBg = {
@@ -70,9 +72,13 @@ export function PathCard({
       href={href}
       aria-label={`${level} : ${title}`}
       className={clsx(
-        "glass-card group relative flex h-full flex-col overflow-hidden p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950 active:scale-[0.98]",
+        "glass-card group relative flex h-full flex-col overflow-hidden p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-xl)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-page)] active:scale-[0.98]",
         borderColors[color]
       )}
+      style={{
+        transitionDuration: "var(--duration-base)",
+        transitionTimingFunction: "var(--ease-out)",
+      }}
     >
       <BorderBeam
         colorFrom={beamColors[color].from}
@@ -99,8 +105,8 @@ export function PathCard({
         </span>
       </div>
 
-      <h3 className="mb-2 text-xl font-bold">{title}</h3>
-      <p className="mb-4 text-base text-slate-600 dark:text-slate-300">
+      <h3 className="mb-2 text-xl font-bold text-[color:var(--fg-primary)]">{title}</h3>
+      <p className="mb-4 text-base text-[color:var(--fg-secondary)]">
         {description}
       </p>
 
@@ -108,7 +114,7 @@ export function PathCard({
         {items.map((item) => (
           <li
             key={item}
-            className="flex items-start gap-2 text-base text-slate-600 dark:text-slate-300"
+            className="flex items-start gap-2 text-base text-[color:var(--fg-secondary)]"
           >
             <span className={clsx("mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full", bulletColors[color])} />
             {item}
@@ -116,7 +122,7 @@ export function PathCard({
         ))}
       </ul>
 
-      <span className="inline-flex items-center gap-1 text-sm font-semibold text-brand-700 dark:text-brand-400 transition-all group-hover:gap-2">
+      <span className="inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--brand-primary)] transition-all group-hover:gap-2">
         {ctaLabel}
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </span>

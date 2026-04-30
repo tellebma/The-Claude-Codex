@@ -8,13 +8,20 @@ interface AudienceCardProps {
 
 export function AudienceCard({ icon: Icon, title, description }: Readonly<AudienceCardProps>) {
   return (
-    <div className="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:shadow-none">
+    <div
+      className="flex items-start gap-4 rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] p-5 transition-all hover:-translate-y-px hover:shadow-[var(--shadow-md)]"
+      style={{
+        boxShadow: "var(--shadow-card)",
+        transitionDuration: "var(--duration-fast)",
+        transitionTimingFunction: "var(--ease-out)",
+      }}
+    >
       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-100 to-accent-50">
-        <Icon className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
+        <Icon className="h-5 w-5 text-brand-700" aria-hidden="true" />
       </div>
       <div>
-        <h3 className="font-semibold">{title}</h3>
-        <p className="mt-1 text-base text-slate-600 dark:text-slate-300">
+        <h3 className="font-semibold text-[color:var(--fg-primary)]">{title}</h3>
+        <p className="mt-1 text-base text-[color:var(--fg-secondary)]">
           {description}
         </p>
       </div>

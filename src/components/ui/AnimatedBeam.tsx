@@ -4,6 +4,7 @@ import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
 
 interface AnimatedBeamProps {
   readonly direction?: "horizontal" | "vertical";
+  /** Couleur du beam, default = brand-500 (#06b6d4 = var(--color-brand-500)). */
   readonly color?: string;
 }
 
@@ -19,7 +20,7 @@ export function AnimatedBeam({
     return (
       <div className="flex items-center justify-center sm:px-2">
         <svg
-          className={`h-6 w-6 text-slate-400 ${isHorizontal ? "rotate-0 hidden sm:block" : "rotate-90 sm:hidden"}`}
+          className={`h-6 w-6 text-[color:var(--fg-muted)] ${isHorizontal ? "rotate-0 hidden sm:block" : "rotate-90 sm:hidden"}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

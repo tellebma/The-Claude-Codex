@@ -94,10 +94,10 @@ function CellValue({ value }: { readonly value: string }) {
  */
 export function ComparisonTable({ columns, rows, caption }: ComparisonTableProps) {
   return (
-    <div className="my-6 overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+    <div className="my-6 overflow-x-auto rounded-xl border border-[color:var(--border-default)]">
       <table className="w-full border-collapse text-sm" role="table">
         {caption && (
-          <caption className="px-4 pb-3 pt-2 text-left text-sm text-slate-500 dark:text-slate-400 caption-bottom">
+          <caption className="px-4 pb-3 pt-2 text-left text-sm text-[color:var(--fg-muted)] caption-bottom">
             {caption}
           </caption>
         )}
@@ -107,8 +107,7 @@ export function ComparisonTable({ columns, rows, caption }: ComparisonTableProps
             <th
               scope="col"
               className={clsx(
-                "sticky left-0 z-10 border-b border-r border-slate-200 bg-slate-50 px-4 py-3 text-left font-semibold text-slate-900",
-                "dark:border-slate-700 dark:bg-slate-800 dark:text-white",
+                "sticky left-0 z-10 border-b border-r border-[color:var(--border-default)] bg-[color:var(--bg-subtle)] px-4 py-3 text-left font-semibold text-[color:var(--fg-primary)]",
                 "min-w-[140px]"
               )}
             >
@@ -121,18 +120,17 @@ export function ComparisonTable({ columns, rows, caption }: ComparisonTableProps
                 key={col.key}
                 scope="col"
                 className={clsx(
-                  "border-b border-slate-200 px-4 py-3 text-center font-semibold",
-                  "dark:border-slate-700",
+                  "border-b border-[color:var(--border-default)] px-4 py-3 text-center font-semibold",
                   "min-w-[120px]",
                   col.recommended
-                    ? "bg-brand-50 text-brand-900 dark:bg-brand-950/30 dark:text-brand-200"
-                    : "bg-slate-50 text-slate-900 dark:bg-slate-800 dark:text-white"
+                    ? "bg-brand-500/10 text-[color:var(--brand-primary)]"
+                    : "bg-[color:var(--bg-subtle)] text-[color:var(--fg-primary)]"
                 )}
               >
                 <span className="inline-flex items-center gap-1.5">
                   {col.label}
                   {col.recommended && (
-                    <span className="inline-flex items-center rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-white">
+                    <span className="inline-flex items-center rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-bold uppercase leading-none text-[color:var(--fg-on-brand)]">
                       rec.
                     </span>
                   )}
@@ -146,16 +144,15 @@ export function ComparisonTable({ columns, rows, caption }: ComparisonTableProps
             <tr
               key={row.feature}
               className={clsx(
-                "transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50",
-                rowIndex < rows.length - 1 && "border-b border-slate-200 dark:border-slate-700"
+                "transition-colors hover:bg-[color:var(--bg-subtle)]",
+                rowIndex < rows.length - 1 && "border-b border-[color:var(--border-default)]"
               )}
             >
               {/* Feature name, sticky on mobile */}
               <th
                 scope="row"
                 className={clsx(
-                  "sticky left-0 z-10 border-r border-slate-200 bg-white px-4 py-3 text-left font-medium text-slate-700",
-                  "dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200"
+                  "sticky left-0 z-10 border-r border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-4 py-3 text-left font-medium text-[color:var(--fg-secondary)]"
                 )}
               >
                 {row.feature}
@@ -168,8 +165,8 @@ export function ComparisonTable({ columns, rows, caption }: ComparisonTableProps
                   <td
                     key={col.key}
                     className={clsx(
-                      "px-4 py-3 text-center text-slate-600 dark:text-slate-300",
-                      col.recommended && "bg-brand-50/50 dark:bg-brand-950/20"
+                      "px-4 py-3 text-center text-[color:var(--fg-secondary)]",
+                      col.recommended && "bg-brand-500/5"
                     )}
                   >
                     <CellValue value={value} />

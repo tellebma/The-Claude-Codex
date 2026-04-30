@@ -18,24 +18,24 @@ export function ConfiguratorTeaser() {
         <div className="mb-8 flex shrink-0 items-center justify-center lg:mb-0 lg:mr-10">
           <div className="relative">
             <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 shadow-lg shadow-brand-500/25">
-              <Settings className="h-10 w-10 text-white" aria-hidden="true" />
+              <Settings className="h-10 w-10 text-[color:var(--fg-on-brand)]" aria-hidden="true" />
             </div>
             <div className="absolute -right-3 -top-3 flex h-8 w-8 items-center justify-center rounded-lg bg-accent-500 shadow-md shadow-accent-500/25">
-              <Wand2 className="h-4 w-4 text-white" aria-hidden="true" />
+              <Wand2 className="h-4 w-4 text-[color:var(--fg-on-brand)]" aria-hidden="true" />
             </div>
             <div className="absolute -bottom-2 -left-3 flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500 shadow-md shadow-violet-500/25">
-              <Cpu className="h-4 w-4 text-white" aria-hidden="true" />
+              <Cpu className="h-4 w-4 text-[color:var(--fg-on-brand)]" aria-hidden="true" />
             </div>
           </div>
         </div>
 
         {/* Center: Text */}
         <div className="flex-1">
-          <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h3 className="text-2xl font-bold tracking-tight text-[color:var(--fg-primary)] sm:text-3xl">
             {t("title")}{" "}
             <span className="text-gradient">{t("titleHighlight")}</span>
           </h3>
-          <p className="mt-3 max-w-2xl text-base text-slate-600 dark:text-slate-300 sm:text-lg">
+          <p className="mt-3 max-w-2xl text-base text-[color:var(--fg-secondary)] sm:text-lg">
             {t("description")}
           </p>
 
@@ -60,7 +60,7 @@ export function ConfiguratorTeaser() {
         <div className="mt-8 shrink-0 lg:ml-10 lg:mt-0">
           <Link
             href="/configurator"
-            className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-500/30"
+            className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-[color:var(--fg-on-brand)] shadow-lg shadow-brand-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-brand-500/30"
           >
             {t("cta")}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />

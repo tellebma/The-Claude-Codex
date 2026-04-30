@@ -105,7 +105,7 @@ export function PricingTable() {
                     "hover:scale-[1.02] hover:shadow-2xl hover:shadow-brand-500/15",
                   ]
                 : [
-                    "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800/50",
+                    "border-[color:var(--border-default)] bg-[color:var(--bg-elevated)]",
                     "hover:shadow-md",
                   ]
             )}
@@ -113,7 +113,7 @@ export function PricingTable() {
             {/* Badge — le conteneur parent a pt-4 sur mobile pour que le badge ne soit pas coupé */}
             {plan.badge && (
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-white shadow-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-500 px-3 py-1 text-xs font-semibold text-[color:var(--fg-on-brand)] shadow-sm">
                   <Star className="h-3 w-3" aria-hidden="true" />
                   {plan.badge}
                 </span>
@@ -127,7 +127,7 @@ export function PricingTable() {
                   "text-lg font-bold",
                   plan.highlighted
                     ? "text-brand-700 dark:text-brand-300"
-                    : "text-slate-900 dark:text-white"
+                    : "text-[color:var(--fg-primary)]"
                 )}
               >
                 {plan.name}
@@ -138,16 +138,16 @@ export function PricingTable() {
                     "text-3xl font-extrabold",
                     plan.highlighted
                       ? "text-brand-700 dark:text-brand-300"
-                      : "text-slate-900 dark:text-white"
+                      : "text-[color:var(--fg-primary)]"
                   )}
                 >
                   {plan.price}
                 </span>
-                <span className="text-sm text-slate-500 dark:text-slate-300">
+                <span className="text-sm text-[color:var(--fg-muted)]">
                   {plan.priceDetail}
                 </span>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+              <p className="mt-3 text-sm leading-relaxed text-[color:var(--fg-secondary)]">
                 {plan.description}
               </p>
             </div>
@@ -165,8 +165,7 @@ export function PricingTable() {
                     )}
                     aria-hidden="true"
                   />
-                  {/* text-slate-600 sur blanc = 7.3:1, passe WCAG AA */}
-                  <span className="text-sm text-slate-600 dark:text-slate-300">
+                  <span className="text-sm text-[color:var(--fg-secondary)]">
                     {feature}
                   </span>
                 </li>
@@ -188,12 +187,11 @@ export function PricingTable() {
                 "flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-4 py-3",
                 "text-sm font-semibold transition-all duration-150",
                 plan.highlighted
-                  ? "bg-brand-500 text-white shadow-md hover:bg-brand-600 hover:shadow-lg"
+                  ? "bg-brand-500 text-[color:var(--fg-on-brand)] shadow-md hover:bg-brand-600 hover:shadow-lg"
                   : [
-                      "border border-slate-200 dark:border-slate-600",
-                      // text-slate-800 sur blanc = 7.9:1 (meilleur que slate-700 = 4.7:1)
-                      "text-slate-800 dark:text-slate-200",
-                      "hover:bg-slate-50 dark:hover:bg-slate-700",
+                      "border border-[color:var(--border-default)]",
+                      "text-[color:var(--fg-primary)]",
+                      "hover:bg-[color:var(--bg-subtle)]",
                     ]
               )}
             >
@@ -207,14 +205,14 @@ export function PricingTable() {
         ))}
       </div>
 
-      <p className="mt-4 text-center text-xs text-slate-400 dark:text-slate-500">
+      <p className="mt-4 text-center text-xs text-[color:var(--fg-muted)]">
         Les prix sont indicatifs et peuvent varier. Consultez{" "}
         <a
           href="https://www.anthropic.com/pricing"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Tarifs officiels Anthropic (s'ouvre dans un nouvel onglet)"
-          className="underline hover:text-slate-600 dark:hover:text-slate-300"
+          className="underline hover:text-[color:var(--fg-secondary)]"
         >
           anthropic.com/pricing
         </a>{" "}

@@ -78,8 +78,8 @@ export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBl
     >
       {filename && (
         <div className="flex items-center justify-between border-b border-[color:var(--code-border)] px-4 py-2">
-          <span className="text-xs text-[color:var(--fg-muted)]">{filename}</span>
-          <span className="rounded bg-[color:var(--code-bg-deep)] px-2 py-0.5 text-xs text-[color:var(--fg-muted)]">
+          <span className="text-xs text-[color:var(--fg-secondary)]">{filename}</span>
+          <span className="rounded bg-[color:var(--code-bg-deep)] px-2 py-0.5 text-xs text-[color:var(--fg-secondary)]">
             {language}
           </span>
         </div>

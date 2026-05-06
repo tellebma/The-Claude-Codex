@@ -35,12 +35,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# screenshots (hors public/)
+# screenshots (hors public/ et baselines visual regression Playwright)
 *.png
 *.jpg
 *.jpeg
 !public/images/**/*.png
 !public/images/**/*.jpg
+# RG-25 — baselines visual regression committees pour la CI
+!e2e/**/*-snapshots/*.png
 
 # playwright
 .playwright-mcp/

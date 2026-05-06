@@ -89,10 +89,9 @@ test.describe("Visual regression — landing & sections cles", () => {
 
         await expect(page).toHaveScreenshot(`${name}-${theme}.png`, {
           fullPage: true,
-          // 0.1% de pixels diff toleres (bruit anti-aliasing, sub-pixels).
-          maxDiffPixelRatio: 0.001,
           // Anim/glow halos peuvent varier marginalement entre runs : un peu
           // de tolerance par-pixel rgb pour eviter les faux positifs.
+          // maxDiffPixelRatio est defini au global dans playwright.config.ts.
           threshold: 0.2,
           animations: "disabled",
           caret: "hide",

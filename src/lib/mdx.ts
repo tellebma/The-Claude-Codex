@@ -249,25 +249,23 @@ export function countAllSections(): number {
   return SECTIONS_FOR_COUNT.length;
 }
 
+function collectTimestamps(
+  files: ReadonlyArray<MdxFile>,
+  out: number[]
+): void {
+  for (const file of files) {
+    const ts = parseTimestamp(file);
+    if (ts !== null) out.push(ts);
+  }
+}
+
 /** Date de derniere modification globale du contenu (RG-32). */
 export function getLastModifiedDate(): Date | null {
   const dates: number[] = [];
   for (const locale of ["fr", "en"] as const) {
-    for (const file of getAllMdxFiles(locale)) {
-      const dm = file.frontmatter.dateModified;
-      if (typeof dm === "string") {
-        const t = Date.parse(dm);
-        if (!Number.isNaN(t)) dates.push(t);
-      }
-    }
+    collectTimestamps(getAllMdxFiles(locale), dates);
     for (const section of SECTIONS_FOR_COUNT) {
-      for (const file of getAllSectionMdxFiles(section, locale)) {
-        const dm = file.frontmatter.dateModified;
-        if (typeof dm === "string") {
-          const t = Date.parse(dm);
-          if (!Number.isNaN(t)) dates.push(t);
-        }
-      }
+      collectTimestamps(getAllSectionMdxFiles(section, locale), dates);
     }
   }
   if (dates.length === 0) return null;

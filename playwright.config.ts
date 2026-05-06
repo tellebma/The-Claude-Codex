@@ -4,6 +4,10 @@ import { defineConfig, devices } from "@playwright/test";
 const useStaticServer = process.env.PLAYWRIGHT_USE_STATIC === "1";
 const allBrowsers = process.env.PLAYWRIGHT_ALL_BROWSERS === "1";
 const isCI = !!process.env.CI;
+// PORT optionnel pour eviter les collisions avec d'autres apps locales
+// (ex: port 3000 squatte par un autre projet WSL).
+const port = process.env.PLAYWRIGHT_PORT ?? "3000";
+const baseURL = `http://localhost:${port}`;
 
 // Projets de tests fonctionnels (smoke + a11y + nav). Excluent visual.spec.ts
 // pour eviter de mixer baselines binaires avec les checks fonctionnels.
@@ -61,7 +65,7 @@ export default defineConfig({
     },
   },
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -75,9 +79,9 @@ export default defineConfig({
   projects: [...browserProjects, visualProject],
   webServer: {
     command: useStaticServer
-      ? "npx --yes http-server out -p 3000 --silent -c-1"
-      : "npm run dev",
-    url: "http://localhost:3000",
+      ? `npx --yes http-server out -p ${port} --silent -c-1`
+      : `npm run dev -- -p ${port}`,
+    url: baseURL,
     reuseExistingServer: !isCI,
     timeout: 120_000,
   },

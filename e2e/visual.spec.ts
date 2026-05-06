@@ -76,6 +76,10 @@ async function settle(page: Page) {
 test.describe("Visual regression — landing & sections cles", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
+  // Pages longues (prompting, configurator) ont plus de 6000px de hauteur
+  // en fullPage : capture + comparaison peut depasser les 5s par defaut.
+  test.setTimeout(60_000);
+
   for (const theme of THEMES) {
     for (const { path, name } of ROUTES) {
       test(`${name} — ${theme}`, async ({ page }) => {
@@ -92,6 +96,9 @@ test.describe("Visual regression — landing & sections cles", () => {
           threshold: 0.2,
           animations: "disabled",
           caret: "hide",
+          // Capture fullPage demande plus que les 5s par defaut sur les
+          // longues pages (prompting/configurator > 6000px) en CI.
+          timeout: 30_000,
         });
       });
     }

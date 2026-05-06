@@ -19,6 +19,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "test:visual": "playwright test --project=visual",
+    "test:visual:update": "playwright test --project=visual --update-snapshots",
     "sonar:local": "docker run --rm -e SONAR_HOST_URL=\"${SONAR_HOST_URL:-http://host.docker.internal:9000}\" -e SONAR_TOKEN=\"${SONAR_TOKEN}\" -v \"$(pwd):/usr/src\" sonarsource/sonar-scanner-cli",
     "test:mutation": "stryker run",
     "docker:build": "docker build -t tellebma/the-claude-codex .",

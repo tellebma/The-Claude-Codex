@@ -5,15 +5,42 @@ const useStaticServer = process.env.PLAYWRIGHT_USE_STATIC === "1";
 const allBrowsers = process.env.PLAYWRIGHT_ALL_BROWSERS === "1";
 const isCI = !!process.env.CI;
 
+// Projets de tests fonctionnels (smoke + a11y + nav). Excluent visual.spec.ts
+// pour eviter de mixer baselines binaires avec les checks fonctionnels.
 const browserProjects = [
-  { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+  {
+    name: "chromium",
+    testIgnore: /visual\.spec\.ts/,
+    use: { ...devices["Desktop Chrome"] },
+  },
   ...(allBrowsers
     ? [
-        { name: "firefox", use: { ...devices["Desktop Firefox"] } },
-        { name: "webkit", use: { ...devices["Desktop Safari"] } },
+        {
+          name: "firefox",
+          testIgnore: /visual\.spec\.ts/,
+          use: { ...devices["Desktop Firefox"] },
+        },
+        {
+          name: "webkit",
+          testIgnore: /visual\.spec\.ts/,
+          use: { ...devices["Desktop Safari"] },
+        },
       ]
     : []),
 ];
+
+// Projet dedie aux tests de regression visuelle (RG-25). Lancer via
+// `npx playwright test --project=visual`. Baselines committees dans le repo
+// (e2e/visual.spec.ts-snapshots/). Re-baseliner avec `--update-snapshots`.
+const visualProject = {
+  name: "visual",
+  testMatch: /visual\.spec\.ts/,
+  use: {
+    ...devices["Desktop Chrome"],
+    viewport: { width: 1440, height: 900 },
+    deviceScaleFactor: 1,
+  },
+};
 
 export default defineConfig({
   testDir: "./e2e",
@@ -24,6 +51,15 @@ export default defineConfig({
   // Blob reporter en CI → permet de merger les shards via `playwright merge-reports`.
   // HTML en local pour exploration directe.
   reporter: isCI ? [["blob"], ["list"]] : [["html"]],
+  // Reglages globaux toHaveScreenshot — chaque appel peut affiner via options.
+  expect: {
+    toHaveScreenshot: {
+      // 0.1% de pixels differents toleres au global (RG-25 acceptance).
+      maxDiffPixelRatio: 0.001,
+      animations: "disabled",
+      caret: "hide",
+    },
+  },
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
@@ -36,7 +72,7 @@ export default defineConfig({
       reducedMotion: "reduce",
     },
   },
-  projects: browserProjects,
+  projects: [...browserProjects, visualProject],
   webServer: {
     command: useStaticServer
       ? "npx --yes http-server out -p 3000 --silent -c-1"

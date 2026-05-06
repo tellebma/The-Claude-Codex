@@ -254,6 +254,9 @@
     --gradient-hero-radial-1: rgba(6, 182, 212, 0.08);
     --gradient-hero-radial-2: rgba(245, 158, 11, 0.06);
     --gradient-card: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(245, 158, 11, 0.05));
+    /* Stats band landing (RG-32) : halos lateraux cyan/ambre */
+    --gradient-stats-glow-1: rgba(6, 182, 212, 0.25);
+    --gradient-stats-glow-2: rgba(245, 158, 11, 0.2);
 
     /* ---- Hero (existant — conserve) ---- */
     --hero-grid-line: rgba(0, 0, 0, 0.04);

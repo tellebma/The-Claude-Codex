@@ -93,7 +93,7 @@ export function TerminalScreenshot({
           className="h-3 w-3 rounded-full bg-green-500"
           aria-hidden="true"
         />
-        <span className="ml-auto font-mono text-xs text-slate-500 dark:text-slate-300">
+        <span className="ml-auto font-mono text-xs text-slate-700 dark:text-slate-300">
           {title}
         </span>
       </div>

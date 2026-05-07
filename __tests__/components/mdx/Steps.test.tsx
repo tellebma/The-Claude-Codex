@@ -71,4 +71,24 @@ describe("Step", () => {
     expect(screen.getByText("2")).toBeInTheDocument();
     expect(screen.getByText("3")).toBeInTheDocument();
   });
+
+  it("uses art-step-num class with default brand gradient", () => {
+    const { container } = render(
+      <Step title="Step" stepNumber={1}>Content</Step>
+    );
+    const badge = container.querySelector(".art-step-num");
+    expect(badge).not.toBeNull();
+    // Default variant : --gradient-brand applied via inline style
+    expect(badge?.getAttribute("style")).toContain("var(--gradient-brand)");
+  });
+
+  it("uses red->amber gradient when variant is 'security'", () => {
+    const { container } = render(
+      <Step title="Step" stepNumber={1} variant="security">Content</Step>
+    );
+    const badge = container.querySelector(".art-step-num");
+    expect(badge).not.toBeNull();
+    expect(badge?.getAttribute("style")).toContain("var(--color-error)");
+    expect(badge?.getAttribute("style")).toContain("var(--color-accent-500)");
+  });
 });

@@ -31,6 +31,7 @@ import { AudienceCard } from "@/components/ui/AudienceCard";
 import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
 import { HeroTerminal } from "@/components/ui/HeroTerminal";
+import { HeroChips } from "@/components/ui/HeroChips";
 import { CodexStatsBand } from "@/components/ui/CodexStatsBand";
 import { RecentArticlesSection } from "@/components/ui/RecentArticlesSection";
 import {
@@ -179,8 +180,10 @@ export default async function HomePage({
             </div>
 
             {/* Terminal preview — animated typing (a droite sur lg+) */}
-            <div className="w-full">
+            {/* RG2-11 : chips orbitaux flottants autour du terminal */}
+            <div className="relative w-full">
               <HeroTerminal lines={terminalLines} />
+              <HeroChips />
             </div>
           </div>
 

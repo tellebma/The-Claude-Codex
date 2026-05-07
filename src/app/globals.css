@@ -643,6 +643,58 @@
     border-left-color: var(--callout-error-border);
     color: var(--callout-error-text);
   }
+
+  /* ============================================================
+     RG2-11 — Chips orbitaux flottants hero
+     Source : design-source/.../landing.css `.lp-chip-orbit`, `.lp-chip-a/b/c`
+     ============================================================ */
+  .lp-chip {
+    position: absolute;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px 8px 10px;
+    border-radius: 9999px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-md);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg-primary);
+    animation: lp-float 7s ease-in-out infinite;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .lp-chip-ic {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+  }
+  .lp-chip-a {
+    top: -18px;
+    left: -28px;
+  }
+  .lp-chip-b {
+    top: 36%;
+    right: -40px;
+  }
+  .lp-chip-c {
+    bottom: -22px;
+    left: 14%;
+  }
+  @keyframes lp-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
 }
 
 @layer utilities {

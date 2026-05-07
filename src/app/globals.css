@@ -275,6 +275,19 @@
     --gradient-stats-glow-1: rgba(6, 182, 212, 0.25);
     --gradient-stats-glow-2: rgba(245, 158, 11, 0.2);
 
+    /* ---- Article hero (RG2-01) : atmosphere editoriale rouge/ambre ---- */
+    /* light : halos rouge top-right + ambre left + linear blanc->cremcreme */
+    --art-hero-bg:
+      radial-gradient(ellipse 50% 60% at 100% 0%, rgba(239, 68, 68, 0.12), transparent 60%),
+      radial-gradient(ellipse 40% 50% at 0% 50%, rgba(245, 158, 11, 0.10), transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #fffbf5 100%);
+    --art-hero-grid-line: rgba(15, 23, 42, 0.04);
+    --art-cat-pill-bg: rgba(239, 68, 68, 0.1);
+    --art-cat-pill-border: rgba(239, 68, 68, 0.25);
+    --art-cat-pill-text: #b91c1c;
+    --art-cat-pill-dot: #ef4444;
+    --art-title-hl-grad: linear-gradient(135deg, #ef4444, #f59e0b);
+
     /* ---- Hero (existant — conserve) ---- */
     --hero-grid-line: rgba(0, 0, 0, 0.04);
     --hero-text-primary: #0f172a;
@@ -370,6 +383,17 @@
     --gradient-hero: linear-gradient(160deg, #083344 0%, #0f172a 40%, #1e1b4b 100%);
     --gradient-hero-radial-1: rgba(6, 182, 212, 0.15);
     --gradient-hero-radial-2: rgba(245, 158, 11, 0.1);
+
+    /* ---- Article hero dark (RG2-01) ---- */
+    --art-hero-bg:
+      radial-gradient(ellipse 50% 60% at 100% 0%, rgba(239, 68, 68, 0.18), transparent 60%),
+      radial-gradient(ellipse 40% 50% at 0% 50%, rgba(245, 158, 11, 0.12), transparent 60%),
+      linear-gradient(180deg, #060912 0%, #0a0e1a 100%);
+    --art-hero-grid-line: rgba(255, 255, 255, 0.04);
+    --art-cat-pill-bg: rgba(239, 68, 68, 0.15);
+    --art-cat-pill-border: rgba(239, 68, 68, 0.3);
+    --art-cat-pill-text: #fca5a5;
+    --art-cat-pill-dot: #ef4444;
 
     /* ---- Hero (existant — conserve) ---- */
     --hero-grid-line: rgba(255, 255, 255, 0.03);
@@ -698,6 +722,188 @@
     }
     50% {
       transform: translateY(-10px);
+    }
+  }
+
+  /* ============================================================
+     RG2-01 — Article shell + hero + sub-nav
+     Source : design-source/.../article.css `.art-*`
+     ============================================================ */
+
+  /* Article hero atmospheric */
+  .art-hero {
+    position: relative;
+    padding: 64px 32px 48px;
+    border-bottom: 1px solid var(--border-default);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .art-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: var(--art-hero-bg);
+  }
+  .art-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--art-hero-grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--art-hero-grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% 80% at 50% 50%,
+      black,
+      transparent 80%
+    );
+    mask-image: radial-gradient(
+      ellipse 70% 80% at 50% 50%,
+      black,
+      transparent 80%
+    );
+  }
+  .art-hero-inner {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  /* Pill categorie (urgent par defaut, decline si data-variant) */
+  .art-cat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--art-cat-pill-bg);
+    color: var(--art-cat-pill-text);
+    border: 1px solid var(--art-cat-pill-border);
+    margin-bottom: 22px;
+  }
+  .art-cat-pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    background: var(--art-cat-pill-dot);
+    box-shadow: 0 0 8px var(--art-cat-pill-dot);
+    animation: lp-pulse 1.6s ease-in-out infinite;
+  }
+
+  /* Title editorial */
+  .art-title {
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--fg-primary);
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+  .art-title-hl {
+    background: var(--art-title-hl-grad, linear-gradient(135deg, #ef4444, #f59e0b));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .art-lead {
+    font-size: 21px;
+    line-height: 1.55;
+    color: var(--fg-secondary);
+    margin: 0 0 36px;
+    max-width: 760px;
+    text-wrap: pretty;
+  }
+
+  /* Meta block (auteur + dates + actions) */
+  .art-meta {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    padding-top: 24px;
+    border-top: 1px dashed var(--border-default);
+  }
+  .art-meta-dates {
+    display: inline-flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .art-meta-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--fg-muted);
+    font-family: var(--font-mono);
+  }
+
+  /* Shell : grille 3 colonnes (share / body 720px / TOC) */
+  .art-shell {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 32px 80px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .art-shell {
+      grid-template-columns: 1fr minmax(0, 720px);
+      gap: 48px;
+    }
+  }
+  @media (min-width: 1280px) {
+    .art-shell {
+      grid-template-columns: 1fr minmax(0, 720px) 240px;
+    }
+  }
+  .art-spacer-left {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: 96px;
+    align-self: start;
+  }
+  .art-body {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--fg-primary);
+  }
+  @media (min-width: 1024px) {
+    .art-body {
+      grid-column: 2;
+    }
+  }
+  .art-toc-rail {
+    grid-row: 1;
+  }
+  @media (min-width: 1280px) {
+    .art-toc-rail {
+      grid-column: 3;
+    }
+  }
+
+  /* lp-pulse keyframe (utilise par .art-cat-pill-dot) */
+  @keyframes lp-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 0.7;
     }
   }
 }

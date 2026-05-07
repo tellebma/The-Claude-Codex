@@ -60,8 +60,9 @@ describe("ArticleSubNav", () => {
         crumbs={[{ label: "Article" }]}
       />
     );
-    const langGroup = screen.getByRole("group", { name: "Langue" });
-    expect(langGroup).toBeInTheDocument();
+    // RG2-01 typescript:S6819 : role="group" remplace par <nav aria-label>
+    const langSwitcher = screen.getByRole("navigation", { name: "Langue" });
+    expect(langSwitcher).toBeInTheDocument();
     expect(screen.getByText("FR")).toBeInTheDocument();
     expect(screen.getByText("EN")).toBeInTheDocument();
   });
@@ -74,6 +75,8 @@ describe("ArticleSubNav", () => {
         crumbs={[{ label: "Article" }]}
       />
     );
-    expect(screen.queryByRole("group", { name: "Langue" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "Langue" })
+    ).not.toBeInTheDocument();
   });
 });

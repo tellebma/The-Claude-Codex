@@ -77,9 +77,8 @@ export function ArticleSubNav({
         </nav>
 
         {otherLocaleHref && (
-          <div
+          <nav
             className="inline-flex gap-1 rounded-full border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] p-0.5 text-xs"
-            role="group"
             aria-label="Langue"
           >
             <span className="rounded-full bg-brand-500 px-3 py-1 font-semibold text-[color:var(--fg-on-brand)]">
@@ -91,7 +90,7 @@ export function ArticleSubNav({
             >
               {otherLocale.toUpperCase()}
             </Link>
-          </div>
+          </nav>
         )}
       </div>
     </div>

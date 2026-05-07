@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link2, Check } from "lucide-react";
 
 /** Inline X (Twitter) brand icon — lucide-react n'expose pas les marques. */
@@ -57,14 +57,33 @@ export function ArticleShareRail({
   label = "Partager",
   copyAriaLabel = "Copier le lien",
   copiedLabel = "Lien copie",
-}: ArticleShareRailProps) {
+}: Readonly<ArticleShareRailProps>) {
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cleanup au demontage : annule le timeout en cours pour eviter une fuite
+  // setState sur composant demonte (l'utilisateur peut naviguer pendant
+  // les 2s d'affichage du "Copie").
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const flashCopied = useCallback(() => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+    }
+    setCopied(true);
+    timeoutRef.current = setTimeout(() => setCopied(false), 2000);
+  }, []);
 
   const handleCopy = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      flashCopied();
     } catch {
       // Fallback : execCommand pour environnements sans Clipboard API.
       const ta = document.createElement("textarea");
@@ -77,11 +96,10 @@ export function ArticleShareRail({
       const ok = document.execCommand("copy");
       ta.remove();
       if (ok) {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        flashCopied();
       }
     }
-  }, [url]);
+  }, [url, flashCopied]);
 
   const twitterHref = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
   const linkedinHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;

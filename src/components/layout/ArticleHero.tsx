@@ -3,12 +3,15 @@ import { Calendar, RefreshCw } from "lucide-react";
 interface ArticleHeroProps {
   readonly category?: string;
   readonly title: string;
-  readonly /** Optional gradient-highlighted suffix of the title (after a line break). */ titleHighlight?: string;
+  /** Optional gradient-highlighted suffix of the title (after a line break). */
+  readonly titleHighlight?: string;
   readonly lead?: string;
   readonly datePublished?: string;
   readonly dateModified?: string;
   readonly publishedLabel?: string;
   readonly modifiedLabel?: string;
+  /** Locale BCP-47 used to format dates (default "fr-FR"). */
+  readonly locale?: string;
   readonly themeBadges?: React.ReactNode;
 }
 
@@ -35,14 +38,15 @@ export function ArticleHero({
   dateModified,
   publishedLabel = "Publié",
   modifiedLabel = "Mis à jour",
+  locale = "fr-FR",
   themeBadges,
-}: ArticleHeroProps) {
+}: Readonly<ArticleHeroProps>) {
   const formattedPublished = datePublished
-    ? formatDate(datePublished)
+    ? formatDate(datePublished, locale)
     : null;
   const formattedModified =
     dateModified && dateModified !== datePublished
-      ? formatDate(dateModified)
+      ? formatDate(dateModified, locale)
       : null;
 
   return (
@@ -74,7 +78,8 @@ export function ArticleHero({
                 <span className="art-meta-date">
                   <Calendar aria-hidden="true" className="h-3.5 w-3.5" />
                   <span>
-                    {publishedLabel} <time dateTime={datePublished}>{formattedPublished}</time>
+                    {publishedLabel}{" "}
+                    <time dateTime={datePublished}>{formattedPublished}</time>
                   </span>
                 </span>
               )}
@@ -82,7 +87,8 @@ export function ArticleHero({
                 <span className="art-meta-date">
                   <RefreshCw aria-hidden="true" className="h-3.5 w-3.5" />
                   <span>
-                    {modifiedLabel} <time dateTime={dateModified}>{formattedModified}</time>
+                    {modifiedLabel}{" "}
+                    <time dateTime={dateModified}>{formattedModified}</time>
                   </span>
                 </span>
               )}
@@ -94,10 +100,10 @@ export function ArticleHero({
   );
 }
 
-function formatDate(iso: string): string {
+function formatDate(iso: string, locale: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("fr-FR", {
+  return d.toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",

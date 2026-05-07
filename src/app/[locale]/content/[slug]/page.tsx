@@ -72,9 +72,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
   );
   const tCommon = await getTranslations("common");
   const tBreadcrumb = await getTranslations("breadcrumb");
-  const locale = resolvedParams.locale as "fr" | "en";
-  const otherLocale = locale === "fr" ? "en" : "fr";
-
+  const locale: "fr" | "en" = resolvedParams.locale === "en" ? "en" : "fr";
   const articleUrl = `${SITE_URL}/${resolvedParams.locale}/content/${resolvedParams.slug}/`;
 
   return (

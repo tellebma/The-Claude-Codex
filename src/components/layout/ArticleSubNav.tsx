@@ -45,9 +45,12 @@ export function ArticleSubNav({
         >
           {crumbs.map((crumb, idx) => {
             const isLast = idx === lastIndex;
+            // Cle stable : label + href (les breadcrumbs ont des couples uniques).
+            // Evite typescript:S6479 (index seul comme cle).
+            const key = `${crumb.label}::${crumb.href ?? "_current"}`;
             return (
               <span
-                key={`${crumb.label}-${idx}`}
+                key={key}
                 className="inline-flex items-center gap-2"
               >
                 {crumb.href && !isLast ? (

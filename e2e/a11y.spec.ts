@@ -62,10 +62,11 @@ const ROUTES: ReadonlyArray<{
   {
     path: "/fr/configurator/",
     name: "FR configurator",
-    // RG-23 (Configurator Wizard tokens C1) reprend la migration des
-    // composants StepProfile/PresetCard/ConfigPreview vers les tokens
-    // semantiques avec contraste valide. RG-26 ne dedouble pas ce travail.
-    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    // RG-23 a migre StepProfile/PresetCard/ConfigPreview/StepSubscription
+    // vers les tokens C1 et corrige les contrastes (text-slate-500 -> -700,
+    // text-brand-600 -> -700, text-emerald-500 -> emerald-700).
+    // Seul scrollable-region-focusable reste exclu (overflow code preview).
+    disableRules: SCROLLABLE_OVERFLOW_OK,
   },
   { path: "/fr/glossary/", name: "FR glossary" },
   { path: "/fr/about/", name: "FR about" },

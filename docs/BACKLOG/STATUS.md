@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-04-22
+> Derniere mise a jour : 2026-05-07
 
 ---
 
@@ -10,8 +10,12 @@
 |------|---------|------|----------|---------|-------------|
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
 | [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 11 | 0 | 0 | 100% ✅ |
+| [Refonte graphique 2026-04](../epics/2026-04-refonte-graphique/EPIC.md) | 32 | 32 | 0 | 0 | 100% ✅ (~70% du SYNTHESIS — voir EPIC suivant) |
+| [Refonte premium 2026-05](../epics/2026-05-refonte-premium/EPIC.md) | 19 | 0 | 0 | 19 | 0% 🆕 (couvre les 30% manquants) |
 
-**Total projet** : 27/28 stories (96%) · 99/102 SP livres (97%)
+**Total projet** : 59/79 stories (75%) · 132/165 SP livres (80%)
+
+> EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
 > EPIC **Corrections UX/UI/A11y** : cloture le 2026-04-22. Seul WorkflowDiagram (C3, 3 SP, nice-to-have) reste dans l'EPIC Best Practices.
 

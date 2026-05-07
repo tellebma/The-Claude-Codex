@@ -2,15 +2,19 @@
 
 **Epic ID** : EPIC-2026-04-DESIGN
 **Date de creation** : 2026-04-26
-**Version** : 1.2 — décisions intégrées + stories RG-31 et RG-32 insérées (2026-04-27)
+**Version** : 1.3 — cloture (32/32 stories merged) + suite ouverte 2026-05 (2026-05-07)
 **Owner** : (a completer par l'utilisateur)
+**Statut** : ✅ **CLOTURE** — toutes les stories du backlog sont mergees sur `develop`
 **Branche cible** : `feat/refonte-graphique-foundation` → `develop` → `main`
 **Lien design source** : https://api.anthropic.com/v1/design/h/2yEee477ZCPcglTV-5P65g (auth utilisateur requise)
+
+> **Suite directe** : `docs/epics/2026-05-refonte-premium/EPIC.md` couvre les ~30% du SYNTHESIS qui n'avaient pas eu de stories dediees ici (article shell 3 colonnes, chips orbitaux, FAQ/Alert/NextSteps, light mode polish). L'audit PO 2026-05-07 a montre que cet EPIC etait cadre "migration vers tokens" mais ne contenait pas les stories pour livrer le SYNTHESIS dans son integralite.
 
 ---
 
 ## Changelog
 
+- **1.3 — 2026-05-07** : EPIC officiellement clos. Audit PO en recette a revele que 22/32 stories etaient des migrations invisibles a l'oeil et que 13 composants nouveaux promis dans SYNTHESIS section 6 n'avaient pas de story dediee ici. Suite consolidee dans EPIC `2026-05-refonte-premium`.
 - **1.2 — 2026-04-27** : insertion effective des stories décidées en 1.1 — RG-31 (badges thématiques articles) en C3, RG-32 (sections data landing : CodexStatsBand factuelles + RecentArticlesSection) en C4. Backlog porté à **32 stories pour 101 points**.
 - **1.1 — 2026-04-27** : décisions utilisateur intégrées (D1 hero split uniquement, D2 tweaks panel hors scope, D3 stats band factuelles via CodexStatsBand, D4 articles 3 derniers par dateModified, D5 cyan uniquement, D6 badges thématiques nouvelle story en C3)
 - **1.0 — 2026-04-26** : draft initial

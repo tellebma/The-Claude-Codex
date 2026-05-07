@@ -106,7 +106,9 @@ describe("CodeBlock", () => {
     const { container } = render(<CodeBlock code="ls" />);
     const root = container.firstElementChild as HTMLElement;
     expect(root.className).toContain("bg-[color:var(--code-bg)]");
-    expect(root.className).toContain("border-[color:var(--border-subtle)]");
+    // RG2-17 : border passe de --border-subtle a --code-border (couleur
+    // dediee CodeBlock, alignee avec son fond toujours sombre).
+    expect(root.className).toContain("border-[color:var(--code-border)]");
     expect(root.className).not.toMatch(/bg-slate-950/);
   });
 

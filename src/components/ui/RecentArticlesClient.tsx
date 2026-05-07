@@ -77,7 +77,7 @@ export function RecentArticlesClient({
           {availableSections.length > 1 && (
             <div
               className="flex flex-wrap gap-2"
-              role="group"
+              role="toolbar"
               aria-label="Filtrer par section"
             >
               <FilterPill

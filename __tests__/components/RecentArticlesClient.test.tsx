@@ -78,7 +78,7 @@ describe("RecentArticlesClient", () => {
       />
     );
     expect(
-      screen.queryByRole("group", { name: "Filtrer par section" })
+      screen.queryByRole("toolbar", { name: "Filtrer par section" })
     ).not.toBeInTheDocument();
   });
 
@@ -92,7 +92,7 @@ describe("RecentArticlesClient", () => {
         {...baseProps}
       />
     );
-    const group = screen.getByRole("group", { name: "Filtrer par section" });
+    const group = screen.getByRole("toolbar", { name: "Filtrer par section" });
     expect(group).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "All" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "MCP" })).toBeInTheDocument();

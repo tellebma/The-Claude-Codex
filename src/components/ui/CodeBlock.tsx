@@ -4,7 +4,6 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { Check, Clipboard } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
 
 interface CodeBlockProps {
   code: string;
@@ -12,27 +11,22 @@ interface CodeBlockProps {
   filename?: string;
 }
 
-// Le theme prism est selectionne au mount cote client pour eviter un FOUC :
-// - SSR/build : on rend nightOwl (theme dark, valeur cote serveur prudente).
-// - Apres mount : on applique le theme adaptatif via useTheme.
-// Le conteneur utilise --code-bg et --code-border qui basculent via .dark{},
-// ce qui garantit la coherence visuelle meme si le theme prism met une frame
-// pour s'aligner.
-function useCodeTheme(): typeof themes.nightOwl {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) {
-    return themes.nightOwl;
-  }
-  return resolvedTheme === "dark" ? themes.nightOwl : themes.nightOwlLight;
-}
+// RG2-17 — Le CodeBlock reste toujours sombre, conformement a la decision
+// design SYNTHESIS section 7.1 : "CodeBlock toujours sombre, pas d'inversion
+// en light mode (choix design delibere)". L'ancienne implementation RG-14
+// basculait nightOwl <-> nightOwlLight via useTheme — contraire a l'intention
+// design. Theme fige sur nightOwl. Le conteneur utilise --code-bg qui est
+// fixe au sombre dans :root ET .dark via globals.css.
 
-export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBlockProps>) {
+export function CodeBlock({
+  code,
+  language = "bash",
+  filename,
+}: Readonly<CodeBlockProps>) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const t = useTranslations("common");
-  const codeTheme = useCodeTheme();
+  const codeTheme = themes.nightOwl;
 
   useEffect(() => {
     return () => {
@@ -73,13 +67,15 @@ export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBl
 
   return (
     <div
-      className="group my-4 overflow-hidden rounded-xl border border-[color:var(--border-subtle)] bg-[color:var(--code-bg)]"
+      className="group my-4 overflow-hidden rounded-xl border border-[color:var(--code-border)] bg-[color:var(--code-bg)]"
       suppressHydrationWarning
     >
       {filename && (
         <div className="flex items-center justify-between border-b border-[color:var(--code-border)] px-4 py-2">
-          <span className="text-xs text-[color:var(--fg-secondary)]">{filename}</span>
-          <span className="rounded bg-[color:var(--code-bg-deep)] px-2 py-0.5 text-xs text-[color:var(--fg-secondary)]">
+          <span className="text-xs text-[color:var(--code-fg-secondary)]">
+            {filename}
+          </span>
+          <span className="rounded bg-[color:var(--code-bg-deep)] px-2 py-0.5 text-xs text-[color:var(--code-fg-secondary)]">
             {language}
           </span>
         </div>
@@ -90,7 +86,7 @@ export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBl
           className={`absolute right-2 top-2 flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-md border px-2 py-1.5 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-brand-500 ${
             copied
               ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 opacity-100"
-              : "border-[color:var(--code-border)] bg-[color:var(--code-bg-deep)] text-[color:var(--fg-muted)] opacity-0 hover:border-[color:var(--border-strong)] hover:bg-[color:var(--bg-subtle)] hover:text-[color:var(--fg-secondary)] group-hover:opacity-100 focus:opacity-100"
+              : "border-[color:var(--code-border)] bg-[color:var(--code-bg-deep)] text-[color:var(--code-fg-muted)] opacity-0 hover:border-[color:var(--border-strong)] hover:bg-[color:var(--bg-subtle)] hover:text-[color:var(--code-fg-secondary)] group-hover:opacity-100 focus:opacity-100"
           }`}
           aria-label={copied ? t("copiedCode") : t("copyCode")}
           type="button"
@@ -114,7 +110,10 @@ export function CodeBlock({ code, language = "bash", filename }: Readonly<CodeBl
               style={{ ...style, backgroundColor: "transparent" }}
             >
               {tokens.map((line, i) => {
-                const lineKey = `line-${i}-${line.map((t) => t.content).join("").slice(0, 40)}`;
+                const lineKey = `line-${i}-${line
+                  .map((t) => t.content)
+                  .join("")
+                  .slice(0, 40)}`;
                 return (
                   <div key={lineKey} {...getLineProps({ line })}>
                     {line.map((token, j) => (

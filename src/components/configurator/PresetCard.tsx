@@ -49,7 +49,7 @@ export function PresetCard({ preset, onSelect }: PresetCardProps) {
       )}
     >
       <div className="flex w-full items-center justify-between">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500/10 text-brand-600 transition-colors group-hover:bg-brand-500/20 dark:text-brand-400">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500/10 text-brand-700 transition-colors group-hover:bg-brand-500/20 dark:text-brand-300">
           <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
         </div>
         <Zap
@@ -62,7 +62,7 @@ export function PresetCard({ preset, onSelect }: PresetCardProps) {
         <h4 className="font-semibold text-slate-900 dark:text-slate-100">
           {preset.name}
         </h4>
-        <p className="mt-1 hidden text-xs text-slate-500 dark:text-slate-300 sm:block">
+        <p className="mt-1 hidden text-xs text-slate-700 dark:text-slate-300 sm:block">
           {preset.description}
         </p>
       </div>
@@ -77,7 +77,7 @@ export function PresetCard({ preset, onSelect }: PresetCardProps) {
           </span>
         ))}
         {preset.stacks.length > 4 && (
-          <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-500 dark:bg-slate-700 dark:text-slate-300">
+          <span className="rounded bg-slate-100 px-2 py-0.5 text-xs text-slate-700 dark:bg-slate-700 dark:text-slate-300">
             +{preset.stacks.length - 4}
           </span>
         )}

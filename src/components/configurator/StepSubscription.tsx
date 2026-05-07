@@ -68,8 +68,8 @@ export function StepSubscription({
                   className={clsx(
                     "text-sm font-semibold",
                     isSelected
-                      ? "text-brand-600 dark:text-brand-400"
-                      : "text-slate-500 dark:text-slate-300"
+                      ? "text-brand-700 dark:text-brand-300"
+                      : "text-slate-700 dark:text-slate-300"
                   )}
                 >
                   {sub.price}
@@ -91,7 +91,7 @@ export function StepSubscription({
                         "mt-0.5 h-3 w-3 shrink-0",
                         isSelected
                           ? "text-brand-500"
-                          : "text-emerald-500"
+                          : "text-emerald-700 dark:text-emerald-400"
                       )}
                       aria-hidden="true"
                     />

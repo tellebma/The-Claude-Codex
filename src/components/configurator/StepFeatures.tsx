@@ -132,7 +132,7 @@ export function StepFeatures({
                     </span>
                   )}
                 </div>
-                <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
+                <p className="mt-1 text-xs text-slate-700 dark:text-slate-300">
                   {feature.description}
                 </p>
               </div>

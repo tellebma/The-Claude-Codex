@@ -91,7 +91,8 @@
       "ariaLabel": "Recent articles",
       "title": "Latest articles",
       "subtitle": "The most recent additions to the Codex.",
-      "readArticle": "Read the article"
+      "readArticle": "Read the article",
+      "filterAll": "All"
     }
   },
   "themes": {

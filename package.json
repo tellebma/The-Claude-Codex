@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build:llms": "node scripts/generate-llms-txt.ts",
+    "build:og": "tsx scripts/generate-og-png.ts",
     "build:search-index": "node scripts/generate-search-index.ts",
     "prebuild": "npm run build:search-index && npm run build:llms",
     "build": "next build",

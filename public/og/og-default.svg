@@ -1,28 +1,47 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
+    <!-- Background : dark approfondi (cf. SYNTHESIS.md, dark mode #060912 -> #0a0e1a) -->
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#1e293b"/>
+      <stop offset="0%" stop-color="#060912"/>
+      <stop offset="60%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#060912"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="400" y2="0" gradientUnits="userSpaceOnUse">
+
+    <!-- Halo cyan top-left (signature dark mode) -->
+    <radialGradient id="halo-cyan" cx="0.12" cy="-0.05" r="0.5">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Halo amber top-right (accent C1) -->
+    <radialGradient id="halo-amber" cx="0.92" cy="0.18" r="0.55">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Wordmark gradient cyan -> cyan -> amber (cf. globals.css --gradient-brand) -->
+    <linearGradient id="wordmark" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#06b6d4"/>
-      <stop offset="100%" stop-color="#0ea5e9"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
-    <linearGradient id="glow" x1="600" y1="0" x2="600" y2="630" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.1"/>
-      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+
+    <!-- Logo tile gradient -->
+    <linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
     </linearGradient>
   </defs>
 
-  <!-- Background -->
+  <!-- Background base -->
   <rect width="1200" height="630" fill="url(#bg)"/>
 
-  <!-- Subtle glow -->
-  <ellipse cx="600" cy="250" rx="500" ry="300" fill="url(#glow)"/>
+  <!-- Halos signature (cyan + amber) -->
+  <rect width="1200" height="630" fill="url(#halo-cyan)"/>
+  <rect width="1200" height="630" fill="url(#halo-amber)"/>
 
-  <!-- Grid pattern -->
-  <g opacity="0.06" stroke="#06b6d4" stroke-width="0.5">
+  <!-- Grid pattern subtil cyan -->
+  <g opacity="0.08" stroke="#22d3ee" stroke-width="0.5">
     <line x1="0" y1="60" x2="1200" y2="60"/>
     <line x1="0" y1="120" x2="1200" y2="120"/>
     <line x1="0" y1="180" x2="1200" y2="180"/>
@@ -53,21 +72,39 @@
     <line x1="1140" y1="0" x2="1140" y2="630"/>
   </g>
 
-  <!-- Logo mark -->
-  <g transform="translate(540, 150)">
-    <rect x="0" y="0" width="120" height="120" rx="24" fill="url(#accent)" opacity="0.15"/>
-    <text x="60" y="78" text-anchor="middle" font-family="system-ui, sans-serif" font-size="56" font-weight="800" fill="url(#accent)">&lt;/&gt;</text>
+  <!-- Logo tile (mimique de src/app/icon.svg, agrandi) -->
+  <g transform="translate(140 240)">
+    <rect width="80" height="80" rx="18" fill="url(#logo-bg)"/>
+    <path d="M22 26L42 40L22 54" stroke="white" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M46 54H62" stroke="white" stroke-width="6" stroke-linecap="round" fill="none"/>
   </g>
 
-  <!-- Title -->
-  <text x="600" y="340" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="800" fill="white">The Claude Codex</text>
+  <!-- Wordmark "The Claude Codex" : "Codex" en gradient -->
+  <text x="250" y="300" font-family="system-ui, -apple-system, 'Plus Jakarta Sans', sans-serif" font-size="64" font-weight="800" fill="#f8fafc" letter-spacing="-2">The Claude <tspan fill="url(#wordmark)">Codex</tspan></text>
 
-  <!-- Subtitle -->
-  <text x="600" y="400" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#94a3b8">Maitrisez Claude Code en partant de zero</text>
+  <!-- Tagline -->
+  <text x="250" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="26" font-weight="500" fill="#cbd5e1" letter-spacing="-0.4">Le guide pour maitriser Claude Code</text>
 
-  <!-- Accent line -->
-  <rect x="450" y="440" width="300" height="3" rx="1.5" fill="url(#accent)" opacity="0.6"/>
+  <!-- Pills features (cyan border, dark fill) -->
+  <g font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="#67e8f9" text-anchor="middle">
+    <g transform="translate(250 430)">
+      <rect width="100" height="38" rx="19" fill="rgba(34,211,238,0.10)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+      <text x="50" y="24">MCP</text>
+    </g>
+    <g transform="translate(370 430)">
+      <rect width="100" height="38" rx="19" fill="rgba(34,211,238,0.10)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+      <text x="50" y="24">Skills</text>
+    </g>
+    <g transform="translate(490 430)">
+      <rect width="100" height="38" rx="19" fill="rgba(34,211,238,0.10)" stroke="rgba(34,211,238,0.35)" stroke-width="1"/>
+      <text x="50" y="24">Agents</text>
+    </g>
+    <g transform="translate(610 430)">
+      <rect width="120" height="38" rx="19" fill="rgba(245,158,11,0.10)" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+      <text x="60" y="24" fill="#fbbf24">Prompting</text>
+    </g>
+  </g>
 
-  <!-- URL -->
-  <text x="600" y="540" text-anchor="middle" font-family="monospace" font-size="18" fill="#64748b">claude-codex.fr</text>
+  <!-- URL en bas, mono, muted -->
+  <text x="600" y="580" text-anchor="middle" font-family="ui-monospace, 'JetBrains Mono', Menlo, monospace" font-size="18" font-weight="500" fill="#64748b">claude-codex.fr</text>
 </svg>

@@ -94,9 +94,11 @@ export default async function HomePage({
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at top right, var(--gradient-hero-radial-1), transparent 60%)" }} />
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at bottom left, var(--gradient-hero-radial-2), transparent 60%)" }} />
 
-        {/* Grid pattern — animated */}
+        {/* Grid pattern — animated (RG2-12 : keyframe canonique lp-grid-fade
+            9s ease-in-out infinite, opacity oscille 0.4 → 1.0 → 0.4 pour
+            respirer la grille comme decrit dans SYNTHESIS section 2.7). */}
         <div
-          className="absolute inset-0 animate-grid-fade"
+          className="absolute inset-0 animate-lp-grid-fade"
           style={{
             backgroundImage:
               "linear-gradient(var(--hero-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hero-grid-line) 1px, transparent 1px)",

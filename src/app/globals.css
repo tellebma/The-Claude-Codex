@@ -83,6 +83,8 @@
   --animate-gradient-shimmer: gradient-shimmer 4s ease-in-out infinite;
   --animate-border-beam: border-beam 4s linear infinite;
   --animate-grid-fade: grid-fade 6s ease-in-out infinite;
+  /* RG2-12 : keyframe canonique du SYNTHESIS, duree 9s (vs 6s legacy). */
+  --animate-lp-grid-fade: lp-grid-fade 9s ease-in-out infinite;
   --animate-beam-flow: beam-flow 2s ease-in-out infinite;
   --animate-shimmer: shimmer 2s linear infinite;
 
@@ -137,6 +139,16 @@
     }
     50% {
       opacity: 0.07;
+    }
+  }
+  /* RG2-12 : keyframe signature SYNTHESIS section 2.7 (grille hero qui respire). */
+  @keyframes lp-grid-fade {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
     }
   }
   @keyframes beam-flow {

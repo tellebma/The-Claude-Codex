@@ -1,12 +1,11 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import { Link } from "@/i18n/navigation";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getMdxBySlug, getAllMdxSlugs, getAllMdxFiles } from "@/lib/mdx";
 import { MdxRenderer } from "@/components/mdx/MdxRenderer";
 import { ArticleSubNav } from "@/components/layout/ArticleSubNav";
 import { ArticleHero } from "@/components/layout/ArticleHero";
 import { ArticleShell } from "@/components/layout/ArticleShell";
+import { ArticlePager } from "@/components/layout/ArticlePager";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
@@ -116,53 +115,27 @@ export default async function ContentPage({ params }: ContentPageProps) {
         <MdxRenderer source={content} locale={resolvedParams.locale} />
       </ArticleShell>
 
-      {/* Pager prev / next */}
-      <section className="mx-auto max-w-7xl border-t border-[color:var(--border-default)] px-4 py-12 sm:px-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
-          {prev ? (
-            <Link
-              href={`/content/${sanitizeSlugForHref(prev.slug)}/`}
-              className="group flex items-center gap-2 rounded-xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-6 py-4 transition-all hover:-translate-y-0.5 hover:border-brand-500/30 hover:shadow-[var(--shadow-md)]"
-            >
-              <ArrowLeft
-                className="h-4 w-4 text-[color:var(--fg-muted)] transition-transform group-hover:-translate-x-1"
-                aria-hidden="true"
-              />
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[color:var(--fg-muted)]">
-                  {tCommon("previous")}
-                </p>
-                <p className="text-sm font-semibold text-[color:var(--fg-primary)]">
-                  {prev.frontmatter.title}
-                </p>
-              </div>
-            </Link>
-          ) : (
-            <div />
-          )}
-          {next ? (
-            <Link
-              href={`/content/${sanitizeSlugForHref(next.slug)}/`}
-              className="group flex items-center justify-end gap-2 rounded-xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-6 py-4 text-right transition-all hover:-translate-y-0.5 hover:border-brand-500/30 hover:shadow-[var(--shadow-md)]"
-            >
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-[color:var(--fg-muted)]">
-                  {tCommon("next")}
-                </p>
-                <p className="text-sm font-semibold text-[color:var(--fg-primary)]">
-                  {next.frontmatter.title}
-                </p>
-              </div>
-              <ArrowRight
-                className="h-4 w-4 text-[color:var(--fg-muted)] transition-transform group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </Link>
-          ) : (
-            <div />
-          )}
-        </div>
-      </section>
+      {/* RG2-08 — Pager refondu */}
+      <ArticlePager
+        previousLabel={tCommon("previous")}
+        nextLabel={tCommon("next")}
+        prev={
+          prev
+            ? {
+                href: `/content/${sanitizeSlugForHref(prev.slug)}/`,
+                title: prev.frontmatter.title,
+              }
+            : null
+        }
+        next={
+          next
+            ? {
+                href: `/content/${sanitizeSlugForHref(next.slug)}/`,
+                title: next.frontmatter.title,
+              }
+            : null
+        }
+      />
     </>
   );
 }

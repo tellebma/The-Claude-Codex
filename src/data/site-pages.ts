@@ -747,12 +747,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/reference/environment",
-    title: "Variables d’environnement Claude Code : référence complète (clé API, proxy, limites)",
+    title: "Variables d’environnement Claude Code : documentation officielle",
     description:
-      "Toutes les variables d’environnement Claude Code : ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL, BASH_MAX_OUTPUT_LENGTH, MAX_THINKING_TOKENS, NO_PROXY, claudeCode.environmentVariables.",
+      "Documentation officielle des variables d’environnement Claude Code : ANTHROPIC_API_KEY, BASE_URL, AUTH_TOKEN, MODEL, proxy. Exemples shell, Docker, CI/CD.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-05-09",
   },
   {
     path: "/configurator",

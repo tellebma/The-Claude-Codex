@@ -98,6 +98,13 @@
       "subtitle": "The most recent additions to the Codex.",
       "readArticle": "Read the article",
       "filterAll": "All"
+    },
+    "trust": {
+      "label": "Why the Codex",
+      "openSource": "100% open-source",
+      "bilingual": "FR + EN, mirrored content",
+      "noTracking": "No third-party cookies",
+      "officialMcp": "Listed by official MCP"
     }
   },
   "themes": {

@@ -17,6 +17,10 @@ import {
   Puzzle,
   MessageSquare,
   ChevronDown,
+  GitBranch,
+  Languages,
+  ShieldCheck,
+  Plug,
 } from "lucide-react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
@@ -32,6 +36,7 @@ import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
 import { HeroTerminal } from "@/components/ui/HeroTerminal";
 import { HeroChips } from "@/components/ui/HeroChips";
+import { TrustBar } from "@/components/ui/TrustBar";
 import { CodexStatsBand } from "@/components/ui/CodexStatsBand";
 import { RecentArticlesSection } from "@/components/ui/RecentArticlesSection";
 import {
@@ -51,6 +56,14 @@ export default async function HomePage({
   const tFeatures = await getTranslations("features");
   const tAudience = await getTranslations("audience");
   const tPaths = await getTranslations("paths");
+  const tTrust = await getTranslations("landing.trust");
+
+  const trustItems = [
+    { Icon: GitBranch, label: tTrust("openSource") },
+    { Icon: Languages, label: tTrust("bilingual") },
+    { Icon: ShieldCheck, label: tTrust("noTracking") },
+    { Icon: Plug, label: tTrust("officialMcp") },
+  ] as const;
 
   const terminalLines = [
     { text: "$ claude", className: "text-slate-400", delay: 500 },
@@ -193,6 +206,9 @@ export default async function HomePage({
           </div>
         </div>
       </section>
+
+      {/* ===== TRUST BAR (RG2-15) ===== Bande mono "pourquoi le Codex" */}
+      <TrustBar label={tTrust("label")} items={trustItems} />
 
       {/* ===== STATS BAND (RG-32) ===== Bande always-dark factuelle */}
       <CodexStatsBand locale={locale} />

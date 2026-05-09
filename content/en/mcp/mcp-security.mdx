@@ -7,6 +7,10 @@ datePublished: "2026-03-11"
 dateModified: "2026-05-09"
 ---
 
+## Quick answer
+
+Top MCP risks in production: prompt injection from untrusted content, data exfiltration via tool calls, npm supply chain attacks, excessive permissions, credential theft. Mitigations: pin MCP versions, disable network access when possible, audit the source code of community MCPs before installing.
+
 ## Why MCP security is a serious topic
 
 MCPs are powerful precisely because they let Claude Code interact with your system, services, and data. That power has a flip side: a malicious or misconfigured MCP can compromise your work environment, expose your secrets, or execute unwanted actions.

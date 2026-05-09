@@ -8,6 +8,16 @@ datePublished: "2026-03-11"
 dateModified: "2026-05-09"
 ---
 
+## Quick answer
+
+Set `ANTHROPIC_API_KEY` in your shell rc or a `.env` file. Claude Code reads the variable on launch:
+
+```bash
+export ANTHROPIC_API_KEY="sk-ant-api03-..."
+```
+
+Need a corporate proxy or a different model? Use `ANTHROPIC_BASE_URL` and `ANTHROPIC_MODEL`. Full details below.
+
 ## What are environment variables and where does Claude Code read them?
 
 An environment variable is a named value stored in your shell session, readable by any program that runs within it. Think of it as a sticky note attached to every process: when Claude Code starts, it reads all the sticky notes and adjusts its behaviour accordingly.

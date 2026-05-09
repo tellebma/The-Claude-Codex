@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-09
+> Derniere mise a jour : 2026-05-09 (cloture EPIC Refonte Premium 2026-05)
 
 ---
 
@@ -11,16 +11,16 @@
 | [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
 | [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 11 | 0 | 0 | 100% ✅ |
 | [Refonte graphique 2026-04](../epics/2026-04-refonte-graphique/EPIC.md) | 32 | 32 | 0 | 0 | 100% ✅ (~70% du SYNTHESIS — voir EPIC suivant) |
-| [Refonte premium 2026-05](../epics/2026-05-refonte-premium/EPIC.md) | 19 | 5 | 1 | 13 | 26% 🔄 (couvre les 30% manquants) |
+| [Refonte premium 2026-05](../epics/2026-05-refonte-premium/EPIC.md) | 19 | 19 | 0 | 0 | 100% ✅ (cloture 2026-05-09) |
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 0 | 0 | 9 | 0% 🆕 (audit GSC + Matomo) |
 
-**Total projet** : 64/88 stories (73%) · ~140/192 SP livres (73%)
+**Total projet** : 78/88 stories (89%) · ~177/192 SP livres (92%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
 > EPIC **Corrections UX/UI/A11y** : cloture le 2026-04-22. Seul WorkflowDiagram (C3, 3 SP, nice-to-have) reste dans l'EPIC Best Practices.
 
-> EPIC **Refonte premium 2026-05** : 5 stories mergees (RG2-04 Steps badges, RG2-11 chips orbitaux, RG2-12 grid fade, RG2-13 articles recents, RG2-17 CodeBlock dark). 1 PR ouverte : RG2-01 article shell (foundation, debloque RG2-02/03/08/10).
+> EPIC **Refonte premium 2026-05** : ✅ **cloture le 2026-05-09 a 100%** — 19 stories mergees (RG2-01 a RG2-19). Couvre integralement les 30% manquants du SYNTHESIS de la refonte 2026-04 : article shell 3 colonnes (RG2-01 + ReadingProgressBar/TocProgress/Pager/Tables), composants editoriaux MDX (Faq, ArticleAlert, NextSteps, Steps gradient), landing signature (TrustBar, chips orbitaux, grid fade, articles recents avec filtres, reorder, CtaFinal), polish global (CodeBlock always-dark, light mode polish, stats band canoniques), rollout E2E sur 10 articles representatifs.
 
 > EPIC **SEO/GEO mai 2026** : ouvert le 2026-05-06 suite a l'audit hebdo GSC + Matomo `2026-04-25 -> 2026-05-01` (rapport `claude-code-obsidian-brain/raw/analytics/`). 9 stories pour 27 SP repartis sur 4 sprints. Quick wins CTR (SEO-1 a SEO-3) en sprint 1.
 
@@ -124,46 +124,46 @@
 
 ---
 
-## EPIC : Refonte premium 2026-05
+## EPIC : Refonte premium 2026-05 — ✅ Termine 2026-05-09
 
 > Source : [docs/epics/2026-05-refonte-premium/EPIC.md](../epics/2026-05-refonte-premium/EPIC.md)
 > Couvre les ~30% manquants du SYNTHESIS de la refonte 2026-04 : article shell premium 3 colonnes, animations signature landing, FAQ/Alert/NextSteps, light mode polish.
 
-### Chantier P1 — Article shell premium
+### Chantier P1 — Article shell premium ✅ 10/10 stories
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| RG2-01 | Article shell 3 colonnes (foundation) | 8 | 🔄 PR #132 ouverte (CI verte sauf SonarQube QG) |
-| RG2-02 | Reading progress bar | 1 | ⬜ Bloque par RG2-01 |
-| RG2-03 | TOC progress bar | 1 | ⬜ Bloque par RG2-01 |
+| RG2-01 | Article shell 3 colonnes (foundation) | 8 | ✅ Fait (#132) |
+| RG2-02 | Reading progress bar | 1 | ✅ Fait (#149) |
+| RG2-03 | TOC progress bar | 1 | ✅ Fait (#150) |
 | RG2-04 | Steps badge gradient 56x56 | 2 | ✅ Fait (#136) |
-| RG2-05 | FAQ accordeon | 3 | ⬜ A faire |
-| RG2-06 | ArticleAlert variantes | 2 | ⬜ A faire |
-| RG2-07 | NextSteps card | 2 | ⬜ A faire |
-| RG2-08 | Pager refondu | 1 | ⬜ Bloque par RG2-01 |
-| RG2-09 | Article tables | 1 | ⬜ A faire |
-| RG2-10 | Rollout sur 150 articles | 5 | ⬜ Bloque par RG2-01/02/03/08 |
+| RG2-05 | FAQ accordeon | 3 | ✅ Fait (#140) |
+| RG2-06 | ArticleAlert variantes | 2 | ✅ Fait (#141) |
+| RG2-07 | NextSteps card | 2 | ✅ Fait (#142) |
+| RG2-08 | Pager refondu | 1 | ✅ Fait (#146) |
+| RG2-09 | Article tables | 1 | ✅ Fait (#143) |
+| RG2-10 | Rollout sur articles existants | 5 | ✅ Fait (#152, 10 articles E2E) |
 
-### Chantier P2 — Landing signature
+### Chantier P2 — Landing signature ✅ 6/6 stories
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
 | RG2-11 | Chips orbitaux | 3 | ✅ Fait (#133) |
 | RG2-12 | Cadrillage hero anime (lp-grid-fade) | 1 | ✅ Fait (#134) |
 | RG2-13 | Articles recents : filtres + restyling | 5 | ✅ Fait (#137) |
-| RG2-14 | Landing reorder | 1 | ⬜ A faire |
-| RG2-15 | TrustBar | 2 | ⬜ A faire |
-| RG2-16 | CTA Final pattern dedie | 3 | ⬜ A faire |
+| RG2-14 | Landing reorder | 1 | ✅ Fait (#147) |
+| RG2-15 | TrustBar | 2 | ✅ Fait (#144) |
+| RG2-16 | CTA Final pattern dedie | 3 | ✅ Fait (#148) |
 
-### Chantier P3 — Polish global
+### Chantier P3 — Polish global ✅ 3/3 stories
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
 | RG2-17 | CodeBlock always-dark | 1 | ✅ Fait (#135) |
-| RG2-18 | Light mode polish | 3 | ⬜ Bloque par RG2-11/12 (faits) — peut demarrer |
-| RG2-19 | Stats band classes canoniques | 1 | ⬜ A faire |
+| RG2-18 | Light mode polish | 3 | ✅ Fait (#151) |
+| RG2-19 | Stats band classes canoniques | 1 | ✅ Fait (#145) |
 
-**Progression** : 5/19 stories · 12/45 SP · 26%
+**Progression** : ✅ **19/19 stories · 45/45 SP · 100%**
 
 ---
 

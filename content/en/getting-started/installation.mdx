@@ -4,12 +4,16 @@ description: "Install Claude Code in minutes. Prerequisites (Node.js 18+, termin
 section: "getting-started"
 order: 2
 datePublished: "2026-03-09"
-dateModified: "2026-04-30"
+dateModified: "2026-05-09"
 themes: ["tutorial", "tooling"]
 ---
 
 <Callout type="tip" title="New to computers?">
 If words like "terminal," "Node.js," or "API key" sound mysterious, start with our [prerequisites for complete beginners](/getting-started/prerequisites-zero) page. It explains everything in plain language with concrete analogies.
+</Callout>
+
+<Callout type="warning" title="Claude Code is not free">
+To use Claude Code, you need **either a paid Claude subscription** (Pro, Max, or Team) **or an API key** (pay-as-you-go via the Anthropic console). Neither option is free: budget for it before you get started. See the [Authentication](#authentication) section below for both methods, and the [Anthropic pricing page](https://claude.com/pricing) for current prices, which change regularly.
 </Callout>
 
 ## Prerequisites
@@ -21,7 +25,7 @@ Claude Code runs on Node.js, the JavaScript engine that executes code server-sid
 
 Download it from [nodejs.org](https://nodejs.org) or use a version manager like `nvm`.
 
-<Screenshot src="/images/screenshots/nodejs-download.svg" alt="Node.js download page - LTS and Current buttons" caption="The nodejs.org page offers two versions: LTS (recommended) and Current" />
+<Screenshot src="/images/screenshots/nodejs-download.png" alt="Node.js download page on nodejs.org with the Windows tab selected, LTS version 22.13.x and nvm/npm options" caption="The nodejs.org/download page provides an official Windows installer (.msi) and a binary distribution. For most users the Windows installer is the easiest path." />
 </Card>
 
 <Card title="A terminal" variant="accent">
@@ -185,10 +189,16 @@ A browser opens automatically. Sign in with your Claude account. Once authentica
 </Steps>
 
 <Callout type="tip" title="Which subscription to choose?">
-The **Max 5x** subscription ($100/month) provides intensive Claude Code usage with 5x Pro capacity. The **Max 20x** subscription ($200/month) gives absolute zero-latency priority (20x Pro capacity). The **Pro** subscription ($20/month) suits moderate usage. The API key (pay-as-you-go) is ideal for testing or occasional use, expect around $5-15 per day of active use.
+The **Max 5x** subscription (from $100/month) provides intensive Claude Code usage with 5x Pro capacity. The **Max 20x** subscription ($200/month) gives absolute zero-latency priority (20x Pro capacity). The **Pro** subscription (~$17-20/month depending on annual or monthly billing) suits moderate usage. The API key (pay-as-you-go) is ideal for testing or occasional use, expect around $5-15 per day of active use.
 </Callout>
 
 ### Plan comparison
+
+<Callout type="warning" title="Pricing changes regularly">
+Anthropic adjusts plans and pricing several times a year (tier reorganisations, new enterprise plans, promotional changes). The numbers below and the screenshot that follows are accurate as of **May 9, 2026**. Before subscribing, always check current pricing on the [official Anthropic pricing page](https://claude.com/pricing).
+</Callout>
+
+<Screenshot src="/images/screenshots/claude-pricing.png" alt="Screenshot of the Pro and Max plans on claude.com/pricing: Pro at 17 dollars per month annually or 20 dollars per month monthly, Max from 100 dollars per month" caption="Extract from claude.com/pricing on May 9, 2026. Pro includes Claude Code, Max adds 5x or 20x the Pro capacity. For up-to-date numbers, open claude.com/pricing." />
 
 <PricingTable />
 

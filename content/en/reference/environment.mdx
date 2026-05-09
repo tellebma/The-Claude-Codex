@@ -708,7 +708,7 @@ CLAUDE_CONFIG_DIR="/opt/claude-code/config"
     ANTHROPIC_API_KEY is the direct sk-ant-api03 key. ANTHROPIC_AUTH_TOKEN is used for OAuth flows and corporate proxies that inject a Bearer token.
   </FaqItem>
   <FaqItem question="How do I configure Claude Code behind a corporate proxy?">
-    Set HTTPS_PROXY and NO_PROXY before launching. ANTHROPIC_BASE_URL can also point to your internal gateway (e.g. https://gateway.corp/anthropic).
+    Set HTTPS_PROXY and NO_PROXY before launching. ANTHROPIC_BASE_URL can also point to your internal gateway (e.g. gateway.corp/anthropic).
   </FaqItem>
   <FaqItem question="Where does Claude Code read its environment variables from?">
     Four sources, read in this order: shell process env, .env file at project root, ~/.claude/env, then settings.json (claudeCode.environmentVariables key).

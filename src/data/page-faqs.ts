@@ -41,7 +41,7 @@ const PAGE_FAQS: Record<string, PageFaqsByLocale> = {
         question:
           "Comment configurer Claude Code derrière un proxy d'entreprise ?",
         answer:
-          "Définissez HTTPS_PROXY et NO_PROXY avant le lancement. ANTHROPIC_BASE_URL peut aussi pointer vers votre passerelle interne (ex: https://gateway.corp/anthropic).",
+          "Définissez HTTPS_PROXY et NO_PROXY avant le lancement. ANTHROPIC_BASE_URL peut aussi pointer vers votre passerelle interne (ex: gateway.corp/anthropic).",
       },
       {
         question: "Depuis où Claude Code lit-il les variables d'environnement ?",
@@ -74,7 +74,7 @@ const PAGE_FAQS: Record<string, PageFaqsByLocale> = {
       {
         question: "How do I configure Claude Code behind a corporate proxy?",
         answer:
-          "Set HTTPS_PROXY and NO_PROXY before launching. ANTHROPIC_BASE_URL can also point to your internal gateway (e.g. https://gateway.corp/anthropic).",
+          "Set HTTPS_PROXY and NO_PROXY before launching. ANTHROPIC_BASE_URL can also point to your internal gateway (e.g. gateway.corp/anthropic).",
       },
       {
         question: "Where does Claude Code read its environment variables from?",

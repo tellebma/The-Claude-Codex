@@ -484,3 +484,45 @@ Content`);
     expect(getLastModifiedDate()).toBeNull();
   });
 });
+
+describe("getMostRecentArticles : articles de section", () => {
+  beforeEach(() => {
+    // Mock un seul article dans la section getting-started.
+    // Verifie que le slug RecentArticle est le slug "nu" (filename sans
+    // prefixe de section), pour que `articleHref` produise un href correct
+    // /{section}/{slug} et non /{section}/{section}/{slug}.
+    mockExistsSync.mockImplementation((p: string) => {
+      const s = String(p);
+      if (s.endsWith("/content/fr/getting-started")) return true;
+      if (s.endsWith("/content/en/getting-started")) return true;
+      if (s.endsWith("/content/fr") || s.endsWith("/content/en")) return true;
+      if (s.includes("/content/fr/getting-started/installation.mdx")) return true;
+      if (s.includes("/content/en/getting-started/installation.mdx")) return true;
+      // Aucune autre section, aucun article racine.
+      return false;
+    });
+    mockReaddirSync.mockImplementation((p: string) => {
+      const s = String(p);
+      if (s.endsWith("/content/fr/getting-started") || s.endsWith("/content/en/getting-started")) {
+        return ["installation.mdx"];
+      }
+      if (s.endsWith("/content/fr") || s.endsWith("/content/en")) {
+        return [];
+      }
+      return [];
+    });
+    mockReadFileSync.mockReturnValue(`---
+title: "Installation"
+description: "Comment installer"
+dateModified: "2026-04-15"
+---
+Content`);
+  });
+
+  it("retourne section + slug nu (sans prefixe de section)", () => {
+    const recent = getMostRecentArticles(3, "fr");
+    expect(recent).toHaveLength(1);
+    expect(recent[0].section).toBe("getting-started");
+    expect(recent[0].slug).toBe("installation");
+  });
+});

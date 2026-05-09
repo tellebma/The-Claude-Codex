@@ -305,11 +305,19 @@ function buildEntry(
   locale: string,
   ts: number
 ): RecentEntry {
+  // Pour un article de section, MdxFile.slug vaut "{section}/{filename}"
+  // (cf. getSectionMdxBySlug). On stocke ici le slug "nu" (filename seul)
+  // pour que les consommateurs puissent reconstruire l'URL via
+  // /{section}/{slug} sans dupliquer le segment section.
+  const bareSlug =
+    section && file.slug.startsWith(`${section}/`)
+      ? file.slug.slice(section.length + 1)
+      : file.slug;
   return {
     title: file.frontmatter.title,
     description: file.frontmatter.description,
     section,
-    slug: file.slug,
+    slug: bareSlug,
     locale,
     dateModified: file.frontmatter.dateModified ?? "",
     themes: file.frontmatter.themes,

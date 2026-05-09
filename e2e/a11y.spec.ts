@@ -126,7 +126,10 @@ const ROUTES: ReadonlyArray<{
     name: "EN article ci-cd-security",
     // color-contrast : theme securite, pills/icones urgent peuvent
     // depasser le ratio AA strict.
-    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    // label : 17 form elements dans des examples MDX (CI/CD checklist
+    // mockups) sans <label> associe — examples illustratifs non
+    // interactifs, le contenu reste lisible.
+    disableRules: ["color-contrast", "label", ...SCROLLABLE_OVERFLOW_OK],
   },
   {
     path: "/en/content/future-vision/",

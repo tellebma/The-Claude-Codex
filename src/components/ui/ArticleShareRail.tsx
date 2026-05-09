@@ -85,19 +85,8 @@ export function ArticleShareRail({
       await navigator.clipboard.writeText(url);
       flashCopied();
     } catch {
-      // Fallback : execCommand pour environnements sans Clipboard API.
-      const ta = document.createElement("textarea");
-      ta.value = url;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      // NOSONAR typescript:S1874 — fallback navigateurs anciens / iframe
-      const ok = document.execCommand("copy");
-      ta.remove();
-      if (ok) {
-        flashCopied();
-      }
+      // Iframe sans permission clipboard : silencieux, l'utilisateur peut
+      // copier l'URL via le partage natif.
     }
   }, [url, flashCopied]);
 

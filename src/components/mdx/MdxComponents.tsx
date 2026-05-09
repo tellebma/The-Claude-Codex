@@ -14,6 +14,7 @@ import { MermaidDiagram } from "@/components/ui/MermaidDiagram";
 import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
 import { Card } from "@/components/mdx/Card";
+import { ArticleAlert } from "@/components/mdx/ArticleAlert";
 
 /**
  * Extract text content from React children recursively.
@@ -61,6 +62,7 @@ export const mdxComponents: MDXComponents = {
   Steps,
   Step,
   Card,
+  ArticleAlert,
 
   // Override default HTML elements for consistent styling.
   // Explicit {children} (vs self-closing {...props}) makes it clear to

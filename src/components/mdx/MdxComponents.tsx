@@ -15,6 +15,7 @@ import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
 import { Card } from "@/components/mdx/Card";
 import { ArticleAlert } from "@/components/mdx/ArticleAlert";
+import { Faq, FaqItem } from "@/components/mdx/Faq";
 
 /**
  * Extract text content from React children recursively.
@@ -63,6 +64,8 @@ export const mdxComponents: MDXComponents = {
   Step,
   Card,
   ArticleAlert,
+  Faq,
+  FaqItem,
 
   // Override default HTML elements for consistent styling.
   // Explicit {children} (vs self-closing {...props}) makes it clear to

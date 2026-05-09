@@ -39,6 +39,7 @@ import { HeroChips } from "@/components/ui/HeroChips";
 import { TrustBar } from "@/components/ui/TrustBar";
 import { CodexStatsBand } from "@/components/ui/CodexStatsBand";
 import { RecentArticlesSection } from "@/components/ui/RecentArticlesSection";
+import { CtaFinal } from "@/components/ui/CtaFinal";
 import {
   AnimateOnScroll,
   StaggerChildren,
@@ -410,20 +411,13 @@ export default async function HomePage({
       {/* ===== ARTICLES RECENTS (RG-32) ===== */}
       <RecentArticlesSection locale={locale} />
 
-      {/* ===== CTA FINAL ===== */}
-      <section className="relative overflow-hidden bg-[color:var(--bg-subtle)] py-16 sm:py-20 lg:py-24">
-        <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, var(--gradient-hero-radial-1), transparent 70%)" }} />
-
-        <AnimateOnScroll preset="fade-up" className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-h1 font-bold tracking-tight text-[color:var(--fg-primary)]">
-            {tSections("cta.title")}{" "}
-            <span className="text-gradient">{tSections("cta.titleHighlight")}</span> ?
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lead text-[color:var(--fg-secondary)]">
-            {tSections("cta.description")}
-          </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      {/* ===== CTA FINAL (RG2-16) ===== Pattern lp-cta-final dedie */}
+      <CtaFinal
+        title={tSections("cta.title")}
+        titleHighlight={`${tSections("cta.titleHighlight")} ?`}
+        description={tSections("cta.description")}
+        actions={
+          <>
             <Link
               href="/getting-started"
               className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-[color:var(--fg-on-brand)] shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
@@ -447,9 +441,9 @@ export default async function HomePage({
               <MessageSquare className="h-4 w-4" aria-hidden="true" />
               {tSections("cta.ctaSecondary")}
             </Link>
-          </div>
-        </AnimateOnScroll>
-      </section>
+          </>
+        }
+      />
     </>
   );
 }

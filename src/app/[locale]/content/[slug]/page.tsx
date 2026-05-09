@@ -1,11 +1,14 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { getMdxBySlug, getAllMdxSlugs, getAllMdxFiles } from "@/lib/mdx";
 import { MdxRenderer } from "@/components/mdx/MdxRenderer";
-import { ArticleDates } from "@/components/ui/ArticleDates";
-import { createPageMetadata } from "@/lib/metadata";
+import { ArticleSubNav } from "@/components/layout/ArticleSubNav";
+import { ArticleHero } from "@/components/layout/ArticleHero";
+import { ArticleShell } from "@/components/layout/ArticleShell";
+import { ThemeBadges } from "@/components/ui/ThemeBadges";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
 
 interface ContentPageProps {
@@ -59,83 +62,105 @@ function getAdjacentArticles(currentSlug: string, locale: string) {
 export default async function ContentPage({ params }: ContentPageProps) {
   const resolvedParams = await params;
   setRequestLocale(resolvedParams.locale);
-  const { frontmatter, content } = getMdxBySlug(resolvedParams.slug, resolvedParams.locale);
-  const { prev, next } = getAdjacentArticles(resolvedParams.slug, resolvedParams.locale);
+  const { frontmatter, content } = getMdxBySlug(
+    resolvedParams.slug,
+    resolvedParams.locale
+  );
+  const { prev, next } = getAdjacentArticles(
+    resolvedParams.slug,
+    resolvedParams.locale
+  );
   const tCommon = await getTranslations("common");
+  const tBreadcrumb = await getTranslations("breadcrumb");
+  const locale: "fr" | "en" = resolvedParams.locale === "en" ? "en" : "fr";
+  const articleUrl = `${SITE_URL}/${resolvedParams.locale}/content/${resolvedParams.slug}/`;
 
   return (
     <>
-      {/* Hero section */}
-      <section className="relative overflow-hidden bg-slate-950">
-        <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
+      <ArticleSubNav
+        currentLocale={locale}
+        otherLocaleHref={`/content/${resolvedParams.slug}/`}
+        ariaLabelBreadcrumb={tBreadcrumb("ariaLabel")}
+        crumbs={[
+          { label: tCommon("home"), href: "/" },
+          {
+            label: tBreadcrumb("sections.content"),
+            href: "/content/",
+          },
+          { label: frontmatter.title },
+        ]}
+      />
 
-        <div className="relative px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
-          <div className="text-center">
-            {frontmatter.badge && (
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-                <BookOpen className="h-4 w-4" aria-hidden="true" />
-                {frontmatter.badge}
-              </div>
-            )}
-            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              {frontmatter.title}
-            </h1>
-            {frontmatter.description && (
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
-                {frontmatter.description}
-              </p>
-            )}
-            <div className="mx-auto mt-4 max-w-2xl">
-              <ArticleDates
-                datePublished={frontmatter.datePublished}
-                dateModified={frontmatter.dateModified}
+      <ArticleHero
+        category={frontmatter.badge}
+        title={frontmatter.title}
+        lead={frontmatter.description}
+        datePublished={frontmatter.datePublished}
+        dateModified={frontmatter.dateModified}
+        publishedLabel={tCommon("published")}
+        modifiedLabel={tCommon("updated")}
+        themeBadges={
+          frontmatter.themes && frontmatter.themes.length > 0 ? (
+            <ThemeBadges themes={frontmatter.themes} />
+          ) : null
+        }
+      />
+
+      <ArticleShell
+        shareUrl={articleUrl}
+        shareTitle={frontmatter.title}
+        shareLabel={tCommon("share")}
+        copyAriaLabel={tCommon("copyLink")}
+        copiedLabel={tCommon("linkCopied")}
+      >
+        <MdxRenderer source={content} locale={resolvedParams.locale} />
+      </ArticleShell>
+
+      {/* Pager prev / next */}
+      <section className="mx-auto max-w-7xl border-t border-[color:var(--border-default)] px-4 py-12 sm:px-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
+          {prev ? (
+            <Link
+              href={`/content/${sanitizeSlugForHref(prev.slug)}/`}
+              className="group flex items-center gap-2 rounded-xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-6 py-4 transition-all hover:-translate-y-0.5 hover:border-brand-500/30 hover:shadow-[var(--shadow-md)]"
+            >
+              <ArrowLeft
+                className="h-4 w-4 text-[color:var(--fg-muted)] transition-transform group-hover:-translate-x-1"
+                aria-hidden="true"
               />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Content */}
-      <section className="py-12 sm:py-16">
-        <div className="px-4 sm:px-6 lg:px-0">
-          <MdxRenderer source={content} locale={resolvedParams.locale} />
-        </div>
-      </section>
-
-      {/* Navigation between articles */}
-      <section className="border-t border-slate-200/50 py-12 dark:border-slate-800">
-        <div className="px-4 sm:px-6 lg:px-0">
-          <div className="flex flex-col gap-4 sm:flex-row sm:justify-between">
-            {prev ? (
-              <Link
-                href={`/${resolvedParams.locale}/content/${sanitizeSlugForHref(prev.slug)}`}
-                className="group flex items-center gap-2 rounded-xl border border-slate-200/50 px-6 py-4 transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
-              >
-                <ArrowLeft className="h-4 w-4 text-slate-500 transition-transform group-hover:-translate-x-1 dark:text-slate-400" aria-hidden="true" />
-                <div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">{tCommon("previous")}</p>
-                  <p className="text-sm font-semibold">{prev.frontmatter.title}</p>
-                </div>
-              </Link>
-            ) : (
-              <div />
-            )}
-            {next ? (
-              <Link
-                href={`/${resolvedParams.locale}/content/${sanitizeSlugForHref(next.slug)}`}
-                className="group flex items-center justify-end gap-2 rounded-xl border border-slate-200/50 px-6 py-4 text-right transition-all hover:border-brand-500/30 hover:bg-slate-50 dark:border-slate-700/50 dark:hover:border-brand-500/30 dark:hover:bg-slate-800/50"
-              >
-                <div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">{tCommon("next")}</p>
-                  <p className="text-sm font-semibold">{next.frontmatter.title}</p>
-                </div>
-                <ArrowRight className="h-4 w-4 text-slate-500 transition-transform group-hover:translate-x-1 dark:text-slate-400" aria-hidden="true" />
-              </Link>
-            ) : (
-              <div />
-            )}
-          </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[color:var(--fg-muted)]">
+                  {tCommon("previous")}
+                </p>
+                <p className="text-sm font-semibold text-[color:var(--fg-primary)]">
+                  {prev.frontmatter.title}
+                </p>
+              </div>
+            </Link>
+          ) : (
+            <div />
+          )}
+          {next ? (
+            <Link
+              href={`/content/${sanitizeSlugForHref(next.slug)}/`}
+              className="group flex items-center justify-end gap-2 rounded-xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-6 py-4 text-right transition-all hover:-translate-y-0.5 hover:border-brand-500/30 hover:shadow-[var(--shadow-md)]"
+            >
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-[color:var(--fg-muted)]">
+                  {tCommon("next")}
+                </p>
+                <p className="text-sm font-semibold text-[color:var(--fg-primary)]">
+                  {next.frontmatter.title}
+                </p>
+              </div>
+              <ArrowRight
+                className="h-4 w-4 text-[color:var(--fg-muted)] transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </Link>
+          ) : (
+            <div />
+          )}
         </div>
       </section>
     </>

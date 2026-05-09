@@ -21,7 +21,12 @@
     "pageNotFound": "Page introuvable",
     "pageNotFoundDescription": "La page que vous cherchez n'existe pas ou a été déplacée.",
     "backToHome": "Retour à l'accueil",
-    "opensNewTab": "(ouvre un nouvel onglet)"
+    "opensNewTab": "(ouvre un nouvel onglet)",
+    "share": "Partager",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié",
+    "published": "Publié le",
+    "updated": "Mis à jour le"
   },
   "about": {
     "badge": "À propos",

@@ -28,6 +28,20 @@ const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = 
   { path: "/fr/glossary/", name: "fr-glossary" },
   { path: "/fr/about/", name: "fr-about" },
   { path: "/fr/future/", name: "fr-future" },
+  // RG2-10 — Articles editoriaux : couvrent le rollout du shell article 3
+  // colonnes (RG2-01 + RG2-02 + RG2-03 + RG2-08). 5 FR + 5 EN, varies en
+  // longueur (court / moyen / long) et en theme (securite / strategie /
+  // outil / opinion / vision).
+  { path: "/fr/content/fuite-cle-api/", name: "fr-article-fuite-cle-api" },
+  { path: "/fr/content/bonnes-pratiques-securite/", name: "fr-article-bonnes-pratiques-securite" },
+  { path: "/fr/content/claude-design-vs-figma/", name: "fr-article-claude-design-vs-figma" },
+  { path: "/fr/content/couts-reels-claude-code/", name: "fr-article-couts-reels" },
+  { path: "/fr/content/future-vision/", name: "fr-article-future-vision" },
+  { path: "/en/content/do-not-give-api-keys-to-claude-code/", name: "en-article-leaked-api-key" },
+  { path: "/en/content/claude-code-myths/", name: "en-article-myths" },
+  { path: "/en/content/claude-design-vs-figma/", name: "en-article-claude-design-vs-figma" },
+  { path: "/en/content/ci-cd-cyber-security/", name: "en-article-ci-cd-security" },
+  { path: "/en/content/future-vision/", name: "en-article-future-vision" },
 ];
 
 const THEMES: ReadonlyArray<"light" | "dark"> = ["light", "dark"];

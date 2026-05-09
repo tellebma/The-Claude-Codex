@@ -6,6 +6,7 @@ import { ArticleSubNav } from "@/components/layout/ArticleSubNav";
 import { ArticleHero } from "@/components/layout/ArticleHero";
 import { ArticleShell } from "@/components/layout/ArticleShell";
 import { ArticlePager } from "@/components/layout/ArticlePager";
+import { ReadingProgressBar } from "@/components/ui/ReadingProgressBar";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
@@ -76,6 +77,9 @@ export default async function ContentPage({ params }: ContentPageProps) {
 
   return (
     <>
+      {/* RG2-02 — Barre de progression de lecture en haut de page */}
+      <ReadingProgressBar />
+
       <ArticleSubNav
         currentLocale={locale}
         otherLocaleHref={`/content/${resolvedParams.slug}/`}

@@ -35,24 +35,14 @@ export function CtaFinal({
   actions,
 }: Readonly<CtaFinalProps>) {
   return (
-    <section className="lp-cta-final relative isolate overflow-hidden px-8 py-32 sm:py-32 lg:py-40">
-      {/* ::before — radial brand au centre + linear soft */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(6,182,212,0.15),transparent_70%),linear-gradient(180deg,var(--bg-page)_0%,var(--bg-subtle)_100%)] dark:bg-[radial-gradient(ellipse_60%_60%_at_50%_50%,rgba(34,211,238,0.18),transparent_70%),linear-gradient(180deg,var(--bg-page)_0%,var(--bg-subtle)_100%)]"
-      />
-      {/* ::after — grid pattern brand 8% avec mask radial centre */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-0 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent_75%)] [-webkit-mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent_75%)]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(6,182,212,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.08) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-        }}
-      />
-
-      <div className="lp-cta-inner relative mx-auto max-w-[820px] text-center">
+    <section
+      className="lp-cta-final relative overflow-hidden px-8 py-32 sm:py-32 lg:py-40"
+      style={{
+        background:
+          "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(6,182,212,0.15), transparent 70%), linear-gradient(180deg, var(--bg-page) 0%, var(--bg-subtle) 100%)",
+      }}
+    >
+      <div className="lp-cta-inner relative z-10 mx-auto max-w-[820px] text-center">
         {badge && (
           <span className="lp-cta-badge inline-flex items-center gap-2.5 rounded-full border border-[color:rgba(6,182,212,0.25)] bg-[color:rgba(6,182,212,0.1)] px-4 py-2 text-[13px] font-semibold text-[color:var(--color-brand-700)]">
             {badge}

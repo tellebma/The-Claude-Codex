@@ -73,11 +73,12 @@ describe("CtaFinal", () => {
     expect(screen.getByRole("button", { name: "B" })).toBeInTheDocument();
   });
 
-  it("background ::before/::after divs are aria-hidden (decorative)", () => {
+  it("background gradient applied via inline style on the section (simplified — no decorative divs)", () => {
     const { container } = render(
       <CtaFinal title="x" description="y" actions={<button type="button">go</button>} />
     );
-    const decorative = container.querySelectorAll('[aria-hidden="true"]');
-    expect(decorative.length).toBeGreaterThanOrEqual(2);
+    const section = container.querySelector("section.lp-cta-final") as HTMLElement;
+    expect(section.style.background).toContain("radial-gradient");
+    expect(section.style.background).toContain("var(--bg-page)");
   });
 });

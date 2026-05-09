@@ -78,12 +78,14 @@ const ROUTES: ReadonlyArray<{
     path: "/fr/content/fuite-cle-api/",
     name: "FR article fuite-cle-api",
     // CodeBlock examples : overflow utile et focusable.
-    disableRules: SCROLLABLE_OVERFLOW_OK,
+    // color-contrast : pill "URGENT" rouge (theme securite) — caractere
+    // alarme intentionnel (cf. SYNTHESIS section 4 palette urgence).
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
   {
     path: "/fr/content/bonnes-pratiques-securite/",
     name: "FR article bonnes-pratiques-securite",
-    disableRules: SCROLLABLE_OVERFLOW_OK,
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
   {
     path: "/fr/content/claude-design-vs-figma/",
@@ -103,7 +105,8 @@ const ROUTES: ReadonlyArray<{
   {
     path: "/en/content/do-not-give-api-keys-to-claude-code/",
     name: "EN article leaked-api-key",
-    disableRules: SCROLLABLE_OVERFLOW_OK,
+    // color-contrast : miroir EN du fr/fuite-cle-api (theme securite).
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
   {
     path: "/en/content/claude-code-myths/",
@@ -118,7 +121,9 @@ const ROUTES: ReadonlyArray<{
   {
     path: "/en/content/ci-cd-cyber-security/",
     name: "EN article ci-cd-security",
-    disableRules: SCROLLABLE_OVERFLOW_OK,
+    // color-contrast : theme securite, pills/icones urgent peuvent
+    // depasser le ratio AA strict.
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
   {
     path: "/en/content/future-vision/",

@@ -230,4 +230,60 @@ describe("TableOfContents", () => {
     const { container } = render(<TableOfContents />);
     expect(container.firstChild).toBeNull();
   });
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // RG2-03 — Bloc de progression locale (TocProgress)
+  // ─────────────────────────────────────────────────────────────────────────
+
+  it("RG2-03 renders progress block with 0/N counter when no active heading yet", () => {
+    setupHeadings();
+    const { container } = render(<TableOfContents />);
+    const progress = container.querySelector(".art-toc-progress");
+    expect(progress).toBeInTheDocument();
+    // 3 headings injected, 0 active initially
+    expect(progress?.textContent).toContain("0 / 3");
+  });
+
+  it("RG2-03 progress block has role=status and aria-live polite for screen readers", () => {
+    setupHeadings();
+    const { container } = render(<TableOfContents />);
+    const progress = container.querySelector(".art-toc-progress");
+    expect(progress?.getAttribute("role")).toBe("status");
+    expect(progress?.getAttribute("aria-live")).toBe("polite");
+  });
+
+  it("RG2-03 updates the progress counter when active heading changes", () => {
+    setupHeadings();
+    const { container } = render(<TableOfContents />);
+
+    // Activate the second heading (index 1 = 2/3)
+    const target = document.getElementById("getting-started")!;
+    act(() => {
+      intersectionCallback(
+        [
+          {
+            isIntersecting: true,
+            target,
+            boundingClientRect: target.getBoundingClientRect(),
+            intersectionRatio: 1,
+            intersectionRect: target.getBoundingClientRect(),
+            rootBounds: null,
+            time: 0,
+          } as IntersectionObserverEntry,
+        ],
+        window.IntersectionObserver as unknown as IntersectionObserver
+      );
+    });
+
+    const progress = container.querySelector(".art-toc-progress");
+    expect(progress?.textContent).toContain("2 / 3");
+  });
+
+  it("RG2-03 progress fill bar uses brand->accent gradient (no raw hex)", () => {
+    setupHeadings();
+    const { container } = render(<TableOfContents />);
+    const fill = container.querySelector(".art-toc-progress div div") as HTMLElement;
+    expect(fill.style.background).toContain("var(--color-brand-500)");
+    expect(fill.style.background).toContain("var(--color-accent-500)");
+  });
 });

@@ -49,10 +49,12 @@ export async function CodexStatsBand({
   return (
     <section
       aria-label={t("ariaLabel")}
-      // Bande always-dark (decision design RG-32) pour creer une demarcation
-      // visuelle forte avec le hero clair. Le token primitif --color-slate-900
-      // est defini dans @theme et ne bascule pas avec le mode.
-      className="relative overflow-hidden bg-[color:var(--color-slate-900)] py-12 sm:py-16"
+      // RG2-19 : classe canonique `lp-stats` du source design + halos
+      // ::before lateraux deja en place (RG-32). Always-dark (decision
+      // design RG-32) pour creer une demarcation visuelle forte avec le
+      // hero clair. Le token primitif --color-slate-900 est defini dans
+      // @theme et ne bascule pas avec le mode.
+      className="lp-stats relative overflow-hidden bg-[color:var(--color-slate-900)] py-12 sm:py-16"
     >
       {/* Halos lateraux cyan/ambre (tokens RG-32) */}
       <div
@@ -72,8 +74,13 @@ export async function CodexStatsBand({
           directs <dt>/<dd> uniquement. Un layout <div> classique avec un
           aria-label sur la section parente couvre la semantique sans
           contraindre la structure HTML.
+
+          RG2-19 : border-left subtile entre les stats items (cf source
+          .lp-stat + .lp-stat). Sur lg+ (4 colonnes) : border entre tous
+          sauf le premier. Sur mobile (2 cols) : border seulement sur les
+          colonnes de droite (chaque 2eme item).
         */}
-        <div className="grid grid-cols-2 gap-6 text-center sm:gap-8 lg:grid-cols-4">
+        <div className="lp-stats-inner grid grid-cols-2 gap-6 text-center sm:gap-8 lg:grid-cols-4 lg:[&>*+*]:border-l lg:[&>*+*]:border-[color:rgba(51,65,85,0.5)]">
           <Stat value={String(articlesCount)} label={t("articles")} />
           <Stat value={String(sectionsCount)} label={t("sections")} />
           <Stat value={String(LANGUAGES_COUNT)} label={t("languages")} />

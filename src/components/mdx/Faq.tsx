@@ -72,15 +72,14 @@ export function FaqItem({
           <ChevronDown className="h-4 w-4" />
         </span>
       </button>
-      <div
+      <section
         id={panelId}
-        role="region"
         aria-labelledby={buttonId}
         hidden={!open}
         className="px-5 pb-5 text-[15px] leading-[1.65] text-[color:var(--fg-secondary)]"
       >
         {children}
-      </div>
+      </section>
     </div>
   );
 }

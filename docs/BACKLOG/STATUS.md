@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-09 (ouverture EPIC Bugfix articles href recette)
+> Derniere mise a jour : 2026-05-09 (ouverture EPICs Bugfix recette : articles href + search Vercel redirect)
 
 ---
 
@@ -13,9 +13,10 @@
 | [Refonte graphique 2026-04](../epics/2026-04-refonte-graphique/EPIC.md) | 32 | 32 | 0 | 0 | 100% ✅ (~70% du SYNTHESIS — voir EPIC suivant) |
 | [Refonte premium 2026-05](../epics/2026-05-refonte-premium/EPIC.md) | 19 | 19 | 0 | 0 | 100% ✅ (cloture 2026-05-09) |
 | [Bugfix articles href 2026-05](EPIC-bugfix-articles-href-2026-05.md) | 2 | 1 | 1 | 0 | 50% 🆕 (B-ART-1 fait, B-ART-2 verif a faire) |
+| [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 1 | 1 | 0 | 50% 🆕 (B-SRC-1 fait, B-SRC-2 verif a faire) |
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 0 | 0 | 9 | 0% 🆕 (audit GSC + Matomo) |
 
-**Total projet** : 79/90 stories (88%) · ~178/194 SP livres (92%)
+**Total projet** : 80/92 stories (87%) · ~179/196 SP livres (91%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
@@ -26,6 +27,8 @@
 > EPIC **SEO/GEO mai 2026** : ouvert le 2026-05-06 suite a l'audit hebdo GSC + Matomo `2026-04-25 -> 2026-05-01` (rapport `claude-code-obsidian-brain/raw/analytics/`). 9 stories pour 27 SP repartis sur 4 sprints. Quick wins CTR (SEO-1 a SEO-3) en sprint 1.
 
 > EPIC **Bugfix articles href 2026-05** : ouvert le 2026-05-09 suite a recette utilisateur sur preview Vercel ("impossible d'ouvrir un article depuis la refonte"). Cards "Articles recents" de la landing produisaient des URLs avec section dupliquee (ex: `/fr/getting-started/getting-started/installation/`) -> 404 systematique. Root cause dans `src/lib/mdx.ts buildEntry` : le slug stocke n'etait pas "nu" pour les articles de section. Fix B-ART-1 commit + test de regression. B-ART-2 (verif E2E) a faire avant merge.
+
+> EPIC **Bugfix search Vercel redirect 2026-05** : ouvert le 2026-05-09 suite a recette utilisateur sur preview Vercel ("dialog s'ouvre mais 0 resultat partout"). Root cause dans `vercel.json` : la regex catch-all `/:path((?!...).+)` redirigeait `/search-index-fr.json` vers `/fr/search-index-fr.json` (404), donc le SearchDialog chargeait un index vide. Plusieurs autres assets `public/` etaient affectes (`sad-toaster.glb`, `images/*`, `skills/*.md`). Fix B-SRC-1 : regex `[^.]+` pour exclure tout chemin avec extension. B-SRC-2 (verif E2E preview Vercel) a faire avant merge.
 
 ---
 

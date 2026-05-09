@@ -23,7 +23,7 @@ export function ReadingProgressBar() {
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mq = globalThis.matchMedia("(prefers-reduced-motion: reduce)");
     const apply = () => setReducedMotion(mq.matches);
     apply();
     mq.addEventListener("change", apply);
@@ -32,28 +32,28 @@ export function ReadingProgressBar() {
 
   useEffect(() => {
     const compute = () => {
-      const scrollTop = window.scrollY;
+      const scrollTop = globalThis.scrollY;
       const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
+        document.documentElement.scrollHeight - globalThis.innerHeight;
       const ratio = docHeight > 0 ? Math.min(1, scrollTop / docHeight) : 0;
       setProgress(ratio * 100);
     };
 
     const onScroll = () => {
       if (rafRef.current !== null) return;
-      rafRef.current = window.requestAnimationFrame(() => {
+      rafRef.current = globalThis.requestAnimationFrame(() => {
         rafRef.current = null;
         compute();
       });
     };
 
     compute();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
+    globalThis.addEventListener("scroll", onScroll, { passive: true });
+    globalThis.addEventListener("resize", onScroll, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
+      globalThis.removeEventListener("scroll", onScroll);
+      globalThis.removeEventListener("resize", onScroll);
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }

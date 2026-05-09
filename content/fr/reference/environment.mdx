@@ -698,6 +698,29 @@ CLAUDE_CONFIG_DIR="/opt/claude-code/config"
 
 ---
 
+## FAQ
+
+<Faq>
+  <FaqItem question="Qu'est-ce que ANTHROPIC_API_KEY et où la définir ?">
+    C'est la clé API Anthropic au format sk-ant-api03-... Elle se définit dans votre shell rc (.bashrc, .zshrc) ou dans un fichier .env du projet. Claude Code la lit au démarrage.
+  </FaqItem>
+  <FaqItem question="Quelle différence entre ANTHROPIC_AUTH_TOKEN et ANTHROPIC_API_KEY ?">
+    ANTHROPIC_API_KEY est la clé directe sk-ant-api03. ANTHROPIC_AUTH_TOKEN est utilisée pour les flux OAuth et les proxies d'entreprise qui injectent un token Bearer.
+  </FaqItem>
+  <FaqItem question="Comment configurer Claude Code derrière un proxy d'entreprise ?">
+    Définissez HTTPS_PROXY et NO_PROXY avant le lancement. ANTHROPIC_BASE_URL peut aussi pointer vers votre passerelle interne (ex: https://gateway.corp/anthropic).
+  </FaqItem>
+  <FaqItem question="Depuis où Claude Code lit-il les variables d'environnement ?">
+    Quatre sources lues dans cet ordre : variables du processus shell, fichier .env à la racine du projet, ~/.claude/env, puis settings.json (clé claudeCode.environmentVariables).
+  </FaqItem>
+  <FaqItem question="Comment changer de modèle Claude Code ?">
+    Définissez ANTHROPIC_MODEL avec un identifiant valide, par exemple ANTHROPIC_MODEL=claude-sonnet-4-6. Vous pouvez aussi le faire par session via l'argument --model.
+  </FaqItem>
+  <FaqItem question="Peut-on désactiver des comportements via une variable ?">
+    Oui. Par exemple DISABLE_AUTOUPDATER=1, DISABLE_TELEMETRY=1, DISABLE_AUTOCOMPACT=1 ou MAX_THINKING_TOKENS=0. La référence complète liste les variables et leurs valeurs acceptées.
+  </FaqItem>
+</Faq>
+
 ## Prochaines étapes
 
 - [settings.json : guide complet](/reference/settings) : Toutes les clés de configuration et leur priorité sur les variables d'environnement

@@ -211,6 +211,9 @@ export default async function HomePage({
       {/* ===== TRUST BAR (RG2-15) ===== Bande mono "pourquoi le Codex" */}
       <TrustBar label={tTrust("label")} items={trustItems} />
 
+      {/* ===== ARTICLES RECENTS (RG2-14 reorder) ===== Source design : Articles vient avant Stats */}
+      <RecentArticlesSection locale={locale} />
+
       {/* ===== STATS BAND (RG-32) ===== Bande always-dark factuelle */}
       <CodexStatsBand locale={locale} />
 
@@ -407,9 +410,6 @@ export default async function HomePage({
           </AnimateOnScroll>
         </div>
       </section>
-
-      {/* ===== ARTICLES RECENTS (RG-32) ===== */}
-      <RecentArticlesSection locale={locale} />
 
       {/* ===== CTA FINAL (RG2-16) ===== Pattern lp-cta-final dedie */}
       <CtaFinal

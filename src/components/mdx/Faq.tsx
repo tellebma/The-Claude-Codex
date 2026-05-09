@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useCallback, useId, useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 
 interface FaqProps {
@@ -35,10 +35,14 @@ export function FaqItem({
   children,
   defaultOpen = false,
 }: Readonly<FaqItemProps>) {
-  const [open, setOpen] = useState<boolean>(defaultOpen);
+  const [open, setOpen] = useState(defaultOpen);
   const reactId = useId();
   const buttonId = `faq-q-${reactId}`;
   const panelId = `faq-a-${reactId}`;
+
+  const handleToggle = useCallback(() => {
+    setOpen((current) => !current);
+  }, []);
 
   const itemBorder = open
     ? "border-[color:var(--color-brand-500)]/40 shadow-[0_8px_24px_-12px_rgba(6,182,212,0.25)]"
@@ -53,7 +57,7 @@ export function FaqItem({
         id={buttonId}
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((v) => !v)}
+        onClick={handleToggle}
         className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-base font-semibold text-[color:var(--fg-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-elevated)]"
       >
         <span>{question}</span>

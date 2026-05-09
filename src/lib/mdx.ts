@@ -354,9 +354,14 @@ function collectArticles(
 }
 
 /**
- * Retourne les N articles les plus recemment modifies (toutes sections,
- * toutes locales). Dedoublonne par "section/slug" en gardant la version
- * dans la locale preferee. (RG-32)
+ * Retourne les N articles les plus recemment modifies pour la locale
+ * preferee. Dedoublonne par "section/slug" en gardant la version dans
+ * la locale preferee si meme slug present aux 2 locales (RG-32).
+ *
+ * Filtre final par `locale === preferredLocale` pour eviter qu'un
+ * article avec slug divergent entre FR et EN (ex: bonnes-pratiques-securite
+ * vs security-best-practices) n'apparaisse sur la mauvaise landing
+ * en produisant un href 404 (cf. test e2e/landing-recent-articles.spec.ts).
  */
 export function getMostRecentArticles(
   limit: number,
@@ -378,6 +383,7 @@ export function getMostRecentArticles(
   }
 
   return [...seen.values()]
+    .filter((entry) => entry.locale === preferredLocale)
     .sort((a, b) => b.ts - a.ts)
     .slice(0, limit)
     .map(({ ts: _ts, ...rest }) => rest);

@@ -199,23 +199,29 @@ export const mdxComponents: MDXComponents = {
       {...props}
     />
   ),
+  // RG2-09 — Tables refondues : wrapper radius 14 border default overflow-hidden,
+  // TH 14/18 600 13px uppercase 0.03em muted bg-subtle, TD 14/18 border-bottom
+  // default + tr:last no border + tr:hover td bg brand/04. Source : article.css
+  // .art-table-wrap, .art-table.
   table: (props: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="my-6 overflow-x-auto">
-      <table
-        className="w-full border-collapse text-sm [&_tbody_tr:nth-child(even)]:bg-[var(--bg-subtle)]"
-        {...props}
-      />
+    <div className="my-6 overflow-hidden rounded-2xl border border-[color:var(--border-default)]">
+      <div className="overflow-x-auto">
+        <table
+          className="w-full border-collapse text-sm [&_tbody_tr:hover_td]:bg-[color:rgba(6,182,212,0.04)] [&_tbody_tr:last-child_td]:border-b-0"
+          {...props}
+        />
+      </div>
     </div>
   ),
   th: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
     <th
-      className="border border-[var(--border-default)] bg-[var(--bg-subtle)] px-4 py-2 text-left font-semibold text-[var(--fg-primary)]"
+      className="bg-[var(--bg-subtle)] px-4 py-3.5 text-left text-[13px] font-semibold uppercase tracking-[0.03em] text-[var(--fg-muted)]"
       {...props}
     />
   ),
   td: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td
-      className="border border-[var(--border-default)] px-4 py-2 text-[var(--fg-secondary)]"
+      className="border-b border-[var(--border-default)] px-4 py-3.5 text-[var(--fg-secondary)] transition-colors"
       {...props}
     />
   ),

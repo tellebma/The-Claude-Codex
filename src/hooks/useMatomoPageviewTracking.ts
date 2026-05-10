@@ -28,8 +28,8 @@ export function useMatomoPageviewTracking(): void {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (globalThis.window === undefined) return;
-
+    // useEffect ne s'execute que cote client : `window` et `document`
+    // sont toujours definis ici, pas de garde SSR necessaire.
     const queryString = searchParams?.toString() ?? "";
     const fullUrl =
       window.location.origin +

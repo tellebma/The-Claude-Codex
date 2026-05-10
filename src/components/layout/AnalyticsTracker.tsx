@@ -21,7 +21,7 @@ import { useMatomoPageviewTracking } from "@/hooks/useMatomoPageviewTracking";
  *   a chaque clic sur un lien externe.
  *
  * Mount it inside layouts that wrap content pages (e.g. `SectionLayout`)
- * ou directement dans les page.tsx hors layout (cf. SEO-9 PR #166).
+ * ou directement dans les page.tsx hors layout (cf. SEO-9 PR no 166).
  *
  * Le hook pageview utilise `useSearchParams` qui requiert un `<Suspense>`
  * boundary en App Router (sinon Next.js force la page entiere en CSR).

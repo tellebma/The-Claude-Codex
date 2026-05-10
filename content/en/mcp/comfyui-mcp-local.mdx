@@ -9,11 +9,11 @@ dateModified: "2026-05-11"
 themes: ["tutorial", "tooling", "architecture"]
 ---
 
-<!-- source: github.com/Comfy-Org/ComfyUI, consulted 2026-05-11 -->
-<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 -->
-<!-- source: docs.comfy.org/get_started/manual_install, consulted 2026-05-11 -->
-<!-- source: github.com/joenorton/comfyui-mcp-server, consulted 2026-05-11 -->
-<!-- source: pytorch.org/get-started/locally, consulted 2026-05-11 -->
+{/* source: github.com/Comfy-Org/ComfyUI, consulted 2026-05-11 */}
+{/* source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 */}
+{/* source: docs.comfy.org/get_started/manual_install, consulted 2026-05-11 */}
+{/* source: github.com/joenorton/comfyui-mcp-server, consulted 2026-05-11 */}
+{/* source: pytorch.org/get-started/locally, consulted 2026-05-11 */}
 
 ## Why connect ComfyUI to Claude Code
 
@@ -69,7 +69,7 @@ ControlNet is an optional module that guides generation from a reference image: 
 
 ## Why ComfyUI over AUTOMATIC1111
 
-<!-- source: docs.comfy.org, consulted 2026-05-11 -->
+{/* source: docs.comfy.org, consulted 2026-05-11 */}
 
 Several interfaces exist for running diffusion models locally. The two most common are AUTOMATIC1111 (also called SD WebUI) and ComfyUI. The right choice depends on your use case.
 
@@ -89,8 +89,8 @@ ComfyUI stands out for two concrete reasons here. First, its node graph architec
 
 ## Hardware requirements
 
-<!-- source: docs.comfy.org/installation/system_requirements, consulted 2026-05-11 -->
-<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 -->
+{/* source: docs.comfy.org/installation/system_requirements, consulted 2026-05-11 */}
+{/* source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 */}
 
 The model you run directly determines the VRAM you need. This table is based on official model file sizes:
 
@@ -115,9 +115,9 @@ Other requirements:
 
 ## Installing ComfyUI and Flux Schnell
 
-<!-- source: docs.comfy.org/get_started/manual_install, consulted 2026-05-11 -->
-<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 -->
-<!-- source: pytorch.org/get-started/locally, consulted 2026-05-11 -->
+{/* source: docs.comfy.org/get_started/manual_install, consulted 2026-05-11 */}
+{/* source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 */}
+{/* source: pytorch.org/get-started/locally, consulted 2026-05-11 */}
 
 <Steps>
 <Step title="Clone ComfyUI" stepNumber={1}>
@@ -169,7 +169,7 @@ This installs all the required Python dependencies (transformers, safetensors, P
 
 <Step title="Download Flux Schnell (fp8 version)" stepNumber={5}>
 
-<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 -->
+{/* source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulted 2026-05-11 */}
 
 Flux Schnell is available in two variants on Hugging Face. The `Comfy-Org/flux1-schnell` repository offers an fp8 version optimized specifically for ComfyUI:
 
@@ -222,7 +222,7 @@ Verify everything works by opening `http://127.0.0.1:8188/system_stats` in your 
 
 ## Connecting a ComfyUI MCP to Claude Code
 
-<!-- source: github.com/joenorton/comfyui-mcp-server, consulted 2026-05-11 -->
+{/* source: github.com/joenorton/comfyui-mcp-server, consulted 2026-05-11 */}
 
 Several ComfyUI MCP projects exist on GitHub. The lightest for our use case is `comfyui-mcp-server` by joenorton, an actively maintained Python server that exposes an MCP API and delegates generation to ComfyUI via its REST API on port 8188.
 

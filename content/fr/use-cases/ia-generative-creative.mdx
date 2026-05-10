@@ -1,0 +1,198 @@
+---
+title: "Claude Code + IA générative : panorama d'un workflow créatif moderne"
+description: "Comment intégrer la génération d'images IA dans ton flow Claude Code. 4 patterns d'intégration (MCP local, MCP cloud, Agent SDK, Skill) comparés sur latence, coût, contrôle et matrice décisionnelle."
+badge: "NEW"
+order: 4
+section: "use-cases"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["guide", "tooling", "productivity"]
+---
+
+{/* source: replicate.com/black-forest-labs/flux-1.1-pro, consulté 2026-05-11 */}
+{/* source: replicate.com/black-forest-labs/flux-dev, consulté 2026-05-11 */}
+{/* source: replicate.com/black-forest-labs/flux-schnell, consulté 2026-05-11 */}
+{/* source: docs.anthropic.com/en/about-claude/models/overview, consulté 2026-05-11 */}
+{/* source: npmjs.com/package/replicate-mcp, consulté 2026-05-11 */}
+
+## Le problème : trop d'outils pour un seul projet
+
+Tu travailles sur une application Next.js. Tu as besoin de 50 images pour illustrer les articles de blog, les pages produit et les bannières réseaux sociaux. Ce que tu fais en général : quitter VSCode, ouvrir un onglet Midjourney ou Stable Diffusion, écrire un prompt, attendre, télécharger, renommer, revenir dans le terminal. Recommencer. Vingt fois.
+
+À la quinzième image, tu réalises que tu as perdu quarante minutes à changer d'outil. Et les images ne sont pas cohérentes entre elles parce que tu as oublié de noter les paramètres exacts du premier lot.
+
+Ce problème est bien plus répandu qu'il n'y paraît. Dès qu'un projet mélange code et contenu visuel, les développeurs se retrouvent à jongler entre des outils qui ne se parlent pas. Claude Code peut changer ça, à condition de choisir le bon pattern d'intégration.
+
+Il en existe quatre, chacun adapté à un contexte précis : un **MCP local** si tu as un GPU et veux contrôler chaque paramètre, un **MCP cloud** si tu veux démarrer vite sans investissement matériel, un **agent SDK** si tu construis un pipeline automatisé, un **skill Claude Code** si tu fais de la génération ponctuelle et manuelle.
+
+Ce guide présente les quatre patterns, les compare sur les dimensions qui comptent (latence, coût, contrôle, courbe d'apprentissage), et te donne une matrice décisionnelle pour choisir en fonction de ta situation réelle.
+
+---
+
+## Les 4 patterns d'intégration
+
+### Pattern A : MCP local avec ComfyUI
+
+```
+Claude Code → MCP server local → ComfyUI (GPU local) → image dans /output
+```
+
+Tu installes ComfyUI sur ta machine, tu lances un serveur MCP qui expose une API vers Claude Code, et tu génères des images directement depuis ta session. L'image arrive dans un dossier de ton projet sans que tu aies quitté le terminal.
+
+**Latence :** 5-30 secondes selon le GPU et le modèle.
+
+**Coût :** 0 $ marginal après l'achat du GPU. L'électricité représente quelques centimes par lot.
+
+**Contrôle :** maximum. Tu choisis le modèle exact (Flux Schnell, Flux Dev, SDXL, LoRA personnalisé), les paramètres de sampling, la résolution, le nombre d'étapes. Tu peux utiliser ControlNet pour guider la composition à partir d'une image existante.
+
+**Quand l'utiliser :** tu génères un volume important d'images (plusieurs centaines par mois), tu as un GPU NVIDIA d'au moins 8 Go de VRAM, tu veux personnaliser les modèles avec tes propres LoRA, ou tes données sont sensibles et ne doivent pas sortir de ta machine.
+
+<Callout type="info" title="Latences indicatives">
+Les valeurs de latence ci-dessus sont des ordres de grandeur observés sur des configurations RTX 3090 / 4090 avec Flux Schnell fp8 en 4 étapes. Elles varient selon le GPU, la résolution cible et le nombre d'étapes de débruitage.
+</Callout>
+
+Pour la mise en place complète, voir [Tuto C2 : MCP ComfyUI local](/fr/mcp/comfyui-mcp-local/).
+
+---
+
+### Pattern B : MCP cloud (Replicate ou équivalent)
+
+```
+Claude Code → MCP server cloud → API Replicate → image via URL temporaire
+```
+
+Au lieu d'une instance ComfyUI locale, le MCP appelle une API cloud qui génère l'image sur des GPU distants. Claude Code reçoit une URL en retour.
+
+**Latence :** 1-10 secondes pour la plupart des modèles Flux sur Replicate, selon la charge des serveurs.
+
+**Coût :** variable selon le modèle. Au 2026-05-11 sur Replicate :
+- Flux 1.1 Pro : $0.04 par image
+- Flux Dev : $0.025 par image
+- Flux Schnell : $0.003 par image
+
+**Contrôle :** moyen. Tu choisis le modèle et les paramètres exposés par l'API (ratio, qualité, seed), mais tu n'as pas accès aux LoRA personnalisés ni au ControlNet sauf si la plateforme les supporte.
+
+**Quand l'utiliser :** tu n'as pas de GPU disponible (Mac, VPS, machine de dev standard), tu veux tester rapidement sans installation, ou tu as besoin de Flux 1.1 Pro (le modèle le plus qualitatif de Black Forest Labs, disponible uniquement en cloud).
+
+**MCP Replicate :** il existe un package npm officiel `replicate-mcp` (publié par `replicatebot`, compte officiel Replicate, licence Apache-2.0, v0.9.0). Il expose l'ensemble de l'API Replicate à Claude Code. Des packages communautaires spécialisés Flux existent aussi (`flux-replicate-mcp`, `replicate-flux-mcp`), mais ils sont peu maintenus. L'approche la plus stable reste d'utiliser le pattern C (Agent SDK) pour des usages en production.
+
+<Callout type="warning" title="URL temporaire">
+Les URLs d'images retournées par Replicate expirent après une heure. Si tu utilises ce pattern, prévois un outil de téléchargement et de stockage local ou cloud dans la foulée, sinon les images disparaissent.
+</Callout>
+
+---
+
+### Pattern C : Agent SDK + API directe
+
+```
+Claude Code (rôle d'orchestrateur) → Agent SDK Anthropic → API Replicate
+                                                          → outil optimize_webp
+                                                          → outil upload_storage
+```
+
+Tu construis un agent autonome avec le SDK Anthropic. L'agent reçoit une demande en langage naturel, génère l'image via Replicate, l'optimise en WebP, puis l'upload sur ton storage (S3, R2, Vercel Blob). Tout ça dans un seul appel Python ou TypeScript, sans interface manuelle.
+
+**Latence :** 10-30 secondes au total (génération + optimisation + upload), variable selon l'API cloud choisie.
+
+**Coût :** coût API Claude (claude-sonnet-4-6 : $3 / million de tokens en entrée, $15 en sortie) + coût image Replicate. Un cycle complet pour une image de blog coûte environ $0.047 (dont $0.04 pour l'image Flux Pro).
+
+**Contrôle :** maximum via le code. Tu peux ajouter n'importe quel outil (redimensionnement, alt text automatique, publication CMS), gérer les erreurs finement, et brancher l'agent dans un pipeline CI/CD.
+
+**Quand l'utiliser :** tu veux automatiser la génération dans un pipeline GitHub Actions ou Vercel, tu génères des images depuis un serveur sans GPU, tu as besoin de paralléliser la génération de centaines d'images, ou tu veux intégrer la génération dans un workflow éditorial complet.
+
+Pour l'implémentation complète en TypeScript et Python, voir [Tuto C3 : Agent Claude SDK](/fr/agents/agent-generation-assets/).
+
+---
+
+### Pattern D : Skill + script local
+
+```
+Claude Code → Skill personnalisé → script bash/python → génération (local ou cloud)
+```
+
+Tu crées un Skill Claude Code qui encapsule un script de génération d'images. Ce script peut appeler un binaire local (Stable Diffusion CLI, diffusers Python), une API cloud via curl, ou même ComfyUI directement. Claude Code invoque le skill sur demande.
+
+**Latence :** dépend du script sous-jacent. Quelques secondes pour un appel API, quelques dizaines de secondes pour une génération locale.
+
+**Coût :** si le script appelle une API cloud, le coût est celui de l'API. Si le script tourne en local, le coût marginal est quasi nul.
+
+**Contrôle :** simple à mettre en place, mais limité par ce que le script expose. Pas de loop de raisonnement, pas de gestion d'erreur avancée côté Claude : c'est le script qui pilote tout.
+
+**Quand l'utiliser :** tu génères rarement des images (quelques fois par mois), tu as déjà un script de génération qui fonctionne et tu veux juste le rendre accessible depuis Claude Code, ou tu veux tester l'intégration avant d'investir dans un agent complet.
+
+---
+
+## Tableau comparatif des 4 patterns
+
+| Pattern | Latence | Coût | Contrôle | Courbe d'apprentissage | Cas d'usage idéal |
+|---|---|---|---|---|---|
+| A : MCP local ComfyUI | 5-30s | 0 $ marginal | Maximum | Élevée (GPU, Python, ComfyUI) | Volume + GPU + données sensibles |
+| B : MCP cloud Replicate | 1-10s | $0.003-0.04/image | Moyen | Faible (npm install) | Test rapide, pas de GPU |
+| C : Agent SDK | 10-30s total | $0.04-0.05/image | Maximum (code) | Moyenne (SDK Anthropic) | CI/CD, automation, prod |
+| D : Skill + script | Variable | Variable | Simple | Très faible | Usage ponctuel, 5 images/mois |
+
+<Callout type="info" title="Tarifs constatés au 2026-05-11">
+Les tarifs Replicate ci-dessus sont ceux relevés sur les pages officielles Replicate à la date du 2026-05-11. Les tarifs Claude sont issus de docs.anthropic.com à la même date. Ils peuvent évoluer.
+</Callout>
+
+---
+
+## Quel pattern pour quel cas d'usage
+
+La matrice ci-dessous est volontairement pragmatique. Elle part de ta situation réelle, pas d'une architecture idéale théorique.
+
+### Tu génères 500+ images par mois et tu as un GPU
+
+**Choix recommandé : Pattern A (MCP local ComfyUI)**
+
+Le coût d'un appel API cloud à $0.04 par image représente $20 pour 500 images. Sur un an, c'est $240 pour quelque chose qu'un GPU RTX 3080 amorti en quelques mois peut faire pour le prix de l'électricité. Au-delà d'un certain volume, le local gagne sur le coût.
+
+Tu bénéficies aussi du contrôle maximal : LoRA pour ton style graphique propre, ControlNet pour respecter des gabarits, résolutions personnalisées. Et tes données ne sortent jamais de ta machine.
+
+Pour démarrer : [Tuto C2 : MCP ComfyUI local](/fr/mcp/comfyui-mcp-local/).
+
+### Tu veux intégrer la génération dans un pipeline CI/CD
+
+**Choix recommandé : Pattern C (Agent SDK)**
+
+Un runner GitHub Actions n'a pas de GPU. Une edge function Vercel non plus. Le pattern C est le seul qui fonctionne nativement dans ces environnements : tu appelles l'API Replicate depuis n'importe quel serveur, tu gères les erreurs dans ton code, tu parallélises les requêtes.
+
+C'est aussi le pattern le plus robuste pour la production : tu contrôles exactement ce qui se passe, tu peux ajouter des retry, des fallbacks, des logs structurés, une intégration avec ton système d'alerte.
+
+Pour démarrer : [Tuto C3 : Agent Claude SDK](/fr/agents/agent-generation-assets/).
+
+### Tu veux tester rapidement sans installer quoi que ce soit
+
+**Choix recommandé : Pattern B (MCP cloud)**
+
+Si tu as juste besoin de voir si l'intégration vaut le coup avant d'investir du temps, le pattern B est le plus rapide à mettre en place. Tu installes `replicate-mcp`, tu configures une clé API Replicate, et Claude Code peut générer des images en quelques minutes.
+
+C'est aussi le seul moyen d'accéder à Flux 1.1 Pro (le modèle le plus performant de Black Forest Labs) sans gérer d'infrastructure. La qualité, notamment sur les prompts complexes avec du texte intégré ou des compositions précises, est supérieure à Flux Dev ou Schnell.
+
+### Tu génères 5 images par mois manuellement
+
+**Choix recommandé : Pattern D (Skill + script)**
+
+Pour un usage très ponctuel, l'overhead d'un agent complet ou d'un MCP serveur n'est pas justifié. Un script bash qui appelle l'API Replicate via curl, encapsulé dans un skill Claude Code, suffit largement.
+
+### Tes données sont sensibles et ne doivent pas sortir de ta machine
+
+**Choix recommandé : Pattern A (MCP local) ou Pattern D (script local)**
+
+Si tes visuels contiennent des informations propriétaires, des designs non publiés, ou des données personnelles, les patterns cloud (B et C) impliquent d'envoyer tes prompts à des API tierces. Les patterns locaux (A et D avec script local) gardent tout sur ta machine.
+
+### Tu veux la meilleure qualité d'image possible
+
+**Choix recommandé : Pattern B ou C avec Flux 1.1 Pro**
+
+Flux 1.1 Pro de Black Forest Labs n'est disponible que via des API cloud (Replicate et l'API BFL officielle). Il surpasse Flux Dev et Schnell sur l'adhérence aux prompts complexes et la diversité des sorties. Si la qualité prime sur le coût, c'est le bon modèle, et les patterns B ou C te permettent d'y accéder.
+
+---
+
+## Prochaines étapes
+
+Les quatre patterns sont décrits ici en surface. Chacun fait l'objet d'un tuto dédié :
+
+- [Tuto C2 : MCP ComfyUI local](/fr/mcp/comfyui-mcp-local/) : installation de ComfyUI, Flux Schnell, serveur MCP, premier prompt depuis Claude Code.
+- [Tuto C3 : Agent Claude SDK](/fr/agents/agent-generation-assets/) : implémentation complète de l'agent en Python et TypeScript, gestion des erreurs, calcul du coût réel.
+- [Use case S2 : Assets blog Next.js automatique](/fr/use-cases/assets-blog-automatique/) : pipeline complet de la rédaction d'article à l'image publiée sur CDN (à venir).

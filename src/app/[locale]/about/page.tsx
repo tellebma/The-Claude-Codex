@@ -12,6 +12,7 @@ import {
 import { GitHubIcon } from "@/components/ui/icons/GitHubIcon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { AnimateOnScroll } from "@/components/ui/AnimateOnScroll";
+import { AnalyticsTracker } from "@/components/layout/AnalyticsTracker";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
   createArticleSchema,
@@ -73,6 +74,7 @@ export default async function AboutPage({
 
   return (
     <>
+      <AnalyticsTracker />
       {/* JSON-LD structured data — safe: static schema, no user input */}
       <script
         type="application/ld+json"

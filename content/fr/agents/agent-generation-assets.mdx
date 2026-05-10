@@ -33,6 +33,10 @@ Le cloud change l'équation dans plusieurs situations :
 
 **Pas de GPU disponible.** Sur un Mac M1, un VPS, ou une machine de dev standard : l'API cloud est la seule option viable pour de la génération haute résolution.
 
+<Callout type="info" title="Valeurs indicatives">
+Les chiffres de latence ci-dessous (5-20s en local, 4-10s en cloud) sont des ordres de grandeur observés sur des configurations standards. Ils varient selon le hardware (RTX 3090 vs RTX 4090 vs Apple M-series) et la qualité du réseau.
+</Callout>
+
 | Critère | Local (ComfyUI) | Cloud (Replicate) |
 |---|---|---|
 | Coût fixe | GPU requis | Aucun |
@@ -654,6 +658,8 @@ async function callWithRetry(
 **Fallback Flux Pro vers Flux Dev.** Si Flux 1.1 Pro est saturé (rare mais possible), bascule automatiquement sur Flux Dev ($0.025/image) :
 
 ```python
+import replicate
+
 def generate_image_with_fallback(prompt: str, aspect_ratio: str = "16:9") -> str:
     models = [
         "black-forest-labs/flux-1.1-pro",
@@ -669,15 +675,20 @@ def generate_image_with_fallback(prompt: str, aspect_ratio: str = "16:9") -> str
             raise
 ```
 
-**Timeout cloud.** Les générations Flux Pro prennent en général 4 à 10 secondes. Fixe un timeout côté client à 60 secondes pour absorber les pics de charge :
+**Timeout cloud.** Les générations Flux Pro prennent en général entre 4 et 10 secondes. Fixe un timeout côté client à 60 secondes pour absorber les pics de charge. Le timeout se configure à la construction du client, pas par appel :
 
 ```python
+import os
 import replicate
 
+# Timeout cote client : 60 secondes pour toutes les requetes
 client = replicate.Client(
     api_token=os.environ["REPLICATE_API_TOKEN"],
+    timeout=60.0,
 )
-# Passe timeout en secondes lors des appels
+
+# Utilise client.run(...) au lieu de replicate.run(...)
+output = client.run("black-forest-labs/flux-1.1-pro", input={"prompt": "..."})
 ```
 
 ## 5. Coût d'exécution réel
@@ -721,7 +732,7 @@ Si tu génères 100 images par mois : environ $4.70, soit le prix d'un café.
 <Callout type="tip" title="Batch et choix du modèle">
 Pour des campagnes de contenu massives, deux leviers :
 
-1. Utilise Flux Dev ($0.025) à la place de Flux Pro pour les previews internes ou les images secondaires. La qualité est légèrement inférieure, le prix 40% plus bas.
+1. Utilise Flux Dev ($0.025) à la place de Flux Pro pour les previews internes ou les images secondaires. La qualité est légèrement inférieure, le prix environ 37% plus bas.
 
 2. Génère en parallèle : envoie plusieurs prompts à Replicate simultanément. Le coût reste identique, mais le temps total est divisé par le nombre de requêtes parallèles.
 </Callout>

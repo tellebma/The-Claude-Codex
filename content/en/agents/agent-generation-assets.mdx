@@ -33,6 +33,10 @@ The cloud changes the equation in several situations:
 
 **No GPU available.** On an M1 Mac, a VPS, or a standard dev machine: the cloud API is the only viable option for high-resolution generation.
 
+<Callout type="info" title="Indicative values">
+The latency figures below (5-20s local, 4-10s cloud) are rough orders of magnitude observed on standard configurations. They vary with hardware (RTX 3090 vs RTX 4090 vs Apple M-series) and network quality.
+</Callout>
+
 | Criteria | Local (ComfyUI) | Cloud (Replicate) |
 |---|---|---|
 | Fixed cost | GPU required | None |
@@ -653,6 +657,8 @@ async function callWithRetry(
 **Fallback from Flux Pro to Flux Dev.** If Flux 1.1 Pro is overloaded (rare but possible), automatically switch to Flux Dev ($0.025/image):
 
 ```python
+import replicate
+
 def generate_image_with_fallback(prompt: str, aspect_ratio: str = "16:9") -> str:
     models = [
         "black-forest-labs/flux-1.1-pro",
@@ -668,7 +674,21 @@ def generate_image_with_fallback(prompt: str, aspect_ratio: str = "16:9") -> str
             raise
 ```
 
-**Cloud timeout.** Flux Pro generations typically take 4 to 10 seconds. Set a client-side timeout of 60 seconds to absorb load spikes.
+**Cloud timeout.** Flux Pro generations typically take 4 to 10 seconds. Set a client-side timeout of 60 seconds to absorb load spikes. The timeout is configured at client construction, not per call:
+
+```python
+import os
+import replicate
+
+# Client-side timeout: 60 seconds for all requests
+client = replicate.Client(
+    api_token=os.environ["REPLICATE_API_TOKEN"],
+    timeout=60.0,
+)
+
+# Use client.run(...) instead of replicate.run(...)
+output = client.run("black-forest-labs/flux-1.1-pro", input={"prompt": "..."})
+```
 
 ## 5. Real execution cost
 
@@ -711,7 +731,7 @@ At 100 images per month: roughly $4.70, about the price of a coffee.
 <Callout type="tip" title="Batching and model selection">
 For large content campaigns, two levers:
 
-1. Use Flux Dev ($0.025) instead of Flux Pro for internal previews or secondary images. Quality is slightly lower, price is 40% less.
+1. Use Flux Dev ($0.025) instead of Flux Pro for internal previews or secondary images. Quality is slightly lower, price is roughly 37% less.
 
 2. Generate in parallel: send multiple prompts to Replicate simultaneously. The cost stays the same, but total execution time is divided by the number of parallel requests.
 </Callout>

@@ -35,14 +35,14 @@ export function useMatomoPageviewTracking(): void {
     // sans Next.js router context). Optional chaining defensive necessaire.
     const queryString = searchParams ? searchParams.toString() : "";
     const fullUrl =
-      window.location.origin +
+      globalThis.location.origin +
       pathname +
       (queryString ? `?${queryString}` : "");
 
     // setCustomUrl avant trackPageView pour que Matomo attribue l'event
     // a la nouvelle URL et non a celle de la 1re page chargee.
     pushMatomoCommand(["setCustomUrl", fullUrl]);
-    pushMatomoCommand(["setDocumentTitle", document.title]);
+    pushMatomoCommand(["setDocumentTitle", globalThis.document.title]);
     pushMatomoCommand(["trackPageView"]);
   }, [pathname, searchParams]);
 }

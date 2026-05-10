@@ -383,7 +383,7 @@ themes: ["guide", "tooling", "productivity"]
      - **(d) Skill + script local** : description, simplicité, limites, exemple de skill
   3. **Tableau comparatif des 4 patterns** (~200 mots + `<Card>` ou table MDX) : colonnes Pattern / Latence / Coût / Contrôle / Courbe d'apprentissage / Cas d'usage idéal
   4. **Quel pattern pour quel cas d'usage** (~500 mots) : matrice décisionnelle :
-     - "Tu génères 1000+ images/mois et tu as un GPU" → C2
+     - "Tu génères 500+ images/mois et tu as un GPU" → C2 (seuil affiné post-validation : 500 images suffit pour rentabiliser un GPU possédé)
      - "Tu veux scale en CI/CD" → C3
      - "Tu veux tester rapidement" → MCP cloud
      - "Tu fais 5 images par mois" → Skill simple

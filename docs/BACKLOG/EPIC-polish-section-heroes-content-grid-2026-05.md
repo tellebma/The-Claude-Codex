@@ -47,6 +47,7 @@ Utilise `<ArticleHero>` (`components/layout/ArticleHero.tsx`) qui est le **gold 
 - **EPIC RG (refonte graphique 2026-04)** : a livré `<ArticleHero>`, `<ArticleShell>`, `<ArticleSubNav>`, `<ArticlePager>`, `<ReadingProgressBar>`, le système de design tokens, et les classes `.art-*` dans `globals.css`. Cet EPIC s'appuie dessus.
 - **EPIC SEO-GEO mai 2026** : améliore les titles + meta + JSON-LD ; pas de conflit, les composants extraits restent rétrocompatibles.
 - **EPIC Ecosystem trending repos** : les nouvelles pages `/ecosystem/*` consommeront directement `<SectionHero>` + `<SectionCardGrid>` livrés par cet EPIC.
+- **EPIC Stack design Claude Code (2026-05)** : fournit les skills externes (Impeccable, UI UX Pro Max, Taste Skill) et le workflow Playwright qui doivent être utilisés pour concevoir et valider les composants `<SectionHero>` et `<SectionCardGrid>` de cet EPIC. Voir section "Workflow recommandé" ci-dessous.
 
 ---
 
@@ -59,6 +60,54 @@ Utilise `<ArticleHero>` (`components/layout/ArticleHero.tsx`) qui est le **gold 
 3. **Cards sub-pages** : extraire le pattern récurrent en `<SectionCardGrid>` réutilisable pour éliminer 6+ copies de JSX.
 
 Aucune nouvelle page, aucun nouveau contenu, aucune nouvelle fonctionnalité. **Pure cohérence visuelle et refacto.**
+
+---
+
+## Workflow recommandé : skills design + Playwright (mise à jour 2026-05-11)
+
+Cet EPIC est le terrain d'application immédiat de la stack design installée par l'EPIC `EPIC-design-stack-skills-mcp-2026-05`. Pour chaque story qui implique du JSX/CSS, suivre cette séquence (et pas l'inverse, sinon Claude tombe dans son biais "AI slop") :
+
+### Pré-requis (à faire une fois, avant Sprint 1)
+
+- [ ] Vérifier que `PRODUCT.md` et `DESIGN.md` existent à la racine du projet (créés via `EPIC-design-stack-skills-mcp-2026-05`). Sans eux, **Impeccable refuse de produire du code de qualité** (gate "Product" du `SKILL.md`).
+- [ ] Vérifier que les 4 skills sont installés (`ls ~/.agents/skills/` doit contenir `impeccable`, `design-taste-frontend`, `ui-ux-pro-max`, `huashu-design`).
+- [ ] Vérifier que Playwright MCP est actif (profil dev global, déjà chargé).
+
+### Boucle par composant (POL-1, POL-2)
+
+1. **Brief design** : définir verbalement la promesse visuelle (ex : "SectionHero calqué sur ArticleHero, pill pulsante, titre gradient sur 2 lignes, atmosphère cyan/ambre subtile").
+2. **Génération initiale** : invoquer `/impeccable shape` pour cadrer le brief (Impeccable lit `PRODUCT.md` + `DESIGN.md` automatiquement), puis `/impeccable craft` pour générer le composant.
+3. **Validation visuelle Playwright** : `npm run dev`, puis `mcp__playwright__browser_navigate` sur `/fr/content/` (page de test), screenshot 375×800 mobile et 1440×900 desktop.
+4. **Critique** : Claude lit le screenshot et identifie ce qui dévie de `<ArticleHero>` (pill manquante, contraste, espacement, typographie).
+5. **Itération** : `/impeccable polish` ou `/design-taste-frontend` avec le diff identifié. 2-4 itérations typiques.
+6. **A11y** : `mcp__playwright__browser_evaluate` pour exécuter axe-core, vérifier 0 violation WCAG 2.1 AA (cible POL-1 / POL-2).
+7. **Visual regression** : ajouter snapshot Playwright (POL-11 anticipée) avec seuil 2% (cf. `project_visual_regression_threshold`).
+
+### Boucle par page migrée (POL-3 à POL-10)
+
+Plus simple car on remplace juste le hero existant par `<SectionHero>` et la liste/cards par `<SectionCardGrid>`. Workflow par page :
+
+1. Lire la page actuelle (`page.tsx`)
+2. Mapper les props existantes vers les props `<SectionHero>` / `<SectionCardGrid>`
+3. **Avant/après screenshot Playwright** (mobile + desktop) en commentaire de PR
+4. Si l'écart visuel surprend : invoquer `/impeccable critique` sur le composant concerné pour aligner
+
+### Skills à privilégier selon le sous-cas
+
+| Tâche | Skill principal | Skill complémentaire |
+|-------|-----------------|----------------------|
+| Concevoir `<SectionHero>` from scratch (POL-1) | Impeccable (`/impeccable craft`) | UI UX Pro Max (palette + spacing) |
+| Concevoir `<SectionCardGrid>` (POL-2) | Impeccable + Taste Skill (`design-taste-frontend`) | UI UX Pro Max (grid responsive) |
+| Mapping iconographie thématique (POL-3) | UI UX Pro Max (base 99 UX guidelines) | Manuel via Lucide |
+| Migration page section landing (POL-4 à POL-10) | Aucun skill : pure substitution mécanique de composants | Playwright pour avant/après |
+| Visual regression snapshots (POL-11) | Playwright MCP | RG-25 framework existant |
+
+### Garde-fous
+
+- **Ne jamais utiliser `text-violet-*`** (réservé exclusivement au theme `devsecops` selon `DESIGN.md`).
+- **Ne jamais inventer une couleur** : tous les composants consomment les tokens sémantiques (`--brand-primary`, `--bg-page`, etc.).
+- **Ne jamais oublier le dark mode** : tester les 2 modes après chaque itération.
+- **Toujours mobile-first** : breakpoints `sm 640` / `md 768` / `lg 1024` / `xl 1280`.
 
 ---
 

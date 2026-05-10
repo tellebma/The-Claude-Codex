@@ -47,6 +47,8 @@ L'écosystème Claude Code explose en 2026. Les recherches GitHub mai 2026 rév�
 - **EPIC SEO-GEO mai 2026** : améliore le CTR de pages existantes. Cet EPIC en complément crée de **nouvelles pages cornerstone** qui captent du trafic neuf.
 - **EPIC Best Practices Integration** : enrichit les sections existantes (advanced, prompting, etc.). Cet EPIC ajoute un *layer* écosystème par-dessus.
 - **Spec Articles IA générative** : peut alimenter cet EPIC en générant les fiches descriptives des repos.
+- **EPIC Stack design Claude Code (2026-05)** : produit les **fiches outils détaillées** (`/skills/impeccable`, `/skills/ui-ux-pro-max`, `/skills/taste-skill`, `/skills/huashu-design`) que `/ecosystem/awesome-skills` (ECO-3) doit référencer en lien interne **plutôt que de linker directement vers GitHub**. Établit la hiérarchie d'autorité : `/ecosystem/*` = inventaire haut de tunnel, `/skills/{slug}` = autorité de référence (cf. recommandation SEO Annexe C de `EPIC-design-stack-skills-mcp-2026-05`).
+- **EPIC Polish section heroes (2026-05)** : livre les composants `<SectionHero>` et `<SectionCardGrid>` que les nouvelles pages `/ecosystem/*` consommeront. À utiliser tels quels, ne pas dupliquer.
 
 ---
 
@@ -70,7 +72,7 @@ Faire de The Claude Codex la **référence francophone d'inventaire de l'écosys
 |----|-------|----|----------------------|
 | ECO-1 | Nouvelle section `/ecosystem/` (FR + EN) : layout, nav sidebar, landing page hub | 3 | `app/[locale]/ecosystem/{layout,page}.tsx` + `lib/section-navigation.ts` |
 | ECO-2 | Page **Top GitHub Repos** : 30+ repos curés par catégorie, mise à jour mensuelle | 5 | `/ecosystem/top-repos-github` |
-| ECO-3 | Page **Awesome Skills** : compilation des meilleurs skills publics (everything-claude-code, awesome-claude-skills, agent-skills, antigravity-awesome-skills) | 3 | `/ecosystem/awesome-skills` |
+| ECO-3 | Page **Awesome Skills** : compilation des meilleurs skills publics (everything-claude-code, awesome-claude-skills, agent-skills, antigravity-awesome-skills). **Pour les 4 skills design** (Impeccable, UI UX Pro Max, Taste, Huashu) : 1 ligne de promesse + lien vers la fiche détaillée `/skills/{slug}` produite par EPIC Stack design (pas de duplication de contenu, sinon Google confond les signaux : règle SEO de l'Annexe C de `EPIC-design-stack-skills-mcp-2026-05`) | 3 | `/ecosystem/awesome-skills` |
 | ECO-4 | Page **Awesome Plugins** : marketplace officielle Anthropic + écosystème community | 3 | `/ecosystem/awesome-plugins` |
 | ECO-5 | Page **Awesome MCP Servers** : curation MCP par catégorie (data, design, dev, security) | 3 | `/ecosystem/awesome-mcp-servers` |
 
@@ -171,6 +173,15 @@ content/en/karpathy-claude-md-analysis.mdx
 ---
 
 ## Composants UI à créer
+
+### Workflow recommandé pour la conception (mise à jour 2026-05-11)
+
+Le composant `<RepoCard />` et les pages `/ecosystem/*` doivent être conçus avec la stack design installée par `EPIC-design-stack-skills-mcp-2026-05` :
+
+1. **Conception `<RepoCard />` et `<CategoryGrid />`** : invoquer `/impeccable shape` → `/impeccable craft` (lit `PRODUCT.md` + `DESIGN.md` automatiquement). Ces composants doivent suivre la même identité visuelle que `<SectionCardGrid>` livré par EPIC Polish (couleurs brand/accent, atmosphère cyan/ambre, animation `fade-up` au scroll).
+2. **Validation visuelle** : Playwright MCP screenshot mobile 375×800 + desktop 1440×900 sur `/fr/ecosystem/top-repos-github`, comparaison avant/après itération.
+3. **A11y** : `mcp__playwright__browser_evaluate` axe-core, 0 violation WCAG 2.1 AA.
+4. **Fiche outil cross-link** : pour les 4 skills design présents dans ECO-3 (`Impeccable`, `UI UX Pro Max`, `Taste Skill`, `Huashu Design`), le `<RepoCard />` doit avoir un CTA "Fiche détaillée →" qui pointe vers `/skills/{slug}` (livré par EPIC Stack design), **pas** vers GitHub directement.
 
 ### `<RepoCard />` (nouveau composant `components/ui/RepoCard.tsx`)
 

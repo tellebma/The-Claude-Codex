@@ -10,6 +10,8 @@ import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { routing } from "@/i18n/routing";
 import {
   SITE_URL,
@@ -212,6 +214,15 @@ export default async function LocaleLayout({
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>
+        {/* VM-3 — Vercel Web Analytics : pageviews + custom events.
+            Doublon assume avec Matomo cookieless (cf. docs/analytics-tracking.md).
+            mode="production" explicite : SSG + next-intl rendent l'auto-detect
+            de NODE_ENV moins fiable. */}
+        <Analytics mode="production" />
+        {/* VM-5 — Vercel Speed Insights : Web Vitals reels (LCP, INP, CLS,
+            FCP, TTFB) en mode RUM. Comble le trou principal du tracking
+            actuel : aujourd'hui Lighthouse en CI = lab synthetique uniquement. */}
+        <SpeedInsights />
       </body>
     </html>
   );

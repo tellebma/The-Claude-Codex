@@ -31,8 +31,9 @@ export function useMatomoPageviewTracking(): void {
     // useEffect ne s'execute que cote client : `window` et `document`
     // sont toujours definis ici, pas de garde SSR necessaire.
     // useSearchParams() retourne `ReadonlyURLSearchParams` non-nullable
-    // (cf. types next/navigation), pas besoin de optional chaining.
-    const queryString = searchParams.toString();
+    // selon les types, mais peut etre null en environnement de test (jsdom
+    // sans Next.js router context). Optional chaining defensive necessaire.
+    const queryString = searchParams ? searchParams.toString() : "";
     const fullUrl =
       window.location.origin +
       pathname +

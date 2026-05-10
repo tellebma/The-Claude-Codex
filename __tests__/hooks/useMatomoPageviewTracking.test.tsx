@@ -6,7 +6,7 @@ import { useMatomoPageviewTracking } from "@/hooks/useMatomoPageviewTracking";
 // pourra spier dessus via des vi.fn() declares ci-dessous pour controler ce
 // que le hook voit a chaque render.
 const usePathnameMock = vi.fn<() => string>(() => "/fr/");
-const useSearchParamsMock = vi.fn<() => URLSearchParams>(
+const useSearchParamsMock = vi.fn<() => URLSearchParams | null>(
   () => new URLSearchParams()
 );
 

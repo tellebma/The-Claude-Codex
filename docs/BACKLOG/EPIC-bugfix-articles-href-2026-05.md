@@ -2,9 +2,16 @@
 
 > Source : recette utilisateur sur preview Vercel `the-claude-codex-env-dev-tellebma.vercel.app`, 2026-05-09
 > Date d'ouverture : 2026-05-09
+> **Statut : ✅ Cloture le 2026-05-10** (B-ART-1 #155 mergee, B-ART-2 #157 mergee)
 > Effort estime : **2 SP** (2 stories, ~30 min de dev + verif)
 > Priorite : **P0** (bug visible en production preview, casse la navigation depuis la landing)
 > Branche cible : `fix/landing-recent-articles-href`
+
+## Bilan post-livraison
+
+- B-ART-1 (PR #155) : fix `buildEntry` pour stocker un slug "nu" + test de regression unitaire dans `__tests__/lib/mdx.test.ts` ("articles de section > retourne section + slug nu").
+- B-ART-2 (PR #157) : garde-fou E2E `e2e/landing-recent-articles.spec.ts` (FR + EN). Pour chaque card de la region `[role="region"][aria-label="Articles recents|Recent articles"]`, le test verifie qu'aucun href ne contient de segment duplique et que la page repondue retourne 200 + h1 visible.
+- **Bug latent expose par B-ART-2** : le test E2E sur `/en/` echouait apres SEO-2 car `getMostRecentArticles` retournait des articles a slug divergent FR/EN (`bonnes-pratiques-securite` cote FR n'existe pas en EN). Fix accompagnant SEO-2 dans `src/lib/mdx.ts` : filtre final `entry.locale === preferredLocale` qui supprime le fallback cross-locale.
 
 ---
 

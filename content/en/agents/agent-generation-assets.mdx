@@ -1,0 +1,726 @@
+---
+title: "Build a Claude agent that generates and publishes your visual assets"
+description: "Tutorial to build a Claude SDK agent that generates images via Flux/Replicate API, optimizes to WebP and uploads to your storage. Architecture, TypeScript and Python code, error handling and real cost."
+badge: "NEW"
+order: 10
+section: "agents"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["tutorial", "architecture", "tooling"]
+---
+
+<!-- source: docs.anthropic.com/en/about-claude/models/overview, consulted 2026-05-11 -->
+<!-- source: docs.anthropic.com/en/agents-and-tools/tool-use/handle-tool-calls, consulted 2026-05-11 -->
+<!-- source: replicate.com/black-forest-labs/flux-1.1-pro, consulted 2026-05-11 -->
+<!-- source: replicate.com/black-forest-labs/flux-dev, consulted 2026-05-11 -->
+<!-- source: replicate.com/black-forest-labs/flux-schnell, consulted 2026-05-11 -->
+
+# Build a Claude agent that generates and publishes your visual assets
+
+You want to automate image generation for your blog, social media, or content pipeline? This article shows you how to build a complete Claude SDK agent: it receives a request in natural language, generates an image via the Replicate/Flux API, optimizes it to WebP, then publishes it to your storage. Everything orchestrated by Claude with three simple tools.
+
+## 1. Why prefer the cloud for image generation
+
+Local image generation (via ComfyUI or Automatic1111) has its advantages: you control everything, costs at volume are low, and you can customize models. But it requires a dedicated GPU, an always-on server, and infrastructure to maintain. For the article on local ComfyUI, see [C2 - Local ComfyUI MCP](/en/mcp/comfyui-mcp-local/).
+
+The cloud changes the equation in several situations:
+
+**CI/CD and automation.** A GitHub Actions or Vercel pipeline has no access to a local GPU. Cloud APIs can be called from any runner, without hardware configuration.
+
+**Scale and traffic spikes.** Need to generate 200 images for a launch? The Replicate API handles parallelism for you. Locally, you hit your VRAM ceiling quickly.
+
+**Flux Pro quality.** Black Forest Labs' Flux 1.1 Pro model is not available locally (commercial rights): it runs exclusively via Replicate. Quality, especially prompt adherence on complex descriptions, exceeds Flux Dev or Schnell.
+
+**No GPU available.** On an M1 Mac, a VPS, or a standard dev machine: the cloud API is the only viable option for high-resolution generation.
+
+| Criteria | Local (ComfyUI) | Cloud (Replicate) |
+|---|---|---|
+| Fixed cost | GPU required | None |
+| Variable cost | Electricity | $0.04/image (Flux Pro) |
+| Latency | 5–20s (depends on GPU) | 4–10s |
+| Parallelism | Limited by VRAM | Unlimited |
+| Premium models | No | Yes (Flux Pro) |
+| CI/CD | Difficult | Native |
+| Data control | Full | Per Replicate ToS |
+
+For a detailed comparison, see [S3 Comparison - Local vs cloud](/en/use-cases/image-ia-local-vs-cloud/) (coming soon).
+
+## 2. Agent architecture
+
+<Callout type="info" title="Agent overview">
+The agent relies on three tools that Claude orchestrates based on the request:
+
+```
+Claude Agent (claude-sonnet-4-6)
+  ├── tool: generate_image
+  │     └── Calls Replicate API (Flux 1.1 Pro)
+  │           → returns a temporary image URL
+  ├── tool: optimize_webp
+  │     └── Downloads the image, compresses to WebP via sharp (TS) or Pillow (Python)
+  │           → returns the local path of the WebP file
+  └── tool: upload_storage
+        └── Uploads to S3 / R2 / Vercel Blob
+              → returns the final public URL
+```
+</Callout>
+
+The flow works like this: the user sends a natural language message ("Generate a hero image for my coffee article"). Claude analyzes the request, builds an optimized prompt, then calls `generate_image`. Replicate returns a temporary URL. Claude calls `optimize_webp` to convert and compress. Then `upload_storage` to persist the image. Claude finally returns the public URL to the user.
+
+This three-tool pattern is intentionally simple. You can extend it with a fourth `generate_alt_text` tool (Claude Vision) or `resize_variants` to generate multiple formats in parallel.
+
+**Why let Claude decide the tool order?** The agent can sometimes choose to call `optimize_webp` before `generate_image` has finished if you pass it an existing URL. This flexibility is the core of the agentic pattern: Claude adapts the sequence to context, rather than following a fixed script.
+
+## 3. Step-by-step implementation
+
+<Tabs>
+<div label="Python">
+
+<Steps>
+
+<Step title="Install dependencies" stepNumber={1}>
+
+```bash
+pip install anthropic replicate pillow boto3
+```
+
+Set your environment variables:
+
+```bash
+export ANTHROPIC_API_KEY="sk-ant-..."
+export REPLICATE_API_TOKEN="r8_..."
+export AWS_ACCESS_KEY_ID="..."
+export AWS_SECRET_ACCESS_KEY="..."
+export AWS_S3_BUCKET="my-bucket"
+```
+
+</Step>
+
+<Step title="Define the three tools" stepNumber={2}>
+
+```python
+# tools.py
+# source: docs.anthropic.com/en/agents-and-tools/tool-use/define-tools, consulted 2026-05-11
+
+TOOLS = [
+    {
+        "name": "generate_image",
+        "description": (
+            "Generates an image from a text prompt via Flux 1.1 Pro on Replicate. "
+            "Returns a temporary URL valid for 1 hour."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "prompt": {
+                    "type": "string",
+                    "description": "Detailed description of the image to generate.",
+                },
+                "aspect_ratio": {
+                    "type": "string",
+                    "enum": ["1:1", "16:9", "3:2", "4:5", "9:16"],
+                    "description": "Image ratio. Default: 16:9 for blog articles.",
+                },
+            },
+            "required": ["prompt"],
+        },
+    },
+    {
+        "name": "optimize_webp",
+        "description": (
+            "Downloads an image from a URL and converts it to optimized WebP. "
+            "Returns the local path of the WebP file."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string",
+                    "description": "URL of the image to download and convert.",
+                },
+                "quality": {
+                    "type": "integer",
+                    "description": "WebP quality from 1 to 100. Default: 82.",
+                    "minimum": 1,
+                    "maximum": 100,
+                },
+                "filename": {
+                    "type": "string",
+                    "description": "Output filename without extension.",
+                },
+            },
+            "required": ["image_url", "filename"],
+        },
+    },
+    {
+        "name": "upload_storage",
+        "description": (
+            "Uploads a local file to S3 and returns the permanent public URL."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "local_path": {
+                    "type": "string",
+                    "description": "Local path of the file to upload.",
+                },
+                "s3_key": {
+                    "type": "string",
+                    "description": "Destination key in the S3 bucket (e.g. images/hero-coffee.webp).",
+                },
+            },
+            "required": ["local_path", "s3_key"],
+        },
+    },
+]
+```
+
+</Step>
+
+<Step title="Implement tool functions" stepNumber={3}>
+
+```python
+# tool_functions.py
+import io
+import os
+import urllib.request
+
+import boto3
+import replicate
+from PIL import Image
+
+
+def generate_image(prompt: str, aspect_ratio: str = "16:9") -> str:
+    """Calls Replicate Flux 1.1 Pro and returns the image URL."""
+    # source: replicate.com/black-forest-labs/flux-1.1-pro/api, consulted 2026-05-11
+    output = replicate.run(
+        "black-forest-labs/flux-1.1-pro",
+        input={
+            "prompt": prompt,
+            "aspect_ratio": aspect_ratio,
+            "output_format": "jpg",
+            "output_quality": 90,
+            "safety_tolerance": 2,
+        },
+    )
+    return str(output)
+
+
+def optimize_webp(image_url: str, filename: str, quality: int = 82) -> str:
+    """Downloads and converts to optimized WebP."""
+    local_path = f"/tmp/{filename}.webp"
+    with urllib.request.urlopen(image_url) as response:
+        img_data = response.read()
+    img = Image.open(io.BytesIO(img_data))
+    img.save(local_path, "WEBP", quality=quality, method=6)
+    return local_path
+
+
+def upload_storage(local_path: str, s3_key: str) -> str:
+    """Uploads to S3 and returns the public URL."""
+    bucket = os.environ["AWS_S3_BUCKET"]
+    s3 = boto3.client("s3")
+    s3.upload_file(
+        local_path,
+        bucket,
+        s3_key,
+        ExtraArgs={"ContentType": "image/webp"},
+    )
+    return f"https://{bucket}.s3.amazonaws.com/{s3_key}"
+```
+
+</Step>
+
+<Step title="Agent execution loop" stepNumber={4}>
+
+```python
+# agent.py
+import json
+
+import anthropic
+
+from tool_functions import generate_image, optimize_webp, upload_storage
+from tools import TOOLS
+
+SYSTEM_PROMPT = """You are an agent specialized in image generation and publishing.
+When the user requests an image:
+1. Call generate_image with a precise, detailed prompt.
+2. Call optimize_webp to convert the result to WebP.
+3. Call upload_storage to publish the image.
+4. Return the final URL along with a short description of the generated image.
+Use aspect_ratio 16:9 by default for blog images."""
+
+TOOL_FUNCTIONS = {
+    "generate_image": generate_image,
+    "optimize_webp": optimize_webp,
+    "upload_storage": upload_storage,
+}
+
+
+def run_agent(user_message: str) -> str:
+    # source: docs.anthropic.com/en/agents-and-tools/tool-use/handle-tool-calls, consulted 2026-05-11
+    client = anthropic.Anthropic()
+    messages = [{"role": "user", "content": user_message}]
+
+    while True:
+        response = client.messages.create(
+            model="claude-sonnet-4-6",
+            max_tokens=1024,
+            system=SYSTEM_PROMPT,
+            tools=TOOLS,
+            messages=messages,
+        )
+
+        # Append assistant response to history
+        messages.append({"role": "assistant", "content": response.content})
+
+        if response.stop_reason == "end_turn":
+            for block in response.content:
+                if hasattr(block, "text"):
+                    return block.text
+            return ""
+
+        if response.stop_reason != "tool_use":
+            break
+
+        # Execute requested tools
+        tool_results = []
+        for block in response.content:
+            if block.type != "tool_use":
+                continue
+            tool_fn = TOOL_FUNCTIONS.get(block.name)
+            if tool_fn is None:
+                result_content = f"Unknown tool: {block.name}"
+                is_error = True
+            else:
+                try:
+                    result = tool_fn(**block.input)
+                    result_content = result
+                    is_error = False
+                except Exception as exc:
+                    result_content = str(exc)
+                    is_error = True
+
+            tool_results.append({
+                "type": "tool_result",
+                "tool_use_id": block.id,
+                "content": result_content,
+                "is_error": is_error,
+            })
+
+        # Send results back to Claude
+        # Note: tool_result must come first in the user message content
+        messages.append({"role": "user", "content": tool_results})
+
+    return "The agent could not produce a result."
+
+
+if __name__ == "__main__":
+    result = run_agent(
+        "Generate a hero image for a blog article about the benefits of morning coffee. "
+        "Photorealistic style, 16:9 format. Publish it as images/hero-coffee.webp"
+    )
+    print(result)
+```
+
+</Step>
+
+</Steps>
+
+</div>
+<div label="TypeScript">
+
+<Steps>
+
+<Step title="Install dependencies" stepNumber={1}>
+
+```bash
+npm install @anthropic-ai/sdk replicate sharp @aws-sdk/client-s3
+npm install -D tsx @types/node
+```
+
+Set your environment variables:
+
+```bash
+export ANTHROPIC_API_KEY="sk-ant-..."
+export REPLICATE_API_TOKEN="r8_..."
+export AWS_ACCESS_KEY_ID="..."
+export AWS_SECRET_ACCESS_KEY="..."
+export AWS_S3_BUCKET="my-bucket"
+```
+
+</Step>
+
+<Step title="Define the three tools" stepNumber={2}>
+
+```typescript
+// tools.ts
+// source: docs.anthropic.com/en/agents-and-tools/tool-use/define-tools, consulted 2026-05-11
+import Anthropic from "@anthropic-ai/sdk";
+
+export const TOOLS: Anthropic.Tool[] = [
+  {
+    name: "generate_image",
+    description:
+      "Generates an image from a text prompt via Flux 1.1 Pro on Replicate. " +
+      "Returns a temporary URL valid for 1 hour.",
+    input_schema: {
+      type: "object",
+      properties: {
+        prompt: {
+          type: "string",
+          description: "Detailed description of the image to generate.",
+        },
+        aspect_ratio: {
+          type: "string",
+          enum: ["1:1", "16:9", "3:2", "4:5", "9:16"],
+          description: "Image ratio. Default: 16:9 for blog articles.",
+        },
+      },
+      required: ["prompt"],
+    },
+  },
+  {
+    name: "optimize_webp",
+    description:
+      "Downloads an image from a URL and converts it to optimized WebP. " +
+      "Returns the local path of the WebP file.",
+    input_schema: {
+      type: "object",
+      properties: {
+        image_url: {
+          type: "string",
+          description: "URL of the image to download and convert.",
+        },
+        quality: {
+          type: "number",
+          description: "WebP quality from 1 to 100. Default: 82.",
+          minimum: 1,
+          maximum: 100,
+        },
+        filename: {
+          type: "string",
+          description: "Output filename without extension.",
+        },
+      },
+      required: ["image_url", "filename"],
+    },
+  },
+  {
+    name: "upload_storage",
+    description:
+      "Uploads a local file to S3 and returns the permanent public URL.",
+    input_schema: {
+      type: "object",
+      properties: {
+        local_path: {
+          type: "string",
+          description: "Local path of the file to upload.",
+        },
+        s3_key: {
+          type: "string",
+          description:
+            "Destination key in the S3 bucket (e.g. images/hero-coffee.webp).",
+        },
+      },
+      required: ["local_path", "s3_key"],
+    },
+  },
+];
+```
+
+</Step>
+
+<Step title="Implement tool functions" stepNumber={3}>
+
+```typescript
+// tool-functions.ts
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import sharp from "sharp";
+import Replicate from "replicate";
+
+const replicate = new Replicate();
+const s3 = new S3Client({});
+
+export async function generateImage(
+  prompt: string,
+  aspectRatio = "16:9"
+): Promise<string> {
+  // source: replicate.com/black-forest-labs/flux-1.1-pro/api, consulted 2026-05-11
+  const output = await replicate.run("black-forest-labs/flux-1.1-pro", {
+    input: {
+      prompt,
+      aspect_ratio: aspectRatio,
+      output_format: "jpg",
+      output_quality: 90,
+      safety_tolerance: 2,
+    },
+  });
+  return String(output);
+}
+
+export async function optimizeWebp(
+  imageUrl: string,
+  filename: string,
+  quality = 82
+): Promise<string> {
+  const response = await fetch(imageUrl);
+  const buffer = Buffer.from(await response.arrayBuffer());
+  const localPath = join(tmpdir(), `${filename}.webp`);
+  await sharp(buffer).webp({ quality }).toFile(localPath);
+  return localPath;
+}
+
+export async function uploadStorage(
+  localPath: string,
+  s3Key: string
+): Promise<string> {
+  const { readFile } = await import("node:fs/promises");
+  const body = await readFile(localPath);
+  const bucket = process.env["AWS_S3_BUCKET"] ?? "";
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: bucket,
+      Key: s3Key,
+      Body: body,
+      ContentType: "image/webp",
+    })
+  );
+  return `https://${bucket}.s3.amazonaws.com/${s3Key}`;
+}
+```
+
+</Step>
+
+<Step title="Agent execution loop" stepNumber={4}>
+
+```typescript
+// agent.ts
+// source: docs.anthropic.com/en/agents-and-tools/tool-use/handle-tool-calls, consulted 2026-05-11
+import Anthropic from "@anthropic-ai/sdk";
+import { TOOLS } from "./tools";
+import { generateImage, optimizeWebp, uploadStorage } from "./tool-functions";
+
+const SYSTEM_PROMPT = `You are an agent specialized in image generation and publishing.
+When the user requests an image:
+1. Call generate_image with a precise, detailed prompt.
+2. Call optimize_webp to convert the result to WebP.
+3. Call upload_storage to publish the image.
+4. Return the final URL along with a short description of the generated image.
+Use aspect_ratio 16:9 by default for blog images.`;
+
+type ToolInput = Record<string, unknown>;
+
+async function executeTool(name: string, input: ToolInput): Promise<string> {
+  switch (name) {
+    case "generate_image":
+      return generateImage(
+        input["prompt"] as string,
+        (input["aspect_ratio"] as string) ?? "16:9"
+      );
+    case "optimize_webp":
+      return optimizeWebp(
+        input["image_url"] as string,
+        input["filename"] as string,
+        (input["quality"] as number) ?? 82
+      );
+    case "upload_storage":
+      return uploadStorage(
+        input["local_path"] as string,
+        input["s3_key"] as string
+      );
+    default:
+      throw new Error(`Unknown tool: ${name}`);
+  }
+}
+
+export async function runAgent(userMessage: string): Promise<string> {
+  const client = new Anthropic();
+  const messages: Anthropic.MessageParam[] = [
+    { role: "user", content: userMessage },
+  ];
+
+  while (true) {
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      tools: TOOLS,
+      messages,
+    });
+
+    messages.push({ role: "assistant", content: response.content });
+
+    if (response.stop_reason === "end_turn") {
+      const textBlock = response.content.find((b) => b.type === "text");
+      return textBlock && "text" in textBlock ? textBlock.text : "";
+    }
+
+    if (response.stop_reason !== "tool_use") break;
+
+    // Execute all requested tools and collect results
+    const toolResults: Anthropic.ToolResultBlockParam[] = [];
+    for (const block of response.content) {
+      if (block.type !== "tool_use") continue;
+      let content: string;
+      let isError = false;
+      try {
+        content = await executeTool(block.name, block.input as ToolInput);
+      } catch (err) {
+        content = String(err);
+        isError = true;
+      }
+      toolResults.push({
+        type: "tool_result",
+        tool_use_id: block.id,
+        content,
+        is_error: isError,
+      });
+    }
+
+    // tool_result must come first in the user message
+    messages.push({ role: "user", content: toolResults });
+  }
+
+  return "The agent could not produce a result.";
+}
+
+// Entry point
+const result = await runAgent(
+  "Generate a hero image for a blog article about the benefits of morning coffee. " +
+    "Photorealistic style, 16:9 format. Publish it as images/hero-coffee.webp"
+);
+console.log(result);
+```
+
+Run with:
+
+```bash
+npx tsx agent.ts
+```
+
+</Step>
+
+</Steps>
+
+</div>
+</Tabs>
+
+## 4. Error handling
+
+Two types of errors dominate in practice: rate limits and content filters.
+
+**Anthropic rate limits (HTTP 429).** The Claude API imposes per-minute and per-day limits depending on your tier. An exponential backoff handles most cases:
+
+```python
+import time
+import anthropic
+
+def call_with_retry(client, max_retries=5, **kwargs):
+    for attempt in range(max_retries):
+        try:
+            return client.messages.create(**kwargs)
+        except anthropic.RateLimitError:
+            if attempt == max_retries - 1:
+                raise
+            wait = 2 ** attempt  # 1s, 2s, 4s, 8s, 16s
+            time.sleep(wait)
+```
+
+The same pattern in TypeScript:
+
+```typescript
+async function callWithRetry(
+  client: Anthropic,
+  params: Anthropic.MessageCreateParamsNonStreaming,
+  maxRetries = 5
+): Promise<Anthropic.Message> {
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      return await client.messages.create(params);
+    } catch (err) {
+      if (!(err instanceof Anthropic.RateLimitError)) throw err;
+      if (attempt === maxRetries - 1) throw err;
+      await new Promise((r) => setTimeout(r, 1000 * 2 ** attempt));
+    }
+  }
+  throw new Error("unreachable");
+}
+```
+
+**Replicate NSFW filter.** If your prompt triggers Flux's safety filter, Replicate returns an error with an explicit message. The recommended strategy: ask Claude to rephrase the prompt, then call `generate_image` again. You can also lower `safety_tolerance` from 2 to 1 for a stricter mode.
+
+**Fallback from Flux Pro to Flux Dev.** If Flux 1.1 Pro is overloaded (rare but possible), automatically switch to Flux Dev ($0.025/image):
+
+```python
+def generate_image_with_fallback(prompt: str, aspect_ratio: str = "16:9") -> str:
+    models = [
+        "black-forest-labs/flux-1.1-pro",
+        "black-forest-labs/flux-dev",
+    ]
+    for model in models:
+        try:
+            output = replicate.run(model, input={"prompt": prompt, "aspect_ratio": aspect_ratio})
+            return str(output)
+        except replicate.exceptions.ReplicateError as e:
+            if "rate" in str(e).lower() and model != models[-1]:
+                continue
+            raise
+```
+
+**Cloud timeout.** Flux Pro generations typically take 4 to 10 seconds. Set a client-side timeout of 60 seconds to absorb load spikes.
+
+## 5. Real execution cost
+
+<Callout type="info" title="Prices recorded on 2026-05-11">
+The prices below were read from the official Replicate and Anthropic pages on 2026-05-11. They may change.
+</Callout>
+
+<!-- source: replicate.com/black-forest-labs/flux-1.1-pro, consulted 2026-05-11 -->
+<!-- source: replicate.com/black-forest-labs/flux-dev, consulted 2026-05-11 -->
+<!-- source: replicate.com/black-forest-labs/flux-schnell, consulted 2026-05-11 -->
+<!-- source: docs.anthropic.com/en/about-claude/models/overview, consulted 2026-05-11 -->
+
+**Pricing breakdown (as of 2026-05-11):**
+
+| Component | Price |
+|---|---|
+| Claude Sonnet 4.6 (input) | $3 / million tokens |
+| Claude Sonnet 4.6 (output) | $15 / million tokens |
+| Flux 1.1 Pro | $0.04 / image |
+| Flux Dev | $0.025 / image |
+| Flux Schnell | $0.003 / image |
+
+**Concrete example: 1 blog article with 1 hero image.**
+
+A typical agent call for a blog image consumes:
+- Claude input tokens: ~800 tokens (system prompt + user message + tool definitions)
+- Claude output tokens: ~300 tokens (text + tool calls)
+- 1 Flux 1.1 Pro image
+
+Calculation:
+- Claude input: 800 tokens × $3 / 1,000,000 = **$0.0024**
+- Claude output: 300 tokens × $15 / 1,000,000 = **$0.0045**
+- Flux Pro image: **$0.04**
+- **Total: ~$0.047 per published image**
+
+At 100 images per month: roughly $4.70, about the price of a coffee.
+
+**Reducing costs:**
+
+<Callout type="tip" title="Batching and model selection">
+For large content campaigns, two levers:
+
+1. Use Flux Dev ($0.025) instead of Flux Pro for internal previews or secondary images. Quality is slightly lower, price is 40% less.
+
+2. Generate in parallel: send multiple prompts to Replicate simultaneously. The cost stays the same, but total execution time is divided by the number of parallel requests.
+</Callout>
+
+## 6. Next steps
+
+The agent you just built is a solid foundation. You can integrate it into broader workflows:
+
+- [Use case S2 - Automated Next.js blog assets](/en/use-cases/assets-blog-automatique/): full editorial pipeline automation, from writing to published image on your CDN.
+- [S3 Comparison - Local vs cloud](/en/use-cases/image-ia-local-vs-cloud/): when to invest in a local GPU, when to stay on the cloud API. Break-even analysis by volume.

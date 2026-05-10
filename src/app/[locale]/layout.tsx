@@ -10,8 +10,7 @@ import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { VercelMetrics } from "@/components/layout/VercelMetrics";
 import { routing } from "@/i18n/routing";
 import {
   SITE_URL,
@@ -41,50 +40,6 @@ const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "";
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "";
 const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
 
-/*
- * VM-6 — Vercel Speed Insights sample rate configurable via env var.
- * Default 1.0 (100% des visiteurs). En cas de quota Hobby atteint, baisser
- * a 0.5 (echantillon 50%) ou 0.1 (10%) avant de passer au plan Pro.
- * Le quota est visible dans le dashboard Vercel Settings > Usage.
- */
-const SPEED_INSIGHTS_SAMPLE_RATE = Math.max(
-  0,
-  Math.min(1, Number(process.env.NEXT_PUBLIC_VERCEL_SI_SAMPLE_RATE ?? "1") || 1)
-);
-
-/*
- * VM-7 — Redaction des params query sensibles avant envoi a Vercel
- * Web Analytics. Couvre les patterns courants : ?token, ?key, ?secret,
- * ?api_key, ?password, ?auth. Le component fait suivre {url, ...} pour
- * chaque pageview ; on overwrite l'URL avec la version sanitisee.
- */
-const SENSITIVE_QUERY_KEYS = new Set([
-  "token",
-  "key",
-  "secret",
-  "api_key",
-  "apikey",
-  "password",
-  "pwd",
-  "auth",
-  "code",
-]);
-
-function redactSensitiveQuery(rawUrl: string): string {
-  try {
-    const url = new URL(rawUrl);
-    let mutated = false;
-    for (const key of [...url.searchParams.keys()]) {
-      if (SENSITIVE_QUERY_KEYS.has(key.toLowerCase())) {
-        url.searchParams.set(key, "[redacted]");
-        mutated = true;
-      }
-    }
-    return mutated ? url.toString() : rawUrl;
-  } catch {
-    return rawUrl;
-  }
-}
 
 /*
  * Matomo analytics script — safe: built from environment variables
@@ -259,25 +214,10 @@ export default async function LocaleLayout({
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>
-        {/* VM-3 — Vercel Web Analytics : pageviews + custom events.
-            Doublon assume avec Matomo cookieless (cf. docs/analytics-tracking.md).
-            mode="production" explicite : SSG + next-intl rendent l'auto-detect
-            de NODE_ENV moins fiable.
-            VM-7 — beforeSend : redaction des params query sensibles (token, key,
-            secret, etc.) avant envoi du beacon a Vercel. */}
-        <Analytics
-          mode="production"
-          beforeSend={(event) => ({
-            ...event,
-            url: redactSensitiveQuery(event.url),
-          })}
-        />
-        {/* VM-5 — Vercel Speed Insights : Web Vitals reels (LCP, INP, CLS,
-            FCP, TTFB) en mode RUM. Comble le trou principal du tracking
-            actuel : aujourd'hui Lighthouse en CI = lab synthetique uniquement.
-            VM-6 — sample rate configurable via NEXT_PUBLIC_VERCEL_SI_SAMPLE_RATE
-            pour piloter le quota Hobby si on s'en approche. */}
-        <SpeedInsights sampleRate={SPEED_INSIGHTS_SAMPLE_RATE} />
+        {/* VM-3 / VM-5 / VM-6 / VM-7 — Vercel Web Analytics + Speed Insights.
+            Encapsule dans un Client Component (VercelMetrics) car les Server
+            Components ne peuvent pas passer de fonction (beforeSend) en prop. */}
+        <VercelMetrics />
       </body>
     </html>
   );

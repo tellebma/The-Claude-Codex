@@ -28,7 +28,6 @@ export function useMatomoPageviewTracking(): void {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (pathname === null) return;
     if (globalThis.window === undefined) return;
 
     const queryString = searchParams?.toString() ?? "";

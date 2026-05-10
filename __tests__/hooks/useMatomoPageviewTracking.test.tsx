@@ -5,7 +5,7 @@ import { useMatomoPageviewTracking } from "@/hooks/useMatomoPageviewTracking";
 // Mock next/navigation : on retourne des valeurs constantes par defaut, on
 // pourra spier dessus via des vi.fn() declares ci-dessous pour controler ce
 // que le hook voit a chaque render.
-const usePathnameMock = vi.fn<() => string | null>(() => "/fr/");
+const usePathnameMock = vi.fn<() => string>(() => "/fr/");
 const useSearchParamsMock = vi.fn<() => URLSearchParams | null>(
   () => new URLSearchParams()
 );
@@ -41,6 +41,8 @@ describe("useMatomoPageviewTracking", () => {
     vi.clearAllMocks();
   });
 
+  // Note : usePathname() retourne `string` (pas nullable) en App Router,
+  // donc plus de cas "pathname null" a tester. cf. types next/navigation.
   it("emet setCustomUrl + setDocumentTitle + trackPageView au premier render", () => {
     renderHook(() => useMatomoPageviewTracking());
     const setUrl = getCommands("setCustomUrl");
@@ -71,12 +73,6 @@ describe("useMatomoPageviewTracking", () => {
     usePathnameMock.mockReturnValue("/fr/agents/");
     rerender();
     expect(getCommands("trackPageView")).toHaveLength(3);
-  });
-
-  it("ne fire rien si pathname est null", () => {
-    usePathnameMock.mockReturnValue(null);
-    renderHook(() => useMatomoPageviewTracking());
-    expect(getPaq()).toHaveLength(0);
   });
 
   it("ne fire pas a nouveau si pathname identique au render precedent", () => {

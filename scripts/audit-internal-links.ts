@@ -16,7 +16,7 @@
 
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import { existsSync, statSync } from "node:fs";
-import { join, resolve, dirname } from "node:path";
+import { join, resolve } from "node:path";
 
 const OUT_DIR = resolve(process.cwd(), "out");
 const REPORTS_DIR = resolve(process.cwd(), "reports");
@@ -81,7 +81,12 @@ export function isInternalLink(href: string): boolean {
   if (href.startsWith("#")) return false; // ancre pure dans la page courante
   if (href.startsWith("mailto:")) return false;
   if (href.startsWith("tel:")) return false;
-  if (href.startsWith("javascript:")) return false;
+  // Schemes a code-execution potentiel : exclure tous (CWE-184).
+  // CodeQL js/incomplete-url-scheme-check exige ces 3 explicites.
+  const lower = href.toLowerCase().trimStart();
+  if (lower.startsWith("javascript:")) return false;
+  if (lower.startsWith("data:")) return false;
+  if (lower.startsWith("vbscript:")) return false;
   if (/^https?:\/\//i.test(href)) return false;
   if (href.startsWith("//")) return false;
   return href.startsWith("/");

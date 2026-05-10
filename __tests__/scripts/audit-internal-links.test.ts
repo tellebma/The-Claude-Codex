@@ -74,6 +74,10 @@ describe("isInternalLink", () => {
     ["mailto:foo@bar.com", false],
     ["tel:+33000", false],
     ["javascript:void(0)", false],
+    ["JavaScript:alert(1)", false],
+    ["data:text/html,<script>1</script>", false],
+    ["vbscript:msgbox(1)", false],
+    [" javascript:alert(1)", false], // espaces leading
     ["#section", false],
     ["", false],
   ])("external: %s -> %s", (href, expected) => {

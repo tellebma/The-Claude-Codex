@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-09 (ouverture EPICs Bugfix recette : articles href + search Vercel redirect)
+> Derniere mise a jour : 2026-05-10 (cloture Bugfix EPICs + Sprint 1+2 SEO/GEO mergees)
 
 ---
 
@@ -12,11 +12,12 @@
 | [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 11 | 0 | 0 | 100% ✅ |
 | [Refonte graphique 2026-04](../epics/2026-04-refonte-graphique/EPIC.md) | 32 | 32 | 0 | 0 | 100% ✅ (~70% du SYNTHESIS — voir EPIC suivant) |
 | [Refonte premium 2026-05](../epics/2026-05-refonte-premium/EPIC.md) | 19 | 19 | 0 | 0 | 100% ✅ (cloture 2026-05-09) |
-| [Bugfix articles href 2026-05](EPIC-bugfix-articles-href-2026-05.md) | 2 | 1 | 1 | 0 | 50% 🆕 (B-ART-1 fait, B-ART-2 verif a faire) |
-| [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 1 | 1 | 0 | 50% 🆕 (B-SRC-1 fait, B-SRC-2 verif a faire) |
-| [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 0 | 0 | 9 | 0% 🆕 (audit GSC + Matomo) |
+| [Bugfix articles href 2026-05](EPIC-bugfix-articles-href-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
+| [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
+| [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 4 | 0 | 5 | 44% 🔄 (Sprint 1 + Sprint 2 livres) |
+| [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 0 | 0 | 11 | 0% (backlog post-SEO/GEO) |
 
-**Total projet** : 80/92 stories (87%) · ~179/196 SP livres (91%)
+**Total projet** : 86/103 stories (83%) · ~197/218 SP livres (90%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
@@ -24,11 +25,11 @@
 
 > EPIC **Refonte premium 2026-05** : ✅ **cloture le 2026-05-09 a 100%** — 19 stories mergees (RG2-01 a RG2-19). Couvre integralement les 30% manquants du SYNTHESIS de la refonte 2026-04 : article shell 3 colonnes (RG2-01 + ReadingProgressBar/TocProgress/Pager/Tables), composants editoriaux MDX (Faq, ArticleAlert, NextSteps, Steps gradient), landing signature (TrustBar, chips orbitaux, grid fade, articles recents avec filtres, reorder, CtaFinal), polish global (CodeBlock always-dark, light mode polish, stats band canoniques), rollout E2E sur 10 articles representatifs.
 
-> EPIC **SEO/GEO mai 2026** : ouvert le 2026-05-06 suite a l'audit hebdo GSC + Matomo `2026-04-25 -> 2026-05-01` (rapport `claude-code-obsidian-brain/raw/analytics/`). 9 stories pour 27 SP repartis sur 4 sprints. Quick wins CTR (SEO-1 a SEO-3) en sprint 1.
+> EPIC **SEO/GEO mai 2026** : ouvert le 2026-05-06 suite a l'audit hebdo GSC + Matomo `2026-04-25 -> 2026-05-01` (rapport `claude-code-obsidian-brain/raw/analytics/`). 9 stories pour 27 SP repartis sur 4 sprints. Sprint 1 (SEO-1, SEO-2) ✅ et Sprint 2 (SEO-4, SEO-5) ✅ mergees le 2026-05-10. SEO-3 partiellement absorbee par les dateModified bumps de SEO-1+SEO-2. Reste : Sprint 3 (SEO-6 audit drops, SEO-7 audit maillage) et Sprint 4 (SEO-8 debug Matomo, SEO-9 AnalyticsTracker overview).
 
-> EPIC **Bugfix articles href 2026-05** : ouvert le 2026-05-09 suite a recette utilisateur sur preview Vercel ("impossible d'ouvrir un article depuis la refonte"). Cards "Articles recents" de la landing produisaient des URLs avec section dupliquee (ex: `/fr/getting-started/getting-started/installation/`) -> 404 systematique. Root cause dans `src/lib/mdx.ts buildEntry` : le slug stocke n'etait pas "nu" pour les articles de section. Fix B-ART-1 commit + test de regression. B-ART-2 (verif E2E) a faire avant merge.
+> EPIC **Bugfix articles href 2026-05** : ouvert et cloture le 2026-05-09. B-ART-1 (#155) fix `buildEntry` slug nu + tests RG-32. B-ART-2 (#157) garde-fou E2E `e2e/landing-recent-articles.spec.ts` qui a ensuite expose un bug latent corrige dans le Sprint 1 SEO/GEO (`getMostRecentArticles` filtre locale `===` preferredLocale, evite 404 sur slugs divergents FR/EN comme `bonnes-pratiques-securite` vs `security-best-practices`).
 
-> EPIC **Bugfix search Vercel redirect 2026-05** : ouvert le 2026-05-09 suite a recette utilisateur sur preview Vercel ("dialog s'ouvre mais 0 resultat partout"). Root cause dans `vercel.json` : la regex catch-all `/:path((?!...).+)` redirigeait `/search-index-fr.json` vers `/fr/search-index-fr.json` (404), donc le SearchDialog chargeait un index vide. Plusieurs autres assets `public/` etaient affectes (`sad-toaster.glb`, `images/*`, `skills/*.md`). Fix B-SRC-1 : regex `[^.]+` pour exclure tout chemin avec extension. B-SRC-2 (verif E2E preview Vercel) a faire avant merge.
+> EPIC **Bugfix search Vercel redirect 2026-05** : ouvert et cloture le 2026-05-09. B-SRC-1 (#156) fix regex `vercel.json` `[^.]+` pour exclure les fichiers `public/` (`search-index-fr.json`, `sad-toaster.glb`, `images/*`, etc.). B-SRC-2 (#158) suite E2E `e2e/search-results.spec.ts` qui s'execute en preview Vercel uniquement (skip si `VERCEL_PREVIEW_URL` non defini, pattern aligne sur `e2e/locale-redirects.spec.ts`).
 
 ---
 
@@ -178,20 +179,20 @@
 > Source : [docs/BACKLOG/EPIC-seo-geo-may-2026.md](EPIC-seo-geo-may-2026.md)
 > Origine : audit hebdo GSC + Matomo `2026-04-25 -> 2026-05-01` (16 alertes critiques, 57 a surveiller).
 
-### Sprint 1 — Quick wins CTR (10 SP)
+### Sprint 1 — Quick wins CTR (10 SP) — ✅ Termine 2026-05-10
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| SEO-1 | Reecriture title + description `/reference/environment/` | 2 | ⬜ A faire |
-| SEO-2 | Reecriture title + description sur 14 pages CRIT | 5 | ⬜ A faire |
-| SEO-3 | Refresh `dateModified` top 10 pages | 3 | ⬜ A faire |
+| SEO-1 | Reecriture title + description `/reference/environment/` | 2 | ✅ Fait (#159) |
+| SEO-2 | Reecriture title + description sur 14 pages CRIT | 5 | ✅ Fait (#161) |
+| SEO-3 | Refresh `dateModified` top 10 pages | 3 | ✅ Couvert par SEO-1+SEO-2 (5/10 pages refresh) ; reste 5 pages secondaires |
 
-### Sprint 2 — GEO et AI Overviews (8 SP)
+### Sprint 2 — GEO et AI Overviews (8 SP) — ✅ Termine 2026-05-10
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| SEO-4 | FAQPage schema sur 6 pages strategiques | 5 | ⬜ A faire |
-| SEO-5 | Section TL;DR sur 10-12 pages | 3 | ⬜ A faire |
+| SEO-4 | FAQPage schema sur 6 pages strategiques | 5 | ✅ Fait (#162) — 12 MDX + `src/data/page-faqs.ts` |
+| SEO-5 | Section TL;DR sur 10-12 pages | 3 | ✅ Fait (#163) — 18 MDX (9 pages × 2 locales) |
 
 ### Sprint 3 — Recovery position drops (5 SP)
 

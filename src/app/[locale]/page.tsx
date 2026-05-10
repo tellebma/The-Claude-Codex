@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { AnalyticsTracker } from "@/components/layout/AnalyticsTracker";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -102,6 +103,7 @@ export default async function HomePage({
 
   return (
     <>
+      <AnalyticsTracker />
       {/* ===== HERO ===== Layout split (RG-18) : 1.05fr 1fr sur lg+ */}
       <section className="relative overflow-hidden bg-[color:var(--bg-page)]">
         {/* Background effects */}

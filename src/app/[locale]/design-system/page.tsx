@@ -11,6 +11,7 @@ import {
   Swatch,
   TypeSample,
 } from "./_components";
+import { AnalyticsTracker } from "@/components/layout/AnalyticsTracker";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -191,6 +192,7 @@ export default async function DesignSystemPage({
 
   return (
     <div className="cc-surface-page">
+      <AnalyticsTracker />
       {/* ===== HERO ===== */}
       <header className="border-b border-[var(--border-subtle)] bg-[var(--bg-subtle)]">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28">

@@ -30,7 +30,9 @@ export function useMatomoPageviewTracking(): void {
   useEffect(() => {
     // useEffect ne s'execute que cote client : `window` et `document`
     // sont toujours definis ici, pas de garde SSR necessaire.
-    const queryString = searchParams?.toString() ?? "";
+    // useSearchParams() retourne `ReadonlyURLSearchParams` non-nullable
+    // (cf. types next/navigation), pas besoin de optional chaining.
+    const queryString = searchParams.toString();
     const fullUrl =
       window.location.origin +
       pathname +

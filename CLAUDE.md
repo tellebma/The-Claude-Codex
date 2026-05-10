@@ -192,7 +192,7 @@ Pour TOUTE rédaction d'article, doc ou comparatif sur ce projet :
 
 - **TOUTE statistique, date, nom propre, version, prix, URL ou fait précis DOIT être vérifié via Playwright MCP ou WebFetch AVANT d'être écrit.** Aucune exception.
 - **JAMAIS écrire un fait depuis la mémoire si une vérification web est possible.** En cas d'incertitude → vérification systématique.
-- **Workflow par section** : (1) lister les faits précis nécessaires, (2) vérifier chacun via Playwright/WebFetch, (3) noter source + date dans commentaire HTML masqué `<!-- source: URL, consulté YYYY-MM-DD -->`, (4) rédiger uniquement avec les faits vérifiés.
+- **Workflow par section** : (1) lister les faits précis nécessaires, (2) vérifier chacun via Playwright/WebFetch, (3) noter source + date dans commentaire MDX masqué `{/* source: URL, consulté YYYY-MM-DD */}` (⚠️ syntax MDX, PAS `<!-- ... -->` qui est du HTML invalide dans MDX et casse next-mdx-remote au parsing), (4) rédiger uniquement avec les faits vérifiés.
 - **Sources prioritaires** : doc officielle fournisseur > GitHub releases > annonces officielles. Si information non vérifiable → `<Callout type="info">` "Information non vérifiée au YYYY-MM-DD, à confirmer auprès du fournisseur".
 - **Sources INTERDITES comme source factuelle** : forums Reddit, posts Twitter/X non officiels, articles de blog tiers non datés, tutoriels YouTube. Acceptables uniquement comme inspiration narrative.
 - **Versions de modèles Claude** : toujours re-vérifier sur docs.anthropic.com avant chaque snippet (les modèles évoluent : actuels au 2026-05 = `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`).

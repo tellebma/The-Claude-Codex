@@ -1,6 +1,17 @@
-# Analytics & tracking — funnel Matomo
+# Analytics & tracking — funnel Matomo + Vercel
 
-> Reference de l'instrumentation analytics du site, post-SEO-8.
+> Reference de l'instrumentation analytics du site, post-SEO-8 + VM-3/VM-5.
+
+## Sources actives en parallele
+
+| Tool | Role | Etat |
+|---|---|---|
+| **Matomo cookieless** (self-hosted) | Source de verite engagement (scroll, links, configurator funnel), demographie | Actif depuis 2026-04 |
+| **Vercel Web Analytics** | Sanity check pageviews, top referrers, demographie premium | Actif depuis VM-3 (2026-05-10) |
+| **Vercel Speed Insights** | Web Vitals reels (RUM) : LCP, INP, CLS, FCP, TTFB | Actif depuis VM-5 (2026-05-10) |
+| **Lighthouse CI** | Web Vitals lab synthetique en CI | Actif depuis 2026-04 |
+
+Matomo et Vercel Web Analytics sont volontairement en doublon sur les pageviews (sanity check cross-tool, cf. EPIC Vercel Metrics 2026 metrique de validation).
 
 ## Architecture
 
@@ -47,6 +58,17 @@ Trois sources d'evenements alimentent `_paq` :
 | `/design-system/` | `[locale]/layout.tsx` | ✅ via `<AnalyticsTracker />` ajoute en SEO-9 | |
 | `/glossary/` | layout custom DefinedTermSet | ✅ via `<AnalyticsTracker />` ajoute en SEO-9 | |
 | `/configurator/` | layout custom Breadcrumb | ✅ via `<AnalyticsTracker />` ajoute en SEO-9 | |
+
+## Vercel SDKs (VM-3 + VM-5)
+
+`<Analytics mode="production" />` et `<SpeedInsights />` sont montes dans `src/app/[locale]/layout.tsx` (juste avant `</body>`). Ils chargent leurs scripts respectifs au runtime quand le site est servi par Vercel et :
+
+- `<Analytics />` (`@vercel/analytics`) : envoie un beacon vers `/_vercel/insights/view` a chaque pageview. Capture aussi automatiquement la source/medium et le device.
+- `<SpeedInsights />` (`@vercel/speed-insights`) : mesure les Web Vitals reels via les `PerformanceObserver` API et envoie les metriques vers `/_vercel/speed-insights/vitals`.
+
+En local (`npm run dev` hors Vercel), les composants no-op silencieusement. Sur preview Vercel et en production, ils alimentent les dashboards Vercel Web Analytics + Speed Insights.
+
+**Pas de configuration runtime requise** : pas de cles API, pas d'env vars. L'identification du projet se fait via le hostname Vercel.
 
 ## Catalogue d'evenements
 

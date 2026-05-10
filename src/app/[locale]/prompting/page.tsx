@@ -32,9 +32,9 @@ import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 const translations = {
   fr: {
-    metaTitle: "Prompting : L'art de communiquer avec l'IA",
+    metaTitle: "Prompting Claude Code : 5 principes + templates pour bons prompts",
     metaDescription:
-      "Maitrisez l'art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
+      "Maitriser le prompting Claude Code : 5 principes fondamentaux, templates copiables, erreurs courantes et techniques avancees pour des resultats parfaits.",
     jsonLdDescription:
       "Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
     heroBadge: "Guide du prompting",
@@ -391,9 +391,9 @@ Relations : User 1-N Project, Project 1-N Task, User 1-N Task"`,
     ],
   },
   en: {
-    metaTitle: "Prompting: The Art of Communicating with AI",
+    metaTitle: "Prompting Claude Code: 5 principles + templates for great prompts",
     metaDescription:
-      "Master the art of prompting with Claude Code. Techniques, templates and best practices to get the most out of AI.",
+      "Master Claude Code prompting: 5 core principles, copy-paste templates, common mistakes, and advanced techniques to get the results you actually want.",
     jsonLdDescription:
       "Techniques, templates and best practices to get the most out of AI.",
     heroBadge: "Prompting guide",
@@ -780,7 +780,7 @@ function buildArticleJsonLd(locale: string) {
     url: `${SITE_URL}/${locale}/prompting`,
     locale,
     datePublished: "2026-03-07",
-    dateModified: "2026-03-07",
+    dateModified: "2026-05-09",
   });
 }
 

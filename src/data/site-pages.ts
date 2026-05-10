@@ -116,12 +116,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/mcp/what-are-mcps",
-    title: "Comprendre les MCP en 5 minutes",
+    title: "MCP Claude Code : Model Context Protocol expliqué en 5 minutes",
     description:
-      "Découvrez le Model Context Protocol (MCP) : l’adaptateur universel qui connecte Claude Code à vos outils. Architecture, fonctionnement et différences avec les plugins et skills.",
+      "Model Context Protocol (MCP) Claude Code expliqué en 5 minutes : architecture, exemples concrets, et différences avec plugins et skills. Démarrage rapide.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-09",
   },
   {
     path: "/mcp/setup",
@@ -171,12 +171,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   {
     path: "/mcp/securite-mcp",
     pathsByLocale: { en: "/mcp/mcp-security" },
-    title: "Sécurité des MCP : dangers réels et comment s’en protéger",
+    title: "Sécuriser les MCP Claude Code : dangers réels et checklist",
     description:
-      "Guide complet de sécurité pour les MCP Claude Code : prompt injection, exfiltration de données, supply chain attacks, permissions et checklist de sécurité.",
+      "Guide sécurité MCP Claude Code : prompt injection, exfiltration de données, supply chain, permissions. Checklist actionnable contre les risques réels en prod.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-05-09",
   },
   {
     path: "/mcp/create-mcp-typescript",
@@ -216,12 +216,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/prompting",
-    title: "Prompting : L’art de communiquer avec l’IA",
+    title: "Prompting Claude Code : 5 principes + templates pour bons prompts",
     description:
-      "Maîtrisez l’art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour tirer le maximum de l’IA.",
+      "Maîtriser le prompting Claude Code : 5 principes fondamentaux, templates copiables, erreurs courantes et techniques avancées pour des résultats parfaits.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-05-09",
   },
   {
     path: "/prompting/basics",
@@ -342,12 +342,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/future/trends-2026",
-    title: "Tendances IA 2026",
+    title: "10 tendances IA coding 2026 : agents, MCP, multimodal, IDE IA",
     description:
-      "Agents autonomes, MCP comme standard, multimodalité, évolution des IDE IA et impact sur les méthodologies de développement. Les tendances qui façonnent 2026.",
+      "Les 10 tendances IA coding qui façonnent 2026 : agents autonomes, MCP devenu standard, multimodalité, IDE IA, évolution du métier de dev. Rapport complet.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-05-09",
   },
   {
     path: "/future/roadmap",
@@ -387,12 +387,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/plugins/setup",
-    title: "Installer et gérer ses plugins",
+    title: "Installer et configurer les plugins Claude Code : guide complet",
     description:
-      "Guide complet pour installer, configurer et gérer les plugins Claude Code. Commandes marketplace, installation, suppression et création de plugins custom.",
+      "Installer, configurer et organiser des plugins Claude Code : skills, agents, règles. Hooks, système d'événement et bonnes pratiques pour packs communautaires.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-09",
   },
   {
     path: "/plugins/best-essential",
@@ -405,12 +405,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/plugins/best-design",
-    title: "Plugins design & frontend",
+    title: "10 extensions design pour Claude Code : agents, MCP, skills UI",
     description:
-      "Les meilleurs plugins Claude Code pour le design et le frontend : Frontend Design, UI UX Pro Max, 21st Magic et Playwright.",
+      "Top extensions Claude Code pour design et frontend : agent Frontend Design, MCP Playwright, 21st.dev Magic. Installation et cas d'usage.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-09",
   },
   {
     path: "/plugins/best-security",
@@ -432,12 +432,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/skills/best-skills",
-    title: "Top Skills recommandés 2026",
+    title: "Top 6 Skills Claude Code 2026 : TDD, Code Review, Frontend, Plan",
     description:
-      "Les meilleurs Skills Claude Code pour la productivité, le développement et la qualité de code. TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing et plus.",
+      "Les 6 meilleurs Skills Claude Code 2026 : TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing, Security Review. Installation et exemples copiables.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-05-09",
   },
   {
     path: "/skills/create-custom",
@@ -450,12 +450,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/skills/comparison",
-    title: "Skills vs MCP vs Plugins : le comparatif complet",
+    title: "Skills vs MCP vs Plugins Claude Code : comparatif 2026",
     description:
-      "Comparaison détaillée entre Skills, MCP et Plugins Claude Code. Quand utiliser quoi, exemples concrets, combinaisons recommandées et FAQ.",
+      "Skills, MCP ou Plugins Claude Code : quand utiliser quoi. Comparatif détaillé avec exemples concrets, combinaisons recommandées et FAQ. Décidez en 5 min.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-05-09",
   },
   {
     path: "/agents",
@@ -468,12 +468,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/agents/what-are-agents",
-    title: "Comprendre les agents et subagents Claude Code",
+    title: "Agents Claude Code : comprendre subagents et workflows autonomes",
     description:
-      "Qu’est-ce qu’un agent Claude Code ? Découvrez les subagents, leur fonctionnement, les types d’agents disponibles et comment ils orchestrent des workflows complexes de manière autonome.",
+      "Comprendre les agents Claude Code et subagents : architecture, types disponibles, exemples concrets et orchestration de workflows multi-étapes en autonomie.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-05-09",
   },
   {
     path: "/agents/create-subagent",
@@ -522,12 +522,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/agents/agent-sdk",
-    title: "Claude Agent SDK : construire des agents programmatiques",
+    title: "Agent SDK Claude Code : créer des agents en TypeScript et Python",
     description:
-      "Utilisez le Claude Agent SDK pour créer des agents en TypeScript et Python. Intégration d’outils, monitoring automatisé, pipelines de déploiement et comparaison avec les subagents natifs.",
+      "Construire des agents Claude Code avec l'Agent SDK : API, TypeScript et Python, monitoring, déploiement. Comparaison avec les subagents natifs.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-05-09",
   },
   {
     path: "/agents/performance-limits",
@@ -612,12 +612,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/enterprise/faq",
-    title: "FAQ Enterprise : Claude Code",
+    title: "FAQ Claude Code Enterprise : sécurité, prix, données, conformité",
     description:
-      "Réponses aux questions fréquentes sur le déploiement de Claude Code en entreprise : données, conformité, coûts, formation, propriété intellectuelle et support.",
+      "FAQ Claude Code en entreprise : sécurité, conformité, prix, formation, propriété intellectuelle, support. Réponses concrètes pour déployer à l'échelle.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-05-09",
   },
   {
     path: "/enterprise/governance",
@@ -747,12 +747,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/reference/environment",
-    title: "Variables d’environnement Claude Code : référence complète (clé API, proxy, limites)",
+    title: "Variables d’environnement Claude Code : documentation officielle",
     description:
-      "Toutes les variables d’environnement Claude Code : ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL, BASH_MAX_OUTPUT_LENGTH, MAX_THINKING_TOKENS, NO_PROXY, claudeCode.environmentVariables.",
+      "Documentation officielle des variables d’environnement Claude Code : ANTHROPIC_API_KEY, BASE_URL, AUTH_TOKEN, MODEL, proxy. Exemples shell, Docker, CI/CD.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-05-09",
   },
   {
     path: "/configurator",
@@ -885,12 +885,12 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   {
     path: "/content/bonnes-pratiques-securite",
     pathsByLocale: { en: "/content/security-best-practices" },
-    title: "Sécurité Claude Code : bonnes pratiques et checklist copiable",
+    title: "Sécurité Claude Code : 8 bonnes pratiques et checklist copiable",
     description:
-      "Moindre privilège, audit MCP, profils sandboxés, scan des secrets : guide pratique avec checklist prête à l'emploi pour sécuriser Claude Code en équipe.",
+      "Moindre privilège, audit MCP, profils sandboxés, scan des secrets : 8 bonnes pratiques avec checklist prête à l'emploi pour sécuriser Claude Code en équipe.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-05-09",
   },
   {
     path: "/content/claude-design-vs-figma",
@@ -909,7 +909,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Votre clé API Anthropic sk-ant a fuité dans un commit, screenshot ou log ? Révoquez-la, faites la rotation, auditez les dégâts. Guide de récupération pas à pas.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-23",
+    lastModified: "2026-05-09",
   },
   {
     path: "/content/mode-plan-vs-thinking",

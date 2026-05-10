@@ -33,7 +33,7 @@ This guide covers all four patterns, compares them on the dimensions that matter
 
 ### Pattern A: local MCP with ComfyUI
 
-```
+```text
 Claude Code → local MCP server → ComfyUI (local GPU) → image in /output
 ```
 
@@ -57,7 +57,7 @@ For the full setup guide, see [Tutorial C2: local ComfyUI MCP](/en/mcp/comfyui-m
 
 ### Pattern B: cloud MCP (Replicate or equivalent)
 
-```
+```text
 Claude Code → cloud MCP server → Replicate API → image via temporary URL
 ```
 
@@ -84,7 +84,7 @@ Image URLs returned by Replicate expire after one hour. If you use this pattern,
 
 ### Pattern C: Agent SDK + direct API
 
-```
+```text
 Claude Code (as orchestrator) → Anthropic Agent SDK → Replicate API
                                                      → optimize_webp tool
                                                      → upload_storage tool
@@ -106,7 +106,7 @@ For the full TypeScript and Python implementation, see [Tutorial C3: Claude Agen
 
 ### Pattern D: Skill + local script
 
-```
+```text
 Claude Code → custom Skill → bash/python script → generation (local or cloud)
 ```
 

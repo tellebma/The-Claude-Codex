@@ -36,7 +36,9 @@ function redactSensitiveQuery(rawUrl: string): string {
   try {
     const url = new URL(rawUrl);
     let mutated = false;
-    for (const key of [...url.searchParams.keys()]) {
+    // Iteration directe sur l'iterable (set() remplace, n'ajoute pas
+    // de cle, donc pas de risque de concurrent modification).
+    for (const key of url.searchParams.keys()) {
       if (SENSITIVE_QUERY_KEYS.has(key.toLowerCase())) {
         url.searchParams.set(key, "[redacted]");
         mutated = true;

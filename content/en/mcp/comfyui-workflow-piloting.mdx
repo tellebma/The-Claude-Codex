@@ -1,0 +1,323 @@
+---
+title: "Pilot a ComfyUI JSON workflow from Claude Code"
+description: "Tutorial to expose an exported ComfyUI workflow JSON via a custom MCP tool and have Claude Code edit it dynamically (sampler, ControlNet, prompt loop)."
+order: 10
+section: "mcp"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["reference", "tooling"]
+---
+
+{/* source: github.com/comfyanonymous/ComfyUI/blob/master/nodes.py, accessed 2026-05-11 */}
+{/* source: docs.comfy.org/development/comfyui-server/comms_routes, accessed 2026-05-11 */}
+{/* source: github.com/comfyanonymous/ComfyUI/blob/master/comfy/samplers.py, accessed 2026-05-11 */}
+{/* source: content/fr/mcp/comfyui-mcp-local.mdx (C2, parent cornerstone), accessed 2026-05-11 */}
+
+## Anatomy of a ComfyUI JSON workflow
+
+A ComfyUI workflow is a directed graph stored as JSON. Each entry in the root dictionary is a node identified by a numeric id as a string: `"1"`, `"2"`, etc. A node has two mandatory fields: `class_type` (the node type, which determines its behavior) and `inputs` (the node parameters).
+
+Connections between nodes are expressed inside `inputs`: when a parameter expects the output of another node, its value is an array `[node_id, output_index]` instead of a scalar value. `output_index` corresponds to the position of the output in the node's declaration order.
+
+Example: `CheckpointLoaderSimple` declares three outputs in order MODEL (index 0), CLIP (index 1), VAE (index 2). To connect the CLIP to a `CLIPTextEncode`, you write `"clip": ["2", 1]` if the loader is node `"2"`.
+
+Here is a minimal workflow representing the classic text-to-image generation pipeline:
+
+```json
+{
+  "1": {
+    "class_type": "CheckpointLoaderSimple",
+    "inputs": {
+      "ckpt_name": "flux1-schnell-fp8.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "a robot astronaut on the moon",
+      "clip": ["1", 1]
+    }
+  },
+  "3": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "text": "",
+      "clip": ["1", 1]
+    }
+  },
+  "4": {
+    "class_type": "EmptyLatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    }
+  },
+  "5": {
+    "class_type": "KSampler",
+    "inputs": {
+      "seed": 42,
+      "steps": 4,
+      "cfg": 1.0,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1.0,
+      "model": ["1", 0],
+      "positive": ["2", 0],
+      "negative": ["3", 0],
+      "latent_image": ["4", 0]
+    }
+  },
+  "6": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": ["5", 0],
+      "vae": ["1", 2]
+    }
+  },
+  "7": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "filename_prefix": "claude_run",
+      "images": ["6", 0]
+    }
+  }
+}
+```
+
+The four node types here cover 90% of real-world workflows:
+
+- **Loaders** (`CheckpointLoaderSimple`, `VAELoader`, `UNETLoader`): load model files from disk
+- **Samplers** (`KSampler`, `KSamplerAdvanced`): control the iterative denoising process
+- **Text encoders** (`CLIPTextEncode`): convert the prompt into a latent embedding
+- **Output nodes** (`VAEDecode`, `SaveImage`): decode the result back to pixels and write to disk
+
+<Callout type="info" title="sampler_name and scheduler: two separate fields">
+In ComfyUI, the sampler (denoising algorithm) and the scheduler (noise decay strategy per step) are two distinct KSampler parameters. Write `sampler_name: "dpmpp_2m"` combined with `scheduler: "karras"`, not `"dpmpp_2m_karras"` as a single field.
+</Callout>
+
+---
+
+## Exposing the workflow via a custom MCP tool
+
+The architecture is straightforward: Claude Code calls an MCP tool, the MCP server loads the JSON workflow file, applies the dynamic parameters it received, then POSTs to `http://127.0.0.1:8188/prompt`. ComfyUI executes the workflow and writes the image to its `output/` folder.
+
+The wrapper below uses the same `McpServer` + `server.tool()` pattern as the other examples on this site, detailed in [Create a TypeScript MCP Server](/en/mcp/create-mcp-typescript/).
+
+<Steps>
+<Step title="Create the project and install dependencies" stepNumber={1}>
+
+```bash
+mkdir comfyui-workflow-mcp && cd comfyui-workflow-mcp
+npm init -y
+npm install @modelcontextprotocol/sdk zod
+npm install -D typescript tsx @types/node
+```
+
+</Step>
+
+<Step title="Prepare the JSON workflow file" stepNumber={2}>
+
+Export your workflow from the ComfyUI interface using the "Save (API Format)" button (not the regular "Save" button, which produces an extended format that is not compatible with the API). Place the file at `workflow.json` in the project root.
+
+You can start from the minimal workflow in the previous section.
+
+</Step>
+
+<Step title="Write the MCP wrapper" stepNumber={3}>
+
+Create `src/index.ts`:
+
+```typescript
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const COMFYUI_URL = "http://127.0.0.1:8188";
+
+const server = new McpServer({
+  name: "comfyui-workflow-pilot",
+  version: "0.1.0",
+});
+
+server.tool(
+  "run_workflow",
+  "Runs a ComfyUI JSON workflow with dynamic parameters",
+  {
+    positive_prompt: z.string().describe("Positive prompt (image description)"),
+    negative_prompt: z.string().default("").describe("Negative prompt (elements to avoid)"),
+    seed: z.number().int().default(-1).describe("Seed (-1 = random)"),
+    sampler_name: z
+      .enum(["euler", "dpmpp_2m", "dpmpp_3m_sde", "ddim", "uni_pc"])
+      .default("euler")
+      .describe("Sampling algorithm"),
+    scheduler: z
+      .enum(["simple", "karras", "exponential", "sgm_uniform", "beta"])
+      .default("simple")
+      .describe("Noise scheduling strategy"),
+    steps: z.number().int().min(1).max(150).default(4).describe("Number of steps"),
+  },
+  async ({ positive_prompt, negative_prompt, seed, sampler_name, scheduler, steps }) => {
+    const workflowPath = join(process.cwd(), "workflow.json");
+    const workflow = JSON.parse(readFileSync(workflowPath, "utf-8")) as Record<
+      string,
+      { class_type: string; inputs: Record<string, unknown> }
+    >;
+
+    const resolvedSeed = seed === -1 ? Math.floor(Math.random() * 1e9) : seed;
+
+    for (const node of Object.values(workflow)) {
+      if (node.class_type === "CLIPTextEncode") {
+        const isNegative =
+          typeof node.inputs["text"] === "string" && node.inputs["text"] === "";
+        node.inputs["text"] = isNegative ? negative_prompt : positive_prompt;
+      }
+      if (node.class_type === "KSampler") {
+        node.inputs["seed"] = resolvedSeed;
+        node.inputs["sampler_name"] = sampler_name;
+        node.inputs["scheduler"] = scheduler;
+        node.inputs["steps"] = steps;
+      }
+    }
+
+    const res = await fetch(`${COMFYUI_URL}/prompt`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: workflow }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`ComfyUI /prompt responded ${res.status}: ${text}`);
+    }
+
+    const data = (await res.json()) as { prompt_id: string; number: number };
+    return {
+      content: [
+        {
+          type: "text" as const,
+          text: `Workflow queued. prompt_id: ${data.prompt_id}, position: ${data.number}`,
+        },
+      ],
+    };
+  }
+);
+
+async function main(): Promise<void> {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
+main().catch((err: unknown) => {
+  console.error("MCP error:", err);
+  process.exit(1);
+});
+```
+
+</Step>
+
+<Step title="Configure Claude Code to use the MCP" stepNumber={4}>
+
+Add (or create) `.mcp.json` at the root of your Claude Code project:
+
+```json
+{
+  "mcpServers": {
+    "comfyui-workflow": {
+      "command": "npx",
+      "args": ["tsx", "/absolute/path/to/comfyui-workflow-mcp/src/index.ts"]
+    }
+  }
+}
+```
+
+Restart Claude Code to load the new config.
+
+</Step>
+</Steps>
+
+<Callout type="warning" title="Startup order">
+ComfyUI must be running on port 8188 before you launch Claude Code. The MCP contacts the API on the first tool call: if ComfyUI is not ready, the request fails with a connection error.
+</Callout>
+
+---
+
+## Having Claude edit the workflow
+
+Once the MCP is connected, Claude Code can modify workflow parameters on demand. It does not need to see the raw JSON: it receives a description of the tool and its parameters via the MCP protocol.
+
+### Example system prompt
+
+```text
+You have access to the run_workflow tool, which triggers image generations via ComfyUI.
+Available parameters: positive_prompt, negative_prompt, seed,
+sampler_name (euler | dpmpp_2m | dpmpp_3m_sde | ddim | uni_pc),
+scheduler (simple | karras | exponential | sgm_uniform | beta), steps.
+
+For fast generations (tests, previews), use sampler_name=euler with
+scheduler=simple and steps=4.
+For quality generations, use sampler_name=dpmpp_2m with
+scheduler=karras and steps=20.
+```
+
+### Example interaction
+
+User message:
+
+```text
+Generate an illustration of a futuristic city in the rain, cyberpunk style,
+blue and orange tones. Use a higher-quality sampler.
+```
+
+Tool call Claude will make:
+
+```json
+{
+  "tool": "run_workflow",
+  "arguments": {
+    "positive_prompt": "futuristic city in the rain, cyberpunk style, blue and orange tones, neon reflections on wet streets, highly detailed",
+    "negative_prompt": "blurry, low quality, watermark, text",
+    "seed": -1,
+    "sampler_name": "dpmpp_2m",
+    "scheduler": "karras",
+    "steps": 20
+  }
+}
+```
+
+Response returned to the model:
+
+```text
+Workflow queued. prompt_id: a3f7c2d1-..., position: 1
+```
+
+<Callout type="tip" title="Checking generation progress">
+The ComfyUI API exposes `GET /queue` to inspect pending jobs and `GET /history/{prompt_id}` to retrieve the status and filename of the generated image. You can add a second tool `get_generation_status` that polls these endpoints if you want Claude to wait for the generation to finish before continuing.
+</Callout>
+
+---
+
+## Use cases
+
+### Switching the sampler to balance quality vs speed
+
+The KSampler is the most influential node on the final render. Going from `euler/simple/4 steps` to `dpmpp_2m/karras/20 steps` significantly changes coherence and detail precision, at the cost of 4 to 5 times longer generation time. The practical pattern: generate a dozen fast previews to validate the direction, then run a slow, high-quality generation on the best candidate. The MCP wrapper makes this trivial from Claude Code: a single message per phase.
+
+### Adding a ControlNet to an existing workflow
+
+A ControlNet inserts into the graph between the model loader and the KSampler. You load a reference image (Canny edges, OpenPose skeleton, or depth map), pass it to a `ControlNetApply` node, and connect the `conditioning` output to the KSampler's `positive` input instead of the CLIPTextEncode directly.
+
+To control this via MCP, add `controlnet_image_path` and `controlnet_strength` parameters to the tool. The wrapper dynamically injects the `ControlNetLoader` and `ControlNetApply` nodes into the workflow when the parameter is provided, otherwise it routes the CLIPTextEncode directly. Claude can then enable or disable ControlNet on a generation without touching the JSON file.
+
+### A/B testing across N prompts in a loop
+
+The most productive use case: you want to compare 10 prompt formulations on the same seed and sampling parameters. Give Claude a list of prompts and ask it to run them sequentially with a fixed `seed`. It calls `run_workflow` ten times, each with a different `positive_prompt` and the same seed, which guarantees controlled variations. You retrieve the ten images from `ComfyUI/output/` and pick the best formulation before launching a final high-quality generation.
+
+---
+
+## Next steps
+
+- [C2: Local ComfyUI MCP, full tutorial](/en/mcp/comfyui-mcp-local/): setting up ComfyUI from scratch, installing Flux Schnell, and the initial connection to Claude Code.
+- [S3: Local vs cloud generative AI, comparison](/en/use-cases/image-ia-local-vs-cloud/): when a local GPU is worth it, and when cloud APIs (Replicate, fal.ai) are the better choice.

@@ -27,17 +27,22 @@ import { useMatomoPageviewTracking } from "@/hooks/useMatomoPageviewTracking";
  * boundary en App Router (sinon Next.js force la page entiere en CSR).
  * On le wrappe ici pour ne pas obliger chaque appelant a le faire.
  */
+/**
+ * Wrapper interne necessaire car `useMatomoPageviewTracking` utilise
+ * `useSearchParams` qui requiert un boundary `<Suspense>` parent en
+ * App Router (sinon Next.js opt out le route en pure CSR au build).
+ */
+function MatomoPageviewWrapper() {
+  useMatomoPageviewTracking();
+  return null;
+}
+
 export function AnalyticsTracker() {
   useScrollDepthTracking();
   useExternalLinkTracking();
   return (
     <Suspense fallback={null}>
-      <PageviewTrackerInner />
+      <MatomoPageviewWrapper />
     </Suspense>
   );
-}
-
-function PageviewTrackerInner() {
-  useMatomoPageviewTracking();
-  return null;
 }

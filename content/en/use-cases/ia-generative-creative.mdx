@@ -45,7 +45,7 @@ You install ComfyUI on your machine, run an MCP server that exposes an API to Cl
 
 **Control:** maximum. You choose the exact model (Flux Schnell, Flux Dev, SDXL, custom LoRA), sampling parameters, resolution, and step count. You can use ControlNet to guide composition from an existing image.
 
-**When to use it:** you generate a high volume of images (several hundred per month), you have an NVIDIA GPU with at least 8 GB VRAM, you want to fine-tune models with your own LoRA weights, or your data is sensitive and must not leave your machine.
+**When to use it:** you generate a high volume of images (500+ images per month), you have an NVIDIA GPU with at least 8 GB VRAM, you want to fine-tune models with your own LoRA weights, or your data is sensitive and must not leave your machine.
 
 <Callout type="info" title="Indicative latency values">
 The latency figures above are ballpark estimates observed on RTX 3090 / 4090 setups running Flux Schnell fp8 at 4 denoising steps. They vary with GPU model, output resolution, and step count.
@@ -63,7 +63,7 @@ Claude Code → cloud MCP server → Replicate API → image via temporary URL
 
 Instead of a local ComfyUI instance, the MCP calls a cloud API that generates the image on remote GPUs. Claude Code receives a URL in return.
 
-**Latency:** 1-10 seconds for most Flux models on Replicate, depending on server load.
+**Latency:** 4-10 seconds for most Flux models on Replicate, depending on server load.
 
 **Cost:** varies by model. As of 2026-05-11 on Replicate:
 - Flux 1.1 Pro: $0.04 per image
@@ -74,7 +74,7 @@ Instead of a local ComfyUI instance, the MCP calls a cloud API that generates th
 
 **When to use it:** you have no GPU available (Mac, VPS, standard dev machine), you want to start quickly without installation, or you need Flux 1.1 Pro (the most capable Black Forest Labs model, only available via cloud).
 
-**Replicate MCP:** there is an official npm package `replicate-mcp` (published by `replicatebot`, the official Replicate account, Apache-2.0 license, v0.9.0). It exposes the full Replicate API to Claude Code. Flux-specific community packages also exist (`flux-replicate-mcp`, `replicate-flux-mcp`), but they have low maintenance activity. For production use, Pattern C (Agent SDK) is a more reliable approach.
+**Replicate MCP:** there is an official npm package `replicate-mcp` (published by `replicatebot`, the official Replicate account, Apache-2.0 license, v0.9.0). It exposes the full Replicate API to Claude Code. Community MCP packages emerge around Replicate/Flux but activity varies. For production use, Pattern C (Agent SDK) is a more reliable approach.
 
 <Callout type="warning" title="Temporary URL">
 Image URLs returned by Replicate expire after one hour. If you use this pattern, plan for a download-and-store step right after generation, otherwise the images disappear.
@@ -127,9 +127,9 @@ You create a Claude Code Skill that wraps a generation script. That script can c
 | Pattern | Latency | Cost | Control | Learning curve | Ideal use case |
 |---|---|---|---|---|---|
 | A: local ComfyUI MCP | 5-30s | $0 marginal | Maximum | High (GPU, Python, ComfyUI) | Volume + GPU + sensitive data |
-| B: cloud Replicate MCP | 1-10s | $0.003-0.04/image | Medium | Low (npm install) | Quick start, no GPU |
+| B: cloud Replicate MCP | 4-10s | $0.003-0.04/image | Medium | Low (npm install) | Quick start, no GPU |
 | C: Agent SDK | 10-30s total | $0.04-0.05/image | Maximum (code) | Medium (Anthropic SDK) | CI/CD, automation, prod |
-| D: Skill + script | Variable | Variable | Simple | Very low | Occasional use, 5 images/month |
+| D: Skill + script | Variable | Variable | Limited | Very low | Occasional use, 5 images/month |
 
 <Callout type="info" title="Prices as of 2026-05-11">
 Replicate prices above are taken from official Replicate product pages on 2026-05-11. Claude prices are from docs.anthropic.com on the same date. Both can change over time.
@@ -193,6 +193,6 @@ Black Forest Labs' Flux 1.1 Pro is only available through cloud APIs (Replicate 
 
 Each of the four patterns has a dedicated deep-dive tutorial:
 
-- [Tutorial C2: local ComfyUI MCP](/en/mcp/comfyui-mcp-local/) : ComfyUI setup, Flux Schnell, MCP server, first prompt from Claude Code.
-- [Tutorial C3: Claude Agent SDK](/en/agents/agent-generation-assets/) : full agent implementation in Python and TypeScript, error handling, real cost breakdown.
-- [Use case S2: automatic Next.js blog assets](/en/use-cases/assets-blog-automatique/) : complete pipeline from article draft to image published on CDN (coming soon).
+- [Tutorial C2: local ComfyUI MCP](/en/mcp/comfyui-mcp-local/): ComfyUI setup, Flux Schnell, MCP server, first prompt from Claude Code.
+- [Tutorial C3: Claude Agent SDK](/en/agents/agent-generation-assets/): full agent implementation in Python and TypeScript, error handling, real cost breakdown.
+- [Use case S2: automatic Next.js blog assets](/en/use-cases/assets-blog-automatique/): complete pipeline from article draft to image published on CDN (coming soon).

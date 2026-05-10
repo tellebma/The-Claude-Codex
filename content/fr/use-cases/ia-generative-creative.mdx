@@ -45,7 +45,7 @@ Tu installes ComfyUI sur ta machine, tu lances un serveur MCP qui expose une API
 
 **Contrôle :** maximum. Tu choisis le modèle exact (Flux Schnell, Flux Dev, SDXL, LoRA personnalisé), les paramètres de sampling, la résolution, le nombre d'étapes. Tu peux utiliser ControlNet pour guider la composition à partir d'une image existante.
 
-**Quand l'utiliser :** tu génères un volume important d'images (plusieurs centaines par mois), tu as un GPU NVIDIA d'au moins 8 Go de VRAM, tu veux personnaliser les modèles avec tes propres LoRA, ou tes données sont sensibles et ne doivent pas sortir de ta machine.
+**Quand l'utiliser :** tu génères un volume important d'images (500+ images par mois), tu as un GPU NVIDIA d'au moins 8 Go de VRAM, tu veux personnaliser les modèles avec tes propres LoRA, ou tes données sont sensibles et ne doivent pas sortir de ta machine.
 
 <Callout type="info" title="Latences indicatives">
 Les valeurs de latence ci-dessus sont des ordres de grandeur observés sur des configurations RTX 3090 / 4090 avec Flux Schnell fp8 en 4 étapes. Elles varient selon le GPU, la résolution cible et le nombre d'étapes de débruitage.
@@ -63,7 +63,7 @@ Claude Code → MCP server cloud → API Replicate → image via URL temporaire
 
 Au lieu d'une instance ComfyUI locale, le MCP appelle une API cloud qui génère l'image sur des GPU distants. Claude Code reçoit une URL en retour.
 
-**Latence :** 1-10 secondes pour la plupart des modèles Flux sur Replicate, selon la charge des serveurs.
+**Latence :** 4-10 secondes pour la plupart des modèles Flux sur Replicate, selon la charge des serveurs.
 
 **Coût :** variable selon le modèle. Au 2026-05-11 sur Replicate :
 - Flux 1.1 Pro : $0.04 par image
@@ -74,7 +74,7 @@ Au lieu d'une instance ComfyUI locale, le MCP appelle une API cloud qui génère
 
 **Quand l'utiliser :** tu n'as pas de GPU disponible (Mac, VPS, machine de dev standard), tu veux tester rapidement sans installation, ou tu as besoin de Flux 1.1 Pro (le modèle le plus qualitatif de Black Forest Labs, disponible uniquement en cloud).
 
-**MCP Replicate :** il existe un package npm officiel `replicate-mcp` (publié par `replicatebot`, compte officiel Replicate, licence Apache-2.0, v0.9.0). Il expose l'ensemble de l'API Replicate à Claude Code. Des packages communautaires spécialisés Flux existent aussi (`flux-replicate-mcp`, `replicate-flux-mcp`), mais ils sont peu maintenus. L'approche la plus stable reste d'utiliser le pattern C (Agent SDK) pour des usages en production.
+**MCP Replicate :** il existe un package npm officiel `replicate-mcp` (publié par `replicatebot`, compte officiel Replicate, licence Apache-2.0, v0.9.0). Il expose l'ensemble de l'API Replicate à Claude Code. Des packages MCP communautaires émergent autour de Replicate/Flux mais leur niveau d'activité est variable. L'approche la plus stable reste d'utiliser le pattern C (Agent SDK) pour des usages en production.
 
 <Callout type="warning" title="URL temporaire">
 Les URLs d'images retournées par Replicate expirent après une heure. Si tu utilises ce pattern, prévois un outil de téléchargement et de stockage local ou cloud dans la foulée, sinon les images disparaissent.
@@ -127,9 +127,9 @@ Tu crées un Skill Claude Code qui encapsule un script de génération d'images.
 | Pattern | Latence | Coût | Contrôle | Courbe d'apprentissage | Cas d'usage idéal |
 |---|---|---|---|---|---|
 | A : MCP local ComfyUI | 5-30s | 0 $ marginal | Maximum | Élevée (GPU, Python, ComfyUI) | Volume + GPU + données sensibles |
-| B : MCP cloud Replicate | 1-10s | $0.003-0.04/image | Moyen | Faible (npm install) | Test rapide, pas de GPU |
+| B : MCP cloud Replicate | 4-10s | $0.003-0.04/image | Moyen | Faible (npm install) | Test rapide, pas de GPU |
 | C : Agent SDK | 10-30s total | $0.04-0.05/image | Maximum (code) | Moyenne (SDK Anthropic) | CI/CD, automation, prod |
-| D : Skill + script | Variable | Variable | Simple | Très faible | Usage ponctuel, 5 images/mois |
+| D : Skill + script | Variable | Variable | Limité | Très faible | Usage ponctuel, 5 images/mois |
 
 <Callout type="info" title="Tarifs constatés au 2026-05-11">
 Les tarifs Replicate ci-dessus sont ceux relevés sur les pages officielles Replicate à la date du 2026-05-11. Les tarifs Claude sont issus de docs.anthropic.com à la même date. Ils peuvent évoluer.

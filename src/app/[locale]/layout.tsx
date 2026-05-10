@@ -43,11 +43,18 @@ const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
  * Matomo analytics script — safe: built from environment variables
  * at build time. No user input reaches this path.
  * Tracking is disabled entirely when env vars are not set.
+ *
+ * Note (SEO-8) : ce snippet ne fire PAS de `trackPageView` au load.
+ * C'est `useMatomoPageviewTracking` (monte via AnalyticsTracker dans
+ * SectionLayout + pages overview) qui s'en charge a chaque navigation
+ * App Router, y compris la premiere. Sans cette delegation, Next.js
+ * App Router (navigation client-side) ne firerait qu'un seul pageview
+ * par session.
  */
 const matomoTrackingScript = MATOMO_ENABLED
   ? `
   var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['trackPageView'], ['enableLinkTracking']);
+  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking']);
   (function() {
     var u = '${MATOMO_URL}/';
     _paq.push(['setTrackerUrl', u + 'matomo.php'], ['setSiteId', '${MATOMO_SITE_ID}']);

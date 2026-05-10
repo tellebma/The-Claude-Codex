@@ -64,6 +64,13 @@ next-env.d.ts
 .claude/settings.local.json
 doc/settings.local.json
 
+# claude code runtime locks (skill `loop` / `schedule`)
+.claude/scheduled_tasks.lock
+
+# claude code skills installes localement via `npx skills add` ou `uipro init`
+# (regenerables, ~10MB de data CSV externes, evite conflits de versions cross-dev)
+.claude/skills/
+
 # Generated at build time by scripts/generate-llms-txt.ts
 /public/llms.txt
 /public/llms-full.txt

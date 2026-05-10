@@ -21,7 +21,7 @@ const translations = {
     heroTitle: "Tous nos",
     heroTitleHighlight: "articles",
     heroSubtitle:
-      "Explorez nos guides editoriaux au format MDX. Chaque article est autonome et peut etre lu independamment.",
+      "Chaque article est autonome et peut etre lu independamment.",
     sectionBadge: "Articles",
     sectionTitle: "Guides disponibles",
     sectionDescription:

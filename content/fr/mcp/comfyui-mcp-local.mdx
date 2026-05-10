@@ -1,0 +1,438 @@
+---
+title: "MCP ComfyUI local : générer des images sur ton GPU depuis Claude Code"
+description: "Tutoriel complet pour brancher ComfyUI à Claude Code via MCP, générer des images en local sur ton GPU, comprendre la diffusion, installer Flux Schnell et débugger les erreurs CUDA/OOM."
+badge: "NEW"
+order: 6
+section: "mcp"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["tutorial", "tooling", "architecture"]
+---
+
+<!-- source: github.com/Comfy-Org/ComfyUI, consulté 2026-05-11 -->
+<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulté 2026-05-11 -->
+<!-- source: docs.comfy.org/get_started/manual_install, consulté 2026-05-11 -->
+<!-- source: github.com/joenorton/comfyui-mcp-server, consulté 2026-05-11 -->
+<!-- source: pytorch.org/get-started/locally, consulté 2026-05-11 -->
+
+## Pourquoi brancher ComfyUI à Claude Code
+
+Tu travailles sur un projet qui demande des images : maquettes, illustrations, variations de style, assets de jeu. Le flux habituel ressemble à ça : tu quittes ton éditeur, tu ouvres un onglet Midjourney ou Stable Diffusion, tu copie-colles un prompt, tu attends, tu télécharges, tu retournes dans ton terminal. Vingt fois de suite.
+
+Avec un MCP ComfyUI local, Claude Code devient la seule interface. Tu décris ce dont tu as besoin en langage naturel, le MCP traduit ça en workflow de génération, ComfyUI tourne en arrière-plan sur ton GPU, et l'image arrive dans ton dossier de projet. Tout ça sans quitter ta session de code.
+
+Cet article te montre comment mettre ça en place de A à Z : comprendre ce qui se passe dans le modèle, installer ComfyUI avec Flux Schnell sur ton GPU, connecter le MCP à Claude Code, et gérer les erreurs courantes. Le tuto cible Linux/WSL2 avec un GPU NVIDIA, mais les concepts s'appliquent à tous les systèmes.
+
+---
+
+## Comment marche un modèle de diffusion
+
+Avant de lancer des commandes, un tour rapide sous le capot. Pas besoin de mathématiques, juste les concepts qui t'aideront à comprendre pourquoi certains paramètres existent et pourquoi certaines erreurs arrivent.
+
+### Le bruit comme point de départ
+
+Un modèle de diffusion ne "dessine" pas une image. Il part d'une image de bruit pur (des pixels aléatoires, comme de la neige sur un vieux téléviseur) et il la débruite progressivement, étape par étape, jusqu'à obtenir quelque chose de cohérent. Le texte de ton prompt guide chaque étape de débruitage.
+
+L'analogie la plus proche : imagine un sculpteur qui travaille sur un bloc de marbre recouvert d'un brouillard dense. Il ne voit pas encore la statue finale, mais à chaque coup de ciseau il révèle un peu plus de forme, en s'aidant d'une description écrite de ce qu'il cherche à obtenir.
+
+### L'espace latent : la carte compressée
+
+<Callout type="info" title="Latent space">
+Le modèle ne travaille pas directement sur les pixels de l'image finale. Il opère dans un espace mathématique compressé, dit "latent", où une image de 1024 x 1024 pixels est représentée par un vecteur de quelques milliers de valeurs. C'est beaucoup plus léger à traiter, et c'est pourquoi un GPU de 8 Go peut générer des images en haute résolution sans saturer.
+</Callout>
+
+### Le U-Net : l'artiste qui débruite
+
+<Callout type="info" title="U-Net (ou Transformer de diffusion)">
+C'est le coeur du modèle, le réseau de neurones qui prédit "quels pixels enlever" à chaque étape de débruitage. Il reçoit l'image bruitée et le texte du prompt, et produit une estimation du bruit à soustraire. Les modèles récents comme Flux remplacent le U-Net classique par une architecture Transformer plus puissante, mais le principe reste identique.
+</Callout>
+
+### Le sampler : le rythme du débruitage
+
+<Callout type="info" title="Sampler">
+Le sampler décide de la stratégie de débruitage : combien d'étapes, à quelle vitesse réduire le bruit, avec quelle formule mathématique. Flux Schnell utilise seulement 1 à 4 étapes grâce à une distillation adversariale, là où SD 1.5 en nécessitait 20 à 50. Moins d'étapes = génération plus rapide, mais les résultats peuvent être moins détaillés.
+</Callout>
+
+### Le VAE : le traducteur image/latent
+
+<Callout type="info" title="VAE (Variational Autoencoder)">
+Le VAE est le pont entre l'espace latent et les pixels réels. L'encodeur compresse l'image d'entrée vers le latent (utile pour img2img), le décodeur reconvertit le latent débruité en image finale. Si tu as déjà vu une image générée avec des artefacts étranges (couleurs saturées, textures bizarres), c'est souvent un problème de VAE mal chargé.
+</Callout>
+
+### Le ControlNet : le gabarit imposé
+
+<Callout type="info" title="ControlNet">
+ControlNet est un module optionnel qui guide la génération à partir d'une image de référence : contours détectés (Canny), pose humaine (OpenPose), profondeur (Depth). Sans ControlNet, le modèle est libre. Avec, il respecte une structure imposée tout en appliquant le style textuel du prompt. On n'en a pas besoin pour commencer, mais c'est la prochaine étape naturelle.
+</Callout>
+
+---
+
+## Pourquoi ComfyUI plutôt qu'AUTOMATIC1111
+
+<!-- source: docs.comfy.org, consulté 2026-05-11 -->
+
+Il existe plusieurs interfaces pour lancer des modèles de diffusion localement. Les deux plus connues sont AUTOMATIC1111 (aussi appelé SD WebUI) et ComfyUI. Le choix dépend de ton usage.
+
+| Critère | AUTOMATIC1111 | ComfyUI |
+|---|---|---|
+| Interface | Formulaires, onglets | Graphe de noeuds |
+| Courbe d'apprentissage | Douce | Steeper au départ |
+| Flexibilité | Limitée aux extensions | Totale (tu câbles toi-même) |
+| Reproductibilité | Workflows difficiles à partager | Workflows en JSON exportables |
+| Support Flux | Partiel, via extensions | Natif depuis fin 2024 |
+| API REST | Limitée | Complète (`/prompt`, `/queue`, `/history`) |
+| Intégration MCP | Difficile | Naturelle via l'API |
+
+ComfyUI s'impose pour deux raisons concrètes ici. D'abord, son architecture en graphe de noeuds correspond exactement à ce que fait un workflow de diffusion (chaque noeud = une opération, les liens = le flux de données). Ensuite, son API REST locale sur le port 8188 est ce que le MCP va appeler pour déclencher une génération.
+
+---
+
+## Pré-requis matériel
+
+<!-- source: docs.comfy.org/installation/system_requirements, consulté 2026-05-11 -->
+<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulté 2026-05-11 -->
+
+Le modèle qui tourne influence directement la VRAM nécessaire. Voici un tableau réaliste basé sur les tailles officielles des fichiers de modèles :
+
+| VRAM GPU | Modèles compatibles | Notes |
+|---|---|---|
+| 4 Go | SD 1.5 (2 Go), SDXL Turbo en fp8 | Génération lente, résolutions limitées à 512x512 |
+| 6 Go | SD 1.5, SDXL en fp8, Flux Schnell fp8 partiel | Flux Schnell fp8 requiert `--lowvram` |
+| 8 Go | SDXL, Flux Schnell fp8 (17,2 Go chargé par morceaux) | Flux Schnell fp8 confortable avec offloading CPU |
+| 12 Go | Flux Schnell fp8 complet, Flux Dev fp8 | Recommandé pour un usage quotidien avec Flux |
+| 24 Go+ | Flux Schnell full (23,8 Go), Flux Dev full | Qualité maximale, génération rapide |
+
+<Callout type="warning" title="RAM système : souvent sous-estimée">
+La VRAM n'est pas le seul goulot d'étranglement. ComfyUI charge les modèles en RAM avant de les transférer vers le GPU. Flux Schnell full fait 23,8 Go : tu as besoin d'au moins 32 Go de RAM système pour le manipuler correctement. Avec 16 Go de RAM, reste sur la version fp8 (17,2 Go).
+</Callout>
+
+Autres pré-requis :
+- **GPU NVIDIA** avec pilotes récents (CUDA 12.6+ recommandé)
+- **Python 3.12 ou 3.13** (3.13 recommandé par la doc officielle ComfyUI)
+- **Git** pour cloner le dépôt
+
+---
+
+## Installation de ComfyUI et de Flux Schnell
+
+<!-- source: docs.comfy.org/get_started/manual_install, consulté 2026-05-11 -->
+<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulté 2026-05-11 -->
+<!-- source: pytorch.org/get-started/locally, consulté 2026-05-11 -->
+
+<Steps>
+<Step title="Cloner ComfyUI" stepNumber={1}>
+
+```bash
+git clone https://github.com/Comfy-Org/ComfyUI.git
+cd ComfyUI
+```
+
+Le dépôt officiel est maintenant sous l'organisation `Comfy-Org`. L'ancien `comfyanonymous/ComfyUI` redirige vers ce même dépôt.
+
+</Step>
+
+<Step title="Créer un environnement virtuel Python" stepNumber={2}>
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Linux/macOS
+# Sur Windows : venv\Scripts\activate
+```
+
+Utilise toujours un virtualenv dédié. Installer ComfyUI dans le Python système casse régulièrement d'autres outils.
+
+</Step>
+
+<Step title="Installer PyTorch avec support CUDA" stepNumber={3}>
+
+```bash
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+```
+
+Cette commande installe PyTorch avec CUDA 12.6, la version stable recommandée au moment de la rédaction. Si ton GPU nécessite CUDA 11.8 (architectures plus anciennes comme Turing/Ampere avec pilotes anciens) :
+
+```bash
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+```
+
+</Step>
+
+<Step title="Installer les dépendances ComfyUI" stepNumber={4}>
+
+```bash
+pip install -r requirements.txt
+```
+
+Cette commande installe toutes les dépendances Python nécessaires (transformers, safetensors, Pillow, aiohttp, etc.). L'installation prend quelques minutes.
+
+</Step>
+
+<Step title="Télécharger Flux Schnell (version fp8)" stepNumber={5}>
+
+<!-- source: huggingface.co/Comfy-Org/flux1-schnell/tree/main, consulté 2026-05-11 -->
+
+Flux Schnell existe en deux variantes sur Hugging Face. Le repo `Comfy-Org/flux1-schnell` propose une version fp8 optimisée spécialement pour ComfyUI :
+
+- `flux1-schnell-fp8.safetensors` : 17,2 Go, recommandé pour GPU de 8-12 Go
+- `flux1-schnell.safetensors` : 23,8 Go, pleine précision pour GPU de 24 Go+
+
+Télécharge la version fp8 avec `huggingface-cli` :
+
+```bash
+# Installer huggingface-cli si absent
+pip install huggingface_hub
+
+# Télécharger le modèle fp8 directement dans le bon dossier
+huggingface-cli download Comfy-Org/flux1-schnell flux1-schnell-fp8.safetensors \
+  --local-dir ./models/checkpoints/
+```
+
+Si tu préfères wget (sans authentification, car la licence est Apache 2.0) :
+
+```bash
+mkdir -p models/checkpoints
+wget -O models/checkpoints/flux1-schnell-fp8.safetensors \
+  https://huggingface.co/Comfy-Org/flux1-schnell/resolve/main/flux1-schnell-fp8.safetensors
+```
+
+Le téléchargement prend du temps : 17 Go à télécharger.
+
+</Step>
+
+<Step title="Lancer ComfyUI" stepNumber={6}>
+
+```bash
+python main.py
+```
+
+Sur un GPU avec peu de VRAM (6-8 Go), ajoute les flags d'optimisation mémoire :
+
+```bash
+python main.py --lowvram
+```
+
+ComfyUI démarre sur `http://127.0.0.1:8188`. L'interface graphique est accessible dans le navigateur, mais on ne l'utilise pas directement : c'est l'API REST derrière qui nous intéresse.
+
+Vérifie que tout fonctionne en ouvrant `http://127.0.0.1:8188/system_stats` dans ton navigateur : tu dois voir un JSON avec les infos GPU et CUDA.
+
+</Step>
+</Steps>
+
+---
+
+## Brancher un MCP ComfyUI à Claude Code
+
+<!-- source: github.com/joenorton/comfyui-mcp-server, consulté 2026-05-11 -->
+
+Plusieurs projets MCP pour ComfyUI existent sur GitHub. Le plus maintenu et le plus léger pour notre usage est `comfyui-mcp-server` de joenorton (308 étoiles, mis à jour le 10 mai 2026). C'est un serveur Python léger qui expose une API MCP et délègue la génération à ComfyUI via son API REST sur le port 8188.
+
+### Installation du serveur MCP
+
+```bash
+# Dans un dossier séparé (pas dans ComfyUI)
+git clone https://github.com/joenorton/comfyui-mcp-server.git
+cd comfyui-mcp-server
+
+# Activer le même venv ou en créer un dédié
+pip install -r requirements.txt
+
+# Lancer le serveur MCP
+python server.py
+```
+
+Le serveur MCP écoute sur `http://127.0.0.1:9000/mcp`. Il attend que ComfyUI tourne déjà sur le port 8188.
+
+### Configuration dans Claude Code
+
+Crée ou modifie le fichier `.mcp.json` à la racine de ton projet :
+
+```json
+{
+  "mcpServers": {
+    "comfyui": {
+      "type": "streamable-http",
+      "url": "http://127.0.0.1:9000/mcp"
+    }
+  }
+}
+```
+
+<Callout type="tip" title="Ordre de démarrage">
+Lance toujours ComfyUI en premier (`python main.py`), puis le serveur MCP (`python server.py`), puis Claude Code. Le MCP tente de contacter ComfyUI au démarrage et échoue si ce dernier n'est pas encore disponible.
+</Callout>
+
+### Ce que le MCP expose à Claude
+
+Une fois connecté, Claude Code dispose des outils suivants :
+
+- `generate_image` : génère une image depuis un prompt textuel
+- `list_models` : liste les modèles disponibles dans ComfyUI
+- `get_queue_status` : vérifie les jobs en attente ou en cours
+- `list_assets` : parcourt les images déjà générées
+- `run_workflow` : exécute un workflow JSON personnalisé
+
+### Alternative : wrapper TypeScript minimal
+
+Si tu préfères une intégration plus directe sans serveur intermédiaire, voici un wrapper minimal en TypeScript qui POST directement sur l'API ComfyUI. C'est utile si tu veux contrôler précisément le workflow JSON envoyé :
+
+```typescript
+// comfyui-mcp-wrapper.ts
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
+const COMFYUI_URL = "http://127.0.0.1:8188";
+
+const server = new Server(
+  { name: "comfyui-local", version: "0.1.0" },
+  { capabilities: { tools: {} } }
+);
+
+server.setRequestHandler("tools/list", async () => ({
+  tools: [{
+    name: "generate_image",
+    description: "Generate an image via local ComfyUI",
+    inputSchema: {
+      type: "object",
+      properties: {
+        prompt: { type: "string", description: "Image description" },
+        steps: { type: "number", default: 4 }
+      },
+      required: ["prompt"]
+    }
+  }]
+}));
+
+server.setRequestHandler("tools/call", async (req) => {
+  const { prompt, steps = 4 } = req.params.arguments as Record<string, unknown>;
+
+  const workflow = {
+    "1": { inputs: { text: prompt, clip: ["2", 0] }, class_type: "CLIPTextEncode" },
+    "2": { inputs: { ckpt_name: "flux1-schnell-fp8.safetensors" }, class_type: "CheckpointLoaderSimple" },
+    "3": { inputs: { seed: Math.floor(Math.random() * 1e9), steps, cfg: 1.0, sampler_name: "euler", scheduler: "simple", denoise: 1.0, model: ["2", 0], positive: ["1", 0], negative: ["4", 0], latent_image: ["5", 0] }, class_type: "KSampler" },
+    "4": { inputs: { text: "", clip: ["2", 1] }, class_type: "CLIPTextEncode" },
+    "5": { inputs: { width: 1024, height: 1024, batch_size: 1 }, class_type: "EmptyLatentImage" },
+    "6": { inputs: { samples: ["3", 0], vae: ["2", 2] }, class_type: "VAEDecode" },
+    "7": { inputs: { filename_prefix: "claude_gen", images: ["6", 0] }, class_type: "SaveImage" }
+  };
+
+  const res = await fetch(`${COMFYUI_URL}/prompt`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt: workflow })
+  });
+
+  const data = await res.json() as { prompt_id: string };
+  return { content: [{ type: "text", text: `Image queued. ID: ${data.prompt_id}` }] };
+});
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+Pour utiliser ce wrapper via stdio, la config `.mcp.json` devient :
+
+```json
+{
+  "mcpServers": {
+    "comfyui": {
+      "command": "npx",
+      "args": ["ts-node", "comfyui-mcp-wrapper.ts"]
+    }
+  }
+}
+```
+
+---
+
+## Premier prompt depuis Claude Code
+
+Une fois les deux serveurs lancés (ComfyUI sur 8188, MCP sur 9000) et Claude Code redémarré pour charger la config MCP, tu peux tester directement dans ta session :
+
+```
+Génère une image d'un robot astronaute regardant la Terre depuis la Lune,
+style illustration vectorielle, couleurs cyan et ambre, fond noir.
+Taille 1024x1024, 4 étapes.
+```
+
+Claude Code appelle l'outil `generate_image` avec ces paramètres, le MCP transmet le workflow à ComfyUI, et la génération démarre. Sur un GPU de 8 Go avec Flux Schnell fp8 en 4 étapes, compte environ 10 à 30 secondes selon ta carte.
+
+Le résultat atterrit dans le dossier `ComfyUI/output/` avec un nom de fichier horodaté (`ComfyUI_00001_.png` ou le préfixe défini dans le workflow). Tu peux demander à Claude Code de lister les images générées avec `list_assets`, ou simplement ouvrir le dossier.
+
+<Callout type="tip" title="Vérifier que l'image est bien là">
+```bash
+ls -lt ~/ComfyUI/output/ | head -5
+```
+Les fichiers les plus récents apparaissent en premier. Si le dossier est vide après une génération, vérifie les logs de ComfyUI dans le terminal où il tourne.
+</Callout>
+
+---
+
+## Troubleshooting
+
+Les quatre erreurs les plus courantes quand on démarre avec ComfyUI sur GPU.
+
+<Callout type="warning" title="CUDA out of memory (OOM)">
+**Symptôme** : `torch.cuda.OutOfMemoryError: CUDA out of memory` dans les logs ComfyUI.
+
+**Causes** : le modèle est trop grand pour ta VRAM, ou une autre application utilise le GPU (navigateur avec accélération matérielle, autre modèle chargé).
+
+**Solutions** :
+- Relance ComfyUI avec `python main.py --lowvram` ou `--novram` (offloading total sur CPU, très lent mais fonctionnel)
+- Utilise la version fp8 du modèle plutôt que la version full
+- Ferme les applications qui utilisent le GPU (`nvidia-smi` pour identifier les consommateurs)
+- Réduis la résolution de sortie (512x512 au lieu de 1024x1024)
+</Callout>
+
+<Callout type="warning" title="torch not compiled with CUDA support">
+**Symptôme** : `AssertionError: Torch not compiled with CUDA enabled` ou `CUDA is not available`.
+
+**Cause** : PyTorch a été installé sans support CUDA (version CPU-only).
+
+**Solution** : réinstalle PyTorch avec la bonne commande :
+```bash
+pip uninstall torch torchvision torchaudio
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+```
+Vérifie ensuite avec `python -c "import torch; print(torch.cuda.is_available())"` : doit afficher `True`.
+</Callout>
+
+<Callout type="warning" title="Modèle absent ou non chargé">
+**Symptôme** : ComfyUI affiche `Error loading model` ou le workflow échoue avec `checkpoint not found`.
+
+**Cause** : le fichier `.safetensors` n'est pas au bon endroit, ou le nom dans le workflow ne correspond pas au fichier présent.
+
+**Solution** :
+```bash
+# Vérifier que le fichier est au bon endroit
+ls ~/ComfyUI/models/checkpoints/
+# Doit afficher : flux1-schnell-fp8.safetensors
+
+# Forcer ComfyUI à rescanner les modèles disponibles
+curl http://127.0.0.1:8188/object_info | python3 -m json.tool | grep -i "flux"
+```
+Le nom du fichier dans ton workflow JSON doit correspondre exactement au fichier présent dans `models/checkpoints/`.
+</Callout>
+
+<Callout type="warning" title="GPU non utilisé (génération sur CPU)">
+**Symptôme** : la génération prend des minutes au lieu de secondes, le GPU n'est pas sollicité.
+
+**Diagnostic** : pendant une génération, ouvre un autre terminal et lance :
+```bash
+nvidia-smi
+```
+La colonne `GPU-Util` doit monter à 90-100% pendant la génération. Si elle reste à 0%, le modèle tourne sur CPU.
+
+**Solutions** :
+- Vérifie que PyTorch détecte bien le GPU : `python -c "import torch; print(torch.cuda.get_device_name(0))"`
+- Vérifie que tu n'as pas lancé ComfyUI avec `--cpu` par erreur
+- Sur WSL2 : assure-toi que les pilotes NVIDIA WSL2 sont installés (pas les pilotes Linux standard)
+</Callout>
+
+---
+
+## Prochaines étapes
+
+Tu as ComfyUI qui tourne en local et Claude Code qui peut générer des images. La suite logique :
+
+- [S1 - Piloter un workflow JSON ComfyUI depuis Claude Code](/fr/mcp/comfyui-workflow-piloting/) : aller plus loin avec les workflows personnalisés, les paramètres de sampling avancés et les techniques img2img.
+- [S3 - IA générative locale vs cloud : comparatif complet](/fr/use-cases/image-ia-local-vs-cloud/) : quand vaut-il vraiment la peine d'avoir un GPU local, et quand les APIs cloud (Replicate, fal.ai) sont-elles plus rentables ?

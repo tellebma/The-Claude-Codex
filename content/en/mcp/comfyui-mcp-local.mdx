@@ -50,7 +50,7 @@ This is the core of the model, the neural network that predicts "which pixels to
 ### The sampler: the denoising rhythm
 
 <Callout type="info" title="Sampler">
-The sampler decides the denoising strategy: how many steps, how fast to reduce noise, which mathematical formula to use. Flux Schnell uses only 1 to 4 steps thanks to adversarial diffusion distillation, whereas SD 1.5 required 20 to 50. Fewer steps means faster generation, but results can be less detailed.
+The sampler decides the denoising strategy: how many steps, how fast to reduce noise, which mathematical formula to use. Flux Schnell uses only 1 to 4 steps thanks to a technique Black Forest Labs calls "latent adversarial diffusion distillation", whereas SD 1.5 required 20 to 50. Fewer steps means faster generation, but results can be less detailed.
 </Callout>
 
 ### The VAE: the image/latent translator
@@ -149,7 +149,7 @@ Always use a dedicated virtualenv. Installing ComfyUI into the system Python reg
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 ```
 
-This command installs PyTorch with CUDA 12.6, the stable version recommended at the time of writing. If your GPU requires CUDA 11.8 (older architectures like Turing/Ampere with older drivers):
+This command installs PyTorch with CUDA 12.6, the stable version recommended at the time of writing. If your GPU requires CUDA 11.8 (Pascal architecture like the GTX 1000 series, or systems with older drivers that do not support CUDA 12):
 
 ```bash
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
@@ -224,7 +224,7 @@ Verify everything works by opening `http://127.0.0.1:8188/system_stats` in your 
 
 <!-- source: github.com/joenorton/comfyui-mcp-server, consulted 2026-05-11 -->
 
-Several ComfyUI MCP projects exist on GitHub. The most actively maintained and lightest for our use case is `comfyui-mcp-server` by joenorton (308 stars, last updated May 10, 2026). It is a lightweight Python server that exposes an MCP API and delegates generation to ComfyUI via its REST API on port 8188.
+Several ComfyUI MCP projects exist on GitHub. The lightest for our use case is `comfyui-mcp-server` by joenorton, an actively maintained Python server that exposes an MCP API and delegates generation to ComfyUI via its REST API on port 8188.
 
 ### Installing the MCP server
 
@@ -273,61 +273,66 @@ Once connected, Claude Code has access to the following tools:
 
 ### Alternative: minimal TypeScript wrapper
 
-If you prefer a more direct integration without an intermediary server, here is a minimal TypeScript wrapper that POSTs directly to the ComfyUI API. Useful when you want precise control over the JSON workflow sent:
+If you prefer a more direct integration without an intermediary server, here is a minimal TypeScript wrapper that POSTs directly to the ComfyUI API. It uses the same `McpServer` + `server.tool()` API as the [Build a TypeScript MCP](/en/mcp/create-mcp-typescript/) tutorial, to stay consistent with the other site examples.
 
 ```typescript
 // comfyui-mcp-wrapper.ts
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
 
 const COMFYUI_URL = "http://127.0.0.1:8188";
 
-const server = new Server(
-  { name: "comfyui-local", version: "0.1.0" },
-  { capabilities: { tools: {} } }
-);
-
-server.setRequestHandler("tools/list", async () => ({
-  tools: [{
-    name: "generate_image",
-    description: "Generate an image via local ComfyUI",
-    inputSchema: {
-      type: "object",
-      properties: {
-        prompt: { type: "string", description: "Image description" },
-        steps: { type: "number", default: 4 }
-      },
-      required: ["prompt"]
-    }
-  }]
-}));
-
-server.setRequestHandler("tools/call", async (req) => {
-  const { prompt, steps = 4 } = req.params.arguments as Record<string, unknown>;
-
-  const workflow = {
-    "1": { inputs: { text: prompt, clip: ["2", 0] }, class_type: "CLIPTextEncode" },
-    "2": { inputs: { ckpt_name: "flux1-schnell-fp8.safetensors" }, class_type: "CheckpointLoaderSimple" },
-    "3": { inputs: { seed: Math.floor(Math.random() * 1e9), steps, cfg: 1.0, sampler_name: "euler", scheduler: "simple", denoise: 1.0, model: ["2", 0], positive: ["1", 0], negative: ["4", 0], latent_image: ["5", 0] }, class_type: "KSampler" },
-    "4": { inputs: { text: "", clip: ["2", 1] }, class_type: "CLIPTextEncode" },
-    "5": { inputs: { width: 1024, height: 1024, batch_size: 1 }, class_type: "EmptyLatentImage" },
-    "6": { inputs: { samples: ["3", 0], vae: ["2", 2] }, class_type: "VAEDecode" },
-    "7": { inputs: { filename_prefix: "claude_gen", images: ["6", 0] }, class_type: "SaveImage" }
-  };
-
-  const res = await fetch(`${COMFYUI_URL}/prompt`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt: workflow })
-  });
-
-  const data = await res.json() as { prompt_id: string };
-  return { content: [{ type: "text", text: `Image queued. ID: ${data.prompt_id}` }] };
+const server = new McpServer({
+  name: "comfyui-local",
+  version: "0.1.0",
 });
 
-const transport = new StdioServerTransport();
-await server.connect(transport);
+server.tool(
+  "generate_image",
+  "Generate an image via local ComfyUI by POSTing on /prompt",
+  {
+    prompt: z.string().describe("Text description of the image"),
+    steps: z.number().default(4).describe("Number of denoising steps"),
+  },
+  async ({ prompt, steps }) => {
+    const workflow = {
+      "1": { inputs: { text: prompt, clip: ["2", 0] }, class_type: "CLIPTextEncode" },
+      "2": { inputs: { ckpt_name: "flux1-schnell-fp8.safetensors" }, class_type: "CheckpointLoaderSimple" },
+      "3": { inputs: { seed: Math.floor(Math.random() * 1e9), steps, cfg: 1.0, sampler_name: "euler", scheduler: "simple", denoise: 1.0, model: ["2", 0], positive: ["1", 0], negative: ["4", 0], latent_image: ["5", 0] }, class_type: "KSampler" },
+      "4": { inputs: { text: "", clip: ["2", 1] }, class_type: "CLIPTextEncode" },
+      "5": { inputs: { width: 1024, height: 1024, batch_size: 1 }, class_type: "EmptyLatentImage" },
+      "6": { inputs: { samples: ["3", 0], vae: ["2", 2] }, class_type: "VAEDecode" },
+      "7": { inputs: { filename_prefix: "claude_gen", images: ["6", 0] }, class_type: "SaveImage" },
+    };
+
+    const res = await fetch(`${COMFYUI_URL}/prompt`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: workflow }),
+    });
+
+    const data = (await res.json()) as { prompt_id: string };
+    return {
+      content: [{ type: "text" as const, text: `Image queued. ID: ${data.prompt_id}` }],
+    };
+  }
+);
+
+async function main() {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
+main().catch((err) => {
+  console.error("MCP error:", err);
+  process.exit(1);
+});
 ```
+
+<Callout type="info" title="Simplified workflow, not canonical">
+The JSON workflow above is a simplified illustration that uses `CheckpointLoaderSimple`. The canonical Comfy-Org workflow for Flux Schnell uses separate loaders (`UNETLoader`, `DualCLIPLoader`, `VAELoader`) for more flexibility and better results. See the official examples on the ComfyUI repository for the production version.
+</Callout>
 
 To use this wrapper via stdio, the `.mcp.json` config becomes:
 

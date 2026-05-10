@@ -337,6 +337,29 @@ Production
 - [ ] CI/CD in sandboxed environment (Docker or equivalent)
 ```
 
+## FAQ
+
+<Faq>
+  <FaqItem question="What are the top security risks with Claude Code?">
+    Leaked API keys in commits, malicious MCP servers, prompt injection from untrusted content, over-broad file access, and secrets bleeding into LLM context. The checklist covers each one.
+  </FaqItem>
+  <FaqItem question="How do I apply least privilege to Claude Code?">
+    Run Claude Code from the smallest possible folder, use sandboxed config profiles per project, and restrict allowed_tools to the strict minimum the agent needs.
+  </FaqItem>
+  <FaqItem question="How do I vet a community MCP before installing?">
+    Read the source on GitHub, check the publisher reputation, look for telemetry or remote calls, run it in a sandbox first, and review what tools it exposes to the model.
+  </FaqItem>
+  <FaqItem question="How do I scan for secrets in Claude Code config?">
+    Use gitleaks or trufflehog on .claude/, settings.json and .env files. Add a pre-commit hook to block secrets at commit time, before they reach git history.
+  </FaqItem>
+  <FaqItem question="What's a sandboxed Claude Code config profile?">
+    A folder-scoped settings.json that limits the agent's permissions: which tools it can call, which paths it can read or write, and which commands are auto-approved.
+  </FaqItem>
+  <FaqItem question="Can Claude Code access my private files outside the project?">
+    Only if you allow it. By default it's scoped to the cwd. Bash and Edit tools obey the working directory. Be cautious with global MCPs that may bypass this scope.
+  </FaqItem>
+</Faq>
+
 ## Next steps
 
 - [MCP Security](/mcp/mcp-security): MCP-specific attack vectors in detail

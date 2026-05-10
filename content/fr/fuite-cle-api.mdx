@@ -302,6 +302,29 @@ Moins exposé qu'avec un repo public, mais pas en sécurité pour autant. Toute 
 
 ---
 
+## FAQ
+
+<Faq>
+  <FaqItem question="Ma clé API Anthropic a fuité, par quoi commencer ?">
+    Révoquez-la immédiatement sur console.anthropic.com/settings/keys. Considérez la clé comme compromise même si vous n'avez qu'un soupçon.
+  </FaqItem>
+  <FaqItem question="Comment faire une rotation de clé API Anthropic en sécurité ?">
+    Générez une nouvelle clé, mettez à jour tous les environnements (CI, local, prod), puis désactivez l'ancienne. Ne supprimez pas avant d'avoir vérifié qu'aucun service ne l'utilise.
+  </FaqItem>
+  <FaqItem question="Combien de temps prend la révocation d'une clé fuitée ?">
+    La révocation est instantanée depuis la console. Les requêtes en cours qui utilisent la clé échouent au prochain appel. Aucune période de grâce.
+  </FaqItem>
+  <FaqItem question="Quel est l'impact financier d'une clé API Anthropic fuitée ?">
+    Cela dépend de l'usage abusif. Définissez des plafonds mensuels dans console.anthropic.com/settings/limits pour capper l'exposition avant toute fuite.
+  </FaqItem>
+  <FaqItem question="Comment scanner mon dépôt à la recherche de clés fuitées ?">
+    Lancez gitleaks, trufflehog ou git-secrets sur l'historique complet (pas seulement HEAD). Ajoutez un pre-commit hook pour bloquer les futures fuites au commit.
+  </FaqItem>
+  <FaqItem question="Faut-il réécrire l'historique git pour effacer une clé fuitée ?">
+    Pour un dépôt privé, oui via git filter-repo ou BFG. Pour un dépôt public, la clé est déjà crawlée par des bots : la rotation est obligatoire, la réécriture optionnelle.
+  </FaqItem>
+</Faq>
+
 ## Prochaines étapes
 
 <Callout type="tip" title="Créez l'habitude avant l'incident">

@@ -321,6 +321,29 @@ A good practice is to define different MCP profiles based on your work contexts.
 }
 ```
 
+## FAQ
+
+<Faq>
+  <FaqItem question="What are the main MCP security risks in production?">
+    Prompt injection from untrusted content, data exfiltration via tool calls, supply chain attacks (malicious npm packages), excessive permissions granted to the MCP, and credential theft.
+  </FaqItem>
+  <FaqItem question="How does prompt injection work in MCP?">
+    Untrusted content (web page, GitHub issue, email) contains hidden instructions the model executes as if they came from the user. Mitigations: sanitize inputs, isolate sensitive tools, and review tool calls.
+  </FaqItem>
+  <FaqItem question="Can a malicious MCP exfiltrate my data?">
+    Yes, if you grant it network access and file read tools. An adversarial MCP could read secrets, call out to a remote server, or write malicious code to your project.
+  </FaqItem>
+  <FaqItem question="What permissions should I grant to an MCP?">
+    Only what it strictly needs. Disable network access if the MCP is purely local. Restrict file paths via working directory. Review the tool list and disable any tool that surprises you.
+  </FaqItem>
+  <FaqItem question="How do I detect supply chain attacks on MCPs?">
+    Pin MCP versions in your config, use npm audit and Snyk, watch for sudden permission changes between versions, and verify maintainer signatures when available.
+  </FaqItem>
+  <FaqItem question="Are official MCPs safer than community ones?">
+    Generally yes, because they get more scrutiny and security review. But even official MCPs can have bugs. Always assume any MCP you install can act on your project.
+  </FaqItem>
+</Faq>
+
 ## Next steps
 
 MCP security is one aspect of overall Claude Code security.

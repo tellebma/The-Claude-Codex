@@ -9,6 +9,8 @@ import { ArticlePager } from "@/components/layout/ArticlePager";
 import { ReadingProgressBar } from "@/components/ui/ReadingProgressBar";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import { createFAQPageSchema, serializeJsonLd } from "@/lib/structured-data";
+import { getPageFaqs } from "@/data/page-faqs";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
 
 interface ContentPageProps {
@@ -75,8 +77,21 @@ export default async function ContentPage({ params }: ContentPageProps) {
   const locale: "fr" | "en" = resolvedParams.locale === "en" ? "en" : "fr";
   const articleUrl = `${SITE_URL}/${resolvedParams.locale}/content/${resolvedParams.slug}/`;
 
+  // SEO-4 — FAQPage JSON-LD si la page a des Q/R configurees.
+  const faqs = getPageFaqs(`/content/${resolvedParams.slug}`, resolvedParams.locale);
+  const faqJsonLdHtml = faqs
+    ? serializeJsonLd(createFAQPageSchema(faqs))
+    : null;
+
   return (
     <>
+      {faqJsonLdHtml && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: faqJsonLdHtml }}
+        />
+      )}
+
       {/* RG2-02 — Barre de progression de lecture en haut de page */}
       <ReadingProgressBar />
 

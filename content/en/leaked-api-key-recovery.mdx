@@ -301,6 +301,29 @@ Less exposed than a public repo, but not safe. Anyone with read access to the re
 
 ---
 
+## FAQ
+
+<Faq>
+  <FaqItem question="My Anthropic API key was leaked, what do I do first?">
+    Revoke it immediately at console.anthropic.com/settings/keys. Treat the key as compromised even if you only suspect a leak.
+  </FaqItem>
+  <FaqItem question="How do I rotate an Anthropic API key safely?">
+    Generate a new key, update every environment that uses the old one (CI, local, prod), then disable the old key. Don't delete it before validating no service still depends on it.
+  </FaqItem>
+  <FaqItem question="How long does it take for Anthropic to revoke a leaked key?">
+    Revocation is instant from the console. Existing requests using the key will fail on their next call. There is no grace period.
+  </FaqItem>
+  <FaqItem question="What's the cost impact of a leaked Anthropic API key?">
+    It depends on usage. Set monthly spend limits in console.anthropic.com/settings/limits to cap exposure proactively, before any leak happens.
+  </FaqItem>
+  <FaqItem question="How do I scan my repo for leaked API keys?">
+    Run gitleaks, trufflehog or git-secrets on the full git history (not just HEAD). Add a pre-commit hook to block future leaks at commit time.
+  </FaqItem>
+  <FaqItem question="Should I rewrite git history to remove a leaked key?">
+    For private repos, yes via git filter-repo or BFG. For public repos, the key is already crawled by bots, so rotation is mandatory and history rewrite is optional.
+  </FaqItem>
+</Faq>
+
 ## Next steps
 
 <Callout type="tip" title="Build the habit before the incident">

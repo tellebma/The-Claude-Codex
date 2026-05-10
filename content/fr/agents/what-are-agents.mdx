@@ -242,6 +242,29 @@ Voici un scénario typique d'utilisation des agents :
 
 Le résultat est une review **multidimensionnelle** qui couvre la qualité du code, la sécurité et les tests, le tout en une seule commande.
 
+## FAQ
+
+<Faq>
+  <FaqItem question="Qu'est-ce qu'un agent Claude Code ?">
+    Un agent est une instance Claude spécialisée avec son propre prompt système, ses outils dédiés et son contexte isolé. Il exécute des tâches multi-étapes en autonomie sans pollution du contexte principal.
+  </FaqItem>
+  <FaqItem question="Quelle différence entre un agent et un subagent ?">
+    Un agent est invoqué directement par l'utilisateur (mention par nom). Un subagent est invoqué par un autre agent via la Task tool, pour déléguer une sous-tâche dans son propre contexte.
+  </FaqItem>
+  <FaqItem question="Comment créer un agent Claude Code custom ?">
+    Créez un fichier markdown dans .claude/agents/ avec un frontmatter (name, description, tools, model) et un prompt système. L'agent est immédiatement disponible via @nom-agent.
+  </FaqItem>
+  <FaqItem question="Quand utiliser un agent plutôt qu'une slash command ?">
+    Une slash command est un raccourci de prompt sans isolation. Un agent isole le contexte, restreint les outils et a un prompt système dédié. Préférez l'agent pour les tâches longues ou sensibles.
+  </FaqItem>
+  <FaqItem question="À quel point les agents Claude Code sont-ils autonomes ?">
+    Très autonomes : ils peuvent enchaîner dizaines d'outils sans intervention. Vous gardez le contrôle via les permissions, les hooks (ex: PreToolUse), et la possibilité d'interrompre à tout moment.
+  </FaqItem>
+  <FaqItem question="Plusieurs agents peuvent-ils tourner en parallèle ?">
+    Oui, via la Task tool : un agent principal peut dispatcher plusieurs subagents en parallèle. Chacun a son contexte isolé et retourne un résultat consolidé à l'orchestrateur.
+  </FaqItem>
+</Faq>
+
 ## Prochaines étapes
 
 Maintenant que vous comprenez le concept des agents et subagents, passons à la pratique.

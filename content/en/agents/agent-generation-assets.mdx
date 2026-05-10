@@ -37,7 +37,7 @@ The cloud changes the equation in several situations:
 |---|---|---|
 | Fixed cost | GPU required | None |
 | Variable cost | Electricity | $0.04/image (Flux Pro) |
-| Latency | 5–20s (depends on GPU) | 4–10s |
+| Latency | 5-20s (depends on GPU) | 4-10s |
 | Parallelism | Limited by VRAM | Unlimited |
 | Premium models | No | Yes (Flux Pro) |
 | CI/CD | Difficult | Native |
@@ -234,8 +234,6 @@ def upload_storage(local_path: str, s3_key: str) -> str:
 
 ```python
 # agent.py
-import json
-
 import anthropic
 
 from tool_functions import generate_image, optimize_webp, upload_storage

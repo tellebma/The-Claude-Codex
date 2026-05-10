@@ -234,8 +234,6 @@ def upload_storage(local_path: str, s3_key: str) -> str:
 
 ```python
 # agent.py
-import json
-
 import anthropic
 
 from tool_functions import generate_image, optimize_webp, upload_storage
@@ -435,8 +433,6 @@ export const TOOLS: Anthropic.Tool[] = [
 
 ```typescript
 // tool-functions.ts
-import { createWriteStream } from "node:fs";
-import { writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -621,7 +617,7 @@ Deux types d'erreurs dominent en pratique : les limites de débit (rate limits) 
 import time
 import anthropic
 
-def call_with_retry(client, **kwargs, max_retries=5):
+def call_with_retry(client, max_retries=5, **kwargs):
     for attempt in range(max_retries):
         try:
             return client.messages.create(**kwargs)

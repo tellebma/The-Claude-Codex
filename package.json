@@ -11,6 +11,7 @@
     "prebuild": "npm run build:search-index && npm run build:llms",
     "build": "next build",
     "validate:static": "node scripts/validate-static-output.ts",
+    "audit:links": "node scripts/audit-internal-links.ts",
     "check:contrast": "tsx scripts/check-contrast.ts",
     "check:hex": "./scripts/check-hardcoded-colors.sh",
     "start": "next start",

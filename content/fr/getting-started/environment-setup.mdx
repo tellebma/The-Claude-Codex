@@ -4,8 +4,17 @@ description: "Configurez Claude Code pour tirer le meilleur de l'IA : variable d
 section: "getting-started"
 order: 3
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-05-10"
 ---
+
+## Mis à jour mai 2026
+
+Évolutions récentes de la configuration Claude Code :
+
+- **`ANTHROPIC_AUTH_TOKEN`** est maintenant le mécanisme recommandé pour les passerelles d'entreprise (proxy + token Bearer), tandis que `ANTHROPIC_API_KEY` reste pour l'usage direct. Voir [Variables d'environnement : référence officielle](/reference/environment).
+- **`ANTHROPIC_BASE_URL`** permet de pointer vers un proxy interne (ex: `gateway.corp/anthropic`) sans toucher au reste de la config.
+- **`MAX_THINKING_TOKENS`** plafonne le budget de réflexion par requête : utile pour borner les coûts sur les sessions longues.
+- **`DISABLE_AUTOUPDATER=1`** est désormais déployé par défaut dans les CI pour éviter qu'un upgrade silencieux ne casse une pipeline en cours.
 
 ## Vue d'ensemble de la configuration
 

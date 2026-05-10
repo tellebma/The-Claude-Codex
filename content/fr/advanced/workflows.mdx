@@ -20,6 +20,17 @@ Ce pattern Research → Plan → Execute → Review → Ship vient directement d
 
 ## Le workflow en 5 étapes
 
+<WorkflowDiagram
+  ariaLabel="Workflow Claude Code en 5 etapes"
+  steps={[
+    { label: "Research", description: "Comprendre le contexte avant d'agir" },
+    { label: "Plan", description: "Découper le travail en étapes précises" },
+    { label: "Execute", description: "Implémenter pas à pas, vérifier à chaque palier" },
+    { label: "Review", description: "Relecture critique du diff par un agent dédié" },
+    { label: "Ship", description: "Tests, build, merge sur develop, deploy preview" },
+  ]}
+/>
+
 ### Research : comprendre avant d'agir
 
 Avant d'écrire la moindre ligne de code, Claude doit comprendre le contexte. Sur un projet existant, cela signifie parcourir le codebase, lire les fichiers de configuration, identifier les patterns déjà en place.

@@ -1,8 +1,8 @@
 # Design — Série d'articles "Claude Code + IA générative" (V1)
 
 **Date** : 2026-05-10
-**Auteur** : Maxime Bellet (via Claude Opus 4.7)
-**Statut** : Validé sections 1-3, en attente review user du spec
+**Auteur** : Maxime Bellet
+**Statut** : Validé (review user 2026-05-11)
 **Branche cible** : nouvelle branche `feat/articles-ia-generative-v1` depuis `develop`
 
 ---

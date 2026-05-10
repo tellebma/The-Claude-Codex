@@ -50,7 +50,7 @@ export function Footer() {
   const tCommon = useTranslations("common");
 
   return (
-    <footer className="border-t border-slate-200/50 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
+    <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-subtle)]">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 xl:max-w-[1400px] 2xl:max-w-[1800px]">
         <div className="grid grid-cols-2 gap-6 lg:grid-cols-5">
           <div className="col-span-2">
@@ -60,19 +60,19 @@ export function Footer() {
             >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent-500">
                 <Terminal
-                  className="h-4 w-4 text-white"
+                  className="h-4 w-4 text-[color:var(--fg-on-brand)]"
                   aria-hidden="true"
                 />
               </div>
               The Claude <span className="text-gradient">Codex</span>
             </Link>
-            <p className="mt-3 max-w-md text-sm text-slate-500 dark:text-slate-300">
+            <p className="mt-3 max-w-md text-sm text-[color:var(--fg-muted)]">
               {tFooter("description")}
             </p>
           </div>
 
           <nav aria-label={tCommon("guides")}>
-            <p className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[color:var(--fg-primary)]">
               {tCommon("guides")}
             </p>
             <ul className="mt-3 space-y-2">
@@ -80,7 +80,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                    className="inline-flex min-h-[44px] items-center text-sm text-[color:var(--fg-secondary)] transition-colors hover:text-[color:var(--brand-primary)]"
                   >
                     {tNav(link.key)}
                   </Link>
@@ -90,7 +90,7 @@ export function Footer() {
           </nav>
 
           <nav aria-label={tCommon("tools")}>
-            <p className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[color:var(--fg-primary)]">
               {tCommon("tools")}
             </p>
             <ul className="mt-3 space-y-2">
@@ -98,7 +98,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                    className="inline-flex min-h-[44px] items-center text-sm text-[color:var(--fg-secondary)] transition-colors hover:text-[color:var(--brand-primary)]"
                   >
                     {tNav(link.key)}
                   </Link>
@@ -108,7 +108,7 @@ export function Footer() {
           </nav>
 
           <nav aria-label={tCommon("resources")}>
-            <p className="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-white">
+            <p className="text-sm font-semibold uppercase tracking-wider text-[color:var(--fg-primary)]">
               {tCommon("resources")}
             </p>
             <ul className="mt-3 space-y-2">
@@ -119,7 +119,7 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-[44px] items-center gap-1 text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                      className="inline-flex min-h-[44px] items-center gap-1 text-sm text-[color:var(--fg-secondary)] transition-colors hover:text-[color:var(--brand-primary)]"
                     >
                       {tFooter(link.key)}
                       <ExternalLink
@@ -131,7 +131,7 @@ export function Footer() {
                   ) : (
                     <Link
                       href={link.href}
-                      className="inline-flex min-h-[44px] items-center text-sm text-slate-600 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+                      className="inline-flex min-h-[44px] items-center text-sm text-[color:var(--fg-secondary)] transition-colors hover:text-[color:var(--brand-primary)]"
                     >
                       {tFooter(link.key)}
                     </Link>
@@ -142,9 +142,9 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-slate-200/50 pt-8 dark:border-slate-800 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[color:var(--border-subtle)] pt-8 sm:flex-row">
           <div className="flex flex-col gap-1 text-center sm:text-left">
-            <p className="text-sm text-slate-500 dark:text-slate-300">
+            <p className="text-sm text-[color:var(--fg-muted)]">
               <CopyrightYear /> The Claude Codex. {tCommon("openSource")}
             </p>
           </div>
@@ -154,7 +154,7 @@ export function Footer() {
               href="https://github.com/tellebma/The-Claude-Codex"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex min-h-[44px] items-center gap-2 text-sm text-slate-500 transition-colors hover:text-brand-700 dark:text-slate-300 dark:hover:text-brand-400"
+              className="flex min-h-[44px] items-center gap-2 text-sm text-[color:var(--fg-muted)] transition-colors hover:text-[color:var(--brand-primary)]"
             >
               <GitHubIcon className="h-4 w-4" aria-hidden="true" />
               GitHub

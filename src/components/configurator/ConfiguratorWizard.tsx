@@ -263,7 +263,7 @@ export function ConfiguratorWizard() {
       {/* Séparateur */}
       <div className="mb-12 flex items-center gap-4 sm:mb-16">
         <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
-        <span className="text-sm font-medium text-slate-500 dark:text-slate-300">
+        <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
           ou configurez pas à pas
         </span>
         <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
@@ -339,7 +339,7 @@ export function ConfiguratorWizard() {
         </div>
 
         {/* Current step label on mobile */}
-        <p className="mt-2 text-center text-xs font-medium text-brand-600 dark:text-brand-400 sm:hidden">
+        <p className="mt-2 text-center text-xs font-medium text-brand-700 dark:text-brand-300 sm:hidden">
           {WIZARD_STEP_LABELS[step]}
         </p>
 
@@ -451,7 +451,7 @@ export function ConfiguratorWizard() {
               Aperçu en temps réel
             </h3>
             {!showPreview && config.profile === null && (
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-slate-600 dark:text-slate-400">
                 Sélectionnez un profil pour commencer
               </span>
             )}

@@ -170,8 +170,8 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
               className={clsx(
                 "whitespace-nowrap border-b-2 px-3 py-2.5 text-xs font-medium transition-colors sm:px-4 sm:text-sm",
                 activeTab === tab.id
-                  ? "border-brand-500 text-brand-600 dark:text-brand-400"
-                  : "border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"
+                  ? "border-brand-500 text-brand-700 dark:text-brand-300"
+                  : "border-transparent text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
               )}
             >
               {tab.label}
@@ -193,7 +193,7 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
           >
             {copiedFile === activeTab ? (
               <>
-                <Check className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
+                <Check className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
                 <span className="hidden sm:inline">Copié</span>
               </>
             ) : (
@@ -217,7 +217,7 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
           >
             {copiedAll ? (
               <>
-                <Check className="h-3.5 w-3.5 text-emerald-500" aria-hidden="true" />
+                <Check className="h-3.5 w-3.5 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
                 <span className="hidden sm:inline">Copié</span>
               </>
             ) : (
@@ -247,7 +247,7 @@ export function ConfigPreview({ config }: ConfigPreviewProps) {
                 const lineKey = `line-${i}-${line.map((t) => t.content).join("").slice(0, 40)}`;
                 return (
                   <div key={lineKey} {...getLineProps({ line })}>
-                    <span className="mr-4 inline-block w-8 select-none text-right text-slate-600">
+                    <span className="mr-4 inline-block w-8 select-none text-right text-slate-400">
                       {i + 1}
                     </span>
                     {line.map((token, j) => (

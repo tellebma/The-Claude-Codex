@@ -5,12 +5,16 @@ badge: "Security"
 section: "content"
 order: 9
 datePublished: "2026-04-20"
-dateModified: "2026-04-23"
+dateModified: "2026-05-09"
 ---
 
 <Callout type="warning" title="Act in the next 5 minutes">
 A leaked API key can be used by automated bots within minutes of being discovered. Every second counts. Skip straight to the checklist below, read the rest after.
 </Callout>
+
+## Quick answer
+
+Your `sk-ant-...` key was leaked? Revoke it now at [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys), generate a new one, update every environment (CI, local, prod), then disable the old key. Treat the key as compromised on suspicion alone. The detailed checklist is right below.
 
 ## The 5-minute emergency checklist
 
@@ -300,6 +304,29 @@ Look at the Anthropic usage dashboard for the period between when the key was cr
 Less exposed than a public repo, but not safe. Anyone with read access to the repo has the key. This includes current and former collaborators, CI/CD systems, and anyone who cloned it. Rotate the key and clean the history regardless.
 
 ---
+
+## FAQ
+
+<Faq>
+  <FaqItem question="My Anthropic API key was leaked, what do I do first?">
+    Revoke it immediately at console.anthropic.com/settings/keys. Treat the key as compromised even if you only suspect a leak.
+  </FaqItem>
+  <FaqItem question="How do I rotate an Anthropic API key safely?">
+    Generate a new key, update every environment that uses the old one (CI, local, prod), then disable the old key. Don't delete it before validating no service still depends on it.
+  </FaqItem>
+  <FaqItem question="How long does it take for Anthropic to revoke a leaked key?">
+    Revocation is instant from the console. Existing requests using the key will fail on their next call. There is no grace period.
+  </FaqItem>
+  <FaqItem question="What's the cost impact of a leaked Anthropic API key?">
+    It depends on usage. Set monthly spend limits in console.anthropic.com/settings/limits to cap exposure proactively, before any leak happens.
+  </FaqItem>
+  <FaqItem question="How do I scan my repo for leaked API keys?">
+    Run gitleaks, trufflehog or git-secrets on the full git history (not just HEAD). Add a pre-commit hook to block future leaks at commit time.
+  </FaqItem>
+  <FaqItem question="Should I rewrite git history to remove a leaked key?">
+    For private repos, yes via git filter-repo or BFG. For public repos, the key is already crawled by bots, so rotation is mandatory and history rewrite is optional.
+  </FaqItem>
+</Faq>
 
 ## Next steps
 

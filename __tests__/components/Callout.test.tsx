@@ -15,24 +15,28 @@ describe("Callout", () => {
     expect(aside).toBeInTheDocument();
     // Default type is "info" — mock t("info") returns "info"
     expect(aside).toHaveAttribute("aria-label", "info");
-    expect(aside.className).toContain("border-brand-500/30");
-    expect(aside.className).toContain("bg-brand-500/5");
+    expect(aside.className).toContain("cc-callout-info");
   });
 
   it("renders tip variant with correct styles", () => {
     render(<Callout type="tip">A tip</Callout>);
     const aside = screen.getByRole("complementary");
     expect(aside).toHaveAttribute("aria-label", "tip");
-    expect(aside.className).toContain("border-emerald-500/30");
-    expect(aside.className).toContain("bg-emerald-500/5");
+    expect(aside.className).toContain("cc-callout-tip");
   });
 
   it("renders warning variant with correct styles", () => {
     render(<Callout type="warning">A warning</Callout>);
     const aside = screen.getByRole("complementary");
     expect(aside).toHaveAttribute("aria-label", "warning");
-    expect(aside.className).toContain("border-amber-500/30");
-    expect(aside.className).toContain("bg-amber-500/5");
+    expect(aside.className).toContain("cc-callout-warning");
+  });
+
+  it("renders error variant with correct styles", () => {
+    render(<Callout type="error">An error</Callout>);
+    const aside = screen.getByRole("complementary");
+    expect(aside).toHaveAttribute("aria-label", "error");
+    expect(aside.className).toContain("cc-callout-error");
   });
 
   it("uses custom title when provided", () => {

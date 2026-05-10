@@ -17,9 +17,14 @@ import {
   Puzzle,
   MessageSquare,
   ChevronDown,
+  GitBranch,
+  Languages,
+  ShieldCheck,
+  Plug,
 } from "lucide-react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { AnalyticsTracker } from "@/components/layout/AnalyticsTracker";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -31,6 +36,11 @@ import { AudienceCard } from "@/components/ui/AudienceCard";
 import { ConfiguratorTeaser } from "@/components/ui/ConfiguratorTeaser";
 import { Logo } from "@/components/layout/Logo";
 import { HeroTerminal } from "@/components/ui/HeroTerminal";
+import { HeroChips } from "@/components/ui/HeroChips";
+import { TrustBar } from "@/components/ui/TrustBar";
+import { CodexStatsBand } from "@/components/ui/CodexStatsBand";
+import { RecentArticlesSection } from "@/components/ui/RecentArticlesSection";
+import { CtaFinal } from "@/components/ui/CtaFinal";
 import {
   AnimateOnScroll,
   StaggerChildren,
@@ -48,6 +58,14 @@ export default async function HomePage({
   const tFeatures = await getTranslations("features");
   const tAudience = await getTranslations("audience");
   const tPaths = await getTranslations("paths");
+  const tTrust = await getTranslations("landing.trust");
+
+  const trustItems = [
+    { Icon: GitBranch, label: tTrust("openSource") },
+    { Icon: Languages, label: tTrust("bilingual") },
+    { Icon: ShieldCheck, label: tTrust("noTracking") },
+    { Icon: Plug, label: tTrust("officialMcp") },
+  ] as const;
 
   const terminalLines = [
     { text: "$ claude", className: "text-slate-400", delay: 500 },
@@ -85,16 +103,19 @@ export default async function HomePage({
 
   return (
     <>
-      {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-slate-50 dark:bg-slate-950">
+      <AnalyticsTracker />
+      {/* ===== HERO ===== Layout split (RG-18) : 1.05fr 1fr sur lg+ */}
+      <section className="relative overflow-hidden bg-[color:var(--bg-page)]">
         {/* Background effects */}
         <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at top right, var(--gradient-hero-radial-1), transparent 60%)" }} />
         <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at bottom left, var(--gradient-hero-radial-2), transparent 60%)" }} />
 
-        {/* Grid pattern — animated */}
+        {/* Grid pattern — animated (RG2-12 : keyframe canonique lp-grid-fade
+            9s ease-in-out infinite, opacity oscille 0.4 → 1.0 → 0.4 pour
+            respirer la grille comme decrit dans SYNTHESIS section 2.7). */}
         <div
-          className="absolute inset-0 animate-grid-fade"
+          className="absolute inset-0 animate-lp-grid-fade"
           style={{
             backgroundImage:
               "linear-gradient(var(--hero-grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--hero-grid-line) 1px, transparent 1px)",
@@ -103,79 +124,103 @@ export default async function HomePage({
         />
 
         <div className="relative mx-auto max-w-7xl px-4 pb-20 pt-20 sm:px-6 sm:pb-28 sm:pt-28 lg:px-8 lg:pb-36 lg:pt-32">
-          <div className="mx-auto max-w-4xl text-center">
-            {/* Badge */}
-            <div
-              className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm"
-              style={{
-                borderWidth: "1px",
-                borderStyle: "solid",
-                borderColor: "var(--hero-badge-border)",
-                backgroundColor: "var(--hero-badge-bg)",
-                color: "var(--hero-badge-text)",
-              }}
-            >
-              <Sparkles className="h-4 w-4" aria-hidden="true" />
-              {tHero("badge")}
-            </div>
-
-            {/* Title */}
-            <h1
-              className="text-4xl font-extrabold leading-tight tracking-tight sm:text-6xl sm:leading-tight lg:text-7xl lg:leading-[1.1]"
-              style={{ color: "var(--hero-text-primary)" }}
-            >
-              {tHero("title")}{" "}
-              <span className="text-gradient">{tHero("titleHighlight")}</span>
-              <br />
-              {tHero("titleEnd")}
-            </h1>
-
-            {/* Subtitle */}
-            <p
-              className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl"
-              style={{ color: "var(--hero-text-secondary)" }}
-            >
-              {tHero("subtitle")}
-            </p>
-
-            {/* CTA */}
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                href="/getting-started"
-                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
-              >
-                {tHero("ctaPrimary")}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-              </Link>
-              <Link
-                href="/mcp"
-                className="hero-cta-secondary inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
+          {/*
+            Layout split (AC RG-18) : sur mobile/tablet, stack vertical
+            (texte au-dessus, terminal en-dessous, centred). Sur lg+,
+            grille 1.05fr / 1fr (texte gauche, terminal droite, gap 64).
+          */}
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+            <div className="text-center lg:text-left">
+              {/* Badge */}
+              <div
+                className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm"
                 style={{
                   borderWidth: "1px",
                   borderStyle: "solid",
-                  borderColor: "var(--hero-cta-secondary-border)",
-                  color: "var(--hero-cta-secondary-text)",
+                  borderColor: "var(--hero-badge-border)",
+                  backgroundColor: "var(--hero-badge-bg)",
+                  color: "var(--hero-badge-text)",
                 }}
               >
-                {tHero("ctaSecondary")}
-              </Link>
+                <Sparkles className="h-4 w-4" aria-hidden="true" />
+                {tHero("badge")}
+              </div>
+
+              {/* Title — token typo display-1 (clamp 44px → 76px) + tracking-display (-0.03em) */}
+              <h1
+                className="text-display-1 font-extrabold leading-tight tracking-display"
+                style={{ color: "var(--hero-text-primary)" }}
+              >
+                {tHero("title")}{" "}
+                <span className="text-gradient">{tHero("titleHighlight")}</span>
+                <br />
+                {tHero("titleEnd")}
+              </h1>
+
+              {/* Subtitle */}
+              <p
+                className="mx-auto mt-6 max-w-2xl text-lead lg:mx-0"
+                style={{ color: "var(--hero-text-secondary)" }}
+              >
+                {tHero("subtitle")}
+              </p>
+
+              {/* CTA */}
+              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
+                <Link
+                  href="/getting-started"
+                  className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-[color:var(--fg-on-brand)] shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
+                  style={{
+                    transitionDuration: "var(--duration-fast)",
+                    transitionTimingFunction: "var(--ease-out)",
+                  }}
+                >
+                  {tHero("ctaPrimary")}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/mcp"
+                  className="hero-cta-secondary inline-flex items-center gap-2 rounded-xl px-8 py-3.5 text-base font-semibold transition-all"
+                  style={{
+                    borderWidth: "1px",
+                    borderStyle: "solid",
+                    borderColor: "var(--hero-cta-secondary-border)",
+                    color: "var(--hero-cta-secondary-text)",
+                    transitionDuration: "var(--duration-fast)",
+                    transitionTimingFunction: "var(--ease-out)",
+                  }}
+                >
+                  {tHero("ctaSecondary")}
+                </Link>
+              </div>
             </div>
 
-            {/* Terminal preview — animated typing */}
-            <div className="mx-auto mt-16 max-w-2xl">
+            {/* Terminal preview — animated typing (a droite sur lg+) */}
+            {/* RG2-11 : chips orbitaux flottants autour du terminal */}
+            <div className="relative w-full">
               <HeroTerminal lines={terminalLines} />
+              <HeroChips />
             </div>
+          </div>
 
-            {/* Scroll indicator */}
-            <div className="mt-8 flex justify-center">
-              <ChevronDown className="h-6 w-6 animate-float text-slate-400 dark:text-slate-500" aria-hidden="true" />
-            </div>
+          {/* Scroll indicator */}
+          <div className="mt-12 flex justify-center lg:mt-16">
+            <ChevronDown className="h-6 w-6 animate-float text-[color:var(--fg-muted)]" aria-hidden="true" />
           </div>
         </div>
       </section>
 
+      {/* ===== TRUST BAR (RG2-15) ===== Bande mono "pourquoi le Codex" */}
+      <TrustBar label={tTrust("label")} items={trustItems} />
+
+      {/* ===== ARTICLES RECENTS (RG2-14 reorder) ===== Source design : Articles vient avant Stats */}
+      <RecentArticlesSection locale={locale} />
+
+      {/* ===== STATS BAND (RG-32) ===== Bande always-dark factuelle */}
+      <CodexStatsBand locale={locale} />
+
       {/* ===== CE QUE VOUS POUVEZ FAIRE ===== */}
-      <section className="bg-white py-16 dark:bg-slate-950 sm:py-20 lg:py-24">
+      <section className="bg-[color:var(--bg-page)] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -245,7 +290,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== POUR QUI ? ===== */}
-      <section className="bg-slate-50 py-16 dark:bg-slate-900 sm:py-20 lg:py-24">
+      <section className="bg-[color:var(--bg-subtle)] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -291,7 +336,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== PARCOURS ===== */}
-      <section className="bg-white py-16 dark:bg-slate-950 sm:py-20 lg:py-24">
+      <section className="bg-[color:var(--bg-page)] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -352,7 +397,7 @@ export default async function HomePage({
       </section>
 
       {/* ===== CONFIGURATEUR RAPIDE ===== */}
-      <section className="bg-slate-50 py-16 dark:bg-slate-900 sm:py-20 lg:py-24">
+      <section className="bg-[color:var(--bg-subtle)] py-16 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimateOnScroll preset="fade-up">
             <SectionHeading
@@ -368,23 +413,20 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* ===== CTA FINAL ===== */}
-      <section className="relative overflow-hidden bg-slate-100 py-16 dark:bg-slate-950 sm:py-20 lg:py-24">
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-50 via-slate-50 to-brand-100 dark:from-brand-950 dark:via-slate-900 dark:to-brand-900" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.08),_transparent_70%)] dark:bg-[radial-gradient(ellipse_at_center,_rgba(6,182,212,0.15),_transparent_70%)]" />
-
-        <AnimateOnScroll preset="fade-up" className="relative mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl">
-            {tSections("cta.title")}{" "}
-            <span className="text-gradient">{tSections("cta.titleHighlight")}</span> ?
-          </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-300">
-            {tSections("cta.description")}
-          </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      {/* ===== CTA FINAL (RG2-16) ===== Pattern lp-cta-final dedie */}
+      <CtaFinal
+        title={tSections("cta.title")}
+        titleHighlight={`${tSections("cta.titleHighlight")} ?`}
+        description={tSections("cta.description")}
+        actions={
+          <>
             <Link
               href="/getting-started"
-              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30 dark:bg-white dark:from-white dark:to-white dark:text-slate-900 dark:shadow-none dark:hover:bg-slate-100 dark:hover:shadow-none"
+              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-8 py-3.5 text-base font-semibold text-[color:var(--fg-on-brand)] shadow-lg shadow-brand-500/25 transition-all hover:shadow-xl hover:shadow-brand-500/30"
+              style={{
+                transitionDuration: "var(--duration-fast)",
+                transitionTimingFunction: "var(--ease-out)",
+              }}
             >
               <Logo size="sm" />
               {tSections("cta.ctaPrimary")}
@@ -392,14 +434,18 @@ export default async function HomePage({
             </Link>
             <Link
               href="/future"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-8 py-3.5 text-base font-semibold text-slate-700 transition-all hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:text-white dark:hover:border-slate-500 dark:hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded-xl border border-[color:var(--border-default)] px-8 py-3.5 text-base font-semibold text-[color:var(--fg-secondary)] transition-all hover:border-[color:var(--border-strong)] hover:bg-[color:var(--bg-elevated)]"
+              style={{
+                transitionDuration: "var(--duration-fast)",
+                transitionTimingFunction: "var(--ease-out)",
+              }}
             >
               <MessageSquare className="h-4 w-4" aria-hidden="true" />
               {tSections("cta.ctaSecondary")}
             </Link>
-          </div>
-        </AnimateOnScroll>
-      </section>
+          </>
+        }
+      />
     </>
   );
 }

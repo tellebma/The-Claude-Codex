@@ -14,6 +14,10 @@ import { MermaidDiagram } from "@/components/ui/MermaidDiagram";
 import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
 import { Card } from "@/components/mdx/Card";
+import { ArticleAlert } from "@/components/mdx/ArticleAlert";
+import { Faq, FaqItem } from "@/components/mdx/Faq";
+import { NextSteps } from "@/components/mdx/NextSteps";
+import { WorkflowDiagram } from "@/components/mdx/WorkflowDiagram";
 
 /**
  * Extract text content from React children recursively.
@@ -61,13 +65,18 @@ export const mdxComponents: MDXComponents = {
   Steps,
   Step,
   Card,
+  ArticleAlert,
+  Faq,
+  FaqItem,
+  NextSteps,
+  WorkflowDiagram,
 
   // Override default HTML elements for consistent styling.
   // Explicit {children} (vs self-closing {...props}) makes it clear to
   // the linter (Sonar S6850) that content is passed and announced.
   h1: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
-      className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-4xl"
+      className="mb-6 text-3xl font-extrabold tracking-tight text-[var(--fg-primary)] sm:text-4xl"
       {...rest}
     >
       {children}
@@ -75,7 +84,7 @@ export const mdxComponents: MDXComponents = {
   ),
   h2: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
-      className="mb-4 mt-10 text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl"
+      className="mb-4 mt-10 text-2xl font-bold tracking-tight text-[var(--fg-primary)] sm:text-3xl"
       {...rest}
     >
       {children}
@@ -83,7 +92,7 @@ export const mdxComponents: MDXComponents = {
   ),
   h3: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h3
-      className="mb-3 mt-8 text-xl font-semibold text-slate-900 dark:text-white"
+      className="mb-3 mt-8 text-xl font-semibold text-[var(--fg-primary)]"
       {...rest}
     >
       {children}
@@ -91,7 +100,7 @@ export const mdxComponents: MDXComponents = {
   ),
   h4: ({ children, ...rest }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h4
-      className="mb-2 mt-6 text-lg font-semibold text-slate-900 dark:text-white"
+      className="mb-2 mt-6 text-lg font-semibold text-[var(--fg-primary)]"
       {...rest}
     >
       {children}
@@ -99,19 +108,19 @@ export const mdxComponents: MDXComponents = {
   ),
   p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
     <p
-      className="my-4 leading-relaxed text-slate-700 dark:text-slate-200"
+      className="my-4 leading-relaxed text-[var(--fg-secondary)]"
       {...props}
     />
   ),
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
     <ul
-      className="my-4 list-disc space-y-2 pl-6 text-slate-700 dark:text-slate-200"
+      className="my-4 list-disc space-y-2 pl-6 text-[var(--fg-secondary)]"
       {...props}
     />
   ),
   ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
     <ol
-      className="my-4 list-decimal space-y-2 pl-6 text-slate-700 dark:text-slate-200"
+      className="my-4 list-decimal space-y-2 pl-6 text-[var(--fg-secondary)]"
       {...props}
     />
   ),
@@ -122,7 +131,7 @@ export const mdxComponents: MDXComponents = {
     const isExternal = props.href?.startsWith("http") || props.target === "_blank";
     return (
       <a
-        className="text-brand-700 underline underline-offset-2 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
+        className="rounded text-[var(--brand-700)] underline underline-offset-2 transition-colors hover:text-[var(--brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-page)]"
         {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         {...props}
       >
@@ -133,14 +142,14 @@ export const mdxComponents: MDXComponents = {
   },
   blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
     <blockquote
-      className="my-6 border-l-4 border-brand-500/30 pl-4 italic text-slate-700 dark:text-slate-200"
+      className="my-6 rounded-r-md border-l-4 border-[var(--brand-primary)] bg-[var(--bg-subtle)] py-2 pl-4 italic text-[var(--fg-secondary)]"
       {...props}
     />
   ),
   // Inline code (not inside a fenced code block)
   code: (props: React.HTMLAttributes<HTMLElement>) => (
     <code
-      className="rounded bg-slate-200/50 px-1.5 py-0.5 font-mono text-sm dark:bg-slate-700/50"
+      className="rounded bg-[var(--bg-subtle)] px-1.5 py-0.5 font-mono text-sm text-[var(--fg-primary)]"
       {...props}
     />
   ),
@@ -176,7 +185,7 @@ export const mdxComponents: MDXComponents = {
     // Fallback for pre without a language-tagged code child
     return (
       <pre
-        className="my-4 overflow-x-auto rounded-xl bg-slate-950 p-4 text-sm leading-relaxed"
+        className="my-4 overflow-x-auto rounded-xl bg-[var(--code-bg)] p-4 text-sm leading-relaxed text-[var(--code-text)]"
         {...rest}
       >
         {children}
@@ -184,31 +193,37 @@ export const mdxComponents: MDXComponents = {
     );
   },
   hr: () => (
-    <hr className="my-8 border-slate-200 dark:border-slate-700" />
+    <hr className="my-8 border-[var(--border-default)]" />
   ),
   strong: (props: React.HTMLAttributes<HTMLElement>) => (
     <strong
-      className="font-semibold text-slate-900 dark:text-white"
+      className="font-semibold text-[var(--fg-primary)]"
       {...props}
     />
   ),
+  // RG2-09 — Tables refondues : wrapper radius 14 border default overflow-hidden,
+  // TH 14/18 600 13px uppercase 0.03em muted bg-subtle, TD 14/18 border-bottom
+  // default + tr:last no border + tr:hover td bg brand/04. Source : article.css
+  // .art-table-wrap, .art-table.
   table: (props: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="my-6 overflow-x-auto">
-      <table
-        className="w-full border-collapse text-sm"
-        {...props}
-      />
+    <div className="my-6 overflow-hidden rounded-2xl border border-[color:var(--border-default)]">
+      <div className="overflow-x-auto">
+        <table
+          className="w-full border-collapse text-sm [&_tbody_tr:hover_td]:bg-[color:rgba(6,182,212,0.04)] [&_tbody_tr:last-child_td]:border-b-0"
+          {...props}
+        />
+      </div>
     </div>
   ),
   th: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
     <th
-      className="border border-slate-200 bg-slate-50 px-4 py-2 text-left font-semibold dark:border-slate-700 dark:bg-slate-800"
+      className="bg-[var(--bg-subtle)] px-4 py-3.5 text-left text-[13px] font-semibold uppercase tracking-[0.03em] text-[var(--fg-muted)]"
       {...props}
     />
   ),
   td: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td
-      className="border border-slate-200 px-4 py-2 dark:border-slate-700"
+      className="border-b border-[var(--border-default)] px-4 py-3.5 text-[var(--fg-secondary)] transition-colors"
       {...props}
     />
   ),
@@ -239,7 +254,7 @@ export function createLocaleMdxComponents(locale: string): MDXComponents {
       const isExternal = href?.startsWith("http") || props.target === "_blank";
       return (
         <a
-          className="text-brand-700 underline underline-offset-2 transition-colors hover:text-brand-600 dark:text-brand-400 dark:hover:text-brand-300"
+          className="rounded text-[var(--brand-700)] underline underline-offset-2 transition-colors hover:text-[var(--brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-page)]"
           {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           {...props}
           href={href}

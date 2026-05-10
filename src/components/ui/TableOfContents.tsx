@@ -103,17 +103,27 @@ export function TableOfContents() {
     return null;
   }
 
+  // RG2-03 — Calcul de la progression locale (rang de la section active dans
+  // la TOC). 0 si pas encore d'active heading. Sinon (index+1) / total.
+  const activeIndex = activeId
+    ? headings.findIndex((h) => h.id === activeId)
+    : -1;
+  const currentRank = activeIndex >= 0 ? activeIndex + 1 : 0;
+  const totalSections = headings.length;
+  const progressRatio =
+    totalSections > 0 ? (currentRank / totalSections) * 100 : 0;
+
   return (
     <nav
       aria-label={t("tableOfContents")}
       className="hidden xl:block"
     >
       <div className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
-        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-300">
+        <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[color:var(--fg-muted)]">
           <List className="h-3.5 w-3.5" aria-hidden="true" />
           {t("onThisPage")}
         </div>
-        <ul className="space-y-1 border-l border-slate-200 dark:border-slate-700">
+        <ul className="space-y-1 border-l border-[color:var(--border-default)]">
           {headings.map((heading) => {
             const isActive = activeId === heading.id;
             return (
@@ -139,8 +149,8 @@ export function TableOfContents() {
                     heading.level === 3 ? "pl-6" : "pl-4"
                   } ${
                     isActive
-                      ? "-ml-px border-brand-500 font-medium text-brand-700 dark:text-brand-400"
-                      : "-ml-px border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:text-slate-200"
+                      ? "-ml-px border-brand-500 font-medium text-[color:var(--brand-primary)]"
+                      : "-ml-px border-transparent text-[color:var(--fg-secondary)] hover:border-[color:var(--border-strong)] hover:text-[color:var(--fg-primary)]"
                   }`}
                 >
                   {heading.text}
@@ -149,6 +159,31 @@ export function TableOfContents() {
             );
           })}
         </ul>
+
+        {/* RG2-03 — Bloc de progression locale dans l'article */}
+        <div
+          className="art-toc-progress mt-6 rounded-xl border border-[color:rgba(6,182,212,0.15)] bg-[color:rgba(6,182,212,0.05)] p-3.5 dark:border-[color:rgba(34,211,238,0.15)] dark:bg-[color:rgba(34,211,238,0.06)]"
+          role="status"
+          aria-live="polite"
+          aria-label={`${t("onThisPage")} ${currentRank} / ${totalSections}`}
+        >
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.05em] text-[color:var(--color-brand-700)] dark:text-[color:rgba(103,232,249,1)]">
+            {t("onThisPage")}
+          </p>
+          <div className="mb-2 h-1 overflow-hidden rounded-full bg-[color:var(--border-default)]">
+            <div
+              className="h-full rounded-full transition-all duration-300 ease-out"
+              style={{
+                width: `${progressRatio}%`,
+                background:
+                  "linear-gradient(90deg, var(--color-brand-500), var(--color-accent-500))",
+              }}
+            />
+          </div>
+          <p className="font-mono text-[11px] tabular-nums text-[color:var(--fg-muted)]">
+            {currentRank} / {totalSections}
+          </p>
+        </div>
       </div>
     </nav>
   );

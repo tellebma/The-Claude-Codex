@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import { validateThemes, type ThemeKey } from "./themes";
 
 /**
  * Frontmatter shape expected in MDX content files.
@@ -13,6 +14,8 @@ export interface MdxFrontmatter {
   readonly section?: string;
   readonly datePublished?: string;
   readonly dateModified?: string;
+  /** Themes thematiques (RG-31) : 1 a 3 cles, dont au moins un type de contenu. */
+  readonly themes?: ReadonlyArray<ThemeKey>;
 }
 
 /**
@@ -57,6 +60,8 @@ function validateFrontmatter(
     );
   }
 
+  const themes = validateThemes(data["themes"], slug);
+
   return {
     title: data["title"],
     description: data["description"],
@@ -74,6 +79,7 @@ function validateFrontmatter(
       typeof data["dateModified"] === "string"
         ? data["dateModified"]
         : undefined,
+    themes: themes ?? undefined,
   };
 }
 
@@ -197,4 +203,188 @@ export function getAllSectionMdxFiles(
     const orderB = b.frontmatter.order ?? 999;
     return orderA - orderB;
   });
+}
+
+// ----------------------------------------------------------------------------
+// Helpers landing (RG-32) : stats factuelles + articles recents.
+// Tous les calculs sont faits au build (SSG-compatible). Aucune query runtime.
+// ----------------------------------------------------------------------------
+
+const SECTIONS_FOR_COUNT: ReadonlyArray<string> = [
+  "getting-started",
+  "mcp",
+  "skills",
+  "agents",
+  "prompting",
+  "use-cases",
+  "personas",
+  "advanced",
+  "limits",
+  "reference",
+];
+
+/**
+ * Compte les articles MDX deduplique sur le slug : si un article existe en
+ * FR et en EN, il compte comme 1 seul article (la traduction n'augmente pas
+ * le total). Inclut les articles racine et les articles de chaque section.
+ * (RG-32)
+ */
+export function countAllArticles(): number {
+  const slugs = new Set<string>();
+  for (const slug of getAllMdxSlugs("fr")) slugs.add(slug);
+  for (const slug of getAllMdxSlugs("en")) slugs.add(slug);
+  for (const section of SECTIONS_FOR_COUNT) {
+    for (const slug of getSectionMdxSlugs(section, "fr")) {
+      slugs.add(`${section}/${slug}`);
+    }
+    for (const slug of getSectionMdxSlugs(section, "en")) {
+      slugs.add(`${section}/${slug}`);
+    }
+  }
+  return slugs.size;
+}
+
+/** Nombre de sections de documentation actives (RG-32). */
+export function countAllSections(): number {
+  return SECTIONS_FOR_COUNT.length;
+}
+
+function collectTimestamps(
+  files: ReadonlyArray<MdxFile>,
+  out: number[]
+): void {
+  for (const file of files) {
+    const ts = parseTimestamp(file);
+    if (ts !== null) out.push(ts);
+  }
+}
+
+/** Date de derniere modification globale du contenu (RG-32). */
+export function getLastModifiedDate(): Date | null {
+  const dates: number[] = [];
+  for (const locale of ["fr", "en"] as const) {
+    collectTimestamps(getAllMdxFiles(locale), dates);
+    for (const section of SECTIONS_FOR_COUNT) {
+      collectTimestamps(getAllSectionMdxFiles(section, locale), dates);
+    }
+  }
+  if (dates.length === 0) return null;
+  return new Date(Math.max(...dates));
+}
+
+/**
+ * Article enrichi avec son chemin (section + slug ou racine) et sa locale,
+ * pour generer le href local correctement (RG-32).
+ */
+export interface RecentArticle {
+  readonly title: string;
+  readonly description: string;
+  readonly section: string | null;
+  readonly slug: string;
+  readonly locale: string;
+  readonly dateModified: string;
+  readonly themes?: ReadonlyArray<ThemeKey>;
+}
+
+type RecentEntry = RecentArticle & { readonly ts: number };
+
+function parseTimestamp(file: MdxFile): number | null {
+  const dm = file.frontmatter.dateModified;
+  if (typeof dm !== "string") return null;
+  const ts = Date.parse(dm);
+  return Number.isNaN(ts) ? null : ts;
+}
+
+function entryKey(section: string | null, slug: string): string {
+  return section ? `${section}/${slug}` : slug;
+}
+
+function buildEntry(
+  file: MdxFile,
+  section: string | null,
+  locale: string,
+  ts: number
+): RecentEntry {
+  // Pour un article de section, MdxFile.slug vaut "{section}/{filename}"
+  // (cf. getSectionMdxBySlug). On stocke ici le slug "nu" (filename seul)
+  // pour que les consommateurs puissent reconstruire l'URL via
+  // /{section}/{slug} sans dupliquer le segment section.
+  const bareSlug =
+    section && file.slug.startsWith(`${section}/`)
+      ? file.slug.slice(section.length + 1)
+      : file.slug;
+  return {
+    title: file.frontmatter.title,
+    description: file.frontmatter.description,
+    section,
+    slug: bareSlug,
+    locale,
+    dateModified: file.frontmatter.dateModified ?? "",
+    themes: file.frontmatter.themes,
+    ts,
+  };
+}
+
+function shouldReplace(
+  existing: RecentEntry | undefined,
+  ts: number,
+  locale: string,
+  preferredLocale: string
+): boolean {
+  if (!existing) return true;
+  if (ts > existing.ts) return true;
+  return ts === existing.ts && locale === preferredLocale;
+}
+
+function collectArticles(
+  files: ReadonlyArray<MdxFile>,
+  section: string | null,
+  locale: string,
+  preferredLocale: string,
+  seen: Map<string, RecentEntry>
+): void {
+  for (const file of files) {
+    const ts = parseTimestamp(file);
+    if (ts === null) continue;
+    const key = entryKey(section, file.slug);
+    if (shouldReplace(seen.get(key), ts, locale, preferredLocale)) {
+      seen.set(key, buildEntry(file, section, locale, ts));
+    }
+  }
+}
+
+/**
+ * Retourne les N articles les plus recemment modifies pour la locale
+ * preferee. Dedoublonne par "section/slug" en gardant la version dans
+ * la locale preferee si meme slug present aux 2 locales (RG-32).
+ *
+ * Filtre final par `locale === preferredLocale` pour eviter qu'un
+ * article avec slug divergent entre FR et EN (ex: bonnes-pratiques-securite
+ * vs security-best-practices) n'apparaisse sur la mauvaise landing
+ * en produisant un href 404 (cf. test e2e/landing-recent-articles.spec.ts).
+ */
+export function getMostRecentArticles(
+  limit: number,
+  preferredLocale: string = DEFAULT_LOCALE
+): ReadonlyArray<RecentArticle> {
+  const seen = new Map<string, RecentEntry>();
+
+  for (const locale of ["fr", "en"] as const) {
+    collectArticles(getAllMdxFiles(locale), null, locale, preferredLocale, seen);
+    for (const section of SECTIONS_FOR_COUNT) {
+      collectArticles(
+        getAllSectionMdxFiles(section, locale),
+        section,
+        locale,
+        preferredLocale,
+        seen
+      );
+    }
+  }
+
+  return [...seen.values()]
+    .filter((entry) => entry.locale === preferredLocale)
+    .sort((a, b) => b.ts - a.ts)
+    .slice(0, limit)
+    .map(({ ts: _ts, ...rest }) => rest);
 }

@@ -18,7 +18,7 @@ export function StepStack({ profile, selected, onToggle }: StepStackProps) {
     return (
       <div>
         <h3 className="mb-2 text-xl font-bold">Choisissez vos stacks</h3>
-        <p className="text-sm text-slate-500 dark:text-slate-300">
+        <p className="text-sm text-slate-700 dark:text-slate-300">
           Veuillez d&apos;abord sélectionner un profil à l&apos;étape 1.
         </p>
       </div>
@@ -58,7 +58,7 @@ export function StepStack({ profile, selected, onToggle }: StepStackProps) {
       </div>
 
       {selected.length > 0 && (
-        <p className="mt-4 text-xs text-slate-500 dark:text-slate-300">
+        <p className="mt-4 text-xs text-slate-700 dark:text-slate-300">
           {selected.length} stack{selected.length > 1 ? "s" : ""} sélectionnée
           {selected.length > 1 ? "s" : ""}
         </p>

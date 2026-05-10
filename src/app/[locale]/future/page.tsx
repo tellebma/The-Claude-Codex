@@ -647,7 +647,7 @@ export default async function FuturePage({
                           className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
                             isFirst
                               ? "bg-brand-500/10 text-brand-700 dark:text-brand-400"
-                              : "bg-slate-100 text-slate-500 dark:bg-slate-700/50 dark:text-slate-300"
+                              : "bg-slate-100 text-slate-700 dark:bg-slate-700/50 dark:text-slate-300"
                           }`}
                         >
                           {item.status}

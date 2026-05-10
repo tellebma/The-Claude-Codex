@@ -110,7 +110,9 @@ describe("mdxComponents", () => {
       expect(hr).toBeInTheDocument();
     });
 
-    it("renders table wrapped in scrollable div", () => {
+    it("renders table wrapped in rounded bordered container with inner overflow-x", () => {
+      // RG2-09 : wrapper externe a overflow-hidden (radius 14 + border default),
+      // l'overflow horizontal est sur le div inner pour respecter le border-radius.
       const Table = mdxComponents.table as React.FC<React.HTMLAttributes<HTMLTableElement>>;
       const { container } = render(
         <Table>
@@ -118,24 +120,28 @@ describe("mdxComponents", () => {
         </Table>
       );
       const wrapper = container.firstElementChild;
-      expect(wrapper?.className).toContain("overflow-x-auto");
-      expect(wrapper?.querySelector("table")).toBeInTheDocument();
+      expect(wrapper?.className).toContain("rounded-2xl");
+      expect(wrapper?.className).toContain("overflow-hidden");
+      const inner = wrapper?.firstElementChild;
+      expect(inner?.className).toContain("overflow-x-auto");
+      expect(inner?.querySelector("table")).toBeInTheDocument();
     });
 
-    it("renders th with header styles", () => {
+    it("renders th with header styles (RG2-09 uppercase muted label tone)", () => {
       const Th = mdxComponents.th as React.FC<React.HTMLAttributes<HTMLTableCellElement>>;
       render(<table><thead><tr><Th>Header</Th></tr></thead></table>);
       const th = screen.getByText("Header");
       expect(th.tagName).toBe("TH");
       expect(th.className).toContain("font-semibold");
+      expect(th.className).toContain("uppercase");
     });
 
-    it("renders td with border", () => {
+    it("renders td with border-bottom (RG2-09 row separator)", () => {
       const Td = mdxComponents.td as React.FC<React.HTMLAttributes<HTMLTableCellElement>>;
       render(<table><tbody><tr><Td>Cell</Td></tr></tbody></table>);
       const td = screen.getByText("Cell");
       expect(td.tagName).toBe("TD");
-      expect(td.className).toContain("border");
+      expect(td.className).toContain("border-b");
     });
   });
 

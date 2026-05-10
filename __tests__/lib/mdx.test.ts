@@ -24,6 +24,10 @@ import {
   getSectionMdxSlugs,
   getSectionMdxBySlug,
   getAllSectionMdxFiles,
+  countAllArticles,
+  countAllSections,
+  getLastModifiedDate,
+  getMostRecentArticles,
 } from "@/lib/mdx";
 
 const contentDir = path.join(process.cwd(), "content");
@@ -134,6 +138,78 @@ Content`);
     expect(result.frontmatter.section).toBe("mcp");
     expect(result.frontmatter.datePublished).toBe("2026-01-01");
     expect(result.frontmatter.dateModified).toBe("2026-02-01");
+  });
+
+  it("parses optional themes field (RG-31)", () => {
+    const filePath = path.join(contentDir, "fr", "themed.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "Themed"
+description: "Desc"
+themes: ["tutorial", "security"]
+---
+Content`);
+
+    const result = getMdxBySlug("themed", "fr");
+    expect(result.frontmatter.themes).toEqual(["tutorial", "security"]);
+  });
+
+  it("returns themes undefined when not present", () => {
+    const filePath = path.join(contentDir, "fr", "no-themes.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "No themes"
+description: "Desc"
+---
+Content`);
+
+    const result = getMdxBySlug("no-themes", "fr");
+    expect(result.frontmatter.themes).toBeUndefined();
+  });
+
+  it("throws when themes contains an unknown key", () => {
+    const filePath = path.join(contentDir, "fr", "bad-theme.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "Bad theme"
+description: "Desc"
+themes: ["unknown-key"]
+---
+Content`);
+
+    expect(() => getMdxBySlug("bad-theme", "fr")).toThrow(
+      /unknown key "unknown-key"/
+    );
+  });
+
+  it("throws when themes has more than 3 entries", () => {
+    const filePath = path.join(contentDir, "fr", "too-many.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "Too many"
+description: "Desc"
+themes: ["tutorial", "security", "tooling", "performance"]
+---
+Content`);
+
+    expect(() => getMdxBySlug("too-many", "fr")).toThrow(
+      /at most 3 entries/
+    );
+  });
+
+  it("throws when themes has no content type (only domains)", () => {
+    const filePath = path.join(contentDir, "fr", "no-type.mdx");
+    mockExistsSync.mockImplementation((p) => p === filePath);
+    mockReadFileSync.mockReturnValue(`---
+title: "No type"
+description: "Desc"
+themes: ["security", "performance"]
+---
+Content`);
+
+    expect(() => getMdxBySlug("no-type", "fr")).toThrow(
+      /at least one content type/
+    );
   });
 
   it("treats empty title as missing", () => {
@@ -300,5 +376,153 @@ Content`;
     expect(result).toHaveLength(2);
     expect(result[0].frontmatter.title).toBe("A Page");
     expect(result[1].frontmatter.title).toBe("B Page");
+  });
+});
+
+// ----------------------------------------------------------------------------
+// Helpers RG-32 : countAllArticles, countAllSections, getLastModifiedDate,
+// getMostRecentArticles. Mocks fs reduits a un seul article racine FR + EN
+// pour valider la deduplication par slug.
+// ----------------------------------------------------------------------------
+
+describe("countAllSections", () => {
+  it("returns 10 (les 10 sections actives definies en SECTIONS_FOR_COUNT)", () => {
+    expect(countAllSections()).toBe(10);
+  });
+});
+
+describe("countAllArticles + getLastModifiedDate + getMostRecentArticles (RG-32)", () => {
+  beforeEach(() => {
+    // Mock minimal : un seul article racine en FR et son equivalent EN.
+    // Aucun article de section. countAllArticles doit retourner 1
+    // (deduplication FR/EN sur le slug "intro").
+    mockExistsSync.mockImplementation((p: string) => {
+      const s = String(p);
+      // Repertoires racine FR + EN existent
+      if (s.endsWith("/content/fr")) return true;
+      if (s.endsWith("/content/en")) return true;
+      // Repertoires de section : aucun n'existe
+      if (s.includes("/content/fr/") || s.includes("/content/en/")) {
+        if (s.endsWith(".mdx")) return true;
+        return false;
+      }
+      return true;
+    });
+    mockReaddirSync.mockImplementation((p: string) => {
+      const s = String(p);
+      if (s.endsWith("/content/fr") || s.endsWith("/content/en")) {
+        return ["intro.mdx"];
+      }
+      return [];
+    });
+    mockReadFileSync.mockReturnValue(`---
+title: "Intro"
+description: "An intro"
+dateModified: "2026-04-15"
+---
+Content`);
+  });
+
+  it("countAllArticles deduplique FR/EN sur le slug", () => {
+    expect(countAllArticles()).toBe(1);
+  });
+
+  it("getLastModifiedDate retourne le max des dateModified (parse ISO)", () => {
+    const d = getLastModifiedDate();
+    expect(d).not.toBeNull();
+    expect(d?.getUTCFullYear()).toBe(2026);
+    expect(d?.getUTCMonth()).toBe(3); // Avril (0-indexed)
+    expect(d?.getUTCDate()).toBe(15);
+  });
+
+  it("getMostRecentArticles retourne au plus N entrees triees par dateModified", () => {
+    const recent = getMostRecentArticles(3, "fr");
+    expect(recent).toHaveLength(1);
+    expect(recent[0].slug).toBe("intro");
+    expect(recent[0].section).toBeNull();
+    // La locale preferee FR doit gagner sur le timestamp egal.
+    expect(recent[0].locale).toBe("fr");
+  });
+
+  it("getMostRecentArticles retourne EN si preferredLocale='en'", () => {
+    const recent = getMostRecentArticles(3, "en");
+    expect(recent).toHaveLength(1);
+    expect(recent[0].locale).toBe("en");
+  });
+
+  it("countAllArticles retourne 0 si aucun fichier MDX", () => {
+    mockReaddirSync.mockReturnValue([]);
+    expect(countAllArticles()).toBe(0);
+  });
+
+  it("getLastModifiedDate retourne null si aucune date valide", () => {
+    mockReadFileSync.mockReturnValue(`---
+title: "Sans date"
+description: "Pas de dateModified"
+---
+Content`);
+    expect(getLastModifiedDate()).toBeNull();
+  });
+
+  it("getMostRecentArticles ignore les articles sans dateModified", () => {
+    mockReadFileSync.mockReturnValue(`---
+title: "Sans date"
+description: "Pas de dateModified"
+---
+Content`);
+    const recent = getMostRecentArticles(3, "fr");
+    expect(recent).toHaveLength(0);
+  });
+
+  it("getLastModifiedDate ignore les dateModified avec format invalide", () => {
+    mockReadFileSync.mockReturnValue(`---
+title: "Date invalide"
+description: "Date pourrie"
+dateModified: "not-a-date"
+---
+Content`);
+    expect(getLastModifiedDate()).toBeNull();
+  });
+});
+
+describe("getMostRecentArticles : articles de section", () => {
+  beforeEach(() => {
+    // Mock un seul article dans la section getting-started.
+    // Verifie que le slug RecentArticle est le slug "nu" (filename sans
+    // prefixe de section), pour que `articleHref` produise un href correct
+    // /{section}/{slug} et non /{section}/{section}/{slug}.
+    mockExistsSync.mockImplementation((p: string) => {
+      const s = String(p);
+      if (s.endsWith("/content/fr/getting-started")) return true;
+      if (s.endsWith("/content/en/getting-started")) return true;
+      if (s.endsWith("/content/fr") || s.endsWith("/content/en")) return true;
+      if (s.includes("/content/fr/getting-started/installation.mdx")) return true;
+      if (s.includes("/content/en/getting-started/installation.mdx")) return true;
+      // Aucune autre section, aucun article racine.
+      return false;
+    });
+    mockReaddirSync.mockImplementation((p: string) => {
+      const s = String(p);
+      if (s.endsWith("/content/fr/getting-started") || s.endsWith("/content/en/getting-started")) {
+        return ["installation.mdx"];
+      }
+      if (s.endsWith("/content/fr") || s.endsWith("/content/en")) {
+        return [];
+      }
+      return [];
+    });
+    mockReadFileSync.mockReturnValue(`---
+title: "Installation"
+description: "Comment installer"
+dateModified: "2026-04-15"
+---
+Content`);
+  });
+
+  it("retourne section + slug nu (sans prefixe de section)", () => {
+    const recent = getMostRecentArticles(3, "fr");
+    expect(recent).toHaveLength(1);
+    expect(recent[0].section).toBe("getting-started");
+    expect(recent[0].slug).toBe("installation");
   });
 });

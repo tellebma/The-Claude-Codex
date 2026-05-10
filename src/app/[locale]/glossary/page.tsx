@@ -294,7 +294,7 @@ function GlossaryCard({ entry, t }: GlossaryCardProps) {
         {entry.definition}
       </p>
       <div className="mt-3 rounded-xl bg-slate-50 px-4 py-3 dark:bg-slate-700/50">
-        <span className="text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
+        <span className="text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-300">
           {t.analogyLabel}
         </span>
         <p className="mt-1 text-sm italic text-slate-600 dark:text-slate-300">

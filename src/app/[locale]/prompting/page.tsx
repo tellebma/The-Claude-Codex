@@ -32,9 +32,9 @@ import { createArticleSchema, serializeJsonLd } from "@/lib/structured-data";
 
 const translations = {
   fr: {
-    metaTitle: "Prompting : L'art de communiquer avec l'IA",
+    metaTitle: "Prompting Claude Code : 5 principes + templates pour bons prompts",
     metaDescription:
-      "Maitrisez l'art du prompting avec Claude Code. Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
+      "Maitriser le prompting Claude Code : 5 principes fondamentaux, templates copiables, erreurs courantes et techniques avancees pour des resultats parfaits.",
     jsonLdDescription:
       "Techniques, templates et bonnes pratiques pour tirer le maximum de l'IA.",
     heroBadge: "Guide du prompting",
@@ -391,9 +391,9 @@ Relations : User 1-N Project, Project 1-N Task, User 1-N Task"`,
     ],
   },
   en: {
-    metaTitle: "Prompting: The Art of Communicating with AI",
+    metaTitle: "Prompting Claude Code: 5 principles + templates for great prompts",
     metaDescription:
-      "Master the art of prompting with Claude Code. Techniques, templates and best practices to get the most out of AI.",
+      "Master Claude Code prompting: 5 core principles, copy-paste templates, common mistakes, and advanced techniques to get the results you actually want.",
     jsonLdDescription:
       "Techniques, templates and best practices to get the most out of AI.",
     heroBadge: "Prompting guide",
@@ -780,7 +780,7 @@ function buildArticleJsonLd(locale: string) {
     url: `${SITE_URL}/${locale}/prompting`,
     locale,
     datePublished: "2026-03-07",
-    dateModified: "2026-03-07",
+    dateModified: "2026-05-09",
   });
 }
 
@@ -885,7 +885,7 @@ export default async function PromptingPage({
                       <h3 className="mb-3 text-xl font-bold sm:text-2xl">
                         {principle.title}
                       </h3>
-                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-300">
+                      <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
                         {principle.description}
                       </p>
                     </div>
@@ -940,7 +940,7 @@ export default async function PromptingPage({
                       <h3 className="text-lg font-bold sm:text-xl">
                         {template.category}
                       </h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-300">
+                      <p className="text-sm text-slate-700 dark:text-slate-300">
                         {template.description}
                       </p>
                     </div>
@@ -982,8 +982,8 @@ export default async function PromptingPage({
                   {/* Bad example */}
                   <div>
                     <div className="mb-3 flex items-center gap-2">
-                      <XCircle className="h-5 w-5 text-red-500" aria-hidden="true" />
-                      <span className="text-sm font-semibold text-red-500">
+                      <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" aria-hidden="true" />
+                      <span className="text-sm font-semibold text-red-700 dark:text-red-400">
                         {t.mistakeBadLabel}
                       </span>
                     </div>
@@ -997,8 +997,8 @@ export default async function PromptingPage({
                   {/* Good example */}
                   <div>
                     <div className="mb-3 flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5 text-emerald-500" aria-hidden="true" />
-                      <span className="text-sm font-semibold text-emerald-500">
+                      <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
+                      <span className="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
                         {t.mistakeGoodLabel}
                       </span>
                     </div>
@@ -1042,7 +1042,7 @@ export default async function PromptingPage({
                   <h3 className="text-lg font-bold sm:text-xl">
                     {t.chainingTitle}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     {t.chainingDescription}
                   </p>
                 </div>
@@ -1083,7 +1083,7 @@ et que les tests passent. Suggere des ameliorations supplementaires si pertinent
                   <h3 className="text-lg font-bold sm:text-xl">
                     {t.multiAgentTitle}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     {t.multiAgentDescription}
                   </p>
                 </div>
@@ -1130,7 +1130,7 @@ Une fois les tests ecrits, implemente le code pour les faire passer."`}
                   <h3 className="text-lg font-bold sm:text-xl">
                     {t.workflowTitle}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     {t.workflowDescription}
                   </p>
                 </div>
@@ -1188,7 +1188,7 @@ Verifie que le CI passe. Deploie en staging pour validation."`}
                   <h3 className="text-lg font-bold sm:text-xl">
                     {t.claudeMdStructureTitle}
                   </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     {t.claudeMdStructureDescription}
                   </p>
                 </div>
@@ -1260,7 +1260,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                     <Sparkles className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
                   </div>
                   <h4 className="mb-1 font-semibold">{t.claudeMdGlobalTitle}</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ~/.claude/CLAUDE.md
                     </code>
@@ -1274,7 +1274,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                     <BrainCircuit className="h-5 w-5 text-accent-500" aria-hidden="true" />
                   </div>
                   <h4 className="mb-1 font-semibold">{t.claudeMdProjectTitle}</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ./CLAUDE.md
                     </code>
@@ -1288,7 +1288,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                     <Layers className="h-5 w-5 text-violet-500" aria-hidden="true" />
                   </div>
                   <h4 className="mb-1 font-semibold">{t.claudeMdModuleTitle}</h4>
-                  <p className="text-sm text-slate-500 dark:text-slate-300">
+                  <p className="text-sm text-slate-700 dark:text-slate-300">
                     <code className="rounded bg-slate-200 px-1 py-0.5 text-xs dark:bg-slate-700">
                       ./src/features/auth/CLAUDE.md
                     </code>

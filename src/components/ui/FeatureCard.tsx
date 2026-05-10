@@ -17,11 +17,14 @@ const gradients = {
   green: "from-emerald-100 to-emerald-50",
 };
 
+// Couleurs d'icones uniformes light/dark : la classe Tailwind brand/accent/
+// violet/emerald-600 garde un contraste suffisant sur le fond gradient clair
+// de la pastille.
 const iconColors = {
-  teal: "text-brand-700 dark:text-brand-400",
-  amber: "text-accent-600 dark:text-accent-400",
-  purple: "text-violet-600 dark:text-violet-400",
-  green: "text-emerald-600 dark:text-emerald-400",
+  teal: "text-brand-700",
+  amber: "text-accent-600",
+  purple: "text-violet-600",
+  green: "text-emerald-600",
 };
 
 export function FeatureCard({
@@ -31,9 +34,12 @@ export function FeatureCard({
   gradient = "teal",
   href,
 }: Readonly<FeatureCardProps>) {
-  const baseClassName = "glass-card group h-full p-6 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-950";
+  // glass-card est defini dans globals.css et utilise deja les tokens de
+  // surface ; on y ajoute la transition motion via tokens et le focus ring
+  // qui pointe sur --bg-page (qui bascule light/dark).
+  const baseClassName = "glass-card group h-full p-6 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--bg-page)]";
 
-  const interactiveClassName = "hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] cursor-pointer";
+  const interactiveClassName = "hover:-translate-y-1 hover:shadow-[var(--shadow-lg)] active:scale-[0.98] cursor-pointer";
 
   const content = (
     <>
@@ -45,23 +51,33 @@ export function FeatureCard({
       >
         <Icon className={clsx("h-6 w-6", iconColors[gradient])} aria-hidden="true" />
       </div>
-      <h3 className="mb-2 text-lg font-semibold">{title}</h3>
-      <p className="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+      <h3 className="mb-2 text-lg font-semibold text-[color:var(--fg-primary)]">{title}</h3>
+      <p className="text-base leading-relaxed text-[color:var(--fg-secondary)]">
         {description}
       </p>
     </>
   );
 
+  const motionStyle = {
+    transitionDuration: "var(--duration-base)",
+    transitionTimingFunction: "var(--ease-out)",
+  };
+
   if (href) {
     return (
-      <Link href={href} data-interactive className={clsx(baseClassName, interactiveClassName, "block")}>
+      <Link
+        href={href}
+        data-interactive
+        className={clsx(baseClassName, interactiveClassName, "block")}
+        style={motionStyle}
+      >
         {content}
       </Link>
     );
   }
 
   return (
-    <div className={baseClassName}>
+    <div className={baseClassName} style={motionStyle}>
       {content}
     </div>
   );

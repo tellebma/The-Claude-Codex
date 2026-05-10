@@ -21,7 +21,12 @@
     "pageNotFound": "Page introuvable",
     "pageNotFoundDescription": "La page que vous cherchez n'existe pas ou a été déplacée.",
     "backToHome": "Retour à l'accueil",
-    "opensNewTab": "(ouvre un nouvel onglet)"
+    "opensNewTab": "(ouvre un nouvel onglet)",
+    "share": "Partager",
+    "copyLink": "Copier le lien",
+    "linkCopied": "Lien copié",
+    "published": "Publié le",
+    "updated": "Mis à jour le"
   },
   "about": {
     "badge": "À propos",
@@ -78,6 +83,44 @@
     "agents": "Agents",
     "about": "À propos",
     "more": "Plus"
+  },
+  "landing": {
+    "stats": {
+      "ariaLabel": "Le Codex en chiffres",
+      "articles": "articles publiés",
+      "sections": "sections de documentation",
+      "languages": "langues",
+      "lastUpdate": "dernière mise à jour"
+    },
+    "recent": {
+      "ariaLabel": "Articles récents",
+      "title": "Les derniers articles",
+      "subtitle": "Les ajouts les plus récents au Codex.",
+      "readArticle": "Lire l'article",
+      "filterAll": "Toutes"
+    },
+    "trust": {
+      "label": "Pourquoi le Codex",
+      "openSource": "100 % open-source",
+      "bilingual": "FR + EN, contenu miroir",
+      "noTracking": "Sans cookies tiers",
+      "officialMcp": "MCP officiel referencé"
+    }
+  },
+  "themes": {
+    "badgesLabel": "Thèmes de l'article",
+    "tutorial": "Tutoriel",
+    "guide": "Guide",
+    "reference": "Référence",
+    "comparison": "Comparatif",
+    "use-case": "Cas d'usage",
+    "security": "Sécurité",
+    "devsecops": "DevSecOps",
+    "architecture": "Architecture",
+    "performance": "Performance",
+    "tooling": "Outils",
+    "productivity": "Productivité",
+    "migration": "Migration"
   },
   "footer": {
     "description": "Le guide de référence gratuit pour maîtriser Claude Code. Créé par la communauté, pour la communauté. Pas de paywall, pas de tracking, juste du savoir partagé.",
@@ -143,7 +186,8 @@
   "callout": {
     "info": "Information",
     "tip": "Astuce",
-    "warning": "Attention"
+    "warning": "Attention",
+    "error": "Erreur"
   },
   "videoEmbed": {
     "play": "Lire la vidéo : {title}",
@@ -420,6 +464,145 @@
       "couts-reels": "Coûts réels de Claude Code",
       "mythes": "8 idées reçues sur Claude Code",
       "securite": "Guide de sécurité"
+    }
+  },
+  "designSystem": {
+    "metaTitle": "Design System · Tokens C1 (interne)",
+    "metaDescription": "Page interne de référence pour les tokens C1 du Claude Codex : typographie, palettes, surfaces, callouts, radius, ombres et motion.",
+    "hero": {
+      "eyebrow": "Interne · Tokens C1",
+      "title": "Design system du Claude Codex",
+      "subtitle": "Cette page liste tous les tokens visuels du site. Elle sert de référence aux développeurs et aux designers pour vérifier qu'un nouveau composant réutilise bien le système existant.",
+      "notice": "Page non listée dans la navigation publique. Indexation désactivée. Toujours préférer un token sémantique à une valeur en dur."
+    },
+    "typography": {
+      "eyebrow": "01 · Typographie",
+      "title": "Échelle typographique",
+      "description": "Toutes les classes utilitaires sont définies dans globals.css. Elles encodent à la fois la taille, la hauteur de ligne, le poids et la couleur sémantique de chaque rôle de texte.",
+      "sample": {
+        "cc-display-1": "Display 1 : pour le hero principal",
+        "cc-display-2": "Display 2 : secondaire fort",
+        "cc-h1": "H1 d'une page de section",
+        "cc-h1-doc": "H1 d'une page de doc",
+        "cc-h2": "H2 standard d'une section",
+        "cc-h2-article": "H2 d'un article éditorial",
+        "cc-h2-doc": "H2 d'une page de doc",
+        "cc-h3": "H3 : sous-section",
+        "cc-h4": "H4 : petit titre de bloc",
+        "cc-lead": "Paragraphe d'introduction qui amène la lecture en douceur.",
+        "cc-body": "Texte de corps standard pour le contenu courant.",
+        "cc-body-sm": "Texte de corps plus petit, pour les notes ou les légendes longues.",
+        "cc-caption": "Légende discrète pour métadonnées",
+        "cc-eyebrow": "Sourcil de section"
+      },
+      "tracking": {
+        "tight": "tracking display, poids 800",
+        "tightDoc": "tracking -0.025em, poids 800",
+        "tight2": "tracking -0.02em, poids 700",
+        "tightSmall": "tracking -0.015em, poids 700",
+        "normal": "tracking neutre",
+        "wide": "tracking 0.08em, capitales"
+      }
+    },
+    "palettes": {
+      "eyebrow": "02 · Palettes",
+      "title": "Couleurs primitives",
+      "description": "Onze paliers par palette, exposés à la fois comme variables CSS et utilitaires Tailwind. Les composants ne devraient utiliser ces hex que pour des cas particuliers documentés.",
+      "brand": "Brand (cyan)",
+      "accent": "Accent (ambre)",
+      "slate": "Neutres (slate)"
+    },
+    "semantic": {
+      "eyebrow": "03 · Tokens sémantiques",
+      "title": "Couleurs sémantiques",
+      "description": "Les composants doivent consommer ces tokens en priorité. Ils basculent automatiquement entre clair et sombre via la classe .dark.",
+      "bgGroup": "Arrière-plans",
+      "fgGroup": "Textes",
+      "borderGroup": "Bordures",
+      "brandGroup": "Brand sémantique",
+      "bgPageUsage": "Fond principal de la page",
+      "bgSubtleUsage": "Fond de section secondaire",
+      "bgElevatedUsage": "Fond de carte ou de surface flottante",
+      "fgPrimaryUsage": "Texte principal, titres",
+      "fgSecondaryUsage": "Texte secondaire, descriptions",
+      "fgMutedUsage": "Texte discret, métadonnées",
+      "fgOnBrandUsage": "Texte sur fond brand (contraste AA)",
+      "borderSubtleUsage": "Bordure légère, séparateurs",
+      "borderDefaultUsage": "Bordure standard de carte",
+      "borderStrongUsage": "Bordure marquée, focus",
+      "brandPrimaryUsage": "Couleur d'action principale (AA sur fg-on-brand)",
+      "brandHoverUsage": "État hover des actions principales",
+      "brand700Usage": "Alias historique pour brand-700",
+      "brand800Usage": "Alias historique pour brand-800"
+    },
+    "surfaces": {
+      "eyebrow": "04 · Surfaces",
+      "title": "Trois niveaux de surface",
+      "description": "page → subtle → elevated. Les classes utilitaires .cc-surface-* gèrent à la fois la couleur de fond, le texte et l'ombre éventuelle.",
+      "page": "Page",
+      "subtle": "Subtle",
+      "elevated": "Elevated",
+      "pageUsage": "Fond de la page de plus haut niveau, sans ombre.",
+      "subtleUsage": "Fond plus doux pour découper les sections.",
+      "elevatedUsage": "Surface flottante, livrée avec --shadow-elevated."
+    },
+    "status": {
+      "eyebrow": "05 · Statuts",
+      "title": "Couleurs de statut",
+      "description": "Les quatre statuts standards. Toujours accompagner la couleur d'un libellé pour rester accessible aux personnes daltoniennes.",
+      "success": "Succès",
+      "warning": "Avertissement",
+      "error": "Erreur",
+      "info": "Info"
+    },
+    "cards": {
+      "eyebrow": "06 · Cartes",
+      "title": "Carte sémantique",
+      "description": "La classe .cc-card pose un fond, une bordure, un radius et une ombre cohérents. Ajouter data-interactive=\"true\" active la translation au survol.",
+      "staticLabel": "Statique",
+      "interactiveLabel": "Interactif",
+      "staticDescription": "Carte de présentation classique, sans interaction. Utilisée pour le contenu informatif.",
+      "interactiveDescription": "Survolez cette carte pour voir l'élévation et le glow brand."
+    },
+    "callouts": {
+      "eyebrow": "07 · Callouts",
+      "title": "Encadrés sémantiques",
+      "description": "Quatre variantes pour les MDX. Les couleurs de bordure et de texte respectent un contraste AA en clair comme en sombre.",
+      "info": {
+        "title": "Information",
+        "body": "Bloc neutre pour préciser un élément de contexte ou pointer vers une ressource."
+      },
+      "tip": {
+        "title": "Astuce",
+        "body": "Bloc positif pour partager une bonne pratique ou un raccourci utile."
+      },
+      "warning": {
+        "title": "Attention",
+        "body": "Bloc d'alerte pour signaler un piège fréquent ou un point de vigilance."
+      },
+      "error": {
+        "title": "Erreur",
+        "body": "Bloc rouge pour les erreurs bloquantes ou les comportements à éviter."
+      }
+    },
+    "radius": {
+      "eyebrow": "08 · Radius",
+      "title": "Rayons de bordure",
+      "description": "Sept paliers de radius pour couvrir l'ensemble des surfaces, du badge plein au cercle parfait."
+    },
+    "shadows": {
+      "eyebrow": "09 · Ombres",
+      "title": "Profondeur",
+      "description": "Six niveaux d'ombre plus deux glows colorés. Les valeurs sont retravaillées en dark pour rester perceptibles sur fond sombre."
+    },
+    "motion": {
+      "eyebrow": "10 · Motion",
+      "title": "Durées et courbes",
+      "description": "Toutes les transitions du site puisent dans ces tokens. Préférer ease-out pour une entrée naturelle, ease-spring pour un rebond léger.",
+      "hoverLabel": "Démo hover",
+      "hoverTitle": "Survolez cette carte",
+      "hoverBody": "Translation de 3px vers le haut, sur la durée base avec une courbe ease-out. Désactivée si prefers-reduced-motion est actif.",
+      "reducedMotion": "Toutes les animations respectent prefers-reduced-motion : la translation est neutralisée pour les utilisateurs qui en font la demande."
     }
   }
 }

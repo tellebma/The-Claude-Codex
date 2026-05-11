@@ -527,6 +527,30 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Awesome Claude Plugins: official marketplace + community ecosystem",
+    description:
+      "Claude Code plugins worth knowing: official Anthropic marketplace, claude-hud, compound-engineering-plugin, claudian, alternative marketplaces.",
+    href: "/ecosystem/awesome-plugins",
+    section: "Ecosystem",
+    keywords: [
+      "plugins",
+      "awesome",
+      "marketplace",
+      "anthropic",
+      "claude-plugins-official",
+      "claude-hud",
+      "compound-engineering",
+      "claudian",
+      "obsidian",
+      "jetbrains",
+      "knowledge-work",
+      "buildwithclaude",
+      "tonsofskills",
+      "ccpi",
+      "ecosystem",
+    ],
+  },
+  {
     title: "Awesome Claude Skills: the 2026 selection",
     description:
       "Public skills worth installing: complete packs, single-purpose skills (memory, tokens, marketing), pro design skills, and awesome lists.",

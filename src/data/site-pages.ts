@@ -602,6 +602,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-11",
   },
   {
+    path: "/ecosystem/awesome-plugins",
+    title: "Awesome Claude Plugins : marketplace officielle + écosystème community",
+    description:
+      "Plugins Claude Code à connaître : marketplace officielle Anthropic, plugins community à fort impact (claude-hud, compound-engineering, claudian), marketplaces alternatives.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/enterprise",
     title: "Claude Code en entreprise",
     description:

@@ -67,7 +67,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Installez Claude Code en quelques minutes : Node.js 18+, npm, authentification API key ou Max, et résolution des erreurs courantes.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-05-10",
+    lastModified: "2026-05-11",
   },
   {
     path: "/getting-started/environment-setup",

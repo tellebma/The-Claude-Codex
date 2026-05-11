@@ -138,6 +138,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
     titleKey: "ecosystem.title",
     items: [
       { labelKey: "ecosystem.overview", href: "/ecosystem" },
+      { labelKey: "ecosystem.top-repos-github", href: "/ecosystem/top-repos-github" },
     ],
   },
   enterprise: {

@@ -104,10 +104,10 @@ const translations = {
 };
 
 const SUB_PAGES = [
-  { href: "/ecosystem/top-repos-github", icon: Star, step: "01", color: "brand" as const },
-  { href: "/ecosystem/awesome-skills", icon: Sparkles, step: "02", color: "accent" as const },
-  { href: "/ecosystem/awesome-plugins", icon: Puzzle, step: "03", color: "brand" as const },
-  { href: "/ecosystem/awesome-mcp-servers", icon: Server, step: "04", color: "accent" as const },
+  { href: "/ecosystem/top-repos-github", icon: Star, step: "01", color: "brand" as const, live: true },
+  { href: "/ecosystem/awesome-skills", icon: Sparkles, step: "02", color: "accent" as const, live: false },
+  { href: "/ecosystem/awesome-plugins", icon: Puzzle, step: "03", color: "brand" as const, live: false },
+  { href: "/ecosystem/awesome-mcp-servers", icon: Server, step: "04", color: "accent" as const, live: false },
 ] as const;
 
 const colorStyles = {
@@ -226,10 +226,37 @@ export default async function EcosystemPage({
               const Icon = page.icon;
               const styles = colorStyles[page.color];
               const subPage = t.subPages[index];
+              if (page.live) {
+                return (
+                  <AnimateOnScroll key={page.href} preset="fade-up">
+                    <Link
+                      href={`/${locale}${page.href}`}
+                      className={`group relative flex flex-col rounded-xl border border-slate-200/50 bg-white/50 p-6 transition-all hover:bg-white hover:shadow-lg dark:border-slate-700/50 dark:bg-slate-800/50 dark:hover:bg-slate-800/80 ${styles.hoverBorder}`}
+                    >
+                      <div className="mb-4 flex items-center justify-between">
+                        <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${styles.iconBg}`}>
+                          <Icon className={`h-6 w-6 ${styles.iconText}`} aria-hidden="true" />
+                        </div>
+                        <span className={`text-3xl font-black ${styles.step}`}>{page.step}</span>
+                      </div>
+                      <h3 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
+                        {subPage.title}
+                      </h3>
+                      <p className="mb-4 flex-1 text-sm leading-relaxed text-slate-500 dark:text-slate-300">
+                        {subPage.description}
+                      </p>
+                      <div className={`flex items-center gap-1 text-sm font-medium ${styles.linkText} transition-colors ${styles.linkHover}`}>
+                        {t.readGuide}
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                      </div>
+                    </Link>
+                  </AnimateOnScroll>
+                );
+              }
               return (
                 <AnimateOnScroll key={page.href} preset="fade-up">
                   <div
-                    className={`group relative flex flex-col rounded-xl border border-slate-200/50 bg-white/50 p-6 opacity-70 dark:border-slate-700/50 dark:bg-slate-800/50`}
+                    className="group relative flex flex-col rounded-xl border border-slate-200/50 bg-white/50 p-6 opacity-70 dark:border-slate-700/50 dark:bg-slate-800/50"
                     aria-disabled="true"
                   >
                     <div className="mb-4 flex items-center justify-between">

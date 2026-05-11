@@ -584,6 +584,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-11",
   },
   {
+    path: "/ecosystem/top-repos-github",
+    title: "Top repos GitHub pour Claude Code (mai 2026)",
+    description:
+      "25 repos GitHub triés sur le volet qui font avancer l’écosystème Claude Code : harness, awesome lists, mémoire, optimisation tokens, multi-agents, plugins.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/enterprise",
     title: "Claude Code en entreprise",
     description:

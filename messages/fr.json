@@ -405,7 +405,8 @@
     },
     "ecosystem": {
       "title": "Écosystème",
-      "overview": "Vue d'ensemble"
+      "overview": "Vue d'ensemble",
+      "top-repos-github": "Top repos GitHub"
     },
     "enterprise": {
       "title": "Entreprise",

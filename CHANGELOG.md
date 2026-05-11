@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.9.0...v1.9.1) (2026-05-11)
+
+
+### Bug Fixes
+
+* **ui:** Screenshot lightbox bugs + retire image console API ([#196](https://github.com/tellebma/The-Claude-Codex/issues/196)) ([51528e1](https://github.com/tellebma/The-Claude-Codex/commit/51528e1c544191f15f47a31f85d1bfa70f626716))
+
 # [1.9.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.8.0...v1.9.0) (2026-05-11)
 
 

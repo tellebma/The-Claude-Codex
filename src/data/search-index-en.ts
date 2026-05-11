@@ -973,6 +973,27 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "comparison",
     ],
   },
+  {
+    title: "Persistent memory across Claude Code sessions",
+    description:
+      "Patterns to keep context across sessions: hierarchical CLAUDE.md, SessionStart hooks, claude-mem, graphify. Comparison and combination.",
+    href: "/advanced/memoire-persistante",
+    section: "Advanced",
+    keywords: [
+      "memory",
+      "persistent",
+      "session",
+      "claude-mem",
+      "graphify",
+      "claude.md",
+      "hooks",
+      "sessionstart",
+      "knowledge graph",
+      "context",
+      "history",
+      "thedotmack",
+    ],
+  },
   // Reference
   {
     title: "Technical reference: Claude Code",

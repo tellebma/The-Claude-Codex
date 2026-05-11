@@ -434,7 +434,8 @@
       "ultraplan": "Ultraplan: plan in the cloud",
       "rpi-workflow": "RPI: Research, Plan, Implement",
       "cross-model-workflow": "Cross-Model: Claude + Codex/Gemini",
-      "methodologies-ecosystem": "Methodologies ecosystem"
+      "methodologies-ecosystem": "Methodologies ecosystem",
+      "memoire-persistante": "Persistent memory"
     },
     "reference": {
       "title": "Reference",

@@ -755,6 +755,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-26",
   },
   {
+    path: "/advanced/memoire-persistante",
+    title: "Mémoire persistante entre sessions Claude Code",
+    description:
+      "Comment garder le contexte d’une session Claude Code à l’autre : patterns claude-mem, graphify, hooks SessionStart, CLAUDE.md hiérarchique. Comparaison des 4 approches.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

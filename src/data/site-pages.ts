@@ -764,6 +764,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-11",
   },
   {
+    path: "/advanced/optimisation-tokens",
+    title: "Optimisation tokens et réduction des coûts Claude Code",
+    description:
+      "Faire baisser la facture Anthropic sans sacrifier la qualité. 5 leviers : prompt caching natif, /compact, caveman, claude-code-router, abonnement Max.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

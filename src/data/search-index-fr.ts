@@ -1006,6 +1006,30 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "thedotmack",
     ],
   },
+  {
+    title: "Optimisation tokens et reduction couts Claude Code",
+    description:
+      "5 leviers pour faire baisser la facture Anthropic : prompt caching natif (90%), /compact, caveman (-65% output), claude-code-router, Max.",
+    href: "/advanced/optimisation-tokens",
+    section: "Avance",
+    keywords: [
+      "tokens",
+      "optimisation",
+      "couts",
+      "facture",
+      "prompt caching",
+      "compact",
+      "caveman",
+      "claude-code-router",
+      "routeur",
+      "haiku",
+      "sonnet",
+      "opus",
+      "claude max",
+      "abonnement",
+      "anthropic pricing",
+    ],
+  },
   // Reference
   {
     title: "Reference technique : Claude Code",

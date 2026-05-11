@@ -1,0 +1,123 @@
+---
+title: "Token optimization and cost reduction for Claude Code"
+description: "Lower your Anthropic bill without sacrificing quality. Concrete patterns: native prompt caching, caveman skill, claude-code-router, /compact, model selection. Comparison and combos."
+order: 15
+section: "advanced"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["guide", "performance"]
+---
+
+{/* source: GitHub API repos data + Anthropic prompt caching docs, fetched 2026-05-11 */}
+
+## TL;DR
+
+- Claude Code can get expensive fast: a 4h session on a large project costs $1-5 in API key, much more if Opus 4.7 is used everywhere.
+- 5 concrete levers to reduce the bill: **native prompt caching** (up to 90% savings on cache hit), **`/compact` command** (shrinks conversation), **`caveman` skill** (65% fewer output tokens), **`claude-code-router`** (switches Haiku/Sonnet/Opus by context), **Claude Max subscription** (flat rate instead of pay-as-you-go).
+- The biggest gain is often **picking the right model**: Haiku 4.5 for 80% of tasks, Sonnet 4.6 for daily complex work, Opus 4.7 only for architecture and tough debugging.
+
+## Understanding where the money goes
+
+Before optimizing, know what costs. On a typical Claude Code session:
+
+1. **System prompt + CLAUDE.md**: ~5K to 20K tokens (input), paid at session start
+2. **File reading**: every `Read` injects content as input tokens
+3. **Model responses**: output (3-5× more expensive than input at Anthropic)
+4. **Tool calls + results**: invisible in UI but consume tokens
+5. **Parallel sessions / delegated agents**: each has its own context
+
+<Callout type="info" title="2026 price ratios">
+As of 2026-05-11 at Anthropic: input $1/MTok for Haiku, ~$3 for Sonnet, ~$15 for Opus. Output 5× more expensive. Cache hit is billed at ~10% of normal input price. Check current rates at [anthropic.com/pricing](https://www.anthropic.com/pricing) (prices change).
+</Callout>
+
+## Lever 1: Native prompt caching (up to 90% savings)
+
+Anthropic has had **prompt caching** since late 2024. When an identical prefix reappears across successive requests (typically system prompt + CLAUDE.md + first files), it's billed at the cache hit rate (~10% of normal).
+
+Claude Code uses it automatically. To maximize hit rate:
+
+- Keep the **system prompt stable** between requests (avoid editing CLAUDE.md mid-session)
+- Put **large reference files** in CLAUDE.md instead of `Read`-ing them each time
+- Avoid **switching between models** in the same session (each model has its own cache)
+
+See [`docs.anthropic.com/en/docs/build-with-claude/prompt-caching`](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) for the full docs.
+
+## Lever 2: `/compact` when the session drags on
+
+When a session runs > 2h or you pass 100K tokens, Claude starts losing initial context (context rot). The **`/compact`** command asks Claude to compress the conversation into a structured summary, restarting at ~10K tokens instead of 150K+.
+
+When to use it:
+
+- After resolving a big step (deploy, refactor, etc.)
+- Before starting a new sub-task that doesn't need full history
+- When you see context degrading (Claude forgets decisions taken 1h earlier)
+
+See [`/prompting/context-management`](/prompting/context-management) for details.
+
+## Lever 3: `caveman` skill (–65% output tokens)
+
+[`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) (58,284 ★ as of 2026-05-11). Skill that forces Claude to answer in a "caveman" style: short sentences, minimal vocabulary, no ornament.
+
+```text
+Before: "I will now proceed to carry out an in-depth analysis of this function to identify any potential performance or security issues that might arise."
+
+After (caveman): "Analyze function. Look for perf and security bugs."
+```
+
+Author-reported: **65% reduction in output tokens** on common tasks, with minor impact on technical accuracy. Test on your project: some workflows (architecture, pedagogical explanation) suffer from the style.
+
+**When to enable**: repetitive tasks where conciseness matters more than pedagogy. File editing, running tests, factual debugging.
+
+**When to avoid**: code reviews to explain to a junior, documentation, pair-programming sessions where nuance matters.
+
+## Lever 4: `claude-code-router` (right model at the right time)
+
+[`musistudio/claude-code-router`](https://github.com/musistudio/claude-code-router) (33,826 ★ as of 2026-05-11). Router that decides which Anthropic model is used based on request context.
+
+Typical logic:
+
+- **Haiku 4.5**: file reads, running tests, simple git operations
+- **Sonnet 4.6**: code edits, refactoring, standard debugging
+- **Opus 4.7**: architecture, complex debugging, algorithm design
+
+Author-measured savings: **30 to 50%** on a developer's monthly bill who used Opus everywhere. Latency also drops (Haiku replies in ~2s vs Opus ~8s).
+
+**Risk**: if the router misroutes a complex task to Haiku, quality drops. Calibrate on your real workflow for 1-2 weeks before trusting it blindly.
+
+## Lever 5: Claude Max subscription instead of API key
+
+For a developer using Claude Code **more than 2-3h per day**, the **Claude Max** subscription (from ~$100/month, verify on [claude.com/pricing](https://claude.com/pricing)) becomes more cost-effective than pay-as-you-go API billing.
+
+| Profile | API key (pay-as-you-go) | Claude Max |
+|---------|--------------------------|------------|
+| Occasional dev (<5h/week) | $10-30/month | $100/month minimum (overkill) |
+| Daily dev (3-4h/day) | $100-300/month | $100/month (net win) |
+| Heavy dev + agents (8h+) | $300-1000/month | $100-500/month per tier |
+
+See [`/getting-started/installation`](/getting-started/installation) for Max auth procedure.
+
+## Recommended starter combo
+
+A 3-step recipe to cut your bill 40-60% without rewriting your workflow:
+
+1. **Pick Claude Max** if you use Claude Code > 2h/day. Otherwise stay on API key.
+2. **Install `claude-code-router`** and let it run 2 weeks in passive observation. Adjust thresholds if you see too much Haiku struggling or too much Opus over-engineering.
+3. **`/compact` after every big step** (becomes a reflex in 1-2 weeks).
+
+What NOT to do on day 1:
+
+- Install `caveman` everywhere (test first on a non-critical workflow)
+- Disable native prompt caching (rarely worth it)
+- Force Haiku for everything (quality drops sharply on complex tasks)
+
+<Callout type="warning" title="Measure before and after">
+Before optimizing, note your average bill over 1 month. Otherwise you can't tell if your optimizations worked. Anthropic shows daily usage in the API console; Claude Max shows a capacity counter.
+</Callout>
+
+## Next steps
+
+- Dive deeper into **prompt caching**: official doc [`docs.anthropic.com/.../prompt-caching`](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching).
+- Master **context management**: [`/prompting/context-management`](/prompting/context-management).
+- Detailed **multi-model** approach: [`/advanced/cross-model-workflow`](/advanced/cross-model-workflow).
+- Compare **optimization skills**: [`/ecosystem/awesome-skills`](/ecosystem/awesome-skills).
+- Keep **memory across sessions** to avoid re-paying context: [`/advanced/memoire-persistante`](/advanced/memoire-persistante).

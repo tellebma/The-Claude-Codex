@@ -994,6 +994,30 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "thedotmack",
     ],
   },
+  {
+    title: "Token optimization and Claude Code cost reduction",
+    description:
+      "5 levers to cut the Anthropic bill: native prompt caching (90%), /compact, caveman (-65% output), claude-code-router, Max subscription.",
+    href: "/advanced/optimisation-tokens",
+    section: "Advanced",
+    keywords: [
+      "tokens",
+      "optimization",
+      "cost",
+      "bill",
+      "prompt caching",
+      "compact",
+      "caveman",
+      "claude-code-router",
+      "router",
+      "haiku",
+      "sonnet",
+      "opus",
+      "claude max",
+      "subscription",
+      "anthropic pricing",
+    ],
+  },
   // Reference
   {
     title: "Technical reference: Claude Code",

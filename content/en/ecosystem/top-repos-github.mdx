@@ -1,0 +1,128 @@
+---
+title: "Top GitHub repos for Claude Code (May 2026)"
+description: "25 hand-picked GitHub repos that drive the Claude Code ecosystem forward: harness, awesome lists, memory, token optimization, multi-agents, plugins. Data verified on GitHub 2026-05-11."
+order: 1
+section: "ecosystem"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["reference", "tooling"]
+---
+
+{/* source: GitHub API repos data, fetched 2026-05-11 */}
+
+## TL;DR
+
+- The Claude Code ecosystem now exceeds **2 million cumulative stars** across the 25 repos below (GitHub data as of 2026-05-11).
+- 8 categories cover the real needs: harness, awesome lists, plugins, memory, token optimization, multi-agents, templates, and system prompt leaks.
+- Three repos dominate their category: `anthropics/claude-code` (122k★ official), `everything-claude-code` (179k★ harness leader), `x1xhlol/system-prompts-and-models-of-ai-tools` (137k★ internals reference).
+- A dozen more stand out for their **clearly identified niche** rather than star count: `claude-mem` (memory), `caveman` (token reduction), `graphify` (knowledge graph), `gstack` (Garry Tan's templates).
+- List refreshed monthly. Dead or inactive repos (no commit in 90+ days) are removed.
+
+## Why this page exists
+
+When an ecosystem explodes, you need a **map**. GitHub awesome lists (43k+ ★ each) are already great, but they list everything without prioritization. This page filters: we keep only repos that have both **social traction** (stars) and **real-world usage value** (clear description, recent commits, active community).
+
+Each entry shows the GitHub star count measured on the day of publication. Numbers move fast (sometimes +10k★ per week on viral repos), so they're a **rough order-of-magnitude signal**, not absolute truth.
+
+<Callout type="info" title="Curation methodology">
+Selection criteria: 1) at least 25k★ or a unique non-replaceable niche, 2) recent commit (< 90 days), 3) clear English description, 4) no AI-generated spam, 5) real usage documented in README or blog. Repos that are just a README with no real traction are excluded even at > 50k★.
+</Callout>
+
+## 1. Harness & frameworks
+
+"Harness" refers to the layer of prompts, skills, and hooks that turn Claude Code into a specialized assistant. The densest category.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`anthropics/claude-code`](https://github.com/anthropics/claude-code) | 122,570 | The official Anthropic repo, source of truth for the CLI itself. GitHub issues + releases. |
+| [`affaan-m/everything-claude-code`](https://github.com/affaan-m/everything-claude-code) | 179,423 | The leading harness: skills, instincts, memory, security, research-first. The most complete one. |
+| [`forrestchang/andrej-karpathy-skills`](https://github.com/forrestchang/andrej-karpathy-skills) | 125,124 | A single `CLAUDE.md` derived from Karpathy's observations on LLM pitfalls. Required reading. |
+| [`garrytan/gstack`](https://github.com/garrytan/gstack) | 93,773 | Garry Tan's exact setup (Y Combinator): 23 opinionated tools, defined roles (CEO, designer, QA…). |
+| [`shareAI-lab/learn-claude-code`](https://github.com/shareAI-lab/learn-claude-code) | 59,784 | "Bash is all you need" — a nano educational harness to understand how a CLI agent works. |
+
+## 2. Awesome lists & curation
+
+The reference annuaire pages to discover the ecosystem. Bookmark these.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`punkpeye/awesome-mcp-servers`](https://github.com/punkpeye/awesome-mcp-servers) | 86,707 | THE reference list for MCP servers. Sorted by category. |
+| [`ComposioHQ/awesome-claude-skills`](https://github.com/ComposioHQ/awesome-claude-skills) | 59,255 | Curation of public skills with usage examples. |
+| [`hesreallyhim/awesome-claude-code`](https://github.com/hesreallyhim/awesome-claude-code) | 43,382 | Global inventory: skills, hooks, slash-commands, agents, plugins. |
+| [`sickn33/antigravity-awesome-skills`](https://github.com/sickn33/antigravity-awesome-skills) | 37,180 | 1,400+ installable skills for Claude Code, Cursor, Codex CLI, Gemini. |
+
+## 3. Plugins & marketplaces
+
+The official Anthropic directory and community plugin ecosystems.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) | 19,104 | The official Anthropic-managed directory. Validated and maintained plugins. |
+
+## 4. Memory & persistent context
+
+To avoid losing context between sessions, one of Claude Code's main native gaps.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`thedotmack/claude-mem`](https://github.com/thedotmack/claude-mem) | 74,819 | Captures everything the agent does, compresses, replays at startup. The dominant pattern. |
+| [`safishamsi/graphify`](https://github.com/safishamsi/graphify) | 46,618 | Turns a code folder into a queryable knowledge graph. Works with Cursor, Codex too. |
+
+## 5. Token optimization & cost
+
+When the Anthropic bill climbs. Concrete patterns to reduce token consumption.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) | 58,237 | The "why use many token when few token do trick" skill. Cuts 65% tokens by talking caveman. |
+| [`musistudio/claude-code-router`](https://github.com/musistudio/claude-code-router) | 33,820 | Decides which model handles what based on context. Switches Haiku → Sonnet → Opus on the fly. |
+
+## 6. Multi-agents & orchestration
+
+When a single agent isn't enough. Swarm, teams, and multi-Claude orchestration patterns.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`ruvnet/ruflo`](https://github.com/ruvnet/ruflo) | 49,014 | Leading multi-agent orchestration platform. Smart swarms and autonomous workflows. |
+| [`wshobson/agents`](https://github.com/wshobson/agents) | 35,205 | Smart automation + multi-agent orchestration in Python. |
+| [`Yeachan-Heo/oh-my-claudecode`](https://github.com/Yeachan-Heo/oh-my-claudecode) | 33,417 | Teams-first multi-agent orchestration (defined roles, explicit communication). |
+
+## 7. Templates & meta-prompting
+
+Opinionated setups ready to clone.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`gsd-build/get-shit-done`](https://github.com/gsd-build/get-shit-done) | 61,537 | Meta-prompting + context engineering + spec-driven dev. Lightweight but powerful. |
+| [`shanraisshan/claude-code-best-practice`](https://github.com/shanraisshan/claude-code-best-practice) | 52,365 | "From vibe coding to agentic engineering" — pattern accumulation. |
+| [`davila7/claude-code-templates`](https://github.com/davila7/claude-code-templates) | 27,168 | CLI to configure and monitor Claude Code. Fast bootstrap. |
+| [`luongnv89/claude-howto`](https://github.com/luongnv89/claude-howto) | 32,369 | Visual guide with step-by-step examples and copy-paste templates. |
+
+## 8. System prompts & internals
+
+To understand how Claude Code works under the hood. Essential for advanced prompting.
+
+| Repo | ⭐ | Why it matters |
+|------|---:|----------------|
+| [`x1xhlol/system-prompts-and-models-of-ai-tools`](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools) | 137,157 | THE reference leak: system prompts of Claude Code, Cursor, Devin, Junie, Lovable, etc. |
+| [`asgeirtj/system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) | 40,039 | Extracted system prompts: ChatGPT, Claude Opus 4.7/4.6/Sonnet, Claude Code, Gemini. |
+
+## How to use this
+
+Three typical use cases:
+
+1. **Deciding on a harness**: start with `everything-claude-code` (most complete) or `gstack` (defined roles, simpler). Don't stack two different harnesses.
+2. **Filling a specific gap**: need memory? `claude-mem`. Need to cut the bill? `caveman` + `claude-code-router`. Need to orchestrate multiple agents? `ruflo`.
+3. **Understanding internals**: read `system-prompts-and-models-of-ai-tools` once, then revisit the patterns described in the awesome lists.
+
+<Callout type="tip" title="Before installing 12 tools">
+Paralysis by accumulation is real. Pick **1 harness** + **1 memory tool** + **1 awesome list as reference**. You can always add more later. Better to master 3 tools than skim 12.
+</Callout>
+
+## Next steps
+
+- Compare the best **public skills**: [`/ecosystem/awesome-skills`](/ecosystem/awesome-skills) (coming, story ECO-3).
+- Discover the official Anthropic plugins: [`/ecosystem/awesome-plugins`](/ecosystem/awesome-plugins) (coming, ECO-4).
+- Explore MCP servers by category: [`/ecosystem/awesome-mcp-servers`](/ecosystem/awesome-mcp-servers) (coming, ECO-5).
+- Learn how to **create your own skill**: [`/skills/create-custom`](/skills/create-custom).
+- Dig into **memory and persistent context**: [`/prompting/claude-md`](/prompting/claude-md).

@@ -134,6 +134,16 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "use-cases.no-code", href: "/use-cases/no-code" },
     ],
   },
+  ecosystem: {
+    titleKey: "ecosystem.title",
+    items: [
+      { labelKey: "ecosystem.overview", href: "/ecosystem" },
+      { labelKey: "ecosystem.top-repos-github", href: "/ecosystem/top-repos-github" },
+      { labelKey: "ecosystem.awesome-skills", href: "/ecosystem/awesome-skills" },
+      { labelKey: "ecosystem.awesome-plugins", href: "/ecosystem/awesome-plugins" },
+      { labelKey: "ecosystem.awesome-mcp-servers", href: "/ecosystem/awesome-mcp-servers" },
+    ],
+  },
   enterprise: {
     titleKey: "enterprise.title",
     items: [
@@ -161,6 +171,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.rpi-workflow", href: "/advanced/rpi-workflow" },
       { labelKey: "advanced.cross-model-workflow", href: "/advanced/cross-model-workflow" },
       { labelKey: "advanced.methodologies-ecosystem", href: "/advanced/methodologies-ecosystem" },
+      { labelKey: "advanced.memoire-persistante", href: "/advanced/memoire-persistante" },
     ],
   },
   reference: {

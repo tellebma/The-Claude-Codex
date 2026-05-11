@@ -186,6 +186,19 @@ Suivent la spec [llmstxt.org](https://llmstxt.org) pour faciliter la citation du
   - Privilégier les phrases courtes et directes aux constructions alambiquées
   - Si du texte existant sonne trop "IA", le reformuler pour qu'il paraisse naturel
 
+### Rigueur journalistique — anti-hallucination (zéro-tolérance)
+
+Pour TOUTE rédaction d'article, doc ou comparatif sur ce projet :
+
+- **TOUTE statistique, date, nom propre, version, prix, URL ou fait précis DOIT être vérifié via Playwright MCP ou WebFetch AVANT d'être écrit.** Aucune exception.
+- **JAMAIS écrire un fait depuis la mémoire si une vérification web est possible.** En cas d'incertitude → vérification systématique.
+- **Workflow par section** : (1) lister les faits précis nécessaires, (2) vérifier chacun via Playwright/WebFetch, (3) noter source + date dans commentaire HTML masqué `<!-- source: URL, consulté YYYY-MM-DD -->`, (4) rédiger uniquement avec les faits vérifiés.
+- **Sources prioritaires** : doc officielle fournisseur > GitHub releases > annonces officielles. Si information non vérifiable → `<Callout type="info">` "Information non vérifiée au YYYY-MM-DD, à confirmer auprès du fournisseur".
+- **Sources INTERDITES comme source factuelle** : forums Reddit, posts Twitter/X non officiels, articles de blog tiers non datés, tutoriels YouTube. Acceptables uniquement comme inspiration narrative.
+- **Versions de modèles Claude** : toujours re-vérifier sur docs.anthropic.com avant chaque snippet (les modèles évoluent : actuels au 2026-05 = `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`).
+- **Tarifs API** : préfixer chaque chiffre avec la date de constatation. Format : "Au YYYY-MM-DD, Replicate facture X$ pour Flux Pro (source : replicate.com/black-forest-labs/...)".
+- Si Playwright/WebFetch indisponible → STOP, signaler avant de rédiger. Ne JAMAIS combler par la mémoire.
+
 ## Design & UX
 
 - Mobile-first, responsive sur tous les breakpoints

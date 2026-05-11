@@ -1,0 +1,81 @@
+---
+title: "Awesome Claude Plugins: official marketplace + community ecosystem"
+description: "The Claude Code plugins you should know. Official Anthropic marketplace, high-impact community plugins, alternative marketplaces. GitHub data verified 2026-05-11."
+order: 3
+section: "ecosystem"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["reference", "tooling"]
+---
+
+{/* source: GitHub API repos data, fetched 2026-05-11 */}
+
+## TL;DR
+
+- **Plugins** are packaged integrations distributed via marketplace. More structured than a skill, lighter than a custom agent.
+- Official reference: [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) (19k★) — Anthropic-managed directory, validated plugins.
+- 3 community plugins deserve immediate installation: **claude-hud** (real-time visual HUD), **compound-engineering-plugin** (cross-tool workflows), **claudian** (Obsidian integration).
+- 2 alternative marketplaces extend beyond the official repo: `alirezarezvani/claude-skills` (245+ plugins) and `jeremylongshore/claude-code-plugins-plus-skills` (425 plugins).
+
+<Callout type="info" title="Plugin vs Skill vs Agent">
+A **plugin** distributes via marketplace, exposes a public API, and has a versioned lifecycle. A **skill** is an isolated markdown file. An **agent** is a task delegation. See [`/skills/comparison`](/skills/comparison) for the matrix.
+</Callout>
+
+## 1. Official Anthropic marketplace
+
+The reference directory. Plugins validated and maintained by Anthropic.
+
+| Repo | ⭐ | What's special |
+|------|---:|----------------|
+| [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) | 19,105 | Official directory. Plugins evaluated for quality and security before publication. |
+| [`anthropics/knowledge-work-plugins`](https://github.com/anthropics/knowledge-work-plugins) | 12,028 | Open-source plugin repo for knowledge workers (Claude Cowork). Non-dev target. |
+
+## 2. High-impact community plugins
+
+Community plugins with real traction (at least 10k★, recent updates).
+
+| Repo | ⭐ | What it adds |
+|------|---:|--------------|
+| [`jarrodwatts/claude-hud`](https://github.com/jarrodwatts/claude-hud) | 22,385 | **Visual HUD**: shows in real time the context usage, active tools, running agents, current todo. |
+| [`EveryInc/compound-engineering-plugin`](https://github.com/EveryInc/compound-engineering-plugin) | 16,540 | **Compound engineering**: cross-workflows between Claude Code + Codex + Cursor. Official Every plugin. |
+| [`YishenTu/claudian`](https://github.com/YishenTu/claudian) | 10,936 | **Obsidian integration**: embed Claude Code/Codex as an AI collaborator in your vault. |
+
+## 3. Alternative marketplaces
+
+Third-party marketplaces that extend beyond the official directory scope.
+
+| Repo | ⭐ | Volume |
+|------|---:|--------|
+| [`alirezarezvani/claude-skills`](https://github.com/alirezarezvani/claude-skills) | 14,441 | 245+ skills & agent plugins, cross-tool (Claude Code, Codex, Gemini CLI, Cursor, 8 more). |
+| [`jeremylongshore/claude-code-plugins-plus-skills`](https://github.com/jeremylongshore/claude-code-plugins-plus-skills) | 2,159 | **425 plugins + 2,810 skills + 200 agents**. Open-source marketplace `tonsofskills.com` with `ccpi` CLI. |
+| [`davepoon/buildwithclaude`](https://github.com/davepoon/buildwithclaude) | 2,909 | Unified hub: Skills + Agents + Commands + Hooks + Plugins + Marketplace collections. |
+
+## 4. Notable niche plugins
+
+For specific use cases, but well crafted.
+
+| Repo | ⭐ | For who |
+|------|---:|---------|
+| [`ykdojo/claude-code-tips`](https://github.com/ykdojo/claude-code-tips) | 8,205 | Not strictly a plugin, but 45 official tips + custom status line + system prompts. |
+| [`zhukunpenglinyutong/jetbrains-cc-gui`](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) | 3,365 | JetBrains GUI plugin for Claude Code + Codex (IntelliJ, WebStorm, PyCharm, etc.). |
+| [`agenticnotetaking/arscontexta`](https://github.com/agenticnotetaking/arscontexta) | 3,324 | Generates individualized knowledge systems from conversations. |
+| [`ZeframLou/call-me`](https://github.com/ZeframLou/call-me) | 2,589 | Minimal: lets Claude Code call you on the phone. Gimmick but fun. |
+
+## How to choose
+
+Three steps:
+
+1. **Start with the official one**: browse [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) first. It's the validated baseline. You'll find essential daily-use plugins (formatting, lint, tests).
+2. **Add 1-2 community plugins**: `claude-hud` is a visual must-have (knowing what's happening during long runs). `compound-engineering-plugin` if you juggle multiple AI tools.
+3. **Third-party marketplaces**: only if you're looking for a specific plugin not found elsewhere. Be careful about security (unaudited plugins can execute arbitrary code).
+
+<Callout type="warning" title="Third-party plugin security">
+A plugin has access to your CLI and potentially to your filesystem. Before installing a community plugin, read the source code (or at minimum the README + manifest). Prefer plugins with > 10k★ and an active maintainer. "tonsofskills.com" and other unofficial marketplaces are not audited by Anthropic.
+</Callout>
+
+## Next steps
+
+- Explore **MCP servers** by category: [`/ecosystem/awesome-mcp-servers`](/ecosystem/awesome-mcp-servers) (coming, ECO-5).
+- Understand the **official plugins**: [`/plugins`](/plugins).
+- Install your first plugin: [`/plugins/setup`](/plugins/setup).
+- Compare **plugins vs skills vs agents**: [`/skills/comparison`](/skills/comparison).

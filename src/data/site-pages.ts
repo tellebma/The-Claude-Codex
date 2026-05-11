@@ -67,7 +67,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Installez Claude Code en quelques minutes : Node.js 18+, npm, authentification API key ou Max, et résolution des erreurs courantes.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-05-10",
+    lastModified: "2026-05-11",
   },
   {
     path: "/getting-started/environment-setup",
@@ -575,6 +575,51 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/ecosystem",
+    title: "Écosystème Claude Code : repos, skills, plugins, MCP",
+    description:
+      "Le hub francophone de l’écosystème Claude Code. Top repos GitHub, awesome skills, plugins officiels Anthropic et serveurs MCP soigneusement curés.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/top-repos-github",
+    title: "Top repos GitHub pour Claude Code (mai 2026)",
+    description:
+      "25 repos GitHub triés sur le volet qui font avancer l’écosystème Claude Code : harness, awesome lists, mémoire, optimisation tokens, multi-agents, plugins.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/awesome-skills",
+    title: "Awesome Claude Skills : la sélection 2026",
+    description:
+      "Les skills publics qui valent vraiment l’installation : packs complets, skills uniques (mémoire, tokens, marketing), skills design pro et awesome lists.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/awesome-plugins",
+    title: "Awesome Claude Plugins : marketplace officielle + écosystème community",
+    description:
+      "Plugins Claude Code à connaître : marketplace officielle Anthropic, plugins community à fort impact (claude-hud, compound-engineering, claudian), marketplaces alternatives.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/awesome-mcp-servers",
+    title: "Awesome MCP Servers : la curation par catégorie (mai 2026)",
+    description:
+      "Les serveurs MCP à brancher à Claude Code : awesome lists, dev tools (GitHub, Chrome DevTools, Playwright), data, frameworks builders, automation. Données vérifiées 2026-05-11.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/enterprise",
     title: "Claude Code en entreprise",
     description:
@@ -708,6 +753,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-04-26",
+  },
+  {
+    path: "/advanced/memoire-persistante",
+    title: "Mémoire persistante entre sessions Claude Code",
+    description:
+      "Comment garder le contexte d’une session Claude Code à l’autre : patterns claude-mem, graphify, hooks SessionStart, CLAUDE.md hiérarchique. Comparaison des 4 approches.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
   },
   {
     path: "/reference",

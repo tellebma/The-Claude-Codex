@@ -175,6 +175,7 @@
       "configurator": "Configurator",
       "content": "Articles",
       "use-cases": "Use Cases",
+      "ecosystem": "Ecosystem",
       "enterprise": "Enterprise",
       "advanced": "Advanced",
       "reference": "Reference",
@@ -402,6 +403,14 @@
       "success-stories": "Success stories",
       "no-code": "No-code tutorials"
     },
+    "ecosystem": {
+      "title": "Ecosystem",
+      "overview": "Overview",
+      "top-repos-github": "Top GitHub repos",
+      "awesome-skills": "Awesome Skills",
+      "awesome-plugins": "Awesome Plugins",
+      "awesome-mcp-servers": "Awesome MCP Servers"
+    },
     "enterprise": {
       "title": "Enterprise",
       "overview": "Overview",
@@ -425,7 +434,8 @@
       "ultraplan": "Ultraplan: plan in the cloud",
       "rpi-workflow": "RPI: Research, Plan, Implement",
       "cross-model-workflow": "Cross-Model: Claude + Codex/Gemini",
-      "methodologies-ecosystem": "Methodologies ecosystem"
+      "methodologies-ecosystem": "Methodologies ecosystem",
+      "memoire-persistante": "Persistent memory"
     },
     "reference": {
       "title": "Reference",

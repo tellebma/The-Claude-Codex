@@ -1,0 +1,109 @@
+---
+title: "Awesome MCP Servers: curated by category (May 2026)"
+description: "MCP servers worth connecting to Claude Code. Curated by category: data, design, dev, browser, security, productivity. GitHub data verified 2026-05-11."
+order: 4
+section: "ecosystem"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["reference", "tooling"]
+---
+
+{/* source: GitHub API repos data, fetched 2026-05-11 */}
+
+## TL;DR
+
+- **MCP** (Model Context Protocol) is the canonical way to plug external tools and data into Claude Code. In 2026, the open-source standard moved from experimental to dominant.
+- Aggregated references: [`punkpeye/awesome-mcp-servers`](https://github.com/punkpeye/awesome-mcp-servers) (86k★) and [`modelcontextprotocol/servers`](https://github.com/modelcontextprotocol/servers) (85k★, official repo).
+- 6 categories cover 80% of needs: **dev (GitHub, Chrome DevTools, Playwright, Serena)**, **data (Supabase)**, **design (shadcn, Figma)**, **web nav (Context7)**, **automation (n8n, activepieces)**, **builder frameworks (FastMCP)**.
+- Advice: start with 3 servers tied to your stack, not 30 at once. MCPs consume context and can slow Claude down.
+
+<Callout type="info" title="What is an MCP exactly">
+An MCP server exposes a set of tools (functions) and resources (data) that Claude can call. The protocol is standardized: any compliant server works with Claude Code, Cursor, Codex, Gemini CLI, etc. See [`/mcp/what-are-mcps`](/mcp/what-are-mcps) for the detail.
+</Callout>
+
+## 1. Awesome lists & official repos
+
+Keep these as permanent references.
+
+| Repo | ⭐ | What's special |
+|------|---:|----------------|
+| [`punkpeye/awesome-mcp-servers`](https://github.com/punkpeye/awesome-mcp-servers) | 86,708 | THE reference awesome list for MCP servers. Sorted by category, very actively updated. |
+| [`modelcontextprotocol/servers`](https://github.com/modelcontextprotocol/servers) | 85,460 | Official protocol repo: reference servers (filesystem, postgres, memory, brave-search…). |
+
+## 2. Dev tools (must-haves)
+
+The MCPs that live in developer terminals.
+
+| Repo | ⭐ | What it plugs in |
+|------|---:|------------------|
+| [`ChromeDevTools/chrome-devtools-mcp`](https://github.com/ChromeDevTools/chrome-devtools-mcp) | 39,234 | **Chrome DevTools** for coding agents. Inspect DOM, capture network, run JS, debug live. |
+| [`microsoft/playwright-mcp`](https://github.com/microsoft/playwright-mcp) | 32,364 | **Playwright MCP** official Microsoft. Browser automation, E2E tests, screenshots, scraping. |
+| [`github/github-mcp-server`](https://github.com/github/github-mcp-server) | 29,724 | **Official GitHub MCP**. Issues, PRs, search code, releases — straight from the agent. |
+| [`oraios/serena`](https://github.com/oraios/serena) | 24,086 | **Serena**: semantic retrieval + editing for agents. "The IDE for your agent". |
+
+## 3. Data & docs
+
+When Claude needs to read or write to external stores.
+
+| Repo | ⭐ | Plugs into |
+|------|---:|------------|
+| [`upstash/context7`](https://github.com/upstash/context7) | 55,037 | **Context7**: up-to-date library docs for LLMs. Prevents version and API hallucinations. |
+| [`supabase-community/supabase-mcp`](https://github.com/supabase-community/supabase-mcp) | 2,680 | **Supabase**: connect Postgres + auth + edge functions + storage to the AI assistant. |
+
+## 4. Frameworks to build your own MCP
+
+When public servers aren't enough and you need to create your own.
+
+| Repo | ⭐ | Stack |
+|------|---:|-------|
+| [`PrefectHQ/fastmcp`](https://github.com/PrefectHQ/fastmcp) | 25,116 | **FastMCP** Python — "the fast, Pythonic way to build MCP servers and clients". The most popular. |
+| [`tadata-org/fastapi_mcp`](https://github.com/tadata-org/fastapi_mcp) | 11,857 | **FastAPI MCP**: turns an existing FastAPI app into an MCP server. Zero-effort bridge. |
+| [`punkpeye/fastmcp`](https://github.com/punkpeye/fastmcp) | 3,108 | **FastMCP TypeScript**: TS equivalent of the Python framework. |
+
+## 5. Automation & workflow (multi-MCP)
+
+To orchestrate multiple MCPs together, trigger on events.
+
+| Repo | ⭐ | What's special |
+|------|---:|----------------|
+| [`n8n-io/n8n`](https://github.com/n8n-io/n8n) | 187,464 | **n8n**: no-code/low-code workflow automation platform with native AI capabilities. Combines MCP + 400+ integrations. |
+| [`activepieces/activepieces`](https://github.com/activepieces/activepieces) | 22,145 | **Activepieces**: ~400 MCP servers for AI agents, AI automation + workflows. Open-source Zapier alternative. |
+| [`mcp-use/mcp-use`](https://github.com/mcp-use/mcp-use) | 9,928 | **mcp-use**: abstraction layer to use multiple MCPs in LangChain pipelines. |
+
+## 6. Security, scraping & content
+
+For Claude when it has to fetch data from outside.
+
+| Repo | ⭐ | For who |
+|------|---:|---------|
+| [`D4Vinci/Scrapling`](https://github.com/D4Vinci/Scrapling) | 48,845 | **Scrapling**: adaptive web scraping framework (single request → full crawl). MCP compatible. |
+| [`assafelovic/gpt-researcher`](https://github.com/assafelovic/gpt-researcher) | 26,989 | **GPT Researcher**: autonomous agent that does deep multi-source research. MCP-compatible via wrapper. |
+| [`mrexodia/ida-pro-mcp`](https://github.com/mrexodia/ida-pro-mcp) | 8,420 | **IDA Pro MCP**: reverse engineering assistant for binaries. Niche but excellent. |
+
+## 7. Learning to use MCPs
+
+Not an MCP itself, but essential for getting started.
+
+| Repo | ⭐ | What |
+|------|---:|------|
+| [`microsoft/mcp-for-beginners`](https://github.com/microsoft/mcp-for-beginners) | 16,073 | **Official Microsoft course**: "MCP for beginners". Curriculum, exercises, hands-on. |
+
+## How to choose
+
+Three principles:
+
+1. **Don't plug everything**: each active MCP consumes context at startup. Limit yourself to 5-7 simultaneous servers, otherwise Claude slows down.
+2. **Profiles by context**: use **MCP profiles** to have a "dev" setup different from "SEO audit" or "security audit" (cf. [`/advanced/mcp-profiles`](/advanced/mcp-profiles)).
+3. **Trust the official ones**: for production, prefer vendor MCPs (GitHub, Microsoft, Supabase, Anthropic). Community MCPs are great to experiment.
+
+<Callout type="warning" title="MCP security">
+An MCP can access sensitive resources (filesystem, database, browser). Before installing a non-official MCP, source code audit required. Never run an MCP requesting API tokens in local dev without checking what it does with them.
+</Callout>
+
+## Next steps
+
+- Understand the **MCP architecture**: [`/mcp/what-are-mcps`](/mcp/what-are-mcps).
+- Install your first MCP: [`/mcp/setup`](/mcp/setup).
+- MCP profiles by work context: [`/advanced/mcp-profiles`](/advanced/mcp-profiles).
+- Create your own MCP (TypeScript): [`/mcp/create-mcp-typescript`](/mcp/create-mcp-typescript).
+- Create your own MCP (Python): [`/mcp/create-mcp-python`](/mcp/create-mcp-python).

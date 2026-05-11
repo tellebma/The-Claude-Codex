@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-11 (ouverture EPIC Stack design Claude Code — skills + MCP externes + Playwright)
+> Derniere mise a jour : 2026-05-11 (cloture Sprint 3+4 SEO/GEO + Sprint 1 Vercel Metrics + C3 WorkflowDiagram)
 
 ---
 
@@ -8,17 +8,17 @@
 
 | EPIC | Stories | Fait | En cours | A faire | Progression |
 |------|---------|------|----------|---------|-------------|
-| [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 16 | 0 | 1 | 94% |
+| [Best Practices Integration](EPIC-best-practices-integration.md) | 17 | 17 | 0 | 0 | 100% ✅ (C3 WorkflowDiagram #173) |
 | [Corrections UX/UI/A11y](EPIC-ux-ui-a11y-audit.md) | 11 | 11 | 0 | 0 | 100% ✅ |
 | [Refonte graphique 2026-04](../epics/2026-04-refonte-graphique/EPIC.md) | 32 | 32 | 0 | 0 | 100% ✅ (~70% du SYNTHESIS — voir EPIC suivant) |
 | [Refonte premium 2026-05](../epics/2026-05-refonte-premium/EPIC.md) | 19 | 19 | 0 | 0 | 100% ✅ (cloture 2026-05-09) |
 | [Bugfix articles href 2026-05](EPIC-bugfix-articles-href-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
 | [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
-| [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 4 | 0 | 5 | 44% 🔄 (Sprint 1 + Sprint 2 livres) |
-| [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 0 | 0 | 11 | 0% (backlog post-SEO/GEO) |
+| [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-11) |
+| [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 6 | 0 | 5 | 55% 🔄 (Sprint 1 + custom events livres) |
 | [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 0 | 0 | 10 | 0% 🆕 (validé agents SEO + Rédacteur, pret Sprint 1) |
 
-**Total projet** : 86/113 stories (76%) · ~197/246 SP livres (80%)
+**Total projet** : 98/113 stories (87%) · ~225/246 SP livres (91%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
@@ -26,7 +26,7 @@
 
 > EPIC **Refonte premium 2026-05** : ✅ **cloture le 2026-05-09 a 100%** — 19 stories mergees (RG2-01 a RG2-19). Couvre integralement les 30% manquants du SYNTHESIS de la refonte 2026-04 : article shell 3 colonnes (RG2-01 + ReadingProgressBar/TocProgress/Pager/Tables), composants editoriaux MDX (Faq, ArticleAlert, NextSteps, Steps gradient), landing signature (TrustBar, chips orbitaux, grid fade, articles recents avec filtres, reorder, CtaFinal), polish global (CodeBlock always-dark, light mode polish, stats band canoniques), rollout E2E sur 10 articles representatifs.
 
-> EPIC **SEO/GEO mai 2026** : ouvert le 2026-05-06 suite a l'audit hebdo GSC + Matomo `2026-04-25 -> 2026-05-01` (rapport `claude-code-obsidian-brain/raw/analytics/`). 9 stories pour 27 SP repartis sur 4 sprints. Sprint 1 (SEO-1, SEO-2) ✅ et Sprint 2 (SEO-4, SEO-5) ✅ mergees le 2026-05-10. SEO-3 partiellement absorbee par les dateModified bumps de SEO-1+SEO-2. Reste : Sprint 3 (SEO-6 audit drops, SEO-7 audit maillage) et Sprint 4 (SEO-8 debug Matomo, SEO-9 AnalyticsTracker overview).
+> EPIC **SEO/GEO mai 2026** : ✅ **cloture le 2026-05-11 a 100%**. Ouvert le 2026-05-06 suite a l'audit hebdo GSC + Matomo `2026-04-25 -> 2026-05-01`. 9 stories pour 27 SP livrees sur 4 sprints. Sprint 1 (SEO-1 #159, SEO-2 #161, SEO-3 couvert) ; Sprint 2 (SEO-4 #162, SEO-5 #163) ; Sprint 3 (SEO-6 #170, SEO-7 #167) ; Sprint 4 (SEO-8 #168, SEO-9 #166).
 
 > EPIC **Bugfix articles href 2026-05** : ouvert et cloture le 2026-05-09. B-ART-1 (#155) fix `buildEntry` slug nu + tests RG-32. B-ART-2 (#157) garde-fou E2E `e2e/landing-recent-articles.spec.ts` qui a ensuite expose un bug latent corrige dans le Sprint 1 SEO/GEO (`getMostRecentArticles` filtre locale `===` preferredLocale, evite 404 sur slugs divergents FR/EN comme `bonnes-pratiques-securite` vs `security-best-practices`).
 
@@ -72,9 +72,9 @@
 |----|-------|----|--------|
 | C1 | Browser automation | 5 | ✅ Fait |
 | C2 | Enrichir Prompting (voice, ASCII, styles) | 3 | ✅ Fait |
-| C3 | Composant WorkflowDiagram | 3 | ⬜ Backlog (nice-to-have) |
+| C3 | Composant WorkflowDiagram | 3 | ✅ Fait (#173) |
 
-**Sprint 2** : 2/3 stories · 8/11 SP · 73%
+**Sprint 2** : 3/3 stories · 11/11 SP · 100%
 
 ### Sprint 3 : Stabilisation — ✅ Termine
 
@@ -197,21 +197,21 @@
 | SEO-4 | FAQPage schema sur 6 pages strategiques | 5 | ✅ Fait (#162) — 12 MDX + `src/data/page-faqs.ts` |
 | SEO-5 | Section TL;DR sur 10-12 pages | 3 | ✅ Fait (#163) — 18 MDX (9 pages × 2 locales) |
 
-### Sprint 3 — Recovery position drops (5 SP)
+### Sprint 3 — Recovery position drops (5 SP) — ✅ Termine 2026-05-11
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| SEO-6 | Audit + republication des 10 pages en chute | 3 | ⬜ A faire |
-| SEO-7 | Audit maillage interne post-RG | 2 | ⬜ A faire |
+| SEO-6 | Audit + republication des 10 pages en chute | 3 | ✅ Fait (#170) — 5 pages en chute republiees |
+| SEO-7 | Audit maillage interne post-RG | 2 | ✅ Fait (#167) — script audit maillage post-build |
 
-### Sprint 4 — Backend tracking (4 SP)
+### Sprint 4 — Backend tracking (4 SP) — ✅ Termine 2026-05-11
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| SEO-8 | Debug Matomo tracking | 3 | ⬜ A faire |
-| SEO-9 | Couvrir overview pages avec AnalyticsTracker | 1 | ⬜ A faire |
+| SEO-8 | Debug Matomo tracking | 3 | ✅ Fait (#168) — fix Matomo App Router + doc funnel |
+| SEO-9 | Couvrir overview pages avec AnalyticsTracker | 1 | ✅ Fait (#166) — monter AnalyticsTracker hors SectionLayout |
 
-**Progression** : 0/9 stories · 0/27 SP · 0%
+**Progression** : ✅ **9/9 stories · 27/27 SP · 100%**
 
 ---
 

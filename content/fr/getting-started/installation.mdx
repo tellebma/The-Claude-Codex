@@ -4,7 +4,7 @@ description: "Installez Claude Code en quelques minutes. Prérequis (Node.js 18+
 section: "getting-started"
 order: 2
 datePublished: "2026-03-09"
-dateModified: "2026-05-10"
+dateModified: "2026-05-11"
 themes: ["tutorial", "tooling"]
 ---
 
@@ -20,6 +20,10 @@ Trois changements à connaître avant d'installer en mai 2026 :
 - **Le plan Claude Max** est devenu la voie d'authentification la plus économique pour un usage individuel régulier (vs `ANTHROPIC_API_KEY` au prorata des tokens). À choisir selon votre profil de consommation.
 - **L'installation via `npm i -g @anthropic-ai/claude-code`** reste la seule officielle. Méfiez-vous des forks ou packages non vérifiés. Voir la [page sécurité](/content/bonnes-pratiques-securite) pour les vérifications de provenance.
 
+<Callout type="warning" title="Claude Code n'est pas gratuit">
+Pour utiliser Claude Code, il vous faut **soit un abonnement Claude payant** (Pro, Max ou Team), **soit une clé API** (facturation à l'usage via la console Anthropic). Aucune des deux options n'est gratuite : prévoyez le budget avant de vous lancer. Voir la section [Authentification](#authentification) plus bas pour le détail des deux méthodes, et la [page de tarifs Anthropic](https://claude.com/pricing) pour les prix à jour, qui évoluent régulièrement.
+</Callout>
+
 ## Prérequis
 
 Avant d'installer Claude Code, vérifiez que vous avez ces trois éléments. Si l'un d'entre eux vous manque, pas de panique, on vous explique tout juste en dessous.
@@ -29,7 +33,7 @@ Claude Code fonctionne grâce à Node.js, le moteur JavaScript qui permet d'exé
 
 Téléchargez-le sur [nodejs.org](https://nodejs.org) ou utilisez un gestionnaire de versions comme `nvm`.
 
-<Screenshot src="/images/screenshots/nodejs-download.svg" alt="Page de téléchargement de Node.js - boutons LTS et Current" caption="La page nodejs.org propose deux versions : LTS (recommandée) et Current" />
+<Screenshot src="/images/screenshots/nodejs-download.png" alt="Page de téléchargement Node.js sur nodejs.org avec l'onglet Windows sélectionné, version LTS 22.13.x et options nvm/npm" caption="La page nodejs.org/download propose un installeur Windows officiel (.msi) ainsi qu'une distribution binaire. Pour la majorité des utilisateurs, l'installeur Windows fait l'affaire." />
 </Card>
 
 <Card title="Un terminal" variant="accent">
@@ -193,10 +197,16 @@ Un navigateur s'ouvre automatiquement. Connectez-vous avec votre compte Claude. 
 </Steps>
 
 <Callout type="tip" title="Quel abonnement choisir ?">
-L'abonnement **Max 5x** ($100/mois) offre une utilisation intensive de Claude Code avec 5x la capacité Pro. L'abonnement **Max 20x** ($200/mois) donne une priorité absolue sans latence (20x la capacité Pro). L'abonnement **Pro** ($20/mois) convient pour un usage modéré. La clé API (pay-as-you-go) est idéale pour tester ou pour un usage ponctuel, comptez environ $5-15 par jour d'utilisation active.
+L'abonnement **Max 5x** (à partir de $100/mois) offre une utilisation intensive de Claude Code avec 5x la capacité Pro. L'abonnement **Max 20x** ($200/mois) donne une priorité absolue sans latence (20x la capacité Pro). L'abonnement **Pro** (~$17-20/mois selon facturation annuelle ou mensuelle) convient pour un usage modéré. La clé API (pay-as-you-go) est idéale pour tester ou pour un usage ponctuel, comptez environ $5-15 par jour d'utilisation active.
 </Callout>
 
 ### Comparaison des offres
+
+<Callout type="warning" title="Les tarifs évoluent régulièrement">
+Anthropic ajuste ses offres et ses prix plusieurs fois par an (réorganisation des paliers, ajout de plans entreprise, changements promotionnels). Les chiffres ci-dessous et la capture qui suit sont indicatifs au **9 mai 2026**. Avant de souscrire, vérifiez toujours les tarifs en cours sur la [page de tarifs officielle Anthropic](https://claude.com/pricing).
+</Callout>
+
+<Screenshot src="/images/screenshots/claude-pricing.png" alt="Capture des plans Pro et Max sur claude.com/pricing : Pro à 17 dollars par mois en annuel ou 20 dollars par mois en mensuel, Max à partir de 100 dollars par mois" caption="Extrait de claude.com/pricing au 9 mai 2026. Pro inclut Claude Code, Max ajoute 5x ou 20x la capacité de Pro. Pour les chiffres à jour, ouvrez claude.com/pricing." />
 
 <PricingTable />
 

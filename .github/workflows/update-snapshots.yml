@@ -1,0 +1,100 @@
+name: Update Playwright visual snapshots
+
+# Regénère les baselines visual regression (e2e/visual.spec.ts-snapshots/)
+# sur ubuntu-latest = même OS que e2e-visual du PR Checks, pour éviter le
+# bruit OS-cross (WSL2/macOS) qui ferait fail la CI après update local.
+#
+# Trigger manuel via "Actions > Update Playwright visual snapshots > Run workflow",
+# avec le numéro de la PR à mettre à jour. Le workflow :
+#   1. Checkout la branche de la PR
+#   2. Build le site (Next.js SSG export)
+#   3. Run Playwright avec --update-snapshots sur le project visual
+#   4. Commit les snapshots modifiés sur la branche PR
+#   5. Push (push direct, pas via PR — c'est la PR existante qu'on met à jour)
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number whose branch needs snapshot refresh"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  update-visual-snapshots:
+    name: Regenerate visual snapshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Resolve PR head ref
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pr_number="${{ github.event.inputs.pr_number }}"
+          head_ref=$(gh pr view "$pr_number" --json headRefName --jq '.headRefName' --repo "${{ github.repository }}")
+          head_sha=$(gh pr view "$pr_number" --json headRefOid --jq '.headRefOid' --repo "${{ github.repository }}")
+          echo "head_ref=$head_ref" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+          echo "Resolved PR #$pr_number → branch $head_ref @ $head_sha"
+
+      - name: Checkout PR branch
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: ${{ steps.pr.outputs.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build site (SSG export)
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          NEXT_PUBLIC_MATOMO_URL: https://matomo.example.com
+          NEXT_PUBLIC_MATOMO_SITE_ID: 1
+        run: npm run build
+
+      - name: Update visual snapshots
+        env:
+          CI: "true"
+          PLAYWRIGHT_USE_STATIC: "1"
+        run: npx playwright test --project=visual --update-snapshots
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push snapshots
+        run: |
+          if git diff --quiet e2e/visual.spec.ts-snapshots/; then
+            echo "No snapshot changes — nothing to commit."
+            exit 0
+          fi
+          git add e2e/visual.spec.ts-snapshots/
+          git commit -m "test(visual): regenerate snapshots via update-snapshots workflow (PR #${{ github.event.inputs.pr_number }})"
+          git push origin HEAD:${{ steps.pr.outputs.head_ref }}
+
+      - name: Upload artifact on failure
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-update-snapshots
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

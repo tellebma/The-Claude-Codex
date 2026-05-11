@@ -45,8 +45,11 @@ export function Screenshot({
   const openLightbox = useCallback(() => setLightboxOpen(true), []);
   const closeLightbox = useCallback(() => {
     setLightboxOpen(false);
-    // Return focus to the element that opened the lightbox
-    triggerRef.current?.focus();
+    // Return focus to the element that opened the lightbox.
+    // preventScroll: true évite un jump scroll qui, combiné au hover
+    // transition transform du bouton, créait un effet de clignotement
+    // sur certains navigateurs lorsque la souris quittait l'image.
+    triggerRef.current?.focus({ preventScroll: true });
   }, []);
 
   // Move focus to the close button when lightbox opens
@@ -100,7 +103,7 @@ export function Screenshot({
             width={width}
             height={height}
             loading="lazy"
-            className="w-full object-cover transition-transform duration-200 group-hover:scale-[1.01]"
+            className="block w-full object-cover"
           />
         </button>
         {caption && (
@@ -164,16 +167,20 @@ export function Screenshot({
            * Image container — positioned above the backdrop button so
            * clicks on the image don't trigger close. z-10 > z-0 of the
            * backdrop button.
+           *
+           * object-contain + max-h/w en relatif assure que l'image entière
+           * tient dans la viewport sans scroll (corrige le bug où on ne
+           * voyait que la moitié de l'image en cliquant).
            */}
-          <div className="relative z-10 max-h-[90vh] max-w-[90vw] overflow-auto">
+          <div className="pointer-events-none relative z-10 flex max-h-[90vh] max-w-[90vw] flex-col items-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={src}
               alt={alt}
-              className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-2xl"
+              className="pointer-events-auto max-h-[85vh] max-w-full rounded-lg object-contain shadow-2xl"
             />
             {caption && (
-              <p className="mt-3 text-center text-sm text-white/70">
+              <p className="pointer-events-none mt-3 max-w-2xl text-center text-sm text-white/70">
                 {caption}
               </p>
             )}

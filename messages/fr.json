@@ -175,6 +175,7 @@
       "configurator": "Configurateur",
       "content": "Contenus",
       "use-cases": "Cas d'usage",
+      "ecosystem": "Écosystème",
       "enterprise": "Entreprise",
       "advanced": "Avancé",
       "reference": "Référence",
@@ -401,6 +402,10 @@
       "business": "8 cas d'usage business",
       "success-stories": "Histoires de réussite",
       "no-code": "Tutoriels sans code"
+    },
+    "ecosystem": {
+      "title": "Écosystème",
+      "overview": "Vue d'ensemble"
     },
     "enterprise": {
       "title": "Entreprise",

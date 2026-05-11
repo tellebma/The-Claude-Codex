@@ -575,6 +575,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/ecosystem",
+    title: "Écosystème Claude Code : repos, skills, plugins, MCP",
+    description:
+      "Le hub francophone de l’écosystème Claude Code. Top repos GitHub, awesome skills, plugins officiels Anthropic et serveurs MCP soigneusement curés.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/enterprise",
     title: "Claude Code en entreprise",
     description:

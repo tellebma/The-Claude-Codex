@@ -481,6 +481,30 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "repetitif",
     ],
   },
+  // Ecosystem
+  {
+    title: "Ecosysteme Claude Code : repos, skills, plugins, MCP",
+    description:
+      "Hub francophone de l'ecosysteme Claude Code. Top repos GitHub, awesome skills, plugins officiels Anthropic et serveurs MCP cures.",
+    href: "/ecosystem",
+    section: "Ecosysteme",
+    keywords: [
+      "ecosysteme",
+      "ecosystem",
+      "awesome",
+      "github",
+      "repos",
+      "skills",
+      "plugins",
+      "mcp",
+      "trending",
+      "curation",
+      "inventaire",
+      "hub",
+      "top",
+      "best",
+    ],
+  },
   // Enterprise
   {
     title: "Claude Code en entreprise",

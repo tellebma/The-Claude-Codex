@@ -134,6 +134,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "use-cases.no-code", href: "/use-cases/no-code" },
     ],
   },
+  ecosystem: {
+    titleKey: "ecosystem.title",
+    items: [
+      { labelKey: "ecosystem.overview", href: "/ecosystem" },
+    ],
+  },
   enterprise: {
     titleKey: "enterprise.title",
     items: [

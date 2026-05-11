@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-11 (cloture Sprint 3+4 SEO/GEO + Sprint 1 Vercel Metrics + C3 WorkflowDiagram)
+> Derniere mise a jour : 2026-05-11 (VM-1/VM-9 docs Vercel setup + observability livres)
 
 ---
 
@@ -15,10 +15,10 @@
 | [Bugfix articles href 2026-05](EPIC-bugfix-articles-href-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
 | [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-11) |
-| [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 6 | 0 | 5 | 55% 🔄 (Sprint 1 + custom events livres) |
+| [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 8 | 0 | 3 | 73% 🔄 (Sprint 1 termine + VM-1/VM-9 docs livres) |
 | [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 0 | 0 | 10 | 0% 🆕 (validé agents SEO + Rédacteur, pret Sprint 1) |
 
-**Total projet** : 98/113 stories (87%) · ~225/246 SP livres (91%)
+**Total projet** : 100/113 stories (88%) · ~227/246 SP livres (92%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 

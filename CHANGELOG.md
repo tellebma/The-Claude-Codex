@@ -1,3 +1,16 @@
+# [1.9.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.8.0...v1.9.0) (2026-05-11)
+
+
+### Features
+
+* **advanced:** ECO-6 page memoire persistante cross-session ([#192](https://github.com/tellebma/The-Claude-Codex/issues/192)) ([eb01468](https://github.com/tellebma/The-Claude-Codex/commit/eb0146854eb4f989ade5f91b0a6579a78a0ff460))
+* **ecosystem:** ECO-1 scaffold section /ecosystem/ (hub awesome) ([#185](https://github.com/tellebma/The-Claude-Codex/issues/185)) ([35aebec](https://github.com/tellebma/The-Claude-Codex/commit/35aebec3327fc20790e547b56fb4f37c707a8adc))
+* **ecosystem:** ECO-2 page top-repos-github (25 repos verifies) ([#187](https://github.com/tellebma/The-Claude-Codex/issues/187)) ([b9be8da](https://github.com/tellebma/The-Claude-Codex/commit/b9be8da6b10e126e0135a35778ad17ca0616d6a3))
+* **ecosystem:** ECO-3 page awesome-skills (15+ skills verifies) ([#188](https://github.com/tellebma/The-Claude-Codex/issues/188)) ([929a191](https://github.com/tellebma/The-Claude-Codex/commit/929a1916a806560cc9be17fefd623f0de9c8bd4d))
+* **ecosystem:** ECO-4 page awesome-plugins (12 plugins verifies) ([#189](https://github.com/tellebma/The-Claude-Codex/issues/189)) ([c6db18a](https://github.com/tellebma/The-Claude-Codex/commit/c6db18a654e6401cd50913dff8b09e60af48a4a5))
+* **ecosystem:** ECO-5 page awesome-mcp-servers (17 MCP verifies) ([#190](https://github.com/tellebma/The-Claude-Codex/issues/190)) ([affa39a](https://github.com/tellebma/The-Claude-Codex/commit/affa39a572ee98b4e6912a632502f23804f1bfa8))
+* **getting-started:** vraies captures Node.js + pricing Claude sur installation ([#160](https://github.com/tellebma/The-Claude-Codex/issues/160)) ([f694d8b](https://github.com/tellebma/The-Claude-Codex/commit/f694d8b4a9148457bf0b65c6ac51bfa86e0e6341))
+
 # [1.8.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.7.0...v1.8.0) (2026-05-10)
 
 

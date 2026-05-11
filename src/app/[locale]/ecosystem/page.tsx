@@ -107,7 +107,7 @@ const SUB_PAGES = [
   { href: "/ecosystem/top-repos-github", icon: Star, step: "01", color: "brand" as const, live: true },
   { href: "/ecosystem/awesome-skills", icon: Sparkles, step: "02", color: "accent" as const, live: true },
   { href: "/ecosystem/awesome-plugins", icon: Puzzle, step: "03", color: "brand" as const, live: true },
-  { href: "/ecosystem/awesome-mcp-servers", icon: Server, step: "04", color: "accent" as const, live: false },
+  { href: "/ecosystem/awesome-mcp-servers", icon: Server, step: "04", color: "accent" as const, live: true },
 ] as const;
 
 const colorStyles = {

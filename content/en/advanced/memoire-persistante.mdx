@@ -1,0 +1,115 @@
+---
+title: "Persistent memory across Claude Code sessions"
+description: "How to keep context from one Claude Code session to the next: claude-mem, graphify, SessionStart hooks, hierarchical CLAUDE.md patterns. Compare 4 approaches and when to pick which."
+order: 14
+section: "advanced"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["guide", "tooling"]
+---
+
+{/* source: GitHub API repos data, fetched 2026-05-11; Anthropic official Claude Code docs */}
+
+## TL;DR
+
+- Claude Code **has no native memory** between two distinct sessions. At every startup, it forgets everything.
+- 4 dominant patterns fill this gap: **hierarchical CLAUDE.md** (native, simplest), **SessionStart hooks** (native, scriptable), **claude-mem** (community skill, capture-compress-replay), **graphify** (queryable knowledge graph).
+- Choose by need: stable project → CLAUDE.md. Session-to-session continuity → claude-mem. Massive codebase to explore → graphify. Custom per-project setup → SessionStart hook.
+- Combining patterns works very well: e.g. `CLAUDE.md` for project conventions + `claude-mem` for session history.
+
+## The problem
+
+A new Claude Code session starts from scratch. No memory of:
+
+- What you've already tried (and what didn't work)
+- Conventions discovered while exploring in the previous session
+- Client/project context explained in a previous session
+- Architecture choices validated together
+
+Consequence: you re-explain the same things, Claude re-explores the same files, you re-pay the tokens. On a multi-week project, this is the **#1** source of waste.
+
+## Pattern 1: Hierarchical CLAUDE.md (native)
+
+The simplest, and often sufficient. Claude Code automatically loads `CLAUDE.md` files at 3 levels:
+
+1. `~/.claude/CLAUDE.md` — global instructions (all sessions)
+2. `<project>/CLAUDE.md` — project instructions (loaded when `cwd` is inside)
+3. `<sub-folder>/CLAUDE.md` — descendant instructions (loaded when cwd goes into the sub-folder)
+
+This is **structural** memory: conventions, architecture, business constraints, user profile. See [`/prompting/claude-md`](/prompting/claude-md) for full syntax.
+
+**When to use**: all the time. It's the foundation. All other patterns complement it.
+
+## Pattern 2: SessionStart hooks (native)
+
+Since late 2025, Claude Code exposes a `SessionStart` hook that runs at every startup. It can:
+
+- Read a previous state file and inject it into the session
+- Run a recent `git log` and summarize what moved
+- Ping an internal API to retrieve project context
+- Launch a script that queries a knowledge graph
+
+See [`/advanced/hooks`](/advanced/hooks) for the config.
+
+**When to use**: you want a **scripted** per-project setup (for example: "on every start, read the latest Linear sprint"). Doesn't replace CLAUDE.md but complements it.
+
+## Pattern 3: claude-mem (community skill)
+
+[`thedotmack/claude-mem`](https://github.com/thedotmack/claude-mem) (74,832 ★ as of 2026-05-11). The dominant pattern for **session-to-session** memory.
+
+How it works:
+
+1. During your session, the skill captures messages, edited files, executed commands.
+2. At the end, it AI-compresses everything into a structured summary (10-30 lines max).
+3. At the next startup, it injects the summary into the initial context.
+
+Compatibility: Claude Code, OpenClaw, Codex, Gemini CLI, Hermes, Copilot, OpenCode, and more.
+
+**When to use**: medium-duration project (weeks/months) with frequent sessions. You want Claude to remember **what it did** last time, not just **what it should do** (which is in CLAUDE.md).
+
+<Callout type="warning" title="Don't capture everything">
+If the previous session lasted 4h with 200 messages, capturing it raw is useless (and token-expensive). claude-mem's AI compressor is the right reflex. Still, check the quality of the generated summaries on the first 2-3 sessions.
+</Callout>
+
+## Pattern 4: graphify (knowledge graph)
+
+[`safishamsi/graphify`](https://github.com/safishamsi/graphify) (46,647 ★ as of 2026-05-11). Not a **session** memory tool but a **codebase** memory tool.
+
+How it works:
+
+1. You point graphify at a folder (code, SQL, scripts, docs, papers, images, videos).
+2. It builds a typed, queryable **knowledge graph**.
+3. During the Claude session, the skill exposes queries to inspect the graph (e.g., "give me all the places where function X is called").
+
+**When to use**: massive codebase (> 100k lines) where plain `grep` becomes slow and imprecise. Especially useful on heterogeneous infra (app code + database schema + Terraform in a single graph).
+
+## Express comparison
+
+| Pattern | Covers | Init effort | Token cost |
+|---------|--------|-------------|------------|
+| **CLAUDE.md** | Conventions, archi, constraints | Very low (markdown) | Very low |
+| **SessionStart hook** | Custom scripted setup | Medium (a script) | Variable |
+| **claude-mem** | Session-to-session history | Low (skill install) | Moderate (compression) |
+| **graphify** | Massive codebase navigation | High (graph build) | Low per query |
+
+## When to combine
+
+Recommended combo pattern for a serious project:
+
+1. Project `CLAUDE.md` + descendants → foundation
+2. Personal global `CLAUDE.md` → cross-project preferences (code style, language, etc.)
+3. **claude-mem** active on this project → session history
+4. `SessionStart` hook running `git log --since="last week"` and summarizing → recent context
+5. (Optional, large project) `graphify` initialized for deep queries
+
+<Callout type="tip" title="Measuring the value">
+Before installing all this, measure: how much time do you spend re-explaining context at the start of each session? If it's > 5 min on average, the combo pattern saves you 1-2h per week. If it's < 1 min, stick to CLAUDE.md alone.
+</Callout>
+
+## Next steps
+
+- Dig deeper into **hierarchical CLAUDE.md**: [`/prompting/claude-md`](/prompting/claude-md).
+- Configure **hooks**: [`/advanced/hooks`](/advanced/hooks).
+- Discover **other token-optimization skills**: [`/ecosystem/awesome-skills`](/ecosystem/awesome-skills).
+- Understand how Claude Code **loads context**: [`/reference/cli`](/reference/cli).
+- **Multi-model** approach to distribute cognitive load: [`/advanced/cross-model-workflow`](/advanced/cross-model-workflow).

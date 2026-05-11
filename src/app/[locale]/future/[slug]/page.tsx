@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
+import { createFAQPageSchema } from "@/lib/structured-data";
+import { getPageFaqs } from "@/data/page-faqs";
 import SectionSlugContent from "@/components/layout/SectionSlugContent";
 
 const SECTION = "future";
@@ -42,12 +44,16 @@ export default async function FutureSlugPage({ params }: PageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
+  const faqs = getPageFaqs(`/${SECTION}/${slug}`, locale);
+  const extraJsonLd = faqs ? [createFAQPageSchema(faqs)] : undefined;
+
   return (
     <SectionSlugContent
       section={SECTION}
       slug={slug}
       locale={locale}
       icon={Sparkles}
+      extraJsonLd={extraJsonLd}
     />
   );
 }

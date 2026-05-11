@@ -1,11 +1,15 @@
 ---
-title: "Sécurité des MCP : dangers réels et comment s'en protéger"
-description: "Guide complet de sécurité pour les MCP Claude Code : prompt injection, exfiltration de données, supply chain attacks, permissions et checklist de sécurité."
+title: "Sécuriser les MCP Claude Code : dangers réels et checklist"
+description: "Guide sécurité MCP Claude Code : prompt injection, exfiltration de données, supply chain, permissions. Checklist actionnable contre les risques réels en prod."
 section: "mcp"
 order: 7
 datePublished: "2026-03-11"
-dateModified: "2026-03-11"
+dateModified: "2026-05-09"
 ---
+
+## En bref
+
+Les principaux risques MCP en production : prompt injection via contenu non fiable, exfiltration de données via tool calls, attaques supply chain (npm), permissions excessives, vol de credentials. Mitigations : épingler les versions, désactiver l'accès réseau si possible, auditer le code source des MCP communautaires avant installation.
 
 ## Pourquoi la sécurité des MCP est un sujet sérieux
 
@@ -320,6 +324,29 @@ Une bonne pratique est de définir des profils MCP différents selon vos context
   }
 }
 ```
+
+## FAQ
+
+<Faq>
+  <FaqItem question="Quels sont les principaux risques de sécurité MCP en production ?">
+    Prompt injection via contenu non fiable, exfiltration de données via tool calls, attaques supply chain (packages npm malveillants), permissions excessives accordées au MCP, vol de credentials.
+  </FaqItem>
+  <FaqItem question="Comment fonctionne le prompt injection dans MCP ?">
+    Du contenu non fiable (page web, issue GitHub, email) contient des instructions cachées que le modèle exécute comme si elles venaient de l'utilisateur. Mitigations : sanitiser les inputs, isoler les outils sensibles, revoir les tool calls.
+  </FaqItem>
+  <FaqItem question="Un MCP malveillant peut-il exfiltrer mes données ?">
+    Oui, si vous lui accordez l'accès réseau et la lecture fichiers. Un MCP adversarial peut lire des secrets, appeler un serveur distant, ou écrire du code malveillant dans votre projet.
+  </FaqItem>
+  <FaqItem question="Quelles permissions accorder à un MCP ?">
+    Seulement celles dont il a strictement besoin. Désactivez l'accès réseau si le MCP est purement local. Restreignez les chemins fichiers via le working directory. Revoyez la liste d'outils.
+  </FaqItem>
+  <FaqItem question="Comment détecter les attaques supply chain sur MCP ?">
+    Épinglez les versions MCP dans votre config, utilisez npm audit et Snyk, surveillez les changements brusques de permissions entre versions, vérifiez les signatures du mainteneur si disponibles.
+  </FaqItem>
+  <FaqItem question="Les MCP officiels sont-ils plus sûrs que les communautaires ?">
+    Globalement oui, car ils font l'objet de plus de revues sécurité. Mais même les MCP officiels peuvent avoir des bugs. Considérez toujours que tout MCP installé peut agir sur votre projet.
+  </FaqItem>
+</Faq>
 
 ## Prochaines étapes
 

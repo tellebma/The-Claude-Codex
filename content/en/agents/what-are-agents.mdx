@@ -1,12 +1,16 @@
 ---
-title: "Understanding Claude Code agents"
-description: "Discover Claude Code agents: autonomous sub-agents that execute complex multi-step tasks. Architecture, use cases, and best practices."
+title: "Claude Code agents: understand subagents and autonomous workflows"
+description: "Claude Code agents and subagents explained: architecture, available types, real examples, and how they orchestrate complex multi-step tasks autonomously."
 section: "agents"
 order: 1
 datePublished: "2026-03-10"
-dateModified: "2026-04-30"
+dateModified: "2026-05-09"
 themes: ["guide", "architecture"]
 ---
+
+## Quick answer
+
+A Claude Code agent is a specialized instance with its own system prompt, dedicated tools, and isolated context. It executes multi-step tasks autonomously (plan, execute, verify, iterate) without polluting the main conversation. You can invoke them directly by name, or let them be called as sub-tasks by other agents.
 
 ## What exactly are agents?
 
@@ -241,6 +245,29 @@ Here's a typical agent usage scenario:
 ```
 
 The result is a **multidimensional** review covering code quality, security, and tests, all in a single command.
+
+## FAQ
+
+<Faq>
+  <FaqItem question="What is a Claude Code agent?">
+    An agent is a specialized Claude instance with its own system prompt, dedicated tools and isolated context. It executes multi-step tasks autonomously without polluting the main conversation.
+  </FaqItem>
+  <FaqItem question="What's the difference between an agent and a subagent?">
+    An agent is invoked directly by the user (by name mention). A subagent is invoked by another agent via the Task tool, to delegate a sub-task in its own isolated context.
+  </FaqItem>
+  <FaqItem question="How do I create a custom Claude Code agent?">
+    Create a markdown file in .claude/agents/ with frontmatter (name, description, tools, model) and a system prompt. The agent becomes immediately available via @agent-name.
+  </FaqItem>
+  <FaqItem question="When should I use an agent vs a slash command?">
+    A slash command is a prompt shortcut with no isolation. An agent isolates context, restricts tools and has a dedicated system prompt. Prefer agents for long or sensitive tasks.
+  </FaqItem>
+  <FaqItem question="How autonomous are Claude Code agents?">
+    Very autonomous: they can chain dozens of tool calls without intervention. You keep control via permissions, hooks (e.g. PreToolUse), and the ability to interrupt at any time.
+  </FaqItem>
+  <FaqItem question="Can multiple agents run in parallel?">
+    Yes, via the Task tool: a main agent can dispatch multiple subagents in parallel. Each has an isolated context and returns a consolidated result to the orchestrator.
+  </FaqItem>
+</Faq>
 
 ## Next steps
 

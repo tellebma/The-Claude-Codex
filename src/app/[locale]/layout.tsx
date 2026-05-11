@@ -10,8 +10,7 @@ import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { VercelMetrics } from "@/components/layout/VercelMetrics";
 import { routing } from "@/i18n/routing";
 import {
   SITE_URL,
@@ -40,6 +39,7 @@ const mono = JetBrains_Mono({
 const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "";
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "";
 const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
+
 
 /*
  * Matomo analytics script — safe: built from environment variables
@@ -214,15 +214,10 @@ export default async function LocaleLayout({
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>
-        {/* VM-3 — Vercel Web Analytics : pageviews + custom events.
-            Doublon assume avec Matomo cookieless (cf. docs/analytics-tracking.md).
-            mode="production" explicite : SSG + next-intl rendent l'auto-detect
-            de NODE_ENV moins fiable. */}
-        <Analytics mode="production" />
-        {/* VM-5 — Vercel Speed Insights : Web Vitals reels (LCP, INP, CLS,
-            FCP, TTFB) en mode RUM. Comble le trou principal du tracking
-            actuel : aujourd'hui Lighthouse en CI = lab synthetique uniquement. */}
-        <SpeedInsights />
+        {/* VM-3 / VM-5 / VM-6 / VM-7 — Vercel Web Analytics + Speed Insights.
+            Encapsule dans un Client Component (VercelMetrics) car les Server
+            Components ne peuvent pas passer de fonction (beforeSend) en prop. */}
+        <VercelMetrics />
       </body>
     </html>
   );

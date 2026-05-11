@@ -67,7 +67,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Installez Claude Code en quelques minutes : Node.js 18+, npm, authentification API key ou Max, et résolution des erreurs courantes.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-10",
   },
   {
     path: "/getting-started/environment-setup",
@@ -76,7 +76,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Configurez Claude Code : variable d’environnement API key, fichier settings.json, fichier CLAUDE.md, permissions et sécurité.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-10",
   },
   {
     path: "/getting-started/first-project",
@@ -85,7 +85,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Tutoriel concret : créez votre premier site web avec Claude Code en 5 minutes. Exemples de prompts et bonnes pratiques.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-05-10",
   },
   {
     path: "/getting-started/faq-beginner",
@@ -500,7 +500,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les meilleurs agents Claude Code classés par catégorie : développement, architecture, sécurité, tests et maintenance. Description, quand les utiliser et exemples d’invocation.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-05-10",
   },
   {
     path: "/agents/orchestration",
@@ -788,7 +788,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Itinéraire pour les leads techniques et managers qui déploient Claude Code dans leur équipe. Adoption, gouvernance, sécurité, CI/CD et bonnes pratiques.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-05-10",
   },
   {
     path: "/personas/non-dev",

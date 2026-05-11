@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-11 (VM-10 audit build resilience livre — Vercel ~79s P50, marge x34 vs limite Hobby)
+> Derniere mise a jour : 2026-05-11 (VM-10 + ECO-1 scaffold ecosystem section livres)
 
 ---
 
@@ -17,8 +17,10 @@
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-11) |
 | [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 9 | 0 | 2 | 82% 🔄 (Sprint 1 + VM-1/VM-9/VM-10 docs livres) |
 | [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 0 | 0 | 10 | 0% 🆕 (validé agents SEO + Rédacteur, pret Sprint 1) |
+| [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 1 | 0 | 11 | 8% 🆕 (ECO-1 scaffold section) |
+| [Polish heros sections 2026-05](EPIC-polish-section-heroes-content-grid-2026-05.md) | 12 | 0 | 0 | 12 | 0% 🆕 (en attente skill Impeccable) |
 
-**Total projet** : 101/113 stories (89%) · ~230/246 SP livres (93%)
+**Total projet** : 102/137 stories (74%) · ~233/308 SP livres (76%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 

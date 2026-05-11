@@ -593,6 +593,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-11",
   },
   {
+    path: "/ecosystem/awesome-skills",
+    title: "Awesome Claude Skills : la sélection 2026",
+    description:
+      "Les skills publics qui valent vraiment l’installation : packs complets, skills uniques (mémoire, tokens, marketing), skills design pro et awesome lists.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/enterprise",
     title: "Claude Code en entreprise",
     description:

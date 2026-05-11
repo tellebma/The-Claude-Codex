@@ -1,0 +1,89 @@
+---
+title: "Awesome Claude Skills: the 2026 selection"
+description: "Public skills genuinely worth installing: complete packs, single-purpose skills (memory, tokens, marketing), pro design skills, and awesome lists. GitHub data verified 2026-05-11."
+order: 2
+section: "ecosystem"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["reference", "tooling"]
+---
+
+{/* source: GitHub API repos data, fetched 2026-05-11 */}
+
+## TL;DR
+
+- **Skills** are Claude Code's most powerful reuse layer: a `.md` folder that injects domain expertise into every session.
+- 3 families dominate: **complete packs** (`everything-claude-code`, `mattpocock/skills`), **single-purpose skills** (`caveman` for tokens, `graphify` for memory, `career-ops` for job hunting), and **pro design skills** (Impeccable, UI UX Pro Max, etc.).
+- The awesome lists `ComposioHQ/awesome-claude-skills` (59k★) and `sickn33/antigravity-awesome-skills` (37k★) serve as reference catalogs — bookmark them.
+- Advice: install **1 pack** + **2-3 single-purpose skills** targeted at your actual pain points. Not 50 at once.
+
+<Callout type="info" title="Skills ≠ Plugins ≠ Agents">
+A **skill** is a markdown file that adds a competence to Claude Code (a know-how, workflow, or convention). A **plugin** is a packaged integration distributed via marketplace. An **agent** is a delegated sub-LLM for a specific task. See [`/skills/comparison`](/skills/comparison) for the detail.
+</Callout>
+
+## 1. Complete packs
+
+Ready-to-install full collections. Start here if you want **one polyvalent setup**.
+
+| Repo | ⭐ | For who |
+|------|---:|---------|
+| [`affaan-m/everything-claude-code`](https://github.com/affaan-m/everything-claude-code) | 179,432 | Dev who wants it all: skills, instincts, memory, security, research-first. The Swiss army knife. |
+| [`mattpocock/skills`](https://github.com/mattpocock/skills) | 71,906 | TypeScript/Node dev. "Skills for real engineers, straight from my .claude directory" — opinionated and focused. |
+| [`sickn33/antigravity-awesome-skills`](https://github.com/sickn33/antigravity-awesome-skills) | 37,180 | Cross-tool dev. 1,400+ skills installable for Claude Code, Cursor, Codex CLI, Gemini, Antigravity. |
+| [`nexu-io/open-design`](https://github.com/nexu-io/open-design) | 37,298 | Designer / freelancer. 19 design skills + 71 brand-grade design systems, open-source alternative to Claude Design. |
+
+## 2. High-impact single-purpose skills
+
+A single skill that solves a specific problem. Often more useful than a pack if you know what you need.
+
+| Repo | ⭐ | What it does |
+|------|---:|--------------|
+| [`thedotmack/claude-mem`](https://github.com/thedotmack/claude-mem) | 74,821 | **Persistent memory** across sessions. Captures, compresses, replays. |
+| [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) | 58,241 | **Token reduction**: 65% fewer tokens by making Claude talk caveman. Funny but effective. |
+| [`safishamsi/graphify`](https://github.com/safishamsi/graphify) | 46,621 | **Knowledge graph**: turns a code folder into a queryable graph. Works with Cursor, Codex too. |
+| [`santifer/career-ops`](https://github.com/santifer/career-ops) | 44,086 | **Job hunting**: 14 skill modes, Go dashboard, PDF generation, batch processing. |
+| [`coreyhaines31/marketingskills`](https://github.com/coreyhaines31/marketingskills) | 27,870 | **Marketing & growth**: CRO, copywriting, SEO, analytics, growth engineering. |
+
+## 3. Pro design skills
+
+Four skills installed locally on this Codex and actively used for the ongoing graphic redesign. Detailed fiches in preparation in `/skills/{slug}` (EPIC Claude Code Design Stack).
+
+| Skill | One-line promise | Detailed fiche |
+|-------|------------------|----------------|
+| **Impeccable** | Mandatory "Product" + "Design system" gate — refuses to code without `PRODUCT.md` + `DESIGN.md`. | [`/skills/impeccable`](/skills/impeccable) (coming) |
+| **UI UX Pro Max** | 67 styles, 96 palettes, 57 font pairings, 25 charts, 13 stacks. The largest UI pattern library. | [`/skills/ui-ux-pro-max`](/skills/ui-ux-pro-max) (coming) |
+| **design-taste-frontend** | Senior UI/UX engineer overrides default LLM biases. Strict metrics, hardware-accelerated CSS. | [`/skills/taste-skill`](/skills/taste-skill) (coming) |
+| **Huashu Design** | Hi-fi HTML prototypes, exploratory design, 5 streams × 20 philosophies + 24 prebuilt showcases. | [`/skills/huashu-design`](/skills/huashu-design) (coming) |
+
+<Callout type="tip" title="Why not the direct GitHub link">
+Linking directly to GitHub for these 4 skills would dilute our topical authority and confuse SEO signals (cf. rule appendix C of the Design Stack EPIC). The `/skills/{slug}` fiches will be the authority source on the Codex side. Meanwhile, we keep the one-line promise here and the link will be reactivated when each fiche is published.
+</Callout>
+
+## 4. Awesome lists & catalogs
+
+To discover all existing public skills. Bookmark.
+
+| Repo | ⭐ | What's special |
+|------|---:|----------------|
+| [`ComposioHQ/awesome-claude-skills`](https://github.com/ComposioHQ/awesome-claude-skills) | 59,255 | THE awesome list reference for skills. Sorted by category, usage examples. |
+| [`hesreallyhim/awesome-claude-code`](https://github.com/hesreallyhim/awesome-claude-code) | 43,382 | Global Claude Code inventory (not just skills): hooks, slash-commands, agents, plugins. |
+
+## How to choose
+
+Three steps:
+
+1. **If you're new**: install **one complete pack** (`mattpocock/skills` if you do TypeScript, otherwise `everything-claude-code` for the Swiss army knife). Work with it for 2-3 weeks before adding anything.
+2. **If you have a specific pain point**: grab the matching single-purpose skill (`caveman` for an exploding bill, `claude-mem` for lost context, `graphify` to navigate a large codebase).
+3. **If you want to understand the ecosystem**: spend 30 minutes on `ComposioHQ/awesome-claude-skills` and `hesreallyhim/awesome-claude-code`. You'll come out with a clear view.
+
+<Callout type="warning" title="Don't stack 12 packs">
+Multiple packs at once = convention conflicts + longer loading time + Claude doesn't know which skill to prioritize. **One pack at a time**. If you want to try a new pack, disable the previous one.
+</Callout>
+
+## Next steps
+
+- Discover the official Anthropic plugins: [`/ecosystem/awesome-plugins`](/ecosystem/awesome-plugins) (coming, ECO-4).
+- Explore MCP servers by category: [`/ecosystem/awesome-mcp-servers`](/ecosystem/awesome-mcp-servers) (coming, ECO-5).
+- Understand the **skill** format officially: [`/skills/what-are-skills`](/skills/what-are-skills).
+- Learn to **create your own skill**: [`/skills/create-custom`](/skills/create-custom).
+- Compare **skills vs agents vs plugins**: [`/agents/orchestration`](/agents/orchestration).

@@ -1,0 +1,89 @@
+---
+title: "Awesome Claude Skills : la sélection 2026"
+description: "Les skills publics qui valent vraiment l'installation : packs complets, skills uniques (mémoire, tokens, marketing), skills design pro et awesome lists. Données GitHub vérifiées le 2026-05-11."
+order: 2
+section: "ecosystem"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["reference", "tooling"]
+---
+
+{/* source: GitHub API repos data, consulté 2026-05-11 */}
+
+## TL;DR
+
+- Les **skills** sont la couche de réutilisation la plus puissante de Claude Code : un dossier `.md` qui injecte un savoir-faire métier dans toutes tes sessions.
+- 3 familles dominent : **packs complets** (`everything-claude-code`, `mattpocock/skills`), **skills mono-usage** (`caveman` pour les tokens, `graphify` pour la mémoire, `career-ops` pour le job hunting), et **skills design pro** (Impeccable, UI UX Pro Max, etc.).
+- Les awesome lists `ComposioHQ/awesome-claude-skills` (59k★) et `sickn33/antigravity-awesome-skills` (37k★) servent de référence catalogue, à bookmarker.
+- Conseil : installer **1 pack** + **2-3 skills mono-usage** ciblés sur tes vrais besoins. Pas 50 d'un coup.
+
+<Callout type="info" title="Skills ≠ Plugins ≠ Agents">
+Un **skill** est un fichier markdown qui ajoute une compétence à Claude Code (un savoir-faire, un workflow, des conventions). Un **plugin** est une intégration packagée distribuée via marketplace. Un **agent** est un sous-LLM délégué pour une tâche précise. Voir [`/skills/comparison`](/skills/comparison) pour le détail.
+</Callout>
+
+## 1. Packs complets
+
+Des collections complètes prêtes à installer. Démarrer ici si tu cherches **un seul setup polyvalent**.
+
+| Repo | ⭐ | Pour qui |
+|------|---:|----------|
+| [`affaan-m/everything-claude-code`](https://github.com/affaan-m/everything-claude-code) | 179 432 | Dev qui veut tout d'un coup : skills, instincts, mémoire, sécurité, research-first. Le couteau suisse. |
+| [`mattpocock/skills`](https://github.com/mattpocock/skills) | 71 906 | Dev TypeScript/Node. "Skills for real engineers, straight from my .claude directory" — opinionated et focused. |
+| [`sickn33/antigravity-awesome-skills`](https://github.com/sickn33/antigravity-awesome-skills) | 37 180 | Dev cross-tool. 1 400+ skills installables pour Claude Code, Cursor, Codex CLI, Gemini, Antigravity. |
+| [`nexu-io/open-design`](https://github.com/nexu-io/open-design) | 37 298 | Designer / freelance. 19 skills design + 71 brand-grade design systems, alternative open-source à Claude Design. |
+
+## 2. Skills mono-usage à fort impact
+
+Un seul skill qui résout un problème précis. Souvent plus utile qu'un pack si tu sais ce que tu cherches.
+
+| Repo | ⭐ | Ce qu'il fait |
+|------|---:|---------------|
+| [`thedotmack/claude-mem`](https://github.com/thedotmack/claude-mem) | 74 821 | **Mémoire persistante** entre sessions. Capture, compresse, rejoue. |
+| [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) | 58 241 | **Réduction tokens** : 65 % de tokens en moins en faisant parler Claude comme un homme des cavernes. Drôle mais efficace. |
+| [`safishamsi/graphify`](https://github.com/safishamsi/graphify) | 46 621 | **Knowledge graph** : transforme un dossier de code en graphe interrogeable. Marche aussi avec Cursor, Codex. |
+| [`santifer/career-ops`](https://github.com/santifer/career-ops) | 44 086 | **Job hunting** : 14 modes skills, dashboard Go, génération PDF, batch processing. |
+| [`coreyhaines31/marketingskills`](https://github.com/coreyhaines31/marketingskills) | 27 870 | **Marketing & growth** : CRO, copywriting, SEO, analytics, growth engineering. |
+
+## 3. Skills design pro
+
+Quatre skills installés en local sur ce Codex et activement utilisés pour la refonte graphique en cours. Fiches détaillées en préparation dans `/skills/{slug}` (EPIC Stack design Claude Code).
+
+| Skill | Promesse en 1 ligne | Fiche détaillée |
+|-------|---------------------|-----------------|
+| **Impeccable** | Gate "Product" + "Design system" obligatoire, refuse de coder sans `PRODUCT.md` + `DESIGN.md`. | [`/skills/impeccable`](/skills/impeccable) (à venir) |
+| **UI UX Pro Max** | 67 styles, 96 palettes, 57 font pairings, 25 charts, 13 stacks. La plus grosse bibliothèque de patterns UI. | [`/skills/ui-ux-pro-max`](/skills/ui-ux-pro-max) (à venir) |
+| **design-taste-frontend** | Senior UI/UX engineer override des biais LLM par défaut. Métriques strictes, CSS hardware-accel. | [`/skills/taste-skill`](/skills/taste-skill) (à venir) |
+| **Huashu Design** | Prototypes HTML hi-fi, design exploratoire, 5 flux × 20 philosophies + 24 showcases pré-construits. | [`/skills/huashu-design`](/skills/huashu-design) (à venir) |
+
+<Callout type="tip" title="Pourquoi pas le lien direct GitHub">
+Linker directement vers GitHub pour ces 4 skills diluerait notre topical authority et confondrait les signaux SEO (cf. règle annexe C de l'EPIC Stack design). Les fiches `/skills/{slug}` seront la source d'autorité côté Codex. En attendant, on garde la promesse 1-ligne ici et le lien sera réactivé quand chaque fiche sera publiée.
+</Callout>
+
+## 4. Awesome lists & catalogues
+
+Pour découvrir tous les skills publics existants. À bookmarker.
+
+| Repo | ⭐ | Particularité |
+|------|---:|---------------|
+| [`ComposioHQ/awesome-claude-skills`](https://github.com/ComposioHQ/awesome-claude-skills) | 59 255 | LA awesome list de référence pour les skills. Tri par catégorie, exemples d'usage. |
+| [`hesreallyhim/awesome-claude-code`](https://github.com/hesreallyhim/awesome-claude-code) | 43 382 | Inventaire global Claude Code (pas que skills) : hooks, slash-commands, agents, plugins. |
+
+## Comment choisir
+
+Trois étapes :
+
+1. **Si tu débutes** : installer **un pack complet** (`mattpocock/skills` si tu fais du TypeScript, sinon `everything-claude-code` pour le couteau suisse). Travailler avec pendant 2-3 semaines avant d'ajouter quoi que ce soit.
+2. **Si tu as une douleur précise** : aller chercher le skill mono-usage correspondant (`caveman` pour la facture qui explose, `claude-mem` pour le contexte perdu, `graphify` pour naviguer un gros codebase).
+3. **Si tu veux comprendre l'écosystème** : passer 30 minutes sur `ComposioHQ/awesome-claude-skills` et `hesreallyhim/awesome-claude-code`. Tu ressortiras avec une vision claire.
+
+<Callout type="warning" title="Ne pas empiler 12 packs">
+Plusieurs packs en même temps = conflits de conventions + temps de chargement allongé + Claude qui ne sait plus quel skill prioriser. **Un pack à la fois**. Si tu veux essayer un nouveau pack, désactive le précédent.
+</Callout>
+
+## Prochaines étapes
+
+- Découvrir les plugins officiels Anthropic : [`/ecosystem/awesome-plugins`](/ecosystem/awesome-plugins) (à venir, ECO-4).
+- Explorer les serveurs MCP par catégorie : [`/ecosystem/awesome-mcp-servers`](/ecosystem/awesome-mcp-servers) (à venir, ECO-5).
+- Comprendre le format **skill** côté Claude Code officiel : [`/skills/what-are-skills`](/skills/what-are-skills).
+- Apprendre à **créer ton propre skill** : [`/skills/create-custom`](/skills/create-custom).
+- Comparer **skills vs agents vs plugins** : [`/agents/orchestration`](/agents/orchestration).

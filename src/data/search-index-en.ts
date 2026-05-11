@@ -526,6 +526,33 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "stars",
     ],
   },
+  {
+    title: "Awesome Claude Skills: the 2026 selection",
+    description:
+      "Public skills worth installing: complete packs, single-purpose skills (memory, tokens, marketing), pro design skills, and awesome lists.",
+    href: "/ecosystem/awesome-skills",
+    section: "Ecosystem",
+    keywords: [
+      "skills",
+      "awesome",
+      "mattpocock",
+      "claude-mem",
+      "caveman",
+      "graphify",
+      "career-ops",
+      "marketing",
+      "impeccable",
+      "ui-ux-pro-max",
+      "taste-skill",
+      "huashu-design",
+      "open-design",
+      "antigravity-awesome-skills",
+      "everything-claude-code",
+      "pack",
+      "ecosystem",
+      "selection",
+    ],
+  },
   // Enterprise
   {
     title: "Claude Code for enterprise",

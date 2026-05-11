@@ -536,6 +536,33 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "stars",
     ],
   },
+  {
+    title: "Awesome Claude Skills : la selection 2026",
+    description:
+      "Skills publics qui valent l'installation : packs complets, skills mono-usage (memoire, tokens, marketing), skills design pro et awesome lists.",
+    href: "/ecosystem/awesome-skills",
+    section: "Ecosysteme",
+    keywords: [
+      "skills",
+      "awesome",
+      "mattpocock",
+      "claude-mem",
+      "caveman",
+      "graphify",
+      "career-ops",
+      "marketing",
+      "impeccable",
+      "ui-ux-pro-max",
+      "taste-skill",
+      "huashu-design",
+      "open-design",
+      "antigravity-awesome-skills",
+      "everything-claude-code",
+      "pack",
+      "ecosysteme",
+      "selection",
+    ],
+  },
   // Enterprise
   {
     title: "Claude Code en entreprise",

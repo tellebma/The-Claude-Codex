@@ -611,6 +611,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-11",
   },
   {
+    path: "/ecosystem/awesome-mcp-servers",
+    title: "Awesome MCP Servers : la curation par catégorie (mai 2026)",
+    description:
+      "Les serveurs MCP à brancher à Claude Code : awesome lists, dev tools (GitHub, Chrome DevTools, Playwright), data, frameworks builders, automation. Données vérifiées 2026-05-11.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
     path: "/enterprise",
     title: "Claude Code en entreprise",
     description:

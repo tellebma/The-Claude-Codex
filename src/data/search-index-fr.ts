@@ -537,6 +537,33 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Awesome MCP Servers : la curation par categorie (mai 2026)",
+    description:
+      "Serveurs MCP a brancher a Claude Code : dev tools (GitHub, Chrome DevTools, Playwright), data, frameworks builders, automation.",
+    href: "/ecosystem/awesome-mcp-servers",
+    section: "Ecosysteme",
+    keywords: [
+      "mcp",
+      "servers",
+      "awesome",
+      "modelcontextprotocol",
+      "chrome-devtools",
+      "playwright",
+      "github-mcp",
+      "serena",
+      "context7",
+      "supabase",
+      "fastmcp",
+      "fastapi",
+      "n8n",
+      "activepieces",
+      "scrapling",
+      "gpt-researcher",
+      "ida-pro-mcp",
+      "ecosysteme",
+    ],
+  },
+  {
     title: "Awesome Claude Plugins : marketplace officielle + ecosysteme community",
     description:
       "Plugins Claude Code a connaitre : marketplace officielle Anthropic, claude-hud, compound-engineering-plugin, claudian, marketplaces alternatives.",

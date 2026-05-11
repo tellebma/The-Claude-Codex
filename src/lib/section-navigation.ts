@@ -141,6 +141,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "ecosystem.top-repos-github", href: "/ecosystem/top-repos-github" },
       { labelKey: "ecosystem.awesome-skills", href: "/ecosystem/awesome-skills" },
       { labelKey: "ecosystem.awesome-plugins", href: "/ecosystem/awesome-plugins" },
+      { labelKey: "ecosystem.awesome-mcp-servers", href: "/ecosystem/awesome-mcp-servers" },
     ],
   },
   enterprise: {

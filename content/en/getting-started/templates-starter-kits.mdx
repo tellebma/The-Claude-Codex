@@ -1,0 +1,144 @@
+---
+title: "Templates and starter kits for Claude Code"
+description: "Tour of the opinionated stacks of May 2026: gstack (Garry Tan), claude-code-templates, SuperClaude_Framework, get-shit-done, claude-on-rails. How to choose by profile."
+section: "getting-started"
+order: 7
+datePublished: "2026-05-12"
+dateModified: "2026-05-12"
+themes: ["tutorial", "tooling"]
+---
+
+{/* source: GitHub API repos data + README reads, fetched 2026-05-12 */}
+
+## TL;DR
+
+- Installing Claude Code "bare" gives you a capable but generic agent. A **starter kit** adds skills, agents, commands and hooks tailored to a real workflow.
+- 4 starter kits dominate in May 2026: **gstack** (Garry Tan, 23 opinionated tools running "team-of-20" style), **claude-code-templates** (catalog of 100+ components), **SuperClaude_Framework** (30 commands + 20 cognitive agents), **get-shit-done / GSD** (meta-prompting and sub-agent orchestration).
+- Pick by need: follow a tech leader → gstack ; pick à la carte → claude-code-templates ; full framework for a team → SuperClaude ; fight context rot solo → GSD.
+- All MIT-licensed. You can (and should) **mix them**.
+
+## Why use a template?
+
+Vanilla Claude Code edits code, runs commands, makes commits. Enough for a one-off session. But on a project that lasts:
+
+1. You end up rewriting the same long prompts (code review, implementation plan, security audit)
+2. You manually re-do the same hooks (format before commit, block `rm -rf`)
+3. You reinvent the same agents (PM, designer, QA)
+4. You lose context across sessions
+
+A starter kit ships all that **packaged**. Three main styles:
+
+- **Skills + slash commands**, gstack-style: `/plan-ceo-review` triggers a dedicated agent
+- **Catalog à la carte**, claude-code-templates-style: cherry-pick components you want
+- **Integrated framework**, SuperClaude or GSD style: the whole ecosystem comes together
+
+<Callout type="info" title="Mixing encouraged">
+The 4 tools aren't competitors: gstack for release workflows, claude-code-templates for MCPs, SuperClaude for complex agents, GSD for long sessions. Install several and use what helps.
+</Callout>
+
+## The 4 must-have starter kits
+
+### gstack — Garry Tan's Claude Code setup
+
+The starter kit that went viral in 2026. Garry Tan (Y Combinator) published his personal setup to help a solo founder "function like a team of 20".
+
+- ⭐ **94,475 stars** (verified 2026-05-12, GitHub source)
+- MIT license, TypeScript (77%), Go Template, Shell
+- Repo: [garrytan/gstack](https://github.com/garrytan/gstack)
+
+**What you get**: 23 slash commands that embody full-team roles. Planning (`/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`), design (`/design-consultation`, `/design-shotgun`, `/design-review`), execution (`/review`, `/ship`, `/qa`, `/land-and-deploy`), security (`/cso`), polish (`/freeze`, `/guard`, `/careful`), research (`/browse`, `/investigate`), debug (`/codex`).
+
+<CodeBlock language="bash" code={`git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack
+./setup`} />
+
+Best for: technical founder solo, staff engineer who wants an opinionated workflow, anyone who buys the "one human, many agents" philosophy. Less suited if you'd rather compose each tool yourself.
+
+### claude-code-templates — À la carte catalog (davila7)
+
+Opposite approach: instead of a monolithic stack, a **catalog of 100+ components** you cherry-pick from.
+
+- ⭐ **27,207 stars**, MIT, Python (verified 2026-05-12)
+- Repo: [davila7/claude-code-templates](https://github.com/davila7/claude-code-templates)
+- Web UI: [aitmpl.com](https://aitmpl.com)
+
+**What you get**: domain-specialized agents (security audit, performance, etc.), custom slash commands, MCP integrations (GitHub, PostgreSQL, AWS, etc.), opinionated settings, automation hooks, skills with progressive disclosure.
+
+<CodeBlock language="bash" code={`# Interactive: choose what to install
+npx claude-code-templates@latest
+
+# Direct: install one specific agent
+npx claude-code-templates@latest --agent security-auditor
+
+# Install everything without asking
+npx claude-code-templates@latest --yes`} />
+
+Best for: devs who want a library, cherry-picking per project, or testing an agent before adoption. Good fit for cautious profiles who don't want to ship 23 tools at once.
+
+### SuperClaude_Framework — Meta-programming framework
+
+Framework-oriented approach: behavioral injection + component orchestration. The project positions itself as a "meta-programming configuration framework".
+
+- ⭐ **22,756 stars**, MIT, Python (verified 2026-05-12)
+- Repo: [SuperClaude-Org/SuperClaude_Framework](https://github.com/SuperClaude-Org/SuperClaude_Framework)
+
+**What you get**: 30 slash commands covering the full dev cycle (brainstorming → deployment), 20 specialized cognitive agents (PM, security engineer, frontend architect, etc.), 8 MCP integrations, 7 behavioral modes that adapt to context.
+
+<CodeBlock language="bash" code={`pipx install superclaude
+superclaude install`} />
+
+Best for: teams that want a cohesive framework, long-running projects with agent rotation, profiles who like structured frameworks (Spring Boot, Django…). Less suited if you'd rather add your own conventions one at a time.
+
+### get-shit-done (GSD) — Fight context rot
+
+Minimalist approach centered on **sub-agent orchestration**: isolate heavy research into dedicated 200K-token contexts, keep the main window clean.
+
+- ⭐ **61,732 stars**, MIT, JavaScript (verified 2026-05-12)
+- Repo: [gsd-build/get-shit-done](https://github.com/gsd-build/get-shit-done)
+- Author: TÂCHES (solo dev, rejects heavy "sprint" workflows)
+
+**What you get**: 6 commands orchestrating a research → plan → execute → verify cycle, persisted artifacts (`PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`) that maintain context across sessions, multi-agent with fresh 200K contexts, interactive or autonomous ("yolo") mode.
+
+<CodeBlock language="bash" code={`npx get-shit-done-cc@latest`} />
+
+Compatible not only with Claude Code but also Cursor, Windsurf, and 15+ other runtimes. Best for: very long sessions (> 100K tokens), solo dev on a recurring product, anyone tired of `/compact`-ing every hour. See [/advanced/memoire-persistante](/advanced/memoire-persistante) for the underlying pattern.
+
+## Honorable mention: framework-specific starter kits
+
+### claude-on-rails — For Ruby on Rails devs
+
+- ⭐ **799 stars**, MIT, Ruby (verified 2026-05-12)
+- Repo: [obie/claude-on-rails](https://github.com/obie/claude-on-rails)
+- Inspired by SuperClaude but adapted to Rails conventions (generators, ActiveRecord, ERB)
+
+The ecosystem is starting to spawn per-framework forks (Rails, Django, Next.js…). If you work in a specific stack, check first whether a dedicated starter exists before picking a generic kit.
+
+## Comparison table by use case
+
+| Profile | Recommended | Why |
+|---------|-------------|-----|
+| Solo founder, "team of 20" in one person | **gstack** | Opinionated workflow, 23 roles already wired |
+| Senior dev who picks à la carte | **claude-code-templates** | 100+ component catalog, targeted install |
+| Team that needs consistency | **SuperClaude_Framework** | Structured framework, 20 shared cognitive agents |
+| Very long sessions (context rot) | **get-shit-done** | 200K sub-agents + persistent artifacts |
+| Rails / Django / framework-specific dev | Dedicated fork (e.g. claude-on-rails) | Framework conventions integrated |
+| Just want to test one feature | None, or single skill | No need to install 100 components for a test |
+
+## How to choose
+
+Three questions to ask:
+
+1. **Do you have a clear workflow already?** Yes (release process, structured code review) → gstack or SuperClaude. No → claude-code-templates à la carte.
+2. **Solo or team?** Solo → gstack or GSD (light). Team → SuperClaude (shared framework).
+3. **Short or long sessions?** Short (< 2h) → any kit. Long → GSD first for the sub-agent pattern.
+
+<Callout type="tip" title="Start simple">
+Don't install 4 kits the same day. Start with the one that resonates most, do a full project with it, then pick what you're missing from another. Multiple sources cause convention conflicts.
+</Callout>
+
+## Useful links
+
+- [/getting-started/first-project](/getting-started/first-project): your first project before adding a template
+- [/advanced/memoire-persistante](/advanced/memoire-persistante): GSD pattern explained in depth
+- [/agents/orchestration](/agents/orchestration): when to pick Command vs Agent vs Skill
+- [/ecosystem/awesome-skills](/ecosystem/awesome-skills): broader skill catalog if you'd rather compose manually

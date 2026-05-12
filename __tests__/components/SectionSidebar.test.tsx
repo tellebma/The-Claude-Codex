@@ -137,26 +137,26 @@ describe("SectionSidebar", () => {
     expect(progressbar).toBeInTheDocument();
   });
 
-  it("shows 'Page 1 / 7' when on the overview page of getting-started", () => {
+  it("shows 'Page 1 / 8' when on the overview page of getting-started", () => {
     mockPathname = "/getting-started";
     render(<SectionSidebar />);
 
     // The component renders: "Page {currentPage} / {totalPages}"
-    expect(screen.getByText("Page 1 / 7")).toBeInTheDocument();
+    expect(screen.getByText("Page 1 / 8")).toBeInTheDocument();
   });
 
-  it("shows 'Page 4 / 7' when on the installation page of getting-started", () => {
+  it("shows 'Page 4 / 8' when on the installation page of getting-started", () => {
     mockPathname = "/getting-started/installation";
     render(<SectionSidebar />);
 
-    expect(screen.getByText("Page 4 / 7")).toBeInTheDocument();
+    expect(screen.getByText("Page 4 / 8")).toBeInTheDocument();
   });
 
-  it("shows 'Page 7 / 7' when on the last page of getting-started", () => {
+  it("shows 'Page 8 / 8' when on the last page of getting-started", () => {
     mockPathname = "/getting-started/faq-beginner";
     render(<SectionSidebar />);
 
-    expect(screen.getByText("Page 7 / 7")).toBeInTheDocument();
+    expect(screen.getByText("Page 8 / 8")).toBeInTheDocument();
   });
 
   it("sets correct value/max on the progress bar", () => {
@@ -166,7 +166,7 @@ describe("SectionSidebar", () => {
     // Native <progress> element carries value/max (not aria-valuenow).
     const progressbar = screen.getByRole("progressbar") as HTMLProgressElement;
     expect(progressbar.value).toBe(3);
-    expect(progressbar.max).toBe(7);
+    expect(progressbar.max).toBe(8);
   });
 
   it("does not render the progress bar when on a page not in the section item list", () => {

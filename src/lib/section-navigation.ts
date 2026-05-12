@@ -33,6 +33,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "getting-started.installation", href: "/getting-started/installation" },
       { labelKey: "getting-started.environment-setup", href: "/getting-started/environment-setup" },
       { labelKey: "getting-started.first-project", href: "/getting-started/first-project" },
+      { labelKey: "getting-started.templates-starter-kits", href: "/getting-started/templates-starter-kits" },
       { labelKey: "getting-started.faq-beginner", href: "/getting-started/faq-beginner" },
     ],
   },

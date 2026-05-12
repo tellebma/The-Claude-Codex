@@ -45,6 +45,33 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Templates and starter kits for Claude Code",
+    description:
+      "Opinionated stacks of 2026: gstack (Garry Tan, 94k★), claude-code-templates (27k★), SuperClaude_Framework (23k★), get-shit-done (62k★), claude-on-rails. Pick by profile.",
+    href: "/getting-started/templates-starter-kits",
+    section: "Getting Started",
+    keywords: [
+      "templates",
+      "starter kit",
+      "boilerplate",
+      "gstack",
+      "garry tan",
+      "claude-code-templates",
+      "davila7",
+      "superclaude",
+      "get-shit-done",
+      "gsd",
+      "claude-on-rails",
+      "framework",
+      "skills",
+      "agents",
+      "slash commands",
+      "y combinator",
+      "context rot",
+      "sub-agent",
+    ],
+  },
+  {
     title: "Beginner FAQ: Frequently asked questions about Claude Code",
     description:
       "Answers to the most common questions: security, privacy, costs, difference with ChatGPT, technical prerequisites.",

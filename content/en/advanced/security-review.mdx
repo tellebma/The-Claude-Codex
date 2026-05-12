@@ -1,0 +1,215 @@
+---
+title: "/security-review command: security audits in Claude Code"
+description: "Catch SQL injection, XSS, hardcoded secrets and 7 more vulnerability families straight from Claude Code, locally or in CI through the official GitHub Action."
+section: "advanced"
+order: 17
+datePublished: "2026-05-12"
+dateModified: "2026-05-12"
+themes: ["tutorial", "security", "devsecops"]
+---
+
+<Callout type="info" title="TL;DR">
+`/security-review` is a native Claude Code slash command that runs a security review against your local diff before you commit. It targets developers on the Pro, Max, or API Console pay-as-you-go plans, and works either interactively in the terminal or in CI through the official `anthropics/claude-code-security-review` GitHub Action. You type it like any other Claude Code command, no required arguments.
+</Callout>
+
+{/* source: https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code, consulté 2026-05-12 */}
+{/* source: https://claude.com/blog/automate-security-reviews-with-claude-code, consulté 2026-05-12 */}
+
+## Plan eligibility
+
+Availability depends on your Anthropic plan. As of 2026-05-12, the official help center article (Anthropic article 11932705) explicitly lists three compatible plans.
+
+| Plan | `/security-review` (CLI) | GitHub Action |
+|------|--------------------------|---------------|
+| Pro (individual) | Yes | Yes via API key |
+| Max (individual) | Yes | Yes via API key |
+| API Console (pay-as-you-go) | Yes | Yes |
+| Free plan | Not listed as eligible | No |
+| Team / Enterprise | Not specified in the help center as of 2026-05-12 | Confirm with support |
+
+{/* source: https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code, consulté 2026-05-12 */}
+
+On the CI side, the GitHub Action needs a valid Claude API key stored as a repo secret. In practice that means an active API Console credit balance or a compatible plan that exposes a key usable outside the CLI.
+
+## Why `/security-review` matters
+
+Anthropic's pitch is straightforward in the product blog post from 2025-08-06 : turn a security review into a few-seconds gesture, baked into the coding workflow. Where a static scanner like Semgrep or Snyk applies a rule catalog, `/security-review` leans on the model's reasoning to analyze code in context. The GitHub Action's README claims "deep semantic analysis" and "advanced false positive filtering", two promises you won't find in signature-based tools.
+
+{/* source: https://claude.com/blog/automate-security-reviews-with-claude-code, consulté 2026-05-12 */}
+{/* source: https://github.com/anthropics/claude-code-security-review (README), consulté 2026-05-12 */}
+
+Three practical differences from a classic scanner:
+
+1. The command reasons about the current diff. It sees the modified function and its callers, not just the flagged line.
+2. It's language-agnostic. The Action's README spells out "language-agnostic", which saves you from installing a dedicated parser per stack.
+3. It suggests a fix you can apply. Once a finding shows up, you can ask Claude to apply the patch right away, no manual copy-paste.
+
+The flip side holds too : `/security-review` does not replace a static scanner. Anthropic's docs are firm on the word "complement", not "replace". More on that in the limits section.
+
+## Running the command locally
+
+<Steps>
+
+<Step title="Start a Claude Code session" stepNumber={1}>
+Open your terminal at the project root and run `claude`. If you hit unexpected behavior, check your version with `claude --version`. The command shipped on 2025-08-06.
+
+<CodeBlock
+  language="bash"
+  code={`cd ~/projects/my-app
+claude`}
+/>
+</Step>
+
+<Step title="Modify code without committing" stepNumber={2}>
+The command analyzes your current diff. As long as you haven't committed, edit files as usual. For a first dry run, introduce an obvious flaw : a concatenated SQL query or a hardcoded secret.
+</Step>
+
+<Step title="Run the command" stepNumber={3}>
+In the active Claude Code session, type the command with no arguments.
+
+<CodeBlock language="bash" code={`/security-review`} />
+
+Claude reads the uncommitted diff, applies Anthropic's specialized prompt, and returns a list of findings ranked by severity. Each finding includes a description, a location, and a remediation suggestion.
+</Step>
+
+<Step title="Ask for a fix" stepNumber={4}>
+If a finding looks legit, ask Claude to apply the patch on the spot. A simple "apply the fix for finding 1" is enough. The model rewrites the affected block, and you review the diff like any other file edit.
+</Step>
+
+<Step title="Re-scan before committing" stepNumber={5}>
+Once corrections land, run `/security-review` again to confirm no findings remain. This "scan, fix, re-scan" loop wraps up in a few minutes on a medium-sized diff.
+</Step>
+
+</Steps>
+
+The primary help center source does not document any flag or argument for the command as of 2026-05-12. If Anthropic adds options later, `/security-review --help` inside the CLI should surface them.
+
+{/* source: https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code, consulté 2026-05-12 */}
+
+## Automating with the GitHub Action
+
+The CI counterpart is the open-source repo [`anthropics/claude-code-security-review`](https://github.com/anthropics/claude-code-security-review), published under the MIT license. As of 2026-05-12, it sits at 4,573 stars, 432 forks and 69 open issues, with the latest push dated February 11, 2026. The job fires on every pull request and posts findings inline as PR comments.
+
+{/* source: GitHub API repos/anthropics/claude-code-security-review, consulté 2026-05-12 */}
+
+### Minimal workflow
+
+Here's the exact snippet the README ships with. It's fifteen lines long, scans the PR diff, and posts findings as comments.
+
+<CodeBlock
+  language="yaml"
+  code={`name: Security Review
+
+permissions:
+  pull-requests: write  # Needed for leaving PR comments
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+
+      - uses: anthropics/claude-code-security-review@main
+        with:
+          comment-pr: true
+          claude-api-key: \${{ secrets.CLAUDE_API_KEY }}`}
+/>
+
+Two things to nail down during setup :
+
+- **`CLAUDE_API_KEY` secret** : create it under `Settings → Secrets and variables → Actions`. The key needs access to both the Claude API and Claude Code.
+- **GITHUB_TOKEN permissions** : `pull-requests: write` to post comments, `contents: read` to read the code. Nothing more.
+
+### Configuration options
+
+The main options exposed by the Action are documented in the README as of 2026-05-12.
+
+| Option | Default | Purpose |
+|--------|---------|---------|
+| `claude-api-key` (required) | _none_ | API key with access to the Claude API and Claude Code |
+| `comment-pr` | `true` | Post findings as PR comments |
+| `claude-model` | `claude-opus-4-1-20250805` | Model used for analysis |
+| `claudecode-timeout` | 20 minutes | Maximum analysis timeout |
+| `exclude-directories` | _none_ | Folders excluded from the scan (test fixtures, etc.) |
+
+{/* source: https://github.com/anthropics/claude-code-security-review (README), consulté 2026-05-12 */}
+
+<Callout type="tip" title="Default model">
+As of 2026-05-12, the README lists `claude-opus-4-1-20250805` as the Action's default model. This model predates the latest Opus 4.x generations. Check the README before pinning a model in your workflow, the default may shift.
+</Callout>
+
+The Action is diff-aware : it only analyzes files modified by the PR, not the whole repo. This avoids the cost blowup you'd hit on any project past a few thousand lines.
+
+## The 5 official families detected
+
+Anthropic's help center formalizes five vulnerability families. The Action's README lists more granular technical subtypes. The two lists don't contradict each other, the second is just finer-grained.
+
+| Official family (Anthropic help center) | Concrete subtypes listed in the Action's README |
+|-----------------------------------------|--------------------------------------------------|
+| SQL injection risks | SQL injection, command injection, LDAP, XPath, NoSQL, XXE |
+| Cross-site scripting (XSS) | Reflected XSS, stored XSS, DOM-based XSS |
+| Authentication and authorization flaws | Broken auth, privilege escalation, IDOR, bypass logic, session flaws |
+| Insecure data handling | Hardcoded secrets, sensitive data logging, information disclosure, PII violations |
+| Dependency vulnerabilities | Vulnerable packages, typosquatting risks |
+
+{/* source: https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code, consulté 2026-05-12 */}
+{/* source: https://github.com/anthropics/claude-code-security-review (README), consulté 2026-05-12 */}
+
+This five-family layout works as a reading grid. In practice you'll also see findings around weak crypto or insecure default configurations : Anthropic maps these under "insecure data handling" or "dependency vulnerabilities" depending on the case.
+
+## Limits and false positives
+
+<Callout type="warning" title="Read this before shipping the Action to production">
+The README for `anthropics/claude-code-security-review` is explicit : "This action is not hardened against prompt injection attacks and should only be used to review trusted PRs." In plain English, an attacker opening a PR from a fork can embed instructions in their code to manipulate the review. The official recommendation is to require manual approval from a maintainer before any workflow runs on a PR from an external contributor (GitHub's "Require approval for all external contributors" setting).
+</Callout>
+
+{/* source: https://github.com/anthropics/claude-code-security-review (README), consulté 2026-05-12 */}
+
+Four more limits to keep in mind :
+
+1. **Code is sent to the Anthropic API.** Every call ships your diff to Anthropic's servers. For proprietary or NDA-bound code, vet your org's data policy and Anthropic's first.
+2. **Token cost.** The command bills like any other API call. On a busy repo (dozens of PRs per day), watch consumption, especially if you wire the Action to every push.
+3. **Categories filtered out by default.** To cut noise, the Action excludes Denial of Service, rate limiting, memory/CPU exhaustion, input validation without proven impact, and open redirects. If those angles matter to you, tweak the custom instructions.
+4. **No coverage guarantee.** Anthropic says it plainly in the help center : "While automated security reviews help identify many common vulnerabilities, they should complement, not replace, your existing security practices." No precision or recall numbers are published.
+
+{/* source: https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code, consulté 2026-05-12 */}
+{/* source: https://github.com/anthropics/claude-code-security-review (README), consulté 2026-05-12 */}
+
+## Wiring the command into a DevSecOps workflow
+
+`/security-review` shines when it sits inside a toolchain, not alone. Here's a defensive combo you'll often see on mature projects, paired with the [security best practices](/content/security-best-practices) page and the [CI/CD and cybersecurity](/content/ci-cd-cyber-security) guide.
+
+| Tool | Role | Complements `/security-review` by |
+|------|------|-----------------------------------|
+| gitleaks | Detect secrets committed to git history | Catching historical leaks the command can't see (it only reads the PR diff) |
+| dependabot | Vulnerable dependency updates | Handling the "dependency vulnerabilities" family upstream, freeing `/security-review` to focus on application code |
+| CODEOWNERS | Targeted human review by path | Forcing a human to validate findings on sensitive paths (auth, payments) |
+| Branch protection | Required status checks before merge | Letting the GHA job become a blocking status if you want to gate merges |
+
+On the CLI side, you can also trigger the command automatically through a Claude Code `PreToolUse` hook on `git commit`. The mechanism is covered on the [hooks](/advanced/hooks) page and stops you from forgetting the review before a push. If an API key did leak through the cracks, the remediation playbook lives in [Leaked API key recovery](/content/leaked-api-key-recovery).
+
+On the threat model side, remember `/security-review` does not replace a manual pentest or a commercial SAST tuned to your stack. It catches a meaningful share of recurring mistakes (concatenated SQL, forgotten secrets, missing access controls) before they hit prod, which is already valuable.
+
+## Going further
+
+Beyond the slash command, Anthropic ships a web product called "Claude Code Security", positioned as an Enterprise offering for continuous scanning of a full codebase, with a dashboard and grouped patch suggestions. As of 2026-05-12, this product is distinct from `/security-review` : the slash command stays available to all paid individual plans, the web product targets Enterprise teams. If you landed here looking for the web product, check Anthropic's official docs rather than this article.
+
+Official links worth bookmarking :
+
+- [Automated security reviews in Claude Code](https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code) (help center, primary source)
+- [Automate security reviews with Claude Code](https://claude.com/blog/automate-security-reviews-with-claude-code) (product announcement, 2025-08-06)
+- [anthropics/claude-code-security-review](https://github.com/anthropics/claude-code-security-review) (Action repo, MIT)
+
+## Next steps
+
+- Run `/security-review` locally in your next Claude Code session, on a real diff
+- Wire the GitHub Action into a secondary repo to calibrate cost and finding relevance before enforcing it in CI on critical repos
+- Read the [hooks](/advanced/hooks) page to automate the command before each commit
+- Round out your defense with the practices laid out in [security best practices](/content/security-best-practices) and [CI/CD and cybersecurity](/content/ci-cd-cyber-security)

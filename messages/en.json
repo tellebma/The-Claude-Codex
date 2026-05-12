@@ -438,7 +438,8 @@
       "methodologies-ecosystem": "Methodologies ecosystem",
       "memoire-persistante": "Persistent memory",
       "optimisation-tokens": "Token optimization",
-      "observabilite-monitoring": "Observability and monitoring"
+      "observabilite-monitoring": "Observability and monitoring",
+      "security-review": "/security-review command"
     },
     "reference": {
       "title": "Reference",

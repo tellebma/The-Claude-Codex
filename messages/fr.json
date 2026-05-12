@@ -438,7 +438,8 @@
       "methodologies-ecosystem": "Écosystème des méthodologies",
       "memoire-persistante": "Mémoire persistante",
       "optimisation-tokens": "Optimisation tokens",
-      "observabilite-monitoring": "Observabilité et monitoring"
+      "observabilite-monitoring": "Observabilité et monitoring",
+      "security-review": "Commande /security-review"
     },
     "reference": {
       "title": "Référence",

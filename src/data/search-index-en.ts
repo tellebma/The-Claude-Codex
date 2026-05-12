@@ -1075,6 +1075,32 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "claude_code_enable_telemetry",
     ],
   },
+  // Security review
+  {
+    title: "/security-review command: security audits in Claude Code",
+    description:
+      "Catch SQL injection, XSS, hardcoded secrets and 7 more vulnerability families straight from Claude Code, locally or in CI through the official GitHub Action.",
+    href: "/advanced/security-review",
+    section: "Advanced",
+    keywords: [
+      "security-review",
+      "security audit",
+      "claude code security review",
+      "github action security",
+      "claude-code-security-review",
+      "anthropic",
+      "sql injection",
+      "xss",
+      "secrets",
+      "owasp",
+      "devsecops",
+      "semgrep",
+      "snyk",
+      "ci/cd",
+      "pre-commit",
+      "vulnerabilities",
+    ],
+  },
   // Reference
   {
     title: "Technical reference: Claude Code",

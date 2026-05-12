@@ -52,6 +52,33 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Templates et starter kits pour Claude Code",
+    description:
+      "Stacks opinionated 2026 : gstack (Garry Tan, 94k★), claude-code-templates (27k★), SuperClaude_Framework (23k★), get-shit-done (62k★), claude-on-rails. Choix par profil.",
+    href: "/getting-started/templates-starter-kits",
+    section: "Demarrer",
+    keywords: [
+      "templates",
+      "starter kit",
+      "boilerplate",
+      "gstack",
+      "garry tan",
+      "claude-code-templates",
+      "davila7",
+      "superclaude",
+      "get-shit-done",
+      "gsd",
+      "claude-on-rails",
+      "framework",
+      "skills",
+      "agents",
+      "slash commands",
+      "y combinator",
+      "context rot",
+      "sub-agent",
+    ],
+  },
+  {
     title: "FAQ debutants : Questions frequentes sur Claude Code",
     description:
       "Reponses aux questions les plus courantes : securite, vie privee, couts, difference avec ChatGPT, prerequis techniques.",

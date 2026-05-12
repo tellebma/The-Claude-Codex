@@ -88,6 +88,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-10",
   },
   {
+    path: "/getting-started/templates-starter-kits",
+    title: "Templates et starter kits Claude Code",
+    description:
+      "Tour des stacks opinionated 2026 : gstack, claude-code-templates, SuperClaude_Framework, get-shit-done. Comment choisir selon ton profil.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
     path: "/getting-started/faq-beginner",
     title: "FAQ débutants : Questions fréquentes sur Claude Code",
     description:

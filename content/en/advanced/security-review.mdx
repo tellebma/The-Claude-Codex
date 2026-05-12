@@ -193,7 +193,7 @@ Four more limits to keep in mind :
 | CODEOWNERS | Targeted human review by path | Forcing a human to validate findings on sensitive paths (auth, payments) |
 | Branch protection | Required status checks before merge | Letting the GHA job become a blocking status if you want to gate merges |
 
-On the CLI side, you can also trigger the command automatically through a Claude Code `PreToolUse` hook on `git commit`. The mechanism is covered on the [hooks](/advanced/hooks) page and stops you from forgetting the review before a push. If an API key did leak through the cracks, the remediation playbook lives in [Leaked API key recovery](/content/leaked-api-key-recovery).
+On the CLI side, you can also trigger the command automatically through a Claude Code `PreToolUse` hook on `git commit`. The mechanism is covered on the [hooks](/advanced/hooks) page and stops you from forgetting the review before a push. If an API key did leak through the cracks, the remediation playbook lives in [Leaked API key recovery](/content/leaked-api-key-recovery). For hardening the MCP servers Claude calls during the review, see [MCP security](/mcp/mcp-security). And for community agents dedicated to audit work (Security Reviewer, TDD Guide), the curated list is on [Best security plugins](/plugins/best-security).
 
 On the threat model side, remember `/security-review` does not replace a manual pentest or a commercial SAST tuned to your stack. It catches a meaningful share of recurring mistakes (concatenated SQL, forgotten secrets, missing access controls) before they hit prod, which is already valuable.
 

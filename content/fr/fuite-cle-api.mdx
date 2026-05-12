@@ -16,6 +16,10 @@ Une clé API compromise peut être exploitée par des bots automatisés en quelq
 
 Votre clé `sk-ant-...` a fuité ? Révoquez-la maintenant sur [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys), générez-en une nouvelle, mettez à jour tous les environnements (CI, local, prod), puis désactivez l'ancienne. Considérez la clé comme compromise même au moindre soupçon. La checklist détaillée est juste en dessous.
 
+<Callout type="tip" title="Voir aussi : prévention">
+Pour éviter de revivre ça, la commande [`/security-review`](/advanced/security-review) de Claude Code détecte les secrets en clair dans la diff avant le commit. Couplée à gitleaks en pre-commit, elle ferme la porte par les deux côtés.
+</Callout>
+
 ## La checklist d'urgence en 5 minutes
 
 Faites ces étapes dans l'ordre, maintenant.

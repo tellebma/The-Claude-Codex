@@ -175,6 +175,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.memoire-persistante", href: "/advanced/memoire-persistante" },
       { labelKey: "advanced.optimisation-tokens", href: "/advanced/optimisation-tokens" },
       { labelKey: "advanced.observabilite-monitoring", href: "/advanced/observabilite-monitoring" },
+      { labelKey: "advanced.security-review", href: "/advanced/security-review" },
     ],
   },
   reference: {

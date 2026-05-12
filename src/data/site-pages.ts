@@ -791,6 +791,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-12",
   },
   {
+    path: "/advanced/security-review",
+    title: "Commande /security-review : audit de sécurité dans Claude Code",
+    description:
+      "Détecter et corriger les failles SQL, XSS, secrets en clair et 7 autres familles directement depuis Claude Code, en local ou en CI via GitHub Action.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

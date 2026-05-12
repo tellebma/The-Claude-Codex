@@ -20,11 +20,11 @@
 | [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture 2026-05-12) |
 | [Polish heros sections 2026-05](EPIC-polish-section-heroes-content-grid-2026-05.md) | 12 | 0 | 0 | 12 | 0% 🆕 (en attente skill Impeccable) |
 | [Langue espagnole 2026-05](EPIC-i18n-espagnol-2026-05.md) | 11 | 0 | 0 | 11 | 0% 🆕 (~500M locuteurs natifs, vide concurrentiel ES) |
-| [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 6 | 0 | 2 | 75% 🔄 (SR-1/SR-2/SR-4/SR-5/SR-6/SR-7 livres ; reste SR-3 screenshot manuel, SR-8 E2E dedies) |
+| [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 7 | 0 | 1 | 88% 🔄 (SR-1/SR-2/SR-4/SR-5/SR-6/SR-7/SR-8 livres ; reste SR-3 screenshot manuel) |
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
 
-**Total projet** : 125/171 stories (73%) · ~293/394 SP livres (74%)
+**Total projet** : 126/171 stories (74%) · ~295/394 SP livres (75%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 

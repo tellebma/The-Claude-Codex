@@ -11,6 +11,10 @@ dateModified: "2026-05-09"
 
 Les principaux risques MCP en production : prompt injection via contenu non fiable, exfiltration de données via tool calls, attaques supply chain (npm), permissions excessives, vol de credentials. Mitigations : épingler les versions, désactiver l'accès réseau si possible, auditer le code source des MCP communautaires avant installation.
 
+<Callout type="tip" title="Voir aussi : audit du code projet">
+Côté code, la commande [`/security-review`](/advanced/security-review) native de Claude Code couvre SQL, XSS, secrets et dépendances vulnérables sur ton propre code, en complément du durcissement MCP côté config.
+</Callout>
+
 ## Pourquoi la sécurité des MCP est un sujet sérieux
 
 Les MCP sont puissants précisément parce qu'ils permettent à Claude Code d'interagir avec votre système, vos services et vos données. Cette puissance a un revers : un MCP malveillant ou mal configuré peut compromettre votre environnement de travail, exposer vos secrets ou exécuter des actions non désirées.

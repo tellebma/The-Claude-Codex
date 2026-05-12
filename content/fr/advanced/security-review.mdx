@@ -193,7 +193,7 @@ Quatre autres limites à garder en tête :
 | CODEOWNERS | Revue humaine ciblée par chemin | Force un humain à valider les findings sur les chemins sensibles (auth, paiement) |
 | Branch protection | Statuts requis avant merge | Le job GHA peut devenir un statut bloquant si vous voulez verrouiller le merge |
 
-Côté CLI, vous pouvez aussi déclencher la commande automatiquement via un hook Claude Code de type `PreToolUse` sur `git commit`. Le mécanisme est décrit dans la page [hooks](/advanced/hooks) et vous évite d'oublier la revue avant un push. Si une fuite de clé API est passée entre les mailles, la procédure de remédiation est documentée dans [Que faire en cas de fuite de clé API](/content/fuite-cle-api).
+Côté CLI, vous pouvez aussi déclencher la commande automatiquement via un hook Claude Code de type `PreToolUse` sur `git commit`. Le mécanisme est décrit dans la page [hooks](/advanced/hooks) et vous évite d'oublier la revue avant un push. Si une fuite de clé API est passée entre les mailles, la procédure de remédiation est documentée dans [Que faire en cas de fuite de clé API](/content/fuite-cle-api). Pour le durcissement des serveurs MCP que Claude appelle pendant la revue, voir [Sécurité des MCP](/mcp/securite-mcp). Et pour des agents communautaires dédiés à l'audit (Security Reviewer, TDD Guide), la sélection est sur [Meilleurs plugins sécurité](/plugins/best-security).
 
 Sur la question du modèle de menace, retenez que `/security-review` ne remplace ni un pentest manuel, ni un SAST commercial calibré sur votre stack. Elle attrape une part significative des erreurs récurrentes (concaténation SQL, secrets oubliés, contrôles d'accès manquants) avant qu'elles n'atteignent la prod, ce qui est déjà précieux.
 

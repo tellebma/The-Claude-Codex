@@ -1,0 +1,118 @@
+---
+title: "Karpathy-Style CLAUDE.md: Analysis and FR Adaptation"
+description: "A close read of the so-called Karpathy CLAUDE.md: four principles against Claude Code drift, what transfers to a team setting, and a ready-to-paste French template."
+section: "content"
+order: 16
+datePublished: "2026-05-12"
+dateModified: "2026-05-12"
+themes: ["guide", "productivity"]
+---
+
+## TL;DR
+
+- The famous "Karpathy CLAUDE.md" is not an official Karpathy repo. It is `forrestchang/andrej-karpathy-skills`, a single file that distills his public observations about LLM coding pitfalls. {/* source: https://github.com/forrestchang/andrej-karpathy-skills, consulté 2026-05-12 */}
+- Four principles: *Think Before Coding*, *Simplicity First*, *Surgical Changes*, *Goal-Driven Execution*. {/* source: https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md, consulté 2026-05-12 */}
+- Karpathy himself publishes his own CLAUDE.md files in his personal repos (e.g. `karpathy/llm-council`), and they look very different: closer to a project architecture brief. {/* source: https://github.com/karpathy/llm-council/blob/master/CLAUDE.md, consulté 2026-05-12 */}
+- It transfers to any stack. The trap: do not paste it as is on a team project, because it deliberately favors caution over speed.
+
+## Who is speaking, and why people care
+
+Andrej Karpathy is the former director of AI at Tesla, a founding member of OpenAI, and the creator of Eureka Labs. His current GitHub bio reads *"I like to train Deep Neural Nets on large datasets"*, with Stanford as the visible affiliation. {/* source: https://github.com/karpathy, consulté 2026-05-12 */} He has over 183,000 followers, and his educational repos (`nanoGPT`, `nanochat`, `llm.c`) are widely cited.
+
+When he shares an observation about how LLMs drift while coding, the community ships tools. That is what happened with `forrestchang/andrej-karpathy-skills`, which condenses his public remarks into a single `CLAUDE.md` file. The repo currently shows around 127,000 stars, MIT license. {/* source: https://github.com/forrestchang/andrej-karpathy-skills, consulté 2026-05-12 */}
+
+Important caveat: the file is not authored by Karpathy. It is a rewrite by Forrest Chang based on Karpathy's public talks and posts. The "Karpathy CLAUDE.md" tag is community branding, not a signature.
+
+## What the file actually contains
+
+The repo's `CLAUDE.md` is organized into sections: *The Problems*, *The Solution*, *The Four Principles in Detail*, *Install*, *Using with Cursor*, *Key Insight*, *How to Know It's Working*, *Customization*, *Tradeoff Note*, *License*. {/* source: https://github.com/forrestchang/andrej-karpathy-skills/blob/main/CLAUDE.md, consulté 2026-05-12 */}
+
+The heart of the file is four short principles.
+
+| Principle | Core idea |
+|-----------|-----------|
+| Think Before Coding | State assumptions, do not hide confusion, ask before inventing |
+| Simplicity First | The minimum code that solves the problem, nothing speculative |
+| Surgical Changes | Touch only what must change, keep the existing style |
+| Goal-Driven Execution | Define a verifiable success criterion, loop until verified |
+
+The repo includes an honest disclaimer: *"These guidelines bias toward caution over speed. For trivial tasks, use judgment."* {/* source: https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md, consulté 2026-05-12 */}
+
+Side by side, the CLAUDE.md that Karpathy writes for his own projects (see `karpathy/llm-council`, about 18,700 stars, described as "99% vibe coded") is structured very differently. It uses *Project Overview*, *Architecture*, *Key Design Decisions*, *Common Gotchas*, *Data Flow Summary*. {/* source: https://github.com/karpathy/llm-council/blob/master/CLAUDE.md, consulté 2026-05-12 */} Karpathy himself treats CLAUDE.md as an architecture brief, not a behavior charter.
+
+<Callout type="info" title="Two uses, one file">
+The real lesson is in that duality. A CLAUDE.md does two jobs: it shapes the agent's behavior (the four principles) and it gives the agent the map of your project (architecture, conventions). The best CLAUDE.md files do both, in that order.
+</Callout>
+
+## Five principles that really transfer
+
+Regardless of your stack or team size, here is what survives a paste-and-edit.
+
+**1. Force the agent to surface assumptions.** The number one failure mode of coding LLMs is to invent an API rather than ask. A single line like "if something is ambiguous, ask before writing code" changes behavior dramatically.
+
+**2. Ban speculation.** No "I also added this helper just in case", no opportunistic refactor, no tests "to cover other cases" that nobody asked for. This is the principle that saves the most review time.
+
+**3. Protect the diff.** Ask the agent to change only what is necessary, keeping existing style and structure. Critical on legacy codebases where every PR risks dragging in unintended formatting.
+
+**4. Verifiable success criterion.** Before writing code, the agent must say how it will know the task is done: a passing test, a command exit code, an expected output. Without that, it declares victory too soon.
+
+**5. Combine behavior and architecture.** Borrow from both sources. A first block on *how* the agent should work, a second block on *where* it works (modules, conventions, gotchas).
+
+## A French-adapted template
+
+Below is a short template you can drop at the root of a French-speaking project. Same Karpathy principles, written in idiomatic French, without translation tics.
+
+<CodeBlock language="markdown" code={`# CLAUDE.md
+
+## Comment tu travailles
+
+- Énonce tes hypothèses avant d'écrire du code. Si un nom de fonction, un type ou une route te semble incertain, demande plutôt que d'inventer.
+- Écris le minimum de code qui résout le problème. Pas de fonction "au cas où", pas de tests non demandés, pas de refacto opportuniste.
+- Touche uniquement ce qui doit l'être. Garde le style et l'indentation existants. Ne renomme rien sans raison.
+- Avant de commencer, dis comment tu sauras que c'est fini (test, commande, exit code, sortie attendue). Boucle jusqu'à validation.
+- Pour une tâche triviale (typo, renommage local, changement d'une constante), saute ces étapes.
+
+## Le projet
+
+Stack : Next.js 14 (App Router), TypeScript strict, Tailwind, MDX pour le contenu.
+
+Architecture clé :
+- src/app : pages et layouts
+- src/components : composants React, un par fichier
+- src/lib : utilitaires purs, pas d'effets de bord
+- content/fr et content/en : contenu MDX bilingue
+
+Pièges connus :
+- Pas de SSR ni d'API routes (output: 'export'). Les routes dynamiques doivent toutes implémenter generateStaticParams.
+- Toute modification visible déclenche la mise à jour de dateModified dans le frontmatter et de lastModified dans lib/metadata.ts.
+
+## Commandes utiles
+
+- npm run dev : serveur de dev
+- npm run lint && npm run type-check : à passer avant chaque commit
+- npm run build : build statique de production
+`} />
+
+<Callout type="tip" title="Tu or vous?">
+In French, the informal *tu* form works better with Claude Code. It cuts polite circumlocutions and makes instructions sharper. The formal *vous* tends to make outputs slightly more verbose.
+</Callout>
+
+## What does not transfer
+
+Three blind spots to know before you paste.
+
+**Karpathy's context is solo, experimental, vibe coding.** His `llm-council` is explicitly described as "99% vibe coded" over a weekend. {/* source: https://github.com/karpathy/llm-council, consulté 2026-05-12 */} His preferred guidance is tuned for one human who wants a cautious agent. On a team project, "touch only what is strictly necessary" can block legitimate refactors.
+
+**The cautious bias slows things down.** The file itself admits it sacrifices speed for safety. On a throwaway prototype or a one-day POC, those guardrails get in the way.
+
+**No quality or security section.** The community CLAUDE.md says nothing about tests, accessibility, secrets, coverage, or linting. On a production product, that is exactly what you have to add on top.
+
+## Verdict
+
+The real contribution of the "Karpathy-style CLAUDE.md" is less the file than the practice it made visible: a short file, at the project root, that encodes the agent's expected behavior. Use it as a base, then extend with your architecture, your commands, and your specific quality rules. For more, see [the full CLAUDE.md guide](/prompting/claude-md/) and the [starter templates](/getting-started/templates-starter-kits/).
+
+## Resources
+
+- Repo `forrestchang/andrej-karpathy-skills`: https://github.com/forrestchang/andrej-karpathy-skills
+- Karpathy's CLAUDE.md on `llm-council`: https://github.com/karpathy/llm-council/blob/master/CLAUDE.md
+- Karpathy's GitHub profile: https://github.com/karpathy

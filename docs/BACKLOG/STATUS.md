@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-12 (EPIC Ecosystem : ECO-6 + ECO-7 + ECO-8 + ECO-9 livres, 75%)
+> Derniere mise a jour : 2026-05-12 (EPIC Ecosystem clos a 100% : Sprint 3 ECO-10/11/12 livres ; SR-1 livre cote security-review)
 
 ---
 
@@ -17,12 +17,13 @@
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-11) |
 | [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 9 | 0 | 2 | 82% 🔄 (Sprint 1 + VM-1/VM-9/VM-10 docs livres) |
 | [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 0 | 0 | 10 | 0% 🆕 (validé agents SEO + Rédacteur, pret Sprint 1) |
-| [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 9 | 0 | 3 | 75% 🔄 (Sprint 1 100% + Sprint 2 100% ECO-6/7/8/9) |
+| [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture 2026-05-12) |
 | [Polish heros sections 2026-05](EPIC-polish-section-heroes-content-grid-2026-05.md) | 12 | 0 | 0 | 12 | 0% 🆕 (en attente skill Impeccable) |
 | [Langue espagnole 2026-05](EPIC-i18n-espagnol-2026-05.md) | 11 | 0 | 0 | 11 | 0% 🆕 (~500M locuteurs natifs, vide concurrentiel ES) |
-| [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (cornerstone DevSecOps, feature Anthropic 2025-08-06) |
+| [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 1 | 0 | 7 | 13% 🔄 (SR-1 recherche factuelle livree) |
+| [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 
-**Total projet** : 110/156 stories (71%) · ~256/361 SP livres (71%)
+**Total projet** : 114/164 stories (70%) · ~266/379 SP livres (70%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
@@ -41,6 +42,8 @@
 > EPIC **Vercel Metrics 2026** : ouvert le 2026-05-09 suite a une demande PO interne, **revise le meme jour** apres audit MCP Vercel qui a revele que le projet etait deja en production sur Vercel (claude-codex.fr servi par Vercel, pas Docker Nginx contrairement a l'hypothese initiale). Story VM-2 "double hosting" supprimee (3 SP retires). Reste : 11 stories / 22 SP / 3 sprints. Pack : Web Analytics + Speed Insights (Web Vitals RUM qui manque a Matomo) + Observability. Effort reel install SDK ~5 SP au lieu de 18 SP estime initialement. Priorite : backlog post-SEO/GEO.
 
 > EPIC **Content /security-review 2026-05** : ouvert le 2026-05-12 suite a demande PO. Couvre la feature Anthropic native de revue de securite (commande slash `/security-review` + GitHub Action `anthropics/claude-code-security-review`). **Source primaire** : centre d'aide officiel FR `support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code` (derniere MAJ 2026-03-12, consultee 2026-05-12). Sources secondaires : blog claude.com (annonce 2025-08-06), repo GitHub (MIT, 4.6k stars). 8 stories / 19 SP / 3 sprints. Cible : `content/{fr,en}/advanced/security-review.mdx`, themes `tutorial + security + devsecops`. Specificites : 5 familles de vulnerabilites officielles (SQL, XSS, auth, validation, dependances) ; eligibilite plans Pro/Max/API Console pay-as-you-go (hors plan gratuit) ; distinction stricte entre la commande slash (focus EPIC) et le produit web "Claude Code Security" (mention rapide, hors scope).
+
+> EPIC **Ecosystem discovery script 2026-05** : ouvert le 2026-05-12 suite a demande PO. Concretise W5 (out of scope MVP) et la note "automatiser en chore Sprint 4" de l'EPIC Ecosystem trending repos. Script Node TypeScript `scripts/refresh-ecosystem.ts` + GitHub Action cron mensuel qui ouvre une PR draft avec rapport markdown `docs/ecosystem/discovery-YYYY-MM.md` (nouveaux entrants, sortants, top movers, liens morts). MUST (4 stories / 10 SP) couvre pipeline de decouverte + heuristics qualite + workflow CI. SHOULD (3 stories / 6 SP) ajoute check-links + MAJ auto compteurs etoiles + webhook Discord viral repo. COULD (1 story / 2 SP) finit le coverage tests. **Pre-requis bloquant** : EPIC Ecosystem Sprint 3 doit etre merge (ECO-10/11/12) car le script lit les MDX existants. Cible : reduire la charge de maintenance manuelle des pages `/ecosystem/*` par 4 et detecter automatiquement les repos viraux Claude Code.
 
 ---
 

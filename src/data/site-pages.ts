@@ -1023,6 +1023,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-21",
   },
   {
+    path: "/content/comprendre-claude-code-internals",
+    title: "Comprendre les internals de Claude Code par ses leaks",
+    description:
+      "Ce que les system prompts fuités révèlent sur l'architecture interne de Claude Code, et ce qu'on peut en déduire pour écrire de meilleurs CLAUDE.md.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
+    path: "/content/garry-tan-stack-claude-code",
+    title: "gstack de Garry Tan : verdict après un mois d'usage en équipe FR",
+    description:
+      "Review critique du stack Claude Code de Garry Tan (CEO YC). 35 commandes, philosophie solo founder, ce qui marche et ce qui coince en contexte français.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
+    path: "/content/karpathy-claude-md-analyse",
+    title: "CLAUDE.md façon Karpathy : analyse et version FR",
+    description:
+      "Décryptage du CLAUDE.md inspiré d'Andrej Karpathy : 4 principes contre les dérives de Claude Code, ce qui se transpose en équipe, et un modèle FR prêt à coller.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
     path: "/about",
     title: "À propos du Claude Codex",
     description:

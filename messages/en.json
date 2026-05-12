@@ -436,7 +436,8 @@
       "cross-model-workflow": "Cross-Model: Claude + Codex/Gemini",
       "methodologies-ecosystem": "Methodologies ecosystem",
       "memoire-persistante": "Persistent memory",
-      "optimisation-tokens": "Token optimization"
+      "optimisation-tokens": "Token optimization",
+      "observabilite-monitoring": "Observability and monitoring"
     },
     "reference": {
       "title": "Reference",

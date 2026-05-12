@@ -773,6 +773,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-11",
   },
   {
+    path: "/advanced/observabilite-monitoring",
+    title: "Observabilité et monitoring de Claude Code",
+    description:
+      "Tracer ce que fait Claude Code : OpenTelemetry natif, hooks d'événements, dashboards community (claude-hud, abtop, Agent-Monitor) et stack Grafana/Loki.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:

@@ -1,0 +1,174 @@
+---
+title: "Observability and monitoring for Claude Code"
+description: "See what Claude Code does: native OpenTelemetry, lifecycle hooks, community dashboards (claude-hud, abtop, Agent-Monitor) and the Grafana/Loki stack. How to choose and combine them."
+order: 16
+section: "advanced"
+datePublished: "2026-05-12"
+dateModified: "2026-05-12"
+themes: ["guide", "tooling"]
+---
+
+{/* source: code.claude.com/docs/en/monitoring-usage + GitHub API repos data, fetched 2026-05-12 */}
+
+## TL;DR
+
+- Claude Code ships **native OpenTelemetry** support since 2025: one env var (`CLAUDE_CODE_ENABLE_TELEMETRY=1`) and everything flows to your OTLP collector (Prometheus, Grafana, Datadog, etc.).
+- Three complementary levers: **OTel** for aggregated metrics (cost, tokens, sessions), **hooks** for granular events (every tool call), **community dashboards** for live visualization.
+- Driving a team: OTel + Grafana is enough. Watching your agent live: `claude-hud` or `abtop`. Multi-agent R&D: `Claude-Code-Agent-Monitor` or `claude-code-hooks-multi-agent-observability`.
+- Distributed tracing (spans `claude_code.interaction` → `llm_request` + `tool`) available in beta with `CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1`.
+
+## Why monitor Claude Code?
+
+Solo dev on a small project: the terminal is enough. The moment you switch to team or production, questions show up:
+
+- How much do we spend per day, per project, per dev?
+- Which models are actually used (Haiku/Sonnet/Opus)?
+- Which task triggered 50 file reads and 200K input tokens?
+- Why did this session take 30 minutes to wrap?
+- Which MCP tools really got called?
+
+Observability answers all that without asking the dev to keep a journal.
+
+## Lever 1: native OpenTelemetry (the recommended path)
+
+Anthropic officially exposes Claude Code metrics, events and traces over the OTLP protocol. Minimal setup:
+
+<CodeBlock language="bash" code={`# Enable telemetry
+export CLAUDE_CODE_ENABLE_TELEMETRY=1
+
+# Pick exporters (otlp, prometheus, console, none)
+export OTEL_METRICS_EXPORTER=otlp
+export OTEL_LOGS_EXPORTER=otlp
+
+# Point at your collector
+export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+
+# Optional auth
+export OTEL_EXPORTER_OTLP_HEADERS="Authorization=Bearer your-token"
+
+claude`} />
+
+By default Claude Code exports metrics every **60 seconds** and logs every **5 seconds**. During setup, shorten with `OTEL_METRIC_EXPORT_INTERVAL=10000` to see data flowing fast.
+
+<Callout type="info" title="No SaaS needed">
+A local OpenTelemetry collector + Prometheus + Grafana in Docker Compose is enough. The [`acreeger/claude-code-metrics-stack`](https://github.com/acreeger/claude-code-metrics-stack) repo ships a ready-to-use stack you can spin up in 5 minutes (verified 2026-05-12).
+</Callout>
+
+### What you get
+
+Exported metrics cover:
+
+- **API**: request count, input/output tokens, cache tokens (read and write), latency
+- **Sessions**: duration, interactions per session, model used
+- **Tools**: tool call count by type, execution time, errors
+- **Cost**: derived from tokens via Anthropic pricing
+
+Standard attributes (`session.id`, `app.version`, `user.account_uuid`) can be disabled via `OTEL_METRICS_INCLUDE_*=false` to lower cardinality.
+
+### Distributed tracing (beta)
+
+To see a user prompt cascade into LLM calls, tool calls and hooks, enable tracing:
+
+<CodeBlock language="bash" code={`export CLAUDE_CODE_ENABLE_TELEMETRY=1
+export CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1
+export OTEL_TRACES_EXPORTER=otlp`} />
+
+You then see this hierarchy in your tracing backend (Jaeger, Tempo, Honeycomb):
+
+```text
+claude_code.interaction         (user prompt)
+├── claude_code.llm_request     (Anthropic API call)
+├── claude_code.hook            (hook execution)
+└── claude_code.tool            (tool call)
+    ├── claude_code.tool.blocked_on_user   (permission wait)
+    └── claude_code.tool.execution
+```
+
+When a subagent is spawned via the `Task` tool, its own spans nest under the parent `tool`. You get a full multi-agent view without wiring anything.
+
+<Callout type="warning" title="Sensitive data is redacted by default">
+User prompts, tool contents and Bash parameters are **redacted** by default (`<REDACTED>`). To include them (internal debug only): `OTEL_LOG_USER_PROMPTS=1`, `OTEL_LOG_TOOL_DETAILS=1`, `OTEL_LOG_TOOL_CONTENT=1`. Use sparingly: you're shipping source code and secrets into your logs.
+</Callout>
+
+## Lever 2: lifecycle hooks
+
+OTel answers "how much" and "what on average". **Hooks** answer "exactly when". Claude Code emits 12 lifecycle events:
+
+| Event | When | Typical use |
+|-------|------|-------------|
+| `SessionStart` / `SessionEnd` | Session start / end | Log duration |
+| `PreToolUse` / `PostToolUse` | Before / after each tool call | Trace, block, validate |
+| `PostToolUseFailure` | Tool failed | Alert, retry |
+| `SubagentStart` / `SubagentStop` | Subagent launched | Count parallelism |
+| `UserPromptSubmit` | User submitted a prompt | Audit prompts |
+| `Notification` | System notification | Pipe to Slack/email |
+| `PermissionRequest` | Permission request | Log and alert |
+| `Stop` | Response finished | Measure total duration |
+| `PreCompact` | Before `/compact` | Snapshot before compaction |
+
+The standard pattern: a Python or Bash script that reads JSON payload from stdin, serializes it, and pushes to an HTTP endpoint (or writes SQLite). See [/advanced/hooks](/advanced/hooks) for configuration details.
+
+<Callout type="tip" title="OTel + hooks = winning combo">
+They don't overlap. OTel aggregates for the dashboard; hooks trace the event stream for debugging. Enable both if you can.
+</Callout>
+
+## Lever 3: community dashboards
+
+Four tools dominate the Claude Code observability ecosystem in 2026. All open source, all different.
+
+### claude-hud (Jarrod Watts)
+
+A Claude Code plugin that displays **inside the terminal itself**: context usage, active tools, running agents, todo progress. One-line install via the plugin marketplace.
+
+- ⭐ 22.5k stars (verified 2026-05-12, source GitHub)
+- MIT license, JavaScript
+- Repo: [jarrodwatts/claude-hud](https://github.com/jarrodwatts/claude-hud)
+- Best for: solo devs who want a live view without leaving the terminal.
+
+### abtop (Graykode)
+
+"htop for AI agents". Real-time monitor of Claude Code and Codex CLI sessions: tokens, context window, rate limits, ports.
+
+- ⭐ 2.1k stars, MIT, written in Rust (fast, low footprint)
+- Repo: [graykode/abtop](https://github.com/graykode/abtop)
+- Best for: sysadmins who want a light tool over SSH.
+
+### Claude-Code-Agent-Monitor (Hoang Son)
+
+Full web dashboard: Express + React + Vite + TailwindCSS + SQLite + WebSockets. Tracks sessions, tool usage, subagents, and exposes a Kanban status board.
+
+- ⭐ 353 stars, MIT, TypeScript
+- Repo: [hoangsonww/Claude-Code-Agent-Monitor](https://github.com/hoangsonww/Claude-Code-Agent-Monitor)
+- Best for: small team coordination, aggregate views.
+
+### claude-code-hooks-multi-agent-observability (Disler)
+
+Multi-agent oriented architecture: Python hooks → Bun TypeScript server → SQLite → WebSocket → Vue 3 dashboard. Captures the 12 lifecycle events listed above.
+
+- ⭐ 1.4k stars, Python/Vue/TypeScript
+- Repo: [disler/claude-code-hooks-multi-agent-observability](https://github.com/disler/claude-code-hooks-multi-agent-observability)
+- Best for: R&D, complex multi-agent pipelines, custom dashboards.
+
+## How to choose
+
+| Need | Recommended pick |
+|------|------------------|
+| Cost reporting for a team or client | OTel + Grafana |
+| See my agent work in real time | claude-hud (terminal) or abtop (TUI) |
+| Self-hosted multi-user dashboard | Claude-Code-Agent-Monitor |
+| Multi-agent R&D with custom views | claude-code-hooks-multi-agent-observability |
+| One-off debug of a single session | PostToolUse hook that logs JSON, then `jq` |
+
+These aren't exclusive. The standard team practice:
+
+1. **OTel + Grafana** for long-term tracking and billing.
+2. **claude-hud** for daily dev.
+3. **Custom hooks** for security policies (block `rm -rf`, alert on exposed secrets, etc.).
+
+## Useful links
+
+- [/advanced/hooks](/advanced/hooks): configure lifecycle hooks and write your first script
+- [/advanced/optimisation-tokens](/advanced/optimisation-tokens): use OTel metrics to cut the bill
+- [/ecosystem/awesome-mcp-servers](/ecosystem/awesome-mcp-servers): MCP servers that expose their own OTel traces
+- [Anthropic monitoring docs](https://code.claude.com/docs/en/monitoring-usage): official source for env variables

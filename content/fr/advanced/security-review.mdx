@@ -1,6 +1,6 @@
 ---
 title: "Commande /security-review : audit de sécurité dans Claude Code"
-description: "Détecter et corriger les failles SQL, XSS, secrets en clair et 7 autres familles directement depuis Claude Code, en local ou en CI via GitHub Action."
+description: "Audit sécurité Claude Code : détectez failles SQL, XSS, secrets en clair et 7 autres familles depuis le CLI ou en CI via GitHub Action officielle."
 section: "advanced"
 order: 17
 datePublished: "2026-05-12"
@@ -9,7 +9,7 @@ themes: ["tutorial", "security", "devsecops"]
 ---
 
 <Callout type="info" title="En bref">
-`/security-review` est une commande slash native de Claude Code qui déclenche une revue de sécurité sur votre diff local avant un commit. Elle vise les développeurs sur plans Pro, Max ou API Console pay-as-you-go, et s'utilise soit en interactif dans le terminal, soit en CI via la GitHub Action officielle `anthropics/claude-code-security-review`. Elle se tape comme n'importe quelle commande Claude Code, sans argument obligatoire.
+`/security-review` est une commande slash native de Claude Code qui déclenche un audit sécurité sur votre diff local avant un commit. Elle cible les développeurs sur plans Pro, Max ou API Console pay-as-you-go. Deux modes d'usage : interactif dans le terminal, ou en CI via la GitHub Action officielle `anthropics/claude-code-security-review`. La commande se tape sans argument obligatoire.
 </Callout>
 
 {/* source: https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code, consulté 2026-05-12 */}
@@ -33,7 +33,7 @@ Côté CI, la GitHub Action a besoin d'une clé API Claude valide stockée en se
 
 ## Pourquoi `/security-review` change la donne
 
-La promesse d'Anthropic est claire dans le blog produit du 2025-08-06 : faire d'une revue de sécurité un geste de quelques secondes, intégré au workflow de code. Là où un scanner statique comme Semgrep ou Snyk applique un catalogue de règles, `/security-review` s'appuie sur le raisonnement du modèle pour analyser le code en contexte. Le README de la GitHub Action revendique d'ailleurs une "analyse sémantique profonde" et un "filtrage avancé des faux positifs", deux promesses absentes des outils basés sur signatures.
+La promesse d'Anthropic est claire dans le blog produit du 2025-08-06 : faire d'une revue de sécurité un geste de quelques secondes, intégré au workflow de code. Là où un scanner statique comme Semgrep ou Snyk applique un catalogue de règles (souvent calé sur l'OWASP Top 10), `/security-review` s'appuie sur le raisonnement du modèle pour analyser le code en contexte. Le README de la GitHub Action revendique une "analyse sémantique profonde" et un "filtrage avancé des faux positifs", deux promesses absentes des outils basés sur signatures.
 
 {/* source: https://claude.com/blog/automate-security-reviews-with-claude-code, consulté 2026-05-12 */}
 {/* source: https://github.com/anthropics/claude-code-security-review (README), consulté 2026-05-12 */}
@@ -51,7 +51,7 @@ L'inverse est aussi vrai : `/security-review` ne remplace pas un scanner statiqu
 <Steps>
 
 <Step title="Préparer une session Claude Code" stepNumber={1}>
-Ouvrez votre terminal dans le dossier racine du projet et lancez `claude`. Vérifiez votre version avec `claude --version` si vous rencontrez un comportement inattendu, la commande étant arrivée le 2025-08-06.
+Ouvrez votre terminal dans le dossier racine du projet et lancez `claude`. En cas de comportement inattendu, vérifiez votre version avec `claude --version`. La commande est disponible depuis le 2025-08-06.
 
 <CodeBlock
   language="bash"
@@ -88,7 +88,7 @@ La source primaire FR ne documente aucun flag ou argument pour la commande au 20
 
 ## Automatiser via la GitHub Action
 
-Le pendant CI de la commande est le repo open source [`anthropics/claude-code-security-review`](https://github.com/anthropics/claude-code-security-review), publié sous licence MIT. Au 2026-05-12, il cumule 4 573 étoiles, 432 forks et 69 issues ouvertes, avec un dernier push daté du 11 février 2026. Le job s'exécute à chaque pull request et commente automatiquement les findings inline sur la PR.
+Le pendant CI de la commande est le repo open source [`anthropics/claude-code-security-review`](https://github.com/anthropics/claude-code-security-review), publié sous licence MIT. Au 2026-05-12, il cumule 4 573 étoiles, 432 forks et 69 issues ouvertes, dernier push le 11 février 2026. Le job s'exécute à chaque pull request et commente les findings inline sur la PR.
 
 {/* source: GitHub API repos/anthropics/claude-code-security-review, consulté 2026-05-12 */}
 
@@ -176,7 +176,7 @@ Quatre autres limites à garder en tête :
 
 1. **Code envoyé à l'API Anthropic.** Chaque appel transmet votre diff aux serveurs d'Anthropic. Pour du code propriétaire sensible ou sous NDA, validez d'abord la politique data de votre organisation et celle d'Anthropic.
 2. **Coût en tokens.** La commande facture comme n'importe quel appel API. Sur un repo très actif (dizaines de PR par jour), surveillez la consommation, surtout si vous activez l'Action sur chaque push.
-3. **Catégories filtrées par défaut.** Pour réduire le bruit, la GHA exclut Denial of Service, rate limiting, exhaustion mémoire/CPU, validation d'entrées sans impact prouvé et open redirect. Si ces angles vous intéressent, il faut ajuster les instructions personnalisées.
+3. **Catégories filtrées par défaut.** Pour réduire le bruit, la GHA exclut Denial of Service, rate limiting, exhaustion mémoire/CPU, validation d'entrées sans impact prouvé et open redirect. Si ces angles vous intéressent, ajustez les instructions personnalisées.
 4. **Pas de garantie de couverture.** Anthropic le dit dans la doc FR : "Bien que les examens de sécurité automatisés aident à identifier de nombreuses vulnérabilités courantes, ils doivent compléter, et non remplacer, vos pratiques de sécurité existantes." Aucun chiffre de précision ni de rappel n'est publié.
 
 {/* source: https://support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code, consulté 2026-05-12 */}
@@ -184,7 +184,7 @@ Quatre autres limites à garder en tête :
 
 ## Intégrer la commande à un workflow DevSecOps
 
-`/security-review` brille quand elle s'insère dans une chaîne d'outils, pas seule. Voici un combo défensif qu'on retrouve souvent sur les projets matures, à coupler avec la page [bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) et le guide [CI/CD et cybersécurité](/content/ci-cd-cyber-securite).
+`/security-review` brille quand elle s'insère dans une chaîne d'outils, pas seule. Voici un combo défensif qu'on retrouve souvent sur les projets matures. À coupler avec la page [bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) et le guide [CI/CD et cybersécurité](/content/ci-cd-cyber-securite).
 
 | Outil | Rôle | Complémentarité avec `/security-review` |
 |-------|------|------------------------------------------|
@@ -193,13 +193,15 @@ Quatre autres limites à garder en tête :
 | CODEOWNERS | Revue humaine ciblée par chemin | Force un humain à valider les findings sur les chemins sensibles (auth, paiement) |
 | Branch protection | Statuts requis avant merge | Le job GHA peut devenir un statut bloquant si vous voulez verrouiller le merge |
 
-Côté CLI, vous pouvez aussi déclencher la commande automatiquement via un hook Claude Code de type `PreToolUse` sur `git commit`. Le mécanisme est décrit dans la page [hooks](/advanced/hooks) et vous évite d'oublier la revue avant un push. Si une fuite de clé API est passée entre les mailles, la procédure de remédiation est documentée dans [Que faire en cas de fuite de clé API](/content/fuite-cle-api). Pour le durcissement des serveurs MCP que Claude appelle pendant la revue, voir [Sécurité des MCP](/mcp/securite-mcp). Et pour des agents communautaires dédiés à l'audit (Security Reviewer, TDD Guide), la sélection est sur [Meilleurs plugins sécurité](/plugins/best-security).
+Côté CLI, vous pouvez aussi déclencher la commande automatiquement via un hook Claude Code de type `PreToolUse` sur `git commit`. Le mécanisme est décrit dans la page [hooks](/advanced/hooks) et vous évite d'oublier la revue avant un push.
+
+Si une fuite de clé API est passée entre les mailles, la procédure de remédiation est documentée dans [Que faire en cas de fuite de clé API](/content/fuite-cle-api). Pour durcir les serveurs MCP que Claude appelle pendant la revue, voir [Sécurité des MCP](/mcp/securite-mcp). Et pour des agents communautaires dédiés à l'audit sécurité (Security Reviewer, TDD Guide), la sélection est sur [Meilleurs plugins sécurité](/plugins/best-security).
 
 Sur la question du modèle de menace, retenez que `/security-review` ne remplace ni un pentest manuel, ni un SAST commercial calibré sur votre stack. Elle attrape une part significative des erreurs récurrentes (concaténation SQL, secrets oubliés, contrôles d'accès manquants) avant qu'elles n'atteignent la prod, ce qui est déjà précieux.
 
 ## Aller plus loin
 
-Au-delà de la commande slash, Anthropic propose un produit web nommé "Claude Code Security", positionné comme une offre Enterprise pour le scan continu d'une codebase complète, avec dashboard et suggestions de patches groupées. Au 2026-05-12, ce produit est distinct de `/security-review` : la commande slash reste accessible à tous les plans payants individuels, le produit web s'adresse aux équipes Enterprise. Si vous arrivez sur cette page en cherchant le produit web, consultez la doc officielle Anthropic plutôt que cet article.
+Au-delà de la commande slash, Anthropic propose un produit web nommé "Claude Code Security". C'est une offre Enterprise pour le scan continu d'une codebase complète, avec dashboard et suggestions de patches groupées. Au 2026-05-12, ce produit reste distinct de `/security-review` : la commande slash s'adresse à tous les plans payants individuels, le produit web vise les équipes Enterprise. Si vous arrivez sur cette page en cherchant le produit web, consultez la doc officielle Anthropic plutôt que cet article.
 
 Liens officiels à mettre en favori :
 

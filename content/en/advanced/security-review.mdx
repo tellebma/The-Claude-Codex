@@ -69,7 +69,13 @@ In the active Claude Code session, type the command with no arguments.
 
 <CodeBlock language="bash" code={`/security-review`} />
 
-Claude reads the uncommitted diff, applies Anthropic's specialized prompt, and returns a list of findings ranked by severity. Each finding includes a description, a location, and a remediation suggestion.
+Claude then orchestrates several internal agents: one identifies the vulnerabilities in the diff, then secondary agents filter false positives per category (SQL injection, hardcoded API key, etc.). This "FP filter" mechanic is documented as a strength of the native command, and shows up directly in the console output.
+
+![/security-review multi-agent orchestration: one agent identifies vulnerabilities then two FP filter agents (SQL injection, hardcoded API key) validate each finding](/images/security-review/demo-agents.webp)
+
+Once the agents are done, Claude prints findings ranked by severity. Each one has a description, a location, an exploit scenario, and a concrete recommendation.
+
+![Structured /security-review finding: SQL injection in src/auth.py, High severity, exploit scenario, and a parameterized query recommendation](/images/security-review/demo-findings.webp)
 </Step>
 
 <Step title="Ask for a fix" stepNumber={4}>
@@ -198,6 +204,25 @@ On the CLI side, you can also trigger the command automatically through a Claude
 If an API key did leak through the cracks, the remediation playbook lives in [Leaked API key recovery](/content/leaked-api-key-recovery). To harden the MCP servers Claude calls during the review, see [MCP security](/mcp/mcp-security). For community agents dedicated to audit work (Security Reviewer, TDD Guide), the curated list is on [Best security plugins](/plugins/best-security).
 
 On the threat model side, remember `/security-review` does not replace a manual pentest or a commercial SAST tuned to your stack. It catches a meaningful share of recurring mistakes (concatenated SQL, forgotten secrets, missing access controls) before they hit prod, which is already valuable.
+
+## Don't confuse it with the `everything-claude-code:security-review` skill
+
+The Claude Code ecosystem hosts a community skill of the same name in the [`everything-claude-code`](https://github.com/affaan-m/everything-claude-code) plugin (180k+ GitHub stars, verified 2026-05-13). When that plugin is installed, the `/security-review` autocomplete shows both entries side by side. They are not the same beast. For more on the plugin itself and the skills it bundles, see our [Awesome Skills catalog](/ecosystem/awesome-skills) and the [skills comparison](/skills/comparison).
+
+| Criterion | `/security-review` native Anthropic | `/everything-claude-code:security-review` (plugin skill) |
+|-----------|-------------------------------------|---------------------------------------------------------|
+| Type | Native slash command baked into the CLI | Markdown skill loaded into Claude's context |
+| Mechanic | Multi-agent architecture: one agent identifies vulnerabilities, "FP filter" agents filter false positives per category | Loads a static OWASP checklist into the prompt, asks Claude to apply it |
+| Diff analyzed | Uncommitted working tree | `git log origin/HEAD...` (fails without an `origin` remote) |
+| Output | Structured findings (severity, category, exploit scenario, recommendation) | Free-form text driven by Claude's general prompting |
+| Coverage | 5 official families + sub-types (SQL, XSS, auth, validation, dependencies) | 10 extended OWASP categories (secrets, validation, SQL, auth, XSS, CSRF, rate limiting, exposure, Solana blockchain, dependencies) |
+| Dependencies | None (built into the CLI) | Prior install of the `everything-claude-code` plugin |
+| Eligible plans | Pro, Max, API Console pay-as-you-go | Any (no Anthropic-side restriction, it's just a markdown skill) |
+| Updates | Handled by Anthropic | Versioned in the `affaan-m/everything-claude-code` repo |
+
+In practice: if you have access to the native command (compatible plan), use the native one, it was designed for the job. If you are on the Free plan or want a forkable community workflow, the plugin skill is a valid option, but it's a different object, an enriched prompt rather than a dedicated command.
+
+In autocomplete: type `/security-review`, press ↓ to see both the no-prefix entry (native) and the `everything-claude-code:` entry (skill). Pick the one that matches what you want to do.
 
 ## Going further
 

@@ -166,7 +166,7 @@ test.describe("/skills/find-skills — lien sortant vers github vercel-labs", ()
     await expect(
       page
         .locator("main")
-        .getByRole("link", { name: /github\.com\/vercel-labs\/skills/i })
+        .getByRole("link", { name: "github.com/vercel-labs/skills" })
         .first(),
     ).toBeVisible();
   });
@@ -178,7 +178,7 @@ test.describe("/skills/find-skills — lien sortant vers github vercel-labs", ()
     await expect(
       page
         .locator("main")
-        .getByRole("link", { name: /github\.com\/vercel-labs\/skills/i })
+        .getByRole("link", { name: "github.com/vercel-labs/skills" })
         .first(),
     ).toBeVisible();
   });

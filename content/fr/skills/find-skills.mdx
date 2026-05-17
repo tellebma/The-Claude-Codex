@@ -1,0 +1,181 @@
+---
+title: "find-skills : laisser Claude Code trouver le bon skill pour vous"
+description: "Le skill le plus installé au monde sur skills.sh (1.6M installs au 2026-05-17) transforme \"je cherche un outil pour X\" en recommandation argumentée et installation guidée via npx skills."
+section: "skills"
+order: 5
+datePublished: "2026-05-17"
+dateModified: "2026-05-17"
+themes: ["guide", "tooling", "productivity"]
+---
+
+<Callout type="info" title="En bref">
+`find-skills` est un meta-skill publié par vercel-labs qui apprend à Claude Code à découvrir, évaluer et installer d'autres skills via la **Skills CLI** (`npx skills`). C'est le skill **#1 mondial** sur [skills.sh](https://skills.sh/) (1.6M installs au 2026-05-17, environ 4× le #2). Installation : `npx skills add vercel-labs/skills@find-skills -g -y`. Une fois en place, il suffit de demander "trouve-moi un skill pour…" pour déclencher une recherche argumentée.
+</Callout>
+
+## Le problème : un écosystème qui explose, peu de méthode pour le trier
+
+Quelques chiffres au 2026-05-17 :
+
+- Le repo `anthropics/skills` cumule **136k stars** et héberge une dizaine de skills officiels (frontend-design, document skills, etc.).
+- Le repo `vercel-labs/agent-skills` empile des skills à 100k+ installs chacun (react-best-practices, web-design-guidelines).
+- `microsoft/azure-skills` publie une demi-douzaine de skills à 250k+ installs chacun.
+- Sans compter les repos communautaires en `awesome-claude-skills`, `awesome-agent-skills`, etc.
+
+Conséquence pratique : un développeur qui se demande "comment je teste un Next.js en e2e avec Claude Code ?" doit savoir quelle organisation cherche, sur quel repo, comparer plusieurs candidats, vérifier les stars, lire les SKILL.md. C'est exactement le **travail que `find-skills` automatise**.
+
+## C'est quoi exactement (et ce que ce n'est pas)
+
+Quatre concepts se chevauchent dans l'écosystème. La page suivante part du principe que vous les distinguez :
+
+| Concept | Ce que c'est |
+|---------|---------------|
+| **Skill `find-skills`** | Un fichier `SKILL.md` (~135 lignes) hébergé dans `vercel-labs/skills/skills/find-skills/`, qui apprend à Claude (ou à tout agent qui supporte le standard SKILL.md) à utiliser intelligemment la Skills CLI |
+| **Skills CLI** (`npx skills …`) | Le package npm `skills` (v1.5.7 au 2026-05-17), publié par vercel-labs, qui agit comme **package manager** pour les skills : `find`, `add`, `check`, `update`, `init` |
+| **skills.sh** | Le site web public, à la fois annuaire et leaderboard, qui agrège tous les skills publiés et les classe par installs |
+| **Standard SKILL.md** | La convention de format (frontmatter YAML `name` + `description`, puis corps Markdown) que tous les skills doivent respecter pour être chargeables par Claude Code, Cursor, Gemini CLI, etc. |
+
+<Callout type="info" title="Une subtilité dans le naming vercel-labs">
+Attention à ne pas confondre **`vercel-labs/skills`** (le repo qui héberge la Skills CLI et le skill `find-skills`) avec **`vercel-labs/agent-skills`** (un autre repo qui héberge `vercel-react-best-practices`, `web-design-guidelines` et plusieurs autres). Les deux sont officiels, mais ce sont deux destinations différentes.
+</Callout>
+
+## Comment fonctionne `find-skills`
+
+Quand Claude détecte une intention de découverte (formulations comme "trouve-moi un skill pour…", "comment je fais X ?", "est-ce qu'il existe un skill qui…"), il charge le SKILL.md et applique le workflow suivant :
+
+<Steps>
+<Step title="Comprendre le besoin" stepNumber={1}>
+Claude identifie le **domaine** (React, testing, déploiement…), la **tâche précise** (écrire des tests, optimiser une perf, générer un changelog…) et estime si un skill existe probablement pour ça.
+</Step>
+
+<Step title="Checker le leaderboard skills.sh" stepNumber={2}>
+Avant de lancer une recherche, Claude consulte la home de [skills.sh](https://skills.sh/). Les top skills y sont battle-tested et couvrent une bonne partie des besoins courants (web, design, Azure, e2e…).
+</Step>
+
+<Step title="Lancer `npx skills find <query>`" stepNumber={3}>
+Si le leaderboard ne couvre pas le besoin, Claude lance la recherche CLI avec des mots-clés ciblés. Le SKILL.md recommande d'essayer plusieurs variantes ("deploy" → "deployment" → "ci-cd") plutôt qu'une requête vague.
+</Step>
+
+<Step title="Vérifier la qualité avant de recommander" stepNumber={4}>
+C'est le cœur du skill : pas de recommandation aveugle. Trois critères avec seuils explicites (voir section suivante).
+</Step>
+
+<Step title="Présenter les options" stepNumber={5}>
+Pour chaque skill candidat : son nom, ce qu'il fait, son install count, la commande copy-paste pour l'installer, et le lien skills.sh pour creuser.
+</Step>
+
+<Step title="Proposer l'installation" stepNumber={6} isLast>
+Si vous validez, Claude exécute `npx skills add <owner/repo@skill> -g -y` directement, le skill est disponible en quelques secondes.
+</Step>
+</Steps>
+
+## Installer `find-skills` (une seule commande)
+
+```bash
+npx skills add vercel-labs/skills@find-skills -g -y
+```
+
+Le flag `-g` installe le skill au niveau utilisateur (disponible dans tous vos projets). Le flag `-y` skip la confirmation interactive.
+
+Pour vérifier que l'installation a réussi :
+
+```bash
+npx skills check
+```
+
+Une fois en place, il n'y a **pas de slash command** à invoquer. Le skill se déclenche automatiquement quand Claude détecte les patterns documentés dans son SKILL.md (les triggers comme "trouve-moi un skill…", "comment je fais…", etc.).
+
+## Trois exemples concrets
+
+### Exemple 1 : optimiser une app Next.js
+
+> "j'ai besoin d'aide pour optimiser les perfs de mon app Next.js"
+
+Sortie attendue de Claude une fois `find-skills` chargé :
+
+```text
+J'ai trouvé un skill qui devrait t'aider. Le skill "react-best-practices"
+fournit les guidelines de performance Next.js de Vercel Engineering.
+(~405k installs au 2026-05-17, source officielle vercel-labs)
+
+Pour l'installer :
+npx skills add vercel-labs/agent-skills@react-best-practices -g -y
+
+Voir le skill : https://skills.sh/vercel-labs/agent-skills/react-best-practices
+```
+
+### Exemple 2 : reviewer mes PR React
+
+> "tu connais un skill pour faire des code reviews sur mes PR ?"
+
+Claude lance d'abord `npx skills find pr review`, puis filtre les résultats selon les critères qualité, et propose le ou les meilleurs candidats avec leur install count, leur source et la commande d'installation.
+
+### Exemple 3 : un domaine niche sans skill existant
+
+> "il y a un skill pour générer des diagrammes Mermaid à partir d'un dump SQL ?"
+
+Sortie attendue quand aucun match crédible n'est trouvé :
+
+```text
+J'ai cherché des skills liés à "mermaid sql diagram" mais je n'ai pas trouvé
+de match crédible (seuls deux candidats sous 100 installs).
+
+Je peux toujours t'aider directement sur cette tâche avec mes capacités natives.
+Si c'est un usage récurrent pour toi, tu peux aussi initier ton propre skill :
+npx skills init mermaid-sql-diagram
+```
+
+C'est exactement le bon comportement : refuser de recommander un skill faiblement noté juste pour combler le silence.
+
+## Les critères de qualité enseignés
+
+Le SKILL.md de `find-skills` impose des seuils explicites avant toute recommandation. Ce ne sont pas des suggestions souples, ce sont les règles que Claude suit :
+
+| Critère | Seuil "préférer" | Seuil "méfiance" |
+|---------|------------------|------------------|
+| Install count du skill | ≥ 1 000 | < 100 |
+| Réputation de la source | `vercel-labs`, `anthropics`, `microsoft` (officielles trustées) | Auteurs inconnus |
+| GitHub stars du repo qui héberge le skill | "More is better" | < 100 |
+
+L'install count est le critère le plus discriminant. Un skill à 2 installs, même bien rédigé, peut cacher un bug, une dépendance hostile, ou simplement ne pas faire ce qu'il prétend. Le SKILL.md formalise cette prudence pour éviter qu'un agent ne pollue votre environnement par excès d'enthousiasme.
+
+## Les sept catégories à connaître
+
+Le SKILL.md liste sept catégories de recherche communes. Connaître ces étiquettes aide à formuler des requêtes plus efficaces :
+
+| Catégorie | Mots-clés à essayer |
+|-----------|---------------------|
+| Web Development | react, nextjs, typescript, css, tailwind |
+| Testing | testing, jest, playwright, e2e |
+| DevOps | deploy, docker, kubernetes, ci-cd |
+| Documentation | docs, readme, changelog, api-docs |
+| Code Quality | review, lint, refactor, best-practices |
+| Design | ui, ux, design-system, accessibility |
+| Productivity | workflow, automation, git |
+
+## Combiner avec les autres ressources du Codex
+
+Une fois `find-skills` installé, vous pouvez l'enchaîner avec les autres pages skills du Codex :
+
+- [Qu'est-ce qu'un skill ?](/skills/what-are-skills) pour comprendre le concept de fond et les différences avec un fichier `CLAUDE.md`.
+- [Les skills incontournables 2026](/skills/best-skills) pour la sélection éditoriale du Codex, indépendante du leaderboard skills.sh.
+- [Comparaison Skills vs Agents vs Plugins](/skills/comparison) pour situer le rôle d'un skill par rapport aux autres mécanismes d'extension.
+- [Créer son propre skill](/skills/create-custom) si une recherche ne donne rien et qu'il faut packager votre propre savoir-faire.
+
+## Limites et précautions
+
+<Callout type="warning" title="Trois pièges à connaître">
+**Un skill #1 n'est pas un skill pertinent pour vous.** L'install count mesure la popularité, pas la pertinence pour votre stack précis. `find-skills` recommande mais ne valide pas.
+
+**Une installation `-g` charge le skill dans tous vos projets.** Si vous testez un skill obscur, préférez l'installation locale au projet avant de l'élever au niveau utilisateur.
+
+**Les chiffres bougent vite.** Les install counts (1.6M pour find-skills, 422K pour frontend-design, etc.) datent du 2026-05-17. Skills.sh met à jour ses compteurs en continu, vérifiez la home pour les valeurs courantes.
+</Callout>
+
+## Aller plus loin
+
+- **Publier votre propre skill** : `npx skills init <nom>` crée un squelette de SKILL.md prêt à pousser sur GitHub, puis à référencer sur skills.sh.
+- **Le repo officiel** : [github.com/vercel-labs/skills](https://github.com/vercel-labs/skills) (18.9k stars au 2026-05-17, license MIT, package `skills` v1.5.7) pour suivre les évolutions de la CLI.
+- **L'annuaire** : [skills.sh](https://skills.sh/) pour parcourir le catalogue trié par installs, par topic ou par tendance 24h.
+- **Le repo Anthropic** : [github.com/anthropics/skills](https://github.com/anthropics/skills) (136k stars, Apache 2.0) qui héberge les skills officiels Anthropic et la spécification de référence du format SKILL.md.
+
+Au final, `find-skills` est moins un outil qu'une discipline : forcer Claude à appliquer une grille de lecture explicite avant de vous proposer d'installer du code tiers dans votre environnement. Cette discipline est plus utile à mesure que l'écosystème grossit, et c'est probablement la raison pour laquelle il caracole en tête du leaderboard.

@@ -53,7 +53,7 @@ Catégories de recherche communes citées : Web Dev (react, nextjs, tailwind), T
 
 | Indicateur | Donnée |
 |------------|--------|
-| Pages FR sur l'écosystème skills | 4 (skills/overview, skills/comparison, skills/best-skills, skills/architecture-skills) |
+| Pages FR sur l'écosystème skills | 4 (skills/what-are-skills, skills/comparison, skills/best-skills, skills/create-custom) |
 | Page dédiée à la découverte (méta-skill) | **0** (manque flagrant) |
 | Pages décrivant des skills individuels | EPIC Stack design (4 fiches à venir : Impeccable, UIUX Pro Max, Taste, Huashu) |
 | Concurrence FR sur "comment trouver un skill claude code" | Quasi-nulle |
@@ -126,7 +126,7 @@ themes: ["guide", "tooling", "productivity"]
 - 1 page MDX EN `content/en/skills/find-skills.mdx` (traduction et localisation)
 - Capture d'écran terminal de `find-skills` en action sur une vraie demande utilisateur (mode clair + sombre)
 - Intégration complète : navigation, sitemap, search-index, llms.txt, JSON-LD
-- Cross-link bidirectionnel avec `/skills/overview`, `/skills/best-skills`, `/skills/architecture-skills`, `/skills/comparison`
+- Cross-link bidirectionnel avec `/skills/what-are-skills`, `/skills/best-skills`, `/skills/comparison`, `/skills/create-custom`
 - Audit Rédacteur (anti-IA, ton naturel) + audit SEO (cible "find-skills", "trouver un skill claude code", "découvrir skills claude code")
 
 ### Out of scope
@@ -156,7 +156,7 @@ themes: ["guide", "tooling", "productivity"]
 |----|-------|----|-----------|
 | FS-4 | Traduction EN avec localisation (terminologie native, exemples adaptés au public anglophone, pas de calque FR→EN). Validation parité structurelle (mêmes sections, mêmes Steps, mêmes Callouts) | 2 | `content/en/skills/find-skills.mdx` |
 | FS-5 | Intégration site : ajout dans `lib/section-navigation.ts` (section `skills`, position selon `order: 5`), `SITE_PAGES` de `lib/metadata.ts` (priority 0.7, changeFrequency monthly), `searchIndexFr` + `searchIndexEn` de `lib/search-index.ts`, `POPULAR_SLUGS_FR/EN` du `scripts/generate-llms-txt.ts`. Régénérer `public/llms.txt` et `public/llms-full.txt` | 1 | 4 fichiers modifiés + 2 fichiers regen |
-| FS-6 | Cross-link bidirectionnel : ajouter un encart "Voir aussi" dans `skills/overview.mdx`, `skills/best-skills.mdx`, `skills/architecture-skills.mdx`, `skills/comparison.mdx` (FR + EN, soit 8 fichiers) pointant vers `/skills/find-skills`. La nouvelle page link en retour vers ces 4 cornerstones | 1 | 8 MDX modifiés |
+| FS-6 | Cross-link bidirectionnel : ajouter un encart "Voir aussi" dans `skills/what-are-skills.mdx`, `skills/best-skills.mdx`, `skills/comparison.mdx`, `skills/create-custom.mdx` (FR + EN, soit 8 fichiers) pointant vers `/skills/find-skills`. La nouvelle page link en retour vers ces 4 cornerstones | 1 | 8 MDX modifiés |
 | FS-7 | Audit Rédacteur (skill `content-writer` ou agent dédié) sur ton, fluidité, anti-tics IA. Audit SEO en parallèle : title ≤ 60 car, description 140-160 car, présence des kw "find-skills", "trouver skill claude code", "découvrir skills", "npx skills". Tests E2E parité FR/EN sur `/fr/skills/find-skills/` + `/en/skills/find-skills/` (rendu, navigation, breadcrumb, table des matières, cross-links). Lighthouse ≥ 90 sur les 4 métriques. Vérification dark mode + light mode. A11y WCAG 2.1 AA | 2 | 2 rapports + corrections + `e2e/skills-find-skills.spec.ts` |
 
 ---

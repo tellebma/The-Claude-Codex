@@ -449,6 +449,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-09",
   },
   {
+    path: "/skills/find-skills",
+    title: "find-skills : laisser Claude Code trouver le bon skill pour vous",
+    description:
+      "Le skill le plus installé au monde sur skills.sh (1.6M installs au 2026-05-17) transforme \"je cherche un outil pour X\" en recommandation argumentée et installation guidée via npx skills.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-17",
+  },
+  {
     path: "/skills/create-custom",
     title: "Créer un Skill custom pas à pas",
     description:

@@ -209,6 +209,32 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "find-skills : laisser Claude Code trouver le bon skill",
+    description:
+      "Le meta-skill vercel-labs #1 mondial (1.6M installs au 2026-05-17). Decouvrez et installez d'autres skills via npx skills, avec criteres qualite explicites (installs, source, stars).",
+    href: "/skills/find-skills",
+    section: "Skills",
+    keywords: [
+      "find-skills",
+      "find skills",
+      "trouver skill",
+      "trouver un skill",
+      "decouvrir skill",
+      "decouvrir skills",
+      "npx skills",
+      "skills cli",
+      "vercel-labs",
+      "vercel labs skills",
+      "skills.sh",
+      "meta-skill",
+      "package manager skills",
+      "annuaire skills",
+      "leaderboard skills",
+      "claude code skill populaire",
+      "skill #1",
+    ],
+  },
+  {
     title: "Creer un Skill custom pas a pas",
     description:
       "Guide complet pour creer vos propres Skills : structure, patterns avances, skills conditionnels, orchestration, variables de templating, estimation tokens et versioning.",

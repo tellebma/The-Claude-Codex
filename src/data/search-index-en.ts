@@ -202,6 +202,31 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "find-skills: let Claude Code find the right skill",
+    description:
+      "The #1 most-installed meta-skill in the world (1.6M installs as of 2026-05-17). Discover and install other skills via npx skills, with explicit quality criteria (installs, source, stars).",
+    href: "/skills/find-skills",
+    section: "Skills",
+    keywords: [
+      "find-skills",
+      "find skills",
+      "find a skill",
+      "discover skill",
+      "discover skills",
+      "npx skills",
+      "skills cli",
+      "vercel-labs",
+      "vercel labs skills",
+      "skills.sh",
+      "meta-skill",
+      "skill package manager",
+      "skill directory",
+      "skill leaderboard",
+      "most popular claude code skill",
+      "top skill",
+    ],
+  },
+  {
     title: "Create a custom Skill step by step",
     description:
       "Complete guide to creating your own Skills: structure, advanced patterns, conditional skills, orchestration, templating variables, token estimation, and versioning.",

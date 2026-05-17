@@ -1,0 +1,181 @@
+---
+title: "find-skills: let Claude Code find the right skill for you"
+description: "The #1 meta-skill on skills.sh (1.6M installs in 2026) that teaches Claude Code to find, vet, and install the right skill via npx skills add."
+section: "skills"
+order: 5
+datePublished: "2026-05-17"
+dateModified: "2026-05-17"
+themes: ["guide", "tooling", "productivity"]
+---
+
+<Callout type="info" title="In short">
+`find-skills` is a meta-skill published by vercel-labs that teaches Claude Code how to discover, vet, and install other skills through the **Skills CLI** (`npx skills`). It is the **#1 most-installed skill** on [skills.sh](https://skills.sh/) (1.6M installs as of 2026-05-17, roughly 4× the #2). Install: `npx skills add vercel-labs/skills@find-skills -g -y`. Once loaded, just ask "find me a skill for…" to trigger a vetted search.
+</Callout>
+
+## The problem: a booming ecosystem, no real method to sort it
+
+A few numbers as of 2026-05-17:
+
+- The `anthropics/skills` repo has **136k stars** and hosts about a dozen official skills (frontend-design, document skills, etc.).
+- `vercel-labs/agent-skills` ships skills with 100k+ installs each (react-best-practices, web-design-guidelines).
+- `microsoft/azure-skills` publishes half a dozen skills at 250k+ installs each.
+- Add to that the community lists in `awesome-claude-skills`, `awesome-agent-skills`, and so on.
+
+Concrete fallout: a developer wondering "how do I e2e-test a Next.js app with Claude Code?" has to know which organization to look at, in which repo, compare candidates, check stars, and read every SKILL.md. That's exactly the **work `find-skills` automates**.
+
+## What it is (and what it isn't)
+
+Four concepts overlap in this ecosystem. The rest of this page assumes you can tell them apart:
+
+| Concept | What it is |
+|---------|------------|
+| **The `find-skills` skill** | A `SKILL.md` file (~135 lines) living in `vercel-labs/skills/skills/find-skills/`, which teaches Claude (or any agent that supports the SKILL.md standard) how to use the Skills CLI thoughtfully |
+| **The Skills CLI** (`npx skills …`) | The npm package `skills` (v1.5.7 as of 2026-05-17), published by vercel-labs, acting as the **package manager** for skills: `find`, `add`, `check`, `update`, `init` |
+| **skills.sh** | The public website, both a directory and a leaderboard, that aggregates published skills and ranks them by installs |
+| **The SKILL.md standard** | The format convention (YAML frontmatter `name` + `description`, then Markdown body) that every skill follows so it can be loaded by Claude Code, Cursor, Gemini CLI, etc. |
+
+<Callout type="info" title="A naming subtlety on the vercel-labs side">
+Do not confuse **`vercel-labs/skills`** (the repo that hosts the Skills CLI and the `find-skills` skill) with **`vercel-labs/agent-skills`** (a separate repo that hosts `vercel-react-best-practices`, `web-design-guidelines`, and several others). Both are official, but they're two different destinations.
+</Callout>
+
+## How `find-skills` works
+
+When Claude detects discovery intent (phrases like "find me a skill for…", "how do I do X?", "is there a skill that…"), it loads the SKILL.md and runs the following workflow:
+
+<Steps>
+<Step title="Understand the need" stepNumber={1}>
+Claude identifies the **domain** (React, testing, deployment…), the **specific task** (write tests, optimize perf, generate a changelog…), and estimates whether a skill likely exists for it.
+</Step>
+
+<Step title="Check the skills.sh leaderboard" stepNumber={2}>
+Before running a search, Claude scans the [skills.sh](https://skills.sh/) home. The top skills there are battle-tested and cover most common needs (web, design, Azure, e2e…).
+</Step>
+
+<Step title="Run `npx skills find <query>`" stepNumber={3}>
+If the leaderboard doesn't cover the need, Claude runs the CLI search with targeted keywords. The SKILL.md recommends trying alternative terms ("deploy" → "deployment" → "ci-cd") rather than one vague query.
+</Step>
+
+<Step title="Verify quality before recommending" stepNumber={4}>
+This is the core of the skill: no blind recommendations. Three criteria with explicit thresholds (see next section).
+</Step>
+
+<Step title="Present the options" stepNumber={5}>
+For every candidate skill: its name, what it does, its install count, the copy-paste install command, and the skills.sh link for deeper inspection.
+</Step>
+
+<Step title="Offer to install" stepNumber={6} isLast>
+If you confirm, Claude runs `npx skills add <owner/repo@skill> -g -y` directly, and the skill is available within seconds.
+</Step>
+</Steps>
+
+## Install `find-skills` (one command)
+
+```bash
+npx skills add vercel-labs/skills@find-skills -g -y
+```
+
+The `-g` flag installs the skill at the user level (available in all your projects). The `-y` flag skips the interactive confirmation.
+
+To verify the install worked:
+
+```bash
+npx skills check
+```
+
+Once installed, there is **no slash command** to invoke. The skill triggers automatically when Claude detects the patterns documented in its SKILL.md (triggers like "find me a skill…", "how do I…", etc.).
+
+## Three concrete examples
+
+### Example 1: optimize a Next.js app
+
+> "I need help optimizing the perf of my Next.js app"
+
+Expected output from Claude once `find-skills` is loaded:
+
+```text
+I found a skill that should help. The "react-best-practices" skill provides
+the Next.js performance guidelines from Vercel Engineering.
+(~405k installs as of 2026-05-17, official source vercel-labs)
+
+To install:
+npx skills add vercel-labs/agent-skills@react-best-practices -g -y
+
+View the skill: https://skills.sh/vercel-labs/agent-skills/react-best-practices
+```
+
+### Example 2: review my React PRs
+
+> "do you know a skill for code-reviewing my PRs?"
+
+Claude first runs `npx skills find pr review`, then filters results against the quality criteria and proposes the best one or two candidates, with their install count, source, and install command.
+
+### Example 3: a niche domain with no existing skill
+
+> "is there a skill to generate Mermaid diagrams from a SQL dump?"
+
+Expected output when no credible match is found:
+
+```text
+I searched for skills related to "mermaid sql diagram" but didn't find a
+credible match (only two candidates with under 100 installs).
+
+I can still help you with this task directly using my native capabilities.
+If you do this often, you could also initialize your own skill:
+npx skills init mermaid-sql-diagram
+```
+
+That is exactly the right behavior: refusing to recommend a low-quality skill just to fill the silence.
+
+## The quality criteria the skill enforces
+
+The `find-skills` SKILL.md sets explicit thresholds before any recommendation. These are not soft hints, they are the rules Claude follows:
+
+| Criterion | "Prefer" threshold | "Be cautious" threshold |
+|-----------|--------------------|--------------------------|
+| Install count of the skill | ≥ 1,000 | < 100 |
+| Source reputation | `vercel-labs`, `anthropics`, `microsoft` (trusted officials) | Unknown authors |
+| GitHub stars of the host repo | "More is better" | < 100 |
+
+Install count is the most discriminating signal. A skill with 2 installs, however nicely written, may hide a bug, a hostile dependency, or simply fail to deliver what it claims. The SKILL.md formalizes this caution so the agent doesn't pollute your environment out of overzealousness.
+
+## The seven categories to know
+
+The SKILL.md lists seven common search categories. Knowing these labels helps you phrase more effective queries:
+
+| Category | Keywords to try |
+|----------|-----------------|
+| Web Development | react, nextjs, typescript, css, tailwind |
+| Testing | testing, jest, playwright, e2e |
+| DevOps | deploy, docker, kubernetes, ci-cd |
+| Documentation | docs, readme, changelog, api-docs |
+| Code Quality | review, lint, refactor, best-practices |
+| Design | ui, ux, design-system, accessibility |
+| Productivity | workflow, automation, git |
+
+## Pair it with the rest of the Codex
+
+Once `find-skills` is installed, you can chain it with the other skills pages on the Codex:
+
+- [What is a Skill?](/skills/what-are-skills) to understand the core concept and how a skill differs from a `CLAUDE.md` file.
+- [Top Skills for 2026](/skills/best-skills) for the Codex's own editorial picks, independent from the skills.sh leaderboard.
+- [Skills vs Agents vs Plugins](/skills/comparison) to situate a skill against the other extension mechanisms.
+- [Create your own skill](/skills/create-custom) when a search returns nothing and you need to package your own know-how.
+
+## Limits and caveats
+
+<Callout type="warning" title="Three pitfalls to know about">
+**A #1 skill is not necessarily the right skill for you.** Install count measures popularity, not fit for your specific stack. `find-skills` recommends, it does not validate.
+
+**A `-g` install loads the skill into every one of your projects.** When trying an obscure skill, prefer a project-level install before promoting it to user level.
+
+**Numbers move fast.** The install counts (1.6M for find-skills, 422K for frontend-design, etc.) were captured on 2026-05-17. Skills.sh updates its counters continuously, check the home page for current values.
+</Callout>
+
+## Going further
+
+- **Publish your own skill**: `npx skills init <name>` scaffolds a SKILL.md ready to push to GitHub, then to list on skills.sh.
+- **The official repo**: [github.com/vercel-labs/skills](https://github.com/vercel-labs/skills) (18.9k stars as of 2026-05-17, MIT license, `skills` package v1.5.7) to track CLI changes.
+- **The directory**: [skills.sh](https://skills.sh/) to browse the catalog by installs, by topic, or by 24h trending.
+- **The Anthropic repo**: [github.com/anthropics/skills](https://github.com/anthropics/skills) (136k stars, Apache 2.0) which hosts Anthropic's official skills and the reference specification of the SKILL.md format.
+
+Ultimately, `find-skills` is less a tool than a discipline: forcing Claude to apply an explicit reading grid before suggesting that you install third-party code into your environment. That discipline becomes more valuable as the ecosystem grows, which is probably why it tops the leaderboard.

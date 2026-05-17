@@ -74,6 +74,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "skills.overview", href: "/skills" },
       { labelKey: "skills.what-are-skills", href: "/skills/what-are-skills" },
       { labelKey: "skills.best-skills", href: "/skills/best-skills" },
+      { labelKey: "skills.find-skills", href: "/skills/find-skills" },
       { labelKey: "skills.create-custom", href: "/skills/create-custom" },
       { labelKey: "skills.comparison", href: "/skills/comparison" },
     ],

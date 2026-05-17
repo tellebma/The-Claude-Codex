@@ -449,6 +449,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-09",
   },
   {
+    path: "/skills/find-skills",
+    title: "find-skills : trouver et installer le bon skill Claude Code",
+    description:
+      "Le méta-skill #1 sur skills.sh (1.6M installs en 2026) qui apprend à Claude Code à trouver, vérifier et installer le bon skill via npx skills.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-17",
+  },
+  {
     path: "/skills/create-custom",
     title: "Créer un Skill custom pas à pas",
     description:

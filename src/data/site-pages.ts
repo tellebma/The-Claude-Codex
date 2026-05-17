@@ -450,9 +450,9 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   },
   {
     path: "/skills/find-skills",
-    title: "find-skills : laisser Claude Code trouver le bon skill pour vous",
+    title: "find-skills : trouver et installer le bon skill Claude Code",
     description:
-      "Le skill le plus installé au monde sur skills.sh (1.6M installs au 2026-05-17) transforme \"je cherche un outil pour X\" en recommandation argumentée et installation guidée via npx skills.",
+      "Le méta-skill #1 sur skills.sh (1.6M installs en 2026) qui apprend à Claude Code à trouver, vérifier et installer le bon skill via npx skills.",
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-05-17",

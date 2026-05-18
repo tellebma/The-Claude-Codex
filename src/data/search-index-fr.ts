@@ -235,6 +235,33 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Impeccable : skill design pour Claude Code",
+    description:
+      "Skill Apache 2.0 de Paul Bakaus avec 23 commandes design (/polish, /audit, /typeset...) et 27 regles anti-patterns. 28.6k etoiles GitHub au 2026-05-18.",
+    href: "/skills/impeccable",
+    section: "Skills",
+    keywords: [
+      "impeccable",
+      "impeccable skill",
+      "skill design",
+      "skill design claude code",
+      "pbakaus",
+      "paul bakaus",
+      "renaissance geek",
+      "vocabulaire design",
+      "anti-patterns design",
+      "anti slop",
+      "polish",
+      "audit design",
+      "typeset",
+      "colorize",
+      "animate",
+      "ui slop",
+      "design fluency",
+      "apache 2.0 skill",
+    ],
+  },
+  {
     title: "Creer un Skill custom pas a pas",
     description:
       "Guide complet pour creer vos propres Skills : structure, patterns avances, skills conditionnels, orchestration, variables de templating, estimation tokens et versioning.",

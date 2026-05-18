@@ -1,0 +1,160 @@
+---
+title: "Impeccable : le skill design qui donne du vocabulaire visuel à Claude Code"
+description: "Skill Apache 2.0 de Paul Bakaus avec 23 commandes design (/polish, /audit, /typeset…) et 27 règles anti-patterns pour élever la qualité visuelle des sorties Claude Code."
+section: "skills"
+order: 6
+datePublished: "2026-05-18"
+dateModified: "2026-05-18"
+themes: ["reference", "tooling"]
+---
+
+{/* source primaire : https://impeccable.style/ (consulté 2026-05-18) */}
+{/* source secondaire : https://github.com/pbakaus/impeccable v3.1.1 (consulté 2026-05-18) */}
+
+<Callout type="info" title="En bref">
+**Impeccable** est un skill open source publié par [Paul Bakaus](https://github.com/pbakaus) (alias Renaissance Geek) qui apprend à Claude Code à parler design. Il expose **23 commandes** (`/polish`, `/audit`, `/typeset`, `/colorize`, `/animate`...) et **27 règles anti-patterns déterministes** qui filtrent les sorties pour éviter le "AI slop" visuel. Installation : `npx skills add pbakaus/impeccable`. Licence Apache 2.0, version 3.1.1 publiée le 14 mai 2026, 28.6k★ GitHub. <time dateTime="2026-05-18">Vérifié le 18 mai 2026</time>.
+</Callout>
+
+## TL;DR actionnable
+
+- **Promesse** : "Design fluency for AI harnesses" — donner à Claude le vocabulaire d'un designer senior
+- **Licence** : Apache 2.0, gratuit (open source)
+- **Installation** : `npx skills add pbakaus/impeccable` (un seul appel)
+- **Commandes phares** : `/impeccable shape` pour visualiser, `/impeccable craft` pour construire, `/polish` pour itérer
+- **Ce qui le distingue** : règles anti-patterns appliquées de manière déterministe (pas juste des recommandations en prompt)
+
+## La promesse, citée mot pour mot
+
+> "Design fluency for AI harnesses. Great design prompts require design vocabulary. Most people don't have it. Impeccable teaches your AI deep design knowledge and gives you 23 commands to steer the result."
+
+Source : [impeccable.style](https://impeccable.style/), vérifié 2026-05-18.
+
+L'idée est simple : un développeur qui demande "fais une jolie carte produit" à Claude n'obtiendra pas le même résultat qu'un designer senior qui demanderait "hiérarchie typographique 32/16/12, palette monochrome neutre, élévation 4dp, padding 24px, hover scale 1.02 avec easing cubic-bezier". Impeccable injecte ce vocabulaire et les règles qui vont avec dans le contexte de Claude.
+
+## Ce que ça change en pratique
+
+**Sans Impeccable**, demander à Claude Code "fais-moi une carte de prix pour mon SaaS" produit typiquement :
+
+- un fond gris clair `bg-gray-100`
+- un titre Inter 24px (la police par défaut des templates)
+- un bouton bleu Tailwind par défaut
+- aucune hiérarchie typographique entre prix, période, features
+- pas de hover, pas d'élévation, pas de micro-interactions
+
+**Avec Impeccable et la commande `/impeccable craft "pricing card minimaliste avec hover"`**, le même prompt sort :
+
+- une palette monochrome cohérente, contrastes WCAG AA vérifiés
+- une hiérarchie typo 48px / 14px / 16px entre prix / cadence / features
+- un bouton avec micro-interaction (scale + shadow shift) et focus ring visible
+- un padding rythmé (24px interne, 32px entre sections)
+- la règle anti-pattern "pas de bouton bleu Tailwind 500 par défaut" appliquée silencieusement
+
+C'est la même conversation, le même modèle Claude derrière, mais le contexte change la sortie en profondeur.
+
+## Installation
+
+```bash
+npx skills add pbakaus/impeccable
+```
+
+Le skill s'installe au niveau de votre profil utilisateur et est disponible dans tous vos projets Claude Code. Pour confirmer qu'il est bien chargé :
+
+```bash
+npx skills check
+```
+
+Aucune configuration supplémentaire n'est requise. Les commandes sont disponibles immédiatement après installation.
+
+## Les 23 commandes (panorama)
+
+Les commandes Impeccable se répartissent en 4 familles. La liste complète et à jour est dans le SKILL.md du repo (lien en bas de page) ; voici l'usage typique de chaque famille :
+
+| Famille | Commandes représentatives | Quand l'utiliser |
+|---------|---------------------------|------------------|
+| **Visualisation** | `/impeccable shape`, `/sketch`, `/wireframe` | En amont, pour aligner l'intention avant de coder |
+| **Construction** | `/impeccable craft`, `/build`, `/scaffold` | Quand l'intention est claire et qu'on génère du code |
+| **Itération** | `/polish`, `/refine`, `/typeset`, `/colorize`, `/animate` | Après une première sortie, pour pousser un axe précis |
+| **Audit** | `/audit`, `/critique`, `/anti-pattern` | Sur du code existant, pour identifier les défauts visuels |
+
+L'arbre de décision recommandé : commencer par `/impeccable shape` pour cadrer, puis `/impeccable craft` pour produire, puis itérer avec `/polish` autant que nécessaire. L'audit (`/audit`) sert au pré-merge, pas à la création.
+
+## Les 27 règles anti-patterns
+
+C'est le cœur technique d'Impeccable. Le skill définit 27 règles déterministes qui filtrent les sorties Claude :
+
+- pas de gradients ternes par défaut (les "purple-pink linear" générés en série par les LLM sont signalés)
+- pas de Tailwind colors `*-500` directement, préférer un système de tokens
+- contraste WCAG AA minimum, AAA recommandé
+- hiérarchie typographique sur au moins 3 niveaux quand l'écran le justifie
+- pas de polices Inter / Roboto / Open Sans par défaut sans justification
+- pas d'animations qui violent `prefers-reduced-motion`
+- pas de borders 1px gris clair en pile (effet "table HTML 2008")
+
+Ces règles ne sont pas appliquées en mode "demande à Claude de respecter X" (le LLM oublie). Elles sont injectées dans le contexte sous forme de checklist explicite que le skill demande à Claude de valider avant de retourner du code.
+
+## Fonctionnalités annexes
+
+Au-delà des commandes, Impeccable livre quatre fonctionnalités opérationnelles :
+
+| Fonctionnalité | Usage |
+|----------------|-------|
+| **Live Mode** (Alpha) | Itération en navigateur avec HMR : Claude reçoit le rendu en temps réel et corrige |
+| **CLI** `npx impeccable detect` | Scan d'un dossier `src/` pour repérer les anti-patterns, intégrable en CI/CD |
+| **Chrome Extension** | Détection sur n'importe quel site, utile pour auditer un concurrent ou un référent |
+| **PRODUCT.md & DESIGN.md** | Fichiers de contexte design persistants, partagés entre toutes les sessions |
+
+Le couple `PRODUCT.md` / `DESIGN.md` est la version "design" du `CLAUDE.md` : les conventions de votre design system y sont décrites une fois, et tous les futurs prompts les héritent.
+
+## Workflow type avec Claude Code
+
+<Steps>
+<Step title="Brief" stepNumber={1}>
+Décrire ce que vous voulez : "fais-moi une section pricing avec 3 tiers, design SaaS premium, accents sur la valeur".
+</Step>
+
+<Step title="Visualisation" stepNumber={2}>
+Lancer `/impeccable shape` pour qu'Impeccable propose un layout textuel (hiérarchie, sections, points d'attention) avant tout code.
+</Step>
+
+<Step title="Construction" stepNumber={3}>
+Approuver le shape, puis enchaîner avec `/impeccable craft`. Claude génère le composant React/HTML en respectant les règles anti-patterns.
+</Step>
+
+<Step title="Itération ciblée" stepNumber={4}>
+Identifier un axe à pousser : typographie (`/typeset`), palette (`/colorize`), animations (`/animate`), polish général (`/polish`).
+</Step>
+
+<Step title="Audit pré-merge" stepNumber={5} isLast>
+Lancer `npx impeccable detect src/components/Pricing.tsx` pour le rapport CI. Zéro anti-pattern remonté = prêt pour PR.
+</Step>
+</Steps>
+
+## Cas d'échec à connaître
+
+**Cas 1 — Brief sans intention** : "fais quelque chose de joli" produit toujours du moyen, même avec Impeccable. Le skill amplifie une intention design, il ne la remplace pas. Plus le brief est précis ("pricing card style Linear, accent magenta, élévation marquée"), plus la sortie est cohérente.
+
+**Cas 2 — Stack très contrainte** : si votre projet impose un design system propriétaire (Material UI strict, Carbon, FAST...), les règles Impeccable peuvent entrer en conflit avec les contraintes du DS. Dans ce cas, soit créer un `DESIGN.md` qui décrit explicitement le DS imposé en haut du contexte, soit n'utiliser Impeccable que pour les surfaces marketing (landing, blog) hors du DS.
+
+## Pour qui ?
+
+- **Recommandé en priorité** si vous lancez Claude Code sur du front-end sans designer interne et que vous obtenez des sorties génériques à répétition. C'est l'investissement le plus court (`npx` + zéro config) pour le plus grand saut qualitatif.
+- **Recommandé en complément** si vous avez déjà un design system clair et que vous voulez forcer son respect côté audit (`/audit`, `npx impeccable detect`).
+- **À éviter** si votre stack design est lockée par une équipe design qui ne veut pas qu'un skill applique des règles externes. Dans ce cas, regarder plutôt [find-skills](/skills/find-skills) pour découvrir des skills compatibles avec votre cadre.
+
+## Alternatives à connaître
+
+Impeccable n'est pas le seul skill design disponible. Trois autres méritent d'être comparés selon votre cas :
+
+- **UI UX Pro Max** (`nextlevelbuilder/ui-ux-pro-max-skill`) : approche multi-stack avec 67 styles UI et 161 palettes, plutôt orienté "génération à partir de patterns" que "anti-patterns".
+- **Taste Skill** (`Leonxlnx/taste-skill`) : framework anti-slop avec plusieurs sous-skills spécialisés (gpt-taste, image-to-code, brutalist...). Bonne option si vous travaillez sur plusieurs styles distincts.
+- **Huashu Design** (`alchaincyf/huashu-design`) : orienté prototypes HTML natifs et présentations. Attention, licence commerciale payante pour usage entreprise.
+
+Pour creuser : [comparatif Skills vs MCP vs Plugins](/skills/comparison), [les skills incontournables 2026](/skills/best-skills), [find-skills pour découvrir d'autres skills](/skills/find-skills).
+
+## Aller plus loin
+
+- **Site officiel** : [impeccable.style](https://impeccable.style/) — documentation des 23 commandes, démos, philosophie
+- **Repo GitHub** : [github.com/pbakaus/impeccable](https://github.com/pbakaus/impeccable) — 28.6k★, 1.5k forks, Apache 2.0, v3.1.1 (14 mai 2026)
+- **Auteur** : Paul Bakaus alias Renaissance Geek, ex-Google, créateur de jQuery UI et de Diavlo
+
+Impeccable est un cas d'école : un skill court, ciblé sur un manque réel (le vocabulaire design qui manque aux prompts génériques), avec une mécanique vérifiable (les règles anti-patterns sont auditables, pas magiques). C'est probablement la raison pour laquelle il caracole à près de 30k étoiles GitHub un an après sa publication.

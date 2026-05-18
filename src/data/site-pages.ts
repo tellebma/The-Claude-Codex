@@ -458,6 +458,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-17",
   },
   {
+    path: "/skills/impeccable",
+    title: "Impeccable : le skill design qui donne du vocabulaire visuel à Claude Code",
+    description:
+      "Skill Apache 2.0 de Paul Bakaus avec 23 commandes design (/polish, /audit, /typeset…) et 27 règles anti-patterns pour élever la qualité visuelle des sorties Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-18",
+  },
+  {
     path: "/skills/create-custom",
     title: "Créer un Skill custom pas à pas",
     description:

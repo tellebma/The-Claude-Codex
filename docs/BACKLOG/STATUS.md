@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-17 (EPIC Content find-skills 87% : 6 stories livrees FS-1/2/4/5/6/7 - 13/15 SP, reste FS-3 capture manuelle)
+> Derniere mise a jour : 2026-05-18 (EPIC Stack design ouverture Sprint 1 : DSK-2 fiche Impeccable FR + EN livree - 3/28 SP)
 
 ---
 
@@ -16,7 +16,7 @@
 | [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-11) |
 | [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 9 | 0 | 2 | 82% 🔄 (Sprint 1 + VM-1/VM-9/VM-10 docs livres) |
-| [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 0 | 0 | 10 | 0% 🆕 (validé agents SEO + Rédacteur, pret Sprint 1) |
+| [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 1 | 0 | 9 | 11% 🔄 (Sprint 1 ouvert : DSK-2 Impeccable FR + EN livree 3/28 SP) |
 | [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture 2026-05-12) |
 | [Polish heros sections 2026-05](EPIC-polish-section-heroes-content-grid-2026-05.md) | 12 | 0 | 0 | 12 | 0% 🆕 (en attente skill Impeccable) |
 | [Langue espagnole 2026-05](EPIC-i18n-espagnol-2026-05.md) | 11 | 0 | 0 | 11 | 0% 🆕 (~500M locuteurs natifs, vide concurrentiel ES) |
@@ -24,7 +24,7 @@
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
 
-**Total projet** : 126/171 stories (74%) · ~295/394 SP livres (75%)
+**Total projet** : 127/171 stories (74%) · ~298/394 SP livres (76%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
@@ -38,7 +38,7 @@
 
 > EPIC **Bugfix search Vercel redirect 2026-05** : ouvert et cloture le 2026-05-09. B-SRC-1 (#156) fix regex `vercel.json` `[^.]+` pour exclure les fichiers `public/` (`search-index-fr.json`, `sad-toaster.glb`, `images/*`, etc.). B-SRC-2 (#158) suite E2E `e2e/search-results.spec.ts` qui s'execute en preview Vercel uniquement (skip si `VERCEL_PREVIEW_URL` non defini, pattern aligne sur `e2e/locale-redirects.spec.ts`).
 
-> EPIC **Stack design Claude Code 2026-05** : ouvert le 2026-05-11 suite a 1 mois d'utilisation intensive de Claude Code en mode design (refonte graphique + refonte premium). 10 stories pour 28 SP repartis sur 3 sprints. 4 fiches outils (Impeccable, UI UX Pro Max, Taste Skill, Huashu Design) + cornerstone retour d'experience + workflow Playwright + demo + maillage. URLs cibles : `/skills/{slug}` et `/mcp/workflow-design-playwright`. **Valide en draft par 2 agents** (SEO + Redacteur) le 2026-05-11 ; corrections integrees (`SoftwareApplication` schema, mots-cles EN, sections "ce que ca change" et "cas d'echec", honnetete "1 mois", DSK-9/10 remontees Sprint 1). Pret pour ouverture Sprint 1.
+> EPIC **Stack design Claude Code 2026-05** : ouvert le 2026-05-11 suite a 1 mois d'utilisation intensive de Claude Code en mode design (refonte graphique + refonte premium). 10 stories pour 28 SP repartis sur 3 sprints. 4 fiches outils (Impeccable, UI UX Pro Max, Taste Skill, Huashu Design) + cornerstone retour d'experience + workflow Playwright + demo + maillage. URLs cibles : `/skills/{slug}` et `/mcp/workflow-design-playwright`. **Valide en draft par 2 agents** (SEO + Redacteur) le 2026-05-11 ; corrections integrees (`SoftwareApplication` schema, mots-cles EN, sections "ce que ca change" et "cas d'echec", honnetete "1 mois", DSK-9/10 remontees Sprint 1). **Sprint 1 ouvert le 2026-05-18** : DSK-2 livree (fiche Impeccable FR + EN, page MDX ~250 lignes par locale avec structure DSK-2 prescrite, cablage section-nav + i18n + SITE_PAGES + search-index FR/EN, 12 tests E2E parite dans `e2e/skills-impeccable.spec.ts`). Faits Impeccable verifies via WebFetch 2026-05-18 : 28.6k★, Apache 2.0, v3.1.1 (14 mai 2026), 23 commandes, 27 anti-pattern rules.
 
 > EPIC **Vercel Metrics 2026** : ouvert le 2026-05-09 suite a une demande PO interne, **revise le meme jour** apres audit MCP Vercel qui a revele que le projet etait deja en production sur Vercel (claude-codex.fr servi par Vercel, pas Docker Nginx contrairement a l'hypothese initiale). Story VM-2 "double hosting" supprimee (3 SP retires). Reste : 11 stories / 22 SP / 3 sprints. Pack : Web Analytics + Speed Insights (Web Vitals RUM qui manque a Matomo) + Observability. Effort reel install SDK ~5 SP au lieu de 18 SP estime initialement. Priorite : backlog post-SEO/GEO.
 

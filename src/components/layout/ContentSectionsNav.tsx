@@ -39,7 +39,7 @@ const OBSERVER_OPTIONS: IntersectionObserverInit = {
 };
 
 function prefersReducedMotion(): boolean {
-  if (typeof globalThis.window === "undefined" || !globalThis.matchMedia) {
+  if (globalThis.window === undefined || !globalThis.matchMedia) {
     return false;
   }
   return globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -57,7 +57,7 @@ function pickActiveSectionId(
 
 function isObserverAvailable(): boolean {
   return (
-    typeof globalThis.window !== "undefined" &&
+    globalThis.window !== undefined &&
     "IntersectionObserver" in globalThis
   );
 }

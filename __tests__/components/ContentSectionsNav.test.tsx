@@ -25,8 +25,8 @@ describe("ContentSectionsNav", () => {
       observe = vi.fn();
       disconnect = vi.fn();
       unobserve = vi.fn();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       constructor(_cb: IntersectionObserverCallback) {
+        void _cb;
         observerInstances.push(this);
       }
     }

@@ -323,6 +323,7 @@
       "installation": "Prerequisites & installation",
       "environment-setup": "Environment setup",
       "first-project": "First project step by step",
+      "templates-starter-kits": "Templates & starter kits",
       "faq-beginner": "FAQ for beginners"
     },
     "mcp": {
@@ -353,6 +354,8 @@
       "overview": "Overview",
       "what-are-skills": "What is a Skill?",
       "best-skills": "Top recommended Skills",
+      "find-skills": "Find a Skill (find-skills)",
+      "impeccable": "Impeccable (design skill)",
       "create-custom": "Create a custom Skill",
       "comparison": "Skills vs MCP vs Plugins"
     },
@@ -435,7 +438,10 @@
       "rpi-workflow": "RPI: Research, Plan, Implement",
       "cross-model-workflow": "Cross-Model: Claude + Codex/Gemini",
       "methodologies-ecosystem": "Methodologies ecosystem",
-      "memoire-persistante": "Persistent memory"
+      "memoire-persistante": "Persistent memory",
+      "optimisation-tokens": "Token optimization",
+      "observabilite-monitoring": "Observability and monitoring",
+      "security-review": "/security-review command"
     },
     "reference": {
       "title": "Reference",

@@ -25,7 +25,7 @@ The reference pattern uses tmux to keep both sessions side by side:
 ```
 ┌─────────────────────────┬─────────────────────────┐
 │                         │                         │
-│   Claude Code (Opus)    │   Codex CLI (GPT-5.4)   │
+│   Claude Code (Opus)    │   Codex CLI (GPT-4o)    │
 │   Plan Mode             │   QA review mode        │
 │                         │                         │
 │   plan.md (writing)     │   plan.md (reading)     │
@@ -152,7 +152,7 @@ A few things to know before adopting the pattern:
 - **No automatic file sharing** between Claude Code and Codex/Gemini: you pass the plan via copy-paste or file reference
 - **CLIs have separate permissions**: Codex doesn't see your `CLAUDE.md`. You sometimes need to summarize project context for it
 - **Sometimes redundant findings**: if Codex and Gemini raise the same point, it's probably valid. If they diverge, it's probably a style question
-- **Cumulative costs**: Opus + GPT-5.4 on a 4000-token plan = ~$0.40 USD for the review. Not negligible on big sessions.
+- **Cumulative costs**: Opus + GPT-4o on a plan of a few thousand tokens stacks up. Not negligible on big sessions — measure with your own usage before generalising the pattern.
 
 ## Next steps
 

@@ -25,7 +25,7 @@ Le pattern de référence utilise tmux pour avoir les deux sessions côte à cô
 ```
 ┌─────────────────────────┬─────────────────────────┐
 │                         │                         │
-│   Claude Code (Opus)    │   Codex CLI (GPT-5.4)   │
+│   Claude Code (Opus)    │   Codex CLI (GPT-4o)    │
 │   Plan Mode             │   QA review mode        │
 │                         │                         │
 │   plan.md (rédigé)      │   plan.md (lu)          │
@@ -33,7 +33,7 @@ Le pattern de référence utilise tmux pour avoir les deux sessions côte à cô
 └─────────────────────────┴─────────────────────────┘
 ```
 
-Claude rédige le plan dans la session de gauche. Vous copiez le plan (ou son chemin), vous bipperz dans la session de droite, Codex lit et commente. Vous gardez la main sur les deux sessions.
+Claude rédige le plan dans la session de gauche. Vous copiez le plan (ou son chemin), vous passez dans la session de droite, Codex lit et commente. Vous gardez la main sur les deux sessions.
 
 ```bash
 # Lancer le split tmux
@@ -152,7 +152,7 @@ Quelques points à connaître avant d'adopter le pattern :
 - **Pas de partage de fichiers automatique** entre Claude Code et Codex/Gemini : vous passez le plan en copier-coller ou en référence de fichier
 - **Les CLIs ont des permissions séparées** : Codex ne voit pas votre `CLAUDE.md`. Vous devez parfois lui résumer le contexte projet
 - **Findings parfois redondants** : si Codex et Gemini soulèvent le même point, c'est probablement vrai. S'ils divergent, c'est probablement une question de style
-- **Coûts cumulés** : Opus + GPT-5.4 sur un plan de 4000 tokens = ~0.40 USD pour la review. Pas négligeable sur de grosses sessions.
+- **Coûts cumulés** : Opus + GPT-4o sur un plan de quelques milliers de tokens fait monter la facture. Pas négligeable sur de grosses sessions, à mesurer avec ton propre usage avant de généraliser le pattern.
 
 ## Prochaines étapes
 

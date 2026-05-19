@@ -12,6 +12,10 @@ dateModified: "2026-05-09"
 
 To secure Claude Code in a team: apply least privilege (launch from the smallest possible folder), vet every MCP before installing, use sandboxed config profiles per project, and scan for secrets with gitleaks or trufflehog. The copy-paste checklist is at the end of the page.
 
+<Callout type="tip" title="See also">
+The native [`/security-review`](/advanced/security-review) command automates SQL, XSS, hardcoded secrets, authentication flaws and dependency vulnerabilities right inside Claude Code, locally or in CI via GitHub Action.
+</Callout>
+
 ## Introduction: security by design, not by afterthought
 
 Claude Code security isn't a layer you bolt on after the fact. It's a mindset you integrate from the start into how you configure and use the tool.

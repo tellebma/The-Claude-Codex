@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-11 (EPIC Ecosystem Sprint 1 MUST HAVE 100% : ECO-1 a ECO-5 livres)
+> Derniere mise a jour : 2026-05-18 (EPIC Stack design ouverture Sprint 1 : DSK-2 fiche Impeccable FR + EN livree - 3/28 SP)
 
 ---
 
@@ -16,12 +16,15 @@
 | [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-11) |
 | [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 9 | 0 | 2 | 82% 🔄 (Sprint 1 + VM-1/VM-9/VM-10 docs livres) |
-| [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 0 | 0 | 10 | 0% 🆕 (validé agents SEO + Rédacteur, pret Sprint 1) |
-| [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 5 | 0 | 7 | 42% 🔄 (Sprint 1 MUST HAVE 100%) |
+| [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 1 | 0 | 9 | 11% 🔄 (Sprint 1 ouvert : DSK-2 Impeccable FR + EN livree 3/28 SP) |
+| [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture 2026-05-12) |
 | [Polish heros sections 2026-05](EPIC-polish-section-heroes-content-grid-2026-05.md) | 12 | 0 | 0 | 12 | 0% 🆕 (en attente skill Impeccable) |
 | [Langue espagnole 2026-05](EPIC-i18n-espagnol-2026-05.md) | 11 | 0 | 0 | 11 | 0% 🆕 (~500M locuteurs natifs, vide concurrentiel ES) |
+| [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 7 | 0 | 1 | 88% 🔄 (SR-1/SR-2/SR-4/SR-5/SR-6/SR-7/SR-8 livres ; reste SR-3 screenshot manuel) |
+| [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
+| [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
 
-**Total projet** : 106/148 stories (72%) · ~245/342 SP livres (72%)
+**Total projet** : 127/171 stories (74%) · ~298/394 SP livres (76%)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 
@@ -35,9 +38,15 @@
 
 > EPIC **Bugfix search Vercel redirect 2026-05** : ouvert et cloture le 2026-05-09. B-SRC-1 (#156) fix regex `vercel.json` `[^.]+` pour exclure les fichiers `public/` (`search-index-fr.json`, `sad-toaster.glb`, `images/*`, etc.). B-SRC-2 (#158) suite E2E `e2e/search-results.spec.ts` qui s'execute en preview Vercel uniquement (skip si `VERCEL_PREVIEW_URL` non defini, pattern aligne sur `e2e/locale-redirects.spec.ts`).
 
-> EPIC **Stack design Claude Code 2026-05** : ouvert le 2026-05-11 suite a 1 mois d'utilisation intensive de Claude Code en mode design (refonte graphique + refonte premium). 10 stories pour 28 SP repartis sur 3 sprints. 4 fiches outils (Impeccable, UI UX Pro Max, Taste Skill, Huashu Design) + cornerstone retour d'experience + workflow Playwright + demo + maillage. URLs cibles : `/skills/{slug}` et `/mcp/workflow-design-playwright`. **Valide en draft par 2 agents** (SEO + Redacteur) le 2026-05-11 ; corrections integrees (`SoftwareApplication` schema, mots-cles EN, sections "ce que ca change" et "cas d'echec", honnetete "1 mois", DSK-9/10 remontees Sprint 1). Pret pour ouverture Sprint 1.
+> EPIC **Stack design Claude Code 2026-05** : ouvert le 2026-05-11 suite a 1 mois d'utilisation intensive de Claude Code en mode design (refonte graphique + refonte premium). 10 stories pour 28 SP repartis sur 3 sprints. 4 fiches outils (Impeccable, UI UX Pro Max, Taste Skill, Huashu Design) + cornerstone retour d'experience + workflow Playwright + demo + maillage. URLs cibles : `/skills/{slug}` et `/mcp/workflow-design-playwright`. **Valide en draft par 2 agents** (SEO + Redacteur) le 2026-05-11 ; corrections integrees (`SoftwareApplication` schema, mots-cles EN, sections "ce que ca change" et "cas d'echec", honnetete "1 mois", DSK-9/10 remontees Sprint 1). **Sprint 1 ouvert le 2026-05-18** : DSK-2 livree (fiche Impeccable FR + EN, page MDX ~250 lignes par locale avec structure DSK-2 prescrite, cablage section-nav + i18n + SITE_PAGES + search-index FR/EN, 12 tests E2E parite dans `e2e/skills-impeccable.spec.ts`). Faits Impeccable verifies via WebFetch 2026-05-18 : 28.6k★, Apache 2.0, v3.1.1 (14 mai 2026), 23 commandes, 27 anti-pattern rules.
 
 > EPIC **Vercel Metrics 2026** : ouvert le 2026-05-09 suite a une demande PO interne, **revise le meme jour** apres audit MCP Vercel qui a revele que le projet etait deja en production sur Vercel (claude-codex.fr servi par Vercel, pas Docker Nginx contrairement a l'hypothese initiale). Story VM-2 "double hosting" supprimee (3 SP retires). Reste : 11 stories / 22 SP / 3 sprints. Pack : Web Analytics + Speed Insights (Web Vitals RUM qui manque a Matomo) + Observability. Effort reel install SDK ~5 SP au lieu de 18 SP estime initialement. Priorite : backlog post-SEO/GEO.
+
+> EPIC **Content /security-review 2026-05** : ouvert le 2026-05-12 suite a demande PO. Couvre la feature Anthropic native de revue de securite (commande slash `/security-review` + GitHub Action `anthropics/claude-code-security-review`). **Source primaire** : centre d'aide officiel FR `support.claude.com/fr/articles/11932705-examens-de-securite-automatises-dans-claude-code` (derniere MAJ 2026-03-12, consultee 2026-05-12). Sources secondaires : blog claude.com (annonce 2025-08-06), repo GitHub (MIT, 4.6k stars). 8 stories / 19 SP / 3 sprints. Cible : `content/{fr,en}/advanced/security-review.mdx`, themes `tutorial + security + devsecops`. Specificites : 5 familles de vulnerabilites officielles (SQL, XSS, auth, validation, dependances) ; eligibilite plans Pro/Max/API Console pay-as-you-go (hors plan gratuit) ; distinction stricte entre la commande slash (focus EPIC) et le produit web "Claude Code Security" (mention rapide, hors scope).
+
+> EPIC **Content find-skills 2026-05** : ouvert le 2026-05-17 suite a demande PO. Couvre le meta-skill `find-skills` de vercel-labs (https://github.com/vercel-labs/skills/blob/main/skills/find-skills/SKILL.md) qui apprend a Claude Code a decouvrir et installer d'autres skills via la Skills CLI (`npx skills`). 7 stories / 15 SP / 2 sprints. Cible : `content/{fr,en}/skills/find-skills.mdx`, themes `guide + tooling + productivity`. **PR #207** ouverte le 2026-05-17 avec 13/15 SP livres : FS-1 (recherche factuelle 14 sections datees), FS-2 (page MDX FR 1 300 mots), FS-4 (traduction EN parite), FS-5 (cablage section-nav + i18n + SITE_PAGES + search-index FR/EN), FS-6 (8 cross-links bidirectionnels vers les 4 cornerstones skills), FS-7 (audit Redacteur clean + audit SEO avec raccourcissement titre/description FR-EN dans les fourchettes 60/160 char + 12 tests E2E parite FR/EN dans `e2e/skills-find-skills.spec.ts`). **Insight surfacie par FS-1** : find-skills est le skill #1 mondial sur skills.sh (~1.6M installs au 2026-05-17, ~4x le #2 frontend-design d'anthropics a 422K), angle exploite dans le H1 et le maillage. Specificite : distinction explicite entre les 4 concepts (skill `find-skills` / Skills CLI v1.5.7 / skills.sh / standard SKILL.md) et entre les 2 repos vercel-labs (`skills` vs `agent-skills`). Reste : FS-3 (capture demo terminale, bloque hors env interactif) + FS-7 (audit Redacteur/SEO + E2E parite).
+
+> EPIC **Ecosystem discovery script 2026-05** : ouvert le 2026-05-12 suite a demande PO. Concretise W5 (out of scope MVP) et la note "automatiser en chore Sprint 4" de l'EPIC Ecosystem trending repos. Script Node TypeScript `scripts/refresh-ecosystem.ts` + GitHub Action cron mensuel qui ouvre une PR draft avec rapport markdown `docs/ecosystem/discovery-YYYY-MM.md` (nouveaux entrants, sortants, top movers, liens morts). MUST (4 stories / 10 SP) couvre pipeline de decouverte + heuristics qualite + workflow CI. SHOULD (3 stories / 6 SP) ajoute check-links + MAJ auto compteurs etoiles + webhook Discord viral repo. COULD (1 story / 2 SP) finit le coverage tests. **Pre-requis bloquant** : EPIC Ecosystem Sprint 3 doit etre merge (ECO-10/11/12) car le script lit les MDX existants. Cible : reduire la charge de maintenance manuelle des pages `/ecosystem/*` par 4 et detecter automatiquement les repos viraux Claude Code.
 
 ---
 

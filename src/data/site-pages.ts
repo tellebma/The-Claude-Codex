@@ -88,6 +88,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-10",
   },
   {
+    path: "/getting-started/templates-starter-kits",
+    title: "Templates et starter kits Claude Code",
+    description:
+      "Tour des stacks opinionated 2026 : gstack, claude-code-templates, SuperClaude_Framework, get-shit-done. Comment choisir selon ton profil.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
     path: "/getting-started/faq-beginner",
     title: "FAQ débutants : Questions fréquentes sur Claude Code",
     description:
@@ -440,6 +449,24 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-09",
   },
   {
+    path: "/skills/find-skills",
+    title: "find-skills : trouver et installer le bon skill Claude Code",
+    description:
+      "Le méta-skill #1 sur skills.sh (1.6M installs en 2026) qui apprend à Claude Code à trouver, vérifier et installer le bon skill via npx skills.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-17",
+  },
+  {
+    path: "/skills/impeccable",
+    title: "Impeccable : le skill design qui donne du vocabulaire visuel à Claude Code",
+    description:
+      "Skill Apache 2.0 de Paul Bakaus avec 23 commandes design (/polish, /audit, /typeset…) et 27 règles anti-patterns pour élever la qualité visuelle des sorties Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-18",
+  },
+  {
     path: "/skills/create-custom",
     title: "Créer un Skill custom pas à pas",
     description:
@@ -764,6 +791,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-05-11",
   },
   {
+    path: "/advanced/optimisation-tokens",
+    title: "Optimisation tokens et réduction des coûts Claude Code",
+    description:
+      "Faire baisser la facture Anthropic sans sacrifier la qualité. 5 leviers : prompt caching natif, /compact, caveman, claude-code-router, abonnement Max.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/advanced/observabilite-monitoring",
+    title: "Observabilité et monitoring de Claude Code",
+    description:
+      "Tracer ce que fait Claude Code : OpenTelemetry natif, hooks d'événements, dashboards community (claude-hud, abtop, Agent-Monitor) et stack Grafana/Loki.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
+    path: "/advanced/security-review",
+    title: "Commande /security-review : audit de sécurité dans Claude Code",
+    description:
+      "Détecter et corriger les failles SQL, XSS, secrets en clair et 7 autres familles directement depuis Claude Code, en local ou en CI via GitHub Action.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:
@@ -994,6 +1048,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-04-21",
+  },
+  {
+    path: "/content/comprendre-claude-code-internals",
+    title: "Comprendre les internals de Claude Code par ses leaks",
+    description:
+      "Ce que les system prompts fuités révèlent sur l'architecture interne de Claude Code, et ce qu'on peut en déduire pour écrire de meilleurs CLAUDE.md.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
+    path: "/content/garry-tan-stack-claude-code",
+    title: "gstack de Garry Tan : verdict après un mois d'usage en équipe FR",
+    description:
+      "Review critique du stack Claude Code de Garry Tan (CEO YC). 35 commandes, philosophie solo founder, ce qui marche et ce qui coince en contexte français.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
+    path: "/content/karpathy-claude-md-analyse",
+    title: "CLAUDE.md façon Karpathy : analyse et version FR",
+    description:
+      "Décryptage du CLAUDE.md inspiré d'Andrej Karpathy : 4 principes contre les dérives de Claude Code, ce qui se transpose en équipe, et un modèle FR prêt à coller.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
   },
   {
     path: "/about",

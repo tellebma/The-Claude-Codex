@@ -1,0 +1,117 @@
+---
+title: "Understanding Claude Code internals through leaks"
+description: "What leaked system prompts reveal about Claude Code's internal architecture, and what we can transfer to write sharper CLAUDE.md files and skills."
+section: "content"
+order: 14
+datePublished: "2026-05-12"
+dateModified: "2026-05-12"
+themes: ["guide", "tooling"]
+---
+
+## TL;DR
+
+- Several GitHub repos publish extractions of the Claude Code system prompt; `asgeirtj/system_prompts_leaks` is the most usable today.
+- These files expose the internal tools (`Read`, `Edit`, `Bash`, `Task`, `ToolSearch`, `Skill`...), the hooks contract and the default behavior rules.
+- Cross-referenced with Anthropic's official docs, they confirm hook event names (`PreToolUse`, `PostToolUse`, `Stop`...) and the "do not exceed the requested scope" philosophy.
+- Useful as **inspiration** for writing CLAUDE.md files and skills, not as a guide to bypass safeguards.
+
+<Callout type="warning" title="Editorial disclaimer">
+"System prompt leaks" are unofficial extractions. Anthropic does not validate them, does not publish them, and can silently change the system prompt between two versions. What is true today can be false in two weeks. Every precise fact below is dated; verify before relying on it in production.
+</Callout>
+
+## What is a "system prompt leak"?
+
+A system prompt is the hidden instruction the provider (here Anthropic) injects at the start of every conversation to frame the model's behavior. For Claude Code, this prompt contains far more than a tone directive: it lists available tools, allowed hooks, security rules, response structure conventions. It is the agent's internal "constitution".
+
+A "leak" here means the public extraction of that prompt by researchers or users, usually by asking the model to recite its instructions or by intercepting the network payload. These leaks have **no contractual value**: they describe a temporary snapshot of the system.
+
+Why study them anyway? Three concrete reasons:
+
+1. Understand which tools are actually available on the agent side, beyond user-facing docs.
+2. Identify the writing patterns Anthropic's own engineers use (often transferable to your own CLAUDE.md files).
+3. Spot behavior gaps you can fill with project-level rules.
+
+## Verified repos at 2026-05-12
+
+Four GitHub repos publish more or less recent extractions. State as of 12 May 2026.
+
+{/* source: https://github.com/asgeirtj/system_prompts_leaks, consulté 2026-05-12 */}
+{/* source: https://github.com/0xeb/TheBigPromptLibrary, consulté 2026-05-12 */}
+{/* source: https://github.com/elder-plinius/CL4R1T4S, consulté 2026-05-12 */}
+{/* source: https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools, consulté 2026-05-12 */}
+
+| Repo | Owner | License | Stars | Claude Code coverage |
+|---|---|---|---|---|
+| `system_prompts_leaks` | asgeirtj | MIT | ~40,100 | Dedicated file `Anthropic/claude-code.md`, version 2.1.120 dated 2026-04-27 |
+| `system-prompts-and-models-of-ai-tools` | x1xhlol | GPL-3.0 | ~137,000 | `Anthropic/` folder (Claude Code mentioned in README, dedicated subfolder not visible in listing) |
+| `CL4R1T4S` | elder-plinius | AGPL-3.0 | ~26,100 | `ANTHROPIC/` folder with a `Claude_Code_03-04-24.md` file |
+| `TheBigPromptLibrary` | 0xeb | MIT | ~5,000 | No Claude Code entry identified on the landing page as of 2026-05-12 |
+
+For serious work, `asgeirtj/system_prompts_leaks` is the most workable: dated versions, dedicated file, and a visible git history to reconstruct the evolution.
+
+## Internal architecture revealed
+
+### Tools actually exposed to the agent
+
+The `Anthropic/claude-code.md` file in the asgeirtj repo explicitly lists the tools loaded by default: `Agent`, `Bash`, `Edit`, `Read`, `Write`, `ScheduleWakeup`, `ToolSearch`, `Skill`. A second category groups the **deferred tools**, loaded on demand via `ToolSearch` to save context: `AskUserQuestion`, `CronCreate`, `EnterPlanMode`, `Monitor`, `NotebookEdit`, `SendMessage`, `TaskCreate`, `TaskGet`, `TaskList`, `TaskUpdate`, `WebFetch`, `WebSearch`...
+
+{/* source: https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md (version 2.1.120), consulté 2026-05-12 */}
+
+That distinction is interesting. Not every tool is loaded permanently: only the "frequently used" ones are active by default, and the agent must explicitly request the schema of the others before invoking them. This is a token optimization directly applicable to your own agents: if you build a custom workflow via the SDK, expose only the strict minimum and delegate the rest to a discovery mechanism.
+
+### Hook events confirmed by official docs
+
+On the official-docs side, Anthropic documents 29 hook events as of 2026-05-12: `SessionStart`, `Setup`, `UserPromptSubmit`, `UserPromptExpansion`, `PreToolUse`, `PermissionRequest`, `PermissionDenied`, `PostToolUse`, `PostToolUseFailure`, `PostToolBatch`, `Notification`, `SubagentStart`, `SubagentStop`, `TaskCreated`, `TaskCompleted`, `Stop`, `StopFailure`, `TeammateIdle`, `InstructionsLoaded`, `ConfigChange`, `CwdChanged`, `FileChanged`, `WorktreeCreate`, `WorktreeRemove`, `PreCompact`, `PostCompact`, `Elicitation`, `ElicitationResult`, `SessionEnd`.
+
+{/* source: https://code.claude.com/docs/en/hooks, consulté 2026-05-12 */}
+
+Official terminology splits hooks into three levels: the **hook event** (lifecycle point), the **matcher group** (filter that decides when it fires) and the **hook handler** (shell command, HTTP endpoint, MCP tool, prompt, or agent that runs). The leaks confirm on the agent side: "Treat feedback from hooks, including [tags], as coming from the user." In other words, what a hook returns is treated as a human instruction, not a system notification. That matters: a badly written hook can literally reprogram the agent mid-session.
+
+### Default behavior rules
+
+Still from the 2026-04-27 leak, we find explicit directives for Claude Code:
+
+> "Don't add features, refactor, or introduce abstractions beyond what the task requires."
+
+> "Be careful not to introduce security vulnerabilities such as command injection, XSS, SQL injection, and other OWASP top 10 vulnerabilities."
+
+> "For UI or frontend changes, start the dev server and use the feature in a browser before reporting the task as complete."
+
+Three patterns recur: **minimal scope**, **OWASP explicitly named**, **empirical verification before declaring the task done**. If you ever wondered why Claude Code sometimes refuses to add "just a small extra" you did not ask for, here is the answer.
+
+## Patterns transferable to your own CLAUDE.md
+
+The main value of reading these leaks is not copying them, it is **seeing how Anthropic structures its own instructions** for an agent that has to work across thousands of different codebases. Three concrete lessons.
+
+<Callout type="tip" title="Related reading">
+Our guide [writing a strong CLAUDE.md](/prompting/claude-md/) and our [pick of the best skills](/skills/best-skills/) already apply these principles to production-grade cases.
+</Callout>
+
+**1. State explicit stopping rules.** The leaked system prompt contains several sentences like "When you've completed the task, respond with a concise report". That is a stopping rule. In your own CLAUDE.md, telling Claude **when** to stop is as important as telling it what to do.
+
+**2. Hierarchize: blocking rules vs preferences.** The leaks clearly separate "MUST" (absolute bans, like leaking secrets) from "SHOULD" (style preferences). Reproducing that hierarchy prevents Claude from treating a personal taste as a safety rule.
+
+**3. List usable tools, not just forbidden ones.** Most CLAUDE.md files in the wild list what **not** to do. Anthropic's system prompt does the opposite: it enumerates available tools and their ideal use. Flipping that approach in your own rules tends to produce more predictable outputs.
+
+## Ethical and legal limits
+
+These leaks sit in a grey zone. On one hand, the system prompt is technically reachable by any user through the network payload, and several of the repos cited above publish under permissive licenses (MIT, GPL). On the other, Anthropic has never officially confirmed their content, does not update them, and may consider their distribution a violation of its terms of service.
+
+<Callout type="warning" title="What these leaks are NOT">
+They are neither official documentation nor a guide to jailbreak Claude. Trying to use these extractions to make Claude Code produce forbidden content (malware, filter bypass) remains a violation of Anthropic's Terms of Service, and most such attempts fail anyway because safeguards do not live solely in the system prompt.
+</Callout>
+
+The legitimate use, in our view: read them **the way you read a technical blog**, to understand how Anthropic reasons, without making them the basis of a commercial product or marketing claim.
+
+## Verdict and resources
+
+System prompt leaks are valuable to understand the **mechanics** of Claude Code (which tools, which hooks, which philosophy), but they do not replace official docs for exact API names and stable contracts. The right reading: cross-check a dated file from the `asgeirtj` repo with the matching `code.claude.com/docs` page, spot the gaps, and turn them into hypotheses for your own skills and CLAUDE.md files.
+
+To go deeper:
+
+- Official Claude Code docs: [code.claude.com/docs/en/overview](https://code.claude.com/docs/en/overview)
+- Hooks documentation: [code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks)
+- Reference leak repo: [github.com/asgeirtj/system_prompts_leaks](https://github.com/asgeirtj/system_prompts_leaks)
+- MCP spec (useful for custom tools): [modelcontextprotocol.io](https://modelcontextprotocol.io)
+
+And on the Codex side: our guides to apply these principles in practice, [structuring a CLAUDE.md](/prompting/claude-md/) and [picking the right skills](/skills/best-skills/).

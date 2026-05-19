@@ -107,6 +107,17 @@
       "officialMcp": "Listed by official MCP"
     }
   },
+  "articleCard": {
+    "readLabel": "Read article: {title}",
+    "readCta": "Read article",
+    "pinnedLabel": "Featured",
+    "trendingLabel": "Trending",
+    "deltaLabel": "Trending, +{delta}%",
+    "readingMinutes": "{minutes} min read",
+    "dateToday": "today",
+    "dateYesterday": "yesterday",
+    "dateDaysAgo": "{days} days ago"
+  },
   "themes": {
     "badgesLabel": "Article themes",
     "tutorial": "Tutorial",

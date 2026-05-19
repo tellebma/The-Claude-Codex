@@ -2,12 +2,12 @@
 
 > Source : demande PO 2026-05-19 — la page `/content/` est aujourd'hui une liste plate sans hiérarchie, qui ne donne pas envie de lire.
 > Date d'ouverture : 2026-05-19
-> Effort estimé : **24 SP** (12 stories sur 3 sprints, ~5 semaines)
+> Effort estimé : **25 SP** (12 stories sur 3 sprints, ~5 semaines) — post-revue UX + SEO
 > Priorité : Backlog (en parallèle de l'EPIC Tuto-pages article-shell, pas de chevauchement de fichiers)
 > Branche cible : `feat/content-page-redesign` (puis sous-branches par story `feat/ctn-N-...`)
 > Pré-requis : aucun bloquant — Matomo cookieless déjà en place avec scroll-depth (cf. SEO-8 / SEO-9 livrés), `getMostRecentArticles` déjà en place
 > Owner : Maxime BELLET
-> Statut : draft, en attente de validation reviews UX + SEO
+> Statut : **validé par 2 agents (UX + SEO/technique) le 2026-05-19, prêt pour Sprint 1.** Cf. Annexe C pour les décisions de revue intégrées.
 
 ---
 
@@ -82,34 +82,39 @@ Le site est **100 % statique** (`output: 'export'` dans `next.config.mjs`). Cons
 
 ## Priorisation MoSCoW
 
-### MUST HAVE (12 SP, Sprint 1) — Refonte structurelle + Derniers articles
+> **Décision de revue (cf. Annexe C)** : CTN-3 et CTN-11 **fusionnées** en une seule story de Sprint 1 (Latest + Pinned indissociables, mêmes critères d'exclusion). CTN-14 (nav sticky inter-sections) **remontée en Sprint 1**. CTN-13 (URL state des filtres) **ajoutée en Sprint 2**, reclassée de WON'T à SHOULD après revue UX.
 
-> Le but du Sprint 1 : sortir une vitrine déjà supérieure à l'existante **sans dépendre de données analytics**. Latest seul (calculable depuis le frontmatter) couvre déjà 70 % de la valeur perçue.
+### MUST HAVE (13 SP, Sprint 1) — Refonte structurelle + Latest+Pinned + Nav sticky
+
+> Le but du Sprint 1 : sortir une vitrine déjà supérieure à l'existante **sans dépendre de données analytics**. Latest seul (calculable depuis le frontmatter) couvre déjà 70 % de la valeur perçue. Pinned mutualisé pour éviter la duplication visuelle.
 
 | ID | Story | SP | Page / Section cible |
 |----|-------|----|----------------------|
-| CTN-1 | Décision design tranchée + maquettes Figma (light + dark, 1440 + 768) | 2 | doc + Figma |
-| CTN-2 | Composant `<ArticleCard>` réutilisable (visuel, badges `themes`, date, durée lecture estimée, slug) | 3 | `src/components/ui/ArticleCard.tsx` |
-| CTN-3 | Section "Derniers articles" (latest, top 6) en haut de page sous le hero | 2 | `src/app/[locale]/content/page.tsx` |
-| CTN-4 | Refonte hero + intro éditoriale (suppression du double paragraphe générique) | 2 | `src/app/[locale]/content/page.tsx` |
-| CTN-5 | Section "Tous les articles" filtrable par `themes` (chips cliquables, filtrage côté client) | 3 | `src/app/[locale]/content/page.tsx` + `src/components/ui/ArticleThemeFilter.tsx` |
+| CTN-1 | Décision design tranchée + maquettes Figma (light + dark, 1440 + 768 + **375 mobile**) | 2 | doc + Figma |
+| CTN-2 | Composant `<ArticleCard>` réutilisable (3 variants, event Matomo, aspect-ratio CSS) | 3 | `src/components/ui/ArticleCard.tsx` |
+| CTN-3 | Section combinée "Pinned + Latest" au-dessus du pli (Pinned `hero` à gauche + 2-3 Latest `grid` à droite). Le reste de Latest sous le pli. Cascade d'exclusion explicite. | 3 | `src/app/[locale]/content/page.tsx` |
+| CTN-4 | Refonte hero + intro + `BreadcrumbList` + `CollectionPage` JSON-LD étendu | 2 | `src/app/[locale]/content/page.tsx` |
+| CTN-5 | Section "Tous les articles" filtrable par `themes` (chips groupés Type / Domaine, useMemo, aria-live) | 3 | `src/app/[locale]/content/page.tsx` + `src/components/ui/ArticleThemeFilter.tsx` |
+| CTN-14 | Nav sticky inter-sections (TOC latérale xl + tab bar mobile entre Latest/Trending/Most read/Tous) | 1 | `src/components/layout/ContentSectionsNav.tsx` |
 
-### SHOULD HAVE (8 SP, Sprint 2) — Sections data-driven (trending + most read)
+### SHOULD HAVE (9 SP, Sprint 2) — Sections data-driven (trending + most read) + URL state
 
 | ID | Story | SP | Page / Section cible |
 |----|-------|----|----------------------|
 | CTN-6 | Script `scripts/refresh-article-stats.ts` qui pull Matomo API → `src/data/article-stats.json` (idempotent, source datée) | 3 | `scripts/`, `src/data/` |
 | CTN-7 | Workflow GH Actions hebdo `weekly-article-stats.yml` qui ouvre une PR draft avec MAJ JSON | 2 | `.github/workflows/` |
-| CTN-8 | Section "Les plus lus 30 derniers jours" (top 6 par pageviews Matomo) | 2 | `src/app/[locale]/content/page.tsx` |
-| CTN-9 | Section "Tendances 7 derniers jours" (top 5 par croissance pageviews vs 7j précédents) | 1 | `src/app/[locale]/content/page.tsx` |
+| CTN-8 | Section "Les plus lus 30 derniers jours" (top 6 + `ItemList` JSON-LD + date collecte visible) | 2 | `src/app/[locale]/content/page.tsx` |
+| CTN-9 | Section "Tendances 7 derniers jours" (delta > 0 uniquement, mobile = grid + badge overlay, `ItemList`) | 1 | `src/app/[locale]/content/page.tsx` |
+| CTN-13 | URL state filtres `?theme=tutorial,security` (partage Discord/Twitter) | 1 | `src/components/ui/ArticleThemeFilter.tsx` |
 
-### COULD HAVE (4 SP, Sprint 3) — Polish + variations
+### COULD HAVE (3 SP, Sprint 3) — Polish + variations
 
 | ID | Story | SP | Page / Section cible |
 |----|-------|----|----------------------|
-| CTN-10 | Vignettes Open Graph par article : génération automatique via `app/[locale]/content/[slug]/opengraph-image.tsx` reuse | 2 | `src/components/ui/ArticleCard.tsx` |
-| CTN-11 | Mise en avant article du moment ("Pinned editorial") : sélection manuelle via `src/data/pinned-article.ts`, affichage hero ratio 2/3 | 1 | `src/app/[locale]/content/page.tsx` |
-| CTN-12 | E2E `e2e/content-index.spec.ts` + visual regression (FR + EN, light + dark, mobile + desktop) | 1 | `e2e/`, snapshots |
+| CTN-10 | Vignettes Open Graph par article (loading eager + fetchpriority sur Pinned uniquement) | 2 | `src/components/ui/ArticleCard.tsx` |
+| CTN-12 | E2E `e2e/content-index.spec.ts` + visual regression + tests JSON-LD + axe-core + keyboard-only | 1 | `e2e/`, snapshots |
+
+> Note : CTN-11 (Pinned isolée) **supprimée** — fusionnée dans CTN-3 (cf. Annexe C, retour UX).
 
 ### WON'T HAVE (hors scope EPIC)
 
@@ -119,37 +124,51 @@ Le site est **100 % statique** (`output: 'export'` dans `next.config.mjs`). Cons
 | W2 | Commentaires sur les articles | Idem, et conflit avec la stratégie "no third-party tracking" |
 | W3 | Newsletter / abonnement RSS premium | EPIC dédié à ouvrir si confirmé |
 | W4 | Carrousel auto-rotatif sur le hero | Pattern UX daté, pénalisant CWV (CLS) |
-| W5 | Page de tag par `theme` (`/content/theme/tutorial/`) | Risque de duplication SEO avec `/content/` filtré. À envisager seulement si volume > 50 articles |
+| W5 | Page de tag par `theme` (`/content/theme/tutorial/`) | Risque de duplication SEO avec `/content/` filtré. **Trigger de réouverture : > 50 articles totaux ET ≥ 8 articles par theme principal** (en dessous, page mince pénalisée) |
 
 ---
 
 ## Architecture de l'information
 
-### Sections de la nouvelle page (ordre vertical)
+### Sections de la nouvelle page (ordre vertical, post-revue UX)
 
 ```
 ┌──────────────────────────────────────────────────────┐
 │  HERO (CTN-4)                                        │
-│  Badge + titre + sous-titre + chiffre articles       │
+│  Badge + titre + sous-titre + chiffre articles +     │
+│  CTA "Filtrer par thème" (smooth scroll vers All)    │
 ├──────────────────────────────────────────────────────┤
-│  PINNED (CTN-11, optionnel)                          │
-│  1 article mis en avant, ratio 2/3, image + extrait  │
+│  NAV STICKY (CTN-14)                                 │
+│  Tab bar mobile / TOC latérale xl : ancres vers      │
+│  Latest | Trending | Most read | Tous                │
 ├──────────────────────────────────────────────────────┤
-│  LATEST (CTN-3)                                      │
-│  "Derniers articles" — 6 cartes en grid 3 colonnes   │
+│  PINNED + LATEST COMBINÉS (CTN-3)                    │
+│  Pinned `hero` à gauche (2/3) + 2-3 Latest `grid` à  │
+│  droite (1/3). Sur mobile, Pinned full-width au-     │
+│  dessus, Latest dessous. Reste de Latest dans grid 3 │
+│  colonnes sous cette rangée.                         │
 ├──────────────────────────────────────────────────────┤
 │  TRENDING (CTN-9, SHOULD)                            │
 │  "Tendances 7 jours" — 5 cartes alignées avec icône  │
-│  flamme + delta % vs semaine précédente              │
+│  flamme + delta % positif uniquement. Sur mobile,    │
+│  variant `row` retombe sur `grid` avec badge overlay │
 ├──────────────────────────────────────────────────────┤
 │  MOST READ (CTN-8, SHOULD)                           │
 │  "Les plus lus 30 jours" — 6 cartes en grid          │
 ├──────────────────────────────────────────────────────┤
 │  ALL ARTICLES (CTN-5)                                │
-│  Chips de filtre par theme + grid de toutes les      │
-│  cartes (sauf celles déjà mises en avant supra)      │
+│  Chips groupés Type + Domaine + grid de toutes les   │
+│  cartes (cascade d'exclusion appliquée)              │
 └──────────────────────────────────────────────────────┘
 ```
+
+### Cascade d'exclusion des doublons
+
+Sur 16 articles, un même article pourrait apparaître 4 fois (Pinned + Latest + Trending + Most read + All). Pour éviter le bruit visuel, **règle de cascade obligatoire** : un article qui figure dans une section supérieure est exclu des suivantes.
+
+Ordre de priorité (du plus haut au plus bas) : **Pinned > Trending > Most read > Latest > All**.
+
+Implémentation : la page calcule au build un `Set<slug>` initial vide, puis itère sur chaque section dans l'ordre ci-dessus. Pour chaque section, on prend les top N candidats qui ne sont pas déjà dans le `Set`, on les ajoute au `Set` après les avoir rendus. La section "All articles" filtre les articles déjà dans le `Set`.
 
 ### Composant `<ArticleCard>` (CTN-2)
 
@@ -229,44 +248,69 @@ Si Matomo API indisponible ou si le PO veut overrider :
 
 ### CTN-1 — Décision design tranchée + maquettes (2 SP)
 
-- [ ] 2 maquettes Figma haute-fidélité (light + dark, 1440 + 768)
-- [ ] Décision tracée dans `docs/epics/2026-05-content-redesign/decisions.md` (ou dans cet EPIC en annexe)
-- [ ] Ordre des sections validé (cf. Architecture de l'information)
+- [ ] **3 maquettes** Figma haute-fidélité (light + dark, **375 mobile + 768 tablette + 1440 desktop**)
+- [ ] Décision tracée dans `docs/epics/2026-05-content-redesign/decisions.md`
+- [ ] Ordre des sections validé (cf. Architecture de l'information, avec layout combiné Pinned+Latest au-dessus du pli)
 - [ ] Choix typographique aligné avec le design system existant (Jakarta + JetBrains Mono)
+- [ ] Rythme vertical entre sections documenté (alternance `bg-page` / `bg-surface`, padding 80-96px)
+- [ ] **États interactifs documentés** (hover, focus-visible, active, filtré, vide)
+- [ ] **Baseline Matomo + GSC capturée et consignée** dans `docs/epics/2026-05-content-redesign/baseline.md` (pages/session, bounce, scroll-depth, impressions GSC `/content/`)
 - [ ] Validation explicite PO
 
 ### CTN-2 — Composant `<ArticleCard>` (3 SP)
 
 - [ ] Props `Readonly` : `article`, `size` (`"hero" | "grid" | "row"`), `delta?` (pour trending), `locale`
 - [ ] 3 variants visuels rendus côté serveur (pas de client component)
-- [ ] Image OG fallback dégradé si absente
-- [ ] Durée de lecture calculée au build via `wordCount / 200` (200 mpm)
-- [ ] `aria-label` accessible et liens cliquables sur toute la carte
-- [ ] Tests unitaires : rendu des 3 variants, fallback image, calcul durée de lecture, propagation locale
+- [ ] **Variant `row` sur breakpoint < md : retombe sur `grid` avec badge Trending en overlay coin haut-droit**
+- [ ] Image OG fallback dégradé brand→accent + premier mot du titre en typo display si OG absente
+- [ ] **`aspect-ratio` CSS fixé** (16/9 ou 4/3) pour CLS = 0 garanti
+- [ ] `loading="lazy"` + `decoding="async"` sur images sous le pli ; `loading="eager"` + `fetchpriority="high"` sur image Pinned uniquement (CTN-3)
+- [ ] **Durée de lecture en minutes** ("5 min de lecture"), calculée via `wordCount / 200` (200 mpm) ; **les blocs de code comptent demi-vitesse** pour ne pas sous-estimer les guides techniques
+- [ ] **`dateModified` au format relatif < 14 j** ("il y a 3 jours") + absolu en `title` tooltip
+- [ ] **Description tronquée à max 120 caractères** sur la carte (différente du meta-description complet de l'article)
+- [ ] Titre tronqué via `line-clamp-2` avec `title` HTML pour révélation au hover
+- [ ] **Event Matomo `article_card_click`** émis au clic, label = slug de l'article (pour métrique CTR ≥ 35 %)
+- [ ] `aria-label` accessible, liens cliquables sur toute la carte, focus-visible distinct du hover
+- [ ] Flamme `Flame` lucide (variant `row`) marquée `aria-hidden="true"`
+- [ ] Respect de `prefers-reduced-motion` sur les transitions hover
+- [ ] Tests unitaires : rendu des 3 variants, fallback image, calcul durée de lecture, propagation locale, format date relative
 - [ ] Couverture ≥ 80 %
 
-### CTN-3 — Section "Derniers articles" (2 SP)
+### CTN-3 — Section combinée "Pinned + Latest" (3 SP) — fusion CTN-3 + CTN-11
 
-- [ ] Top 6 articles triés par `dateModified` desc puis `datePublished` desc
-- [ ] Grid 1/2/3 colonnes (mobile / tablette / desktop)
-- [ ] H2 cornerstone "Derniers articles" + lien "Voir tout" qui ancre la section ALL ARTICLES
-- [ ] Test E2E : 6 cartes rendues sur `/fr/content/` et `/en/content/`
+- [ ] Layout combiné au-dessus du pli : **Pinned `hero` variant à gauche (2/3 width) + 2-3 Latest `grid` variant à droite (1/3 width)** sur desktop
+- [ ] Sur mobile : Pinned full-width au-dessus, Latest en grid 1 colonne dessous
+- [ ] Reste de Latest (top 6 total, donc 3 cartes restantes après les 2-3 affichées en haut) dans grid 3 colonnes sous la première rangée
+- [ ] Latest tri : `dateModified` desc puis `datePublished` desc
+- [ ] Pinned : slug + locale lus depuis `src/data/pinned-article.ts` (PO-only, **rappel mensuel** en commentaire `// review monthly`)
+- [ ] **Cascade d'exclusion appliquée** : Pinned exclu de Latest/Trending/Most read/All. Si pinned slug invalide → Pinned masqué, Latest prend 6 cartes au lieu de 4-5
+- [ ] **Image Pinned servie avec `loading="eager"` + `fetchpriority="high"`** pour optimiser LCP
+- [ ] H2 "À la une" pour le bloc combiné (ou pas de H2 si Pinned absent, juste H2 "Derniers articles")
+- [ ] Lien "Voir tout" qui ancre vers section ALL ARTICLES (smooth scroll + focus auto sur premier chip filtre)
+- [ ] Fallback gracieux : si moins de 6 articles disponibles, afficher ce qu'il y a (pas de placeholder)
+- [ ] Test E2E : 6 cartes Latest rendues sur `/fr/content/` et `/en/content/`, Pinned correctement exclu si défini
 
-### CTN-4 — Refonte hero + intro (2 SP)
+### CTN-4 — Refonte hero + intro + structured data (2 SP)
 
 - [ ] Hero : suppression du double paragraphe générique
-- [ ] Affichage du nombre total d'articles (via `countAllArticles()`) + nombre par theme principal
-- [ ] CTA secondaire : "Filtrer par thème" qui ancre la section ALL ARTICLES
+- [ ] Affichage du nombre total d'articles (via `countAllArticles()`) + **liste des thèmes couverts en sous-titre** (ex: "Sécurité, architecture, DevSecOps, performance — 16 guides indépendants") — signal GEO pour les LLM
+- [ ] CTA secondaire : "Filtrer par thème" qui ancre la section ALL ARTICLES (smooth scroll + focus auto sur premier chip)
+- [ ] **`BreadcrumbList` JSON-LD ajouté** via `createBreadcrumbSchema()` (Accueil > Contenus éditoriaux)
+- [ ] **`CollectionPage` JSON-LD étendu** avec `dateModified` (max des articles) et `hasPart` (liste des URLs des articles affichés)
 - [ ] Ton aligné avec CLAUDE.md (pas de tic IA, pas de "Plongez dans")
 
 ### CTN-5 — Filtres par theme (3 SP)
 
-- [ ] Chips cliquables alignés sur les 12 themes définis dans `src/lib/themes.ts`
-- [ ] Filtrage côté client (`useState` simple, pas de URL state pour le MVP)
-- [ ] Compteur dynamique "X articles" qui se met à jour
-- [ ] État vide géré si aucun article ne matche les filtres actifs
-- [ ] Tests unitaires : toggle d'un chip, OR logique sur plusieurs chips, état vide
-- [ ] Accessibilité : `aria-pressed` sur les chips, focus visible
+- [ ] Chips cliquables alignés sur les 12 themes définis dans `src/lib/themes.ts`, **groupés en 2 lignes** : ligne 1 "Type" (5 chips : tutorial, guide, reference, comparison, use-case), ligne 2 "Domaine" (7 chips : security, devsecops, architecture, performance, tooling, productivity, migration)
+- [ ] Filtrage côté client (`useState` simple, pas de URL state pour le MVP — voir CTN-13 Sprint 2)
+- [ ] **OR logique entre filtres actifs** (article visible si au moins un theme match) — décision tracée
+- [ ] **`useMemo` sur la liste filtrée** pour éviter un re-render O(n) à chaque toggle chip
+- [ ] **État initial = état serveur identique** : pas de `useEffect` qui masque puis révèle (éviter mismatch SSR/client)
+- [ ] Compteur dynamique "X articles" qui se met à jour, annoncé via `aria-live="polite"`
+- [ ] **Copy de l'état vide** explicite : "Aucun article ne correspond." + CTA `[Réinitialiser les filtres]`
+- [ ] Tests unitaires : toggle d'un chip, OR logique sur plusieurs chips, état vide, useMemo invalidation
+- [ ] Accessibilité : `aria-pressed` sur chips, `role="group"` + `aria-label="Filtrer par thème"` sur conteneur, focus-visible distinct du hover, **`Esc` réinitialise tous les filtres**, navigation `Tab` / `Shift+Tab` entre chips
+- [ ] **Scroll position préservée** relative à l'ancre `#all-articles` lors d'un toggle (pas de scroll-to-top intempestif)
 
 ### CTN-6 — Script `refresh-article-stats.ts` (3 SP)
 
@@ -287,48 +331,83 @@ Si Matomo API indisponible ou si le PO veut overrider :
 ### CTN-8 — Section "Les plus lus" (2 SP)
 
 - [ ] Top 6 articles par `pageviewsLast30d` dans `article-stats.json`
+- [ ] **Cascade d'exclusion appliquée** : articles déjà dans Pinned ou Trending exclus
 - [ ] Source affichée discrètement : "Stats Matomo, mises à jour le YYYY-MM-DD"
-- [ ] Fallback gracieux si `article-stats.json` absent ou vide : section cachée
+- [ ] **`ItemList` JSON-LD** avec les 6 articles (`position` + `url` + `name`) via nouvelle fonction `createItemListSchema()` dans `lib/structured-data.ts`
+- [ ] Fallback gracieux si `article-stats.json` absent ou vide : **section absente du DOM** (pas juste cachée visuellement)
 - [ ] H2 "Les plus lus ces 30 derniers jours"
 
 ### CTN-9 — Section "Tendances 7 derniers jours" (1 SP)
 
-- [ ] Top 5 articles par `deltaPct` desc (seuil minimum : `pageviewsLast7d` > 20 pour éviter le bruit)
-- [ ] Variant `<ArticleCard size="row">` avec badge "Tendance" + icône `Flame` lucide + delta % en vert
+- [ ] Top 5 articles par `deltaPct` desc, **filtre `deltaPct > 0` uniquement** (pas de rouge négatif en vitrine publique)
+- [ ] Seuil minimum : `pageviewsLast7d` > 20 pour éviter le bruit
+- [ ] **Cascade d'exclusion appliquée** : articles déjà dans Pinned exclus
+- [ ] Variant `<ArticleCard size="row">` avec badge "Tendance" + icône `Flame` lucide (`aria-hidden`) + delta % en vert
+- [ ] **Sur breakpoint < md, variant `row` se rend identiquement à `grid`** avec badge Trending en overlay coin haut-droit
+- [ ] **`ItemList` JSON-LD** (cf. CTN-8)
+- [ ] **Source affichée discrètement** : "Stats Matomo, mises à jour le YYYY-MM-DD" (alignement avec CTN-8)
 - [ ] H2 "Tendances cette semaine"
-- [ ] Fallback gracieux si moins de 5 articles passent le seuil (section cachée ou réduite)
+- [ ] Fallback gracieux si moins de 5 articles passent le seuil : section masquée (absente du DOM) ou réduite à ce qu'il y a
 
 ### CTN-10 — Vignettes Open Graph (2 SP)
 
 - [ ] Image OG affichée dans `<ArticleCard>` quand disponible (résolution via `app/[locale]/content/[slug]/opengraph-image.tsx`)
-- [ ] Fallback dégradé brand→accent si absente, avec premier mot du titre en typographie display
-- [ ] `loading="lazy"` sur toutes les images, `decoding="async"`
+- [ ] Fallback dégradé brand→accent si absente, avec premier mot du titre en typographie display ; **contraste WCAG AA 4.5:1 minimum vérifié sur le texte du fallback**
+- [ ] Dimensions servies : 1200×630 pour `size="hero"` (Pinned), **600×315 pour `size="grid"` et `size="row"`** (éviter de servir un OG 1200 dans une carte 300px)
+- [ ] `loading="lazy"` sur toutes les images, `decoding="async"` ; **exception image Pinned `loading="eager"` + `fetchpriority="high"`** (cf. CTN-3)
 - [ ] CLS = 0 garanti (aspect-ratio CSS)
 
-### CTN-11 — Pinned editorial (1 SP)
+### CTN-13 — URL state des filtres (1 SP) — Sprint 2 SHOULD
 
-- [ ] `src/data/pinned-article.ts` exporte un slug et une locale
-- [ ] Article épinglé exclu des autres sections (Latest, Most Read, etc.) pour éviter la double présence
-- [ ] Fallback : si pinned slug invalide ou absent, la section disparaît proprement
+> Reclassée de WON'T à SHOULD après revue UX. Permet le partage de lien filtré sur Discord/Twitter sans coût SEO (le filtrage reste client-side, l'URL n'expose pas de nouvelles routes statiques).
 
-### CTN-12 — E2E + visual regression (1 SP)
+- [ ] Parsing du paramètre `?theme=tutorial,security` au montage de `<ArticleThemeFilter>`
+- [ ] Mise à jour de l'URL via `useSearchParams` + `replaceState` (pas de scroll-to-top)
+- [ ] **Aucun appel à `generateStaticParams` pour pré-générer les combinaisons** (incompatible avec `output: 'export'`, risque d'explosion combinatoire)
+- [ ] URL vide = état initial (aucun filtre)
+- [ ] Compatibilité : `?theme=` (vide) = équivalent à URL sans paramètre
+- [ ] Tests : URL parsée correctement, état appliqué côté client après hydratation, mise à jour bidirectionnelle (clic chip → URL mise à jour, navigation arrière → état restauré)
+- [ ] **Note SEO** : la page reste indexable telle quelle (état initial = tous les articles visibles) ; les URL avec paramètres ne sont pas dans le sitemap
 
-- [ ] `e2e/content-index.spec.ts` : parité FR + EN, rendu des 5 sections, filtres fonctionnels, lien vers premier article
+### CTN-14 — Nav sticky inter-sections (1 SP) — Sprint 1 MUST
+
+> Améliore drastiquement le scroll-path sur une page longue (5-6 sections).
+
+- [ ] **Sur xl** : TOC latérale flottante (rail droit) avec ancres vers Latest / Trending / Most read / Tous, item actif marqué via IntersectionObserver
+- [ ] **Sur mobile/tablette** : tab bar horizontale sticky en haut de page (sous le hero), 4 boutons d'ancre
+- [ ] Smooth scroll au clic, focus visible (clavier), `aria-current="location"` sur l'item actif
+- [ ] Composant `src/components/layout/ContentSectionsNav.tsx`, props `Readonly { sections: string[] }`
+- [ ] Tests unitaires : rendu des 4 sections, current item changing on scroll (mock IntersectionObserver)
+- [ ] Test E2E : clic sur "Trending" scrolle bien jusqu'à la section, retour via clic sur "Latest" idem
+
+### CTN-12 — E2E + visual regression + tests SEO (1 SP)
+
+- [ ] `e2e/content-index.spec.ts` : parité FR + EN, rendu des sections, filtres fonctionnels (toggle, OR logique, état vide), lien vers premier article, navigation sticky inter-sections
+- [ ] **Test JSON-LD** : présence et validité de `CollectionPage` + `BreadcrumbList` + `ItemList` (Trending, Most read) dans `script[type="application/ld+json"]`
+- [ ] **Test OG tags** : `og:image`, `og:title`, `og:description` présents sur `/fr/content/` et `/en/content/`
+- [ ] **Test fallback sections** : simuler `article-stats.json` absent → sections Trending et Most read absentes du DOM (pas juste cachées)
+- [ ] **Test `aria-pressed`** sur chips après clic (E2E, pas seulement unitaire)
+- [ ] **Test keyboard-only complet** : tab depuis hero jusqu'à premier article via filtre, Esc reset les filtres, navigation sticky accessible
+- [ ] Test mobile portrait + landscape sur Trending (variant fallback vers `grid`)
 - [ ] Visual regression : ajout de `/fr/content/` et `/en/content/` (light + dark) aux 20 routes existantes (cf. RG-25)
-- [ ] Lighthouse ≥ 90 sur les 4 métriques pour `/fr/content/` mobile
+- [ ] Lighthouse ≥ 90 sur les 4 métriques pour `/fr/content/` mobile + desktop
+- [ ] **INP p75 < 200 ms** sur clic chip (mesuré Playwright Lab Mode)
+- [ ] **CLS < 0.05** sur Lighthouse mobile
 - [ ] axe-core 0 violation critical/serious
 
 ---
 
 ## Métriques de succès (J+60 après merge complet)
 
+**Baseline obligatoire** : valeurs capturées au jour du merge CTN-1 et consignées dans `docs/epics/2026-05-content-redesign/baseline.md`. Sans baseline datée, les métriques ne sont pas falsifiables.
+
 | Métrique | Valeur cible | Source |
 |----------|--------------|--------|
-| Pages/session sur visiteurs entrants par `/content/` | +30 % vs baseline | Matomo |
-| Bounce rate `/content/` | -15 % vs baseline | Matomo |
-| CTR moyen des cartes (clic sur carte vers article) | ≥ 35 % | Matomo event `article_card_click` |
-| Position GSC `/content/` sur "articles claude code" | Top 10 | GSC |
-| Impressions GSC `/content/` | +50 % vs baseline | GSC |
+| Pages/session sur visiteurs entrants par `/content/` | +30 % vs baseline documentée | Matomo |
+| Bounce rate `/content/` | -15 % vs baseline documentée | Matomo |
+| CTR moyen des cartes (clic sur carte vers article) | ≥ 35 % | Matomo event `article_card_click` (label = slug) |
+| Position GSC sur **≥ 3 requêtes longue traîne** liées aux thèmes principaux | Top 10 | GSC |
+| Impressions GSC `/content/` | +50 % vs baseline documentée | GSC |
 | Scroll-depth 75 % sur `/content/` | ≥ 60 % | Matomo (déjà tracké) |
 
 ---
@@ -342,7 +421,10 @@ Si Matomo API indisponible ou si le PO veut overrider :
 | Conflit avec EPIC Tuto-pages article-shell | Aucun (pas de fichier partagé) | Confirmé : `app/[locale]/content/page.tsx` ≠ `app/[locale]/{section}/[slug]/page.tsx` |
 | Vignettes OG manquantes sur certains articles anciens | UX dégradée sur ces cartes | Fallback dégradé brand→accent + premier mot titre, ce qui reste visuellement propre |
 | Filtre client-side `<ArticleThemeFilter>` pas indexé par Google | Aucun (la page liste déjà tous les articles côté SSR) | Le filtre est progressive enhancement, le contenu reste indexable |
-| CWV : 4-5 sections + images peut alourdir le LCP | Score Lighthouse baisse | Lazy loading des images sous le pli + critical CSS pour le hero |
+| **SSR/client mismatch sur `<ArticleThemeFilter>`** | Flash + dégrade indexation | État initial hydraté = état serveur (aucun filtre actif), pas de `useEffect` qui masque puis révèle |
+| **Duplication de signal entre sections** | Article apparaît 4 fois → bruit visuel | Cascade d'exclusion obligatoire Pinned > Trending > Most read > Latest > All |
+| **Article viral sur Matomo mais déindexé GSC** | "Trending" affiche un faux signal | Script CTN-6 logue une alerte si `pageviewsLast7d > 50` mais article non modifié depuis > 90 j |
+| CWV : 4-5 sections + images peut alourdir le LCP | Score Lighthouse baisse | Lazy loading des images sous le pli + `loading="eager"` + `fetchpriority="high"` sur image Pinned uniquement + critical CSS pour le hero |
 
 ---
 
@@ -375,14 +457,16 @@ Si Matomo API indisponible ou si le PO veut overrider :
 
 ---
 
-## Planning indicatif
+## Planning indicatif (post-revue)
+
+> CTN-11 supprimée (fusion dans CTN-3), CTN-13 ajoutée Sprint 2, CTN-14 ajoutée Sprint 1. Total stories : 12 → **12** (1 supprimée, 2 ajoutées = +1 net). Total SP : 24 → **25**.
 
 | Sprint | Durée | Stories | SP |
 |--------|-------|---------|----|
-| Sprint 1 | 2 semaines | CTN-1, CTN-2, CTN-3, CTN-4, CTN-5 | 12 |
-| Sprint 2 | 2 semaines | CTN-6, CTN-7, CTN-8, CTN-9 | 8 |
-| Sprint 3 | 1 semaine | CTN-10, CTN-11, CTN-12 | 4 |
-| **Total** | **5 semaines** | **12 stories** | **24 SP** |
+| Sprint 1 | 2 semaines | CTN-1, CTN-2, CTN-3 (fusionnée avec CTN-11), CTN-4, CTN-5, CTN-14 | 13 |
+| Sprint 2 | 2 semaines | CTN-6, CTN-7, CTN-8, CTN-9, CTN-13 | 9 |
+| Sprint 3 | 1 semaine | CTN-10, CTN-12 | 3 |
+| **Total** | **5 semaines** | **12 stories** | **25 SP** |
 
 ---
 
@@ -398,10 +482,86 @@ Si Matomo API indisponible ou si le PO veut overrider :
 
 ---
 
-## Annexe B — Questions ouvertes (à trancher en kick-off)
+## Annexe B — Questions ouvertes (TRANCHÉES après revue UX + SEO 2026-05-19)
 
-1. **Durée de lecture** : afficher en minutes (`5 min`) ou en mots (`1200 mots`) ?
-2. **Filtres themes** : OR logique (article matche au moins un theme actif) ou AND logique (matche tous) ? **Default : OR** plus pragmatique pour un volume de 16 articles.
-3. **URL state pour les filtres** : `?theme=tutorial,security` partageable ou pas ? **Default : non pour le MVP**, à ajouter dans un EPIC suite si la demande remonte.
-4. **Pinned editorial CTN-11** : la sélection est-elle PO-only ou peut-elle suivre une logique automatique (l'article au plus haut scroll-depth des 30 derniers jours, par exemple) ?
-5. **Couleurs de delta tendance** : rouge négatif visible ou seulement le positif vert pour éviter de pointer du doigt un article qui décroche ?
+1. **Durée de lecture** : ✅ **Minutes** (`5 min de lecture`). Convention Medium/Substack/Vercel Blog. Format affiché sur la carte, `wordCount` en `title` tooltip. Blocs de code comptent demi-vitesse.
+2. **Filtres themes** : ✅ **OR logique** (article visible si ≥ 1 theme match). Avec 16 articles, AND tue trop souvent le résultat. Repasser sur AND quand volume > 50 ET avec UX "resserrer" explicite.
+3. **URL state pour les filtres** : ✅ **OUI, Sprint 2 (CTN-13)**. Reclassée de WON'T à SHOULD après revue UX (gain partage Discord/Twitter, coût marginal). Pas d'impact SEO car pas de `generateStaticParams` sur les combinaisons.
+4. **Pinned editorial** : ✅ **PO-only** via `src/data/pinned-article.ts` avec rappel mensuel (`// review monthly`). Auto (scroll-depth max) écarté : effet boule de neige + perte de la dimension éditoriale.
+5. **Couleurs delta tendance** : ✅ **Vert positif uniquement** (filtre `deltaPct > 0`). Gris pour 0, badge masqué pour négatif. Pas de rouge en vitrine publique (auto-stigmatisation d'article).
+
+---
+
+## Annexe C — Décisions de revue (intégrées au corps de l'EPIC)
+
+> EPIC revu le 2026-05-19 par 2 agents en parallèle :
+>
+> - **Agent UX** (`ux-designer`) : architecture de l'information, composants, hiérarchie visuelle, mobile, accessibilité.
+> - **Agent SEO + technique** (`code-reviewer`) : structured data, maillage, CWV, indexation, GEO, métriques.
+>
+> Les corrections structurelles ont été directement intégrées dans le corps de l'EPIC (Priorisation MoSCoW, Architecture de l'information, Critères d'acceptation, Annexe B, Métriques, Risques). Cette annexe trace les retours pour faciliter la relecture.
+
+### C.1 — Retours UX appliqués
+
+| Décision | Origine | Section impactée |
+|----------|---------|------------------|
+| **Fusion CTN-3 + CTN-11** : Latest et Pinned indissociables (exclusion mutuelle + layout combiné au-dessus du pli) | Agent UX | Priorisation MoSCoW + CTN-3 |
+| **CTN-14 ajoutée** : nav sticky inter-sections (TOC xl + tab bar mobile) | Agent UX | Priorisation MoSCoW + critère CTN-14 |
+| **Cascade d'exclusion explicite** Pinned > Trending > Most read > Latest > All | Agent UX | Architecture de l'information |
+| **Variant `row` Trending fallback `grid` sur mobile** avec badge overlay | Agent UX | CTN-2 + CTN-9 |
+| **Chips themes groupés** Type (5) + Domaine (7) au lieu de 12 d'un coup | Agent UX | CTN-5 |
+| **État vide explicite** : "Aucun article ne correspond. [Réinitialiser]" | Agent UX | CTN-5 |
+| **`dateModified` format relatif < 14 j** + absolu en `title` tooltip | Agent UX | CTN-2 |
+| **`wordCount` pondéré** pour blocs de code (demi-vitesse) | Agent UX | CTN-2 |
+| **Maquette 375 mobile** ajoutée à CTN-1 (pas seulement 768) | Agent UX | CTN-1 |
+| **`Esc` réinitialise filtres** + `aria-live` polite + `role="group"` | Agent UX | CTN-5 |
+| **Scroll position préservée** après toggle filtre (ancre `#all-articles`) | Agent UX | CTN-5 |
+| **CTA hero "Filtrer par thème"** : smooth scroll + focus auto sur premier chip | Agent UX | CTN-4 |
+| **Rappel mensuel Pinned** : commentaire `// review monthly` dans `pinned-article.ts` | Agent UX | CTN-3 |
+| **Stories WON'T : trigger réouverture W5** > 50 articles ET ≥ 8 par theme | Agent UX | WON'T HAVE |
+
+### C.2 — Retours SEO + technique appliqués
+
+| Décision | Origine | Section impactée |
+|----------|---------|------------------|
+| **`BreadcrumbList` JSON-LD ajouté** via `createBreadcrumbSchema()` | Agent SEO | CTN-4 |
+| **`CollectionPage` JSON-LD étendu** avec `dateModified` + `hasPart` (URLs articles) | Agent SEO | CTN-4 |
+| **`ItemList` JSON-LD** sur Trending et Most read (nouvelle fonction `createItemListSchema()`) | Agent SEO | CTN-8 + CTN-9 |
+| **Description carte tronquée à 120 char** (différenciation meta-description) | Agent SEO | CTN-2 |
+| **Event Matomo `article_card_click`** label = slug | Agent SEO | CTN-2 (métrique CTR) |
+| **CWV explicites** : INP p75 < 200 ms, CLS < 0.05 | Agent SEO | CTN-12 |
+| **`useMemo` sur liste filtrée** pour éviter re-render O(n) | Agent SEO | CTN-5 |
+| **Image Pinned `loading="eager"` + `fetchpriority="high"`** pour LCP | Agent SEO | CTN-3 + CTN-10 |
+| **Dimensions OG distinctes** : 1200×630 hero, 600×315 grid/row | Agent SEO | CTN-10 |
+| **SSR/client mismatch évité** sur `<ArticleThemeFilter>` (état initial = serveur) | Agent SEO | CTN-5 + Risques |
+| **Source date affichée** alignée CTN-8 ↔ CTN-9 | Agent SEO | CTN-9 |
+| **Liste thèmes en sous-titre hero** (signal GEO pour LLM) | Agent SEO | CTN-4 |
+| **Section absente du DOM (pas cachée)** si `article-stats.json` manquant | Agent SEO | CTN-8 + CTN-9 |
+| **Test E2E JSON-LD + OG + fallback sections + aria-pressed + keyboard-only** | Agent SEO | CTN-12 |
+| **Baseline Matomo + GSC documentée** au merge CTN-1 dans `baseline.md` | Agent SEO | CTN-1 + Métriques |
+| **Métrique GSC reformulée** : ≥ 3 requêtes longue traîne au lieu de "articles claude code" | Agent SEO | Métriques |
+| **Alerte article viral mais déindexé** : log si `pageviewsLast7d > 50` + non modifié > 90 j | Agent SEO | Risques (CTN-6) |
+| **W5 trigger réouverture explicite** : 50 articles + 8 par theme | Agent SEO | WON'T (aligné UX) |
+
+### C.3 — Divergence sur Q3 (URL state) — tranchée
+
+L'agent UX recommandait URL state **dès MVP** (gain partage Discord/Twitter). L'agent SEO recommandait **non pour MVP** mais en justifiait par un warning sur `generateStaticParams` qui ne pouvait pas pré-générer les combinaisons.
+
+**Décision finale** : OUI URL state, **Sprint 2 (CTN-13)**. L'argument SEO contre ne tient pas réellement (URL state pur client-side, aucune route statique générée, aucun impact SEO). Reclassée de WON'T à SHOULD. Note explicite ajoutée dans CTN-13 : ne pas pré-générer via `generateStaticParams`.
+
+### C.4 — Stories ajoutées
+
+| ID | Story | SP | Sprint | Source |
+|----|-------|----|--------|--------|
+| **CTN-13** | URL state filtres `?theme=...` | 1 | 2 SHOULD | Revue UX |
+| **CTN-14** | Nav sticky inter-sections | 1 | 1 MUST | Revue UX |
+
+### C.5 — Stories supprimées / fusionnées
+
+| ID | Action | Raison |
+|----|--------|--------|
+| **CTN-11** | Fusionnée dans CTN-3 | Latest + Pinned indissociables (exclusion mutuelle + layout combiné) |
+
+### C.6 — Statut post-revue
+
+L'EPIC est désormais **prêt pour Sprint 1** sous réserve d'ouverture par le PO. Les ~25 corrections structurelles (C.1 + C.2) sont intégrées au corps. Les 5 questions ouvertes (Annexe B) sont tranchées avec décision tracée. Le scope final passe de 24 SP / 12 stories à **25 SP / 12 stories** (1 supprimée, 2 ajoutées).

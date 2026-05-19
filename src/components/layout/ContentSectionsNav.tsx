@@ -39,8 +39,10 @@ const OBSERVER_OPTIONS: IntersectionObserverInit = {
 };
 
 function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined" || !window.matchMedia) return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (typeof globalThis.window === "undefined" || !globalThis.matchMedia) {
+    return false;
+  }
+  return globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function pickActiveSectionId(
@@ -54,13 +56,16 @@ function pickActiveSectionId(
 }
 
 function isObserverAvailable(): boolean {
-  return typeof window !== "undefined" && "IntersectionObserver" in window;
+  return (
+    typeof globalThis.window !== "undefined" &&
+    "IntersectionObserver" in globalThis
+  );
 }
 
 function scrollToSection(target: HTMLElement): void {
   const behavior: ScrollBehavior = prefersReducedMotion() ? "auto" : "smooth";
   target.scrollIntoView({ behavior, block: "start" });
-  window.requestAnimationFrame(() => {
+  globalThis.requestAnimationFrame(() => {
     target.focus({ preventScroll: true });
   });
 }

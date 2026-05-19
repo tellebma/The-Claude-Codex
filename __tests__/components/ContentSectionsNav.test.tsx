@@ -25,8 +25,7 @@ describe("ContentSectionsNav", () => {
       observe = vi.fn();
       disconnect = vi.fn();
       unobserve = vi.fn();
-      constructor(_cb: IntersectionObserverCallback) {
-        void _cb;
+      constructor() {
         observerInstances.push(this);
       }
     }

@@ -119,24 +119,65 @@ export function createDefinedTermSetSchema(
   };
 }
 
-export function createCollectionPageSchema(options: {
+interface CollectionPagePart {
+  readonly url: string;
+  readonly name: string;
+  readonly dateModified?: string;
+  readonly inLanguage?: string;
+}
+
+interface CollectionPageSchemaOptions {
   readonly name: string;
   readonly description: string;
   readonly url: string;
   readonly locale?: string;
-}): Record<string, unknown> {
+  readonly dateModified?: string;
+  readonly hasPart?: ReadonlyArray<CollectionPagePart>;
+}
+
+function buildHasPart(
+  parts: ReadonlyArray<CollectionPagePart>,
+  parentLang: string
+): ReadonlyArray<Record<string, unknown>> {
+  return parts.map((part) => {
+    const absoluteUrl = part.url.startsWith("http")
+      ? part.url
+      : `${SITE_URL}${part.url}`;
+    return {
+      "@type": "Article",
+      name: part.name,
+      url: ensureTrailingSlash(absoluteUrl),
+      inLanguage: part.inLanguage ?? parentLang,
+      ...(part.dateModified ? { dateModified: part.dateModified } : {}),
+    };
+  });
+}
+
+export function createCollectionPageSchema(
+  options: CollectionPageSchemaOptions
+): Record<string, unknown> {
+  const lang = localeToLanguageTag(options.locale ?? "fr");
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: options.name,
     description: options.description,
     url: ensureTrailingSlash(options.url),
-    inLanguage: localeToLanguageTag(options.locale ?? "fr"),
+    inLanguage: lang,
     isPartOf: {
       "@type": "WebSite",
       name: SITE_NAME,
       url: SITE_URL,
     },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    ...(options.dateModified ? { dateModified: options.dateModified } : {}),
+    ...(options.hasPart && options.hasPart.length > 0
+      ? { hasPart: buildHasPart(options.hasPart, lang) }
+      : {}),
   };
 }
 

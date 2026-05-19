@@ -400,6 +400,81 @@ describe("createCollectionPageSchema", () => {
     expect(isPartOf.name).toBe(SITE_NAME);
     expect(isPartOf.url).toBe(SITE_URL);
   });
+
+  it("includes publisher organization (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+    });
+    const publisher = schema.publisher as Record<string, unknown>;
+    expect(publisher["@type"]).toBe("Organization");
+    expect(publisher.name).toBe(SITE_NAME);
+    expect(publisher.url).toBe(SITE_URL);
+  });
+
+  it("omits dateModified and hasPart by default (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+    });
+    expect(schema.dateModified).toBeUndefined();
+    expect(schema.hasPart).toBeUndefined();
+  });
+
+  it("includes dateModified when provided (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+      dateModified: "2026-05-19",
+    });
+    expect(schema.dateModified).toBe("2026-05-19");
+  });
+
+  it("omits hasPart when array is empty (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+      hasPart: [],
+    });
+    expect(schema.hasPart).toBeUndefined();
+  });
+
+  it("maps hasPart entries to Article objects with absolute URLs (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/fr/content",
+      locale: "fr",
+      hasPart: [
+        {
+          name: "Article relatif",
+          url: "/fr/content/foo",
+          dateModified: "2026-05-10",
+        },
+        {
+          name: "Article absolu",
+          url: "https://claude-codex.fr/en/content/bar",
+          inLanguage: "en-US",
+        },
+      ],
+    });
+
+    const parts = schema.hasPart as ReadonlyArray<Record<string, unknown>>;
+    expect(parts).toHaveLength(2);
+    expect(parts[0]["@type"]).toBe("Article");
+    expect(parts[0].name).toBe("Article relatif");
+    expect(parts[0].url).toBe(`${SITE_URL}/fr/content/foo/`);
+    expect(parts[0].dateModified).toBe("2026-05-10");
+    expect(parts[0].inLanguage).toBe("fr-FR");
+
+    expect(parts[1].url).toBe(`${SITE_URL}/en/content/bar/`);
+    expect(parts[1].inLanguage).toBe("en-US");
+    expect(parts[1].dateModified).toBeUndefined();
+  });
 });
 
 describe("createWebSiteSchema with locale", () => {

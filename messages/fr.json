@@ -107,6 +107,17 @@
       "officialMcp": "MCP officiel referencé"
     }
   },
+  "articleCard": {
+    "readLabel": "Lire l'article : {title}",
+    "readCta": "Lire l'article",
+    "pinnedLabel": "À la une",
+    "trendingLabel": "Tendance",
+    "deltaLabel": "Tendance, +{delta}%",
+    "readingMinutes": "{minutes} min de lecture",
+    "dateToday": "aujourd'hui",
+    "dateYesterday": "hier",
+    "dateDaysAgo": "il y a {days} jours"
+  },
   "themes": {
     "badgesLabel": "Thèmes de l'article",
     "tutorial": "Tutoriel",

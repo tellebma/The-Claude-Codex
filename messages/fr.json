@@ -315,6 +315,10 @@
     "robotAlt": "Robot 3D interactif qui suit votre souris"
   },
   "sectionNav": {
+    "section-peers": {
+      "toggleLabel": "Pages de la section {section}",
+      "overviewLink": "Voir toute la section {section}"
+    },
     "getting-started": {
       "title": "Démarrer",
       "overview": "Vue d'ensemble",

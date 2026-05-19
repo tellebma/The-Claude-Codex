@@ -315,6 +315,10 @@
     "robotAlt": "Interactive 3D robot tracking your cursor"
   },
   "sectionNav": {
+    "section-peers": {
+      "toggleLabel": "Pages in the {section} section",
+      "overviewLink": "View all of {section}"
+    },
     "getting-started": {
       "title": "Getting Started",
       "overview": "Overview",

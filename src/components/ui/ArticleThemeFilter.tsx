@@ -152,7 +152,7 @@ export function ArticleThemeFilter({
   }, []);
 
   const handleKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLDivElement>) => {
+    (event: KeyboardEvent<HTMLFieldSetElement>) => {
       if (event.key === "Escape" && active.size > 0) {
         event.preventDefault();
         reset();
@@ -165,11 +165,10 @@ export function ArticleThemeFilter({
   const emptyState = filteredArticles.length === 0 && hasActiveFilters;
 
   return (
-    <div
-      role="group"
+    <fieldset
       aria-label={labels.ariaLabel}
       onKeyDown={handleKeyDown}
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-4 border-0 p-0"
     >
       <div className="flex flex-col gap-2">
         <span className="cc-eyebrow">{labels.typeGroup}</span>
@@ -250,6 +249,6 @@ export function ArticleThemeFilter({
           ))}
         </div>
       )}
-    </div>
+    </fieldset>
   );
 }

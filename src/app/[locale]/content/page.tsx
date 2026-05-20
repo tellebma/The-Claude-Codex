@@ -1,6 +1,5 @@
+import type { ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
-import { ArrowRight } from "lucide-react";
 import {
   countAllArticles,
   getAllMdxFiles,
@@ -13,8 +12,14 @@ import {
   createCollectionPageSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
+import type { ThemeKey } from "@/lib/themes";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ContentHeroActions } from "@/components/ui/ContentHeroActions";
+import { ArticleCard, type ArticleCardArticle } from "@/components/ui/ArticleCard";
+import {
+  ArticleThemeFilter,
+  type ArticleThemeFilterLabels,
+} from "@/components/ui/ArticleThemeFilter";
 
 const HAS_PART_LIMIT = 16;
 
@@ -40,9 +45,31 @@ const translations = {
     introParagraph2:
       "Chaque article se lit en 5 a 15 minutes. Si vous debutez, commencez par le guide Demarrer, puis revenez ici pour approfondir.",
     sectionBadge: "Articles",
-    sectionTitle: "Guides disponibles",
+    sectionTitle: "Tous les articles",
     sectionDescription:
-      "Cliquez sur un article pour le lire. Les contenus sont classes par ordre de progression.",
+      "Filtrez par theme pour trouver le guide qui vous interesse.",
+    filterAriaLabel: "Filtrer par theme",
+    filterTypeGroup: "Type",
+    filterDomainGroup: "Domaine",
+    filterCountSingular: "article",
+    filterCountPlural: "articles",
+    filterReset: "Reinitialiser les filtres",
+    filterEmptyTitle: "Aucun article ne correspond a ces filtres.",
+    filterEmptyCta: "Reinitialiser les filtres",
+    themeNames: {
+      tutorial: "Tutoriel",
+      guide: "Guide",
+      reference: "Reference",
+      comparison: "Comparatif",
+      "use-case": "Cas d'usage",
+      security: "Securite",
+      devsecops: "DevSecOps",
+      architecture: "Architecture",
+      performance: "Performance",
+      tooling: "Outils",
+      productivity: "Productivite",
+      migration: "Migration",
+    } as Readonly<Record<ThemeKey, string>>,
   },
   en: {
     metaTitle: "Editorial content",
@@ -65,9 +92,31 @@ const translations = {
     introParagraph2:
       "Each article takes 5 to 15 minutes. If you're starting out, begin with the Getting Started guide and come back here to dive deeper.",
     sectionBadge: "Articles",
-    sectionTitle: "Available guides",
+    sectionTitle: "All articles",
     sectionDescription:
-      "Click an article to read it. Content is sorted by progression order.",
+      "Filter by theme to find the guide that matches your interest.",
+    filterAriaLabel: "Filter by theme",
+    filterTypeGroup: "Type",
+    filterDomainGroup: "Domain",
+    filterCountSingular: "article",
+    filterCountPlural: "articles",
+    filterReset: "Reset filters",
+    filterEmptyTitle: "No article matches these filters.",
+    filterEmptyCta: "Reset filters",
+    themeNames: {
+      tutorial: "Tutorial",
+      guide: "Guide",
+      reference: "Reference",
+      comparison: "Comparison",
+      "use-case": "Use case",
+      security: "Security",
+      devsecops: "DevSecOps",
+      architecture: "Architecture",
+      performance: "Performance",
+      tooling: "Tooling",
+      productivity: "Productivity",
+      migration: "Migration",
+    } as Readonly<Record<ThemeKey, string>>,
   },
 };
 
@@ -142,6 +191,38 @@ function buildBreadcrumbJsonLd(locale: string) {
   ]);
 }
 
+function toArticleCardArticle(
+  file: ReturnType<typeof getAllMdxFiles>[number],
+  locale: string,
+): ArticleCardArticle {
+  return {
+    title: file.frontmatter.title,
+    description: file.frontmatter.description,
+    locale,
+    slug: file.slug,
+    section: file.frontmatter.section ?? null,
+    dateModified:
+      file.frontmatter.dateModified ?? file.frontmatter.datePublished ?? "",
+    themes: file.frontmatter.themes,
+  };
+}
+
+function buildFilterLabels(
+  t: (typeof translations)[LocaleKey],
+): ArticleThemeFilterLabels {
+  return {
+    ariaLabel: t.filterAriaLabel,
+    typeGroup: t.filterTypeGroup,
+    domainGroup: t.filterDomainGroup,
+    themeNames: t.themeNames,
+    countSingular: t.filterCountSingular,
+    countPlural: t.filterCountPlural,
+    reset: t.filterReset,
+    emptyTitle: t.filterEmptyTitle,
+    emptyCta: t.filterEmptyCta,
+  };
+}
+
 export default async function ContentIndexPage({
   params,
 }: Readonly<{
@@ -152,6 +233,20 @@ export default async function ContentIndexPage({
   const t = translations[asLocaleKey(locale)];
   const allFiles = getAllMdxFiles(locale);
   const totalArticles = countAllArticles();
+  const articlesForFilter = allFiles.map((file) =>
+    toArticleCardArticle(file, locale),
+  );
+  const cardsBySlug: Record<string, ReactNode> = Object.fromEntries(
+    articlesForFilter.map((article) => [
+      article.slug,
+      <ArticleCard
+        key={article.slug}
+        article={article}
+        size="grid"
+        locale={locale}
+      />,
+    ]),
+  );
 
   return (
     <>
@@ -223,42 +318,25 @@ export default async function ContentIndexPage({
         </div>
       </section>
 
-      {/* Articles list */}
+      {/* Articles filtrables par theme (CTN-5) */}
       <section
         id="all-articles"
-        className="bg-[color:var(--bg-subtle)] py-16 sm:py-20"
+        className="bg-[color:var(--bg-subtle)] py-16 sm:py-20 lg:py-24"
         aria-label={t.sectionTitle}
       >
-        <div className="px-4 sm:px-6 lg:px-0">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge={t.sectionBadge}
             title={t.sectionTitle}
             description={t.sectionDescription}
           />
 
-          <div className="mt-12 space-y-4">
-            {allFiles.map((file) => (
-              <Link
-                key={file.slug}
-                href={`/content/${file.slug}`}
-                className="group flex items-center justify-between rounded-xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] p-6 transition-all hover:-translate-y-0.5 hover:border-[color:var(--border-strong)] hover:shadow-[var(--shadow-md)]"
-              >
-                <div>
-                  {file.frontmatter.badge && (
-                    <span className="mb-2 inline-block rounded-full bg-brand-500/10 px-3 py-0.5 text-xs font-semibold text-brand-700 dark:text-brand-400">
-                      {file.frontmatter.badge}
-                    </span>
-                  )}
-                  <h2 className="text-lg font-semibold text-[color:var(--fg-primary)]">
-                    {file.frontmatter.title}
-                  </h2>
-                  <p className="mt-1 text-sm text-[color:var(--fg-secondary)]">
-                    {file.frontmatter.description}
-                  </p>
-                </div>
-                <ArrowRight className="ml-4 h-5 w-5 shrink-0 text-[color:var(--fg-muted)] transition-transform group-hover:translate-x-1 group-hover:text-[color:var(--brand-primary)]" />
-              </Link>
-            ))}
+          <div className="mt-10 sm:mt-12">
+            <ArticleThemeFilter
+              articles={articlesForFilter}
+              cardsBySlug={cardsBySlug}
+              labels={buildFilterLabels(t)}
+            />
           </div>
         </div>
       </section>

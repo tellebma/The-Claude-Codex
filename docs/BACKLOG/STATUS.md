@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-18 (EPIC Stack design ouverture Sprint 1 : DSK-2 fiche Impeccable FR + EN livree - 3/28 SP)
+> Derniere mise a jour : 2026-05-20 (Sprint 1 EPIC Content page redesign : CTN-1/2/14/4 mergés, reste CTN-5 + CTN-3)
 
 ---
 
@@ -23,6 +23,7 @@
 | [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 7 | 0 | 1 | 88% 🔄 (SR-1/SR-2/SR-4/SR-5/SR-6/SR-7/SR-8 livres ; reste SR-3 screenshot manuel) |
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
+| [Content page redesign 2026-05](EPIC-content-page-redesign-2026-05.md) | 12 | 4 | 0 | 8 | 33% 🔄 (Sprint 1 : CTN-1/2/14/4 livrés 9/25 SP ; reste CTN-5 + CTN-3) |
 
 **Total projet** : 127/171 stories (74%) · ~298/394 SP livres (76%)
 

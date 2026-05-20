@@ -1,11 +1,14 @@
 import type { ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
+import { ArrowRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import {
   countAllArticles,
   getAllMdxFiles,
   getMostRecentArticles,
   type RecentArticle,
 } from "@/lib/mdx";
+import { computeContentSections } from "@/lib/content-sections";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
   createBreadcrumbSchema,
@@ -15,11 +18,12 @@ import {
 import type { ThemeKey } from "@/lib/themes";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ContentHeroActions } from "@/components/ui/ContentHeroActions";
-import { ArticleCard, type ArticleCardArticle } from "@/components/ui/ArticleCard";
+import { ArticleCard } from "@/components/ui/ArticleCard";
 import {
   ArticleThemeFilter,
   type ArticleThemeFilterLabels,
 } from "@/components/ui/ArticleThemeFilter";
+import { PINNED_ARTICLE_SLUG } from "@/data/pinned-article";
 
 const HAS_PART_LIMIT = 16;
 
@@ -40,10 +44,9 @@ const translations = {
       "Securite, architecture, DevSecOps, prompting. 16 guides longue forme, classes et filtrables, ecrits par des experts.",
     ctaFilter: "Filtrer par theme",
     ctaLatest: "Voir les derniers",
-    introParagraph1:
-      "Les articles editoriaux du Claude Codex sont des guides autonomes. Chacun traite un sujet precis : securite, couts reels, bonnes pratiques, mythes a deconstruire. Vous pouvez les lire dans l'ordre que vous voulez.",
-    introParagraph2:
-      "Chaque article se lit en 5 a 15 minutes. Si vous debutez, commencez par le guide Demarrer, puis revenez ici pour approfondir.",
+    pinnedLatestTitleWithPinned: "A la une et derniers articles",
+    pinnedLatestTitleWithoutPinned: "Derniers articles",
+    pinnedLatestSeeAll: "Voir tous les articles",
     sectionBadge: "Articles",
     sectionTitle: "Tous les articles",
     sectionDescription:
@@ -87,10 +90,9 @@ const translations = {
       "Security, architecture, DevSecOps, prompting. Long-form guides written by experts, sortable and filterable.",
     ctaFilter: "Filter by theme",
     ctaLatest: "See the latest",
-    introParagraph1:
-      "Editorial articles from The Claude Codex are self-contained guides. Each covers a specific topic: security, real costs, best practices, myths to bust. Read them in any order.",
-    introParagraph2:
-      "Each article takes 5 to 15 minutes. If you're starting out, begin with the Getting Started guide and come back here to dive deeper.",
+    pinnedLatestTitleWithPinned: "Featured and latest articles",
+    pinnedLatestTitleWithoutPinned: "Latest articles",
+    pinnedLatestSeeAll: "See all articles",
     sectionBadge: "Articles",
     sectionTitle: "All articles",
     sectionDescription:
@@ -191,22 +193,6 @@ function buildBreadcrumbJsonLd(locale: string) {
   ]);
 }
 
-function toArticleCardArticle(
-  file: ReturnType<typeof getAllMdxFiles>[number],
-  locale: string,
-): ArticleCardArticle {
-  return {
-    title: file.frontmatter.title,
-    description: file.frontmatter.description,
-    locale,
-    slug: file.slug,
-    section: file.frontmatter.section ?? null,
-    dateModified:
-      file.frontmatter.dateModified ?? file.frontmatter.datePublished ?? "",
-    themes: file.frontmatter.themes,
-  };
-}
-
 function buildFilterLabels(
   t: (typeof translations)[LocaleKey],
 ): ArticleThemeFilterLabels {
@@ -233,11 +219,20 @@ export default async function ContentIndexPage({
   const t = translations[asLocaleKey(locale)];
   const allFiles = getAllMdxFiles(locale);
   const totalArticles = countAllArticles();
-  const articlesForFilter = allFiles.map((file) =>
-    toArticleCardArticle(file, locale),
-  );
+  const { pinned, latest, all } = computeContentSections({
+    files: allFiles,
+    locale,
+    pinnedSlug: PINNED_ARTICLE_SLUG,
+    latestLimit: 6,
+  });
+  const hasPinned = pinned !== null;
+  const latestTopRow = hasPinned ? latest.slice(0, 2) : [];
+  const latestBottomRow = hasPinned ? latest.slice(2, 5) : latest.slice(0, 6);
+  const pinnedLatestTitle = hasPinned
+    ? t.pinnedLatestTitleWithPinned
+    : t.pinnedLatestTitleWithoutPinned;
   const cardsBySlug: Record<string, ReactNode> = Object.fromEntries(
-    articlesForFilter.map((article) => [
+    all.map((article) => [
       article.slug,
       <ArticleCard
         key={article.slug}
@@ -308,12 +303,57 @@ export default async function ContentIndexPage({
         </div>
       </section>
 
-      {/* Introduction (provisoire, remplacee par CTN-3 Pinned + Latest) */}
-      <section id="pinned-latest" className="py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-0">
-          <div className="space-y-6 cc-body">
-            <p>{t.introParagraph1}</p>
-            <p>{t.introParagraph2}</p>
+      {/* Pinned + Latest combines (CTN-3) */}
+      <section
+        id="pinned-latest"
+        aria-labelledby="pinned-latest-title"
+        className="py-16 sm:py-20 lg:py-24"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2
+              id="pinned-latest-title"
+              className="cc-h2 text-[color:var(--fg-primary)]"
+              style={{ textWrap: "balance" }}
+            >
+              {pinnedLatestTitle}
+            </h2>
+            <Link
+              href="/content/#all-articles"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-[color:var(--brand-primary)] transition-[gap] duration-[var(--duration-base)] ease-[var(--ease-out)] hover:gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+            >
+              {t.pinnedLatestSeeAll}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          {hasPinned ? (
+            <div className="mt-8 grid grid-cols-1 gap-6 lg:mt-10 lg:grid-cols-[1.6fr_1fr] lg:gap-8">
+              <ArticleCard article={pinned} size="hero" locale={locale} />
+              <div className="grid grid-cols-1 gap-6">
+                {latestTopRow.map((article) => (
+                  <ArticleCard
+                    key={article.slug}
+                    article={article}
+                    size="grid"
+                    locale={locale}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div
+            className={`grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ${hasPinned ? "mt-6 lg:mt-8" : "mt-8 lg:mt-10"}`}
+          >
+            {latestBottomRow.map((article) => (
+              <ArticleCard
+                key={article.slug}
+                article={article}
+                size="grid"
+                locale={locale}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -333,7 +373,7 @@ export default async function ContentIndexPage({
 
           <div className="mt-10 sm:mt-12">
             <ArticleThemeFilter
-              articles={articlesForFilter}
+              articles={all}
               cardsBySlug={cardsBySlug}
               labels={buildFilterLabels(t)}
             />

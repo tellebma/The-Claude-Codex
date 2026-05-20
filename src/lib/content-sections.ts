@@ -68,9 +68,9 @@ export function computeContentSections({
   latestLimit = DEFAULT_LATEST_LIMIT,
 }: ComputeOptions): ContentSections {
   const pinnedFile =
-    pinnedSlug !== null
-      ? files.find((file) => file.slug === pinnedSlug)
-      : undefined;
+    pinnedSlug === null
+      ? undefined
+      : files.find((file) => file.slug === pinnedSlug);
 
   const pinned = pinnedFile ? toArticle(pinnedFile, locale) : null;
 

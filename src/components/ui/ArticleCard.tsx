@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, TrendingUp } from "lucide-react";
-import type { ThemeKey } from "@/lib/themes";
+import { ArrowRight, BookOpen, TrendingUp } from "lucide-react";
+import { THEME_REGISTRY, type ThemeKey } from "@/lib/themes";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import clsx from "clsx";
 
@@ -124,16 +124,21 @@ interface CardImageProps {
   readonly src?: string;
   readonly alt: string;
   readonly title: string;
+  readonly themes?: ReadonlyArray<ThemeKey>;
   readonly priority?: boolean;
   readonly aspect?: "16/9" | "1/1";
+  /** Si true, le fallback degrade s'etire en h-full au lieu d'un aspect fixe. */
+  readonly fillHeight?: boolean;
 }
 
 function CardImage({
   src,
   alt,
   title,
+  themes,
   priority = false,
   aspect = "16/9",
+  fillHeight = false,
 }: Readonly<CardImageProps>) {
   const aspectClass = aspect === "1/1" ? "aspect-square" : "aspect-[16/9]";
 
@@ -152,19 +157,24 @@ function CardImage({
     );
   }
 
-  // Fallback degrade : premier mot du titre en typo display
-  const firstWord = title.split(/\s+/)[0] ?? "·";
+  // Fallback degrade : icone thematique discrete (1er theme dispo) sur degrade brand.
+  // Quand `fillHeight` (variant hero), on remplit toute la hauteur de la card
+  // pour eviter l'enorme rectangle vide sous une image en aspect 16/9 fixe.
+  const firstTheme = themes?.[0];
+  const Icon = firstTheme ? THEME_REGISTRY[firstTheme].icon : BookOpen;
   return (
     <div
       aria-hidden="true"
       className={clsx(
         "relative flex w-full items-center justify-center overflow-hidden bg-[image:var(--gradient-card)] text-[color:var(--brand-primary)]",
-        aspectClass,
+        fillHeight ? "min-h-[200px] h-full" : aspectClass,
       )}
+      title={title}
     >
-      <span className="cc-display-2 select-none px-4 text-center uppercase tracking-tight opacity-70">
-        {firstWord}
-      </span>
+      <Icon
+        className="h-20 w-20 opacity-40 sm:h-24 sm:w-24"
+        strokeWidth={1.25}
+      />
     </div>
   );
 }
@@ -197,7 +207,7 @@ export async function ArticleCard({
       <Link
         href={href}
         aria-label={ariaLabel}
-        className="article-card article-card--hero group relative grid h-full overflow-hidden rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] shadow-[var(--shadow-lg)] transition-shadow duration-[var(--duration-base)] ease-[var(--ease-out)] hover:shadow-[var(--shadow-xl)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 lg:grid-cols-[1.6fr_1fr]"
+        className="article-card article-card--hero group relative grid h-full overflow-hidden rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] shadow-[var(--shadow-lg)] transition-shadow duration-[var(--duration-base)] ease-[var(--ease-out)] hover:shadow-[var(--shadow-xl)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 lg:grid-cols-[1fr_1.4fr]"
         data-matomo-category="engagement"
         data-matomo-action="article_card_click"
         data-matomo-name={article.slug}
@@ -206,8 +216,10 @@ export async function ArticleCard({
           src={article.ogImageUrl}
           alt=""
           title={article.title}
+          themes={article.themes}
           priority
           aspect="16/9"
+          fillHeight
         />
         <div className="flex flex-col gap-3 p-6 sm:p-8">
           <span className="inline-flex items-center gap-2 self-start rounded-full bg-brand-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[color:var(--brand-primary)]">
@@ -275,6 +287,7 @@ export async function ArticleCard({
               src={article.ogImageUrl}
               alt=""
               title={article.title}
+              themes={article.themes}
               aspect="1/1"
             />
           </div>
@@ -332,7 +345,12 @@ export async function ArticleCard({
           data-matomo-name={article.slug}
         >
           <div className="relative">
-            <CardImage src={article.ogImageUrl} alt="" title={article.title} />
+            <CardImage
+              src={article.ogImageUrl}
+              alt=""
+              title={article.title}
+              themes={article.themes}
+            />
             <div className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-[color:var(--bg-page)]/85 px-2 py-1 text-[10px] font-semibold text-[color:var(--color-warning)] backdrop-blur">
               <TrendingUp className="h-3 w-3" aria-hidden="true" />
               {hasDelta ? (
@@ -397,7 +415,12 @@ export async function ArticleCard({
         aria-hidden="true"
         className="absolute inset-x-0 top-0 z-10 h-[3px] bg-gradient-to-r from-brand-500 to-accent-500"
       />
-      <CardImage src={article.ogImageUrl} alt="" title={article.title} />
+      <CardImage
+        src={article.ogImageUrl}
+        alt=""
+        title={article.title}
+        themes={article.themes}
+      />
       <div className="flex flex-1 flex-col gap-2 p-5 sm:p-6">
         {article.themes && article.themes.length > 0 && (
           <ThemeBadges themes={article.themes} />

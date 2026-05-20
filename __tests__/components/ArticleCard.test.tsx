@@ -71,17 +71,17 @@ describe("ArticleCard", () => {
       );
     });
 
-    it("renders a fallback gradient block when no OG image is provided", async () => {
+    it("renders a fallback gradient block with a lucide icon when no OG image is provided", async () => {
       const { container } = await renderAsync(
         ArticleCard({ article: baseArticle, locale: "fr" }),
       );
-      // First word of title used as fallback display
-      const firstWord = baseArticle.title.split(" ")[0]!;
-      const fallback = within(container as unknown as HTMLElement).getByText(
-        firstWord,
-      );
-      expect(fallback).toBeInTheDocument();
+      // Fallback : pas de <img>, mais un degrade contenant un SVG icone.
       expect(container.querySelector("img")).toBeNull();
+      const fallback = container.querySelector(
+        '[aria-hidden="true"].bg-\\[image\\:var\\(--gradient-card\\)\\]',
+      );
+      expect(fallback).not.toBeNull();
+      expect(fallback?.querySelector("svg")).not.toBeNull();
     });
 
     it("renders an <img> when ogImageUrl is provided (lazy by default for grid)", async () => {

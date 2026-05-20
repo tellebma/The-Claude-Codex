@@ -12,8 +12,8 @@ const SECONDARY_TARGET = "pinned-latest";
 const FILTER_FIRST_CHIP_SELECTOR = "[data-theme-filter-first]";
 
 function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined" || !window.matchMedia) return false;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (typeof globalThis === "undefined" || !globalThis.matchMedia) return false;
+  return globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function scrollToAnchor(id: string): HTMLElement | null {
@@ -44,7 +44,7 @@ export function ContentHeroActions({
     event.preventDefault();
     const target = scrollToAnchor(PRIMARY_TARGET);
     if (target) {
-      window.setTimeout(() => focusFirstFilterChip(target), 350);
+      globalThis.setTimeout(() => focusFirstFilterChip(target), 350);
     }
   };
 

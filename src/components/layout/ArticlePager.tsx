@@ -35,7 +35,7 @@ export function ArticlePager({
   return (
     <nav
       aria-label={`${previousLabel} / ${nextLabel}`}
-      className="art-pager mx-auto mt-16 grid max-w-7xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:px-8"
+      className="art-pager mx-auto mb-16 mt-16 grid max-w-7xl grid-cols-1 gap-4 px-4 sm:mb-20 sm:grid-cols-2 sm:px-8 lg:mb-24"
     >
       {prev ? (
         <Link

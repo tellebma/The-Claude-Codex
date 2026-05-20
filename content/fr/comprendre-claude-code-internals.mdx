@@ -4,13 +4,13 @@ description: "Ce que les system prompts fuités révèlent sur l'architecture in
 section: "content"
 order: 14
 datePublished: "2026-05-12"
-dateModified: "2026-05-12"
+dateModified: "2026-05-20"
 themes: ["guide", "tooling"]
 ---
 
 ## TL;DR
 
-- Plusieurs dépôts GitHub publient des extractions du system prompt de Claude Code, le plus fourni étant `asgeirtj/system_prompts_leaks`.
+- Plusieurs dépôts GitHub publient des extractions du system prompt de Claude Code, le plus fourni étant [`asgeirtj/system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks).
 - Ces fichiers exposent les tools internes (`Read`, `Edit`, `Bash`, `Task`, `ToolSearch`, `Skill`...), la logique de hooks et les règles de comportement par défaut.
 - Croisés avec la doc officielle d'Anthropic, ils confirment les noms d'événements de hooks (`PreToolUse`, `PostToolUse`, `Stop`...) et la philosophie "ne pas dépasser le scope demandé".
 - Utiles comme **source d'inspiration** pour écrire des CLAUDE.md ou des skills, pas comme guide pour contourner les garde-fous.
@@ -42,18 +42,18 @@ Quatre dépôts GitHub publient des extractions plus ou moins récentes. Voici l
 
 | Dépôt | Owner | Licence | Étoiles | Couverture Claude Code |
 |---|---|---|---|---|
-| `system_prompts_leaks` | asgeirtj | MIT | ~40 100 | Fichier dédié `Anthropic/claude-code.md`, version 2.1.120 datée du 27/04/2026 |
-| `system-prompts-and-models-of-ai-tools` | x1xhlol | GPL-3.0 | ~137 000 | Dossier `Anthropic/` (Claude Code mentionné dans le README mais sous-dossier dédié non visible au listing) |
-| `CL4R1T4S` | elder-plinius | AGPL-3.0 | ~26 100 | Dossier `ANTHROPIC/` avec un fichier `Claude_Code_03-04-24.md` |
-| `TheBigPromptLibrary` | 0xeb | MIT | ~5 000 | Pas d'entrée Claude Code identifiée sur la page d'accueil au 2026-05-12 |
+| [`system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) | asgeirtj | MIT | ~40 100 | Fichier dédié [`Anthropic/claude-code.md`](https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md), version 2.1.120 datée du 27/04/2026 |
+| [`system-prompts-and-models-of-ai-tools`](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools) | x1xhlol | GPL-3.0 | ~137 000 | Dossier `Anthropic/` (Claude Code mentionné dans le README mais sous-dossier dédié non visible au listing) |
+| [`CL4R1T4S`](https://github.com/elder-plinius/CL4R1T4S) | elder-plinius | AGPL-3.0 | ~26 100 | Dossier `ANTHROPIC/` avec un fichier `Claude_Code_03-04-24.md` |
+| [`TheBigPromptLibrary`](https://github.com/0xeb/TheBigPromptLibrary) | 0xeb | MIT | ~5 000 | Pas d'entrée Claude Code identifiée sur la page d'accueil au 2026-05-12 |
 
-Pour un travail sérieux, `asgeirtj/system_prompts_leaks` est le plus exploitable : version datée, fichier dédié, et un historique git visible pour reconstituer l'évolution.
+Pour un travail sérieux, [`asgeirtj/system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) est le plus exploitable : version datée, fichier dédié, et un historique git visible pour reconstituer l'évolution.
 
 ## Architecture interne révélée
 
 ### Les tools réellement exposés à l'agent
 
-Le fichier `Anthropic/claude-code.md` du dépôt asgeirtj liste explicitement les outils chargés par défaut : `Agent`, `Bash`, `Edit`, `Read`, `Write`, `ScheduleWakeup`, `ToolSearch`, `Skill`. Une seconde catégorie regroupe les **deferred tools**, chargés à la demande via `ToolSearch` pour économiser le contexte : `AskUserQuestion`, `CronCreate`, `EnterPlanMode`, `Monitor`, `NotebookEdit`, `SendMessage`, `TaskCreate`, `TaskGet`, `TaskList`, `TaskUpdate`, `WebFetch`, `WebSearch`...
+Le fichier [`Anthropic/claude-code.md`](https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md) du dépôt [asgeirtj](https://github.com/asgeirtj/system_prompts_leaks) liste explicitement les outils chargés par défaut : `Agent`, `Bash`, `Edit`, `Read`, `Write`, `ScheduleWakeup`, `ToolSearch`, `Skill`. Une seconde catégorie regroupe les **deferred tools**, chargés à la demande via `ToolSearch` pour économiser le contexte : `AskUserQuestion`, `CronCreate`, `EnterPlanMode`, `Monitor`, `NotebookEdit`, `SendMessage`, `TaskCreate`, `TaskGet`, `TaskList`, `TaskUpdate`, `WebFetch`, `WebSearch`...
 
 {/* source: https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md (version 2.1.120), consulté 2026-05-12 */}
 

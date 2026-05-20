@@ -37,12 +37,18 @@ function toArticle(
   file: MdxFile,
   locale: string,
 ): ArticleCardArticle {
+  // Les fichiers passes a computeContentSections viennent de
+  // getAllMdxFiles(locale) (articles racine `content/{locale}/*.mdx`).
+  // Leur frontmatter `section` est un tag de categorie pour la sidebar
+  // (ex: "future", "mcp", "prompting"), PAS un segment de route. Forcer
+  // section=null pour que ArticleCard genere /content/{slug} et evite
+  // un 404 (cf. bugfix observe en preview Vercel develop 2026-05-20).
   return {
     title: file.frontmatter.title,
     description: file.frontmatter.description,
     locale,
     slug: file.slug,
-    section: file.frontmatter.section ?? null,
+    section: null,
     dateModified:
       file.frontmatter.dateModified ?? file.frontmatter.datePublished ?? "",
     themes: file.frontmatter.themes,

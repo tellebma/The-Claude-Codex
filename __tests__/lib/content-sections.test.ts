@@ -167,4 +167,27 @@ describe("computeContentSections", () => {
       expect(article.section).toBeNull();
     }
   });
+
+  it("forces section=null even when frontmatter declares a section tag (categorie sidebar, pas une route)", () => {
+    const taggedFiles: ReadonlyArray<MdxFile> = [
+      makeFile("future-vision", "2026-05-12", { section: "future" }),
+      makeFile("mcp-guide", "2026-05-10", { section: "mcp" }),
+      makeFile("prompting-guide", "2026-05-08", { section: "prompting" }),
+      makeFile("comprendre-claude-code-internals", "2026-05-12", {
+        section: "content",
+      }),
+    ];
+    const sections = computeContentSections({
+      files: taggedFiles,
+      locale: "fr",
+      pinnedSlug: "comprendre-claude-code-internals",
+    });
+    expect(sections.pinned?.section).toBeNull();
+    for (const article of sections.latest) {
+      expect(article.section).toBeNull();
+    }
+    for (const article of sections.all) {
+      expect(article.section).toBeNull();
+    }
+  });
 });

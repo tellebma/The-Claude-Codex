@@ -185,7 +185,7 @@ describe("ArticleThemeFilter", () => {
     expect(screen.getByText("d-no-themes")).toBeInTheDocument();
   });
 
-  it("Escape key resets all active filters", () => {
+  it("Escape key on a chip resets all active filters", () => {
     render(
       <ArticleThemeFilter
         articles={articles}
@@ -193,15 +193,13 @@ describe("ArticleThemeFilter", () => {
         labels={labels}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: /Sécurité/ }));
-    const group = screen.getByRole("group", { name: /Filtrer par thème/ });
-    fireEvent.keyDown(group, { key: "Escape" });
-    expect(
-      screen.getByRole("button", { name: /Sécurité/ }),
-    ).toHaveAttribute("aria-pressed", "false");
+    const securityChip = screen.getByRole("button", { name: /Sécurité/ });
+    fireEvent.click(securityChip);
+    fireEvent.keyDown(securityChip, { key: "Escape" });
+    expect(securityChip).toHaveAttribute("aria-pressed", "false");
   });
 
-  it("Escape key is a no-op when no filter is active (no extra renders)", () => {
+  it("Escape key on a chip is a no-op when no filter is active", () => {
     render(
       <ArticleThemeFilter
         articles={articles}
@@ -209,9 +207,8 @@ describe("ArticleThemeFilter", () => {
         labels={labels}
       />,
     );
-    const group = screen.getByRole("group", { name: /Filtrer par thème/ });
-    fireEvent.keyDown(group, { key: "Escape" });
-    // Tous les chips restent inactifs
+    const tutorialChip = screen.getByRole("button", { name: /Tutoriel/ });
+    fireEvent.keyDown(tutorialChip, { key: "Escape" });
     const chips = screen.getAllByRole("button");
     for (const chip of chips) {
       expect(chip).toHaveAttribute("aria-pressed", "false");

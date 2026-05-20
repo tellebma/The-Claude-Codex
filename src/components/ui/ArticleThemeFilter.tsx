@@ -79,9 +79,17 @@ interface ChipProps {
   readonly active: boolean;
   readonly isFirst: boolean;
   readonly onToggle: (key: ThemeKey) => void;
+  readonly onKeyDown: (event: KeyboardEvent<HTMLButtonElement>) => void;
 }
 
-function ThemeChip({ themeKey, label, active, isFirst, onToggle }: ChipProps) {
+function ThemeChip({
+  themeKey,
+  label,
+  active,
+  isFirst,
+  onToggle,
+  onKeyDown,
+}: ChipProps) {
   const meta = THEME_REGISTRY[themeKey];
   const Icon = meta.icon;
   const baseClasses =
@@ -98,6 +106,7 @@ function ThemeChip({ themeKey, label, active, isFirst, onToggle }: ChipProps) {
       type="button"
       aria-pressed={active}
       onClick={() => onToggle(themeKey)}
+      onKeyDown={onKeyDown}
       className={`${baseClasses} ${active ? activeClasses : inactiveClasses}`}
       {...firstAttr}
     >
@@ -151,8 +160,8 @@ export function ArticleThemeFilter({
     });
   }, []);
 
-  const handleKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLFieldSetElement>) => {
+  const handleChipKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>) => {
       if (event.key === "Escape" && active.size > 0) {
         event.preventDefault();
         reset();
@@ -167,7 +176,6 @@ export function ArticleThemeFilter({
   return (
     <fieldset
       aria-label={labels.ariaLabel}
-      onKeyDown={handleKeyDown}
       className="flex flex-col gap-4 border-0 p-0"
     >
       <div className="flex flex-col gap-2">
@@ -181,6 +189,7 @@ export function ArticleThemeFilter({
               active={active.has(key)}
               isFirst={index === 0}
               onToggle={toggle}
+              onKeyDown={handleChipKeyDown}
             />
           ))}
         </div>
@@ -197,6 +206,7 @@ export function ArticleThemeFilter({
               active={active.has(key)}
               isFirst={false}
               onToggle={toggle}
+              onKeyDown={handleChipKeyDown}
             />
           ))}
         </div>

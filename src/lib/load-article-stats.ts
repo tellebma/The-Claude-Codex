@@ -23,11 +23,20 @@ const AUTO_FILENAME = "article-stats.json";
 const OVERRIDE_FILENAME = "article-stats.override.json";
 
 function tryLoadJson(absolutePath: string): unknown {
+  if (!fs.existsSync(absolutePath)) {
+    return null;
+  }
+  const raw = fs.readFileSync(absolutePath, "utf-8");
   try {
-    if (!fs.existsSync(absolutePath)) return null;
-    const raw = fs.readFileSync(absolutePath, "utf-8");
     return JSON.parse(raw);
-  } catch {
+  } catch (error) {
+    // Snapshot malforme : on prefere ne pas casser le build SSG (les
+    // sections Trending/Most read deviendront simplement absentes du
+    // DOM). Loggue la cause pour faciliter le diag CI.
+    // eslint-disable-next-line no-console
+    console.warn(
+      `[article-stats] Ignored malformed JSON at ${absolutePath}: ${error instanceof Error ? error.message : String(error)}`,
+    );
     return null;
   }
 }

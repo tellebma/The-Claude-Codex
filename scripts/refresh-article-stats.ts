@@ -94,10 +94,22 @@ function emit(level: LogLevel, message: string, extra: Record<string, unknown> =
   console.log(JSON.stringify(entry));
 }
 
-export function parseArticleUrl(rawUrl: string): ParsedArticleUrl | null {
+export function normalizeArticlePath(rawUrl: string): string | null {
   if (typeof rawUrl !== "string" || rawUrl.length === 0) return null;
-  const cleaned = rawUrl.split("?")[0]!.split("#")[0]!;
-  const match = ARTICLE_URL_RE.exec(cleaned);
+  let cleaned = rawUrl.split("?")[0]!.split("#")[0]!.trim();
+  cleaned = cleaned.replace(/^https?:\/\/[^/]+/i, "");
+  if (!cleaned.startsWith("/")) {
+    const firstSlash = cleaned.indexOf("/");
+    if (firstSlash === -1) return null;
+    cleaned = cleaned.slice(firstSlash);
+  }
+  return cleaned;
+}
+
+export function parseArticleUrl(rawUrl: string): ParsedArticleUrl | null {
+  const path = normalizeArticlePath(rawUrl);
+  if (!path) return null;
+  const match = ARTICLE_URL_RE.exec(path);
   if (!match?.groups) return null;
   const { locale, slug } = match.groups;
   if (!isArticleLocale(locale)) return null;
@@ -431,6 +443,18 @@ export async function runRefresh(options: RunOptions = {}): Promise<RunResult> {
 
   const last30Pageviews = extractPageviewsMap(last30);
   const scrollDepth75 = buildScrollDepthMap(scrollRows, last30Pageviews);
+
+  const rejected: string[] = [];
+  for (const row of last30) {
+    if (rejected.length >= 5) break;
+    const candidate = row.url ?? row.label;
+    if (candidate && !parseArticleUrl(candidate)) rejected.push(candidate);
+  }
+  emit("info", "Matomo URL parsing stats", {
+    last30Rows: last30.length,
+    last30Matched: Object.keys(last30Pageviews).length,
+    sampleRejectedUrls: rejected,
+  });
 
   const articles = aggregateStats({ last30, last7, prev7, scrollDepth75 });
   const articleDates = collectArticleDates(repoRoot);

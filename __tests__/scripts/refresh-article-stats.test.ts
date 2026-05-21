@@ -16,12 +16,46 @@ import {
   detectStaleViralArticles,
   extractPageviewsMap,
   fetchMatomoJson,
+  normalizeArticlePath,
   parseArticleUrl,
   readMatomoEnv,
   runRefresh,
   REQUEST_TIMEOUT_MS,
   SERVER_ERROR_RETRY_DELAY_MS,
 } from "../../scripts/refresh-article-stats";
+
+describe("normalizeArticlePath", () => {
+  it("strips https://domain prefix", () => {
+    expect(normalizeArticlePath("https://claude-codex.fr/fr/content/foo/")).toBe(
+      "/fr/content/foo/",
+    );
+  });
+
+  it("strips http://domain prefix", () => {
+    expect(normalizeArticlePath("http://claude-codex.fr/en/content/bar")).toBe(
+      "/en/content/bar",
+    );
+  });
+
+  it("adds leading slash to a bare domain-style path", () => {
+    expect(normalizeArticlePath("claude-codex.fr/fr/content/baz/")).toBe(
+      "/fr/content/baz/",
+    );
+  });
+
+  it("returns the path unchanged when already canonical", () => {
+    expect(normalizeArticlePath("/fr/content/foo/")).toBe("/fr/content/foo/");
+  });
+
+  it("trims surrounding whitespace", () => {
+    expect(normalizeArticlePath("  /fr/content/foo/  ")).toBe("/fr/content/foo/");
+  });
+
+  it("returns null on empty input or no slash at all", () => {
+    expect(normalizeArticlePath("")).toBeNull();
+    expect(normalizeArticlePath("garbage")).toBeNull();
+  });
+});
 
 describe("parseArticleUrl", () => {
   it("parses /fr/content/{slug}/ correctly", () => {
@@ -60,6 +94,19 @@ describe("parseArticleUrl", () => {
   it("rejects empty and non-string input", () => {
     expect(parseArticleUrl("")).toBeNull();
     expect(parseArticleUrl("/fr/skills/find-skills/")).toBeNull();
+  });
+
+  it("parses an URL prefixed with the canonical domain", () => {
+    expect(
+      parseArticleUrl("https://claude-codex.fr/fr/content/comprendre-claude-code-internals/"),
+    ).toEqual({ locale: "fr", slug: "comprendre-claude-code-internals" });
+  });
+
+  it("parses a Matomo-style bare domain prefix", () => {
+    expect(parseArticleUrl("claude-codex.fr/en/content/leaked-api-key-recovery")).toEqual({
+      locale: "en",
+      slug: "leaked-api-key-recovery",
+    });
   });
 });
 

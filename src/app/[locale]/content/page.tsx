@@ -8,7 +8,10 @@ import {
   getMostRecentArticles,
   type RecentArticle,
 } from "@/lib/mdx";
-import { computeContentSections } from "@/lib/content-sections";
+import {
+  computeContentSections,
+  type TrendingItem,
+} from "@/lib/content-sections";
 import { loadArticleStats } from "@/lib/load-article-stats";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
@@ -20,7 +23,7 @@ import {
 import type { ThemeKey } from "@/lib/themes";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ContentHeroActions } from "@/components/ui/ContentHeroActions";
-import { ArticleCard } from "@/components/ui/ArticleCard";
+import { ArticleCard, type ArticleCardArticle } from "@/components/ui/ArticleCard";
 import {
   ArticleThemeFilter,
   type ArticleThemeFilterLabels,
@@ -150,6 +153,132 @@ type LocaleKey = keyof typeof translations;
 
 function asLocaleKey(locale: string): LocaleKey {
   return locale === "en" ? "en" : "fr";
+}
+
+interface DataSectionShellProps {
+  readonly id: string;
+  readonly dataSection: string;
+  readonly title: string;
+  readonly sourceDate: string | null;
+  readonly sourceLabel: string;
+  readonly backgroundClass: string;
+  readonly children: ReactNode;
+}
+
+function DataSectionShell({
+  id,
+  dataSection,
+  title,
+  sourceDate,
+  sourceLabel,
+  backgroundClass,
+  children,
+}: DataSectionShellProps) {
+  return (
+    <section
+      id={id}
+      data-section={dataSection}
+      aria-labelledby={`${id}-title`}
+      className={`${backgroundClass} py-16 sm:py-20 lg:py-24`}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+          <h2
+            id={`${id}-title`}
+            className="cc-h2 text-[color:var(--fg-primary)]"
+            style={{ textWrap: "balance" }}
+          >
+            {title}
+          </h2>
+          {sourceDate ? (
+            <p className="text-xs text-[color:var(--fg-muted)]">
+              {sourceLabel} {sourceDate}
+            </p>
+          ) : null}
+        </div>
+        {children}
+      </div>
+    </section>
+  );
+}
+
+interface TrendingSectionProps {
+  readonly trending: ReadonlyArray<TrendingItem>;
+  readonly statsGeneratedDate: string | null;
+  readonly title: string;
+  readonly sourceLabel: string;
+  readonly locale: string;
+}
+
+function TrendingSection({
+  trending,
+  statsGeneratedDate,
+  title,
+  sourceLabel,
+  locale,
+}: TrendingSectionProps) {
+  if (trending.length === 0) return null;
+  return (
+    <DataSectionShell
+      id="trending"
+      dataSection="trending"
+      title={title}
+      sourceDate={statsGeneratedDate}
+      sourceLabel={sourceLabel}
+      backgroundClass="bg-[color:var(--bg-subtle)]"
+    >
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-10 lg:grid-cols-1">
+        {trending.map((item) => (
+          <ArticleCard
+            key={item.article.slug}
+            article={item.article}
+            size="row"
+            locale={locale}
+            deltaPct={item.deltaPct}
+          />
+        ))}
+      </div>
+    </DataSectionShell>
+  );
+}
+
+interface MostReadSectionProps {
+  readonly mostRead: ReadonlyArray<ArticleCardArticle>;
+  readonly statsGeneratedDate: string | null;
+  readonly title: string;
+  readonly sourceLabel: string;
+  readonly locale: string;
+}
+
+function MostReadSection({
+  mostRead,
+  statsGeneratedDate,
+  title,
+  sourceLabel,
+  locale,
+}: MostReadSectionProps) {
+  if (mostRead.length === 0) return null;
+  return (
+    <DataSectionShell
+      id="most-read"
+      dataSection="most-read"
+      title={title}
+      sourceDate={statsGeneratedDate}
+      sourceLabel={sourceLabel}
+      backgroundClass=""
+    >
+      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3">
+        {mostRead.map((article) => (
+          <ArticleCard
+            key={article.slug}
+            article={article}
+            size="grid"
+            locale={locale}
+          />
+        ))}
+      </div>
+    </DataSectionShell>
+  );
 }
 
 export async function generateMetadata({
@@ -432,79 +561,22 @@ export default async function ContentIndexPage({
       </section>
 
       {/* Tendances 7 jours (CTN-9) */}
-      {trending.length > 0 ? (
-        <section
-          id="trending"
-          data-section="trending"
-          aria-labelledby="trending-title"
-          className="bg-[color:var(--bg-subtle)] py-16 sm:py-20 lg:py-24"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-              <h2
-                id="trending-title"
-                className="cc-h2 text-[color:var(--fg-primary)]"
-                style={{ textWrap: "balance" }}
-              >
-                {t.trendingTitle}
-              </h2>
-              {statsGeneratedDate ? (
-                <p className="text-xs text-[color:var(--fg-muted)]">
-                  {t.trendingSource} {statsGeneratedDate}
-                </p>
-              ) : null}
-            </div>
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-10 lg:grid-cols-1">
-              {trending.map((item) => (
-                <ArticleCard
-                  key={item.article.slug}
-                  article={item.article}
-                  size="row"
-                  locale={locale}
-                  deltaPct={item.deltaPct}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <TrendingSection
+        trending={trending}
+        statsGeneratedDate={statsGeneratedDate}
+        title={t.trendingTitle}
+        sourceLabel={t.trendingSource}
+        locale={locale}
+      />
 
       {/* Les plus lus 30 jours (CTN-8) */}
-      {mostRead.length > 0 ? (
-        <section
-          id="most-read"
-          data-section="most-read"
-          aria-labelledby="most-read-title"
-          className="py-16 sm:py-20 lg:py-24"
-        >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-              <h2
-                id="most-read-title"
-                className="cc-h2 text-[color:var(--fg-primary)]"
-                style={{ textWrap: "balance" }}
-              >
-                {t.mostReadTitle}
-              </h2>
-              {statsGeneratedDate ? (
-                <p className="text-xs text-[color:var(--fg-muted)]">
-                  {t.mostReadSource} {statsGeneratedDate}
-                </p>
-              ) : null}
-            </div>
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3">
-              {mostRead.map((article) => (
-                <ArticleCard
-                  key={article.slug}
-                  article={article}
-                  size="grid"
-                  locale={locale}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      ) : null}
+      <MostReadSection
+        mostRead={mostRead}
+        statsGeneratedDate={statsGeneratedDate}
+        title={t.mostReadTitle}
+        sourceLabel={t.mostReadSource}
+        locale={locale}
+      />
 
       {/* Articles filtrables par theme (CTN-5) */}
       <section

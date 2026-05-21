@@ -300,6 +300,47 @@ export function createBreadcrumbSchema(
   };
 }
 
+interface ItemListEntry {
+  readonly position: number;
+  readonly url: string;
+  readonly name: string;
+}
+
+interface ItemListSchemaOptions {
+  readonly name: string;
+  readonly description: string;
+  readonly items: ReadonlyArray<ItemListEntry>;
+  readonly locale?: string;
+}
+
+/**
+ * CTN-8 / CTN-9 : ItemList JSON-LD pour Most read et Trending sur
+ * /content. Spec : `position` 1-indexed, `itemListOrder = Descending`
+ * (tri par signal d'usage), `numberOfItems` toujours emis pour les
+ * validateurs tiers (cf. seo-technical-decisions §1.3).
+ */
+export function createItemListSchema(
+  options: ItemListSchemaOptions,
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: options.name,
+    description: options.description,
+    inLanguage: localeToLanguageTag(options.locale ?? "fr"),
+    numberOfItems: options.items.length,
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    itemListElement: options.items.map((entry) => ({
+      "@type": "ListItem",
+      position: entry.position,
+      url: ensureTrailingSlash(
+        entry.url.startsWith("http") ? entry.url : `${SITE_URL}${entry.url}`,
+      ),
+      name: entry.name,
+    })),
+  };
+}
+
 /**
  * Serializes a JSON-LD schema object into a safe JSON string
  * for embedding in a <script> tag. Only accepts our own

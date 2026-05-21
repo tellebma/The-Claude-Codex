@@ -1,6 +1,41 @@
 import { describe, it, expect } from "vitest";
-import { computeContentSections } from "@/lib/content-sections";
+import {
+  computeContentSections,
+  selectMostRead,
+  selectTrending,
+} from "@/lib/content-sections";
 import type { MdxFile } from "@/lib/mdx";
+import type {
+  ArticleStatsEntry,
+  ArticleStatsFile,
+} from "@/data/article-stats";
+
+function makeStatsEntry(
+  slug: string,
+  overrides: Partial<ArticleStatsEntry> = {},
+): ArticleStatsEntry {
+  return {
+    slug,
+    locale: "fr",
+    pageviewsLast30d: 100,
+    pageviewsLast7d: 30,
+    pageviewsPrev7d: 20,
+    deltaPct: 50,
+    scrollDepth75Pct: 0.4,
+    ...overrides,
+  };
+}
+
+function makeStatsFile(
+  entries: ReadonlyArray<ArticleStatsEntry>,
+): ArticleStatsFile {
+  return {
+    generatedAt: "2026-05-21T00:00:00.000Z",
+    matomoPeriodDays: 30,
+    source: "matomo",
+    articles: entries,
+  };
+}
 
 function makeFile(
   slug: string,
@@ -189,5 +224,211 @@ describe("computeContentSections", () => {
     for (const article of sections.all) {
       expect(article.section).toBeNull();
     }
+  });
+
+  it("returns empty trending/mostRead when stats is undefined", () => {
+    const sections = computeContentSections({
+      files,
+      locale: "fr",
+      pinnedSlug: null,
+    });
+    expect(sections.trending).toEqual([]);
+    expect(sections.mostRead).toEqual([]);
+  });
+
+  it("populates mostRead and trending when stats are provided, excluding Pinned", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("c", { pageviewsLast30d: 500, pageviewsLast7d: 200, pageviewsPrev7d: 60, deltaPct: 233 }),
+      makeStatsEntry("b", { pageviewsLast30d: 300, pageviewsLast7d: 90, pageviewsPrev7d: 50, deltaPct: 80 }),
+      makeStatsEntry("a", { pageviewsLast30d: 200, pageviewsLast7d: 10, pageviewsPrev7d: 5, deltaPct: 100 }),
+      makeStatsEntry("pinned-one", { pageviewsLast30d: 1000, pageviewsLast7d: 300, deltaPct: 200 }),
+    ]);
+    const sections = computeContentSections({
+      files,
+      locale: "fr",
+      pinnedSlug: "pinned-one",
+      stats,
+    });
+    // Pinned est exclu de Trending et Most read
+    expect(sections.trending.map((t) => t.article.slug)).not.toContain("pinned-one");
+    expect(sections.mostRead.map((m) => m.slug)).not.toContain("pinned-one");
+    // Trending : c (delta=233) en haut puis a (delta=100, mais last7=10 < seuil 20)
+    expect(sections.trending.map((t) => t.article.slug)).toEqual(["c", "b"]);
+    // Most read tri par pageviewsLast30d desc, Trending exclu de Most read
+    expect(sections.mostRead.map((m) => m.slug)).toEqual(["a"]);
+  });
+});
+
+describe("selectMostRead", () => {
+  const baseFiles: ReadonlyArray<MdxFile> = [
+    makeFile("a", "2026-05-01"),
+    makeFile("b", "2026-05-10"),
+    makeFile("c", "2026-05-15"),
+  ];
+
+  it("returns empty list when stats is null", () => {
+    expect(
+      selectMostRead({
+        stats: null,
+        locale: "fr",
+        files: baseFiles,
+        excludeSlugs: new Set(),
+      }),
+    ).toEqual([]);
+  });
+
+  it("sorts by pageviewsLast30d descending and respects limit", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { pageviewsLast30d: 50 }),
+      makeStatsEntry("b", { pageviewsLast30d: 500 }),
+      makeStatsEntry("c", { pageviewsLast30d: 200 }),
+    ]);
+    const result = selectMostRead({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(),
+      limit: 2,
+    });
+    expect(result.map((a) => a.slug)).toEqual(["b", "c"]);
+  });
+
+  it("respects the excludeSlugs set", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { pageviewsLast30d: 50 }),
+      makeStatsEntry("b", { pageviewsLast30d: 500 }),
+    ]);
+    const result = selectMostRead({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(["b"]),
+    });
+    expect(result.map((a) => a.slug)).toEqual(["a"]);
+  });
+
+  it("filters out the wrong locale", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { locale: "en", pageviewsLast30d: 999 }),
+    ]);
+    const result = selectMostRead({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(),
+    });
+    expect(result).toEqual([]);
+  });
+
+  it("excludes articles with pageviewsLast30d=0", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { pageviewsLast30d: 0 }),
+    ]);
+    const result = selectMostRead({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(),
+    });
+    expect(result).toEqual([]);
+  });
+});
+
+describe("selectTrending", () => {
+  const baseFiles: ReadonlyArray<MdxFile> = [
+    makeFile("a", "2026-05-01"),
+    makeFile("b", "2026-05-10"),
+    makeFile("c", "2026-05-15"),
+    makeFile("d", "2026-04-20"),
+  ];
+
+  it("returns empty list when stats is null", () => {
+    expect(
+      selectTrending({
+        stats: null,
+        locale: "fr",
+        files: baseFiles,
+        excludeSlugs: new Set(),
+      }),
+    ).toEqual([]);
+  });
+
+  it("filters deltaPct > 0 and pageviewsLast7d > threshold", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { deltaPct: -10, pageviewsLast7d: 100 }),
+      makeStatsEntry("b", { deltaPct: 50, pageviewsLast7d: 5 }),
+      makeStatsEntry("c", { deltaPct: 30, pageviewsLast7d: 60 }),
+      makeStatsEntry("d", { deltaPct: 80, pageviewsLast7d: 200 }),
+    ]);
+    const result = selectTrending({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(),
+    });
+    expect(result.map((r) => r.article.slug)).toEqual(["d", "c"]);
+  });
+
+  it("returns deltaPct and pageviewsLast7d alongside the article", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { deltaPct: 120, pageviewsLast7d: 60 }),
+    ]);
+    const result = selectTrending({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(),
+    });
+    expect(result[0]).toMatchObject({
+      article: expect.objectContaining({ slug: "a" }),
+      deltaPct: 120,
+      pageviewsLast7d: 60,
+    });
+  });
+
+  it("respects custom limit and minimum pageviews (strict greater than)", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { deltaPct: 100, pageviewsLast7d: 25 }),
+      makeStatsEntry("b", { deltaPct: 90, pageviewsLast7d: 30 }),
+      makeStatsEntry("c", { deltaPct: 80, pageviewsLast7d: 35 }),
+      makeStatsEntry("d", { deltaPct: 70, pageviewsLast7d: 100 }),
+    ]);
+    const result = selectTrending({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(),
+      limit: 2,
+      minPageviewsLast7d: 30,
+    });
+    // pageviewsLast7d must be > 30, so b (=30) and a (=25) are excluded
+    expect(result.map((r) => r.article.slug)).toEqual(["c", "d"]);
+  });
+
+  it("respects the excludeSlugs set", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { deltaPct: 200, pageviewsLast7d: 100 }),
+      makeStatsEntry("b", { deltaPct: 100, pageviewsLast7d: 100 }),
+    ]);
+    const result = selectTrending({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(["a"]),
+    });
+    expect(result.map((r) => r.article.slug)).toEqual(["b"]);
+  });
+
+  it("filters out the wrong locale", () => {
+    const stats = makeStatsFile([
+      makeStatsEntry("a", { locale: "en", deltaPct: 200, pageviewsLast7d: 100 }),
+    ]);
+    const result = selectTrending({
+      stats,
+      locale: "fr",
+      files: baseFiles,
+      excludeSlugs: new Set(),
+    });
+    expect(result).toEqual([]);
   });
 });

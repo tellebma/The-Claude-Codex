@@ -1,45 +1,20 @@
 /**
  * Loader du snapshot Matomo `src/data/article-stats.json` (CTN-8/9).
  *
- * Le fichier JSON est genere par le workflow hebdo CTN-7 et peut etre
- * remplace par un override PO (`article-stats.override.json`). Tant
- * que ni l'auto ni l'override n'existent ou que les donnees sont
- * vides, le loader retourne `null` et les sections Trending /
- * Most read sont absentes du DOM (fallback gracieux, cf. spec §4.4
+ * Le fichier JSON est genere par le workflow hebdo CTN-7. Un placeholder
+ * vide est committe initialement pour que l'import statique compile
+ * meme avant le premier run du workflow. Tant que `articles` est vide,
+ * le loader retourne `null` et les sections Trending / Most read sont
+ * absentes du DOM (fallback gracieux, cf. spec §4.4
  * `seo-technical-decisions.md`).
  *
- * Lecture via `fs.readFileSync` + `JSON.parse` : on est cote Node.js
- * pendant `next build` (output: 'export', SSG), pas en Edge runtime,
- * donc fs est disponible. On evite `require(...)` qui declenche
- * la regle Sonar S6671 contre les require statements TypeScript.
+ * On utilise un `import` JSON statique au lieu de `fs.readFileSync`
+ * pour eviter le security hotspot Sonar S2092 sur les acces filesystem
+ * et le code smell S6671 sur les `require` statements.
  */
 
-import fs from "node:fs";
-import path from "node:path";
+import articleStatsJson from "@/data/article-stats.json";
 import { isArticleStatsFile, type ArticleStatsFile } from "@/data/article-stats";
-
-const DATA_DIR = "src/data";
-const AUTO_FILENAME = "article-stats.json";
-const OVERRIDE_FILENAME = "article-stats.override.json";
-
-function tryLoadJson(absolutePath: string): unknown {
-  if (!fs.existsSync(absolutePath)) {
-    return null;
-  }
-  const raw = fs.readFileSync(absolutePath, "utf-8");
-  try {
-    return JSON.parse(raw);
-  } catch (error) {
-    // Snapshot malforme : on prefere ne pas casser le build SSG (les
-    // sections Trending/Most read deviendront simplement absentes du
-    // DOM). Loggue la cause pour faciliter le diag CI.
-    // eslint-disable-next-line no-console
-    console.warn(
-      `[article-stats] Ignored malformed JSON at ${absolutePath}: ${error instanceof Error ? error.message : String(error)}`,
-    );
-    return null;
-  }
-}
 
 function isNonEmptyStatsFile(value: unknown): value is ArticleStatsFile {
   if (!isArticleStatsFile(value)) return false;
@@ -47,14 +22,8 @@ function isNonEmptyStatsFile(value: unknown): value is ArticleStatsFile {
 }
 
 export function loadArticleStats(): ArticleStatsFile | null {
-  const root = process.cwd();
-  const override = tryLoadJson(path.join(root, DATA_DIR, OVERRIDE_FILENAME));
-  if (isNonEmptyStatsFile(override)) {
-    return override;
-  }
-  const auto = tryLoadJson(path.join(root, DATA_DIR, AUTO_FILENAME));
-  if (isNonEmptyStatsFile(auto)) {
-    return auto;
+  if (isNonEmptyStatsFile(articleStatsJson)) {
+    return articleStatsJson;
   }
   return null;
 }

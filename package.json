@@ -12,6 +12,7 @@
     "build": "next build",
     "validate:static": "node scripts/validate-static-output.ts",
     "audit:links": "node scripts/audit-internal-links.ts",
+    "refresh:article-stats": "tsx scripts/refresh-article-stats.ts",
     "check:contrast": "tsx scripts/check-contrast.ts",
     "check:hex": "./scripts/check-hardcoded-colors.sh",
     "start": "next start",

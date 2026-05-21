@@ -404,7 +404,7 @@ describe("buildPageUrlsQuery", () => {
       { apiUrl: "https://matomo.example/", authToken: "TOK", siteId: "12" },
       "last30",
     );
-    expect(url).toMatch(/^https:\/\/matomo\.example\?/);
+    expect(url).toMatch(/^https:\/\/matomo\.example\/index\.php\?/);
     expect(url).toContain("method=Actions.getPageUrls");
     expect(url).toContain("idSite=12");
     expect(url).toContain("date=last30");

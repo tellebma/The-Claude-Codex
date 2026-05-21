@@ -8,17 +8,25 @@
  * Most read sont absentes du DOM (fallback gracieux, cf. spec §4.4
  * `seo-technical-decisions.md`).
  *
- * `require` est utilise volontairement : le build SSG attache les
- * JSON statiques au bundle a la compilation. `await import` ne peut
- * pas etre appele dans un Server Component synchrone.
+ * Lecture via `fs.readFileSync` + `JSON.parse` : on est cote Node.js
+ * pendant `next build` (output: 'export', SSG), pas en Edge runtime,
+ * donc fs est disponible. On evite `require(...)` qui declenche
+ * la regle Sonar S6671 contre les require statements TypeScript.
  */
 
+import fs from "node:fs";
+import path from "node:path";
 import { isArticleStatsFile, type ArticleStatsFile } from "@/data/article-stats";
 
-function tryRequire(modulePath: string): unknown {
+const DATA_DIR = "src/data";
+const AUTO_FILENAME = "article-stats.json";
+const OVERRIDE_FILENAME = "article-stats.override.json";
+
+function tryLoadJson(absolutePath: string): unknown {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    return require(modulePath);
+    if (!fs.existsSync(absolutePath)) return null;
+    const raw = fs.readFileSync(absolutePath, "utf-8");
+    return JSON.parse(raw);
   } catch {
     return null;
   }
@@ -30,11 +38,12 @@ function isNonEmptyStatsFile(value: unknown): value is ArticleStatsFile {
 }
 
 export function loadArticleStats(): ArticleStatsFile | null {
-  const override = tryRequire("@/data/article-stats.override.json");
+  const root = process.cwd();
+  const override = tryLoadJson(path.join(root, DATA_DIR, OVERRIDE_FILENAME));
   if (isNonEmptyStatsFile(override)) {
     return override;
   }
-  const auto = tryRequire("@/data/article-stats.json");
+  const auto = tryLoadJson(path.join(root, DATA_DIR, AUTO_FILENAME));
   if (isNonEmptyStatsFile(auto)) {
     return auto;
   }

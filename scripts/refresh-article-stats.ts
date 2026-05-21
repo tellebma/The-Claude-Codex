@@ -257,8 +257,15 @@ export function computeMatomoDateRanges(now: Date): MatomoDateRanges {
   };
 }
 
+function matomoEndpoint(env: MatomoEnv): string {
+  // Matomo Reporting API : l'endpoint canonique est `index.php`. Sans ce
+  // chemin, on tape la racine du serveur web qui renvoie une page HTML ou
+  // un objet vide, ce qui faisait articles=[] silencieusement (cf.
+  // scripts/analytics/fetch-matomo.ts pour la meme convention).
+  return `${env.apiUrl.replace(/\/$/, "")}/index.php`;
+}
+
 export function buildPageUrlsQuery(env: MatomoEnv, date: string): string {
-  const base = env.apiUrl.replace(/\/$/, "");
   const params = new URLSearchParams({
     module: "API",
     method: "Actions.getPageUrls",
@@ -270,11 +277,10 @@ export function buildPageUrlsQuery(env: MatomoEnv, date: string): string {
     filter_limit: "500",
     token_auth: env.authToken,
   });
-  return `${base}?${params.toString()}`;
+  return `${matomoEndpoint(env)}?${params.toString()}`;
 }
 
 export function buildScrollDepthQuery(env: MatomoEnv, dateRange: string): string {
-  const base = env.apiUrl.replace(/\/$/, "");
   const params = new URLSearchParams({
     module: "API",
     method: "Events.getName",
@@ -288,7 +294,7 @@ export function buildScrollDepthQuery(env: MatomoEnv, dateRange: string): string
     flat: "1",
     token_auth: env.authToken,
   });
-  return `${base}?${params.toString()}`;
+  return `${matomoEndpoint(env)}?${params.toString()}`;
 }
 
 interface FetchOptions {
@@ -346,6 +352,16 @@ export async function fetchMatomoJson<T>(
       body = await response.json();
     } catch {
       throw new Error(`[${label}] malformed JSON`);
+    }
+    if (
+      typeof body === "object" &&
+      body !== null &&
+      "result" in body &&
+      (body as { result: unknown }).result === "error"
+    ) {
+      const message = (body as { message?: unknown }).message;
+      const reason = typeof message === "string" ? message : "unknown error";
+      throw new Error(`[${label}] Matomo API error: ${reason}`);
     }
     return body as T;
   };

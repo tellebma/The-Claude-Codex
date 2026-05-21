@@ -223,6 +223,40 @@ export function readMatomoEnv(env: Readonly<Record<string, string | undefined>>)
   return { apiUrl, authToken, siteId };
 }
 
+/**
+ * Formate une date UTC en `YYYY-MM-DD` (format attendu par Matomo
+ * pour les plages `period=range`).
+ */
+export function formatMatomoDate(date: Date): string {
+  const yyyy = date.getUTCFullYear();
+  const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(date.getUTCDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+const MS_PER_DAY = 86_400_000;
+
+export interface MatomoDateRanges {
+  /** 30 derniers jours (today-29 -> today inclus). */
+  readonly last30: string;
+  /** 7 derniers jours (today-6 -> today inclus). */
+  readonly last7: string;
+  /** 7 jours d'avant (today-13 -> today-7 inclus). */
+  readonly previous7: string;
+}
+
+export function computeMatomoDateRanges(now: Date): MatomoDateRanges {
+  const today = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
+  const dayOffset = (days: number): Date => new Date(today.getTime() - days * MS_PER_DAY);
+  return {
+    last30: `${formatMatomoDate(dayOffset(29))},${formatMatomoDate(today)}`,
+    last7: `${formatMatomoDate(dayOffset(6))},${formatMatomoDate(today)}`,
+    previous7: `${formatMatomoDate(dayOffset(13))},${formatMatomoDate(dayOffset(7))}`,
+  };
+}
+
 export function buildPageUrlsQuery(env: MatomoEnv, date: string): string {
   const base = env.apiUrl.replace(/\/$/, "");
   const params = new URLSearchParams({
@@ -239,14 +273,14 @@ export function buildPageUrlsQuery(env: MatomoEnv, date: string): string {
   return `${base}?${params.toString()}`;
 }
 
-export function buildScrollDepthQuery(env: MatomoEnv): string {
+export function buildScrollDepthQuery(env: MatomoEnv, dateRange: string): string {
   const base = env.apiUrl.replace(/\/$/, "");
   const params = new URLSearchParams({
     module: "API",
     method: "Events.getName",
     idSite: env.siteId,
     period: "range",
-    date: "last30",
+    date: dateRange,
     format: "json",
     filter_limit: "500",
     segment: "eventCategory==engagement;eventAction==scroll_depth;eventName==75",
@@ -409,25 +443,30 @@ export async function runRefresh(options: RunOptions = {}): Promise<RunResult> {
   const repoRoot = options.repoRoot ?? findRepoRoot();
   const fetchOpts: FetchOptions = { fetchFn: options.fetchFn, sleepFn: options.sleepFn };
 
-  emit("info", "Fetching Matomo pageviews", { periods: ["last30", "last7", "previous7"] });
+  const ranges = computeMatomoDateRanges(now);
+  emit("info", "Fetching Matomo pageviews", {
+    last30: ranges.last30,
+    last7: ranges.last7,
+    previous7: ranges.previous7,
+  });
 
   const last30Raw = await fetchMatomoJson<unknown>(
-    buildPageUrlsQuery(env, "last30"),
+    buildPageUrlsQuery(env, ranges.last30),
     "pageviews-last30",
     fetchOpts,
   );
   const last7Raw = await fetchMatomoJson<unknown>(
-    buildPageUrlsQuery(env, "last7"),
+    buildPageUrlsQuery(env, ranges.last7),
     "pageviews-last7",
     fetchOpts,
   );
   const prev7Raw = await fetchMatomoJson<unknown>(
-    buildPageUrlsQuery(env, "previous7"),
+    buildPageUrlsQuery(env, ranges.previous7),
     "pageviews-previous7",
     fetchOpts,
   );
   const scrollRaw = await fetchMatomoJson<unknown>(
-    buildScrollDepthQuery(env),
+    buildScrollDepthQuery(env, ranges.last30),
     "scroll-depth-75",
     fetchOpts,
   ).catch((err: unknown) => {

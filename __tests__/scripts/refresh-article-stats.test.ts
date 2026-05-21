@@ -13,9 +13,11 @@ import {
   buildScrollDepthQuery,
   collectArticleDates,
   computeDeltaPct,
+  computeMatomoDateRanges,
   detectStaleViralArticles,
   extractPageviewsMap,
   fetchMatomoJson,
+  formatMatomoDate,
   normalizeArticlePath,
   parseArticleUrl,
   readMatomoEnv,
@@ -372,6 +374,30 @@ describe("readMatomoEnv", () => {
   });
 });
 
+describe("formatMatomoDate", () => {
+  it("formats a UTC date in YYYY-MM-DD", () => {
+    expect(formatMatomoDate(new Date("2026-05-21T13:43:54Z"))).toBe("2026-05-21");
+  });
+
+  it("zero-pads single-digit months and days", () => {
+    expect(formatMatomoDate(new Date("2026-03-05T00:00:00Z"))).toBe("2026-03-05");
+  });
+});
+
+describe("computeMatomoDateRanges", () => {
+  it("computes inclusive last30 / last7 / previous7 ranges anchored on today UTC", () => {
+    const ranges = computeMatomoDateRanges(new Date("2026-05-21T13:43:54Z"));
+    expect(ranges.last30).toBe("2026-04-22,2026-05-21");
+    expect(ranges.last7).toBe("2026-05-15,2026-05-21");
+    expect(ranges.previous7).toBe("2026-05-08,2026-05-14");
+  });
+
+  it("handles month boundaries", () => {
+    const ranges = computeMatomoDateRanges(new Date("2026-03-05T00:00:00Z"));
+    expect(ranges.last7).toBe("2026-02-27,2026-03-05");
+  });
+});
+
 describe("buildPageUrlsQuery", () => {
   it("includes required Matomo params", () => {
     const url = buildPageUrlsQuery(
@@ -389,12 +415,16 @@ describe("buildPageUrlsQuery", () => {
 
 describe("buildScrollDepthQuery", () => {
   it("includes Events.getName method and scroll-depth segment", () => {
-    const url = buildScrollDepthQuery({
-      apiUrl: "https://matomo.example/",
-      authToken: "TOK",
-      siteId: "12",
-    });
+    const url = buildScrollDepthQuery(
+      {
+        apiUrl: "https://matomo.example/",
+        authToken: "TOK",
+        siteId: "12",
+      },
+      "2026-04-22,2026-05-21",
+    );
     expect(url).toContain("method=Events.getName");
+    expect(url).toContain("date=2026-04-22%2C2026-05-21");
     expect(decodeURIComponent(url)).toContain(
       "segment=eventCategory==engagement;eventAction==scroll_depth;eventName==75",
     );
@@ -522,10 +552,14 @@ describe("runRefresh (integration with mocked fetch)", () => {
             { Events_EventUrl: "/fr/content/foo/", nb_events: 25 },
           ]);
         }
-        if (url.includes("date=last30")) {
+        // For now=2026-05-21, ranges are:
+        //   last30   = 2026-04-22,2026-05-21
+        //   last7    = 2026-05-15,2026-05-21
+        //   previous7= 2026-05-08,2026-05-14
+        if (url.includes("2026-04-22")) {
           return jsonResponse([{ url: "/fr/content/foo/", nb_visits: 100 }]);
         }
-        if (url.includes("date=last7")) {
+        if (url.includes("2026-05-15")) {
           return jsonResponse([{ url: "/fr/content/foo/", nb_visits: 40 }]);
         }
         return jsonResponse([{ url: "/fr/content/foo/", nb_visits: 20 }]);

@@ -9,9 +9,70 @@ import {
   createFAQPageSchema,
   createDefinedTermSetSchema,
   createCollectionPageSchema,
+  createItemListSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
 import { SITE_URL, SITE_NAME } from "@/lib/metadata";
+
+describe("createItemListSchema (CTN-8/9)", () => {
+  const baseOptions = {
+    name: "Most read",
+    description: "Top articles by pageviews",
+    items: [
+      { position: 1, url: "/fr/content/article-a/", name: "Article A" },
+      { position: 2, url: "/fr/content/article-b/", name: "Article B" },
+    ],
+  };
+
+  it("builds a valid ItemList schema with required fields", () => {
+    const schema = createItemListSchema(baseOptions);
+    expect(schema["@context"]).toBe("https://schema.org");
+    expect(schema["@type"]).toBe("ItemList");
+    expect(schema.name).toBe("Most read");
+    expect(schema.description).toBe("Top articles by pageviews");
+    expect(schema.numberOfItems).toBe(2);
+    expect(schema.itemListOrder).toBe("https://schema.org/ItemListOrderDescending");
+  });
+
+  it("defaults inLanguage to fr-FR", () => {
+    expect(createItemListSchema(baseOptions).inLanguage).toBe("fr-FR");
+  });
+
+  it("respects the locale option", () => {
+    expect(createItemListSchema({ ...baseOptions, locale: "en" }).inLanguage).toBe(
+      "en-US",
+    );
+  });
+
+  it("emits 1-indexed ListItem entries with absolute URLs", () => {
+    const elements = createItemListSchema(baseOptions).itemListElement as Array<
+      Record<string, unknown>
+    >;
+    expect(elements).toHaveLength(2);
+    expect(elements[0]?.["@type"]).toBe("ListItem");
+    expect(elements[0]?.position).toBe(1);
+    expect(elements[0]?.name).toBe("Article A");
+    expect(elements[0]?.url).toBe(`${SITE_URL}/fr/content/article-a/`);
+    expect(elements[1]?.position).toBe(2);
+  });
+
+  it("keeps already-absolute URLs untouched (no double prefix)", () => {
+    const schema = createItemListSchema({
+      ...baseOptions,
+      items: [
+        { position: 1, url: "https://other.example/x/", name: "X" },
+      ],
+    });
+    const elements = schema.itemListElement as Array<Record<string, unknown>>;
+    expect(elements[0]?.url).toBe("https://other.example/x/");
+  });
+
+  it("emits numberOfItems even when items is empty", () => {
+    const schema = createItemListSchema({ ...baseOptions, items: [] });
+    expect(schema.numberOfItems).toBe(0);
+    expect(schema.itemListElement).toEqual([]);
+  });
+});
 
 describe("createWebSiteSchema", () => {
   it("creates a valid WebSite schema", () => {

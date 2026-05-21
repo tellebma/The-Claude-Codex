@@ -2,7 +2,25 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import React from "react";
 
-import { ArticleThemeFilter } from "@/components/ui/ArticleThemeFilter";
+const navMocks = vi.hoisted(() => ({
+  replace: vi.fn(),
+  push: vi.fn(),
+  searchParams: new URLSearchParams(),
+  pathname: "/fr/content/",
+}));
+
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => navMocks.searchParams,
+  usePathname: () => navMocks.pathname,
+  useRouter: () => ({ replace: navMocks.replace, push: navMocks.push }),
+}));
+
+import {
+  ArticleThemeFilter,
+  parseThemeQueryParam,
+  serializeThemeFilters,
+  THEME_QUERY_PARAM,
+} from "@/components/ui/ArticleThemeFilter";
 import type { ThemeKey } from "@/lib/themes";
 
 const themeNames: Record<ThemeKey, string> = {
@@ -51,6 +69,10 @@ const cardsBySlug: Record<string, React.ReactNode> = Object.fromEntries(
 describe("ArticleThemeFilter", () => {
   beforeEach(() => {
     (window as unknown as { _paq: unknown[] })._paq = [];
+    navMocks.replace.mockReset();
+    navMocks.push.mockReset();
+    navMocks.searchParams = new URLSearchParams();
+    navMocks.pathname = "/fr/content/";
   });
 
   afterEach(() => {
@@ -297,5 +319,180 @@ describe("ArticleThemeFilter", () => {
       .getAllByText(/^[a-d]-/)
       .map((node) => node.textContent);
     expect(renderedSlugs).toEqual(["b-architecture"]);
+  });
+});
+
+describe("parseThemeQueryParam (CTN-13)", () => {
+  it("returns an empty set when raw is null or empty", () => {
+    expect(parseThemeQueryParam(null).size).toBe(0);
+    expect(parseThemeQueryParam("").size).toBe(0);
+  });
+
+  it("parses a single valid theme key", () => {
+    const result = parseThemeQueryParam("tutorial");
+    expect(result.has("tutorial")).toBe(true);
+    expect(result.size).toBe(1);
+  });
+
+  it("parses multiple comma-separated valid keys", () => {
+    const result = parseThemeQueryParam("tutorial,security,architecture");
+    expect(Array.from(result).sort()).toEqual([
+      "architecture",
+      "security",
+      "tutorial",
+    ]);
+  });
+
+  it("trims whitespace around each token", () => {
+    const result = parseThemeQueryParam(" tutorial , security ");
+    expect(result.has("tutorial")).toBe(true);
+    expect(result.has("security")).toBe(true);
+  });
+
+  it("silently drops unknown keys", () => {
+    const result = parseThemeQueryParam("tutorial,unknown,security");
+    expect(result.has("tutorial")).toBe(true);
+    expect(result.has("security")).toBe(true);
+    expect(result.size).toBe(2);
+  });
+
+  it("returns an empty set when all values are invalid", () => {
+    expect(parseThemeQueryParam("foo,bar,baz").size).toBe(0);
+  });
+});
+
+describe("serializeThemeFilters (CTN-13)", () => {
+  it("returns null for an empty set", () => {
+    expect(serializeThemeFilters(new Set())).toBeNull();
+  });
+
+  it("joins multiple keys with comma", () => {
+    const result = serializeThemeFilters(
+      new Set<ThemeKey>(["tutorial", "security"]),
+    );
+    expect(result).toMatch(/^(tutorial,security|security,tutorial)$/);
+  });
+
+  it("returns a single key without trailing comma", () => {
+    expect(serializeThemeFilters(new Set<ThemeKey>(["tutorial"]))).toBe(
+      "tutorial",
+    );
+  });
+});
+
+describe("ArticleThemeFilter URL state (CTN-13)", () => {
+  beforeEach(() => {
+    (window as unknown as { _paq: unknown[] })._paq = [];
+    navMocks.replace.mockReset();
+    navMocks.push.mockReset();
+    navMocks.searchParams = new URLSearchParams();
+    navMocks.pathname = "/fr/content/";
+  });
+
+  afterEach(() => {
+    delete (window as unknown as { _paq?: unknown[] })._paq;
+    vi.restoreAllMocks();
+  });
+
+  it("uses 'theme' as the query parameter key", () => {
+    expect(THEME_QUERY_PARAM).toBe("theme");
+  });
+
+  it("applies filters parsed from ?theme= at mount", () => {
+    navMocks.searchParams = new URLSearchParams("theme=security,tutorial");
+    render(
+      <ArticleThemeFilter
+        articles={articles}
+        cardsBySlug={cardsBySlug}
+        labels={labels}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: /Sécurité/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(
+      screen.getByRole("button", { name: /Tutoriel/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(screen.queryByText("d-no-themes")).not.toBeInTheDocument();
+  });
+
+  it("ignores unknown keys silently in the URL parameter", () => {
+    navMocks.searchParams = new URLSearchParams("theme=tutorial,fake,security");
+    render(
+      <ArticleThemeFilter
+        articles={articles}
+        cardsBySlug={cardsBySlug}
+        labels={labels}
+      />,
+    );
+    expect(
+      screen.getByRole("button", { name: /Tutoriel/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(
+      screen.getByRole("button", { name: /Sécurité/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("calls router.replace with scroll:false after toggling a chip", () => {
+    render(
+      <ArticleThemeFilter
+        articles={articles}
+        cardsBySlug={cardsBySlug}
+        labels={labels}
+      />,
+    );
+    navMocks.replace.mockClear();
+    fireEvent.click(screen.getByRole("button", { name: /Sécurité/ }));
+    expect(navMocks.replace).toHaveBeenCalled();
+    const [url, opts] = navMocks.replace.mock.calls.at(-1)!;
+    expect(url).toBe("/fr/content/?theme=security");
+    expect(opts).toEqual({ scroll: false });
+  });
+
+  it("removes ?theme= from URL when filters are cleared via reset", () => {
+    navMocks.searchParams = new URLSearchParams("theme=security");
+    render(
+      <ArticleThemeFilter
+        articles={articles}
+        cardsBySlug={cardsBySlug}
+        labels={labels}
+      />,
+    );
+    navMocks.replace.mockClear();
+    const resetButtons = screen.getAllByRole("button", {
+      name: /Réinitialiser les filtres/,
+    });
+    fireEvent.click(resetButtons[0]);
+    expect(navMocks.replace).toHaveBeenCalled();
+    const lastCall = navMocks.replace.mock.calls.at(-1)!;
+    expect(lastCall[0]).toBe("/fr/content/");
+    expect(lastCall[1]).toEqual({ scroll: false });
+  });
+
+  it("preserves the order of selection when serializing multiple themes", () => {
+    render(
+      <ArticleThemeFilter
+        articles={articles}
+        cardsBySlug={cardsBySlug}
+        labels={labels}
+      />,
+    );
+    navMocks.replace.mockClear();
+    fireEvent.click(screen.getByRole("button", { name: /Sécurité/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Architecture/ }));
+    const lastUrl = navMocks.replace.mock.calls.at(-1)![0] as string;
+    expect(lastUrl).toMatch(/\?theme=security,architecture$/);
+  });
+
+  it("does not throw when searchParams is empty at mount", () => {
+    expect(() =>
+      render(
+        <ArticleThemeFilter
+          articles={articles}
+          cardsBySlug={cardsBySlug}
+          labels={labels}
+        />,
+      ),
+    ).not.toThrow();
   });
 });

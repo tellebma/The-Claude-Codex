@@ -3,20 +3,42 @@
 import {
   Fragment,
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
   type KeyboardEvent,
   type ReactNode,
 } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SearchX } from "lucide-react";
 
 import {
   THEME_REGISTRY,
+  isThemeKey,
   type ContentTypeKey,
   type DomainKey,
   type ThemeKey,
 } from "@/lib/themes";
 import { trackContentIndex } from "@/lib/analytics/trackContentIndex";
+
+export const THEME_QUERY_PARAM = "theme";
+
+export function parseThemeQueryParam(raw: string | null): ReadonlySet<ThemeKey> {
+  if (!raw) return new Set();
+  const candidates = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+  return new Set(candidates.filter(isThemeKey));
+}
+
+export function serializeThemeFilters(
+  active: ReadonlySet<ThemeKey>,
+): string | null {
+  if (active.size === 0) return null;
+  return Array.from(active).join(",");
+}
 
 const TYPE_KEYS: ReadonlyArray<ContentTypeKey> = [
   "tutorial",
@@ -127,9 +149,37 @@ export function ArticleThemeFilter({
   cardsBySlug,
   labels,
 }: ArticleThemeFilterProps) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [active, setActive] = useState<ReadonlySet<ThemeKey>>(
     () => new Set<ThemeKey>(),
   );
+  const hydratedRef = useRef(false);
+
+  useEffect(() => {
+    if (hydratedRef.current) return;
+    hydratedRef.current = true;
+    const fromUrl = parseThemeQueryParam(
+      searchParams?.get(THEME_QUERY_PARAM) ?? null,
+    );
+    if (fromUrl.size > 0) {
+      setActive(fromUrl);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+    const others = new URLSearchParams(searchParams?.toString() ?? "");
+    others.delete(THEME_QUERY_PARAM);
+    const serialized = serializeThemeFilters(active);
+    const themeChunk = serialized ? `${THEME_QUERY_PARAM}=${serialized}` : "";
+    const othersChunk = others.toString();
+    const qs = [themeChunk, othersChunk].filter(Boolean).join("&");
+    const target = qs ? `${pathname}?${qs}` : pathname;
+    router.replace(target, { scroll: false });
+  }, [active, pathname, router, searchParams]);
 
   const filteredArticles = useMemo(
     () => articles.filter((a) => matchesActiveFilters(a, active)),

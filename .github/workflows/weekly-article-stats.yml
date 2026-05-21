@@ -56,20 +56,26 @@ jobs:
             src/data/article-stats.json \
             "${RUNNER_TEMP}/article-stats-pr-body.md"
 
-      - name: Create or update draft PR
+      - name: Commit + push + open draft PR
         if: steps.diff.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
-        with:
-          branch: chore/weekly-article-stats
-          base: develop
-          draft: true
-          title: "chore(stats): weekly article stats refresh"
-          commit-message: "chore(stats): refresh article-stats.json"
-          labels: |
-            chore
-            stats
-          body-path: ${{ runner.temp }}/article-stats-pr-body.md
-          delete-branch: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          BRANCH="chore/weekly-article-stats-$(date -u +%Y%m%d-%H%M%S)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH"
+          git add src/data/article-stats.json
+          git commit -m "chore(stats): refresh article-stats.json"
+          git push origin "$BRANCH"
+          gh pr create \
+            --base develop \
+            --head "$BRANCH" \
+            --title "chore(stats): weekly article stats refresh" \
+            --body-file "${RUNNER_TEMP}/article-stats-pr-body.md" \
+            --label chore --label stats \
+            --draft
 
       - name: Report no-op
         if: steps.diff.outputs.changed == 'false'

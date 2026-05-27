@@ -24,9 +24,9 @@
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
 | [Content page redesign 2026-05](EPIC-content-page-redesign-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture : Sprints 1-3 livres #240/#243, release prod 1.10.0) |
-| [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 2 | 1 | 7 | 20% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; TUTO-5 getting-started complet en PR #249) |
+| [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 3 | 0 | 7 | 30% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; reste TUTO-6 rollout skills/prompting/mcp/agents) |
 
-**Total projet** : 135/191 stories (71%) · ~316/441 SP livres (72%) — (VM-8 + VM-12 descopes : retires du denominateur)
+**Total projet** : 136/191 stories (71%) · ~318/441 SP livres (72%) — (VM-8 + VM-12 descopes : retires du denominateur)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 

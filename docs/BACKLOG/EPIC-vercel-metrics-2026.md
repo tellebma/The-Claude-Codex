@@ -10,6 +10,19 @@
 
 ---
 
+## ✅ Cloture 2026-05-27 — 9/11 stories livrees, VM-8 + VM-12 descopes
+
+EPIC **clos a 82 %** (9 stories livrees : VM-1, VM-3, VM-4, VM-5, VM-6, VM-7, VM-9, VM-10, VM-11). Le SDK Vercel (`@vercel/analytics` + `@vercel/speed-insights`) est integre et collecte passivement ; aucune raison de le retirer.
+
+Les 2 stories restantes sont **descopees** sur decision PO :
+
+- **VM-8** (Cross-check Lab vs RUM, 3 SP) : descopee. Exige des chiffres RUM P75 reels (>= 100 sessions sur 7 j) exportes du dashboard Speed Insights. Pas de valeur a documenter un cross-check sur un outil qui reste un PoC.
+- **VM-12** (Rapport hebdo cross-tool, 2 SP) : descopee. Il n'existe **pas d'endpoint REST public** pour lire les stats agregees Web Analytics / Speed Insights (verifie 2026-05-27 via docs Vercel : lecture programmatique uniquement via Drains Pro+ ou `vercel metrics` CLI qui exige Observability Plus payant). Sur plan Hobby, seul un export CSV manuel hebdo serait possible — trop de maintenance recurrente pour un outil PoC alors que **Matomo reste la source de verite engagement**.
+
+**Motif global** : Vercel a ete un test/PoC. Matomo cookieless couvre deja l'engagement (pageviews, scroll, liens, funnel configurator) et la demographie. Investir dans un reporting cross-tool par-dessus un outil non perenne n'est pas justifie.
+
+---
+
 ## ⚠️ Revision majeure 2026-05-09 (audit MCP Vercel)
 
 Audit du projet via MCP Vercel revele que **le projet `the-claude-codex` (`prj_owfJ8wzwLBLSDbuGUsZK9kHvh42Q`) est deja en production sur Vercel**, contrairement a l'hypothese initiale "Docker Nginx production". Le domaine `claude-codex.fr` est servi par Vercel (verifie via `curl -I https://claude-codex.fr` qui retourne `server: Vercel` + `x-vercel-cache: HIT`). Auto-deploy GitHub fonctionne (20 deployments READY recents depuis develop).
@@ -499,9 +512,9 @@ Le but de P3 est moins de collecter de la donnee aujourd'hui que de **valider qu
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| VM-1 | Verification settings + activation Analytics/Speed Insights/Observability dans UI Vercel | 1 | ⬜ |
-| VM-3 | `@vercel/analytics` integre | 2 | ⬜ |
-| VM-11 | Doc analytics-tracking | 2 | ⬜ |
+| VM-1 | Verification settings + activation Analytics/Speed Insights/Observability dans UI Vercel | 1 | ✅ Fait (#182) |
+| VM-3 | `@vercel/analytics` integre | 2 | ✅ Fait (#171) |
+| VM-11 | Doc analytics-tracking | 2 | ✅ Fait (#171) |
 
 **Effort** : ~2 jours (config UI + ajout SDK + doc)
 **Impact attendu** : premier dashboard Web Analytics rempli sous 7 jours sur le trafic reel claude-codex.fr (Vercel deja en prod)
@@ -510,10 +523,10 @@ Le but de P3 est moins de collecter de la donnee aujourd'hui que de **valider qu
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| VM-5 | `@vercel/speed-insights` integre | 3 | ⬜ |
-| VM-6 | Sample rate + quota monitoring | 2 | ⬜ |
-| VM-7 | beforeSend redaction RGPD | 2 | ⬜ |
-| VM-9 | Observability section ON | 1 | ⬜ |
+| VM-5 | `@vercel/speed-insights` integre | 3 | ✅ Fait (#171) |
+| VM-6 | Sample rate + quota monitoring | 2 | ✅ Fait (#172) |
+| VM-7 | beforeSend redaction RGPD | 2 | ✅ Fait (#172) |
+| VM-9 | Observability section ON | 1 | ✅ Fait (#182) |
 
 **Effort** : ~3 jours
 **Impact attendu** : Web Vitals reels collectes, premier RES disponible J+7, conformite RGPD validee
@@ -522,9 +535,9 @@ Le but de P3 est moins de collecter de la donnee aujourd'hui que de **valider qu
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| VM-4 | Custom events strategiques | 2 | ⬜ |
-| VM-8 | Cross-check Lab vs RUM | 3 | ⬜ |
-| VM-10 | Build resilience + alerting | 3 | ⬜ |
+| VM-4 | Custom events strategiques | 2 | ✅ Fait (#172) |
+| VM-8 | Cross-check Lab vs RUM | 3 | 🚫 Descopee (cloture 2026-05-27, Vercel PoC) |
+| VM-10 | Build resilience + alerting | 3 | ✅ Fait (#184) |
 
 **Effort** : ~3-4 jours
 **Impact attendu** : confiance cross-tool, plan d'optim perf priorise sur les ecarts reels
@@ -533,7 +546,7 @@ Le but de P3 est moins de collecter de la donnee aujourd'hui que de **valider qu
 
 | ID | Story | SP | Statut |
 |----|-------|----|--------|
-| VM-12 | Rapport hebdo cross-tool | 2 | ⬜ |
+| VM-12 | Rapport hebdo cross-tool | 2 | 🚫 Descopee (cloture 2026-05-27, pas d'API Hobby + Vercel PoC) |
 
 **Effort** : ~1-2 jours
 **Impact attendu** : pilotage hebdo unifie, decision PO basee sur 1 seul rapport

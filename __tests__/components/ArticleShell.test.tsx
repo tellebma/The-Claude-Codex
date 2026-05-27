@@ -52,4 +52,50 @@ describe("ArticleShell", () => {
     expect(container.querySelector(".art-shell")).not.toBeNull();
     expect(container.querySelector(".art-body")).not.toBeNull();
   });
+
+  describe("sectionPeers (TUTO-3)", () => {
+    it("keeps the TOC rail hidden below xl when no sectionPeers is passed", () => {
+      const { container } = render(
+        <ArticleShell shareUrl="x" shareTitle="t">
+          <p />
+        </ArticleShell>
+      );
+      const rail = container.querySelector(".art-toc-rail");
+      expect(rail).not.toBeNull();
+      // Pages /content : comportement inchange, rail masque sous xl.
+      expect(rail?.className).toContain("hidden");
+      expect(rail?.className).toContain("xl:block");
+    });
+
+    it("renders the sectionPeers node alongside the TOC when provided", () => {
+      render(
+        <ArticleShell
+          shareUrl="x"
+          shareTitle="t"
+          sectionPeers={<nav data-testid="peers">peers</nav>}
+        >
+          <p />
+        </ArticleShell>
+      );
+      expect(screen.getByTestId("peers")).toBeInTheDocument();
+      expect(screen.getByTestId("mocked-toc")).toBeInTheDocument();
+    });
+
+    it("makes the rail visible below xl when sectionPeers is present (accordeon)", () => {
+      const { container } = render(
+        <ArticleShell
+          shareUrl="x"
+          shareTitle="t"
+          sectionPeers={<nav data-testid="peers">peers</nav>}
+        >
+          <p />
+        </ArticleShell>
+      );
+      const rail = container.querySelector(".art-toc-rail");
+      expect(rail).not.toBeNull();
+      // Le rail ne doit pas etre masque sous xl : l'accordeon SectionPeers
+      // doit pouvoir s'afficher sur mobile/tablette.
+      expect(rail?.className).not.toContain("hidden");
+    });
+  });
 });

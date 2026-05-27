@@ -5,8 +5,12 @@ import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import SectionSlugContent from "@/components/layout/SectionSlugContent";
+import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
 const SECTION = "getting-started";
+
+/** TUTO-3 — slugs migres vers le shell article premium (rollout progressif). */
+const ARTICLE_SHELL_SLUGS = new Set(["installation"]);
 
 interface PageProps {
   readonly params: Promise<{ locale: string; slug: string }>;
@@ -88,6 +92,17 @@ export default async function GettingStartedSlugPage({
 }: PageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
+
+  if (ARTICLE_SHELL_SLUGS.has(slug)) {
+    return (
+      <TutoArticleContent
+        section={SECTION}
+        slug={slug}
+        locale={locale}
+        extraJsonLd={buildFaqSchema(slug)}
+      />
+    );
+  }
 
   return (
     <SectionSlugContent

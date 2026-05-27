@@ -46,6 +46,16 @@ const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = 
   { path: "/en/content/claude-design-vs-figma/", name: "en-article-claude-design-vs-figma" },
   { path: "/en/content/ci-cd-cyber-security/", name: "en-article-ci-cd-security" },
   { path: "/en/content/future-vision/", name: "en-article-future-vision" },
+  // TUTO-3 — pilote migration pages tuto vers ArticleShell + SectionPeers.
+  // 3 typologies : installation (longue, deja en liste ci-dessus avec la
+  // baseline a regenerer), prompting/basics (section dense), what-are-skills
+  // (section courte). FR + EN, light + dark via THEMES.
+  // NB recette : `fr-installation` change de layout, regenerer sa baseline.
+  { path: "/en/getting-started/installation/", name: "en-installation" },
+  { path: "/fr/prompting/basics/", name: "fr-prompting-basics" },
+  { path: "/en/prompting/basics/", name: "en-prompting-basics" },
+  { path: "/fr/skills/what-are-skills/", name: "fr-skills-what-are-skills" },
+  { path: "/en/skills/what-are-skills/", name: "en-skills-what-are-skills" },
 ];
 
 const THEMES: ReadonlyArray<"light" | "dark"> = ["light", "dark"];

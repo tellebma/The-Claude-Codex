@@ -41,6 +41,8 @@ next-env.d.ts
 *.jpeg
 !public/images/**/*.png
 !public/images/**/*.jpg
+# CTN-10 — vignettes OG par article (generees par build:og-articles, committees)
+!public/og/**/*.png
 # RG-25 — baselines visual regression committees pour la CI
 !e2e/**/*-snapshots/*.png
 

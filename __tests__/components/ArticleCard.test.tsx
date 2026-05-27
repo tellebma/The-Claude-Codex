@@ -71,9 +71,13 @@ describe("ArticleCard", () => {
       );
     });
 
-    it("renders a fallback gradient block with a lucide icon when no OG image is provided", async () => {
+    it("renders a fallback gradient block with a lucide icon when no OG image exists", async () => {
+      // Slug absent du manifeste OG et sans ogImageUrl explicite => fallback.
       const { container } = await renderAsync(
-        ArticleCard({ article: baseArticle, locale: "fr" }),
+        ArticleCard({
+          article: { ...baseArticle, slug: "slug-sans-vignette-og" },
+          locale: "fr",
+        }),
       );
       // Fallback : pas de <img>, mais un degrade contenant un SVG icone.
       expect(container.querySelector("img")).toBeNull();
@@ -82,6 +86,19 @@ describe("ArticleCard", () => {
       );
       expect(fallback).not.toBeNull();
       expect(fallback?.querySelector("svg")).not.toBeNull();
+    });
+
+    it("resolves the OG vignette from the manifest when the article has one (CTN-10)", async () => {
+      // baseArticle (fr/comprendre-claude-code-internals) est dans le manifeste
+      // genere : variant grid => image -card (600x315), lazy.
+      const { container } = await renderAsync(
+        ArticleCard({ article: baseArticle, locale: "fr" }),
+      );
+      const img = container.querySelector("img");
+      expect(img?.getAttribute("src")).toBe(
+        "/og/content/fr/comprendre-claude-code-internals-card.png",
+      );
+      expect(img?.getAttribute("loading")).toBe("lazy");
     });
 
     it("renders an <img> when ogImageUrl is provided (lazy by default for grid)", async () => {

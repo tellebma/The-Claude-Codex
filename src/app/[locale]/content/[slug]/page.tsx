@@ -9,6 +9,7 @@ import { ArticlePager } from "@/components/layout/ArticlePager";
 import { ReadingProgressBar } from "@/components/ui/ReadingProgressBar";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import { resolveOgImageUrl } from "@/lib/og-images";
 import { createFAQPageSchema, serializeJsonLd } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
@@ -40,11 +41,20 @@ export async function generateMetadata({ params }: ContentPageProps): Promise<Me
   const resolvedParams = await params;
   const { frontmatter } = getMdxBySlug(resolvedParams.slug, resolvedParams.locale);
 
+  // CTN-10 : vignette OG generee par article (1200x630), sinon fallback sur
+  // l'image OG par defaut du site via createPageMetadata.
+  const ogImage = resolveOgImageUrl(
+    resolvedParams.locale,
+    resolvedParams.slug,
+    "hero",
+  );
+
   return createPageMetadata({
     title: frontmatter.title,
     description: frontmatter.description,
     path: `/${resolvedParams.locale}/content/${resolvedParams.slug}`,
     locale: resolvedParams.locale,
+    ...(ogImage ? { ogImage } : {}),
   });
 }
 

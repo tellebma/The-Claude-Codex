@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { ArrowRight, BookOpen, TrendingUp } from "lucide-react";
 import { THEME_REGISTRY, type ThemeKey } from "@/lib/themes";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
+import { resolveOgImageUrl } from "@/lib/og-images";
 import clsx from "clsx";
 
 /**
@@ -190,6 +191,12 @@ export async function ArticleCard({
   const href = buildArticleHref(article.slug, article.section);
   const readingMinutes = estimateReadingMinutes(article.wordCount);
 
+  // Vignette OG : override explicite via la prop, sinon resolution depuis le
+  // manifeste (CTN-10) selon la taille de carte — hero -> 1200x630,
+  // grid/row -> 600x315. `undefined` => fallback degrade + icone thematique.
+  const ogSrc =
+    article.ogImageUrl ?? resolveOgImageUrl(article.locale, article.slug, size);
+
   const dateLabels = buildRelativeDate(article.dateModified, locale, {
     today: t("dateToday"),
     yesterday: t("dateYesterday"),
@@ -213,7 +220,7 @@ export async function ArticleCard({
         data-matomo-name={article.slug}
       >
         <CardImage
-          src={article.ogImageUrl}
+          src={ogSrc}
           alt=""
           title={article.title}
           themes={article.themes}
@@ -284,7 +291,7 @@ export async function ArticleCard({
         >
           <div className="relative w-32 shrink-0 overflow-hidden rounded-xl sm:w-40">
             <CardImage
-              src={article.ogImageUrl}
+              src={ogSrc}
               alt=""
               title={article.title}
               themes={article.themes}
@@ -346,7 +353,7 @@ export async function ArticleCard({
         >
           <div className="relative">
             <CardImage
-              src={article.ogImageUrl}
+              src={ogSrc}
               alt=""
               title={article.title}
               themes={article.themes}
@@ -416,7 +423,7 @@ export async function ArticleCard({
         className="absolute inset-x-0 top-0 z-10 h-[3px] bg-gradient-to-r from-brand-500 to-accent-500"
       />
       <CardImage
-        src={article.ogImageUrl}
+        src={ogSrc}
         alt=""
         title={article.title}
         themes={article.themes}

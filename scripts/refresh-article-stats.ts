@@ -265,7 +265,21 @@ function matomoEndpoint(env: MatomoEnv): string {
   return `${env.apiUrl.replace(/\/$/, "")}/index.php`;
 }
 
-export function buildPageUrlsQuery(env: MatomoEnv, date: string): string {
+/**
+ * Requete Matomo prete a etre envoyee : URL (params non-secrets, lisibles dans
+ * les logs CI pour le diagnostic) + corps POST portant le `token_auth`.
+ *
+ * Le token NE DOIT JAMAIS transiter dans l'URL : les versions recentes de
+ * Matomo (reglage "Only allow secure requests", actif par defaut sur les tokens
+ * cree en v5) ignorent un token passe en parametre GET et renvoient HTTP 401.
+ * Il fuiterait aussi dans les logs serveur et le header Referer.
+ */
+export interface MatomoRequest {
+  readonly url: string;
+  readonly body: URLSearchParams;
+}
+
+export function buildPageUrlsRequest(env: MatomoEnv, date: string): MatomoRequest {
   const params = new URLSearchParams({
     module: "API",
     method: "Actions.getPageUrls",
@@ -275,12 +289,14 @@ export function buildPageUrlsQuery(env: MatomoEnv, date: string): string {
     format: "json",
     flat: "1",
     filter_limit: "500",
-    token_auth: env.authToken,
   });
-  return `${matomoEndpoint(env)}?${params.toString()}`;
+  return {
+    url: `${matomoEndpoint(env)}?${params.toString()}`,
+    body: new URLSearchParams({ token_auth: env.authToken }),
+  };
 }
 
-export function buildScrollDepthQuery(env: MatomoEnv, dateRange: string): string {
+export function buildScrollDepthRequest(env: MatomoEnv, dateRange: string): MatomoRequest {
   const params = new URLSearchParams({
     module: "API",
     method: "Events.getName",
@@ -292,9 +308,11 @@ export function buildScrollDepthQuery(env: MatomoEnv, dateRange: string): string
     segment: "eventCategory==engagement;eventAction==scroll_depth;eventName==75",
     secondaryDimension: "eventUrl",
     flat: "1",
-    token_auth: env.authToken,
   });
-  return `${matomoEndpoint(env)}?${params.toString()}`;
+  return {
+    url: `${matomoEndpoint(env)}?${params.toString()}`,
+    body: new URLSearchParams({ token_auth: env.authToken }),
+  };
 }
 
 interface FetchOptions {
@@ -306,8 +324,33 @@ async function defaultSleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * Extrait un detail lisible du corps d'une reponse Matomo en erreur, pour ne
+ * pas perdre le message discriminant (token expire vs token "secure only" a
+ * envoyer en POST). Best-effort : ne jette jamais.
+ */
+async function readErrorDetail(response: Response): Promise<string> {
+  let text: string;
+  try {
+    text = await response.text();
+  } catch {
+    return "";
+  }
+  const trimmed = text.trim();
+  if (trimmed.length === 0) return "";
+  try {
+    const parsed = JSON.parse(trimmed) as { message?: unknown };
+    if (typeof parsed.message === "string" && parsed.message.length > 0) {
+      return parsed.message;
+    }
+  } catch {
+    // pas du JSON : on retombe sur le texte brut tronque
+  }
+  return trimmed.slice(0, 300);
+}
+
 export async function fetchMatomoJson<T>(
-  url: string,
+  request: MatomoRequest,
   label: string,
   options: FetchOptions = {},
 ): Promise<T> {
@@ -319,12 +362,15 @@ export async function fetchMatomoJson<T>(
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     let response: Response;
     try {
-      response = await fetchFn(url, {
+      response = await fetchFn(request.url, {
+        method: "POST",
         signal: controller.signal,
         headers: {
           Accept: "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
           "User-Agent": USER_AGENT,
         },
+        body: request.body,
       });
     } catch (err) {
       const reason = err instanceof Error ? err.message : String(err);
@@ -344,7 +390,8 @@ export async function fetchMatomoJson<T>(
       throw new Error(`[${label}] HTTP ${response.status} (after retry)`);
     }
     if (!response.ok) {
-      throw new Error(`[${label}] HTTP ${response.status}`);
+      const detail = await readErrorDetail(response);
+      throw new Error(`[${label}] HTTP ${response.status}${detail ? `: ${detail}` : ""}`);
     }
 
     let body: unknown;
@@ -467,22 +514,22 @@ export async function runRefresh(options: RunOptions = {}): Promise<RunResult> {
   });
 
   const last30Raw = await fetchMatomoJson<unknown>(
-    buildPageUrlsQuery(env, ranges.last30),
+    buildPageUrlsRequest(env, ranges.last30),
     "pageviews-last30",
     fetchOpts,
   );
   const last7Raw = await fetchMatomoJson<unknown>(
-    buildPageUrlsQuery(env, ranges.last7),
+    buildPageUrlsRequest(env, ranges.last7),
     "pageviews-last7",
     fetchOpts,
   );
   const prev7Raw = await fetchMatomoJson<unknown>(
-    buildPageUrlsQuery(env, ranges.previous7),
+    buildPageUrlsRequest(env, ranges.previous7),
     "pageviews-previous7",
     fetchOpts,
   );
   const scrollRaw = await fetchMatomoJson<unknown>(
-    buildScrollDepthQuery(env, ranges.last30),
+    buildScrollDepthRequest(env, ranges.last30),
     "scroll-depth-75",
     fetchOpts,
   ).catch((err: unknown) => {

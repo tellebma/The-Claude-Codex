@@ -8,9 +8,9 @@ import os from "node:os";
 import path from "node:path";
 import {
   aggregateStats,
-  buildPageUrlsQuery,
+  buildPageUrlsRequest,
   buildScrollDepthMap,
-  buildScrollDepthQuery,
+  buildScrollDepthRequest,
   collectArticleDates,
   computeDeltaPct,
   computeMatomoDateRanges,
@@ -398,9 +398,9 @@ describe("computeMatomoDateRanges", () => {
   });
 });
 
-describe("buildPageUrlsQuery", () => {
-  it("includes required Matomo params", () => {
-    const url = buildPageUrlsQuery(
+describe("buildPageUrlsRequest", () => {
+  it("includes required Matomo params in the URL without leaking the token", () => {
+    const { url, body } = buildPageUrlsRequest(
       { apiUrl: "https://matomo.example/", authToken: "TOK", siteId: "12" },
       "last30",
     );
@@ -408,14 +408,17 @@ describe("buildPageUrlsQuery", () => {
     expect(url).toContain("method=Actions.getPageUrls");
     expect(url).toContain("idSite=12");
     expect(url).toContain("date=last30");
-    expect(url).toContain("token_auth=TOK");
     expect(url).toContain("flat=1");
+    // Le token ne doit JAMAIS apparaitre dans l'URL (fuite logs/referer + 401
+    // Matomo "secure requests only"). Il passe dans le corps POST.
+    expect(url).not.toContain("token_auth");
+    expect(body.get("token_auth")).toBe("TOK");
   });
 });
 
-describe("buildScrollDepthQuery", () => {
-  it("includes Events.getName method and scroll-depth segment", () => {
-    const url = buildScrollDepthQuery(
+describe("buildScrollDepthRequest", () => {
+  it("includes Events.getName method and scroll-depth segment, token in body", () => {
+    const { url, body } = buildScrollDepthRequest(
       {
         apiUrl: "https://matomo.example/",
         authToken: "TOK",
@@ -428,6 +431,8 @@ describe("buildScrollDepthQuery", () => {
     expect(decodeURIComponent(url)).toContain(
       "segment=eventCategory==engagement;eventAction==scroll_depth;eventName==75",
     );
+    expect(url).not.toContain("token_auth");
+    expect(body.get("token_auth")).toBe("TOK");
   });
 });
 
@@ -438,12 +443,29 @@ function jsonResponse(body: unknown, status = 200): Response {
   });
 }
 
+function req(url: string, token = "TOK") {
+  return { url, body: new URLSearchParams({ token_auth: token }) };
+}
+
 describe("fetchMatomoJson", () => {
   it("returns parsed JSON on 200", async () => {
     const fetchFn = vi.fn(async () => jsonResponse([{ a: 1 }]));
-    const result = await fetchMatomoJson<unknown[]>("https://x", "test", { fetchFn });
+    const result = await fetchMatomoJson<unknown[]>(req("https://x"), "test", { fetchFn });
     expect(result).toEqual([{ a: 1 }]);
     expect(fetchFn).toHaveBeenCalledTimes(1);
+  });
+
+  it("issues a POST request carrying token_auth in the body, not the URL", async () => {
+    const fetchFn = vi.fn(async () => jsonResponse([]));
+    await fetchMatomoJson(req("https://matomo.example/index.php?method=X", "SECRET"), "post", {
+      fetchFn,
+    });
+    const [calledUrl, init] = fetchFn.mock.calls[0] as unknown as [string, RequestInit];
+    expect(calledUrl).toBe("https://matomo.example/index.php?method=X");
+    expect(calledUrl).not.toContain("token_auth");
+    expect(init.method).toBe("POST");
+    expect(init.body).toBeInstanceOf(URLSearchParams);
+    expect((init.body as URLSearchParams).get("token_auth")).toBe("SECRET");
   });
 
   it("retries once on HTTP 5xx then succeeds", async () => {
@@ -452,7 +474,7 @@ describe("fetchMatomoJson", () => {
       .mockResolvedValueOnce(new Response("", { status: 503 }))
       .mockResolvedValueOnce(jsonResponse([{ ok: true }]));
     const sleepFn = vi.fn(async () => undefined);
-    const result = await fetchMatomoJson("https://x", "retry-ok", { fetchFn, sleepFn });
+    const result = await fetchMatomoJson(req("https://x"), "retry-ok", { fetchFn, sleepFn });
     expect(result).toEqual([{ ok: true }]);
     expect(fetchFn).toHaveBeenCalledTimes(2);
     expect(sleepFn).toHaveBeenCalledWith(SERVER_ERROR_RETRY_DELAY_MS);
@@ -462,7 +484,7 @@ describe("fetchMatomoJson", () => {
     const fetchFn = vi.fn(async () => new Response("", { status: 502 }));
     const sleepFn = vi.fn(async () => undefined);
     await expect(
-      fetchMatomoJson("https://x", "retry-fail", { fetchFn, sleepFn }),
+      fetchMatomoJson(req("https://x"), "retry-fail", { fetchFn, sleepFn }),
     ).rejects.toThrow(/HTTP 502/);
     expect(fetchFn).toHaveBeenCalledTimes(2);
   });
@@ -471,10 +493,38 @@ describe("fetchMatomoJson", () => {
     const fetchFn = vi.fn(async () => new Response("", { status: 401 }));
     const sleepFn = vi.fn(async () => undefined);
     await expect(
-      fetchMatomoJson("https://x", "auth", { fetchFn, sleepFn }),
+      fetchMatomoJson(req("https://x"), "auth", { fetchFn, sleepFn }),
     ).rejects.toThrow(/HTTP 401/);
     expect(fetchFn).toHaveBeenCalledTimes(1);
     expect(sleepFn).not.toHaveBeenCalled();
+  });
+
+  it("surfaces the Matomo error message on an authentication failure", async () => {
+    const fetchFn = vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            result: "error",
+            message:
+              "Unable to authenticate with the provided token. It is either invalid, expired or is required to be sent as a POST parameter.",
+          }),
+          { status: 401, headers: { "Content-Type": "application/json" } },
+        ),
+    );
+    const sleepFn = vi.fn(async () => undefined);
+    await expect(
+      fetchMatomoJson(req("https://x"), "auth-detail", { fetchFn, sleepFn }),
+    ).rejects.toThrow(/HTTP 401.*required to be sent as a POST parameter/);
+  });
+
+  it("falls back to the raw error body when it is not JSON", async () => {
+    const fetchFn = vi.fn(
+      async () => new Response("<html>503 Service Unavailable</html>", { status: 403 }),
+    );
+    const sleepFn = vi.fn(async () => undefined);
+    await expect(
+      fetchMatomoJson(req("https://x"), "html-err", { fetchFn, sleepFn }),
+    ).rejects.toThrow(/HTTP 403.*503 Service Unavailable/);
   });
 
   it("throws on malformed JSON body", async () => {
@@ -486,7 +536,7 @@ describe("fetchMatomoJson", () => {
         }),
     );
     await expect(
-      fetchMatomoJson("https://x", "json", { fetchFn }),
+      fetchMatomoJson(req("https://x"), "json", { fetchFn }),
     ).rejects.toThrow(/malformed JSON/);
   });
 
@@ -495,7 +545,7 @@ describe("fetchMatomoJson", () => {
       throw new Error("ECONNREFUSED");
     });
     await expect(
-      fetchMatomoJson("https://x", "net", { fetchFn }),
+      fetchMatomoJson(req("https://x"), "net", { fetchFn }),
     ).rejects.toThrow(/network or timeout error: ECONNREFUSED/);
   });
 

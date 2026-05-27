@@ -71,6 +71,19 @@ const ROUTES: ReadonlyArray<{
   { path: "/fr/glossary/", name: "FR glossary" },
   { path: "/fr/about/", name: "FR about" },
   { path: "/fr/future/", name: "FR future" },
+  // CTN-12 — vitrine editoriale /content (index, FR + EN).
+  // color-contrast : CTA hero "Filtrer par theme" en bg brand-primary
+  // (meme dette brand-500 que installation/mcp, cf. note ci-dessus).
+  {
+    path: "/fr/content/",
+    name: "FR content index",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/content/",
+    name: "EN content index",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
   // RG2-10 — Articles editoriaux : couvrent le rollout du shell article 3
   // colonnes (RG2-01 + composants editoriaux). 5 FR + 5 EN representatifs
   // (varies en longueur et theme).

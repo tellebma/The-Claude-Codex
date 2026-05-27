@@ -4,8 +4,12 @@ import { MessageSquare } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import SectionSlugContent from "@/components/layout/SectionSlugContent";
+import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
 const SECTION = "prompting";
+
+/** TUTO-3 — slugs migres vers le shell article premium (rollout progressif). */
+const ARTICLE_SHELL_SLUGS = new Set(["basics"]);
 
 interface PageProps {
   readonly params: Promise<{ locale: string; slug: string }>;
@@ -41,6 +45,10 @@ export async function generateMetadata({
 export default async function PromptingSlugPage({ params }: PageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
+
+  if (ARTICLE_SHELL_SLUGS.has(slug)) {
+    return <TutoArticleContent section={SECTION} slug={slug} locale={locale} />;
+  }
 
   return (
     <SectionSlugContent

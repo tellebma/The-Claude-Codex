@@ -68,6 +68,36 @@ const ROUTES: ReadonlyArray<{
     // Seul scrollable-region-focusable reste exclu (overflow code preview).
     disableRules: SCROLLABLE_OVERFLOW_OK,
   },
+  // TUTO-3 — pilote migration pages tuto vers ArticleShell (3 typologies :
+  // getting-started/installation deja couverte plus haut, + prompting/basics
+  // dense + skills/what-are-skills courte). FR + EN.
+  // color-contrast : meme dette brand-500 (pill categorie + CTA) que les
+  // articles /content et installation, cf. notes ci-dessus.
+  {
+    path: "/en/getting-started/installation/",
+    name: "EN installation article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/prompting/basics/",
+    name: "FR prompting basics article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/prompting/basics/",
+    name: "EN prompting basics article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/skills/what-are-skills/",
+    name: "FR skills what-are-skills article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/skills/what-are-skills/",
+    name: "EN skills what-are-skills article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
   { path: "/fr/glossary/", name: "FR glossary" },
   { path: "/fr/about/", name: "FR about" },
   { path: "/fr/future/", name: "FR future" },

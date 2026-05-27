@@ -39,6 +39,7 @@ describe("RecentArticlesClient", () => {
     ariaLabel: "Recent",
     readArticleLabel: "Read",
     allFilterLabel: "All",
+    viewAllLabel: "View all articles",
     sectionLabels: { mcp: "MCP", skills: "Skills", agents: "Agents" } as Record<
       string,
       string
@@ -68,6 +69,17 @@ describe("RecentArticlesClient", () => {
     expect(screen.getByRole("heading", { level: 3, name: "A" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 3, name: "B" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 3, name: "C" })).toBeInTheDocument();
+  });
+
+  it("renders a 'view all articles' link to /content in the header", () => {
+    render(
+      <RecentArticlesClient
+        articles={[mkArticle({ slug: "a", section: "mcp" })]}
+        {...baseProps}
+      />
+    );
+    const link = screen.getByRole("link", { name: /View all articles/ });
+    expect(link).toHaveAttribute("href", "/content");
   });
 
   it("does not render filter pills when only one section is present", () => {

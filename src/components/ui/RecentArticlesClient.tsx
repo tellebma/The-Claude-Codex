@@ -12,6 +12,8 @@ interface RecentArticlesClientProps {
   readonly ariaLabel: string;
   readonly readArticleLabel: string;
   readonly allFilterLabel: string;
+  /** Libelle du lien "voir tous les articles" pointant vers /content. */
+  readonly viewAllLabel: string;
   /** Map section key -> human label (ex: { mcp: "MCP", skills: "Skills" }). */
   readonly sectionLabels: Readonly<Record<string, string>>;
 }
@@ -34,6 +36,7 @@ export function RecentArticlesClient({
   ariaLabel,
   readArticleLabel,
   allFilterLabel,
+  viewAllLabel,
   sectionLabels,
 }: Readonly<RecentArticlesClientProps>) {
   const [filter, setFilter] = useState<string>("all");
@@ -74,27 +77,38 @@ export function RecentArticlesClient({
             </p>
           </div>
 
-          {availableSections.length > 1 && (
-            <div
-              className="flex flex-wrap gap-2"
-              role="toolbar"
-              aria-label="Filtrer par section"
+          <div className="flex flex-col gap-4 lg:items-end">
+            <Link
+              href="/content"
+              data-interactive
+              className="group inline-flex items-center gap-1.5 self-start text-sm font-semibold text-[color:var(--brand-primary)] transition-[gap] duration-[var(--duration-base)] ease-[var(--ease-out)] hover:gap-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 lg:self-auto"
             >
-              <FilterPill
-                active={filter === "all"}
-                onClick={() => setFilter("all")}
-                label={allFilterLabel}
-              />
-              {availableSections.map((section) => (
+              {viewAllLabel}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+
+            {availableSections.length > 1 && (
+              <div
+                className="flex flex-wrap gap-2"
+                role="toolbar"
+                aria-label="Filtrer par section"
+              >
                 <FilterPill
-                  key={section}
-                  active={filter === section}
-                  onClick={() => setFilter(section)}
-                  label={sectionLabels[section] ?? section}
+                  active={filter === "all"}
+                  onClick={() => setFilter("all")}
+                  label={allFilterLabel}
                 />
-              ))}
-            </div>
-          )}
+                {availableSections.map((section) => (
+                  <FilterPill
+                    key={section}
+                    active={filter === section}
+                    onClick={() => setFilter(section)}
+                    label={sectionLabels[section] ?? section}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </header>
 
         <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr] lg:gap-8">

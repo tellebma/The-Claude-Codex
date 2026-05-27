@@ -56,6 +56,12 @@ const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = 
   { path: "/en/prompting/basics/", name: "en-prompting-basics" },
   { path: "/fr/skills/what-are-skills/", name: "fr-skills-what-are-skills" },
   { path: "/en/skills/what-are-skills/", name: "en-skills-what-are-skills" },
+  // TUTO-5 — rollout getting-started complet : echantillon visuel de 4 pages
+  // varies (intro, etapes, projet, FAQ). FR, light + dark via THEMES.
+  { path: "/fr/getting-started/what-is-claude-code/", name: "fr-what-is-claude-code" },
+  { path: "/fr/getting-started/prerequisites-zero/", name: "fr-prerequisites-zero" },
+  { path: "/fr/getting-started/first-project/", name: "fr-first-project" },
+  { path: "/fr/getting-started/faq-beginner/", name: "fr-faq-beginner" },
 ];
 
 const THEMES: ReadonlyArray<"light" | "dark"> = ["light", "dark"];

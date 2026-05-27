@@ -97,7 +97,8 @@
       "title": "Les derniers articles",
       "subtitle": "Les ajouts les plus récents au Codex.",
       "readArticle": "Lire l'article",
-      "filterAll": "Toutes"
+      "filterAll": "Toutes",
+      "viewAll": "Voir tous nos articles"
     },
     "trust": {
       "label": "Pourquoi le Codex",
@@ -106,6 +107,17 @@
       "noTracking": "Sans cookies tiers",
       "officialMcp": "MCP officiel referencé"
     }
+  },
+  "articleCard": {
+    "readLabel": "Lire l'article : {title}",
+    "readCta": "Lire l'article",
+    "pinnedLabel": "À la une",
+    "trendingLabel": "Tendance",
+    "deltaLabel": "Tendance, +{delta}%",
+    "readingMinutes": "{minutes} min de lecture",
+    "dateToday": "aujourd'hui",
+    "dateYesterday": "hier",
+    "dateDaysAgo": "il y a {days} jours"
   },
   "themes": {
     "badgesLabel": "Thèmes de l'article",
@@ -315,6 +327,10 @@
     "robotAlt": "Robot 3D interactif qui suit votre souris"
   },
   "sectionNav": {
+    "section-peers": {
+      "toggleLabel": "Pages de la section {section}",
+      "overviewLink": "Voir toute la section {section}"
+    },
     "getting-started": {
       "title": "Démarrer",
       "overview": "Vue d'ensemble",

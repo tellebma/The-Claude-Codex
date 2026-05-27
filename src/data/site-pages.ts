@@ -371,10 +371,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/content",
     title: "Contenus éditoriaux",
     description:
-      "Tous les articles et guides éditoriaux du Claude Codex. Explorez nos contenus MDX sur Claude Code, les MCP, les Skills et le prompting.",
+      "Tous les articles et guides éditoriaux du Claude Codex. Sécurité, architecture, DevSecOps, prompting : 16 guides indépendants pour maîtriser Claude Code en profondeur.",
     priority: 0.6,
     changeFrequency: "weekly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-19",
   },
   {
     path: "/plugins",

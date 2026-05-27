@@ -97,7 +97,8 @@
       "title": "Latest articles",
       "subtitle": "The most recent additions to the Codex.",
       "readArticle": "Read the article",
-      "filterAll": "All"
+      "filterAll": "All",
+      "viewAll": "See all our articles"
     },
     "trust": {
       "label": "Why the Codex",
@@ -106,6 +107,17 @@
       "noTracking": "No third-party cookies",
       "officialMcp": "Listed by official MCP"
     }
+  },
+  "articleCard": {
+    "readLabel": "Read article: {title}",
+    "readCta": "Read article",
+    "pinnedLabel": "Featured",
+    "trendingLabel": "Trending",
+    "deltaLabel": "Trending, +{delta}%",
+    "readingMinutes": "{minutes} min read",
+    "dateToday": "today",
+    "dateYesterday": "yesterday",
+    "dateDaysAgo": "{days} days ago"
   },
   "themes": {
     "badgesLabel": "Article themes",
@@ -315,6 +327,10 @@
     "robotAlt": "Interactive 3D robot tracking your cursor"
   },
   "sectionNav": {
+    "section-peers": {
+      "toggleLabel": "Pages in the {section} section",
+      "overviewLink": "View all of {section}"
+    },
     "getting-started": {
       "title": "Getting Started",
       "overview": "Overview",

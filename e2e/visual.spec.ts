@@ -20,6 +20,10 @@ import { test, expect, type Page } from "@playwright/test";
 const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = [
   { path: "/fr/", name: "fr-landing" },
   { path: "/en/", name: "en-landing" },
+  // CTN-12 — vitrine editoriale redessinee (hero, Pinned+Latest, Most read,
+  // grille filtrable). Baseline FR + EN.
+  { path: "/fr/content/", name: "fr-content-index" },
+  { path: "/en/content/", name: "en-content-index" },
   { path: "/fr/getting-started/", name: "fr-getting-started" },
   { path: "/fr/getting-started/installation/", name: "fr-installation" },
   { path: "/fr/mcp/", name: "fr-mcp" },

@@ -81,11 +81,14 @@ jobs:
 
       - name: Commit and push snapshots
         run: |
-          if git diff --quiet e2e/visual.spec.ts-snapshots/; then
+          # `git add` AVANT le check : `git diff --quiet` ignore les fichiers
+          # non suivis, donc les baselines de NOUVELLES routes n'etaient jamais
+          # committees (seules les modifications de baselines existantes l'etaient).
+          git add e2e/visual.spec.ts-snapshots/
+          if git diff --cached --quiet; then
             echo "No snapshot changes — nothing to commit."
             exit 0
           fi
-          git add e2e/visual.spec.ts-snapshots/
           git commit -m "test(visual): regenerate snapshots via update-snapshots workflow (PR #${{ github.event.inputs.pr_number }})"
           git push origin HEAD:${{ steps.pr.outputs.head_ref }}
 

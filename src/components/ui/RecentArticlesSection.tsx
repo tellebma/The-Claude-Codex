@@ -60,6 +60,7 @@ export async function RecentArticlesSection({
       ariaLabel={t("ariaLabel")}
       readArticleLabel={t("readArticle")}
       allFilterLabel={t("filterAll")}
+      viewAllLabel={t("viewAll")}
       sectionLabels={sectionLabels}
     />
   );

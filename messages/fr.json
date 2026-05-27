@@ -97,7 +97,8 @@
       "title": "Les derniers articles",
       "subtitle": "Les ajouts les plus récents au Codex.",
       "readArticle": "Lire l'article",
-      "filterAll": "Toutes"
+      "filterAll": "Toutes",
+      "viewAll": "Voir tous nos articles"
     },
     "trust": {
       "label": "Pourquoi le Codex",

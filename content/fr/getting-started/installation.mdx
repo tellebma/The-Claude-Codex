@@ -4,7 +4,7 @@ description: "Installez Claude Code en quelques minutes. Prérequis (Node.js 18+
 section: "getting-started"
 order: 2
 datePublished: "2026-03-09"
-dateModified: "2026-05-11"
+dateModified: "2026-05-27"
 themes: ["tutorial", "tooling"]
 ---
 
@@ -16,7 +16,7 @@ Si les mots "terminal", "Node.js" ou "clé API" vous semblent mystérieux, comme
 
 Trois changements à connaître avant d'installer en mai 2026 :
 
-- **Node.js 22 recommandé** (Node 18 est en fin de support en avril 2026, certains scripts d'outillage du projet exigent désormais Node 20+).
+- **Node.js 22 recommandé** (Node 18 est en fin de support depuis avril 2025 et Node 20 l'atteint en avril 2026, certains scripts d'outillage exigent désormais Node 20+).
 - **Le plan Claude Max** est devenu la voie d'authentification la plus économique pour un usage individuel régulier (vs `ANTHROPIC_API_KEY` au prorata des tokens). À choisir selon votre profil de consommation.
 - **L'installation via `npm i -g @anthropic-ai/claude-code`** reste la seule officielle. Méfiez-vous des forks ou packages non vérifiés. Voir la [page sécurité](/content/bonnes-pratiques-securite) pour les vérifications de provenance.
 
@@ -76,7 +76,7 @@ L'installation se fait en une seule commande. Ouvrez votre terminal et exécutez
     { type: "output", content: "" },
     { type: "output", content: "found 0 vulnerabilities" },
     { type: "empty", content: "" },
-    { type: "highlight", content: "+ @anthropic-ai/claude-code@2.1.81" }
+    { type: "highlight", content: "+ @anthropic-ai/claude-code@2.1.152" }
   ]}
 />
 
@@ -89,7 +89,7 @@ L'installation se fait en une seule commande. Ouvrez votre terminal et exécutez
     { type: "output", content: "" },
     { type: "output", content: "found 0 vulnerabilities" },
     { type: "empty", content: "" },
-    { type: "highlight", content: "+ @anthropic-ai/claude-code@2.1.81" }
+    { type: "highlight", content: "+ @anthropic-ai/claude-code@2.1.152" }
   ]}
 />
 
@@ -107,7 +107,7 @@ Après l'installation, vérifiez que tout fonctionne :
   title="Terminal - zsh"
   lines={[
     { type: "command", content: "claude --version" },
-    { type: "highlight", content: "@anthropic-ai/claude-code 2.1.81" }
+    { type: "highlight", content: "@anthropic-ai/claude-code 2.1.152" }
   ]}
 />
 
@@ -147,7 +147,7 @@ Placez-vous dans un dossier de projet et lancez la commande `claude`. L'authenti
     { type: "command", content: "cd ~/mon-projet && claude" },
     { type: "empty", content: "" },
     { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
-    { type: "highlight", content: "  ║  Welcome to Claude Code (2.1.81)  ║" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (2.1.152) ║" },
     { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
     { type: "empty", content: "" },
     { type: "output", content: "  Analysing project structure..." },
@@ -216,7 +216,7 @@ Node.js n'est pas installé ou votre version est trop ancienne.
 
 ```bash
 # Installer nvm (gestionnaire de versions Node.js)
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
 
 # Redémarrer le terminal, puis :
 nvm install 22

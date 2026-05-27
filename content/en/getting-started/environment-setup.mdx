@@ -4,8 +4,17 @@ description: "Configure Claude Code for the best AI experience: API key environm
 section: "getting-started"
 order: 3
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-05-27"
 ---
+
+## Updated May 2026
+
+Recent changes to Claude Code configuration:
+
+- **`ANTHROPIC_AUTH_TOKEN`** is now the recommended mechanism for enterprise gateways (proxy + Bearer token), while `ANTHROPIC_API_KEY` remains for direct use. See [Environment variables: official reference](/reference/environment).
+- **`ANTHROPIC_BASE_URL`** lets you point to an internal proxy (e.g. `gateway.corp/anthropic`) without touching the rest of the config.
+- **`MAX_THINKING_TOKENS`** caps the thinking budget per request: useful for bounding costs on long sessions.
+- **`DISABLE_AUTOUPDATER=1`** is now deployed by default in CI to prevent a silent upgrade from breaking a running pipeline.
 
 ## Configuration overview
 

@@ -58,7 +58,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Découvrez Claude Code, l’assistant IA en ligne de commande d’Anthropic. Comprenez ce qui le différencie de Copilot ou Cursor.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-27",
   },
   {
     path: "/getting-started/installation",
@@ -67,7 +67,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Installez Claude Code en quelques minutes : Node.js 18+, npm, authentification API key ou Max, et résolution des erreurs courantes.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-05-11",
+    lastModified: "2026-05-27",
   },
   {
     path: "/getting-started/environment-setup",
@@ -76,7 +76,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Configurez Claude Code : variable d’environnement API key, fichier settings.json, fichier CLAUDE.md, permissions et sécurité.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-05-10",
+    lastModified: "2026-05-27",
   },
   {
     path: "/getting-started/first-project",
@@ -85,7 +85,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Tutoriel concret : créez votre premier site web avec Claude Code en 5 minutes. Exemples de prompts et bonnes pratiques.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-05-10",
+    lastModified: "2026-05-27",
   },
   {
     path: "/getting-started/templates-starter-kits",
@@ -437,7 +437,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les Skills Claude Code expliqués : workflows Markdown réutilisables déclenchés par slash commands. Fonctionnement, création, et différences avec les MCP et plugins.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-13",
+    lastModified: "2026-05-27",
   },
   {
     path: "/skills/best-skills",

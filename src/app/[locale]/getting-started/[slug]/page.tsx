@@ -1,10 +1,9 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { BookOpen } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
-import SectionSlugContent from "@/components/layout/SectionSlugContent";
+import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
 const SECTION = "getting-started";
 
@@ -89,12 +88,12 @@ export default async function GettingStartedSlugPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
+  // TUTO-5 — section getting-started entierement migree vers le shell article.
   return (
-    <SectionSlugContent
+    <TutoArticleContent
       section={SECTION}
       slug={slug}
       locale={locale}
-      icon={BookOpen}
       extraJsonLd={buildFaqSchema(slug)}
     />
   );

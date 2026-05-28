@@ -68,6 +68,74 @@ const ROUTES: ReadonlyArray<{
     // Seul scrollable-region-focusable reste exclu (overflow code preview).
     disableRules: SCROLLABLE_OVERFLOW_OK,
   },
+  // TUTO-3 — pilote migration pages tuto vers ArticleShell (3 typologies :
+  // getting-started/installation deja couverte plus haut, + prompting/basics
+  // dense + skills/what-are-skills courte). FR + EN.
+  // color-contrast : meme dette brand-500 (pill categorie + CTA) que les
+  // articles /content et installation, cf. notes ci-dessus.
+  {
+    path: "/en/getting-started/installation/",
+    name: "EN installation article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/prompting/basics/",
+    name: "FR prompting basics article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/prompting/basics/",
+    name: "EN prompting basics article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/skills/what-are-skills/",
+    name: "FR skills what-are-skills article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/skills/what-are-skills/",
+    name: "EN skills what-are-skills article (TUTO-3)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  // TUTO-5 — rollout complet de getting-started vers ArticleShell. Les 6 slugs
+  // restants (installation deja couverte plus haut). color-contrast : meme
+  // dette brand-500 (pill categorie) ; SCROLLABLE_OVERFLOW_OK pour les blocs code.
+  {
+    path: "/fr/getting-started/what-is-claude-code/",
+    name: "FR what-is-claude-code (TUTO-5)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/getting-started/prerequisites-zero/",
+    name: "FR prerequisites-zero (TUTO-5)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/getting-started/environment-setup/",
+    name: "FR environment-setup (TUTO-5)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/getting-started/first-project/",
+    name: "FR first-project (TUTO-5)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/getting-started/templates-starter-kits/",
+    name: "FR templates-starter-kits (TUTO-5)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/getting-started/faq-beginner/",
+    name: "FR faq-beginner (TUTO-5)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/getting-started/faq-beginner/",
+    name: "EN faq-beginner (TUTO-5)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
   { path: "/fr/glossary/", name: "FR glossary" },
   { path: "/fr/about/", name: "FR about" },
   { path: "/fr/future/", name: "FR future" },

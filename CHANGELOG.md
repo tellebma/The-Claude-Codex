@@ -1,3 +1,16 @@
+# [1.11.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.10.0...v1.11.0) (2026-05-28)
+
+
+### Bug Fixes
+
+* **content:** corrections fact-check getting-started + what-are-skills ([#250](https://github.com/tellebma/The-Claude-Codex/issues/250)) ([1dba4a0](https://github.com/tellebma/The-Claude-Codex/commit/1dba4a01cf57ba184b0226be91f00af66f555c51))
+
+
+### Features
+
+* **layout:** TUTO-3 pilote migration pages tuto vers ArticleShell ([#248](https://github.com/tellebma/The-Claude-Codex/issues/248)) ([2f50ae8](https://github.com/tellebma/The-Claude-Codex/commit/2f50ae8f36a9e07a2e08bb156d8f5dc8bf7f9817))
+* **layout:** TUTO-5 rollout getting-started complet vers ArticleShell ([#249](https://github.com/tellebma/The-Claude-Codex/issues/249)) ([22f350c](https://github.com/tellebma/The-Claude-Codex/commit/22f350cf149ffa516f9eb74f7b8b6dc8ed5cfb2c))
+
 # [1.10.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.9.1...v1.10.0) (2026-05-27)
 
 

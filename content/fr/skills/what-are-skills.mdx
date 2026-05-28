@@ -4,7 +4,7 @@ description: "Comprendre les Skills Claude Code : concept, types, fonctionnement
 section: "skills"
 order: 1
 datePublished: "2026-03-10"
-dateModified: "2026-04-30"
+dateModified: "2026-05-27"
 themes: ["reference", "productivity"]
 ---
 
@@ -44,10 +44,10 @@ Créés dans le dossier `.claude/commands/` de votre projet, ces Skills sont **p
 # Structure des Skills de projet
 .claude/
   commands/
-    review-pr.md       # → /project:review-pr
-    deploy.md          # → /project:deploy
-    hotfix.md          # → /project:hotfix
-    onboarding.md      # → /project:onboarding
+    review-pr.md       # → /review-pr
+    deploy.md          # → /deploy
+    hotfix.md          # → /hotfix
+    onboarding.md      # → /onboarding
 ```
 
 ### 3. Skills personnels (user commands)
@@ -58,9 +58,9 @@ Stockés dans `~/.claude/commands/`, ces Skills sont disponibles dans **tous vos
 # Structure des Skills personnels
 ~/.claude/
   commands/
-    tdd-guide.md       # → /user:tdd-guide
-    code-review.md     # → /user:code-review
-    brainstorm.md      # → /user:brainstorm
+    tdd-guide.md       # → /tdd-guide
+    code-review.md     # → /code-review
+    brainstorm.md      # → /brainstorm
 ```
 
 <Card title="Comment choisir le bon type ?" variant="accent">
@@ -75,7 +75,7 @@ Quand vous tapez une slash command, Claude Code exécute un processus en quatre 
 
 <Steps>
 <Step title="Détection" stepNumber={1}>
-Claude Code reconnaît la commande `/project:review-pr` et cherche le fichier correspondant dans `.claude/commands/review-pr.md`.
+Claude Code reconnaît la commande `/review-pr` et cherche le fichier correspondant dans `.claude/commands/review-pr.md`.
 </Step>
 
 <Step title="Chargement" stepNumber={2}>
@@ -125,7 +125,7 @@ Pour chaque fichier modifié, fournis :
 ```
 
 <Callout type="tip" title="La puissance de \$ARGUMENTS">
-La variable `$ARGUMENTS` capture tout ce que vous tapez après la slash command. Par exemple, `/project:review-pr develop` remplace `$ARGUMENTS` par `develop`. Cela rend vos Skills dynamiques et réutilisables.
+La variable `$ARGUMENTS` capture tout ce que vous tapez après la slash command. Par exemple, `/review-pr develop` remplace `$ARGUMENTS` par `develop`. Cela rend vos Skills dynamiques et réutilisables.
 </Callout>
 
 ## Skill vs CLAUDE.md : quelle différence ?
@@ -159,7 +159,7 @@ Le **CLAUDE.md** dit à Claude *qui* est le projet. Les **Skills** disent à Cla
 
 ```bash
 # Une seule commande, le même résultat à chaque fois
-/project:review-pr
+/review-pr
 ```
 
 Le Skill garantit que la review suit **toujours le même processus**, avec le même niveau de détail, les mêmes vérifications. Plus besoin de se souvenir de toutes les consignes, elles sont codifiées dans le fichier.
@@ -176,7 +176,7 @@ Pour voir tous les Skills disponibles dans votre session courante :
 /
 ```
 
-Claude Code affiche les Skills regroupés par source : built-in, projet (`/project:...`) et personnel (`/user:...`).
+Claude Code affiche les Skills regroupés par source : built-in, projet (`.claude/commands/`) et personnel (`~/.claude/commands/`). Quelle que soit la source, chaque commande s'invoque directement par son nom (`/review-pr`).
 
 ## Prochaines étapes
 

@@ -1,15 +1,12 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { Wand2 } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
-import SectionSlugContent from "@/components/layout/SectionSlugContent";
+import { createFAQPageSchema } from "@/lib/structured-data";
+import { getPageFaqs } from "@/data/page-faqs";
 import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
 const SECTION = "skills";
-
-/** TUTO-3 — slugs migres vers le shell article premium (rollout progressif). */
-const ARTICLE_SHELL_SLUGS = new Set(["what-are-skills"]);
 
 interface PageProps {
   readonly params: Promise<{ locale: string; slug: string }>;
@@ -46,16 +43,16 @@ export default async function SkillsSlugPage({ params }: PageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  if (ARTICLE_SHELL_SLUGS.has(slug)) {
-    return <TutoArticleContent section={SECTION} slug={slug} locale={locale} />;
-  }
+  // TUTO-6 (batch 1) — section skills entierement migree vers le shell article.
+  const faqs = getPageFaqs(`/${SECTION}/${slug}`, locale);
+  const extraJsonLd = faqs ? [createFAQPageSchema(faqs)] : undefined;
 
   return (
-    <SectionSlugContent
+    <TutoArticleContent
       section={SECTION}
       slug={slug}
       locale={locale}
-      icon={Wand2}
+      extraJsonLd={extraJsonLd}
     />
   );
 }

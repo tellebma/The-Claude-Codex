@@ -62,6 +62,13 @@ const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = 
   { path: "/fr/getting-started/prerequisites-zero/", name: "fr-prerequisites-zero" },
   { path: "/fr/getting-started/first-project/", name: "fr-first-project" },
   { path: "/fr/getting-started/faq-beginner/", name: "fr-faq-beginner" },
+  // TUTO-6 batch 1 — rollout section skills complete vers ArticleShell.
+  // Echantillon de 4 pages varies (cornerstone, comparatif, how-to, fiche
+  // outil), FR light + dark via THEMES. what-are-skills couvert ci-dessus.
+  { path: "/fr/skills/best-skills/", name: "fr-skills-best-skills" },
+  { path: "/fr/skills/comparison/", name: "fr-skills-comparison" },
+  { path: "/fr/skills/create-custom/", name: "fr-skills-create-custom" },
+  { path: "/fr/skills/impeccable/", name: "fr-skills-impeccable" },
 ];
 
 const THEMES: ReadonlyArray<"light" | "dark"> = ["light", "dark"];

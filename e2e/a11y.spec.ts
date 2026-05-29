@@ -98,6 +98,39 @@ const ROUTES: ReadonlyArray<{
     name: "EN skills what-are-skills article (TUTO-3)",
     disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
+  // TUTO-6 (batch 1) — rollout complet de la section skills vers ArticleShell.
+  // Les 5 slugs restants (what-are-skills deja couvert ci-dessus). Meme dette
+  // brand-500 (pill categorie) + SCROLLABLE_OVERFLOW_OK pour les blocs code.
+  {
+    path: "/fr/skills/best-skills/",
+    name: "FR skills best-skills (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/skills/comparison/",
+    name: "FR skills comparison (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/skills/create-custom/",
+    name: "FR skills create-custom (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/skills/find-skills/",
+    name: "FR skills find-skills (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/skills/impeccable/",
+    name: "FR skills impeccable (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/skills/impeccable/",
+    name: "EN skills impeccable (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
   // TUTO-5 — rollout complet de getting-started vers ArticleShell. Les 6 slugs
   // restants (installation deja couverte plus haut). color-contrast : meme
   // dette brand-500 (pill categorie) ; SCROLLABLE_OVERFLOW_OK pour les blocs code.

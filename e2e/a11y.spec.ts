@@ -201,6 +201,41 @@ const ROUTES: ReadonlyArray<{
     name: "EN mcp what-are-mcps (TUTO-6)",
     disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
+  // TUTO-6 (batch 4) — rollout complet de la section agents vers ArticleShell.
+  // Echantillon : 5 slugs FR diversifies (introductif, hands-on, long/dense, avance,
+  // technique SDK) + 1 slug EN representatif. color-contrast : dette brand-500
+  // (pill categorie) identique aux autres articles. SCROLLABLE_OVERFLOW_OK : blocs
+  // code TypeScript/Python/bash frequents dans les articles agents.
+  {
+    path: "/fr/agents/what-are-agents/",
+    name: "FR agents what-are-agents (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/agents/create-subagent/",
+    name: "FR agents create-subagent (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/agents/agent-teams/",
+    name: "FR agents agent-teams (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/agents/orchestration/",
+    name: "FR agents orchestration (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/agents/agent-sdk/",
+    name: "FR agents agent-sdk (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/agents/what-are-agents/",
+    name: "EN agents what-are-agents (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
   // TUTO-5 — rollout complet de getting-started vers ArticleShell. Les 6 slugs
   // restants (installation deja couverte plus haut). color-contrast : meme
   // dette brand-500 (pill categorie) ; SCROLLABLE_OVERFLOW_OK pour les blocs code.

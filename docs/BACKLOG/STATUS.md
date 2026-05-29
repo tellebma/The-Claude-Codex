@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-29 (Tuto-pages TUTO-6 batch 2 `prompting` livre : 24 routes migrees vers ArticleShell, 12 tests a11y batch 2 (6 routes x light+dark), build 267 pages OK ; batch 1 `skills` livre precedemment : 16 tests a11y verts ; Content page redesign clos 100% #240/#243 + release prod 1.10.0 ; Vercel Metrics clos 9/11 VM-8/VM-12 descopes)
+> Derniere mise a jour : 2026-05-29 (Tuto-pages TUTO-6 batch 3 `mcp` livre : 20 routes migrees vers ArticleShell, 12 tests a11y batch 3 (6 routes x light+dark), build OK ; batch 2 `prompting` 24 routes + batch 1 `skills` 12 routes livres precedemment ; Content page redesign clos 100% #240/#243 + release prod 1.10.0 ; Vercel Metrics clos 9/11 VM-8/VM-12 descopes)
 
 ---
 
@@ -24,7 +24,7 @@
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
 | [Content page redesign 2026-05](EPIC-content-page-redesign-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture : Sprints 1-3 livres #240/#243, release prod 1.10.0) |
-| [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 3 | 1 | 6 | 35% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; TUTO-6 EN COURS : batch 1 `skills` livre (12 routes, 16 tests a11y verts), batch 2 `prompting` livre (24 routes, 12 tests a11y batch 2, baselines visuelles reporters pour env stable) ; reste batchs mcp/agents) |
+| [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 3 | 1 | 6 | 38% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; TUTO-6 EN COURS : batch 1 `skills` livre (12 routes, 16 tests a11y verts), batch 2 `prompting` livre (24 routes, 12 tests a11y batch 2), batch 3 `mcp` livre (20 routes, 12 tests a11y batch 3, baselines visuelles reporters pour env stable) ; reste batch agents) |
 
 **Total projet** : 136/191 stories (71%) · ~318/441 SP livres (72%) — (VM-8 + VM-12 descopes : retires du denominateur)
 

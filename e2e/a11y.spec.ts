@@ -166,6 +166,41 @@ const ROUTES: ReadonlyArray<{
     name: "EN prompting advanced (TUTO-6)",
     disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
+  // TUTO-6 (batch 3) — rollout complet de la section mcp vers ArticleShell.
+  // Echantillon : 5 slugs FR diversifies (introductif, setup, creation TS, securite,
+  // protocol avance) + 1 slug EN representatif. color-contrast : dette brand-500
+  // (pill categorie) identique aux autres articles. SCROLLABLE_OVERFLOW_OK : blocs
+  // code TypeScript/Python/bash inline frequents dans les articles MCP.
+  {
+    path: "/fr/mcp/what-are-mcps/",
+    name: "FR mcp what-are-mcps (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/mcp/setup/",
+    name: "FR mcp setup (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/mcp/create-mcp-typescript/",
+    name: "FR mcp create-mcp-typescript (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/mcp/securite-mcp/",
+    name: "FR mcp securite-mcp (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/mcp/advanced-protocol/",
+    name: "FR mcp advanced-protocol (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/mcp/what-are-mcps/",
+    name: "EN mcp what-are-mcps (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
   // TUTO-5 — rollout complet de getting-started vers ArticleShell. Les 6 slugs
   // restants (installation deja couverte plus haut). color-contrast : meme
   // dette brand-500 (pill categorie) ; SCROLLABLE_OVERFLOW_OK pour les blocs code.

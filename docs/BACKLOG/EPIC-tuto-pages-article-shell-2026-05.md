@@ -197,15 +197,15 @@ Pilote sur 3 sections distinctes (1 onboarding lineaire + 1 dense + 1 courte) po
 
 > En tant que **dev**, je migre les 4 sections par batch hebdomadaire avec verifs GSC entre chaque.
 
-**Statut** : 🔄 EN COURS. Bloqueur SEO-2 leve (#161 merge). **Batch 1 `skills` livre** (rollout complet de la section vers `TutoArticleContent` : `skills/[slug]/page.tsx` route desormais tous les slugs via le shell, plus de gate `ARTICLE_SHELL_SLUGS`). Reste : `prompting`, `mcp`, `agents`. La verif GSC J+7 entre chaque batch reste un controle manuel externe (suivi rapport hebdo, hors automation).
+**Statut** : 🔄 EN COURS. Bloqueur SEO-2 leve (#161 merge). **Batch 1 `skills` livre** (rollout complet de la section vers `TutoArticleContent` : `skills/[slug]/page.tsx` route desormais tous les slugs via le shell, plus de gate `ARTICLE_SHELL_SLUGS`). **Batch 2 `prompting` livre** (rollout complet : `prompting/[slug]/page.tsx` route tous les slugs via le shell, gate `ARTICLE_SHELL_SLUGS` supprime, FAQ dynamique via `getPageFaqs` + `createFAQPageSchema` integre, 6 nouvelles routes a11y testees light+dark). Baselines visuelles prompting reportees (env WSL2/Ubuntu non fiable — regenerer via `update-snapshots` en env Linux stable). Reste : `mcp`, `agents`. La verif GSC J+7 entre chaque batch reste un controle manuel externe (suivi rapport hebdo, hors automation).
 
-**Volume** : 70 routes (12 skills + 24 prompting + 20 mcp + 18 agents). Etalement : `skills` (semaine 4, ✅ code livre), `prompting` (5), `mcp` (6), `agents` (7).
+**Volume** : 70 routes (12 skills + 24 prompting + 20 mcp + 18 agents). Etalement : `skills` (semaine 4, ✅ code livre), `prompting` (5, ✅ code livre), `mcp` (6), `agents` (7).
 
 **Criteres d'acceptation** :
-- [ ] 70 routes rendues. **(skills : 12/12 routes ✅)**
-- [x] Build SSG passe sans warning. **(skills : build OK, 267 pages)**
-- [ ] Visual light + dark sur 4 pages par section (16 baselines). **(skills : baselines a regenerer avec les batches suivants via update-snapshots)**
-- [ ] axe-core 0 violation critical/serious sur l'echantillon. **(skills : 16 tests verts FR+EN ✅)**
+- [ ] 70 routes rendues. **(skills : 12/12 routes ✅ ; prompting : 24/24 routes ✅)**
+- [x] Build SSG passe sans warning. **(skills+prompting : build OK, 267 pages, 0 erreur)**
+- [ ] Visual light + dark sur 4 pages par section (16 baselines). **(skills + prompting : baselines reportees — regenerer en env Linux stable)**
+- [ ] axe-core 0 violation critical/serious sur l'echantillon. **(skills : 16 tests verts FR+EN ✅ ; prompting : 12 tests batch 2 (6 routes x light+dark) a executer apres merge)**
 - [ ] **INP p75 < 200 ms** mesure via WebPageTest mobile bas de gamme (Moto G4) sur 3 pages reelles par section avant merge develop.
 - [ ] Audit `npm run audit:links` 0 erreur entre chaque batch.
 - [ ] Verifs GSC entre chaque batch (cf plan rollout) : impressions ±15 %, CTR stable, position +/- 2 rangs, 0 page Excluded. Si 2 criteres KO, gel du rollout.

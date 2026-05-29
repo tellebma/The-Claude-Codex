@@ -131,6 +131,41 @@ const ROUTES: ReadonlyArray<{
     name: "EN skills impeccable (TUTO-6)",
     disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
+  // TUTO-6 (batch 2) — rollout complet de la section prompting vers ArticleShell.
+  // basics FR+EN deja couverts ci-dessus (TUTO-3). Echantillon : 5 slugs FR
+  // diversifies (long, dense, config, court, pedagogique) + 1 slug EN representatif.
+  // color-contrast : dette brand-500 (pill categorie) identique aux autres articles.
+  // SCROLLABLE_OVERFLOW_OK : blocs code inline + templates multi-langages.
+  {
+    path: "/fr/prompting/advanced/",
+    name: "FR prompting advanced (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/prompting/templates/",
+    name: "FR prompting templates (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/prompting/claude-md/",
+    name: "FR prompting claude-md (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/prompting/mistakes/",
+    name: "FR prompting mistakes (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/fr/prompting/thinking-and-planning/",
+    name: "FR prompting thinking-and-planning (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
+  {
+    path: "/en/prompting/advanced/",
+    name: "EN prompting advanced (TUTO-6)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+  },
   // TUTO-5 — rollout complet de getting-started vers ArticleShell. Les 6 slugs
   // restants (installation deja couverte plus haut). color-contrast : meme
   // dette brand-500 (pill categorie) ; SCROLLABLE_OVERFLOW_OK pour les blocs code.

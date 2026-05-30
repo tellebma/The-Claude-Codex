@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { existsSync, readFileSync, readdirSync, statSync } from "fs";
 import { join } from "path";
+import { hasStaticFileExtension } from "@/lib/url-path";
 
 /**
  * Regression guard for the 2026-04-21 bug where pages in src/app/[locale]/
@@ -45,15 +46,6 @@ function isAllowed(href: string): boolean {
   return ALLOWED_PREFIXES.some(
     (p) => href === p || href.startsWith(p + "/") || href.startsWith(p),
   );
-}
-
-function hasStaticFileExtension(href: string): boolean {
-  const pathWithoutHash = href.split("#", 1)[0];
-  const pathOnly = pathWithoutHash.split("?", 1)[0];
-  const lastSlashIndex = pathOnly.lastIndexOf("/");
-  const lastDotIndex = pathOnly.lastIndexOf(".");
-
-  return lastDotIndex > lastSlashIndex && lastDotIndex < pathOnly.length - 1;
 }
 
 function walkHtml(dir: string): string[] {

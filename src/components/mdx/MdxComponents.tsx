@@ -11,6 +11,7 @@ import { PricingTable } from "@/components/ui/PricingTable";
 import { ComparisonTable } from "@/components/ui/ComparisonTable";
 import { TcoCalculator } from "@/components/ui/TcoCalculator";
 import { MermaidDiagram } from "@/components/ui/MermaidDiagram";
+import { hasStaticFileExtension } from "@/lib/url-path";
 import { Tabs } from "@/components/mdx/Tabs";
 import { Steps, Step } from "@/components/mdx/Steps";
 import { Card } from "@/components/mdx/Card";
@@ -242,15 +243,6 @@ function isInternalLink(href: string | undefined): boolean {
   // Static file downloads in public/ are served without locale prefix
   if (hasStaticFileExtension(href)) return false;
   return true;
-}
-
-function hasStaticFileExtension(href: string): boolean {
-  const pathWithoutHash = href.split("#", 1)[0];
-  const pathOnly = pathWithoutHash.split("?", 1)[0];
-  const lastSlashIndex = pathOnly.lastIndexOf("/");
-  const lastDotIndex = pathOnly.lastIndexOf(".");
-
-  return lastDotIndex > lastSlashIndex && lastDotIndex < pathOnly.length - 1;
 }
 
 /**

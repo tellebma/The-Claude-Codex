@@ -40,6 +40,8 @@ function isAllowed(href: string): boolean {
   if (!href.startsWith("/")) return true; // external or relative
   if (href === "/") return true; // root
   if (href.startsWith("#")) return true;
+  // Static file downloads (public/skills/*.md, etc.) served without locale prefix
+  if (/\.\w+$/.test(href.split("?")[0].split("#")[0])) return true;
   return ALLOWED_PREFIXES.some(
     (p) => href === p || href.startsWith(p + "/") || href.startsWith(p),
   );

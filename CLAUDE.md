@@ -98,16 +98,15 @@ Les balises HTML (`h1`-`h4`, `p`, `ul`, `ol`, `a`, `blockquote`, `table`, `code`
 
 ## Layout & Navigation
 
-### SectionLayout
+### Shells de pages tuto vs sections legacy
 
-**Composant standard** pour toutes les sections de documentation (`components/layout/SectionLayout.tsx`). Fournit :
-- Sidebar gauche : navigation de section (`SectionSidebar`)
-- Zone de contenu principale (flex-1)
-- Sidebar droite : table des matières auto-générée (`TableOfContents`, visible sur xl+)
-- Breadcrumb en haut de page
-- Bouton scroll-to-top
+Les pages `[slug]` des sections tuto migrées (`getting-started`, `skills`, `prompting`, `mcp`, `agents`, `advanced`) utilisent désormais `TutoArticleContent`, qui câble `ArticleHero`, `ArticleShell`, `ArticlePager`, `ReadingProgressBar`, JSON-LD et `SectionPeers` dans le rail droit. C'est la cible article-shell pour les pages de documentation longues.
 
-Chaque section l'utilise via son `layout.tsx` : `<SectionLayout>{children}</SectionLayout>`
+`SectionPeers` liste les pages voisines de la même section : accordion sous `xl`, bloc sticky au-delà, `aria-current="page"` sur la page active et lien vers l'overview locale.
+
+`SectionLayout`, `SectionSidebar` et `SectionSlugContent` restent nécessaires pour les overviews et les sections hors scope tuto (`plugins`, `reference`, `future`, `enterprise`, `personas`, `limits`, `use-cases`, `ecosystem`). Ne pas les supprimer tant qu'une route `[slug]` legacy les consomme.
+
+La garde statique `__tests__/architecture/tuto-article-shell-rollout.test.ts` verrouille cette séparation : les sections tuto doivent importer `TutoArticleContent`, les sections legacy documentées doivent encore référencer `SectionSlugContent`.
 
 ### Configuration de navigation
 

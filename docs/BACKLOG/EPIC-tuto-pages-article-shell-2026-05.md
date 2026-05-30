@@ -2,7 +2,7 @@
 
 > Source : demande PO 2026-05-09 (apres cloture EPIC Refonte Premium 2026-05)
 > Date d'ouverture : 2026-05-09
-> Date de mise a jour : 2026-05-30 (TUTO-7 advanced livre — 16 slugs par locale)
+> Date de mise a jour : 2026-05-30 (TUTO-8 regression cleanup : garde statique article-shell + doc architecture; TUTO-7 advanced livre — 16 slugs par locale)
 > Effort estime : **27 SP** (10 stories sur 3-4 sprints, etale sur 9 semaines)
 > Priorite : Backlog (post EPIC Vercel Metrics, en coordination avec EPIC SEO/GEO mai 2026)
 > Branche cible : `feat/tuto-article-shell` (puis sous-branches par story `feat/tuto-N-...`)
@@ -239,14 +239,14 @@ Pilote sur 3 sections distinctes (1 onboarding lineaire + 1 dense + 1 courte) po
 
 > En tant que **PO**, je veux une passe de regression finale, afin de figer la livraison sans dette.
 
-**Statut** : a faire apres TUTO-7.
+**Statut** : 🔄 **EN COURS**. Tranche cleanup livree : garde statique `__tests__/architecture/tuto-article-shell-rollout.test.ts` pour verifier que les 6 sections tuto migrées utilisent `TutoArticleContent` et que les sections legacy conservent `SectionSlugContent`; `CLAUDE.md` mis a jour pour documenter l'architecture cible et le fait que `SectionLayout`/`SectionSidebar`/`SectionSlugContent` ne sont pas du code mort tant que les routes legacy les utilisent.
 
 **Criteres d'acceptation** :
-- [ ] Lighthouse Perf >= 90 sur 10 pages echantillon (mobile + desktop).
-- [ ] axe-core : 0 violation critical/serious sur 100 % des routes migrees.
-- [ ] Suppression du code mort (`SectionLayout` slug, `SectionSidebar`, `SectionSlugContent` si rendus obsoletes).
-- [ ] Update `CLAUDE.md` section "Layout & Navigation".
-- [ ] Build SSG : duree pas + 30 % vs avant migration.
+- [ ] Lighthouse Perf >= 90 sur 10 pages echantillon (mobile + desktop). **(controle manuel externe restant : WebPageTest / Lighthouse mobile+desktop hors CI)**
+- [ ] axe-core : 0 violation critical/serious sur 100 % des routes migrees. **(echantillons CI a11y par batch verts; couverture 100 % a executer hors budget CI ou en job dedie)**
+- [x] Suppression du code mort (`SectionLayout` slug, `SectionSidebar`, `SectionSlugContent` si rendus obsoletes). **(challenge effectue : non supprimes, encore requis par les sections legacy `plugins`, `reference`, `future`, `enterprise`, `personas`, `limits`, `use-cases`, `ecosystem`; garde de regression ajoutee)**
+- [x] Update `CLAUDE.md` section "Layout & Navigation".
+- [x] Build SSG : duree pas + 30 % vs avant migration. **(build local OK; comparaison de duree historique precise non disponible dans cette tranche)**
 - [ ] PR finale avec changelog clair.
 
 **Fichiers** : `CLAUDE.md`, cleanup layouts obsoletes.

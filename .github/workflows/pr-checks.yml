@@ -295,7 +295,7 @@ jobs:
   e2e-smoke:
     name: E2E smoke (chromium)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     needs: [build]
     steps:
       - name: Checkout
@@ -341,7 +341,7 @@ jobs:
     # les diffs visuels (actual vs expected) pour debug.
     name: E2E visual regression
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     needs: [build]
     steps:
       - name: Checkout

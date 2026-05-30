@@ -28,10 +28,13 @@ const SCROLLABLE_OVERFLOW_OK: ReadonlyArray<string> = [
   "scrollable-region-focusable",
 ];
 
+const ADVANCED_A11Y_TIMEOUT_MS = 120_000;
+
 const ROUTES: ReadonlyArray<{
   readonly path: string;
   readonly name: string;
   readonly disableRules?: ReadonlyArray<string>;
+  readonly timeoutMs?: number;
 }> = [
   { path: "/fr/", name: "FR landing" },
   { path: "/en/", name: "EN landing" },
@@ -355,6 +358,48 @@ const ROUTES: ReadonlyArray<{
     name: "EN article future-vision",
     disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
   },
+  // TUTO-7 (advanced) — rollout de la section advanced vers ArticleShell.
+  // Echantillon : 4 slugs FR diversifies (worktrees, hooks, securite/sandbox,
+  // workflows avances) + 2 slugs EN representatifs. color-contrast : dette
+  // brand-500 (pill categorie) identique aux autres articles.
+  // SCROLLABLE_OVERFLOW_OK : blocs code bash/TypeScript frequents dans les
+  // articles advanced (commandes git, scripts hooks, workflows CI/CD).
+  {
+    path: "/fr/advanced/worktrees/",
+    name: "FR advanced worktrees (TUTO-7)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    timeoutMs: ADVANCED_A11Y_TIMEOUT_MS,
+  },
+  {
+    path: "/fr/advanced/hooks/",
+    name: "FR advanced hooks (TUTO-7)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    timeoutMs: ADVANCED_A11Y_TIMEOUT_MS,
+  },
+  {
+    path: "/fr/advanced/permissions-sandbox/",
+    name: "FR advanced permissions-sandbox (TUTO-7)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    timeoutMs: ADVANCED_A11Y_TIMEOUT_MS,
+  },
+  {
+    path: "/fr/advanced/workflows/",
+    name: "FR advanced workflows (TUTO-7)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    timeoutMs: ADVANCED_A11Y_TIMEOUT_MS,
+  },
+  {
+    path: "/en/advanced/worktrees/",
+    name: "EN advanced worktrees (TUTO-7)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    timeoutMs: ADVANCED_A11Y_TIMEOUT_MS,
+  },
+  {
+    path: "/en/advanced/hooks/",
+    name: "EN advanced hooks (TUTO-7)",
+    disableRules: ["color-contrast", ...SCROLLABLE_OVERFLOW_OK],
+    timeoutMs: ADVANCED_A11Y_TIMEOUT_MS,
+  },
 ];
 
 const THEMES: ReadonlyArray<"light" | "dark"> = ["light", "dark"];
@@ -384,8 +429,11 @@ function summarize(violations: ReadonlyArray<AxeViolation>): string {
 
 test.describe("a11y — axe-core WCAG AA (10 routes x 2 themes)", () => {
   for (const theme of THEMES) {
-    for (const { path, name, disableRules } of ROUTES) {
-      test(`a11y: ${name} — ${theme}`, async ({ page }) => {
+    for (const { path, name, disableRules, timeoutMs } of ROUTES) {
+      test(`a11y: ${name} — ${theme}`, async ({ page }, testInfo) => {
+        if (timeoutMs) {
+          testInfo.setTimeout(timeoutMs);
+        }
         await setTheme(page, theme);
         await page.goto(path);
         await page.waitForLoadState("networkidle");

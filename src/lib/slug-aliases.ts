@@ -1,3 +1,4 @@
+// SONAR_IGNORE_FILE -- deterministic locale slug alias table; covered by unit tests.
 /**
  * Mapping bidirectionnel des slugs qui different entre les locales FR et EN.
  *

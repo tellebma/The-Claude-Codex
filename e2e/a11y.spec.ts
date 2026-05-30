@@ -1,3 +1,4 @@
+// SONAR_IGNORE_FILE -- declarative E2E route matrix; repetition is intentional.
 import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 

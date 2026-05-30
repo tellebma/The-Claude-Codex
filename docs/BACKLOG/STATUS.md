@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-30 (Tuto-pages TUTO-8 regression cleanup lance : garde statique article-shell + CLAUDE.md architecture, code legacy conserve car encore utilise ; TUTO-7 `advanced` livre : 32 routes migrees, audit liens OK ; restent controles manuels Lighthouse/WebPageTest/GSC/visuels)
+> Derniere mise a jour : 2026-05-31 (Integration consolidee develop : TUTO-6/7/8 + SR-3 (cloture EPIC security-review 100%) + article cout des tokens selon la langue, lignee lineaire #257 ; restent controles manuels Lighthouse/WebPageTest/GSC/visuels + TUTO-9/10 monitoring post-rollout)
 
 ---
 
@@ -20,13 +20,13 @@
 | [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture 2026-05-12) |
 | [Polish heros sections 2026-05](EPIC-polish-section-heroes-content-grid-2026-05.md) | 12 | 0 | 0 | 12 | 0% 🆕 (en attente skill Impeccable) |
 | [Langue espagnole 2026-05](EPIC-i18n-espagnol-2026-05.md) | 11 | 0 | 0 | 11 | 0% 🆕 (~500M locuteurs natifs, vide concurrentiel ES) |
-| [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 7 | 0 | 1 | 88% 🔄 (SR-1/SR-2/SR-4/SR-5/SR-6/SR-7/SR-8 livres ; reste SR-3 screenshot manuel) |
+| [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 8 | 0 | 0 | 100% ✅ (cloture 2026-05-31 : SR-3 screenshots + comparaison plugin everything-claude-code livre, EPIC complet) |
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
 | [Content page redesign 2026-05](EPIC-content-page-redesign-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture : Sprints 1-3 livres #240/#243, release prod 1.10.0) |
 | [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 5 | 1 | 4 | 64% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; TUTO-6 livre : batch 1 `skills` (12 routes), batch 2 `prompting` (24 routes), batch 3 `mcp` (20 routes), batch 4 `agents` (18 routes) ; **TUTO-7 `advanced` livre 2026-05-30** : 32 routes (16 FR + 16 EN), 12 tests a11y batch 5, build/audit liens OK ; **TUTO-8 regression cleanup en cours** : garde statique article-shell + doc architecture, code legacy conserve car encore utilise ; restent controles manuels Lighthouse/WebPageTest/GSC/visuels + TUTO-9/10 monitoring) |
 
-**Total projet** : 137/191 stories (72%) · ~320/441 SP livres (73%) — (VM-8 + VM-12 descopes : retires du denominateur)
+**Total projet** : 138/191 stories (72%) · ~322/441 SP livres (73%) — (VM-8 + VM-12 descopes : retires du denominateur)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 

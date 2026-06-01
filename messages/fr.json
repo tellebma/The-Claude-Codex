@@ -253,22 +253,64 @@
     }
   },
   "features": {
-    "createWebsite": { "title": "Créer un site web", "description": "De la landing page au e-commerce complet, Claude Code génère, structure et déploie vos projets web." },
-    "generateDocs": { "title": "Générer des documents", "description": "Rapports, présentations, documentation technique : laissez l'IA structurer et rédiger pour vous." },
-    "automate": { "title": "Automatiser vos tâches", "description": "Scripts, pipelines CI/CD, migrations de données. Transformez des heures de travail en quelques minutes." },
-    "analyzeData": { "title": "Analyser des données", "description": "Connectez vos sources, explorez vos datasets et obtenez des insights en langage naturel." },
-    "codeNoDev": { "title": "Coder sans être dev", "description": "Décrivez ce que vous voulez en français. Claude Code traduit vos idées en code fonctionnel." },
-    "designUI": { "title": "Designer des interfaces", "description": "Créez des interfaces modernes et accessibles en décrivant simplement votre vision." },
-    "connectTools": { "title": "Connecter vos outils", "description": "Grâce aux MCP, intégrez Gmail, Slack, GitHub, bases de données et bien plus encore." },
-    "deploy": { "title": "Déployer en production", "description": "Docker, CI/CD, monitoring : Claude Code gère votre infrastructure de A à Z." }
+    "createWebsite": {
+      "title": "Créer un site web",
+      "description": "De la landing page au e-commerce complet, Claude Code génère, structure et déploie vos projets web."
+    },
+    "generateDocs": {
+      "title": "Générer des documents",
+      "description": "Rapports, présentations, documentation technique : laissez l'IA structurer et rédiger pour vous."
+    },
+    "automate": {
+      "title": "Automatiser vos tâches",
+      "description": "Scripts, pipelines CI/CD, migrations de données. Transformez des heures de travail en quelques minutes."
+    },
+    "analyzeData": {
+      "title": "Analyser des données",
+      "description": "Connectez vos sources, explorez vos datasets et obtenez des insights en langage naturel."
+    },
+    "codeNoDev": {
+      "title": "Coder sans être dev",
+      "description": "Décrivez ce que vous voulez en français. Claude Code traduit vos idées en code fonctionnel."
+    },
+    "designUI": {
+      "title": "Designer des interfaces",
+      "description": "Créez des interfaces modernes et accessibles en décrivant simplement votre vision."
+    },
+    "connectTools": {
+      "title": "Connecter vos outils",
+      "description": "Grâce aux MCP, intégrez Gmail, Slack, GitHub, bases de données et bien plus encore."
+    },
+    "deploy": {
+      "title": "Déployer en production",
+      "description": "Docker, CI/CD, monitoring : Claude Code gère votre infrastructure de A à Z."
+    }
   },
   "audience": {
-    "developers": { "title": "Développeurs", "description": "Accélérez votre workflow x10. Code review, refactoring, tests automatisés, debugging assisté. Votre copilote ultime." },
-    "entrepreneurs": { "title": "Entrepreneurs", "description": "Lancez votre MVP en jours au lieu de semaines. Prototypez, itérez et déployez sans équipe technique." },
-    "creatives": { "title": "Créatifs & Designers", "description": "Transformez vos maquettes en sites vivants. Générez des animations, des composants UI sur mesure." },
-    "students": { "title": "Étudiants", "description": "Apprenez en faisant. Claude Code explique chaque concept, corrige vos erreurs et vous guide pas à pas." },
-    "curious": { "title": "Curieux & Autodidactes", "description": "Explorez le monde du code sans prérequis. Posez vos questions, expérimentez, créez vos premiers projets." },
-    "teams": { "title": "Équipes & Managers", "description": "Standardisez vos workflows, documentez automatiquement, et donnez des super-pouvoirs à toute votre équipe." }
+    "developers": {
+      "title": "Développeurs",
+      "description": "Accélérez votre workflow x10. Code review, refactoring, tests automatisés, debugging assisté. Votre copilote ultime."
+    },
+    "entrepreneurs": {
+      "title": "Entrepreneurs",
+      "description": "Lancez votre MVP en jours au lieu de semaines. Prototypez, itérez et déployez sans équipe technique."
+    },
+    "creatives": {
+      "title": "Créatifs & Designers",
+      "description": "Transformez vos maquettes en sites vivants. Générez des animations, des composants UI sur mesure."
+    },
+    "students": {
+      "title": "Étudiants",
+      "description": "Apprenez en faisant. Claude Code explique chaque concept, corrige vos erreurs et vous guide pas à pas."
+    },
+    "curious": {
+      "title": "Curieux & Autodidactes",
+      "description": "Explorez le monde du code sans prérequis. Posez vos questions, expérimentez, créez vos premiers projets."
+    },
+    "teams": {
+      "title": "Équipes & Managers",
+      "description": "Standardisez vos workflows, documentez automatiquement, et donnez des super-pouvoirs à toute votre équipe."
+    }
   },
   "paths": {
     "ctaLabel": "Commencer ce parcours",
@@ -276,25 +318,40 @@
       "level": "Débutant",
       "title": "Les fondamentaux",
       "description": "Vous n'avez jamais utilisé Claude Code ? Parfait. On part de zéro, ensemble.",
-      "items": ["Installer Claude Code en 5 minutes", "Comprendre le terminal et les bases", "Votre premier projet guidé pas à pas", "Les commandes essentielles à connaître"]
+      "items": [
+        "Installer Claude Code en 5 minutes",
+        "Comprendre le terminal et les bases",
+        "Votre premier projet guidé pas à pas",
+        "Les commandes essentielles à connaître"
+      ]
     },
     "intermediate": {
       "level": "Intermédiaire",
       "title": "Maîtrise des outils",
       "description": "Vous savez utiliser Claude Code ? Découvrez les MCP, les Skills et le prompting avancé.",
-      "items": ["Connecter vos outils favoris via les MCP", "Créer et utiliser des Skills personnalisés", "Techniques de prompting qui font la différence", "Automatiser vos workflows quotidiens"]
+      "items": [
+        "Connecter vos outils favoris via les MCP",
+        "Créer et utiliser des Skills personnalisés",
+        "Techniques de prompting qui font la différence",
+        "Automatiser vos workflows quotidiens"
+      ]
     },
     "advanced": {
       "level": "Avancé",
       "title": "Expert & Architecte",
       "description": "Poussez Claude Code dans ses retranchements. Multi-agents, workflows complexes, déploiements.",
-      "items": ["Orchestration multi-agents", "Workflows complexes et chaînage de prompts", "CI/CD et déploiement automatisé", "Créer vos propres MCP servers"]
+      "items": [
+        "Orchestration multi-agents",
+        "Workflows complexes et chaînage de prompts",
+        "CI/CD et déploiement automatisé",
+        "Créer vos propres MCP servers"
+      ]
     }
   },
   "glossary": {
     "analogyLabel": "Analogie :",
     "learnMoreAbout": "En savoir plus sur {term}",
-    "learnMoreLink": "En savoir plus sur ce terme \u2192"
+    "learnMoreLink": "En savoir plus sur ce terme →"
   },
   "configuratorTeaser": {
     "title": "Configurez votre",
@@ -635,6 +692,27 @@
       "hoverTitle": "Survolez cette carte",
       "hoverBody": "Translation de 3px vers le haut, sur la durée base avec une courbe ease-out. Désactivée si prefers-reduced-motion est actif.",
       "reducedMotion": "Toutes les animations respectent prefers-reduced-motion : la translation est neutralisée pour les utilisateurs qui en font la demande."
+    }
+  },
+  "newsletter": {
+    "badge": "Newsletter",
+    "title": "Rejoignez la communauté",
+    "titleHighlight": "IA générative",
+    "description": "Les meilleures astuces, tutoriels et nouveautés Claude, directement dans votre boîte mail. Pas de spam, désinscription en un clic.",
+    "emailLabel": "Adresse email",
+    "emailPlaceholder": "vous@exemple.com",
+    "submit": "S'inscrire",
+    "submitting": "Inscription…",
+    "honeypotLabel": "Ne pas remplir ce champ",
+    "successTitle": "C'est noté !",
+    "successMessage": "Merci ! Vérifiez votre boîte mail pour confirmer votre inscription.",
+    "alreadySubscribed": "Vous êtes déjà inscrit·e. Merci de votre fidélité !",
+    "privacy": "Nous respectons votre vie privée. Aucune donnée revendue, désinscription à tout moment.",
+    "errors": {
+      "invalid_email": "Cette adresse email semble invalide. Vérifiez la saisie.",
+      "rate_limited": "Vous venez de vous inscrire. Patientez un instant avant de réessayer.",
+      "not_configured": "L'inscription est momentanément indisponible. Réessayez plus tard.",
+      "error": "Une erreur est survenue. Merci de réessayer dans un instant."
     }
   }
 }

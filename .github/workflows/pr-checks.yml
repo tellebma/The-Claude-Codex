@@ -412,6 +412,25 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
+      # TEMPORAIRE — dump des issues new-code de la PR pour diagnostic. A RETIRER.
+      - name: Debug — list PR issues
+        if: always()
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          auth="Authorization: Basic $(printf '%s:' "$SONAR_TOKEN" | base64 -w0)"
+          echo "===== ISSUES (PR #$PR) ====="
+          curl -sf -H "$auth" \
+            "${SONAR_HOST_URL}/api/issues/search?componentKeys=the-claude-codex&pullRequest=${PR}&resolved=false&ps=100" \
+            | jq -r '.issues[] | "[\(.severity)/\(.type)] \(.rule)\n  \(.component):\(.line)\n  \(.message)"'
+          echo "===== HOTSPOTS (PR #$PR) ====="
+          curl -sf -H "$auth" \
+            "${SONAR_HOST_URL}/api/hotspots/search?projectKey=the-claude-codex&pullRequest=${PR}&ps=100" \
+            | jq -r '.hotspots[] | "[\(.vulnerabilityProbability)] \(.ruleKey)\n  \(.component):\(.line)\n  \(.message)"'
+
   pr-metrics-comment:
     # Commentaire sticky unique qui consolide toutes les métriques d'analyse
     # (Sonar, Lighthouse, Lychee, tests, Vercel). Tourne avec if: always()

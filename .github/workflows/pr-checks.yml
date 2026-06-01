@@ -412,33 +412,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-      # TEMPORAIRE — dump des issues new-code de la PR pour diagnostic. A RETIRER.
-      - name: Debug — list PR issues
-        if: always()
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          PR: ${{ github.event.pull_request.number }}
-        run: |
-          set -uo pipefail
-          auth="Authorization: Basic $(printf '%s:' "$SONAR_TOKEN" | base64 -w0)"
-          echo "===== QUALITY GATE STATUS (main branch) ====="
-          curl -s -H "$auth" \
-            "${SONAR_HOST_URL}/api/qualitygates/project_status?projectKey=the-claude-codex" \
-            | jq -r '.projectStatus.conditions[]? | "[\(.status)] \(.metricKey) = \(.actualValue) (cmp \(.comparator) \(.errorThreshold))"' || true
-          echo "===== NEW-CODE ISSUES ====="
-          curl -s -H "$auth" \
-            "${SONAR_HOST_URL}/api/issues/search?componentKeys=the-claude-codex&inNewCodePeriod=true&resolved=false&ps=100" \
-            | jq -r '.issues[]? | "[\(.severity)/\(.type)] \(.rule)\n  \(.component):\(.line)\n  \(.message)"' || true
-          echo "===== TOUTES ISSUES OUVERTES ====="
-          curl -s -H "$auth" \
-            "${SONAR_HOST_URL}/api/issues/search?componentKeys=the-claude-codex&resolved=false&ps=100" \
-            | jq -r '.issues[]? | "[\(.severity)/\(.type)] \(.rule) | \(.component):\(.line) | new=\(.newCodePeriod // "?")\n  \(.message)"' || true
-          echo "===== HOTSPOTS ====="
-          curl -s -H "$auth" \
-            "${SONAR_HOST_URL}/api/hotspots/search?projectKey=the-claude-codex&ps=100" \
-            | jq -r '.hotspots[]? | "[\(.vulnerabilityProbability)/\(.status)] \(.ruleKey) | \(.component):\(.line)\n  \(.message)"' || true
-
   pr-metrics-comment:
     # Commentaire sticky unique qui consolide toutes les métriques d'analyse
     # (Sonar, Lighthouse, Lychee, tests, Vercel). Tourne avec if: always()

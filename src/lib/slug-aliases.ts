@@ -42,9 +42,9 @@ const SLUG_ALIASES: Readonly<Record<string, string>> = {
  */
 export function getAlternateLocalePath(pathname: string): string {
   const segments = pathname.split("/").filter(Boolean);
-  if (segments.length === 0) return pathname;
+  const lastSegment = segments.at(-1);
+  if (!lastSegment) return pathname;
 
-  const lastSegment = segments[segments.length - 1];
   const alias = SLUG_ALIASES[lastSegment];
   if (!alias) return pathname;
 

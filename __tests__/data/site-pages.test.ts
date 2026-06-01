@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { SITE_PAGES } from "../../src/data/site-pages";
+import { getAlternateLocalePath } from "../../src/lib/slug-aliases";
+
+const lastSegment = (path: string): string =>
+  path.split("/").filter(Boolean).at(-1) ?? "";
 
 const VALID_CHANGE_FREQUENCIES = [
   "always",
@@ -107,6 +111,27 @@ describe("SITE_PAGES data integrity", () => {
     expect(about).toBeDefined();
     expect(about?.title).toBeTruthy();
     expect(about?.description).toBeTruthy();
+  });
+
+  // Regression PR #257 : l'article "cout des tokens" declarait pathsByLocale.en
+  // mais oubliait l'alias dans slug-aliases.ts, donc le LanguageSwitcher pointait
+  // vers /<locale>/content/<meme-slug>/ inexistant (2 liens internes casses lychee).
+  // Cette garde relie les deux sources de verite pour tout slug divergent.
+  it("every divergent EN slug has a bidirectional alias in slug-aliases", () => {
+    const missing: string[] = [];
+    for (const page of SITE_PAGES) {
+      const enPath = page.pathsByLocale?.en;
+      if (!enPath) continue;
+      if (lastSegment(enPath) === lastSegment(page.path)) continue; // slug identique : pas d'alias requis
+
+      if (getAlternateLocalePath(page.path) !== enPath) {
+        missing.push(`FR->EN: ${page.path} should map to ${enPath}`);
+      }
+      if (getAlternateLocalePath(enPath) !== page.path) {
+        missing.push(`EN->FR: ${enPath} should map to ${page.path}`);
+      }
+    }
+    expect(missing).toEqual([]);
   });
 
   it("all MT1 renamed EN slugs are declared via pathsByLocale", () => {

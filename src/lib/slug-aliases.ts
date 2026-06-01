@@ -10,6 +10,7 @@ const SLUG_ALIASES: Readonly<Record<string, string>> = {
   // content : FR → EN
   "bonnes-pratiques-securite": "security-best-practices",
   "ci-cd-cyber-securite": "ci-cd-cyber-security",
+  "cout-tokens-par-langue": "token-cost-by-language",
   "couts-reels-claude-code": "real-costs-claude-code",
   "fuite-cle-api": "leaked-api-key-recovery",
   "mode-plan-vs-thinking": "plan-vs-thinking-mode",
@@ -18,6 +19,7 @@ const SLUG_ALIASES: Readonly<Record<string, string>> = {
   // content : EN → FR
   "security-best-practices": "bonnes-pratiques-securite",
   "ci-cd-cyber-security": "ci-cd-cyber-securite",
+  "token-cost-by-language": "cout-tokens-par-langue",
   "real-costs-claude-code": "couts-reels-claude-code",
   "leaked-api-key-recovery": "fuite-cle-api",
   "plan-vs-thinking-mode": "mode-plan-vs-thinking",

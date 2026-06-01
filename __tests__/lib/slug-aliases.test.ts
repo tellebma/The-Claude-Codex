@@ -19,6 +19,15 @@ describe("getAlternateLocalePath", () => {
     );
   });
 
+  it("traduit le slug de l'article cout des tokens dans les deux sens", () => {
+    expect(getAlternateLocalePath("/content/cout-tokens-par-langue/")).toBe(
+      "/content/token-cost-by-language/",
+    );
+    expect(getAlternateLocalePath("/content/token-cost-by-language/")).toBe(
+      "/content/cout-tokens-par-langue/",
+    );
+  });
+
   it("traduit le slug d'une page MCP dans les deux sens", () => {
     expect(getAlternateLocalePath("/mcp/mcp-security/")).toBe(
       "/mcp/securite-mcp/",

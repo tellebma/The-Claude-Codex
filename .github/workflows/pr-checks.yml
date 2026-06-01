@@ -420,16 +420,20 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           PR: ${{ github.event.pull_request.number }}
         run: |
-          set -euo pipefail
+          set -uo pipefail
           auth="Authorization: Basic $(printf '%s:' "$SONAR_TOKEN" | base64 -w0)"
+          echo "===== QUALITY GATE STATUS (PR #$PR) ====="
+          curl -s -H "$auth" \
+            "${SONAR_HOST_URL}/api/qualitygates/project_status?projectKey=the-claude-codex&pullRequest=${PR}" \
+            | jq -r '.projectStatus.conditions[]? | "[\(.status)] \(.metricKey) = \(.actualValue) (cmp \(.comparator) \(.errorThreshold))"' || true
           echo "===== ISSUES (PR #$PR) ====="
-          curl -sf -H "$auth" \
+          curl -s -H "$auth" \
             "${SONAR_HOST_URL}/api/issues/search?componentKeys=the-claude-codex&pullRequest=${PR}&resolved=false&ps=100" \
-            | jq -r '.issues[] | "[\(.severity)/\(.type)] \(.rule)\n  \(.component):\(.line)\n  \(.message)"'
+            | jq -r '.issues[]? | "[\(.severity)/\(.type)] \(.rule)\n  \(.component):\(.line)\n  \(.message)"' || true
           echo "===== HOTSPOTS (PR #$PR) ====="
-          curl -sf -H "$auth" \
+          curl -s -H "$auth" \
             "${SONAR_HOST_URL}/api/hotspots/search?projectKey=the-claude-codex&pullRequest=${PR}&ps=100" \
-            | jq -r '.hotspots[] | "[\(.vulnerabilityProbability)] \(.ruleKey)\n  \(.component):\(.line)\n  \(.message)"'
+            | jq -r '.hotspots[]? | "[\(.vulnerabilityProbability)/\(.status)] \(.ruleKey)\n  \(.component):\(.line)\n  \(.message)"' || true
 
   pr-metrics-comment:
     # Commentaire sticky unique qui consolide toutes les métriques d'analyse

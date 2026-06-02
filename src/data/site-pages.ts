@@ -215,6 +215,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/mcp/workflow-design-playwright",
+    title: "Designer avec Claude Code et Playwright MCP : workflow",
+    description:
+      "Workflow pas à pas pour valider un composant Claude Code avec Playwright MCP : screenshots multi-viewport, critique, itération et contrôle a11y.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
     path: "/skills",
     title: "Les Skills Claude Code",
     description:
@@ -446,7 +455,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les 6 meilleurs Skills Claude Code 2026 : TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing, Security Review. Installation et exemples copiables.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-06-02",
+    lastModified: "2026-06-03",
   },
   {
     path: "/skills/find-skills",
@@ -464,7 +473,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Skill Apache 2.0 de Paul Bakaus avec 23 commandes design (/polish, /audit, /typeset…) et 27 règles anti-patterns pour élever la qualité visuelle des sorties Claude Code.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-05-18",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/skills/huashu-design",
+    title: "Huashu Design : skill de prototypage HTML Claude Code",
+    description:
+      "Huashu Design, le skill MIT de Huasheng (花叔) qui génère prototypes HTML cliquables, decks PPTX et animations MP4 depuis Claude Code. Vérifié juin 2026.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
   },
   {
     path: "/skills/create-custom",
@@ -977,7 +995,17 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Quels skills installer pour designer avec Claude Code en 2026 : Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Retour d'expérience daté et comparatif.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-06-02",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/content/refaire-une-card-avec-impeccable-et-playwright",
+    pathsByLocale: { en: "/content/redo-a-card-with-impeccable-and-playwright" },
+    title: "Refaire une card avec Impeccable et Playwright : démo",
+    description:
+      "Exemple Claude Code design : on reprend une vraie card du Codex et on la refait avec Impeccable et Playwright MCP, captures avant/après à l'appui.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
   },
   {
     path: "/content/couts-reels-claude-code",

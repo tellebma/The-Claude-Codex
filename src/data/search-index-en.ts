@@ -302,6 +302,28 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Huashu Design: HTML prototyping for Claude Code",
+    description:
+      "MIT skill by Huasheng (Huashu) that turns Claude Code into clickable HTML prototypes, PPTX decks and MP4 animations.",
+    href: "/skills/huashu-design",
+    section: "Skills",
+    keywords: [
+      "huashu design",
+      "huashu design skill",
+      "huashu",
+      "huasheng",
+      "花叔",
+      "alchaincyf",
+      "html prototyping",
+      "html prototyping skill",
+      "clickable html prototype",
+      "pptx deck",
+      "mp4 animation",
+      "claude code design skill",
+      "mit design skill",
+    ],
+  },
+  {
     title: "Create a custom Skill step by step",
     description:
       "Complete guide to creating your own Skills: structure, advanced patterns, conditional skills, orchestration, templating variables, token estimation, and versioning.",
@@ -1685,6 +1707,26 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "advanced",
     ],
   },
+  {
+    title: "Designing with Claude Code and Playwright MCP",
+    description:
+      "Step-by-step workflow to visually validate a Claude Code component with Playwright MCP: multi-viewport screenshots, critique, iteration and a11y check.",
+    href: "/mcp/workflow-design-playwright",
+    section: "MCP",
+    keywords: [
+      "claude code playwright design",
+      "playwright mcp",
+      "mcp design",
+      "how to validate ui design with playwright mcp",
+      "claude code playwright visual testing workflow",
+      "visual validation ui",
+      "multi-viewport screenshot",
+      "visual regression",
+      "a11y check",
+      "design with claude code",
+      "playwright screenshot claude code",
+    ],
+  },
   // MCP Security
   {
     title: "MCP security: real dangers and how to protect yourself",
@@ -1963,6 +2005,25 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "playwright mcp design",
       "anti slop",
       "design skill comparison",
+    ],
+  },
+  {
+    title: "Redoing a card with Impeccable and Playwright",
+    description:
+      "Claude Code design refactor example: we take a real Codex card and rebuild it with Impeccable and Playwright MCP, with before/after captures.",
+    href: "/content/redo-a-card-with-impeccable-and-playwright",
+    section: "Content",
+    keywords: [
+      "claude code design refactor example",
+      "claude code design example",
+      "redo a card",
+      "redesign component claude code",
+      "impeccable",
+      "playwright mcp",
+      "before after captures",
+      "claude code design stack",
+      "design use case claude code",
+      "polish ui claude code",
     ],
   },
   // Costs

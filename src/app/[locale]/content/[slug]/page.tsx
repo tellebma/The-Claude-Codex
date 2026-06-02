@@ -16,6 +16,7 @@ import {
   serializeJsonLd,
 } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
+import { getPageExtraSchemas } from "@/data/page-schemas";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
 
 interface ContentPageProps {
@@ -97,6 +98,12 @@ export default async function ContentPage({ params }: ContentPageProps) {
     ? serializeJsonLd(createFAQPageSchema(faqs))
     : null;
 
+  // DSK-8 — Schemas additionnels (HowTo) pour les articles demo de workflow.
+  const extraSchemaHtml = getPageExtraSchemas(
+    `/content/${resolvedParams.slug}`,
+    resolvedParams.locale,
+  ).map((schema) => serializeJsonLd(schema));
+
   // DSK-1 — Article JSON-LD pour chaque article editorial racine.
   const articleJsonLdHtml = serializeJsonLd(
     createArticleSchema({
@@ -122,6 +129,14 @@ export default async function ContentPage({ params }: ContentPageProps) {
           dangerouslySetInnerHTML={{ __html: faqJsonLdHtml }}
         />
       )}
+
+      {extraSchemaHtml.map((html) => (
+        <script
+          key={`extra-schema-${html.length}-${html.slice(0, 24)}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      ))}
 
       {/* RG2-02 — Barre de progression de lecture en haut de page */}
       <ReadingProgressBar />

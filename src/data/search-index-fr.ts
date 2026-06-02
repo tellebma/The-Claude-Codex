@@ -308,6 +308,28 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Huashu Design : prototypage HTML pour Claude Code",
+    description:
+      "Skill MIT de Huasheng (Huashu) qui genere des prototypes HTML cliquables, des decks PPTX et des animations MP4 depuis Claude Code.",
+    href: "/skills/huashu-design",
+    section: "Skills",
+    keywords: [
+      "huashu design",
+      "huashu design skill",
+      "huashu",
+      "huasheng",
+      "花叔",
+      "alchaincyf",
+      "prototypage html",
+      "prototype html claude code",
+      "html prototyping skill",
+      "deck pptx",
+      "animation mp4",
+      "skill design claude code",
+      "mit skill design",
+    ],
+  },
+  {
     title: "Creer un Skill custom pas a pas",
     description:
       "Guide complet pour creer vos propres Skills : structure, patterns avances, skills conditionnels, orchestration, variables de templating, estimation tokens et versioning.",
@@ -1698,6 +1720,26 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "avance",
     ],
   },
+  {
+    title: "Designer avec Claude Code et Playwright MCP",
+    description:
+      "Workflow pas a pas pour valider visuellement un composant Claude Code avec Playwright MCP : screenshots multi-viewport, critique, iteration et controle a11y.",
+    href: "/mcp/workflow-design-playwright",
+    section: "MCP",
+    keywords: [
+      "claude code playwright design",
+      "playwright mcp",
+      "mcp design",
+      "workflow design playwright",
+      "validation visuelle ui",
+      "screenshot multi-viewport",
+      "regression visuelle",
+      "controle a11y",
+      "designer avec claude code",
+      "iteration design",
+      "playwright screenshot claude code",
+    ],
+  },
   // MCP Security
   {
     title: "Securite des MCP : dangers reels et comment s'en proteger",
@@ -1979,6 +2021,25 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "playwright mcp design",
       "anti slop",
       "comparatif skills design",
+    ],
+  },
+  {
+    title: "Refaire une card avec Impeccable et Playwright",
+    description:
+      "Exemple Claude Code design : on reprend une vraie card du Codex et on la refait avec Impeccable et Playwright MCP, captures avant/apres a l'appui.",
+    href: "/content/refaire-une-card-avec-impeccable-et-playwright",
+    section: "Contenus",
+    keywords: [
+      "exemple claude code design",
+      "demo claude code design",
+      "refaire une card",
+      "redesign composant claude code",
+      "impeccable",
+      "playwright mcp",
+      "captures avant apres",
+      "stack design claude code",
+      "use case design claude code",
+      "polish ui claude code",
     ],
   },
   // Costs

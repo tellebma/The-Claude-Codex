@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Wand2 } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
+import { getPageExtraSchemas } from "@/data/page-schemas";
 import SectionSlugContent from "@/components/layout/SectionSlugContent";
 import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
@@ -50,12 +51,16 @@ export default async function SkillsSlugPage({ params }: PageProps) {
     return <TutoArticleContent section={SECTION} slug={slug} locale={locale} />;
   }
 
+  const extraSchemas = getPageExtraSchemas(`/${SECTION}/${slug}`, locale);
+  const extraJsonLd = extraSchemas.length > 0 ? extraSchemas : undefined;
+
   return (
     <SectionSlugContent
       section={SECTION}
       slug={slug}
       locale={locale}
       icon={Wand2}
+      extraJsonLd={extraJsonLd}
     />
   );
 }

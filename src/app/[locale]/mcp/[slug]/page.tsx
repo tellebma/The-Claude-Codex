@@ -5,6 +5,7 @@ import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
+import { getPageExtraSchemas } from "@/data/page-schemas";
 import SectionSlugContent from "@/components/layout/SectionSlugContent";
 
 const SECTION = "mcp";
@@ -42,7 +43,11 @@ export default async function McpSlugPage({ params }: PageProps) {
   setRequestLocale(locale);
 
   const faqs = getPageFaqs(`/${SECTION}/${slug}`, locale);
-  const extraJsonLd = faqs ? [createFAQPageSchema(faqs)] : undefined;
+  const extraSchemas = [
+    ...(faqs ? [createFAQPageSchema(faqs)] : []),
+    ...getPageExtraSchemas(`/${SECTION}/${slug}`, locale),
+  ];
+  const extraJsonLd = extraSchemas.length > 0 ? extraSchemas : undefined;
 
   return (
     <SectionSlugContent

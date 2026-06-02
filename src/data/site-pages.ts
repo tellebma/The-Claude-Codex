@@ -971,6 +971,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/content/stack-design-claude-code",
+    title: "Stack design Claude Code : retour après 1 mois de refonte",
+    description:
+      "Quels skills installer pour designer avec Claude Code en 2026 : Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Retour d'expérience daté et comparatif.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-02",
+  },
+  {
     path: "/content/couts-reels-claude-code",
     pathsByLocale: { en: "/content/real-costs-claude-code" },
     title: "Coûts réels de Claude Code : tokens, MCP et abonnements",

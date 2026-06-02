@@ -1,0 +1,155 @@
+---
+title: "Stack design Claude Code : retour après 1 mois de refonte"
+description: "Quels skills installer pour designer avec Claude Code en 2026 : Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Retour d'expérience daté et comparatif."
+badge: "Design"
+section: "content"
+order: 1
+datePublished: "2026-06-02"
+dateModified: "2026-06-02"
+themes: ["use-case", "tooling"]
+---
+
+{/* source primaire : sites officiels des skills + repos GitHub, vérifiés 2026-06-02 */}
+{/* Impeccable : https://impeccable.style/ + github.com/pbakaus/impeccable */}
+{/* UI UX Pro Max : github.com/nextlevelbuilder/ui-ux-pro-max-skill (86.5k★, MIT) */}
+{/* Taste Skill : tasteskill.dev + github.com/Leonxlnx/taste-skill (31.7k★, MIT) */}
+{/* Huashu Design : github.com/alchaincyf/huashu-design (licence commerciale) */}
+
+<Callout type="info" title="En bref (citable)">
+Pour designer avec Claude Code en 2026, quatre skills sortent du lot, et un MCP les rend exploitables.
+<time dateTime="2026-06-02">Vérifié le 2 juin 2026</time>.
+
+- **Impeccable** : 23 commandes design, Apache 2.0, install `npx skills add pbakaus/impeccable`
+- **Taste Skill** : anti "AI slop", 31.7k★ GitHub, MIT, install `npx skills add Leonxlnx/taste-skill`
+- **UI UX Pro Max** : 67 styles UI + 161 palettes, 86.5k★ (compteur à vérifier), MIT, install `npm install -g uipro-cli`
+- **Huashu Design** : design HTML-natif, gratuit perso / payant pro (1 800 à 3 500 USD), `npx skills add alchaincyf/huashu-design`
+- **Workflow recommandé si tu pars de zéro** : Impeccable + Playwright MCP
+</Callout>
+
+## D'où vient ce retour
+
+Cet article est basé sur un mois d'utilisation de Claude Code sur un projet réel (refonte graphique du site The Claude Codex, avril-mai 2026). Les quatre skills présentés n'ont pas tous été testés avec la même intensité : Impeccable et Playwright MCP ont été utilisés quotidiennement, Taste Skill sur deux sprints, UI UX Pro Max et Huashu Design sur des sessions ponctuelles de validation.
+
+Cette gradation est volontaire. Un comparatif honnête vaut mieux qu'un listicle qui prétend avoir tout testé en profondeur.
+
+## Ce que Claude Code fait sans aide
+
+Avant de parler outils, il faut planter le décor. Voici ce que produit Claude Code sur du front-end quand on ne l'outille pas :
+
+- **Le bon** : du code propre, accessible dans les grandes lignes, qui compile et qui marche. Sur de la logique d'interface (états, formulaires, navigation), c'est solide.
+- **Le moyen** : des palettes plates, le bleu Tailwind 500 par défaut, la police Inter partout, peu de hiérarchie typographique. Fonctionnel mais générique.
+- **Le pas terrible** : le fameux "AI slop" visuel. Gradient violet-rose, trois cartes alignées, hero centré interchangeable d'un site à l'autre, animations absentes. Tu reconnais une page générée par IA au premier coup d'œil.
+
+Le problème n'est pas que Claude code mal. C'est qu'un prompt vague produit un design vague. Un skill design, c'est comme donner à Claude un manuel de style avant qu'il commence à dessiner. Sans manuel, il improvise selon ses habitudes. Avec le manuel, il a des règles précises : telle hiérarchie typographique, telle palette, tel espacement. Le résultat est systématiquement plus cohérent.
+
+## Les quatre skills, en une phrase chacun
+
+### Impeccable
+
+Apprend à Claude le vocabulaire d'un designer senior et applique 23 commandes plus des règles anti-patterns déterministes. C'est l'investissement le plus court pour le plus grand saut qualitatif. [Fiche détaillée Impeccable](/skills/impeccable).
+
+### UI UX Pro Max
+
+Fournit un catalogue : 67 styles, 161 palettes alignées par produit, 57 paires de polices, sur 15 stacks. Idéal pour partir d'une page blanche avec un socle cohérent. [Fiche détaillée UI UX Pro Max](/skills/ui-ux-pro-max).
+
+### Taste Skill
+
+Une famille de sous-skills par registre visuel (minimaliste, brutaliste, image-to-code). Le bon choix quand tu jongles entre des styles très différents. [Fiche détaillée Taste Skill](/skills/taste-skill).
+
+### Huashu Design
+
+Orienté prototypes HTML natifs et présentations. Attention : gratuit en personnel, licence commerciale payante en entreprise. La fiche détaillée arrive dans un prochain sprint.
+
+## Pourquoi Playwright MCP est le pivot
+
+Aucun de ces skills ne voit le résultat qu'il produit. Ils écrivent du code, point. C'est là qu'intervient Playwright MCP.
+
+Playwright MCP, c'est le miroir que tu tends à Claude après qu'il a habillé un composant. Sans miroir, Claude travaille à l'aveugle. Avec, il voit exactement ce que le navigateur rend sur mobile et sur desktop, et peut corriger ce qui cloche avant que tu ouvres toi-même le navigateur.
+
+La boucle skill design + Playwright, c'est le même processus qu'un designer qui dessine une maquette, l'imprime, la colle au mur, recule de deux mètres, voit le problème, et corrige. Sauf que la boucle prend 30 secondes au lieu de 30 minutes. Le détail du workflow, étape par étape, fera l'objet d'une page dédiée "Designer avec Claude Code + Playwright MCP".
+
+## Comparatif décisionnel
+
+<ComparisonTable
+  caption="Les 4 skills design pour Claude Code, vérifié le 2 juin 2026"
+  columns={[
+    { key: "imp", label: "Impeccable", recommended: true },
+    { key: "uiux", label: "UI UX Pro Max" },
+    { key: "taste", label: "Taste Skill" },
+    { key: "huashu", label: "Huashu Design" },
+  ]}
+  rows={[
+    {
+      feature: "Approche",
+      values: {
+        imp: "Anti-patterns + vocabulaire",
+        uiux: "Catalogue de patterns",
+        taste: "Sous-skills par style",
+        huashu: "Prototypes HTML",
+      },
+    },
+    {
+      feature: "Étoiles GitHub",
+      values: { imp: "28.6k", uiux: "86.5k", taste: "31.7k", huashu: "13k" },
+    },
+    {
+      feature: "Licence",
+      values: {
+        imp: "Apache 2.0",
+        uiux: "MIT",
+        taste: "MIT",
+        huashu: "Perso gratuit / pro payant",
+      },
+    },
+    {
+      feature: "Gratuit en commercial",
+      values: { imp: "yes", uiux: "yes", taste: "yes", huashu: "no" },
+    },
+    {
+      feature: "Multi-stack",
+      values: { imp: "partial", uiux: "yes", taste: "partial", huashu: "partial" },
+    },
+    {
+      feature: "Install en une commande",
+      values: { imp: "yes", uiux: "partial", taste: "yes", huashu: "yes" },
+    },
+    {
+      feature: "Recommandé pour",
+      values: {
+        imp: "Démarrer vite, auditer",
+        uiux: "Page blanche multi-stack",
+        taste: "Plusieurs registres",
+        huashu: "Protos et decks",
+      },
+    },
+  ]}
+/>
+
+Verdict éditorial sous le tableau :
+
+- **Si tu pars de zéro et veux un seul outil** : commence par Impeccable. Court à installer, effet immédiat sur la hiérarchie et les anti-patterns.
+- **Si tu veux un socle visuel sans réfléchir à la palette** : UI UX Pro Max, surtout sur un stack non-React.
+- **Si tu changes souvent de registre visuel** : Taste Skill et ses sous-skills ciblés.
+- **Si tu fais surtout des prototypes ou des présentations** : Huashu Design, en gardant la licence commerciale en tête.
+
+## Ce que cette stack ne fait pas
+
+Pour rester honnête, voici les limites réelles :
+
+- Elle ne remplace pas un designer. Les skills élèvent le niveau de base, ils ne produisent pas une direction artistique originale à ta place.
+- Elle ne garantit pas un rendu pixel-perfect. Playwright montre le rendu, mais la critique reste humaine ou semi-automatique.
+- Elle ne couvre pas le design produit (parcours, wireframes UX en amont). C'est de l'habillage et du polish, pas de la recherche utilisateur.
+- Les compteurs d'étoiles bougent vite et certains gonflent. Ne choisis pas sur le nombre d'étoiles, choisis sur ce que l'outil produit chez toi.
+- Les skills évoluent au rythme de quelques semaines. Une commande citée aujourd'hui peut changer de nom. Vérifie toujours le repo officiel.
+
+## Verdict prescriptif
+
+Si tu démarres aujourd'hui sur un projet front-end avec Claude Code et que tu n'as jamais installé de skill design : installe Impeccable et active Playwright MCP. C'est le couple à plus fort rendement. Ajoute UI UX Pro Max le jour où tu démarres une interface complète de zéro, et Taste Skill le jour où tu dois jongler entre plusieurs styles. Garde Huashu Design pour les prototypes, en vérifiant sa licence avant tout usage commercial.
+
+## Prochaines étapes
+
+- Lire la [fiche Impeccable](/skills/impeccable) pour démarrer
+- Comparer avec la [fiche UI UX Pro Max](/skills/ui-ux-pro-max) et la [fiche Taste Skill](/skills/taste-skill)
+- Voir les [skills incontournables 2026](/skills/best-skills)
+- Comprendre [Skills vs MCP vs Plugins](/skills/comparison)
+- Configurer [les MCP](/mcp/) dont Playwright pour valider tes rendus

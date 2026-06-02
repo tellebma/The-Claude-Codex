@@ -1942,6 +1942,29 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "not recommended",
     ],
   },
+  // Design stack (DSK-1)
+  {
+    title: "Claude Code design stack: a 1-month review",
+    description:
+      "The best design skills for Claude Code in 2026: Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Dated comparison 2026-06-02.",
+    href: "/content/stack-design-claude-code",
+    section: "Content",
+    keywords: [
+      "best design skills claude code 2026",
+      "claude code ui design tips",
+      "design with claude code",
+      "claude code generic ui",
+      "improve claude code visual output",
+      "best claude code design skill comparison",
+      "impeccable",
+      "ui ux pro max",
+      "taste skill",
+      "huashu design",
+      "playwright mcp design",
+      "anti slop",
+      "design skill comparison",
+    ],
+  },
   // Costs
   {
     title: "Real costs of Claude Code: tokens, MCPs, and subscriptions",

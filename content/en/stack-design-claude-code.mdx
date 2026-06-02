@@ -1,0 +1,155 @@
+---
+title: "Claude Code design stack: a 1-month review"
+description: "The best design skills for Claude Code in 2026: Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Dated hands-on review and decision table."
+badge: "Design"
+section: "content"
+order: 1
+datePublished: "2026-06-02"
+dateModified: "2026-06-02"
+themes: ["use-case", "tooling"]
+---
+
+{/* primary source: official skill sites + GitHub repos, verified 2026-06-02 */}
+{/* Impeccable: https://impeccable.style/ + github.com/pbakaus/impeccable */}
+{/* UI UX Pro Max: github.com/nextlevelbuilder/ui-ux-pro-max-skill (86.5k★, MIT) */}
+{/* Taste Skill: tasteskill.dev + github.com/Leonxlnx/taste-skill (31.7k★, MIT) */}
+{/* Huashu Design: github.com/alchaincyf/huashu-design (commercial license) */}
+
+<Callout type="info" title="In short (quotable)">
+To design with Claude Code in 2026, four skills stand out, and one MCP makes them usable.
+<time dateTime="2026-06-02">Reviewed June 2, 2026</time>.
+
+- **Impeccable**: 23 design commands, Apache 2.0, install `npx skills add pbakaus/impeccable`
+- **Taste Skill**: anti "AI slop", 31.7k★ on GitHub, MIT, install `npx skills add Leonxlnx/taste-skill`
+- **UI UX Pro Max**: 67 UI styles + 161 palettes, 86.5k★ (counter to re-check), MIT, install `npm install -g uipro-cli`
+- **Huashu Design**: HTML-native design, free for personal use / paid for pro (1,800 to 3,500 USD), `npx skills add alchaincyf/huashu-design`
+- **Recommended workflow if you start from scratch**: Impeccable + Playwright MCP
+</Callout>
+
+## Where this review comes from
+
+This article is based on one month of using Claude Code on a real project (the visual redesign of The Claude Codex, April-May 2026). The four skills presented were not all tested with the same intensity: Impeccable and Playwright MCP were used daily, Taste Skill over two sprints, UI UX Pro Max and Huashu Design in occasional validation sessions.
+
+That gradation is deliberate. An honest comparison beats a listicle that claims to have stress-tested everything.
+
+## What Claude Code does without help
+
+Before talking tools, let's set the scene. Here is what Claude Code produces on frontend work when you do not tool it up:
+
+- **The good**: clean code, broadly accessible, that compiles and works. On interface logic (state, forms, navigation), it is solid.
+- **The okay**: flat palettes, the default Tailwind blue 500, Inter everywhere, little typographic hierarchy. Functional but generic.
+- **The not great**: the infamous visual "AI slop". Purple-pink gradient, three aligned cards, a centered hero interchangeable from one site to the next, no animation. You recognize an AI-generated page at a glance.
+
+The problem is not that Claude codes badly. It is that a vague prompt produces a vague design. A design skill is like handing Claude a style manual before it starts drawing. Without the manual, it improvises from habit. With it, it has precise rules: this typographic hierarchy, this palette, this spacing. The result is consistently more coherent.
+
+## The four skills, one sentence each
+
+### Impeccable
+
+Teaches Claude a senior designer's vocabulary and applies 23 commands plus deterministic anti-pattern rules. It is the shortest investment for the biggest quality jump. [Detailed Impeccable page](/en/skills/impeccable).
+
+### UI UX Pro Max
+
+Provides a catalog: 67 styles, 161 palettes aligned by product, 57 font pairings, across 15 stacks. Ideal to start from a blank page with a coherent base. [Detailed UI UX Pro Max page](/en/skills/ui-ux-pro-max).
+
+### Taste Skill
+
+A family of sub-skills by visual register (minimalist, brutalist, image-to-code). The right pick when you juggle very different styles. [Detailed Taste Skill page](/en/skills/taste-skill).
+
+### Huashu Design
+
+Focused on HTML-native prototypes and presentations. Note: free for personal use, paid commercial license for enterprise. The detailed page lands in a future sprint.
+
+## Why Playwright MCP is the pivot
+
+None of these skills see the result they produce. They write code, full stop. That is where Playwright MCP comes in.
+
+Playwright MCP is the mirror you hold up to Claude after it has dressed a component. Without the mirror, Claude works blind. With it, it sees exactly what the browser renders on mobile and desktop, and can fix what is off before you open the browser yourself.
+
+The design skill + Playwright loop is the same process as a designer who draws a mockup, prints it, sticks it on the wall, steps back two meters, sees the problem, and fixes it. Except the loop takes 30 seconds instead of 30 minutes. The step-by-step workflow will be covered in a dedicated "Design with Claude Code + Playwright MCP" page.
+
+## Decision table
+
+<ComparisonTable
+  caption="The 4 design skills for Claude Code, reviewed June 2, 2026"
+  columns={[
+    { key: "imp", label: "Impeccable", recommended: true },
+    { key: "uiux", label: "UI UX Pro Max" },
+    { key: "taste", label: "Taste Skill" },
+    { key: "huashu", label: "Huashu Design" },
+  ]}
+  rows={[
+    {
+      feature: "Approach",
+      values: {
+        imp: "Anti-patterns + vocabulary",
+        uiux: "Pattern catalog",
+        taste: "Per-style sub-skills",
+        huashu: "HTML prototypes",
+      },
+    },
+    {
+      feature: "GitHub stars",
+      values: { imp: "28.6k", uiux: "86.5k", taste: "31.7k", huashu: "13k" },
+    },
+    {
+      feature: "License",
+      values: {
+        imp: "Apache 2.0",
+        uiux: "MIT",
+        taste: "MIT",
+        huashu: "Free personal / paid pro",
+      },
+    },
+    {
+      feature: "Free for commercial",
+      values: { imp: "yes", uiux: "yes", taste: "yes", huashu: "no" },
+    },
+    {
+      feature: "Multi-stack",
+      values: { imp: "partial", uiux: "yes", taste: "partial", huashu: "partial" },
+    },
+    {
+      feature: "One-command install",
+      values: { imp: "yes", uiux: "partial", taste: "yes", huashu: "yes" },
+    },
+    {
+      feature: "Best for",
+      values: {
+        imp: "Start fast, audit",
+        uiux: "Blank-page multi-stack",
+        taste: "Multiple registers",
+        huashu: "Protos and decks",
+      },
+    },
+  ]}
+/>
+
+Editorial verdict under the table:
+
+- **If you start from scratch and want a single tool**: begin with Impeccable. Short to install, immediate effect on hierarchy and anti-patterns.
+- **If you want a visual base without thinking about the palette**: UI UX Pro Max, especially on a non-React stack.
+- **If you switch visual register often**: Taste Skill and its targeted sub-skills.
+- **If you mostly build prototypes or presentations**: Huashu Design, keeping the commercial license in mind.
+
+## What this stack does not do
+
+To stay honest, here are the real limits:
+
+- It does not replace a designer. The skills raise the baseline, they do not produce an original art direction for you.
+- It does not guarantee a pixel-perfect render. Playwright shows the render, but the critique stays human or semi-automated.
+- It does not cover product design (flows, upstream UX wireframes). This is styling and polish, not user research.
+- Star counters move fast and some are inflated. Do not choose on star count, choose on what the tool produces for you.
+- The skills evolve every few weeks. A command cited today can be renamed. Always check the official repo.
+
+## Prescriptive verdict
+
+If you start a frontend project with Claude Code today and have never installed a design skill: install Impeccable and enable Playwright MCP. That is the highest-yield pair. Add UI UX Pro Max the day you build a full interface from scratch, and Taste Skill the day you have to juggle several styles. Keep Huashu Design for prototypes, checking its license before any commercial use.
+
+## Next steps
+
+- Read the [Impeccable page](/en/skills/impeccable) to get started
+- Compare with the [UI UX Pro Max page](/en/skills/ui-ux-pro-max) and the [Taste Skill page](/en/skills/taste-skill)
+- See the [must-have skills 2026](/en/skills/best-skills)
+- Understand [Skills vs MCP vs Plugins](/en/skills/comparison)
+- Set up [MCPs](/en/mcp/) including Playwright to validate your renders

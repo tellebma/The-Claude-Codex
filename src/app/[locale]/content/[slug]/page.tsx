@@ -10,7 +10,11 @@ import { ReadingProgressBar } from "@/components/ui/ReadingProgressBar";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import { resolveOgImageUrl } from "@/lib/og-images";
-import { createFAQPageSchema, serializeJsonLd } from "@/lib/structured-data";
+import {
+  createArticleSchema,
+  createFAQPageSchema,
+  serializeJsonLd,
+} from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
 
@@ -93,8 +97,25 @@ export default async function ContentPage({ params }: ContentPageProps) {
     ? serializeJsonLd(createFAQPageSchema(faqs))
     : null;
 
+  // DSK-1 — Article JSON-LD pour chaque article editorial racine.
+  const articleJsonLdHtml = serializeJsonLd(
+    createArticleSchema({
+      title: frontmatter.title,
+      description: frontmatter.description,
+      url: articleUrl,
+      locale,
+      datePublished: frontmatter.datePublished,
+      dateModified: frontmatter.dateModified,
+    })
+  );
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: articleJsonLdHtml }}
+      />
+
       {faqJsonLdHtml && (
         <script
           type="application/ld+json"

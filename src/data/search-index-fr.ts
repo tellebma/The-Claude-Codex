@@ -1957,6 +1957,30 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "deconseille",
     ],
   },
+  // Design stack (DSK-1)
+  {
+    title: "Stack design Claude Code : retour apres 1 mois",
+    description:
+      "Quels skills installer pour designer avec Claude Code en 2026 : Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Comparatif date 2026-06-02.",
+    href: "/content/stack-design-claude-code",
+    section: "Contenus",
+    keywords: [
+      "stack design claude code",
+      "skill design claude code",
+      "comment designer avec claude code",
+      "claude code vs cursor design",
+      "claude code ui generique",
+      "ameliorer rendu visuel claude code",
+      "meilleur skill design claude code",
+      "impeccable",
+      "ui ux pro max",
+      "taste skill",
+      "huashu design",
+      "playwright mcp design",
+      "anti slop",
+      "comparatif skills design",
+    ],
+  },
   // Costs
   {
     title: "Couts reels de Claude Code : tokens, MCP et abonnements",

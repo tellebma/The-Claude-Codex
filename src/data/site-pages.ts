@@ -446,7 +446,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les 6 meilleurs Skills Claude Code 2026 : TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing, Security Review. Installation et exemples copiables.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-09",
+    lastModified: "2026-06-02",
   },
   {
     path: "/skills/find-skills",

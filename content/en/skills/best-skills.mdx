@@ -4,7 +4,7 @@ description: "The 6 most useful Claude Code Skills for 2026: TDD Guide, Code Rev
 section: "skills"
 order: 2
 datePublished: "2026-03-10"
-dateModified: "2026-05-09"
+dateModified: "2026-06-02"
 ---
 
 <Callout type="tip" title="See also">This list is hand-picked by the editorial team. To let Claude itself discover and install a skill that fits a specific need (without reading 10 README files), see the meta-skill [`find-skills`](/skills/find-skills), which queries the skills.sh leaderboard and applies explicit quality criteria.</Callout>
@@ -282,6 +282,17 @@ The Security Review Skill is an excellent first filter, but it doesn't replace a
 - Accessibility attributes (ARIA, focus management, contrast)
 - Theme variants (light/dark mode)
 - Component tests with Testing Library
+
+### Design skills: the recommended stack
+
+Beyond the built-in Frontend Design, several third-party skills clearly raise the visual quality of Claude Code's output. Our [1-month redesign review](/en/content/stack-design-claude-code) details how to combine them with Playwright MCP. In short:
+
+- **[Impeccable](/en/skills/impeccable)**: 23 design commands and anti-pattern rules, Apache 2.0. The shortest install for the biggest quality jump.
+- **[UI UX Pro Max](/en/skills/ui-ux-pro-max)**: catalog of 67 styles and 161 palettes across 15 stacks, MIT. Ideal to start from a blank page.
+- **[Taste Skill](/en/skills/taste-skill)**: family of sub-skills by visual register (minimalist, brutalist...), MIT. For juggling several styles.
+- **Huashu Design**: HTML prototypes and presentations. Free for personal use, paid commercial license for enterprise.
+
+The highest-yield pair if you start from scratch: Impeccable + Playwright MCP to validate the real render.
 
 ---
 

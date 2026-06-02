@@ -301,6 +301,7 @@ const POPULAR_SLUGS_FR = [
   "mcp/what-are-mcps",
   "mcp/setup",
   "skills/what-are-skills",
+  "skills/claude-council",
   "bonnes-pratiques-securite",
   "couts-reels-claude-code",
 ];
@@ -314,6 +315,7 @@ const POPULAR_SLUGS_EN = [
   "mcp/what-are-mcps",
   "mcp/setup",
   "skills/what-are-skills",
+  "skills/claude-council",
   "security-best-practices",
   "real-costs-claude-code",
 ];

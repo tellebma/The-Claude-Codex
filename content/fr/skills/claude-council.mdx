@@ -1,0 +1,106 @@
+---
+title: "Claude Council : faire délibérer plusieurs IA"
+description: "Le pattern LLM Council de Karpathy expliqué et adapté à Claude : plusieurs avis qui se challengent, review croisée anonymisée, synthèse d'un Chairman, avec un générateur de prompt et de skill."
+badge: "Pattern"
+section: "skills"
+order: 6
+datePublished: "2026-06-02"
+dateModified: "2026-06-02"
+themes: ["guide", "architecture", "productivity"]
+---
+
+<Callout type="info" title="En bref">
+Le **LLM Council** est un pattern d'orchestration popularisé par Andrej Karpathy ([github.com/karpathy/llm-council](https://github.com/karpathy/llm-council)) : au lieu de poser votre question à un seul modèle, vous interrogez un panel, vous leur faites évaluer mutuellement leurs réponses (à l'aveugle), puis un **Chairman** synthétise le tout. Cette page explique le pattern et vous donne un générateur pour le reproduire avec Claude, en prompt ou en skill, sans monter de stack.
+</Callout>
+
+## C'est quoi un Council ?
+
+Quand vous posez une question difficile à un seul modèle, vous obtenez un seul angle. Si ce modèle a un biais sur le sujet, vous héritez du biais sans le savoir. L'idée du Council est simple : réunir plusieurs avis, les confronter, puis trancher.
+
+Le pattern vient d'Andrej Karpathy, qui a publié le repo `karpathy/llm-council` le 22 novembre 2025. Il le décrit lui-même comme du code « 99% vibe coded as a fun Saturday hack » : une app web locale qu'il a montée en une après-midi pour lire des livres en comparant plusieurs LLM côte à côte. Le repo a explosé (au 2026-06-02, environ 19 900 étoiles et 3 760 forks, chiffres à re-vérifier sur GitHub car ils bougent vite), mais il reste un prototype personnel.
+
+<Callout type="warning" title="Un Saturday hack, pas un outil officiel">
+Le repo de Karpathy est fourni « as is », **sans aucune licence** (pas de fichier LICENSE) et **volontairement non maintenu** : « I'm not going to support it in any way ». Ce n'est pas un produit, c'est une démonstration d'idée. Ne le traitez pas comme un projet open source réutilisable au sens juridique, et ne comptez pas sur des mises à jour. Ce qui est précieux ici, c'est le **pattern**, pas le code.
+</Callout>
+
+Le workflow se déroule en trois temps. Les noms et le comportement ci-dessous sont repris directement du README du repo.
+
+<Steps>
+<Step title="First opinions" stepNumber={1}>
+Votre question part vers chaque modèle du council, individuellement. Chacun répond sans voir les autres. Vous récupérez autant de réponses brutes que de conseillers, affichées côte à côte. C'est déjà utile en soi : voir plusieurs réponses indépendantes révèle vite les points de consensus et les points de friction.
+</Step>
+
+<Step title="Review (anonymisée)" stepNumber={2}>
+Chaque modèle reçoit ensuite les réponses des autres, mais **les identités sont masquées**. Personne ne sait qui a écrit quoi. Cet anonymat est volontaire : il empêche un modèle de se favoriser lui-même ou de privilégier une marque. Chaque conseiller classe alors les réponses sur deux axes, l'exactitude et la profondeur d'analyse.
+</Step>
+
+<Step title="Final response" stepNumber={3} isLast>
+Un modèle désigné, le **Chairman**, reçoit toutes les réponses et tous les classements, puis rédige une synthèse unique. C'est cette réponse finale qui vous est présentée. Le Chairman ne se contente pas de recopier le meilleur avis : il arbitre les désaccords et combine ce qui tient la route.
+</Step>
+</Steps>
+
+Détail qui compte pour un site « Claude » : dans la version d'origine, Claude n'est qu'un conseiller parmi quatre, et **c'est Gemini qui préside**. Voici la configuration par défaut, copiée verbatim depuis `backend/config.py` :
+
+```python
+COUNCIL_MODELS = [
+    "openai/gpt-5.1",
+    "google/gemini-3-pro-preview",
+    "anthropic/claude-sonnet-4.5",
+    "x-ai/grok-4",
+]
+
+CHAIRMAN_MODEL = "google/gemini-3-pro-preview"
+```
+
+Les identifiants sont au format OpenRouter, car le repo route tous les appels via [OpenRouter](https://openrouter.ai/) (une clé API, plusieurs providers). Côté stack, c'est du FastAPI (Python 3.10+) avec httpx pour le backend, du React + Vite pour le front, et un stockage en fichiers JSON. Rien d'hébergé : c'est une app locale que vous lancez sur votre machine.
+
+## Multi-modèles ou multi-personas ?
+
+Le mot « Council » recouvre deux montages très différents. Les confondre est l'erreur classique, alors posons-les côte à côte.
+
+| Approche | Principe | Forces | Limites |
+|----------|----------|--------|---------|
+| **Multi-modèles** (façon Karpathy) | N modèles de providers différents (GPT, Gemini, Claude, Grok) délibèrent | Vraie diversité d'angles, biais décorrélés entre modèles | Coût et latence (N providers), clé OpenRouter, qualité inégale d'un modèle à l'autre |
+| **Multi-personas d'un seul Claude** | Un seul Claude joue plusieurs rôles qui se contredisent | Simple (un seul provider, une seule clé), reproductible, empaquetable en skill | Biais corrélés (même modèle dessous), risque d'écho plutôt que de vraie contradiction |
+
+Sur Claude, on fait le plus souvent du **multi-personas** : on demande au même modèle d'incarner tour à tour un sceptique, un optimiste, un expert du domaine, puis de jouer le Chairman. C'est plus simple à mettre en place et ça tient dans un seul prompt ou un seul skill. En échange, vous perdez la vraie indépendance des avis : comme c'est le même cerveau derrière chaque persona, les angles morts sont partagés. Un persona « contrarian » bien écrit aide, mais il ne remplace pas un modèle entraîné différemment.
+
+Le multi-modèles offre une diversité plus authentique, au prix d'une stack à monter et d'une facture qui se multiplie. À vous de choisir selon l'enjeu.
+
+## Anatomie d'un council
+
+Un council, qu'il soit multi-modèles ou multi-personas, repose sur trois ingrédients.
+
+**Les conseillers.** En multi-modèles, ce sont des modèles distincts. En multi-personas, ce sont des rôles que vous définissez. À titre d'illustration, vous pourriez imaginer un panel comme un sceptique qui cherche les failles, un partisan qui défend l'option, un praticien qui pense à l'exécution concrète, et un généraliste qui prend de la hauteur. Ce ne sont que des exemples : les bons personas dépendent entièrement de votre question. Trois à cinq suffisent presque toujours.
+
+**La review croisée anonymisée.** C'est l'étape qui distingue un vrai council d'un simple « pose la question trois fois ». Chaque avis est soumis aux autres sans étiquette d'auteur, et chacun doit le juger sur le fond. L'anonymat évite la complaisance.
+
+**Le Chairman.** Il a le dernier mot. Son travail n'est pas de voter, mais de synthétiser : repérer les accords, expliciter les désaccords, et produire une recommandation argumentée. En multi-personas, c'est souvent le même Claude qui change de casquette une dernière fois.
+
+## Démo : le générateur
+
+Plutôt que de copier du code FastAPI, voici un générateur qui produit le texte dont vous avez besoin. Choisissez le mode, le nombre de conseillers, leurs personas et le Chairman : vous obtenez un **prompt** prêt à coller dans Claude, et un **squelette `SKILL.md`** si vous voulez en faire un skill réutilisable. Tout se passe dans votre navigateur, aucun appel n'est envoyé nulle part.
+
+<CouncilBuilder />
+
+Le prompt généré convient pour un usage ponctuel : vous le collez, Claude joue les rôles dans une seule conversation. Le `SKILL.md`, lui, sert quand vous voulez déclencher ce comportement de façon répétée, sans recoller le prompt à chaque fois. Pour comprendre comment Claude charge un skill, voyez [Qu'est-ce qu'un skill ?](/skills/what-are-skills).
+
+## Quand l'utiliser, quand c'est du gâchis
+
+Un council coûte cher. Comptez de l'ordre de **2N + 1 appels** par question (N réponses initiales, N reviews croisées, 1 synthèse du Chairman). Pour quatre conseillers, ça fait neuf appels là où une question simple en demande un. La latence suit la même courbe.
+
+Ce surcoût ne se justifie que face à un **vrai enjeu**, sans bonne réponse évidente, où plusieurs angles éclairent vraiment la décision.
+
+<Callout type="tip" title="Bons candidats">
+Une décision d'architecture où l'on hésite entre deux options crédibles, l'arbitrage d'un compromis (rapidité contre robustesse), une revue de stratégie, un texte sensible à faire challenger sous plusieurs angles. Bref : les questions où vous diriez « j'aimerais un deuxième avis ».
+</Callout>
+
+<Callout type="warning" title="Mauvais candidats">
+Les questions factuelles à réponse unique (« quelle est la syntaxe de X ? »), les tâches mécaniques, tout ce qui se vérifie en une recherche. Faire délibérer un panel sur un fait, c'est payer neuf appels pour une réponse que le premier modèle donnait déjà. Et attention au piège de fond : un council ne **garantit pas** une meilleure décision, il organise la contradiction. Si vos conseillers partagent le même biais (cas du multi-personas), ils peuvent converger vers une mauvaise réponse avec assurance.
+</Callout>
+
+## Prochaines étapes
+
+- [Qu'est-ce qu'un skill ?](/skills/what-are-skills) pour comprendre comment empaqueter ce pattern et le déclencher automatiquement.
+- [find-skills](/skills/find-skills) pour vérifier si quelqu'un a déjà publié un skill de council avant d'écrire le vôtre.
+- [Orchestrer des agents](/agents/orchestration) si vous voulez aller plus loin que le prompt unique et faire tourner les conseillers comme des agents distincts.

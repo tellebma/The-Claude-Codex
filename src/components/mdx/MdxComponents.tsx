@@ -18,6 +18,7 @@ import { ArticleAlert } from "@/components/mdx/ArticleAlert";
 import { Faq, FaqItem } from "@/components/mdx/Faq";
 import { NextSteps } from "@/components/mdx/NextSteps";
 import { WorkflowDiagram } from "@/components/mdx/WorkflowDiagram";
+import { CouncilBuilder } from "@/components/mdx/CouncilBuilder";
 
 /**
  * Extract text content from React children recursively.
@@ -70,6 +71,7 @@ export const mdxComponents: MDXComponents = {
   FaqItem,
   NextSteps,
   WorkflowDiagram,
+  CouncilBuilder,
 
   // Override default HTML elements for consistent styling.
   // Explicit {children} (vs self-closing {...props}) makes it clear to

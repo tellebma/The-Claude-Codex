@@ -173,6 +173,67 @@
     "browseAll": "Parcourir la doc",
     "browseAllAria": "Parcourir la documentation"
   },
+  "councilBuilder": {
+    "title": "Générateur de Council",
+    "subtitle": "Choisissez le mode, les conseillers et le Chairman. Tout est généré dans votre navigateur, aucun appel n'est envoyé.",
+    "modeLegend": "Mode",
+    "modePersona": "Multi-personas (un seul Claude)",
+    "modeModel": "Multi-modèles (plusieurs IA)",
+    "countLabel": "Nombre de conseillers",
+    "countDecrease": "Retirer un conseiller",
+    "countIncrease": "Ajouter un conseiller",
+    "callsEstimate": "≈ {count} appels par question",
+    "advisorsLabel": "Conseillers",
+    "advisorsHeading": "Les conseillers",
+    "roleField": "Rôle du conseiller {index}",
+    "briefField": "Mission en une phrase",
+    "chairmanField": "Chairman (qui rédige la synthèse)",
+    "questionField": "Votre question",
+    "questionPlaceholder": "Quelle décision difficile voulez-vous soumettre au council ?",
+    "outputLegend": "Sortie générée",
+    "tabPrompt": "Prompt",
+    "tabSkill": "SKILL.md",
+    "copy": "Copier",
+    "copied": "Copié",
+    "promptIntroPersona": "Tu vas jouer un conseil de plusieurs experts qui délibèrent sur ma question. Incarne tour à tour chaque rôle ci-dessous, puis fais la synthèse en tant que Chairman.",
+    "promptIntroModel": "Voici une délibération de council à reproduire avec plusieurs modèles. Chaque modèle ci-dessous est un conseiller indépendant ; un Chairman fera la synthèse finale.",
+    "stage1Heading": "Étape 1 : Premiers avis",
+    "stage1Body": "Chaque conseiller répond à la question de façon indépendante, sans voir les réponses des autres.",
+    "stage2Heading": "Étape 2 : Revue croisée (anonymisée)",
+    "stage2Body": "Présente à chaque conseiller les autres réponses sans révéler leurs auteurs, et demande-lui de les classer sur l'exactitude et la profondeur.",
+    "stage3Heading": "Étape 3 : Synthèse finale",
+    "stage3Body": "Le Chairman lit tous les avis et tous les classements, arbitre les désaccords et produit une recommandation unique et argumentée.",
+    "chairmanLabel": "Le Chairman désigné est :",
+    "questionLabel": "Question",
+    "fallbackQuestion": "(remplacez par votre question)",
+    "skillDescription": "Fait délibérer un conseil de plusieurs perspectives sur une question difficile, avec revue croisée anonymisée et synthèse d'un Chairman. À déclencher quand l'utilisateur veut plusieurs avis qui se challengent sur une décision sans réponse évidente.",
+    "skillWhenToUse": "Utilise ce skill pour les décisions à fort enjeu sans bonne réponse évidente : arbitrages d'architecture, choix stratégiques, textes sensibles à challenger. À éviter pour les questions factuelles à réponse unique (trop coûteux).",
+    "skillInstructions": "Déroule la délibération en trois étapes :",
+    "roleSkeptic": {
+      "role": "Sceptique",
+      "brief": "cherche les failles, les risques et les hypothèses non vérifiées."
+    },
+    "roleAdvocate": {
+      "role": "Partisan",
+      "brief": "défend l'option la plus prometteuse et en montre la valeur."
+    },
+    "rolePractitioner": {
+      "role": "Praticien",
+      "brief": "pense à l'exécution concrète, aux coûts et aux contraintes réelles."
+    },
+    "roleGeneralist": {
+      "role": "Généraliste",
+      "brief": "prend de la hauteur et relie la question au contexte plus large."
+    },
+    "roleContrarian": {
+      "role": "Contrarian",
+      "brief": "défend délibérément l'angle opposé pour tester la robustesse."
+    },
+    "roleVisionary": {
+      "role": "Visionnaire",
+      "brief": "explore les conséquences à long terme et les options audacieuses."
+    }
+  },
   "breadcrumb": {
     "ariaLabel": "Fil d'Ariane",
     "home": "Accueil",

@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`council-prompt logic > generatePrompt > is deterministic (snapshot) 1`] = `
+"PERSONA_INTRO
+
+## ADVISORS
+1. Skeptic : finds flaws
+2. Advocate : defends
+
+## STAGE1
+stage1 body
+
+## STAGE2
+stage2 body
+
+## STAGE3
+CHAIRMAN_IS Skeptic.
+stage3 body
+
+## QUESTION
+Should we ship?"
+`;
+
+exports[`council-prompt logic > generateSkillMd > is deterministic (snapshot) 1`] = `
+"---
+name: claude-council
+description: skill description
+---
+
+## When to use this skill
+
+when to use
+
+## Council members
+
+1. Skeptic : finds flaws
+2. Advocate : defends
+
+## Instructions
+
+instructions
+
+1. **STAGE1** stage1 body
+2. **STAGE2** stage2 body
+3. **STAGE3** CHAIRMAN_IS Skeptic. stage3 body
+"
+`;

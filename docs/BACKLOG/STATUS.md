@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-27 (Content page redesign clos 100% #240/#243 + release prod 1.10.0 ; Vercel Metrics clos 9/11 VM-8/VM-12 descopes ; Tuto-pages TUTO-2 merge #215)
+> Derniere mise a jour : 2026-06-02 (Content Claude Council : 8/8 stories livrees en branche feat/claude-council-2026-06, PR draft vers develop ; Content page redesign clos 100% #240/#243 + release prod 1.10.0 ; Vercel Metrics clos 9/11 VM-8/VM-12 descopes ; Tuto-pages TUTO-2 merge #215)
 
 ---
 
@@ -23,6 +23,7 @@
 | [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 7 | 0 | 1 | 88% 🔄 (SR-1/SR-2/SR-4/SR-5/SR-6/SR-7/SR-8 livres ; reste SR-3 screenshot manuel) |
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
+| [Content Claude Council 2026-06](EPIC-content-claude-council-2026-06.md) | 8 | 8 | 0 | 0 | 100% 🔄 (CC-1 a CC-8 livres en branche feat/claude-council-2026-06, PR draft develop ; page /skills/claude-council FR+EN + composant CouncilBuilder, coverage 95%/100%, 15 E2E ; non merge) |
 | [Content page redesign 2026-05](EPIC-content-page-redesign-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture : Sprints 1-3 livres #240/#243, release prod 1.10.0) |
 | [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 3 | 0 | 7 | 30% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; reste TUTO-6 rollout skills/prompting/mcp/agents) |
 

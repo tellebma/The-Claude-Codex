@@ -1,6 +1,6 @@
 ---
 title: "Claude Council : faire délibérer plusieurs IA"
-description: "Le pattern LLM Council de Karpathy expliqué et adapté à Claude : plusieurs avis qui se challengent, review croisée anonymisée, synthèse d'un Chairman, avec un générateur de prompt et de skill."
+description: "Le pattern LLM Council de Karpathy adapté à Claude : faire délibérer plusieurs IA, review croisée anonyme, synthèse d'un Chairman, et un générateur de prompt."
 badge: "Pattern"
 section: "skills"
 order: 6
@@ -15,7 +15,7 @@ Le **LLM Council** est un pattern d'orchestration popularisé par Andrej Karpath
 
 ## C'est quoi un Council ?
 
-Quand vous posez une question difficile à un seul modèle, vous obtenez un seul angle. Si ce modèle a un biais sur le sujet, vous héritez du biais sans le savoir. L'idée du Council est simple : réunir plusieurs avis, les confronter, puis trancher.
+Quand vous posez une question difficile à un seul modèle, vous obtenez un seul angle. Si ce modèle a un biais sur le sujet, vous héritez du biais sans le savoir. L'idée d'un conseil de LLM est simple : réunir plusieurs avis, les confronter, puis trancher.
 
 Le pattern vient d'Andrej Karpathy, qui a publié le repo `karpathy/llm-council` le 22 novembre 2025. Il le décrit lui-même comme du code « 99% vibe coded as a fun Saturday hack » : une app web locale qu'il a montée en une après-midi pour lire des livres en comparant plusieurs LLM côte à côte. Le repo a explosé (au 2026-06-02, environ 19 900 étoiles et 3 760 forks, chiffres à re-vérifier sur GitHub car ils bougent vite), mais il reste un prototype personnel.
 

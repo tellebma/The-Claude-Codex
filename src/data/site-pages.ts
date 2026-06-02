@@ -461,7 +461,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/skills/claude-council",
     title: "Claude Council : faire délibérer plusieurs IA",
     description:
-      "Le pattern LLM Council de Karpathy expliqué et adapté à Claude : plusieurs avis qui se challengent, review croisée anonymisée, synthèse d'un Chairman, avec un générateur de prompt et de skill.",
+      "Le pattern LLM Council de Karpathy adapté à Claude : faire délibérer plusieurs IA, review croisée anonyme, synthèse d'un Chairman, et un générateur de prompt.",
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-06-02",

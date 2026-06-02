@@ -69,7 +69,7 @@ export function estimateCalls(advisorCount: number): number {
 }
 
 function sanitizeLine(value: string): string {
-  return value.replace(/\s+/g, " ").trim();
+  return value.replaceAll(/\s+/g, " ").trim();
 }
 
 function resolveQuestion(

@@ -76,6 +76,8 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "skills.best-skills", href: "/skills/best-skills" },
       { labelKey: "skills.find-skills", href: "/skills/find-skills" },
       { labelKey: "skills.impeccable", href: "/skills/impeccable" },
+      { labelKey: "skills.ui-ux-pro-max", href: "/skills/ui-ux-pro-max" },
+      { labelKey: "skills.taste-skill", href: "/skills/taste-skill" },
       { labelKey: "skills.create-custom", href: "/skills/create-custom" },
       { labelKey: "skills.comparison", href: "/skills/comparison" },
     ],

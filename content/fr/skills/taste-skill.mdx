@@ -1,0 +1,116 @@
+---
+title: "Taste Skill : le framework anti-slop frontend pour Claude Code"
+description: "Skill MIT de Leon Lin avec une famille de sous-skills par style (minimaliste, brutaliste, image-to-code) pour éviter le rendu générique de Claude Code. Vérifié le 2 juin 2026."
+section: "skills"
+order: 8
+datePublished: "2026-06-02"
+dateModified: "2026-06-02"
+themes: ["reference", "tooling"]
+---
+
+{/* source primaire : https://www.tasteskill.dev/ (consulté 2026-06-02) */}
+{/* source secondaire : https://github.com/Leonxlnx/taste-skill (consulté 2026-06-02) */}
+
+<Callout type="info" title="En bref">
+**Taste Skill** est un framework frontend open source de [Leon Lin](https://github.com/Leonxlnx) (@lexnlin) et blueemi (@blueemi99). Sa promesse : casser le rendu générique des IA. Il s'organise en une **famille de sous-skills** spécialisés par style (minimaliste, brutaliste, image-to-code, redesign...) compatibles Claude Code, Cursor, Codex, Gemini CLI et d'autres. Installation : `npx skills add Leonxlnx/taste-skill`. Licence MIT, 31.7k★ GitHub. <time dateTime="2026-06-02">Vérifié le 2 juin 2026</time>.
+</Callout>
+
+## TL;DR actionnable
+
+- **Promesse** : "The Anti-Slop Frontend Framework for AI Agents"
+- **Licence** : MIT, gratuit (open source)
+- **Installation** : `npx skills add Leonxlnx/taste-skill`
+- **Ce qui le distingue** : plusieurs sous-skills ciblés par style, plutôt qu'un seul skill généraliste
+- **À garder en tête** : 31.7k★ au 2026-06-02 (contre 16.6k★ un mois plus tôt), progression rapide
+
+## La promesse, citée mot pour mot
+
+> "The Anti-Slop Frontend Framework for AI Agents"
+
+Source : [tasteskill.dev](https://www.tasteskill.dev/), vérifié 2026-06-02. La page GitHub le formule autrement : "gives your AI good taste. stops the AI from generating boring, generic slop".
+
+Le pari de Taste Skill : il n'existe pas un seul "bon goût" mais des registres visuels distincts. Plutôt qu'un skill unique qui tente de tout faire, le projet livre une famille de sous-skills, chacun spécialisé dans une intention. Tu choisis le sous-skill qui correspond au registre voulu, et Claude applique les conventions de ce registre.
+
+## Ce que ça change en pratique
+
+**Sans Taste Skill**, demander "une landing page" à Claude Code produit la landing par défaut des LLM : hero centré, gradient violet-rose, trois cartes de features alignées, le tout interchangeable d'un site à l'autre.
+
+**Avec le sous-skill `minimalist-ui`** ciblé, le même prompt sort une page sobre, typographie expressive, espaces généreux, sans gradient ni effet superflu. **Avec `industrial-brutalist-ui`**, la même demande produit un registre brut, contrasté, assumé. Le choix du sous-skill devient le levier principal, à la place d'un long prompt qui décrit le style mot par mot.
+
+## Installation
+
+```bash
+npx skills add Leonxlnx/taste-skill
+```
+
+Pour cibler directement un sous-skill plutôt que toute la famille :
+
+```bash
+npx skills add Leonxlnx/taste-skill --skill "design-taste-frontend"
+```
+
+Le skill s'installe au niveau de ton profil utilisateur et fonctionne avec plusieurs harnais : au 2026-06-02, le site liste Codex, Claude Code, Cursor, OpenCode, Gemini CLI, AI Studio, v0 et Lovable.
+
+## La famille de sous-skills
+
+Au 2026-06-02, le repo regroupe une dizaine de sous-skills. Ils évoluent vite (certains en bêta, des versions v1/v2 coexistent), donc considère cette liste comme un instantané, pas comme un contrat figé :
+
+| Famille | Sous-skills (instantané 2026-06-02) | Usage |
+|---------|--------------------------------------|-------|
+| **Cœur frontend** | `design-taste-frontend` (v2 expérimental), `design-taste-frontend-v1` | Le moteur anti-slop généraliste |
+| **Styles visuels** | `minimalist-ui`, `industrial-brutalist-ui`, `high-end-visual-design` | Registres visuels distincts |
+| **Image vers code** | `image-to-code` | Partir d'une capture ou d'une maquette |
+| **Audit / refonte** | `redesign-existing-projects` | Reprendre un existant |
+| **Exécution** | `full-output-enforcement` | Forcer des sorties complètes, sans troncature |
+| **Export / variantes** | `stitch-design-taste` | Génération orientée Google Stitch |
+| **Génération d'images** | `imagegen-frontend-web`, `imagegen-frontend-mobile`, `brandkit` | Références visuelles |
+
+{/* source: github.com/Leonxlnx/taste-skill + tasteskill.dev, vérifié 2026-06-02 */}
+
+## Workflow type avec Claude Code
+
+<Steps>
+<Step title="Choisir le registre" stepNumber={1}>
+Décider du style avant de coder : minimaliste, brutaliste, haut de gamme... Le registre détermine le sous-skill à invoquer.
+</Step>
+
+<Step title="Installer le bon sous-skill" stepNumber={2}>
+`npx skills add Leonxlnx/taste-skill --skill "minimalist-ui"` par exemple, pour ne charger que ce dont tu as besoin.
+</Step>
+
+<Step title="Générer puis critiquer" stepNumber={3}>
+Claude produit le composant dans le registre choisi. Demander ensuite une critique pour pousser le rendu plus loin dans la même direction.
+</Step>
+
+<Step title="Valider visuellement" stepNumber={4} isLast>
+Vérifier le rendu avec [Playwright MCP](/mcp/) : screenshot multi-viewport, contraste, alignement. Le sous-skill ne voit pas le navigateur, lui.
+</Step>
+</Steps>
+
+## Cas d'échec à connaître
+
+**Cas 1 — Mauvais registre pour le besoin.** Charger `industrial-brutalist-ui` pour une app bancaire grand public produit un rendu cohérent mais hors sujet. La famille de sous-skills suppose que tu sais quel registre tu veux. Si tu hésites, commence par le cœur `design-taste-frontend` plutôt qu'un style marqué.
+
+**Cas 2 — Versions qui bougent.** Les sous-skills évoluent vite (v1/v2, bêtas). Un tutoriel qui cite un nom de sous-skill précis peut être périmé en quelques semaines. Vérifie la liste à jour sur le repo avant de t'appuyer sur un nom exact.
+
+## Pour qui ?
+
+- **Recommandé** si tu travailles sur plusieurs projets aux styles très différents et que tu veux un levier net pour basculer de registre, sans réécrire un long prompt à chaque fois.
+- **Recommandé** pour partir d'une maquette ou d'une capture grâce au sous-skill `image-to-code`.
+- **À éviter** si tu cherches un seul outil "qui range tout" : la force de Taste Skill (sa granularité) est aussi sa courbe d'entrée. [Impeccable](/skills/impeccable) ou [UI UX Pro Max](/skills/ui-ux-pro-max) sont plus directs pour un usage unique.
+
+## Alternatives à connaître
+
+- **Impeccable** (`pbakaus/impeccable`) : un seul skill, vocabulaire design et anti-patterns. Plus simple à démarrer. Voir la [fiche Impeccable](/skills/impeccable).
+- **UI UX Pro Max** (`nextlevelbuilder/ui-ux-pro-max-skill`) : catalogue de styles et palettes multi-stack. Voir la [fiche UI UX Pro Max](/skills/ui-ux-pro-max).
+- **Huashu Design** (`alchaincyf/huashu-design`) : prototypes HTML et présentations, licence commerciale payante en entreprise.
+
+Pour creuser : [comparatif Skills vs MCP vs Plugins](/skills/comparison), [les skills incontournables 2026](/skills/best-skills), [find-skills pour en découvrir d'autres](/skills/find-skills).
+
+## Aller plus loin
+
+- **Site officiel** : [tasteskill.dev](https://www.tasteskill.dev/)
+- **Repo GitHub** : [github.com/Leonxlnx/taste-skill](https://github.com/Leonxlnx/taste-skill) — MIT, 31.7k★ au 2026-06-02
+- **Workflow de validation** : combiner avec [Playwright MCP](/mcp/) pour vérifier le rendu réel
+
+Taste Skill est le bon choix quand tu jongles entre des registres visuels distincts et que tu veux les piloter explicitement. Sa granularité demande un peu de prise en main, mais c'est précisément ce qui évite le rendu passe-partout.

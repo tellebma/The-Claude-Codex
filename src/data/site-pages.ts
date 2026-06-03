@@ -1093,7 +1093,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Ce que les system prompts fuités révèlent sur l'architecture interne de Claude Code, et ce qu'on peut en déduire pour écrire de meilleurs CLAUDE.md.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-12",
+    lastModified: "2026-06-03",
   },
   {
     path: "/content/garry-tan-stack-claude-code",

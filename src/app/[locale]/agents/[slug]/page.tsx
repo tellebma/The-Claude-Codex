@@ -1,11 +1,10 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { Bot } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
-import SectionSlugContent from "@/components/layout/SectionSlugContent";
+import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
 const SECTION = "agents";
 
@@ -44,15 +43,15 @@ export default async function AgentsSlugPage({ params }: PageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
+  // TUTO-6 (batch 4) — section agents entierement migree vers le shell article.
   const faqs = getPageFaqs(`/${SECTION}/${slug}`, locale);
   const extraJsonLd = faqs ? [createFAQPageSchema(faqs)] : undefined;
 
   return (
-    <SectionSlugContent
+    <TutoArticleContent
       section={SECTION}
       slug={slug}
       locale={locale}
-      icon={Bot}
       extraJsonLd={extraJsonLd}
     />
   );

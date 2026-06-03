@@ -7,6 +7,7 @@ import { getAlternateLocalePath } from "@/lib/slug-aliases";
 import { locales } from "@/i18n/config";
 import type { Locale } from "@/i18n/config";
 import clsx from "clsx";
+import { getAlternateLocalePath } from "@/lib/slug-aliases";
 
 const localeLabels: Record<Locale, string> = {
   fr: "FR",

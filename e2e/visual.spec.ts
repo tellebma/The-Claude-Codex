@@ -64,6 +64,23 @@ const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = 
   { path: "/fr/getting-started/faq-beginner/", name: "fr-faq-beginner" },
 ];
 
+const CI_VISUAL_ROUTE_NAMES = new Set([
+  "fr-content-index",
+  "en-content-index",
+  "fr-installation",
+  "en-installation",
+  "fr-skills-what-are-skills",
+  "en-skills-what-are-skills",
+  "fr-what-is-claude-code",
+  "fr-faq-beginner",
+]);
+
+// La CI garde un échantillon représentatif pour tenir dans le job 15 min ;
+// la matrice complète reste disponible en local sans CI=true.
+const visualRoutes = process.env.CI
+  ? ROUTES.filter((route) => CI_VISUAL_ROUTE_NAMES.has(route.name))
+  : ROUTES;
+
 const THEMES: ReadonlyArray<"light" | "dark"> = ["light", "dark"];
 
 // CSS injecte au moment du screenshot pour figer les animations qui survivent
@@ -115,7 +132,7 @@ test.describe("Visual regression — landing & sections cles", () => {
   test.setTimeout(60_000);
 
   for (const theme of THEMES) {
-    for (const { path, name } of ROUTES) {
+    for (const { path, name } of visualRoutes) {
       test(`${name} — ${theme}`, async ({ page }) => {
         await prepareForVisual(page, theme);
         await page.goto(path);

@@ -1018,6 +1018,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-20",
   },
   {
+    path: "/content/cout-tokens-par-langue",
+    pathsByLocale: { en: "/content/token-cost-by-language" },
+    title: "Pourquoi vos tokens coûtent plus cher dans certaines langues",
+    description:
+      "À contenu égal, le nombre de tokens varie selon la langue (jusqu'à 15× d'écart selon les études). Impacts sur le coût, la latence et le contexte, et ce que ça change pour Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-28",
+  },
+  {
     path: "/content/mythes-claude-code",
     pathsByLocale: { en: "/content/claude-code-myths" },
     title: "8 idées reçues sur Claude Code : Mythes et réalités",

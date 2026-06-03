@@ -1,12 +1,11 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
-import { Cable } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
 import { getPageExtraSchemas } from "@/data/page-schemas";
-import SectionSlugContent from "@/components/layout/SectionSlugContent";
+import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
 const SECTION = "mcp";
 
@@ -26,6 +25,9 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
+  if (!getSectionMdxSlugs(SECTION, locale).includes(slug)) {
+    return {};
+  }
   const { frontmatter } = getSectionMdxBySlug(SECTION, slug, locale);
 
   return createPageMetadata({
@@ -42,6 +44,7 @@ export default async function McpSlugPage({ params }: PageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
+  // TUTO-6 (batch 3) — section mcp entierement migree vers le shell article.
   const faqs = getPageFaqs(`/${SECTION}/${slug}`, locale);
   const extraSchemas = [
     ...(faqs ? [createFAQPageSchema(faqs)] : []),
@@ -50,11 +53,10 @@ export default async function McpSlugPage({ params }: PageProps) {
   const extraJsonLd = extraSchemas.length > 0 ? extraSchemas : undefined;
 
   return (
-    <SectionSlugContent
+    <TutoArticleContent
       section={SECTION}
       slug={slug}
       locale={locale}
-      icon={Cable}
       extraJsonLd={extraJsonLd}
     />
   );

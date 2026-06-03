@@ -55,6 +55,10 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "mcp.create-mcp-typescript", href: "/mcp/create-mcp-typescript" },
       { labelKey: "mcp.create-mcp-python", href: "/mcp/create-mcp-python" },
       { labelKey: "mcp.advanced-protocol", href: "/mcp/advanced-protocol" },
+      {
+        labelKey: "mcp.workflow-design-playwright",
+        href: "/mcp/workflow-design-playwright",
+      },
     ],
   },
   plugins: {
@@ -76,6 +80,9 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "skills.best-skills", href: "/skills/best-skills" },
       { labelKey: "skills.find-skills", href: "/skills/find-skills" },
       { labelKey: "skills.impeccable", href: "/skills/impeccable" },
+      { labelKey: "skills.ui-ux-pro-max", href: "/skills/ui-ux-pro-max" },
+      { labelKey: "skills.taste-skill", href: "/skills/taste-skill" },
+      { labelKey: "skills.huashu-design", href: "/skills/huashu-design" },
       { labelKey: "skills.create-custom", href: "/skills/create-custom" },
       { labelKey: "skills.comparison", href: "/skills/comparison" },
     ],

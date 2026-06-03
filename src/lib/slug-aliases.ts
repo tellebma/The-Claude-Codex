@@ -16,6 +16,8 @@ const SLUG_ALIASES: Readonly<Record<string, string>> = {
   "mode-plan-vs-thinking": "plan-vs-thinking-mode",
   "mythes-claude-code": "claude-code-myths",
   "ne-pas-donner-cles-api-a-claude-code": "do-not-give-api-keys-to-claude-code",
+  "refaire-une-card-avec-impeccable-et-playwright":
+    "redo-a-card-with-impeccable-and-playwright",
   // content : EN → FR
   "security-best-practices": "bonnes-pratiques-securite",
   "ci-cd-cyber-security": "ci-cd-cyber-securite",
@@ -25,6 +27,8 @@ const SLUG_ALIASES: Readonly<Record<string, string>> = {
   "plan-vs-thinking-mode": "mode-plan-vs-thinking",
   "claude-code-myths": "mythes-claude-code",
   "do-not-give-api-keys-to-claude-code": "ne-pas-donner-cles-api-a-claude-code",
+  "redo-a-card-with-impeccable-and-playwright":
+    "refaire-une-card-avec-impeccable-et-playwright",
   // mcp : FR ↔ EN
   "securite-mcp": "mcp-security",
   "mcp-security": "securite-mcp",

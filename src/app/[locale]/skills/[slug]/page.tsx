@@ -2,6 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
+import { getPageExtraSchemas } from "@/data/page-schemas";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
 import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
@@ -45,7 +46,11 @@ export default async function SkillsSlugPage({ params }: PageProps) {
 
   // TUTO-6 (batch 1) — section skills entierement migree vers le shell article.
   const faqs = getPageFaqs(`/${SECTION}/${slug}`, locale);
-  const extraJsonLd = faqs ? [createFAQPageSchema(faqs)] : undefined;
+  const extraSchemas = [
+    ...(faqs ? [createFAQPageSchema(faqs)] : []),
+    ...getPageExtraSchemas(`/${SECTION}/${slug}`, locale),
+  ];
+  const extraJsonLd = extraSchemas.length > 0 ? extraSchemas : undefined;
 
   return (
     <TutoArticleContent

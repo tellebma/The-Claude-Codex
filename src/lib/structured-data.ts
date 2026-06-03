@@ -94,6 +94,66 @@ export function createFAQPageSchema(
   };
 }
 
+interface SoftwareApplicationOptions {
+  readonly name: string;
+  readonly description: string;
+  readonly url: string;
+  readonly applicationCategory?: string;
+  readonly operatingSystem?: string;
+  /** Code SPDX de la licence (ex: "MIT", "Apache-2.0"). */
+  readonly license?: string;
+  /** URL canonique de la licence (ex: lien GitHub LICENSE). */
+  readonly licenseUrl?: string;
+  readonly offerPrice?: string;
+  readonly offerCurrency?: string;
+  readonly locale?: string;
+}
+
+/**
+ * Schema SoftwareApplication pour les fiches outil (skills tiers).
+ * Le prix n'est emis que si `offerPrice` est fourni : un skill gratuit
+ * declare `offerPrice: "0"`, un skill payant son tarif. Sans prix, aucun
+ * bloc `offers` n'est ajoute pour eviter une donnee structuree erronee.
+ */
+export function createSoftwareApplicationSchema(
+  options: SoftwareApplicationOptions,
+): Record<string, unknown> {
+  const {
+    name,
+    description,
+    url,
+    applicationCategory = "DeveloperApplication",
+    operatingSystem = "Cross-platform",
+    license,
+    licenseUrl,
+    offerPrice,
+    offerCurrency = "USD",
+    locale = "fr",
+  } = options;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name,
+    description,
+    url: ensureTrailingSlash(url),
+    applicationCategory,
+    operatingSystem,
+    inLanguage: localeToLanguageTag(locale),
+    ...(licenseUrl ? { license: licenseUrl } : {}),
+    ...(license ? { licenseDeclared: license } : {}),
+    ...(offerPrice === undefined
+      ? {}
+      : {
+          offers: {
+            "@type": "Offer",
+            price: offerPrice,
+            priceCurrency: offerCurrency,
+          },
+        }),
+  };
+}
+
 interface DefinedTermItem {
   readonly name: string;
   readonly description: string;

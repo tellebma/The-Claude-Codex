@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { getAlternateLocalePath } from "@/lib/slug-aliases";
 
 /**
- * Regression guard pour les 44 liens internes casses detectes par
+ * Regression guard pour les liens internes casses detectes par
  * `npm run audit:links` : le LanguageSwitcher pointait vers /fr/<slug-EN>/
  * au lieu de /fr/<slug-FR>/ pour les articles aux slugs traduits.
  */
@@ -26,6 +26,19 @@ describe("getAlternateLocalePath", () => {
     expect(getAlternateLocalePath("/content/token-cost-by-language/")).toBe(
       "/content/cout-tokens-par-langue/",
     );
+  });
+
+  it("traduit le slug de l'article demo card (DSK-8) dans les deux sens", () => {
+    expect(
+      getAlternateLocalePath(
+        "/content/refaire-une-card-avec-impeccable-et-playwright/",
+      ),
+    ).toBe("/content/redo-a-card-with-impeccable-and-playwright/");
+    expect(
+      getAlternateLocalePath(
+        "/content/redo-a-card-with-impeccable-and-playwright/",
+      ),
+    ).toBe("/content/refaire-une-card-avec-impeccable-et-playwright/");
   });
 
   it("traduit le slug d'une page MCP dans les deux sens", () => {

@@ -354,7 +354,8 @@
       "securite-mcp": "Sécurité des MCP",
       "create-mcp-typescript": "Créer un MCP en TypeScript",
       "create-mcp-python": "Créer un MCP en Python",
-      "advanced-protocol": "Protocole MCP avancé"
+      "advanced-protocol": "Protocole MCP avancé",
+      "workflow-design-playwright": "Workflow design Playwright"
     },
     "plugins": {
       "title": "Plugins",
@@ -372,6 +373,9 @@
       "best-skills": "Top Skills recommandés",
       "find-skills": "Trouver un Skill (find-skills)",
       "impeccable": "Impeccable (skill design)",
+      "ui-ux-pro-max": "UI UX Pro Max (skill design)",
+      "taste-skill": "Taste Skill (skill design)",
+      "huashu-design": "Huashu Design (skill design)",
       "create-custom": "Créer un Skill custom",
       "comparison": "Skills vs MCP vs Plugins"
     },

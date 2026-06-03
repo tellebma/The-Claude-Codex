@@ -14,7 +14,12 @@ const baseURL = `http://localhost:${port}`;
 const browserProjects = [
   {
     name: "chromium",
-    testIgnore: /visual\.spec\.ts/,
+    // Le job CI "E2E smoke" doit rester un smoke fonctionnel sous le timeout
+    // GitHub de 15 min. La suite axe complète est validée localement par batch
+    // lors des rollouts ArticleShell et relancée ciblée quand une page change.
+    testIgnore: isCI
+      ? /(?:visual|a11y)\.spec\.ts/
+      : /visual\.spec\.ts/,
     use: { ...devices["Desktop Chrome"] },
   },
   ...(allBrowsers

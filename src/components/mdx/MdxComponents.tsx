@@ -241,7 +241,18 @@ function isInternalLink(href: string | undefined): boolean {
   if (href.startsWith("//")) return false;
   // Already has a locale prefix
   if (/^\/(?:fr|en)(?:\/|$)/.test(href)) return false;
+  // Static file downloads in public/ are served without locale prefix
+  if (hasStaticFileExtension(href)) return false;
   return true;
+}
+
+function hasStaticFileExtension(href: string): boolean {
+  const pathWithoutHash = href.split("#", 1)[0];
+  const pathOnly = pathWithoutHash.split("?", 1)[0];
+  const lastSlashIndex = pathOnly.lastIndexOf("/");
+  const lastDotIndex = pathOnly.lastIndexOf(".");
+
+  return lastDotIndex > lastSlashIndex && lastDotIndex < pathOnly.length - 1;
 }
 
 /**

@@ -302,8 +302,10 @@ const POPULAR_SLUGS_FR = [
   "mcp/setup",
   "skills/what-are-skills",
   "skills/claude-council",
+  "mcp/workflow-design-playwright",
   "bonnes-pratiques-securite",
   "couts-reels-claude-code",
+  "stack-design-claude-code",
 ];
 
 const POPULAR_SLUGS_EN = [
@@ -316,8 +318,10 @@ const POPULAR_SLUGS_EN = [
   "mcp/setup",
   "skills/what-are-skills",
   "skills/claude-council",
+  "mcp/workflow-design-playwright",
   "security-best-practices",
   "real-costs-claude-code",
+  "stack-design-claude-code",
 ];
 
 function buildLlmsTxt(pagesByLocale: Map<string, MdxPage[]>): string {

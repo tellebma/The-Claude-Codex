@@ -40,9 +40,20 @@ function isAllowed(href: string): boolean {
   if (!href.startsWith("/")) return true; // external or relative
   if (href === "/") return true; // root
   if (href.startsWith("#")) return true;
+  // Static file downloads (public/skills/*.md, etc.) served without locale prefix
+  if (hasStaticFileExtension(href)) return true;
   return ALLOWED_PREFIXES.some(
     (p) => href === p || href.startsWith(p + "/") || href.startsWith(p),
   );
+}
+
+function hasStaticFileExtension(href: string): boolean {
+  const pathWithoutHash = href.split("#", 1)[0];
+  const pathOnly = pathWithoutHash.split("?", 1)[0];
+  const lastSlashIndex = pathOnly.lastIndexOf("/");
+  const lastDotIndex = pathOnly.lastIndexOf(".");
+
+  return lastDotIndex > lastSlashIndex && lastDotIndex < pathOnly.length - 1;
 }
 
 function walkHtml(dir: string): string[] {

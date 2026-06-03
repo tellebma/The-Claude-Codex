@@ -1937,6 +1937,30 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "limite",
     ],
   },
+  // Token cost by language
+  {
+    title: "Pourquoi vos tokens coutent plus cher dans certaines langues",
+    description:
+      "A contenu egal, le nombre de tokens varie selon la langue : jusqu'a 15x d'ecart selon les etudes. Impacts sur le cout, la latence et la fenetre de contexte, et ce que ca change pour Claude Code.",
+    href: "/content/cout-tokens-par-langue",
+    section: "Contenus",
+    keywords: [
+      "tokens",
+      "langue",
+      "cout",
+      "tokenisation",
+      "tokenizer",
+      "multilingue",
+      "anglais",
+      "francais",
+      "bpe",
+      "facture",
+      "latence",
+      "contexte",
+      "petrov",
+      "ahia",
+    ],
+  },
   // Myths
   {
     title: "8 idees recues sur Claude Code - Mythes et realites",

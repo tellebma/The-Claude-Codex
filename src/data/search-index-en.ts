@@ -1922,6 +1922,29 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "limit",
     ],
   },
+  // Token cost by language
+  {
+    title: "Why your tokens cost more in some languages",
+    description:
+      "For the same content, token count varies by language: up to 15x difference per the studies. Impact on cost, latency and context window, and what it means for Claude Code.",
+    href: "/content/token-cost-by-language",
+    section: "Content",
+    keywords: [
+      "tokens",
+      "language",
+      "cost",
+      "tokenization",
+      "tokenizer",
+      "multilingual",
+      "english",
+      "bpe",
+      "billing",
+      "latency",
+      "context",
+      "petrov",
+      "ahia",
+    ],
+  },
   // Myths
   {
     title: "8 misconceptions about Claude Code - Myths and realities",

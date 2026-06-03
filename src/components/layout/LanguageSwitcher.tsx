@@ -6,6 +6,7 @@ import { Globe } from "lucide-react";
 import { locales } from "@/i18n/config";
 import type { Locale } from "@/i18n/config";
 import clsx from "clsx";
+import { getAlternateLocalePath } from "@/lib/slug-aliases";
 
 const localeLabels: Record<Locale, string> = {
   fr: "FR",
@@ -25,11 +26,12 @@ export function LanguageSwitcher() {
       />
       {locales.map((l) => {
         const isActive = l === locale;
+        const href = isActive ? pathname : getAlternateLocalePath(pathname);
 
         return (
           <Link
             key={l}
-            href={pathname}
+            href={href}
             locale={l}
             aria-label={t(l)}
             // aria-current="true" : la langue active n'est pas une "page" mais

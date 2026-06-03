@@ -1,0 +1,106 @@
+---
+title: "Claude Council: make several AIs deliberate"
+description: "Karpathy's LLM Council pattern adapted to Claude: make several AIs deliberate, anonymized cross-review, a Chairman's synthesis, and a prompt generator."
+badge: "Pattern"
+section: "skills"
+order: 6
+datePublished: "2026-06-02"
+dateModified: "2026-06-02"
+themes: ["guide", "architecture", "productivity"]
+---
+
+<Callout type="info" title="In short">
+The **LLM Council** is an orchestration pattern popularized by Andrej Karpathy ([github.com/karpathy/llm-council](https://github.com/karpathy/llm-council)): instead of asking your question to a single model, you query a panel, have them review each other's answers (blind), then a **Chairman** synthesizes everything. This page explains the pattern and gives you a generator to reproduce it with Claude, as a prompt or a skill, without standing up a stack.
+</Callout>
+
+## What is a Council?
+
+When you ask a hard question to a single model, you get a single angle. If that model has a bias on the topic, you inherit the bias without knowing it. The Council idea is simple: gather several opinions, confront them, then decide.
+
+The pattern comes from Andrej Karpathy, who published the `karpathy/llm-council` repo on November 22, 2025. He describes it himself as code that was "99% vibe coded as a fun Saturday hack": a local web app he built in an afternoon to read books while comparing several LLMs side by side. The repo went viral (as of 2026-06-02, roughly 19,900 stars and 3,760 forks, figures worth re-checking on GitHub as they move fast), but it remains a personal prototype.
+
+<Callout type="warning" title="A Saturday hack, not an official tool">
+Karpathy's repo is provided "as is", with **no license at all** (no LICENSE file) and is **deliberately unmaintained**: "I'm not going to support it in any way." It is not a product, it is a proof of concept. Do not treat it as a reusable open-source project in the legal sense, and do not expect updates. What's valuable here is the **pattern**, not the code.
+</Callout>
+
+The workflow runs in three stages. The names and behavior below are taken directly from the repo's README.
+
+<Steps>
+<Step title="First opinions" stepNumber={1}>
+Your question goes to each model in the council, individually. Each one answers without seeing the others. You collect as many raw answers as there are advisors, shown side by side. That alone is useful: seeing several independent answers quickly reveals where they agree and where they clash.
+</Step>
+
+<Step title="Review (anonymized)" stepNumber={2}>
+Each model then receives the others' answers, but **the identities are hidden**. Nobody knows who wrote what. That anonymity is deliberate: it stops a model from favoring itself or a brand. Each advisor then ranks the answers on two axes, accuracy and insight.
+</Step>
+
+<Step title="Final response" stepNumber={3} isLast>
+A designated model, the **Chairman**, receives every answer and every ranking, then writes a single synthesis. That final answer is what you see. The Chairman doesn't just copy the best opinion: it arbitrates the disagreements and combines what holds up.
+</Step>
+</Steps>
+
+A detail that matters for a "Claude" site: in the original version, Claude is just one advisor out of four, and **Gemini is the one who presides**. Here is the default configuration, copied verbatim from `backend/config.py`:
+
+```python
+COUNCIL_MODELS = [
+    "openai/gpt-5.1",
+    "google/gemini-3-pro-preview",
+    "anthropic/claude-sonnet-4.5",
+    "x-ai/grok-4",
+]
+
+CHAIRMAN_MODEL = "google/gemini-3-pro-preview"
+```
+
+The identifiers are in OpenRouter format, because the repo routes every call through [OpenRouter](https://openrouter.ai/) (one API key, several providers). On the stack side, it's FastAPI (Python 3.10+) with httpx for the backend, React + Vite for the front, and JSON files for storage. Nothing hosted: it's a local app you run on your own machine.
+
+## Multi-model or multi-persona?
+
+The word "Council" covers two very different setups. Confusing them is the classic mistake, so let's put them side by side.
+
+| Approach | Principle | Strengths | Limits |
+|----------|-----------|-----------|--------|
+| **Multi-model** (Karpathy style) | N models from different providers (GPT, Gemini, Claude, Grok) deliberate | Genuine diversity of angles, decorrelated biases across models | Cost and latency (N providers), OpenRouter key, uneven quality from one model to the next |
+| **Multi-persona of a single Claude** | One Claude plays several roles that contradict each other | Simple (one provider, one key), reproducible, packageable as a skill | Correlated biases (same underlying model), risk of echo rather than real contradiction |
+
+On Claude, you most often go **multi-persona**: you ask the same model to play a skeptic, an optimist, a domain expert in turn, then act as the Chairman. It's simpler to set up and fits in a single prompt or a single skill. In exchange, you lose true independence of opinions: since it's the same brain behind every persona, the blind spots are shared. A well-written "contrarian" persona helps, but it doesn't replace a model trained differently.
+
+Multi-model offers more authentic diversity, at the price of a stack to build and a bill that multiplies. Choose based on what's at stake.
+
+## Anatomy of a council
+
+A council, whether multi-model or multi-persona, rests on three ingredients.
+
+**The advisors.** In multi-model, these are distinct models. In multi-persona, they are roles you define. As an illustration, you might picture a panel like a skeptic who hunts for flaws, an advocate who defends the option, a practitioner who thinks about real execution, and a generalist who zooms out. These are only examples: the right personas depend entirely on your question. Three to five almost always suffice.
+
+**The anonymized cross-review.** This is the step that separates a real council from simply "asking the question three times." Each opinion is submitted to the others with no author label, and each one must judge it on the merits. Anonymity prevents complacency.
+
+**The Chairman.** It has the last word. Its job is not to vote but to synthesize: spot the agreements, surface the disagreements, and produce a reasoned recommendation. In multi-persona, it's often the same Claude switching hats one final time.
+
+## Demo: the generator
+
+Rather than copying FastAPI code, here is a generator that produces the text you need. Pick the mode, the number of advisors, their personas and the Chairman: you get a **prompt** ready to paste into Claude, and a **`SKILL.md` skeleton** if you want to turn it into a reusable skill. Everything runs in your browser, nothing is sent anywhere.
+
+<CouncilBuilder />
+
+The generated prompt is fine for one-off use: you paste it, Claude plays the roles in a single conversation. The `SKILL.md` is for when you want to trigger this behavior repeatedly, without re-pasting the prompt every time. To understand how Claude loads a skill, see [What is a skill?](/skills/what-are-skills).
+
+## When to use it, when it's a waste
+
+A council is expensive. Expect on the order of **2N + 1 calls** per question (N first opinions, N cross-reviews, 1 Chairman synthesis). For four advisors, that's nine calls where a simple question takes one. Latency follows the same curve.
+
+That overhead is only worth it for a **real stake**, with no obvious right answer, where several angles genuinely shed light on the decision.
+
+<Callout type="tip" title="Good candidates">
+An architecture decision where you're torn between two credible options, arbitrating a trade-off (speed versus robustness), a strategy review, a sensitive piece of text to stress-test from several angles. In short: the questions where you'd say "I'd like a second opinion."
+</Callout>
+
+<Callout type="warning" title="Bad candidates">
+Single-answer factual questions ("what's the syntax of X?"), mechanical tasks, anything you can verify with one search. Making a panel deliberate over a fact means paying nine calls for an answer the first model already gave. And watch the deeper trap: a council does **not guarantee** a better decision, it organizes contradiction. If your advisors share the same bias (the multi-persona case), they can converge on a wrong answer with confidence.
+</Callout>
+
+## Next steps
+
+- [What is a skill?](/skills/what-are-skills) to understand how to package this pattern and trigger it automatically.
+- [find-skills](/skills/find-skills) to check whether someone already published a council skill before writing your own.
+- [Orchestrating agents](/agents/orchestration) if you want to go beyond a single prompt and run the advisors as separate agents.

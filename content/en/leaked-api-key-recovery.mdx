@@ -6,6 +6,7 @@ section: "content"
 order: 9
 datePublished: "2026-04-20"
 dateModified: "2026-05-09"
+themes: ["use-case", "security"]
 ---
 
 <Callout type="warning" title="Act in the next 5 minutes">
@@ -15,6 +16,10 @@ A leaked API key can be used by automated bots within minutes of being discovere
 ## Quick answer
 
 Your `sk-ant-...` key was leaked? Revoke it now at [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys), generate a new one, update every environment (CI, local, prod), then disable the old key. Treat the key as compromised on suspicion alone. The detailed checklist is right below.
+
+<Callout type="tip" title="See also: prevention">
+To avoid going through this again, Claude Code's [`/security-review`](/advanced/security-review) command detects hardcoded secrets in your diff before commit. Paired with gitleaks as a pre-commit hook, you close the door from both sides.
+</Callout>
 
 ## The 5-minute emergency checklist
 

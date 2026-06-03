@@ -4,8 +4,16 @@ description: "Tutoriel concret : créez votre premier site web avec Claude Code 
 section: "getting-started"
 order: 4
 datePublished: "2026-03-09"
-dateModified: "2026-03-09"
+dateModified: "2026-05-27"
 ---
+
+## Nouveautés (mai 2026)
+
+Trois petites choses ont changé dans le workflow de démarrage recommandé :
+
+- **Les slash commands comme `/init`** génèrent désormais automatiquement un `CLAUDE.md` avec des valeurs par défaut sensées : plus besoin de le rédiger à la main pour un premier projet.
+- **Le Plan tool** (agent intégré) est la façon canonique de cadrer avant de coder. Demandez à Claude Code de "planifier d'abord" pour tout changement qui dépasse un seul fichier.
+- **Les Skills** sont livrés avec le CLI pour les tâches les plus courantes (TDD, revue de code, design frontend). Parcourez-les avec `/skills` avant de chercher une bibliothèque externe. Voir [les meilleurs Skills pour 2026](/skills/best-skills).
 
 ## Ce que vous allez créer
 
@@ -29,7 +37,7 @@ Ce premier projet est volontairement très simple. Pas de framework, pas de conf
     { type: "command", content: "mkdir ~/ma-premiere-page && cd ~/ma-premiere-page && claude" },
     { type: "empty", content: "" },
     { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
-    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (2.1.152) ║" },
     { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
     { type: "empty", content: "" },
     { type: "output", content: "  Analysing project structure..." },
@@ -89,7 +97,7 @@ Créez un nouveau dossier pour votre projet et lancez Claude Code à l'intérieu
     { type: "command", content: "mkdir ~/mon-premier-site && cd ~/mon-premier-site && claude" },
     { type: "empty", content: "" },
     { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
-    { type: "highlight", content: "  ║  Welcome to Claude Code (1.0.17)  ║" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (2.1.152) ║" },
     { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
     { type: "empty", content: "" },
     { type: "output", content: "  Analysing project structure..." },

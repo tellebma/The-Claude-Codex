@@ -1,0 +1,133 @@
+{
+  "generatedAt": "2026-05-27T10:23:25.267Z",
+  "images": [
+    {
+      "locale": "en",
+      "slug": "ci-cd-cyber-security"
+    },
+    {
+      "locale": "en",
+      "slug": "claude-code-myths"
+    },
+    {
+      "locale": "en",
+      "slug": "claude-design-vs-figma"
+    },
+    {
+      "locale": "en",
+      "slug": "comprendre-claude-code-internals"
+    },
+    {
+      "locale": "en",
+      "slug": "do-not-give-api-keys-to-claude-code"
+    },
+    {
+      "locale": "en",
+      "slug": "future-vision"
+    },
+    {
+      "locale": "en",
+      "slug": "garry-tan-stack-claude-code"
+    },
+    {
+      "locale": "en",
+      "slug": "getting-started-intro"
+    },
+    {
+      "locale": "en",
+      "slug": "karpathy-claude-md-analyse"
+    },
+    {
+      "locale": "en",
+      "slug": "leaked-api-key-recovery"
+    },
+    {
+      "locale": "en",
+      "slug": "mcp-guide"
+    },
+    {
+      "locale": "en",
+      "slug": "plan-vs-thinking-mode"
+    },
+    {
+      "locale": "en",
+      "slug": "prompting-guide"
+    },
+    {
+      "locale": "en",
+      "slug": "real-costs-claude-code"
+    },
+    {
+      "locale": "en",
+      "slug": "security-best-practices"
+    },
+    {
+      "locale": "en",
+      "slug": "skills-guide"
+    },
+    {
+      "locale": "fr",
+      "slug": "bonnes-pratiques-securite"
+    },
+    {
+      "locale": "fr",
+      "slug": "ci-cd-cyber-securite"
+    },
+    {
+      "locale": "fr",
+      "slug": "claude-design-vs-figma"
+    },
+    {
+      "locale": "fr",
+      "slug": "comprendre-claude-code-internals"
+    },
+    {
+      "locale": "fr",
+      "slug": "couts-reels-claude-code"
+    },
+    {
+      "locale": "fr",
+      "slug": "fuite-cle-api"
+    },
+    {
+      "locale": "fr",
+      "slug": "future-vision"
+    },
+    {
+      "locale": "fr",
+      "slug": "garry-tan-stack-claude-code"
+    },
+    {
+      "locale": "fr",
+      "slug": "getting-started-intro"
+    },
+    {
+      "locale": "fr",
+      "slug": "karpathy-claude-md-analyse"
+    },
+    {
+      "locale": "fr",
+      "slug": "mcp-guide"
+    },
+    {
+      "locale": "fr",
+      "slug": "mode-plan-vs-thinking"
+    },
+    {
+      "locale": "fr",
+      "slug": "mythes-claude-code"
+    },
+    {
+      "locale": "fr",
+      "slug": "ne-pas-donner-cles-api-a-claude-code"
+    },
+    {
+      "locale": "fr",
+      "slug": "prompting-guide"
+    },
+    {
+      "locale": "fr",
+      "slug": "skills-guide"
+    }
+  ]
+}

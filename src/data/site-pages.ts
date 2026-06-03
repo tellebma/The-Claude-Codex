@@ -58,7 +58,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Découvrez Claude Code, l’assistant IA en ligne de commande d’Anthropic. Comprenez ce qui le différencie de Copilot ou Cursor.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-27",
   },
   {
     path: "/getting-started/installation",
@@ -67,7 +67,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Installez Claude Code en quelques minutes : Node.js 18+, npm, authentification API key ou Max, et résolution des erreurs courantes.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-27",
   },
   {
     path: "/getting-started/environment-setup",
@@ -76,7 +76,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Configurez Claude Code : variable d’environnement API key, fichier settings.json, fichier CLAUDE.md, permissions et sécurité.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-27",
   },
   {
     path: "/getting-started/first-project",
@@ -85,7 +85,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Tutoriel concret : créez votre premier site web avec Claude Code en 5 minutes. Exemples de prompts et bonnes pratiques.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-05-27",
+  },
+  {
+    path: "/getting-started/templates-starter-kits",
+    title: "Templates et starter kits Claude Code",
+    description:
+      "Tour des stacks opinionated 2026 : gstack, claude-code-templates, SuperClaude_Framework, get-shit-done. Comment choisir selon ton profil.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
   },
   {
     path: "/getting-started/faq-beginner",
@@ -204,6 +213,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+  },
+  {
+    path: "/mcp/workflow-design-playwright",
+    title: "Designer avec Claude Code et Playwright MCP : workflow",
+    description:
+      "Workflow pas à pas pour valider un composant Claude Code avec Playwright MCP : screenshots multi-viewport, critique, itération et contrôle a11y.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
   },
   {
     path: "/skills",
@@ -362,10 +380,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     path: "/content",
     title: "Contenus éditoriaux",
     description:
-      "Tous les articles et guides éditoriaux du Claude Codex. Explorez nos contenus MDX sur Claude Code, les MCP, les Skills et le prompting.",
+      "Tous les articles et guides éditoriaux du Claude Codex. Sécurité, architecture, DevSecOps, prompting : 16 guides indépendants pour maîtriser Claude Code en profondeur.",
     priority: 0.6,
     changeFrequency: "weekly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-05-19",
   },
   {
     path: "/plugins",
@@ -428,7 +446,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les Skills Claude Code expliqués : workflows Markdown réutilisables déclenchés par slash commands. Fonctionnement, création, et différences avec les MCP et plugins.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-13",
+    lastModified: "2026-06-02",
   },
   {
     path: "/skills/best-skills",
@@ -437,7 +455,43 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les 6 meilleurs Skills Claude Code 2026 : TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing, Security Review. Installation et exemples copiables.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-09",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/skills/find-skills",
+    title: "find-skills : trouver et installer le bon skill Claude Code",
+    description:
+      "Le méta-skill #1 sur skills.sh (1.6M installs en 2026) qui apprend à Claude Code à trouver, vérifier et installer le bon skill via npx skills.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-02",
+  },
+  {
+    path: "/skills/claude-council",
+    title: "Claude Council : faire délibérer plusieurs IA",
+    description:
+      "Le pattern LLM Council de Karpathy adapté à Claude : faire délibérer plusieurs IA, review croisée anonyme, synthèse d'un Chairman, et un générateur de prompt.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-02",
+  },
+  {
+    path: "/skills/impeccable",
+    title: "Impeccable : le skill design qui donne du vocabulaire visuel à Claude Code",
+    description:
+      "Skill Apache 2.0 de Paul Bakaus avec 23 commandes design (/polish, /audit, /typeset…) et 27 règles anti-patterns pour élever la qualité visuelle des sorties Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/skills/huashu-design",
+    title: "Huashu Design : skill de prototypage HTML Claude Code",
+    description:
+      "Huashu Design, le skill MIT de Huasheng (花叔) qui génère prototypes HTML cliquables, decks PPTX et animations MP4 depuis Claude Code. Vérifié juin 2026.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
   },
   {
     path: "/skills/create-custom",
@@ -500,7 +554,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les meilleurs agents Claude Code classés par catégorie : développement, architecture, sécurité, tests et maintenance. Description, quand les utiliser et exemples d’invocation.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-10",
+    lastModified: "2026-05-10",
   },
   {
     path: "/agents/orchestration",
@@ -509,7 +563,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Patterns d’orchestration pour combiner plusieurs agents Claude Code : séquentiel, parallèle, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-06-02",
   },
   {
     path: "/agents/orchestration-patterns",
@@ -573,6 +627,51 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+  },
+  {
+    path: "/ecosystem",
+    title: "Écosystème Claude Code : repos, skills, plugins, MCP",
+    description:
+      "Le hub francophone de l’écosystème Claude Code. Top repos GitHub, awesome skills, plugins officiels Anthropic et serveurs MCP soigneusement curés.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/top-repos-github",
+    title: "Top repos GitHub pour Claude Code (mai 2026)",
+    description:
+      "25 repos GitHub triés sur le volet qui font avancer l’écosystème Claude Code : harness, awesome lists, mémoire, optimisation tokens, multi-agents, plugins.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/awesome-skills",
+    title: "Awesome Claude Skills : la sélection 2026",
+    description:
+      "Les skills publics qui valent vraiment l’installation : packs complets, skills uniques (mémoire, tokens, marketing), skills design pro et awesome lists.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/awesome-plugins",
+    title: "Awesome Claude Plugins : marketplace officielle + écosystème community",
+    description:
+      "Plugins Claude Code à connaître : marketplace officielle Anthropic, plugins community à fort impact (claude-hud, compound-engineering, claudian), marketplaces alternatives.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/ecosystem/awesome-mcp-servers",
+    title: "Awesome MCP Servers : la curation par catégorie (mai 2026)",
+    description:
+      "Les serveurs MCP à brancher à Claude Code : awesome lists, dev tools (GitHub, Chrome DevTools, Playwright), data, frameworks builders, automation. Données vérifiées 2026-05-11.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
   },
   {
     path: "/enterprise",
@@ -710,6 +809,42 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-04-26",
   },
   {
+    path: "/advanced/memoire-persistante",
+    title: "Mémoire persistante entre sessions Claude Code",
+    description:
+      "Comment garder le contexte d’une session Claude Code à l’autre : patterns claude-mem, graphify, hooks SessionStart, CLAUDE.md hiérarchique. Comparaison des 4 approches.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/advanced/optimisation-tokens",
+    title: "Optimisation tokens et réduction des coûts Claude Code",
+    description:
+      "Faire baisser la facture Anthropic sans sacrifier la qualité. 5 leviers : prompt caching natif, /compact, caveman, claude-code-router, abonnement Max.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-11",
+  },
+  {
+    path: "/advanced/observabilite-monitoring",
+    title: "Observabilité et monitoring de Claude Code",
+    description:
+      "Tracer ce que fait Claude Code : OpenTelemetry natif, hooks d'événements, dashboards community (claude-hud, abtop, Agent-Monitor) et stack Grafana/Loki.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
+    path: "/advanced/security-review",
+    title: "Commande /security-review : audit de sécurité dans Claude Code",
+    description:
+      "Détecter et corriger les failles SQL, XSS, secrets en clair et 7 autres familles directement depuis Claude Code, en local ou en CI via GitHub Action.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
     path: "/reference",
     title: "Référence technique : Claude Code",
     description:
@@ -788,7 +923,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Itinéraire pour les leads techniques et managers qui déploient Claude Code dans leur équipe. Adoption, gouvernance, sécurité, CI/CD et bonnes pratiques.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-05-10",
   },
   {
     path: "/personas/non-dev",
@@ -863,6 +998,25 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/content/stack-design-claude-code",
+    title: "Stack design Claude Code : retour après 1 mois de refonte",
+    description:
+      "Quels skills installer pour designer avec Claude Code en 2026 : Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Retour d'expérience daté et comparatif.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/content/refaire-une-card-avec-impeccable-et-playwright",
+    pathsByLocale: { en: "/content/redo-a-card-with-impeccable-and-playwright" },
+    title: "Refaire une card avec Impeccable et Playwright : démo",
+    description:
+      "Exemple Claude Code design : on reprend une vraie card du Codex et on la refait avec Impeccable et Playwright MCP, captures avant/après à l'appui.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
     path: "/content/couts-reels-claude-code",
     pathsByLocale: { en: "/content/real-costs-claude-code" },
     title: "Coûts réels de Claude Code : tokens, MCP et abonnements",
@@ -871,6 +1025,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-04-20",
+  },
+  {
+    path: "/content/cout-tokens-par-langue",
+    pathsByLocale: { en: "/content/token-cost-by-language" },
+    title: "Pourquoi vos tokens coûtent plus cher dans certaines langues",
+    description:
+      "À contenu égal, le nombre de tokens varie selon la langue (jusqu'à 15× d'écart selon les études). Impacts sur le coût, la latence et le contexte, et ce que ça change pour Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-28",
   },
   {
     path: "/content/mythes-claude-code",
@@ -940,6 +1104,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-04-21",
+  },
+  {
+    path: "/content/comprendre-claude-code-internals",
+    title: "Comprendre les internals de Claude Code par ses leaks",
+    description:
+      "Ce que les system prompts fuités révèlent sur l'architecture interne de Claude Code, et ce qu'on peut en déduire pour écrire de meilleurs CLAUDE.md.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/content/garry-tan-stack-claude-code",
+    title: "gstack de Garry Tan : verdict après un mois d'usage en équipe FR",
+    description:
+      "Review critique du stack Claude Code de Garry Tan (CEO YC). 35 commandes, philosophie solo founder, ce qui marche et ce qui coince en contexte français.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
+  },
+  {
+    path: "/content/karpathy-claude-md-analyse",
+    title: "CLAUDE.md façon Karpathy : analyse et version FR",
+    description:
+      "Décryptage du CLAUDE.md inspiré d'Andrej Karpathy : 4 principes contre les dérives de Claude Code, ce qui se transpose en équipe, et un modèle FR prêt à coller.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-12",
   },
   {
     path: "/about",

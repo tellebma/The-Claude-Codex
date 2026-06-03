@@ -9,8 +9,14 @@ import { ArticlePager } from "@/components/layout/ArticlePager";
 import { ReadingProgressBar } from "@/components/ui/ReadingProgressBar";
 import { ThemeBadges } from "@/components/ui/ThemeBadges";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
-import { createFAQPageSchema, serializeJsonLd } from "@/lib/structured-data";
+import { resolveOgImageUrl } from "@/lib/og-images";
+import {
+  createArticleSchema,
+  createFAQPageSchema,
+  serializeJsonLd,
+} from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
+import { getPageExtraSchemas } from "@/data/page-schemas";
 import { sanitizeSlugForHref } from "@/lib/section-utils";
 
 interface ContentPageProps {
@@ -40,11 +46,20 @@ export async function generateMetadata({ params }: ContentPageProps): Promise<Me
   const resolvedParams = await params;
   const { frontmatter } = getMdxBySlug(resolvedParams.slug, resolvedParams.locale);
 
+  // CTN-10 : vignette OG generee par article (1200x630), sinon fallback sur
+  // l'image OG par defaut du site via createPageMetadata.
+  const ogImage = resolveOgImageUrl(
+    resolvedParams.locale,
+    resolvedParams.slug,
+    "hero",
+  );
+
   return createPageMetadata({
     title: frontmatter.title,
     description: frontmatter.description,
     path: `/${resolvedParams.locale}/content/${resolvedParams.slug}`,
     locale: resolvedParams.locale,
+    ...(ogImage ? { ogImage } : {}),
   });
 }
 
@@ -83,14 +98,45 @@ export default async function ContentPage({ params }: ContentPageProps) {
     ? serializeJsonLd(createFAQPageSchema(faqs))
     : null;
 
+  // DSK-8 — Schemas additionnels (HowTo) pour les articles demo de workflow.
+  const extraSchemaHtml = getPageExtraSchemas(
+    `/content/${resolvedParams.slug}`,
+    resolvedParams.locale,
+  ).map((schema) => serializeJsonLd(schema));
+
+  // DSK-1 — Article JSON-LD pour chaque article editorial racine.
+  const articleJsonLdHtml = serializeJsonLd(
+    createArticleSchema({
+      title: frontmatter.title,
+      description: frontmatter.description,
+      url: articleUrl,
+      locale,
+      datePublished: frontmatter.datePublished,
+      dateModified: frontmatter.dateModified,
+    })
+  );
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: articleJsonLdHtml }}
+      />
+
       {faqJsonLdHtml && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: faqJsonLdHtml }}
         />
       )}
+
+      {extraSchemaHtml.map((html) => (
+        <script
+          key={`extra-schema-${html.length}-${html.slice(0, 24)}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      ))}
 
       {/* RG2-02 — Barre de progression de lecture en haut de page */}
       <ReadingProgressBar />

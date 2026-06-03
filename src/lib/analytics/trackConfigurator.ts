@@ -1,7 +1,10 @@
 import { trackEvent } from "./matomo";
+import { trackVercelEvent } from "./trackVercel";
 
 /**
- * Dedicated Matomo events for the interactive configurator.
+ * Dedicated tracking for the interactive configurator. Fires the same
+ * events on both Matomo (source of truth) and Vercel Web Analytics
+ * (sanity check + premium dashboard, cf. VM-4).
  *
  * Category: `configurator`
  *
@@ -19,11 +22,14 @@ const CATEGORY = "configurator";
 export const trackConfigurator = {
   start(): void {
     trackEvent(CATEGORY, "configurator_start");
+    trackVercelEvent("configurator_start");
   },
   step(stepNumber: number): void {
     trackEvent(CATEGORY, "configurator_step", String(stepNumber), stepNumber);
+    trackVercelEvent("configurator_step", { step: stepNumber });
   },
   complete(): void {
     trackEvent(CATEGORY, "configurator_complete");
+    trackVercelEvent("configurator_complete");
   },
 } as const;

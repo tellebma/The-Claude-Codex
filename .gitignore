@@ -41,6 +41,8 @@ next-env.d.ts
 *.jpeg
 !public/images/**/*.png
 !public/images/**/*.jpg
+# CTN-10 — vignettes OG par article (generees par build:og-articles, committees)
+!public/og/**/*.png
 # RG-25 — baselines visual regression committees pour la CI
 !e2e/**/*-snapshots/*.png
 
@@ -63,6 +65,13 @@ next-env.d.ts
 # claude code local settings
 .claude/settings.local.json
 doc/settings.local.json
+
+# claude code runtime locks (skill `loop` / `schedule`)
+.claude/scheduled_tasks.lock
+
+# claude code skills installes localement via `npx skills add` ou `uipro init`
+# (regenerables, ~10MB de data CSV externes, evite conflits de versions cross-dev)
+.claude/skills/
 
 # Generated at build time by scripts/generate-llms-txt.ts
 /public/llms.txt

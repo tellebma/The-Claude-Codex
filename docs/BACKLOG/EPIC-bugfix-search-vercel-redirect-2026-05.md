@@ -2,9 +2,21 @@
 
 > Source : recette utilisateur sur preview Vercel `the-claude-codex-env-dev-tellebma.vercel.app`, 2026-05-09 — "search KO, dialog s'ouvre mais 0 resultat partout"
 > Date d'ouverture : 2026-05-09
+> **Statut : ✅ Cloture le 2026-05-10** (B-SRC-1 #156 mergee, B-SRC-2 #158 mergee)
 > Effort estime : **2 SP** (2 stories, ~30 min de dev + verif)
 > Priorite : **P0** (recherche globale du site totalement non-fonctionnelle en production Vercel)
 > Branche cible : `fix/vercel-redirect-public-assets`
+
+## Bilan post-livraison
+
+- B-SRC-1 (PR #156) : regex `vercel.json` `/:path((?!fr/|en/|...).+)` -> `[^.]+` pour exclure tout chemin avec extension de fichier (.json, .glb, .png, .md, etc.). Test unitaire `__tests__/config/vercel-redirects.test.ts` couvre la matrice fichiers public vs URLs de pages.
+- B-SRC-2 (PR #158) : suite E2E `e2e/search-results.spec.ts` (5 tests). Skip si `VERCEL_PREVIEW_URL` non defini, pattern aligne sur `e2e/locale-redirects.spec.ts`. Couvre :
+  1. `/search-index-fr.json` -> 200 + content-type JSON + array non vide
+  2. `/search-index-en.json` -> 200 + idem
+  3. `/sad-toaster.glb` -> 200 (asset binaire, pas de redirect locale)
+  4. recherche `mcp` -> >= 1 option dans le listbox
+  5. click 1er resultat -> page valide (h1 visible, pas de /404)
+- A executer en CI contre l'URL preview avec `VERCEL_PREVIEW_URL=https://<preview>.vercel.app`.
 
 ---
 

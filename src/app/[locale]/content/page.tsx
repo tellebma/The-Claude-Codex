@@ -1,54 +1,293 @@
+import { Suspense, type ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
+import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { BookOpen, ArrowRight } from "lucide-react";
-import { getAllMdxFiles } from "@/lib/mdx";
+import {
+  countAllArticles,
+  getAllMdxFiles,
+  getMostRecentArticles,
+  type RecentArticle,
+} from "@/lib/mdx";
+import {
+  computeContentSections,
+  type TrendingItem,
+} from "@/lib/content-sections";
+import { loadArticleStats } from "@/lib/load-article-stats";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 import {
+  createBreadcrumbSchema,
   createCollectionPageSchema,
+  createItemListSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
+import type { ThemeKey } from "@/lib/themes";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { ContentHeroActions } from "@/components/ui/ContentHeroActions";
+import { ArticleCard, type ArticleCardArticle } from "@/components/ui/ArticleCard";
+import {
+  ArticleThemeFilter,
+  type ArticleThemeFilterLabels,
+} from "@/components/ui/ArticleThemeFilter";
+import { PINNED_ARTICLE_SLUG } from "@/data/pinned-article";
+
+const HAS_PART_LIMIT = 16;
 
 const translations = {
   fr: {
     metaTitle: "Contenus editoriaux",
     metaDescription:
-      "Tous les articles et guides editoriaux du Claude Codex. Explorez nos contenus MDX sur Claude Code, les MCP, les Skills et le prompting.",
+      "Tous les articles et guides editoriaux du Claude Codex. Securite, architecture, DevSecOps, prompting : 16 guides independants pour maitriser Claude Code en profondeur.",
     collectionName: "Contenus editoriaux",
     collectionDescription:
       "Tous les articles et guides editoriaux du Claude Codex sur Claude Code, les MCP, les Skills et le prompting.",
-    heroBadge: "Contenus editoriaux",
-    heroTitle: "Tous nos",
-    heroTitleHighlight: "articles",
+    breadcrumbHome: "Accueil",
+    breadcrumbContent: "Contenus editoriaux",
+    eyebrowGuides: "guides independants",
+    heroTitle: "Contenus editoriaux",
+    heroTitleHighlight: "pour comprendre Claude Code.",
     heroSubtitle:
-      "Explorez nos guides editoriaux au format MDX. Chaque article est autonome et peut etre lu independamment.",
+      "Securite, architecture, DevSecOps, prompting. 16 guides longue forme, classes et filtrables, ecrits par des experts.",
+    ctaFilter: "Filtrer par theme",
+    ctaLatest: "Voir les derniers",
+    pinnedLatestTitleWithPinned: "A la une et derniers articles",
+    pinnedLatestTitleWithoutPinned: "Derniers articles",
+    pinnedLatestSeeAll: "Voir tous les articles",
+    trendingTitle: "Tendances cette semaine",
+    trendingItemListName: "Tendances cette semaine",
+    trendingItemListDescription:
+      "Articles editoriaux dont la frequentation a le plus augmente sur les 7 derniers jours.",
+    trendingLabel: "Tendance",
+    trendingSource: "Stats Matomo, mises a jour le",
+    mostReadTitle: "Les plus lus ces 30 derniers jours",
+    mostReadItemListName: "Articles les plus lus ces 30 derniers jours",
+    mostReadItemListDescription:
+      "Top 6 des articles editoriaux par nombre de vues sur les 30 derniers jours.",
+    mostReadSource: "Stats Matomo, mises a jour le",
     sectionBadge: "Articles",
-    sectionTitle: "Guides disponibles",
+    sectionTitle: "Tous les articles",
     sectionDescription:
-      "Cliquez sur un article pour le lire. Les contenus sont classes par ordre de progression.",
+      "Filtrez par theme pour trouver le guide qui vous interesse.",
+    filterAriaLabel: "Filtrer par theme",
+    filterTypeGroup: "Type",
+    filterDomainGroup: "Domaine",
+    filterCountSingular: "article",
+    filterCountPlural: "articles",
+    filterReset: "Reinitialiser les filtres",
+    filterEmptyTitle: "Aucun article ne correspond a ces filtres.",
+    filterEmptyCta: "Reinitialiser les filtres",
+    themeNames: {
+      tutorial: "Tutoriel",
+      guide: "Guide",
+      reference: "Reference",
+      comparison: "Comparatif",
+      "use-case": "Cas d'usage",
+      security: "Securite",
+      devsecops: "DevSecOps",
+      architecture: "Architecture",
+      performance: "Performance",
+      tooling: "Outils",
+      productivity: "Productivite",
+      migration: "Migration",
+    } as Readonly<Record<ThemeKey, string>>,
   },
   en: {
     metaTitle: "Editorial content",
     metaDescription:
-      "All editorial articles and guides from The Claude Codex. Explore our MDX content on Claude Code, MCPs, Skills, and prompting.",
+      "All editorial articles and guides from The Claude Codex. Security, architecture, DevSecOps, prompting: in-depth guides to master Claude Code.",
     collectionName: "Editorial content",
     collectionDescription:
       "All editorial articles and guides from The Claude Codex on Claude Code, MCPs, Skills, and prompting.",
-    heroBadge: "Editorial content",
-    heroTitle: "All our",
-    heroTitleHighlight: "articles",
+    breadcrumbHome: "Home",
+    breadcrumbContent: "Editorial content",
+    eyebrowGuides: "independent guides",
+    heroTitle: "Editorial content",
+    heroTitleHighlight: "to understand Claude Code.",
     heroSubtitle:
-      "Explore our editorial guides in MDX format. Each article is self-contained and can be read independently.",
+      "Security, architecture, DevSecOps, prompting. Long-form guides written by experts, sortable and filterable.",
+    ctaFilter: "Filter by theme",
+    ctaLatest: "See the latest",
+    pinnedLatestTitleWithPinned: "Featured and latest articles",
+    pinnedLatestTitleWithoutPinned: "Latest articles",
+    pinnedLatestSeeAll: "See all articles",
+    trendingTitle: "Trending this week",
+    trendingItemListName: "Trending this week",
+    trendingItemListDescription:
+      "Editorial articles with the largest pageview growth over the last 7 days.",
+    trendingLabel: "Trending",
+    trendingSource: "Matomo stats, refreshed on",
+    mostReadTitle: "Most read in the last 30 days",
+    mostReadItemListName: "Most read articles in the last 30 days",
+    mostReadItemListDescription:
+      "Top 6 editorial articles by pageviews over the last 30 days.",
+    mostReadSource: "Matomo stats, refreshed on",
     sectionBadge: "Articles",
-    sectionTitle: "Available guides",
+    sectionTitle: "All articles",
     sectionDescription:
-      "Click an article to read it. Content is sorted by progression order.",
+      "Filter by theme to find the guide that matches your interest.",
+    filterAriaLabel: "Filter by theme",
+    filterTypeGroup: "Type",
+    filterDomainGroup: "Domain",
+    filterCountSingular: "article",
+    filterCountPlural: "articles",
+    filterReset: "Reset filters",
+    filterEmptyTitle: "No article matches these filters.",
+    filterEmptyCta: "Reset filters",
+    themeNames: {
+      tutorial: "Tutorial",
+      guide: "Guide",
+      reference: "Reference",
+      comparison: "Comparison",
+      "use-case": "Use case",
+      security: "Security",
+      devsecops: "DevSecOps",
+      architecture: "Architecture",
+      performance: "Performance",
+      tooling: "Tooling",
+      productivity: "Productivity",
+      migration: "Migration",
+    } as Readonly<Record<ThemeKey, string>>,
   },
 };
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+type LocaleKey = keyof typeof translations;
+
+function asLocaleKey(locale: string): LocaleKey {
+  return locale === "en" ? "en" : "fr";
+}
+
+interface DataSectionShellProps {
+  readonly id: string;
+  readonly dataSection: string;
+  readonly title: string;
+  readonly sourceDate: string | null;
+  readonly sourceLabel: string;
+  readonly backgroundClass: string;
+  readonly children: ReactNode;
+}
+
+function DataSectionShell({
+  id,
+  dataSection,
+  title,
+  sourceDate,
+  sourceLabel,
+  backgroundClass,
+  children,
+}: DataSectionShellProps) {
+  return (
+    <section
+      id={id}
+      data-section={dataSection}
+      aria-labelledby={`${id}-title`}
+      className={`${backgroundClass} py-16 sm:py-20 lg:py-24`}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+          <h2
+            id={`${id}-title`}
+            className="cc-h2 text-[color:var(--fg-primary)]"
+            style={{ textWrap: "balance" }}
+          >
+            {title}
+          </h2>
+          {sourceDate ? (
+            <p className="text-xs text-[color:var(--fg-muted)]">
+              {sourceLabel} {sourceDate}
+            </p>
+          ) : null}
+        </div>
+        {children}
+      </div>
+    </section>
+  );
+}
+
+interface TrendingSectionProps {
+  readonly trending: ReadonlyArray<TrendingItem>;
+  readonly statsGeneratedDate: string | null;
+  readonly title: string;
+  readonly sourceLabel: string;
+  readonly locale: string;
+}
+
+function TrendingSection({
+  trending,
+  statsGeneratedDate,
+  title,
+  sourceLabel,
+  locale,
+}: TrendingSectionProps) {
+  if (trending.length === 0) return null;
+  return (
+    <DataSectionShell
+      id="trending"
+      dataSection="trending"
+      title={title}
+      sourceDate={statsGeneratedDate}
+      sourceLabel={sourceLabel}
+      backgroundClass="bg-[color:var(--bg-subtle)]"
+    >
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-10 lg:grid-cols-1">
+        {trending.map((item) => (
+          <ArticleCard
+            key={item.article.slug}
+            article={item.article}
+            size="row"
+            locale={locale}
+            deltaPct={item.deltaPct}
+          />
+        ))}
+      </div>
+    </DataSectionShell>
+  );
+}
+
+interface MostReadSectionProps {
+  readonly mostRead: ReadonlyArray<ArticleCardArticle>;
+  readonly statsGeneratedDate: string | null;
+  readonly title: string;
+  readonly sourceLabel: string;
+  readonly locale: string;
+}
+
+function MostReadSection({
+  mostRead,
+  statsGeneratedDate,
+  title,
+  sourceLabel,
+  locale,
+}: MostReadSectionProps) {
+  if (mostRead.length === 0) return null;
+  return (
+    <DataSectionShell
+      id="most-read"
+      dataSection="most-read"
+      title={title}
+      sourceDate={statsGeneratedDate}
+      sourceLabel={sourceLabel}
+      backgroundClass=""
+    >
+      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3">
+        {mostRead.map((article) => (
+          <ArticleCard
+            key={article.slug}
+            article={article}
+            size="grid"
+            locale={locale}
+          />
+        ))}
+      </div>
+    </DataSectionShell>
+  );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[asLocaleKey(locale)];
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
@@ -57,14 +296,70 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   });
 }
 
+function buildHasPart(
+  articles: ReadonlyArray<RecentArticle>,
+  locale: string
+): ReadonlyArray<{
+  readonly name: string;
+  readonly url: string;
+  readonly dateModified?: string;
+}> {
+  return articles.slice(0, HAS_PART_LIMIT).map((article) => {
+    const localePath = `/${locale}`;
+    const sectionPath = article.section ? `/${article.section}` : "/content";
+    const url = `${localePath}${sectionPath}/${article.slug}`;
+    return {
+      name: article.title,
+      url,
+      dateModified: article.dateModified || undefined,
+    };
+  });
+}
+
+function pickCollectionDateModified(
+  articles: ReadonlyArray<RecentArticle>
+): string | undefined {
+  for (const article of articles) {
+    if (article.dateModified) return article.dateModified;
+  }
+  return undefined;
+}
+
 function buildCollectionJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[asLocaleKey(locale)];
+  const recent = getMostRecentArticles(HAS_PART_LIMIT, locale);
   return createCollectionPageSchema({
     name: t.collectionName,
     description: t.collectionDescription,
     url: `${SITE_URL}/${locale}/content`,
     locale,
+    dateModified: pickCollectionDateModified(recent),
+    hasPart: buildHasPart(recent, locale),
   });
+}
+
+function buildBreadcrumbJsonLd(locale: string) {
+  const t = translations[asLocaleKey(locale)];
+  return createBreadcrumbSchema([
+    { name: t.breadcrumbHome, href: `/${locale}/` },
+    { name: t.breadcrumbContent, href: `/${locale}/content/` },
+  ]);
+}
+
+function buildFilterLabels(
+  t: (typeof translations)[LocaleKey],
+): ArticleThemeFilterLabels {
+  return {
+    ariaLabel: t.filterAriaLabel,
+    typeGroup: t.filterTypeGroup,
+    domainGroup: t.filterDomainGroup,
+    themeNames: t.themeNames,
+    countSingular: t.filterCountSingular,
+    countPlural: t.filterCountPlural,
+    reset: t.filterReset,
+    emptyTitle: t.filterEmptyTitle,
+    emptyCta: t.filterEmptyCta,
+  };
 }
 
 export default async function ContentIndexPage({
@@ -74,8 +369,65 @@ export default async function ContentIndexPage({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"];
+  const localeKey = asLocaleKey(locale);
+  const t = translations[localeKey];
   const allFiles = getAllMdxFiles(locale);
+  const totalArticles = countAllArticles();
+  const articleStats = loadArticleStats();
+  const { pinned, trending, mostRead, latest, all } = computeContentSections({
+    files: allFiles,
+    locale: localeKey,
+    pinnedSlug: PINNED_ARTICLE_SLUG,
+    stats: articleStats,
+    latestLimit: 6,
+  });
+  const hasPinned = pinned !== null;
+  const latestTopRow = hasPinned ? latest.slice(0, 2) : [];
+  const latestBottomRow = hasPinned ? latest.slice(2, 5) : latest.slice(0, 6);
+  const pinnedLatestTitle = hasPinned
+    ? t.pinnedLatestTitleWithPinned
+    : t.pinnedLatestTitleWithoutPinned;
+  const cardsBySlug: Record<string, ReactNode> = Object.fromEntries(
+    all.map((article) => [
+      article.slug,
+      <ArticleCard
+        key={article.slug}
+        article={article}
+        size="grid"
+        locale={locale}
+      />,
+    ]),
+  );
+
+  const statsGeneratedDate = articleStats
+    ? articleStats.generatedAt.slice(0, 10)
+    : null;
+  const trendingItemList =
+    trending.length > 0
+      ? createItemListSchema({
+          name: t.trendingItemListName,
+          description: t.trendingItemListDescription,
+          locale,
+          items: trending.map((item, index) => ({
+            position: index + 1,
+            url: `/${locale}/content/${item.article.slug}/`,
+            name: item.article.title,
+          })),
+        })
+      : null;
+  const mostReadItemList =
+    mostRead.length > 0
+      ? createItemListSchema({
+          name: t.mostReadItemListName,
+          description: t.mostReadItemListDescription,
+          locale,
+          items: mostRead.map((article, index) => ({
+            position: index + 1,
+            url: `/${locale}/content/${article.slug}/`,
+            name: article.title,
+          })),
+        })
+      : null;
 
   return (
     <>
@@ -85,82 +437,168 @@ export default async function ContentIndexPage({
           __html: serializeJsonLd(buildCollectionJsonLd(locale)),
         }}
       />
-      {/* Hero */}
-      <section className="relative overflow-hidden bg-slate-950">
-        <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(6,182,212,0.15),_transparent_60%)]" />
-
-        <div className="relative px-4 pb-12 pt-16 sm:px-6 sm:pb-16 sm:pt-24 lg:px-8">
-          <div className="text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-4 py-1.5 text-sm text-brand-300">
-              <BookOpen className="h-4 w-4" aria-hidden="true" />
-              {t.heroBadge}
-            </div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
-              {t.heroTitle} <span className="text-gradient">{t.heroTitleHighlight}</span>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(buildBreadcrumbJsonLd(locale)),
+        }}
+      />
+      {trendingItemList ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd(trendingItemList),
+          }}
+        />
+      ) : null}
+      {mostReadItemList ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: serializeJsonLd(mostReadItemList),
+          }}
+        />
+      ) : null}
+      {/* Hero CTN-4 */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: "var(--gradient-hero)" }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at top left, var(--gradient-hero-radial-1), transparent 60%), radial-gradient(ellipse at bottom right, var(--gradient-hero-radial-2), transparent 60%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="cc-eyebrow inline-flex items-center gap-2">
+              <span
+                aria-hidden="true"
+                className="relative inline-flex h-2 w-2"
+              >
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[color:var(--brand-primary)] opacity-60 motion-reduce:animate-none" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[color:var(--brand-primary)]" />
+              </span>
+              {totalArticles}&nbsp;{t.eyebrowGuides}
+            </p>
+            <h1
+              className="cc-h1 mt-4"
+              style={{ textWrap: "balance" }}
+            >
+              {t.heroTitle}{" "}
+              <span className="text-gradient">{t.heroTitleHighlight}</span>
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
+            <p
+              className="cc-lead mx-auto mt-6 max-w-[60ch]"
+              style={{ textWrap: "pretty" }}
+            >
               {t.heroSubtitle}
             </p>
+            <ContentHeroActions
+              primaryLabel={t.ctaFilter}
+              secondaryLabel={t.ctaLatest}
+            />
           </div>
         </div>
       </section>
 
-      {/* Introduction */}
-      <section className="py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-0">
-          <div className="space-y-6 text-lg text-slate-600 dark:text-slate-300">
-            <p>
-              Les articles &eacute;ditoriaux du Claude Codex sont des guides
-              autonomes qui traitent chacun d&apos;un sujet pr&eacute;cis. Contrairement
-              aux pages de documentation structur&eacute;es par section (MCP, Skills,
-              Prompting), ces contenus abordent des th&egrave;mes transversaux :
-              s&eacute;curit&eacute;, co&ucirc;ts r&eacute;els, bonnes pratiques
-              et mythes &agrave; d&eacute;construire.
-            </p>
-            <p>
-              Chaque article est r&eacute;dig&eacute; pour &ecirc;tre lu en 5 &agrave;
-              15 minutes. Vous pouvez les lire dans n&apos;importe quel ordre.
-              Si vous d&eacute;butez, commencez par &quot;Qu&apos;est-ce que Claude
-              Code&quot; dans la section D&eacute;marrer, puis revenez ici pour approfondir
-              les sujets qui vous int&eacute;ressent.
-            </p>
+      {/* Pinned + Latest combines (CTN-3) */}
+      <section
+        id="pinned-latest"
+        aria-labelledby="pinned-latest-title"
+        className="py-16 sm:py-20 lg:py-24"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2
+              id="pinned-latest-title"
+              className="cc-h2 text-[color:var(--fg-primary)]"
+              style={{ textWrap: "balance" }}
+            >
+              {pinnedLatestTitle}
+            </h2>
+            <Link
+              href="/content/#all-articles"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-[color:var(--brand-primary)] transition-[gap] duration-[var(--duration-base)] ease-[var(--ease-out)] hover:gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+            >
+              {t.pinnedLatestSeeAll}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          {hasPinned ? (
+            <div className="mt-8 grid grid-cols-1 gap-6 lg:mt-10 lg:grid-cols-[1.6fr_1fr] lg:gap-8">
+              <ArticleCard article={pinned} size="hero" locale={locale} />
+              <div className="grid grid-cols-1 gap-6">
+                {latestTopRow.map((article) => (
+                  <ArticleCard
+                    key={article.slug}
+                    article={article}
+                    size="grid"
+                    locale={locale}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div
+            className={`grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 ${hasPinned ? "mt-6 lg:mt-8" : "mt-8 lg:mt-10"}`}
+          >
+            {latestBottomRow.map((article) => (
+              <ArticleCard
+                key={article.slug}
+                article={article}
+                size="grid"
+                locale={locale}
+              />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Articles list */}
-      <section className="bg-slate-50/50 py-16 dark:bg-slate-900/50 sm:py-20">
-        <div className="px-4 sm:px-6 lg:px-0">
+      {/* Tendances 7 jours (CTN-9) */}
+      <TrendingSection
+        trending={trending}
+        statsGeneratedDate={statsGeneratedDate}
+        title={t.trendingTitle}
+        sourceLabel={t.trendingSource}
+        locale={locale}
+      />
+
+      {/* Les plus lus 30 jours (CTN-8) */}
+      <MostReadSection
+        mostRead={mostRead}
+        statsGeneratedDate={statsGeneratedDate}
+        title={t.mostReadTitle}
+        sourceLabel={t.mostReadSource}
+        locale={locale}
+      />
+
+      {/* Articles filtrables par theme (CTN-5) */}
+      <section
+        id="all-articles"
+        className="bg-[color:var(--bg-subtle)] py-16 sm:py-20 lg:py-24"
+        aria-label={t.sectionTitle}
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge={t.sectionBadge}
             title={t.sectionTitle}
             description={t.sectionDescription}
           />
 
-          <div className="mt-12 space-y-4">
-            {allFiles.map((file) => (
-              <Link
-                key={file.slug}
-                href={`/content/${file.slug}`}
-                className="group flex items-center justify-between rounded-xl border border-slate-200/50 bg-white/50 p-6 transition-all hover:-translate-y-0.5 hover:border-brand-500/30 hover:shadow-lg dark:border-slate-700/50 dark:bg-slate-800/50 dark:hover:border-brand-500/30"
-              >
-                <div>
-                  {file.frontmatter.badge && (
-                    <span className="mb-2 inline-block rounded-full bg-brand-500/10 px-3 py-0.5 text-xs font-semibold text-brand-700 dark:text-brand-400">
-                      {file.frontmatter.badge}
-                    </span>
-                  )}
-                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                    {file.frontmatter.title}
-                  </h2>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
-                    {file.frontmatter.description}
-                  </p>
-                </div>
-                <ArrowRight className="ml-4 h-5 w-5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-brand-500" />
-              </Link>
-            ))}
+          <div className="mt-10 sm:mt-12">
+            <Suspense fallback={null}>
+              <ArticleThemeFilter
+                articles={all}
+                cardsBySlug={cardsBySlug}
+                labels={buildFilterLabels(t)}
+              />
+            </Suspense>
           </div>
         </div>
       </section>

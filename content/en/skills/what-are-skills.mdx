@@ -4,9 +4,11 @@ description: "What are Claude Code Skills? Reusable Markdown workflows triggered
 section: "skills"
 order: 1
 datePublished: "2026-03-10"
-dateModified: "2026-04-30"
+dateModified: "2026-06-02"
 themes: ["reference", "productivity"]
 ---
+
+<Callout type="tip" title="See also">Once you understand what a Skill is, the meta-skill [`find-skills`](/skills/find-skills) (1.6M installs, #1 in the world on skills.sh as of 2026-05-17) lets Claude discover, vet, and install relevant skills for your stack on its own.</Callout>
 
 <Callout type="tip" title="Just getting started?">If the technical concepts feel overwhelming, start with our [concrete use cases](/use-cases) to see Claude Code in action without writing any code.</Callout>
 
@@ -42,10 +44,10 @@ Created in your project's `.claude/commands/` folder, these Skills are **shared 
 # Project Skills structure
 .claude/
   commands/
-    review-pr.md       # -> /project:review-pr
-    deploy.md          # -> /project:deploy
-    hotfix.md          # -> /project:hotfix
-    onboarding.md      # -> /project:onboarding
+    review-pr.md       # -> /review-pr
+    deploy.md          # -> /deploy
+    hotfix.md          # -> /hotfix
+    onboarding.md      # -> /onboarding
 ```
 
 ### 3. Personal Skills (user commands)
@@ -56,9 +58,9 @@ Stored in `~/.claude/commands/`, these Skills are available across **all your pr
 # Personal Skills structure
 ~/.claude/
   commands/
-    tdd-guide.md       # -> /user:tdd-guide
-    code-review.md     # -> /user:code-review
-    brainstorm.md      # -> /user:brainstorm
+    tdd-guide.md       # -> /tdd-guide
+    code-review.md     # -> /code-review
+    brainstorm.md      # -> /brainstorm
 ```
 
 <Card title="How to choose the right type?" variant="accent">
@@ -73,7 +75,7 @@ When you type a slash command, Claude Code executes a four-step process.
 
 <Steps>
 <Step title="Detection" stepNumber={1}>
-Claude Code recognizes the `/project:review-pr` command and looks for the corresponding file in `.claude/commands/review-pr.md`.
+Claude Code recognizes the `/review-pr` command and looks for the corresponding file in `.claude/commands/review-pr.md`.
 </Step>
 
 <Step title="Loading" stepNumber={2}>
@@ -123,7 +125,7 @@ For each modified file, provide:
 ```
 
 <Callout type="tip" title="The power of \$ARGUMENTS">
-The `$ARGUMENTS` variable captures everything you type after the slash command. For example, `/project:review-pr develop` replaces `$ARGUMENTS` with `develop`. This makes your Skills dynamic and reusable.
+The `$ARGUMENTS` variable captures everything you type after the slash command. For example, `/review-pr develop` replaces `$ARGUMENTS` with `develop`. This makes your Skills dynamic and reusable.
 </Callout>
 
 ## Skill vs CLAUDE.md: what's the difference?
@@ -157,7 +159,7 @@ You might wonder why create Skills when you already have the `CLAUDE.md` file fo
 
 ```bash
 # One command, the same result every time
-/project:review-pr
+/review-pr
 ```
 
 The Skill ensures the review **always follows the same process**, with the same level of detail, the same checks. No more trying to remember all the instructions; they're codified in the file.
@@ -174,7 +176,7 @@ To see all Skills available in your current session:
 /
 ```
 
-Claude Code displays Skills grouped by source: built-in, project (`/project:...`), and personal (`/user:...`).
+Claude Code displays Skills grouped by source: built-in, project (`.claude/commands/`), and personal (`~/.claude/commands/`). Whatever the source, each command is invoked directly by its name (`/review-pr`).
 
 ## Next steps
 
@@ -183,3 +185,4 @@ Now that you understand the Skills concept, let's get hands-on.
 - [Top recommended Skills 2026](/skills/best-skills): The must-have Skills to boost your productivity
 - [Create a custom Skill step by step](/skills/create-custom): Complete guide to writing your own Skills
 - [Skills vs MCP vs Plugins](/skills/comparison): Understanding when to use what
+- [Claude Council](/skills/claude-council): An orchestration pattern to package as a Skill, making several opinions deliberate on a hard decision

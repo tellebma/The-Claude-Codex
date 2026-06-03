@@ -33,6 +33,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "getting-started.installation", href: "/getting-started/installation" },
       { labelKey: "getting-started.environment-setup", href: "/getting-started/environment-setup" },
       { labelKey: "getting-started.first-project", href: "/getting-started/first-project" },
+      { labelKey: "getting-started.templates-starter-kits", href: "/getting-started/templates-starter-kits" },
       { labelKey: "getting-started.faq-beginner", href: "/getting-started/faq-beginner" },
     ],
   },
@@ -54,6 +55,10 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "mcp.create-mcp-typescript", href: "/mcp/create-mcp-typescript" },
       { labelKey: "mcp.create-mcp-python", href: "/mcp/create-mcp-python" },
       { labelKey: "mcp.advanced-protocol", href: "/mcp/advanced-protocol" },
+      {
+        labelKey: "mcp.workflow-design-playwright",
+        href: "/mcp/workflow-design-playwright",
+      },
     ],
   },
   plugins: {
@@ -73,6 +78,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "skills.overview", href: "/skills" },
       { labelKey: "skills.what-are-skills", href: "/skills/what-are-skills" },
       { labelKey: "skills.best-skills", href: "/skills/best-skills" },
+      { labelKey: "skills.find-skills", href: "/skills/find-skills" },
+      { labelKey: "skills.claude-council", href: "/skills/claude-council" },
+      { labelKey: "skills.impeccable", href: "/skills/impeccable" },
+      { labelKey: "skills.ui-ux-pro-max", href: "/skills/ui-ux-pro-max" },
+      { labelKey: "skills.taste-skill", href: "/skills/taste-skill" },
+      { labelKey: "skills.huashu-design", href: "/skills/huashu-design" },
       { labelKey: "skills.create-custom", href: "/skills/create-custom" },
       { labelKey: "skills.comparison", href: "/skills/comparison" },
     ],
@@ -134,6 +145,16 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "use-cases.no-code", href: "/use-cases/no-code" },
     ],
   },
+  ecosystem: {
+    titleKey: "ecosystem.title",
+    items: [
+      { labelKey: "ecosystem.overview", href: "/ecosystem" },
+      { labelKey: "ecosystem.top-repos-github", href: "/ecosystem/top-repos-github" },
+      { labelKey: "ecosystem.awesome-skills", href: "/ecosystem/awesome-skills" },
+      { labelKey: "ecosystem.awesome-plugins", href: "/ecosystem/awesome-plugins" },
+      { labelKey: "ecosystem.awesome-mcp-servers", href: "/ecosystem/awesome-mcp-servers" },
+    ],
+  },
   enterprise: {
     titleKey: "enterprise.title",
     items: [
@@ -161,6 +182,10 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "advanced.rpi-workflow", href: "/advanced/rpi-workflow" },
       { labelKey: "advanced.cross-model-workflow", href: "/advanced/cross-model-workflow" },
       { labelKey: "advanced.methodologies-ecosystem", href: "/advanced/methodologies-ecosystem" },
+      { labelKey: "advanced.memoire-persistante", href: "/advanced/memoire-persistante" },
+      { labelKey: "advanced.optimisation-tokens", href: "/advanced/optimisation-tokens" },
+      { labelKey: "advanced.observabilite-monitoring", href: "/advanced/observabilite-monitoring" },
+      { labelKey: "advanced.security-review", href: "/advanced/security-review" },
     ],
   },
   reference: {

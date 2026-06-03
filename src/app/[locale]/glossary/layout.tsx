@@ -5,6 +5,7 @@ import {
   serializeJsonLd,
 } from "@/lib/structured-data";
 import { glossaryTerms } from "@/data/glossary";
+import { AnalyticsTracker } from "@/components/layout/AnalyticsTracker";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -47,6 +48,7 @@ export default async function GlossaryLayout({
 
   return (
     <>
+      <AnalyticsTracker />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: breadcrumbHtml }}

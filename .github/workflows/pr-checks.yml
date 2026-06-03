@@ -295,7 +295,14 @@ jobs:
   e2e-smoke:
     name: E2E smoke (chromium)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Container Playwright officiel : browsers + deps systeme deja dans l'image,
+    # AUCUN `playwright install`. Sur les runners, `--with-deps` (apt/needrestart)
+    # hangait indefiniment et consommait tout le timeout (diagnostic 2026-06-03).
+    # MAINTENANCE : la version d'image DOIT matcher @playwright/test (package.json).
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
+    timeout-minutes: 25
     needs: [build]
     steps:
       - name: Checkout
@@ -309,9 +316,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
 
       - name: Download build artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -341,7 +345,13 @@ jobs:
     # les diffs visuels (actual vs expected) pour debug.
     name: E2E visual regression
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # Container Playwright officiel (meme rationale que e2e-smoke, 2026-06-03).
+    # Les baselines visuelles DOIVENT etre generees dans ce meme container
+    # (update-snapshots.yml utilise la meme image) pour eviter le bruit cross-env.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
+    timeout-minutes: 25
     needs: [build]
     steps:
       - name: Checkout
@@ -355,9 +365,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
 
       - name: Download build artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1

@@ -9,9 +9,70 @@ import {
   createFAQPageSchema,
   createDefinedTermSetSchema,
   createCollectionPageSchema,
+  createItemListSchema,
   serializeJsonLd,
 } from "@/lib/structured-data";
 import { SITE_URL, SITE_NAME } from "@/lib/metadata";
+
+describe("createItemListSchema (CTN-8/9)", () => {
+  const baseOptions = {
+    name: "Most read",
+    description: "Top articles by pageviews",
+    items: [
+      { position: 1, url: "/fr/content/article-a/", name: "Article A" },
+      { position: 2, url: "/fr/content/article-b/", name: "Article B" },
+    ],
+  };
+
+  it("builds a valid ItemList schema with required fields", () => {
+    const schema = createItemListSchema(baseOptions);
+    expect(schema["@context"]).toBe("https://schema.org");
+    expect(schema["@type"]).toBe("ItemList");
+    expect(schema.name).toBe("Most read");
+    expect(schema.description).toBe("Top articles by pageviews");
+    expect(schema.numberOfItems).toBe(2);
+    expect(schema.itemListOrder).toBe("https://schema.org/ItemListOrderDescending");
+  });
+
+  it("defaults inLanguage to fr-FR", () => {
+    expect(createItemListSchema(baseOptions).inLanguage).toBe("fr-FR");
+  });
+
+  it("respects the locale option", () => {
+    expect(createItemListSchema({ ...baseOptions, locale: "en" }).inLanguage).toBe(
+      "en-US",
+    );
+  });
+
+  it("emits 1-indexed ListItem entries with absolute URLs", () => {
+    const elements = createItemListSchema(baseOptions).itemListElement as Array<
+      Record<string, unknown>
+    >;
+    expect(elements).toHaveLength(2);
+    expect(elements[0]?.["@type"]).toBe("ListItem");
+    expect(elements[0]?.position).toBe(1);
+    expect(elements[0]?.name).toBe("Article A");
+    expect(elements[0]?.url).toBe(`${SITE_URL}/fr/content/article-a/`);
+    expect(elements[1]?.position).toBe(2);
+  });
+
+  it("keeps already-absolute URLs untouched (no double prefix)", () => {
+    const schema = createItemListSchema({
+      ...baseOptions,
+      items: [
+        { position: 1, url: "https://other.example/x/", name: "X" },
+      ],
+    });
+    const elements = schema.itemListElement as Array<Record<string, unknown>>;
+    expect(elements[0]?.url).toBe("https://other.example/x/");
+  });
+
+  it("emits numberOfItems even when items is empty", () => {
+    const schema = createItemListSchema({ ...baseOptions, items: [] });
+    expect(schema.numberOfItems).toBe(0);
+    expect(schema.itemListElement).toEqual([]);
+  });
+});
 
 describe("createWebSiteSchema", () => {
   it("creates a valid WebSite schema", () => {
@@ -399,6 +460,81 @@ describe("createCollectionPageSchema", () => {
     expect(isPartOf["@type"]).toBe("WebSite");
     expect(isPartOf.name).toBe(SITE_NAME);
     expect(isPartOf.url).toBe(SITE_URL);
+  });
+
+  it("includes publisher organization (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+    });
+    const publisher = schema.publisher as Record<string, unknown>;
+    expect(publisher["@type"]).toBe("Organization");
+    expect(publisher.name).toBe(SITE_NAME);
+    expect(publisher.url).toBe(SITE_URL);
+  });
+
+  it("omits dateModified and hasPart by default (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+    });
+    expect(schema.dateModified).toBeUndefined();
+    expect(schema.hasPart).toBeUndefined();
+  });
+
+  it("includes dateModified when provided (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+      dateModified: "2026-05-19",
+    });
+    expect(schema.dateModified).toBe("2026-05-19");
+  });
+
+  it("omits hasPart when array is empty (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/test",
+      hasPart: [],
+    });
+    expect(schema.hasPart).toBeUndefined();
+  });
+
+  it("maps hasPart entries to Article objects with absolute URLs (CTN-4)", () => {
+    const schema = createCollectionPageSchema({
+      name: "Test",
+      description: "desc",
+      url: "https://claude-codex.fr/fr/content",
+      locale: "fr",
+      hasPart: [
+        {
+          name: "Article relatif",
+          url: "/fr/content/foo",
+          dateModified: "2026-05-10",
+        },
+        {
+          name: "Article absolu",
+          url: "https://claude-codex.fr/en/content/bar",
+          inLanguage: "en-US",
+        },
+      ],
+    });
+
+    const parts = schema.hasPart as ReadonlyArray<Record<string, unknown>>;
+    expect(parts).toHaveLength(2);
+    expect(parts[0]["@type"]).toBe("Article");
+    expect(parts[0].name).toBe("Article relatif");
+    expect(parts[0].url).toBe(`${SITE_URL}/fr/content/foo/`);
+    expect(parts[0].dateModified).toBe("2026-05-10");
+    expect(parts[0].inLanguage).toBe("fr-FR");
+
+    expect(parts[1].url).toBe(`${SITE_URL}/en/content/bar/`);
+    expect(parts[1].inLanguage).toBe("en-US");
+    expect(parts[1].dateModified).toBeUndefined();
   });
 });
 

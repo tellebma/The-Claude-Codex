@@ -67,7 +67,7 @@ describe("RecentArticlesSection", () => {
       sample({ section: "mcp", slug: "what-are-mcps" }),
     ]);
     await renderAsync(RecentArticlesSection({ locale: "fr" }));
-    const link = screen.getByRole("link");
+    const link = screen.getByRole("link", { name: /readArticle/ });
     expect(link.getAttribute("href")).toBe("/mcp/what-are-mcps");
   });
 
@@ -76,7 +76,7 @@ describe("RecentArticlesSection", () => {
       sample({ section: null, slug: "ceo-letter" }),
     ]);
     await renderAsync(RecentArticlesSection({ locale: "fr" }));
-    const link = screen.getByRole("link");
+    const link = screen.getByRole("link", { name: /readArticle/ });
     expect(link.getAttribute("href")).toBe("/content/ceo-letter");
   });
 });

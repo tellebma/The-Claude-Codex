@@ -97,7 +97,8 @@
       "title": "Latest articles",
       "subtitle": "The most recent additions to the Codex.",
       "readArticle": "Read the article",
-      "filterAll": "All"
+      "filterAll": "All",
+      "viewAll": "See all our articles"
     },
     "trust": {
       "label": "Why the Codex",
@@ -106,6 +107,17 @@
       "noTracking": "No third-party cookies",
       "officialMcp": "Listed by official MCP"
     }
+  },
+  "articleCard": {
+    "readLabel": "Read article: {title}",
+    "readCta": "Read article",
+    "pinnedLabel": "Featured",
+    "trendingLabel": "Trending",
+    "deltaLabel": "Trending, +{delta}%",
+    "readingMinutes": "{minutes} min read",
+    "dateToday": "today",
+    "dateYesterday": "yesterday",
+    "dateDaysAgo": "{days} days ago"
   },
   "themes": {
     "badgesLabel": "Article themes",
@@ -161,6 +173,67 @@
     "browseAll": "Browse the docs",
     "browseAllAria": "Browse the documentation"
   },
+  "councilBuilder": {
+    "title": "Council generator",
+    "subtitle": "Pick the mode, the advisors and the Chairman. Everything is generated in your browser, no request is ever sent.",
+    "modeLegend": "Mode",
+    "modePersona": "Multi-persona (a single Claude)",
+    "modeModel": "Multi-model (several AIs)",
+    "countLabel": "Number of advisors",
+    "countDecrease": "Remove an advisor",
+    "countIncrease": "Add an advisor",
+    "callsEstimate": "≈ {count} calls per question",
+    "advisorsLabel": "Advisors",
+    "advisorsHeading": "The advisors",
+    "roleField": "Advisor {index} role",
+    "briefField": "One-line brief",
+    "chairmanField": "Chairman (who writes the synthesis)",
+    "questionField": "Your question",
+    "questionPlaceholder": "Which hard decision do you want to put to the council?",
+    "outputLegend": "Generated output",
+    "tabPrompt": "Prompt",
+    "tabSkill": "SKILL.md",
+    "copy": "Copy",
+    "copied": "Copied",
+    "promptIntroPersona": "You will play a council of several experts deliberating on my question. Take on each role below in turn, then synthesize the answer as the Chairman.",
+    "promptIntroModel": "Here is a council deliberation to reproduce with several models. Each model below is an independent advisor; a Chairman writes the final synthesis.",
+    "stage1Heading": "Stage 1: First opinions",
+    "stage1Body": "Each advisor answers the question independently, without seeing the other answers.",
+    "stage2Heading": "Stage 2: Review (anonymized)",
+    "stage2Body": "Show each advisor the other answers without revealing who wrote them, and ask them to rank the answers on accuracy and insight.",
+    "stage3Heading": "Stage 3: Final response",
+    "stage3Body": "The Chairman reads every opinion and every ranking, arbitrates the disagreements and produces a single, reasoned recommendation.",
+    "chairmanLabel": "The designated Chairman is:",
+    "questionLabel": "Question",
+    "fallbackQuestion": "(replace with your question)",
+    "skillDescription": "Runs a council of several perspectives on a hard question, with anonymized cross-review and a Chairman synthesis. Trigger when the user wants multiple opinions that challenge each other on a decision with no obvious answer.",
+    "skillWhenToUse": "Use this skill for high-stakes decisions with no obvious right answer: architecture trade-offs, strategic choices, sensitive text to stress-test. Avoid it for single-answer factual questions (too costly).",
+    "skillInstructions": "Run the deliberation in three stages:",
+    "roleSkeptic": {
+      "role": "Skeptic",
+      "brief": "hunts for flaws, risks and unverified assumptions."
+    },
+    "roleAdvocate": {
+      "role": "Advocate",
+      "brief": "defends the most promising option and shows its value."
+    },
+    "rolePractitioner": {
+      "role": "Practitioner",
+      "brief": "thinks about real execution, cost and constraints."
+    },
+    "roleGeneralist": {
+      "role": "Generalist",
+      "brief": "zooms out and ties the question to the bigger picture."
+    },
+    "roleContrarian": {
+      "role": "Contrarian",
+      "brief": "deliberately argues the opposite angle to test robustness."
+    },
+    "roleVisionary": {
+      "role": "Visionary",
+      "brief": "explores long-term consequences and bold options."
+    }
+  },
   "breadcrumb": {
     "ariaLabel": "Breadcrumb",
     "home": "Home",
@@ -175,6 +248,7 @@
       "configurator": "Configurator",
       "content": "Articles",
       "use-cases": "Use Cases",
+      "ecosystem": "Ecosystem",
       "enterprise": "Enterprise",
       "advanced": "Advanced",
       "reference": "Reference",
@@ -314,6 +388,10 @@
     "robotAlt": "Interactive 3D robot tracking your cursor"
   },
   "sectionNav": {
+    "section-peers": {
+      "toggleLabel": "Pages in the {section} section",
+      "overviewLink": "View all of {section}"
+    },
     "getting-started": {
       "title": "Getting Started",
       "overview": "Overview",
@@ -322,6 +400,7 @@
       "installation": "Prerequisites & installation",
       "environment-setup": "Environment setup",
       "first-project": "First project step by step",
+      "templates-starter-kits": "Templates & starter kits",
       "faq-beginner": "FAQ for beginners"
     },
     "mcp": {
@@ -336,7 +415,8 @@
       "securite-mcp": "MCP security",
       "create-mcp-typescript": "Create a TypeScript MCP",
       "create-mcp-python": "Create a Python MCP",
-      "advanced-protocol": "Advanced MCP protocol"
+      "advanced-protocol": "Advanced MCP protocol",
+      "workflow-design-playwright": "Playwright design workflow"
     },
     "plugins": {
       "title": "Plugins",
@@ -352,6 +432,12 @@
       "overview": "Overview",
       "what-are-skills": "What is a Skill?",
       "best-skills": "Top recommended Skills",
+      "find-skills": "Find a Skill (find-skills)",
+      "claude-council": "Claude Council (make AIs deliberate)",
+      "impeccable": "Impeccable (design skill)",
+      "ui-ux-pro-max": "UI UX Pro Max (design skill)",
+      "taste-skill": "Taste Skill (design skill)",
+      "huashu-design": "Huashu Design (design skill)",
       "create-custom": "Create a custom Skill",
       "comparison": "Skills vs MCP vs Plugins"
     },
@@ -402,6 +488,14 @@
       "success-stories": "Success stories",
       "no-code": "No-code tutorials"
     },
+    "ecosystem": {
+      "title": "Ecosystem",
+      "overview": "Overview",
+      "top-repos-github": "Top GitHub repos",
+      "awesome-skills": "Awesome Skills",
+      "awesome-plugins": "Awesome Plugins",
+      "awesome-mcp-servers": "Awesome MCP Servers"
+    },
     "enterprise": {
       "title": "Enterprise",
       "overview": "Overview",
@@ -425,7 +519,11 @@
       "ultraplan": "Ultraplan: plan in the cloud",
       "rpi-workflow": "RPI: Research, Plan, Implement",
       "cross-model-workflow": "Cross-Model: Claude + Codex/Gemini",
-      "methodologies-ecosystem": "Methodologies ecosystem"
+      "methodologies-ecosystem": "Methodologies ecosystem",
+      "memoire-persistante": "Persistent memory",
+      "optimisation-tokens": "Token optimization",
+      "observabilite-monitoring": "Observability and monitoring",
+      "security-review": "/security-review command"
     },
     "reference": {
       "title": "Reference",

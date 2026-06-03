@@ -4,8 +4,18 @@ description: "Les meilleurs agents Claude Code classés par catégorie : dévelo
 section: "agents"
 order: 4
 datePublished: "2026-03-10"
-dateModified: "2026-03-10"
+dateModified: "2026-05-10"
 ---
+
+## Mis à jour mai 2026
+
+L'écosystème agents a évolué depuis mars. Trois ajouts qui changent la donne :
+
+- **`@security-reviewer`** : agent communautaire qui audite un diff sous l'angle OWASP Top 10 + secrets. Devenu la baseline pour tout review de PR sensible. Lire [bonnes pratiques sécurité](/content/bonnes-pratiques-securite) pour le contexte.
+- **`@plan`** : agent intégré qui force Claude Code à formaliser un plan avant d'écrire du code. Indispensable sur les refactos multi-fichiers. Voir [comprendre les agents](/agents/what-are-agents).
+- **`@tdd-guide`** : agent qui orchestre une boucle TDD complète (rouge -> vert -> refactor). Les Skills TDD du CLI couvrent déjà 80% des cas mais l'agent ajoute la supervision pour les domaines complexes.
+
+Pour les agents en orchestration parallèle, voir [Agent SDK](/agents/agent-sdk).
 
 ## Les agents incontournables
 

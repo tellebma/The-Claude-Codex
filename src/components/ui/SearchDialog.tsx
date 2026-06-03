@@ -22,6 +22,7 @@ import {
   type SearchRunResult,
   type SearchSnippet,
 } from "@/lib/search-live";
+import { trackSearchDialogOpen } from "@/lib/analytics/trackSearch";
 
 const RESULTS_LISTBOX_ID = "search-results-listbox";
 const DEBOUNCE_MS = 120;
@@ -115,10 +116,15 @@ export function SearchDialog() {
   // Return focus to the trigger after the dialog closes.
   // Using an effect guarantees the DOM has committed the unmount before
   // we re-focus, which keeps Playwright's actionability checks happy.
+  // Aussi : VM-4, fire l'event search_dialog_open sur la transition
+  // closed -> open (Matomo + Vercel Web Analytics).
   const wasOpenRef = useRef(false);
   useEffect(() => {
     if (wasOpenRef.current && !open) {
       triggerRef.current?.focus();
+    }
+    if (!wasOpenRef.current && open) {
+      trackSearchDialogOpen();
     }
     wasOpenRef.current = open;
   }, [open]);

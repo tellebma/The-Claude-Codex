@@ -1,0 +1,77 @@
+---
+title: "Why your tokens cost more in some languages"
+description: "For the same content, a sentence in French, Japanese or Hindi doesn't cost the same number of tokens as in English. Here's the phenomenon, the scientific sources, and what it means for Claude Code."
+badge: "Tokens"
+section: "content"
+order: 17
+datePublished: "2026-05-28"
+dateModified: "2026-05-28"
+themes: ["guide", "productivity"]
+---
+
+## The same text, a different cost
+
+Language model APIs bill per **token**, the fragments of text a model splits your input into before reasoning. Here's the surprising part: to express the exact same idea, the number of tokens changes depending on the language. English is usually the most compact. Many other languages, especially those that don't use the Latin alphabet, get split into far more pieces.
+
+The direct consequence: since the bill depends on the token count, two people asking the same question in two different languages do not pay the same price.
+
+{/* source: https://arxiv.org/abs/2305.15425 (Petrov et al., NeurIPS 2023), accessed 2026-05-28 */}
+{/* source: https://arxiv.org/abs/2305.13707 (Ahia et al., 2023), accessed 2026-05-28 */}
+
+## What the research says
+
+The phenomenon is documented in peer-reviewed work.
+
+<Callout type="info" title="Up to 15 times more tokens">
+In **"Language Model Tokenizers Introduce Unfairness Between Languages"** (Petrov, La Malfa, Torr and Bibi, presented at NeurIPS 2023), the authors show that the same text translated into different languages produces tokenization lengths that can differ **by up to 15 times**. The gap appears at the tokenization stage, well before the model is even invoked.
+</Callout>
+
+A second study, **"Do All Languages Cost the Same? Tokenization in the Era of Commercial Language Models"** (Ahia, Kumar, Gonen, Kasai, Mortensen, Smith and Tsvetkov, 2023), measured the cost and utility of OpenAI's API across **22 typologically diverse languages**. Its conclusion is blunt: speakers of a large number of these languages are **overcharged while getting poorer results**, and they are often populations for whom these services are already the least affordable.
+
+## Why the gap exists
+
+Models split text with a tokenizer trained on large corpora that are overwhelmingly English. So the tokenizer learns efficient fragments for English: common words fit in a single token.
+
+For a less-represented language, or one written in a different system (ideograms, non-Latin scripts), the tokenizer has learned no shortcuts. It falls back on smaller units, sometimes letter by letter or byte by byte. The same meaning then takes many more tokens.
+
+An analogy: picture a dictionary of abbreviations designed for English. English words have their short code. Words from another language, absent from the dictionary, have to be spelled out in full. The message is identical, but it takes up far more space.
+
+## Three concrete consequences
+
+Petrov and co-authors explicitly identify three effects of this imbalance.
+
+<Steps>
+<Step title="Cost" stepNumber={1}>
+More tokens for the same content means a higher bill, both on input and output, since pricing is per token.
+</Step>
+
+<Step title="Latency" stepNumber={2}>
+The model processes and generates token by token. More fragmented text takes longer to read and produce, so responses are slower.
+</Step>
+
+<Step title="Context window" stepNumber={3} isLast>
+The context window is measured in tokens. A token-hungry language "fills" the window faster: you can give the model less context for the same budget.
+</Step>
+</Steps>
+
+## What about Claude Code?
+
+The figures above come from studies on OpenAI's tokenizers and on multilingual tokenizers. But the mechanism is general: **any commercial LLM billed per token is affected**, including Claude, which has its own tokenizer and also bills input and output tokens.
+
+<Callout type="warning" title="No magic multiplier">
+The exact size of the gap depends on the specific tokenizer and model. The "up to 15×" or "22 languages" values are those of the cited studies, not an official Claude-specific number. To know the real cost of a given text with Claude, measure it rather than estimate it.
+</Callout>
+
+In practice, if you use Claude Code intensively and in multiple languages, keep in mind that the token volume, and therefore the budget, is not the same depending on the language of your prompts, your files, and the expected answers.
+
+## What you can do
+
+- **Measure before assuming.** Anthropic's API exposes a token count (`count_tokens`) that lets you check the real cost of a prompt in a given language, instead of guessing.
+- **Pick the language to fit the stakes.** For large, repetitive tasks where language barely matters (technical instructions, internal directives), writing in English can lower consumption. For content meant for humans, quality and accuracy come first: don't trade clarity for a few tokens.
+- **Tend to the context.** Since a token-hungry language fills the window faster, a concise `CLAUDE.md` and well-targeted prompts matter even more in those languages.
+
+## Next steps
+
+- [Real costs of Claude Code](/content/real-costs-claude-code): understand what gets billed, plan by plan.
+- [Context management](/prompting/context-management): get the most out of a limited window.
+- Sources: [Petrov et al., NeurIPS 2023](https://arxiv.org/abs/2305.15425) and [Ahia et al., 2023](https://arxiv.org/abs/2305.13707).

@@ -17,6 +17,8 @@ import { Card } from "@/components/mdx/Card";
 import { ArticleAlert } from "@/components/mdx/ArticleAlert";
 import { Faq, FaqItem } from "@/components/mdx/Faq";
 import { NextSteps } from "@/components/mdx/NextSteps";
+import { WorkflowDiagram } from "@/components/mdx/WorkflowDiagram";
+import { CouncilBuilder } from "@/components/mdx/CouncilBuilder";
 
 /**
  * Extract text content from React children recursively.
@@ -68,6 +70,8 @@ export const mdxComponents: MDXComponents = {
   Faq,
   FaqItem,
   NextSteps,
+  WorkflowDiagram,
+  CouncilBuilder,
 
   // Override default HTML elements for consistent styling.
   // Explicit {children} (vs self-closing {...props}) makes it clear to
@@ -237,7 +241,18 @@ function isInternalLink(href: string | undefined): boolean {
   if (href.startsWith("//")) return false;
   // Already has a locale prefix
   if (/^\/(?:fr|en)(?:\/|$)/.test(href)) return false;
+  // Static file downloads in public/ are served without locale prefix
+  if (hasStaticFileExtension(href)) return false;
   return true;
+}
+
+function hasStaticFileExtension(href: string): boolean {
+  const pathWithoutHash = href.split("#", 1)[0];
+  const pathOnly = pathWithoutHash.split("?", 1)[0];
+  const lastSlashIndex = pathOnly.lastIndexOf("/");
+  const lastDotIndex = pathOnly.lastIndexOf(".");
+
+  return lastDotIndex > lastSlashIndex && lastDotIndex < pathOnly.length - 1;
 }
 
 /**

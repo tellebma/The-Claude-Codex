@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import { AnalyticsTracker } from "@/components/layout/AnalyticsTracker";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -102,6 +103,7 @@ export default async function HomePage({
 
   return (
     <>
+      <AnalyticsTracker />
       {/* ===== HERO ===== Layout split (RG-18) : 1.05fr 1fr sur lg+ */}
       <section className="relative overflow-hidden bg-[color:var(--bg-page)]">
         {/* Background effects */}
@@ -236,6 +238,7 @@ export default async function HomePage({
                 title={tFeatures("createWebsite.title")}
                 description={tFeatures("createWebsite.description")}
                 gradient="teal"
+                href="/use-cases"
               />
             </div>
             <FeatureCard
@@ -243,24 +246,28 @@ export default async function HomePage({
               title={tFeatures("generateDocs.title")}
               description={tFeatures("generateDocs.description")}
               gradient="amber"
+              href="/prompting"
             />
             <FeatureCard
               icon={Zap}
               title={tFeatures("automate.title")}
               description={tFeatures("automate.description")}
               gradient="purple"
+              href="/agents"
             />
             <FeatureCard
               icon={BarChart3}
               title={tFeatures("analyzeData.title")}
               description={tFeatures("analyzeData.description")}
               gradient="green"
+              href="/use-cases"
             />
             <FeatureCard
               icon={Code2}
               title={tFeatures("codeNoDev.title")}
               description={tFeatures("codeNoDev.description")}
               gradient="teal"
+              href="/getting-started"
             />
             <div className="sm:col-span-2">
               <FeatureCard
@@ -276,12 +283,14 @@ export default async function HomePage({
               title={tFeatures("designUI.title")}
               description={tFeatures("designUI.description")}
               gradient="amber"
+              href="/skills"
             />
             <FeatureCard
               icon={Rocket}
               title={tFeatures("deploy.title")}
               description={tFeatures("deploy.description")}
               gradient="green"
+              href="/advanced"
             />
           </StaggerChildren>
         </div>

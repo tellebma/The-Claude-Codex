@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { VercelMetrics } from "@/components/layout/VercelMetrics";
 import { routing } from "@/i18n/routing";
 import {
   SITE_URL,
@@ -39,15 +40,23 @@ const MATOMO_URL = process.env.NEXT_PUBLIC_MATOMO_URL ?? "";
 const MATOMO_SITE_ID = process.env.NEXT_PUBLIC_MATOMO_SITE_ID ?? "";
 const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
 
+
 /*
  * Matomo analytics script — safe: built from environment variables
  * at build time. No user input reaches this path.
  * Tracking is disabled entirely when env vars are not set.
+ *
+ * Note (SEO-8) : ce snippet ne fire PAS de `trackPageView` au load.
+ * C'est `useMatomoPageviewTracking` (monte via AnalyticsTracker dans
+ * SectionLayout + pages overview) qui s'en charge a chaque navigation
+ * App Router, y compris la premiere. Sans cette delegation, Next.js
+ * App Router (navigation client-side) ne firerait qu'un seul pageview
+ * par session.
  */
 const matomoTrackingScript = MATOMO_ENABLED
   ? `
   var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['trackPageView'], ['enableLinkTracking']);
+  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking']);
   (function() {
     var u = '${MATOMO_URL}/';
     _paq.push(['setTrackerUrl', u + 'matomo.php'], ['setSiteId', '${MATOMO_SITE_ID}']);
@@ -205,6 +214,10 @@ export default async function LocaleLayout({
             </div>
           </ThemeProvider>
         </NextIntlClientProvider>
+        {/* VM-3 / VM-5 / VM-6 / VM-7 — Vercel Web Analytics + Speed Insights.
+            Encapsule dans un Client Component (VercelMetrics) car les Server
+            Components ne peuvent pas passer de fonction (beforeSend) en prop. */}
+        <VercelMetrics />
       </body>
     </html>
   );

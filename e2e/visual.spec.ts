@@ -20,6 +20,10 @@ import { test, expect, type Page } from "@playwright/test";
 const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = [
   { path: "/fr/", name: "fr-landing" },
   { path: "/en/", name: "en-landing" },
+  // CTN-12 — vitrine editoriale redessinee (hero, Pinned+Latest, Most read,
+  // grille filtrable). Baseline FR + EN.
+  { path: "/fr/content/", name: "fr-content-index" },
+  { path: "/en/content/", name: "en-content-index" },
   { path: "/fr/getting-started/", name: "fr-getting-started" },
   { path: "/fr/getting-started/installation/", name: "fr-installation" },
   { path: "/fr/mcp/", name: "fr-mcp" },
@@ -42,7 +46,40 @@ const ROUTES: ReadonlyArray<{ readonly path: string; readonly name: string }> = 
   { path: "/en/content/claude-design-vs-figma/", name: "en-article-claude-design-vs-figma" },
   { path: "/en/content/ci-cd-cyber-security/", name: "en-article-ci-cd-security" },
   { path: "/en/content/future-vision/", name: "en-article-future-vision" },
+  // TUTO-3 — pilote migration pages tuto vers ArticleShell + SectionPeers.
+  // 3 typologies : installation (longue, deja en liste ci-dessus avec la
+  // baseline a regenerer), prompting/basics (section dense), what-are-skills
+  // (section courte). FR + EN, light + dark via THEMES.
+  // NB recette : `fr-installation` change de layout, regenerer sa baseline.
+  { path: "/en/getting-started/installation/", name: "en-installation" },
+  { path: "/fr/prompting/basics/", name: "fr-prompting-basics" },
+  { path: "/en/prompting/basics/", name: "en-prompting-basics" },
+  { path: "/fr/skills/what-are-skills/", name: "fr-skills-what-are-skills" },
+  { path: "/en/skills/what-are-skills/", name: "en-skills-what-are-skills" },
+  // TUTO-5 — rollout getting-started complet : echantillon visuel de 4 pages
+  // varies (intro, etapes, projet, FAQ). FR, light + dark via THEMES.
+  { path: "/fr/getting-started/what-is-claude-code/", name: "fr-what-is-claude-code" },
+  { path: "/fr/getting-started/prerequisites-zero/", name: "fr-prerequisites-zero" },
+  { path: "/fr/getting-started/first-project/", name: "fr-first-project" },
+  { path: "/fr/getting-started/faq-beginner/", name: "fr-faq-beginner" },
 ];
+
+const CI_VISUAL_ROUTE_NAMES = new Set([
+  "fr-content-index",
+  "en-content-index",
+  "fr-installation",
+  "en-installation",
+  "fr-skills-what-are-skills",
+  "en-skills-what-are-skills",
+  "fr-what-is-claude-code",
+  "fr-faq-beginner",
+]);
+
+// La CI garde un échantillon représentatif pour tenir dans le job 15 min ;
+// la matrice complète reste disponible en local sans CI=true.
+const visualRoutes = process.env.CI
+  ? ROUTES.filter((route) => CI_VISUAL_ROUTE_NAMES.has(route.name))
+  : ROUTES;
 
 const THEMES: ReadonlyArray<"light" | "dark"> = ["light", "dark"];
 
@@ -95,7 +132,7 @@ test.describe("Visual regression — landing & sections cles", () => {
   test.setTimeout(60_000);
 
   for (const theme of THEMES) {
-    for (const { path, name } of ROUTES) {
+    for (const { path, name } of visualRoutes) {
       test(`${name} — ${theme}`, async ({ page }) => {
         await prepareForVisual(page, theme);
         await page.goto(path);

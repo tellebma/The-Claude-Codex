@@ -98,16 +98,15 @@ Les balises HTML (`h1`-`h4`, `p`, `ul`, `ol`, `a`, `blockquote`, `table`, `code`
 
 ## Layout & Navigation
 
-### SectionLayout
+### Shells de pages tuto vs sections legacy
 
-**Composant standard** pour toutes les sections de documentation (`components/layout/SectionLayout.tsx`). Fournit :
-- Sidebar gauche : navigation de section (`SectionSidebar`)
-- Zone de contenu principale (flex-1)
-- Sidebar droite : table des matières auto-générée (`TableOfContents`, visible sur xl+)
-- Breadcrumb en haut de page
-- Bouton scroll-to-top
+Les pages `[slug]` des sections tuto migrées (`getting-started`, `skills`, `prompting`, `mcp`, `agents`, `advanced`) utilisent désormais `TutoArticleContent`, qui câble `ArticleHero`, `ArticleShell`, `ArticlePager`, `ReadingProgressBar`, JSON-LD et `SectionPeers` dans le rail droit. C'est la cible article-shell pour les pages de documentation longues.
 
-Chaque section l'utilise via son `layout.tsx` : `<SectionLayout>{children}</SectionLayout>`
+`SectionPeers` liste les pages voisines de la même section : accordion sous `xl`, bloc sticky au-delà, `aria-current="page"` sur la page active et lien vers l'overview locale.
+
+`SectionLayout`, `SectionSidebar` et `SectionSlugContent` restent nécessaires pour les overviews et les sections hors scope tuto (`plugins`, `reference`, `future`, `enterprise`, `personas`, `limits`, `use-cases`, `ecosystem`). Ne pas les supprimer tant qu'une route `[slug]` legacy les consomme.
+
+La garde statique `__tests__/architecture/tuto-article-shell-rollout.test.ts` verrouille cette séparation : les sections tuto doivent importer `TutoArticleContent`, les sections legacy documentées doivent encore référencer `SectionSlugContent`.
 
 ### Configuration de navigation
 
@@ -192,7 +191,7 @@ Pour TOUTE rédaction d'article, doc ou comparatif sur ce projet :
 
 - **TOUTE statistique, date, nom propre, version, prix, URL ou fait précis DOIT être vérifié via Playwright MCP ou WebFetch AVANT d'être écrit.** Aucune exception.
 - **JAMAIS écrire un fait depuis la mémoire si une vérification web est possible.** En cas d'incertitude → vérification systématique.
-- **Workflow par section** : (1) lister les faits précis nécessaires, (2) vérifier chacun via Playwright/WebFetch, (3) noter source + date dans commentaire MDX masqué `{/* source: URL, consulté YYYY-MM-DD */}` (⚠️ syntax MDX, PAS `<!-- ... -->` qui est du HTML invalide dans MDX et casse next-mdx-remote au parsing), (4) rédiger uniquement avec les faits vérifiés.
+- **Workflow par section** : (1) lister les faits précis nécessaires, (2) vérifier chacun via Playwright/WebFetch, (3) noter source + date dans commentaire HTML masqué `<!-- source: URL, consulté YYYY-MM-DD -->`, (4) rédiger uniquement avec les faits vérifiés.
 - **Sources prioritaires** : doc officielle fournisseur > GitHub releases > annonces officielles. Si information non vérifiable → `<Callout type="info">` "Information non vérifiée au YYYY-MM-DD, à confirmer auprès du fournisseur".
 - **Sources INTERDITES comme source factuelle** : forums Reddit, posts Twitter/X non officiels, articles de blog tiers non datés, tutoriels YouTube. Acceptables uniquement comme inspiration narrative.
 - **Versions de modèles Claude** : toujours re-vérifier sur docs.anthropic.com avant chaque snippet (les modèles évoluent : actuels au 2026-05 = `claude-opus-4-7`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`).

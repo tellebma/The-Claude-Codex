@@ -94,6 +94,66 @@ export function createFAQPageSchema(
   };
 }
 
+interface SoftwareApplicationOptions {
+  readonly name: string;
+  readonly description: string;
+  readonly url: string;
+  readonly applicationCategory?: string;
+  readonly operatingSystem?: string;
+  /** Code SPDX de la licence (ex: "MIT", "Apache-2.0"). */
+  readonly license?: string;
+  /** URL canonique de la licence (ex: lien GitHub LICENSE). */
+  readonly licenseUrl?: string;
+  readonly offerPrice?: string;
+  readonly offerCurrency?: string;
+  readonly locale?: string;
+}
+
+/**
+ * Schema SoftwareApplication pour les fiches outil (skills tiers).
+ * Le prix n'est emis que si `offerPrice` est fourni : un skill gratuit
+ * declare `offerPrice: "0"`, un skill payant son tarif. Sans prix, aucun
+ * bloc `offers` n'est ajoute pour eviter une donnee structuree erronee.
+ */
+export function createSoftwareApplicationSchema(
+  options: SoftwareApplicationOptions,
+): Record<string, unknown> {
+  const {
+    name,
+    description,
+    url,
+    applicationCategory = "DeveloperApplication",
+    operatingSystem = "Cross-platform",
+    license,
+    licenseUrl,
+    offerPrice,
+    offerCurrency = "USD",
+    locale = "fr",
+  } = options;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name,
+    description,
+    url: ensureTrailingSlash(url),
+    applicationCategory,
+    operatingSystem,
+    inLanguage: localeToLanguageTag(locale),
+    ...(licenseUrl ? { license: licenseUrl } : {}),
+    ...(license ? { licenseDeclared: license } : {}),
+    ...(offerPrice === undefined
+      ? {}
+      : {
+          offers: {
+            "@type": "Offer",
+            price: offerPrice,
+            priceCurrency: offerCurrency,
+          },
+        }),
+  };
+}
+
 interface DefinedTermItem {
   readonly name: string;
   readonly description: string;
@@ -119,24 +179,65 @@ export function createDefinedTermSetSchema(
   };
 }
 
-export function createCollectionPageSchema(options: {
+interface CollectionPagePart {
+  readonly url: string;
+  readonly name: string;
+  readonly dateModified?: string;
+  readonly inLanguage?: string;
+}
+
+interface CollectionPageSchemaOptions {
   readonly name: string;
   readonly description: string;
   readonly url: string;
   readonly locale?: string;
-}): Record<string, unknown> {
+  readonly dateModified?: string;
+  readonly hasPart?: ReadonlyArray<CollectionPagePart>;
+}
+
+function buildHasPart(
+  parts: ReadonlyArray<CollectionPagePart>,
+  parentLang: string
+): ReadonlyArray<Record<string, unknown>> {
+  return parts.map((part) => {
+    const absoluteUrl = part.url.startsWith("http")
+      ? part.url
+      : `${SITE_URL}${part.url}`;
+    return {
+      "@type": "Article",
+      name: part.name,
+      url: ensureTrailingSlash(absoluteUrl),
+      inLanguage: part.inLanguage ?? parentLang,
+      ...(part.dateModified ? { dateModified: part.dateModified } : {}),
+    };
+  });
+}
+
+export function createCollectionPageSchema(
+  options: CollectionPageSchemaOptions
+): Record<string, unknown> {
+  const lang = localeToLanguageTag(options.locale ?? "fr");
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: options.name,
     description: options.description,
     url: ensureTrailingSlash(options.url),
-    inLanguage: localeToLanguageTag(options.locale ?? "fr"),
+    inLanguage: lang,
     isPartOf: {
       "@type": "WebSite",
       name: SITE_NAME,
       url: SITE_URL,
     },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    ...(options.dateModified ? { dateModified: options.dateModified } : {}),
+    ...(options.hasPart && options.hasPart.length > 0
+      ? { hasPart: buildHasPart(options.hasPart, lang) }
+      : {}),
   };
 }
 
@@ -255,6 +356,47 @@ export function createBreadcrumbSchema(
       position: index + 1,
       name: item.name,
       item: ensureTrailingSlash(`${SITE_URL}${item.href}`),
+    })),
+  };
+}
+
+interface ItemListEntry {
+  readonly position: number;
+  readonly url: string;
+  readonly name: string;
+}
+
+interface ItemListSchemaOptions {
+  readonly name: string;
+  readonly description: string;
+  readonly items: ReadonlyArray<ItemListEntry>;
+  readonly locale?: string;
+}
+
+/**
+ * CTN-8 / CTN-9 : ItemList JSON-LD pour Most read et Trending sur
+ * /content. Spec : `position` 1-indexed, `itemListOrder = Descending`
+ * (tri par signal d'usage), `numberOfItems` toujours emis pour les
+ * validateurs tiers (cf. seo-technical-decisions §1.3).
+ */
+export function createItemListSchema(
+  options: ItemListSchemaOptions,
+): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: options.name,
+    description: options.description,
+    inLanguage: localeToLanguageTag(options.locale ?? "fr"),
+    numberOfItems: options.items.length,
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    itemListElement: options.items.map((entry) => ({
+      "@type": "ListItem",
+      position: entry.position,
+      url: ensureTrailingSlash(
+        entry.url.startsWith("http") ? entry.url : `${SITE_URL}${entry.url}`,
+      ),
+      name: entry.name,
     })),
   };
 }

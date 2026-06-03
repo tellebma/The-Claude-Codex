@@ -295,8 +295,13 @@ jobs:
   e2e-smoke:
     name: E2E smoke (chromium)
     runs-on: ubuntu-latest
-    # 25 min : l'install Playwright (--with-deps) consommait les 15 min du job
-    # sur les runners lents avant la mise en cache des browsers (2026-06-03).
+    # Container Playwright officiel : browsers + deps systeme deja dans l'image,
+    # AUCUN `playwright install`. Sur les runners, `--with-deps` (apt/needrestart)
+    # hangait indefiniment et consommait tout le timeout (diagnostic 2026-06-03).
+    # MAINTENANCE : la version d'image DOIT matcher @playwright/test (package.json).
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
     timeout-minutes: 25
     needs: [build]
     steps:
@@ -311,25 +316,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Get Playwright version
-        id: pw-version
-        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Playwright browsers
-        id: pw-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw-version.outputs.version }}
-
-      - name: Install Playwright browsers
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Install Playwright browsers (cache hit)
-        if: steps.pw-cache.outputs.cache-hit == 'true'
-        run: npx playwright install chromium
 
       - name: Download build artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -359,7 +345,12 @@ jobs:
     # les diffs visuels (actual vs expected) pour debug.
     name: E2E visual regression
     runs-on: ubuntu-latest
-    # 25 min + cache browsers : meme rationale que e2e-smoke (2026-06-03).
+    # Container Playwright officiel (meme rationale que e2e-smoke, 2026-06-03).
+    # Les baselines visuelles DOIVENT etre generees dans ce meme container
+    # (update-snapshots.yml utilise la meme image) pour eviter le bruit cross-env.
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
     timeout-minutes: 25
     needs: [build]
     steps:
@@ -374,25 +365,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Get Playwright version
-        id: pw-version
-        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
-
-      - name: Cache Playwright browsers
-        id: pw-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw-version.outputs.version }}
-
-      - name: Install Playwright browsers
-        if: steps.pw-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
-
-      - name: Install Playwright browsers (cache hit)
-        if: steps.pw-cache.outputs.cache-hit == 'true'
-        run: npx playwright install chromium
 
       - name: Download build artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1

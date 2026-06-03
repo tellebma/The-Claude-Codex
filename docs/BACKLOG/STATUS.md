@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-05-31 (Integration consolidee develop : TUTO-6/7/8 + SR-3 (cloture EPIC security-review 100%) + article cout des tokens selon la langue, lignee lineaire #257 ; restent controles manuels Lighthouse/WebPageTest/GSC/visuels + TUTO-9/10 monitoring post-rollout)
+> Derniere mise a jour : 2026-06-03 (Merges develop : #257 integration TUTO-6/7/8 + SR-3 + article tokens, puis #261 EPIC Stack design DSK complet hors captures ; Claude Council 8/8 stories en PR #262 ; CI E2E migree en container Playwright)
 
 ---
 
@@ -23,6 +23,7 @@
 | [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 8 | 0 | 0 | 100% ✅ (cloture 2026-05-31 : SR-3 screenshots + comparaison plugin everything-claude-code livre, EPIC complet) |
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
+| [Content Claude Council 2026-06](EPIC-content-claude-council-2026-06.md) | 8 | 8 | 0 | 0 | 100% 🔄 (CC-1 a CC-8 livres en branche feat/claude-council-2026-06, PR draft develop ; page /skills/claude-council FR+EN + composant CouncilBuilder, coverage 95%/100%, 15 E2E ; non merge) |
 | [Content page redesign 2026-05](EPIC-content-page-redesign-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture : Sprints 1-3 livres #240/#243, release prod 1.10.0) |
 | [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 5 | 1 | 4 | 64% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; TUTO-6 livre : batch 1 `skills` (12 routes), batch 2 `prompting` (24 routes), batch 3 `mcp` (20 routes), batch 4 `agents` (18 routes) ; **TUTO-7 `advanced` livre 2026-05-30** : 32 routes (16 FR + 16 EN), 12 tests a11y batch 5, build/audit liens OK ; **TUTO-8 regression cleanup en cours** : garde statique article-shell + doc architecture, code legacy conserve car encore utilise ; restent controles manuels Lighthouse/WebPageTest/GSC/visuels + TUTO-9/10 monitoring) |
 

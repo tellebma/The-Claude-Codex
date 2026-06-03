@@ -175,11 +175,63 @@ const huashuDesignSoftware: Record<string, SchemaBuilder> = {
     }),
 };
 
+/**
+ * CC-5 — HowTo : les 3 stages du pattern LLM Council (First opinions /
+ * Review anonymisee / Final response). Source primaire karpathy/llm-council.
+ */
+const claudeCouncilHowTo: Record<string, SchemaBuilder> = {
+  fr: (locale) =>
+    createHowToSchema({
+      title: "Claude Council : faire délibérer plusieurs IA",
+      description:
+        "Le pattern LLM Council applique a Claude : premiers avis independants, revue croisee anonymisee, synthese d'un Chairman.",
+      url: url("/skills/claude-council"),
+      locale,
+      steps: [
+        {
+          name: "Premiers avis",
+          text: "Chaque conseiller repond a la question de facon independante, sans voir les reponses des autres.",
+        },
+        {
+          name: "Revue croisee anonymisee",
+          text: "Chaque conseiller recoit les autres reponses sans connaitre leurs auteurs, et les classe sur l'exactitude et la profondeur.",
+        },
+        {
+          name: "Synthese finale",
+          text: "Un Chairman designe lit tous les avis et tous les classements, arbitre les desaccords et produit une recommandation unique.",
+        },
+      ],
+    }),
+  en: (locale) =>
+    createHowToSchema({
+      title: "Claude Council: make several AIs deliberate",
+      description:
+        "The LLM Council pattern applied to Claude: independent first opinions, anonymized cross-review, Chairman synthesis.",
+      url: url("/skills/claude-council"),
+      locale,
+      steps: [
+        {
+          name: "First opinions",
+          text: "Each advisor answers the question independently, without seeing the other answers.",
+        },
+        {
+          name: "Anonymized cross-review",
+          text: "Each advisor receives the other answers without knowing who wrote them, and ranks them on accuracy and insight.",
+        },
+        {
+          name: "Final response",
+          text: "A designated Chairman reads every opinion and ranking, arbitrates disagreements and produces a single recommendation.",
+        },
+      ],
+    }),
+};
+
 const PAGE_SCHEMAS: Record<string, Record<string, SchemaBuilder>> = {
   "/mcp/workflow-design-playwright": workflowDesignPlaywrightHowTo,
   "/content/refaire-une-card-avec-impeccable-et-playwright": redoCardHowTo,
   "/content/redo-a-card-with-impeccable-and-playwright": redoCardHowTo,
   "/skills/huashu-design": huashuDesignSoftware,
+  "/skills/claude-council": claudeCouncilHowTo,
 };
 
 /**

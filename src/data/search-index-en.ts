@@ -227,6 +227,30 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Claude Council: make several AIs deliberate",
+    description:
+      "Karpathy's LLM Council pattern adapted to Claude: several opinions that challenge each other, anonymized cross-review, a Chairman's synthesis, with a prompt and skill generator.",
+    href: "/skills/claude-council",
+    section: "Skills",
+    keywords: [
+      "claude council",
+      "llm council",
+      "council of llms",
+      "council of models",
+      "make several ais deliberate",
+      "make multiple llms deliberate",
+      "deliberate",
+      "deliberation",
+      "panel of models",
+      "chairman",
+      "karpathy",
+      "multi-model",
+      "multi-persona",
+      "multiple ai opinions",
+      "multi-perspective orchestration",
+    ],
+  },
+  {
     title: "Impeccable: design skill for Claude Code",
     description:
       "Apache 2.0 skill by Paul Bakaus shipping 23 design commands (/polish, /audit, /typeset...) and 27 anti-pattern rules. 28.6k GitHub stars as of 2026-05-18.",

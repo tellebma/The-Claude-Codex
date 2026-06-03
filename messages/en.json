@@ -173,6 +173,67 @@
     "browseAll": "Browse the docs",
     "browseAllAria": "Browse the documentation"
   },
+  "councilBuilder": {
+    "title": "Council generator",
+    "subtitle": "Pick the mode, the advisors and the Chairman. Everything is generated in your browser, no request is ever sent.",
+    "modeLegend": "Mode",
+    "modePersona": "Multi-persona (a single Claude)",
+    "modeModel": "Multi-model (several AIs)",
+    "countLabel": "Number of advisors",
+    "countDecrease": "Remove an advisor",
+    "countIncrease": "Add an advisor",
+    "callsEstimate": "≈ {count} calls per question",
+    "advisorsLabel": "Advisors",
+    "advisorsHeading": "The advisors",
+    "roleField": "Advisor {index} role",
+    "briefField": "One-line brief",
+    "chairmanField": "Chairman (who writes the synthesis)",
+    "questionField": "Your question",
+    "questionPlaceholder": "Which hard decision do you want to put to the council?",
+    "outputLegend": "Generated output",
+    "tabPrompt": "Prompt",
+    "tabSkill": "SKILL.md",
+    "copy": "Copy",
+    "copied": "Copied",
+    "promptIntroPersona": "You will play a council of several experts deliberating on my question. Take on each role below in turn, then synthesize the answer as the Chairman.",
+    "promptIntroModel": "Here is a council deliberation to reproduce with several models. Each model below is an independent advisor; a Chairman writes the final synthesis.",
+    "stage1Heading": "Stage 1: First opinions",
+    "stage1Body": "Each advisor answers the question independently, without seeing the other answers.",
+    "stage2Heading": "Stage 2: Review (anonymized)",
+    "stage2Body": "Show each advisor the other answers without revealing who wrote them, and ask them to rank the answers on accuracy and insight.",
+    "stage3Heading": "Stage 3: Final response",
+    "stage3Body": "The Chairman reads every opinion and every ranking, arbitrates the disagreements and produces a single, reasoned recommendation.",
+    "chairmanLabel": "The designated Chairman is:",
+    "questionLabel": "Question",
+    "fallbackQuestion": "(replace with your question)",
+    "skillDescription": "Runs a council of several perspectives on a hard question, with anonymized cross-review and a Chairman synthesis. Trigger when the user wants multiple opinions that challenge each other on a decision with no obvious answer.",
+    "skillWhenToUse": "Use this skill for high-stakes decisions with no obvious right answer: architecture trade-offs, strategic choices, sensitive text to stress-test. Avoid it for single-answer factual questions (too costly).",
+    "skillInstructions": "Run the deliberation in three stages:",
+    "roleSkeptic": {
+      "role": "Skeptic",
+      "brief": "hunts for flaws, risks and unverified assumptions."
+    },
+    "roleAdvocate": {
+      "role": "Advocate",
+      "brief": "defends the most promising option and shows its value."
+    },
+    "rolePractitioner": {
+      "role": "Practitioner",
+      "brief": "thinks about real execution, cost and constraints."
+    },
+    "roleGeneralist": {
+      "role": "Generalist",
+      "brief": "zooms out and ties the question to the bigger picture."
+    },
+    "roleContrarian": {
+      "role": "Contrarian",
+      "brief": "deliberately argues the opposite angle to test robustness."
+    },
+    "roleVisionary": {
+      "role": "Visionary",
+      "brief": "explores long-term consequences and bold options."
+    }
+  },
   "breadcrumb": {
     "ariaLabel": "Breadcrumb",
     "home": "Home",
@@ -372,6 +433,7 @@
       "what-are-skills": "What is a Skill?",
       "best-skills": "Top recommended Skills",
       "find-skills": "Find a Skill (find-skills)",
+      "claude-council": "Claude Council (make AIs deliberate)",
       "impeccable": "Impeccable (design skill)",
       "ui-ux-pro-max": "UI UX Pro Max (design skill)",
       "taste-skill": "Taste Skill (design skill)",

@@ -446,7 +446,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les Skills Claude Code expliqués : workflows Markdown réutilisables déclenchés par slash commands. Fonctionnement, création, et différences avec les MCP et plugins.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-27",
+    lastModified: "2026-06-02",
   },
   {
     path: "/skills/best-skills",
@@ -464,7 +464,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Le méta-skill #1 sur skills.sh (1.6M installs en 2026) qui apprend à Claude Code à trouver, vérifier et installer le bon skill via npx skills.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-05-17",
+    lastModified: "2026-06-02",
+  },
+  {
+    path: "/skills/claude-council",
+    title: "Claude Council : faire délibérer plusieurs IA",
+    description:
+      "Le pattern LLM Council de Karpathy adapté à Claude : faire délibérer plusieurs IA, review croisée anonyme, synthèse d'un Chairman, et un générateur de prompt.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-02",
   },
   {
     path: "/skills/impeccable",
@@ -554,7 +563,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Patterns d’orchestration pour combiner plusieurs agents Claude Code : séquentiel, parallèle, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-06-02",
   },
   {
     path: "/agents/orchestration-patterns",

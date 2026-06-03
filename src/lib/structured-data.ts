@@ -142,15 +142,15 @@ export function createSoftwareApplicationSchema(
     inLanguage: localeToLanguageTag(locale),
     ...(licenseUrl ? { license: licenseUrl } : {}),
     ...(license ? { licenseDeclared: license } : {}),
-    ...(offerPrice !== undefined
-      ? {
+    ...(offerPrice === undefined
+      ? {}
+      : {
           offers: {
             "@type": "Offer",
             price: offerPrice,
             priceCurrency: offerCurrency,
           },
-        }
-      : {}),
+        }),
   };
 }
 

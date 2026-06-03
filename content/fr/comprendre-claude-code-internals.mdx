@@ -4,7 +4,7 @@ description: "Ce que les system prompts fuités révèlent sur l'architecture in
 section: "content"
 order: 14
 datePublished: "2026-05-12"
-dateModified: "2026-05-20"
+dateModified: "2026-06-03"
 themes: ["guide", "tooling"]
 ---
 
@@ -42,7 +42,7 @@ Quatre dépôts GitHub publient des extractions plus ou moins récentes. Voici l
 
 | Dépôt | Owner | Licence | Étoiles | Couverture Claude Code |
 |---|---|---|---|---|
-| [`system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) | asgeirtj | MIT | ~40 100 | Fichier dédié [`Anthropic/claude-code.md`](https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md), version 2.1.120 datée du 27/04/2026 |
+| [`system_prompts_leaks`](https://github.com/asgeirtj/system_prompts_leaks) | asgeirtj | MIT | ~40 100 | Dossier dédié [`Anthropic/claude-code/`](https://github.com/asgeirtj/system_prompts_leaks/tree/main/Anthropic/claude-code), prompts versionnés par modèle (au 2026-06-03) |
 | [`system-prompts-and-models-of-ai-tools`](https://github.com/x1xhlol/system-prompts-and-models-of-ai-tools) | x1xhlol | GPL-3.0 | ~137 000 | Dossier `Anthropic/` (Claude Code mentionné dans le README mais sous-dossier dédié non visible au listing) |
 | [`CL4R1T4S`](https://github.com/elder-plinius/CL4R1T4S) | elder-plinius | AGPL-3.0 | ~26 100 | Dossier `ANTHROPIC/` avec un fichier `Claude_Code_03-04-24.md` |
 | [`TheBigPromptLibrary`](https://github.com/0xeb/TheBigPromptLibrary) | 0xeb | MIT | ~5 000 | Pas d'entrée Claude Code identifiée sur la page d'accueil au 2026-05-12 |
@@ -53,9 +53,9 @@ Pour un travail sérieux, [`asgeirtj/system_prompts_leaks`](https://github.com/a
 
 ### Les tools réellement exposés à l'agent
 
-Le fichier [`Anthropic/claude-code.md`](https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md) du dépôt [asgeirtj](https://github.com/asgeirtj/system_prompts_leaks) liste explicitement les outils chargés par défaut : `Agent`, `Bash`, `Edit`, `Read`, `Write`, `ScheduleWakeup`, `ToolSearch`, `Skill`. Une seconde catégorie regroupe les **deferred tools**, chargés à la demande via `ToolSearch` pour économiser le contexte : `AskUserQuestion`, `CronCreate`, `EnterPlanMode`, `Monitor`, `NotebookEdit`, `SendMessage`, `TaskCreate`, `TaskGet`, `TaskList`, `TaskUpdate`, `WebFetch`, `WebSearch`...
+Le dossier [`Anthropic/claude-code/`](https://github.com/asgeirtj/system_prompts_leaks/tree/main/Anthropic/claude-code) du dépôt [asgeirtj](https://github.com/asgeirtj/system_prompts_leaks) liste explicitement les outils chargés par défaut : `Agent`, `Bash`, `Edit`, `Read`, `Write`, `ScheduleWakeup`, `ToolSearch`, `Skill`. Une seconde catégorie regroupe les **deferred tools**, chargés à la demande via `ToolSearch` pour économiser le contexte : `AskUserQuestion`, `CronCreate`, `EnterPlanMode`, `Monitor`, `NotebookEdit`, `SendMessage`, `TaskCreate`, `TaskGet`, `TaskList`, `TaskUpdate`, `WebFetch`, `WebSearch`...
 
-{/* source: https://github.com/asgeirtj/system_prompts_leaks/blob/main/Anthropic/claude-code.md (version 2.1.120), consulté 2026-05-12 */}
+{/* source: https://github.com/asgeirtj/system_prompts_leaks/tree/main/Anthropic/claude-code (ex claude-code.md v2.1.120 consulté 2026-05-12, devenu dossier versionné, re-vérifié 2026-06-03) */}
 
 Cette distinction est intéressante. Tous les outils ne sont pas chargés en permanence : ce sont les outils "souvent utilisés" qui sont actifs par défaut, et l'agent doit explicitement demander le schéma des autres avant de pouvoir les invoquer. C'est une optimisation de tokens directement applicable à tes propres agents : si tu construis un workflow custom via le SDK, n'expose que le strict nécessaire et délègue le reste à un mécanisme de découverte.
 

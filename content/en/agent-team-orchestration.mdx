@@ -19,6 +19,17 @@ A single Claude agent is a very fast developer who does one thing at a time. Sev
 
 This article tours the tools that turn Claude sessions into an organization, with roles, a hierarchy, goals and governance. Every figure below was verified on 4 June 2026 against official sources. They move fast, so re-check before you decide.
 
+<Callout type="info" title="In short (citable)">
+Five ways to orchestrate multiple Claude agents, depending on whether you want one-off parallelism or an organization that lasts. <time dateTime="2026-06-04">Verified 4 June 2026</time>.
+
+- **Native Claude Code**: subagents (isolated workers) and agent teams (experimental, flag `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`, v2.1.32+). Nothing to install.
+- **Paperclip**: org chart, per-agent budgets, governance. MIT, ~69k★. Install `npx paperclipai onboard --yes`.
+- **claude-office**: real-time pixel-art visualization of your sessions. MIT, ~415★.
+- **CrewAI**: role-based Python framework, crews and a manager. MIT, ~52.8k★.
+- **LangGraph**: graph-based Python framework, lower level. MIT, ~33.8k★.
+- **Where to start**: stay native for one-off work, move to Paperclip for a persistent organization.
+</Callout>
+
 ## What Claude Code already does out of the box
 
 Before reaching for a third-party tool, look at what ships in the box. Claude Code offers two ways to parallelize work.
@@ -108,13 +119,13 @@ Microsoft's AutoGen often comes up in comparisons. As of 2026-06-04 its latest P
   ]}
   rows={[
     {
-      feature: "Role",
+      feature: "Type",
       values: {
-        native: "Subagents + agent teams",
-        paperclip: "Company org chart",
-        office: "Office visualization",
-        crew: "Role-based code framework",
-        lang: "Graph-based code framework",
+        native: "Built-in",
+        paperclip: "Org chart",
+        office: "Visualization",
+        crew: "Framework",
+        lang: "Framework",
       },
     },
     {

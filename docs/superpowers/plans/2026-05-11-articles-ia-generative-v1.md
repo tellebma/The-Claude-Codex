@@ -21,7 +21,7 @@ Tu es un rédacteur journalistique rigoureux. Règles absolues :
 - **Pour chaque section, commence par une phase de recherche AVANT de rédiger.** Workflow par section :
   1. Lister les faits précis nécessaires à la section (tarifs, versions, URLs, chiffres)
   2. Pour chaque fait : Playwright sur la source officielle (site provider, GitHub release, doc officielle)
-  3. Noter source + date de consultation dans un commentaire HTML masqué `<!-- source: URL, consulté 2026-05-11 -->`
+  3. Noter source + date de consultation dans un commentaire MDX masqué `{/* source: URL, consulté 2026-05-11 */}` (PAS `<!-- ... -->` qui est du HTML invalide en MDX et casse next-mdx-remote au parsing)
   4. Rédiger en s'appuyant uniquement sur les faits vérifiés
 - **Sources prioritaires (par ordre de confiance)** :
   1. Documentation officielle du fournisseur (anthropic.com, replicate.com/docs, comfyanonymous/ComfyUI README, huggingface.co/black-forest-labs)
@@ -383,7 +383,7 @@ themes: ["guide", "tooling", "productivity"]
      - **(d) Skill + script local** : description, simplicité, limites, exemple de skill
   3. **Tableau comparatif des 4 patterns** (~200 mots + `<Card>` ou table MDX) : colonnes Pattern / Latence / Coût / Contrôle / Courbe d'apprentissage / Cas d'usage idéal
   4. **Quel pattern pour quel cas d'usage** (~500 mots) : matrice décisionnelle :
-     - "Tu génères 1000+ images/mois et tu as un GPU" → C2
+     - "Tu génères 500+ images/mois et tu as un GPU" → C2 (seuil affiné post-validation : 500 images suffit pour rentabiliser un GPU possédé)
      - "Tu veux scale en CI/CD" → C3
      - "Tu veux tester rapidement" → MCP cloud
      - "Tu fais 5 images par mois" → Skill simple

@@ -224,6 +224,24 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-06-03",
   },
   {
+    path: "/mcp/comfyui-mcp-local",
+    title: "ComfyUI MCP local : générer des images sur ton GPU",
+    description:
+      "Tutoriel pour brancher ComfyUI à Claude Code via MCP, générer des images en local sur ton GPU, installer Flux Schnell et débugger les erreurs CUDA/OOM.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
+  },
+  {
+    path: "/mcp/comfyui-workflow-piloting",
+    title: "Piloter un workflow ComfyUI JSON depuis Claude Code",
+    description:
+      "Tutoriel pour exposer un workflow ComfyUI exporté en JSON via un outil MCP custom et le faire éditer dynamiquement par Claude Code (sampler, ControlNet).",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
+  },
+  {
     path: "/skills",
     title: "Les Skills Claude Code",
     description:
@@ -593,6 +611,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/agents/agent-generation-assets",
+    title: "Agent Claude qui génère et publie tes assets visuels",
+    description:
+      "Tutoriel pour bâtir un agent Claude SDK qui génère des images via Flux/Replicate, optimise en WebP et upload. Architecture, code TypeScript et Python, coûts.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
+  },
+  {
     path: "/use-cases",
     title: "Claude Code pour tous : cas d’usage concrets",
     description:
@@ -627,6 +654,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+  },
+  {
+    path: "/use-cases/ia-generative-creative",
+    title: "Claude Code + IA générative : un workflow créatif moderne",
+    description:
+      "Intégrer la génération d'images IA dans ton flow Claude Code. 4 patterns (MCP local, MCP cloud, Agent SDK, Skill) comparés sur latence, coût et contrôle.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
   },
   {
     path: "/ecosystem",

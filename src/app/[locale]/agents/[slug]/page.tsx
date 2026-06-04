@@ -4,6 +4,7 @@ import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
+import { getPageExtraSchemas } from "@/data/page-schemas";
 import { TutoArticleContent } from "@/components/layout/TutoArticleContent";
 
 const SECTION = "agents";
@@ -45,7 +46,11 @@ export default async function AgentsSlugPage({ params }: PageProps) {
 
   // TUTO-6 (batch 4) — section agents entierement migree vers le shell article.
   const faqs = getPageFaqs(`/${SECTION}/${slug}`, locale);
-  const extraJsonLd = faqs ? [createFAQPageSchema(faqs)] : undefined;
+  const extraSchemas = [
+    ...(faqs ? [createFAQPageSchema(faqs)] : []),
+    ...getPageExtraSchemas(`/${SECTION}/${slug}`, locale),
+  ];
+  const extraJsonLd = extraSchemas.length > 0 ? extraSchemas : undefined;
 
   return (
     <TutoArticleContent

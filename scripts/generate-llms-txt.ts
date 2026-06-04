@@ -307,6 +307,7 @@ const POPULAR_SLUGS_FR = [
   "bonnes-pratiques-securite",
   "couts-reels-claude-code",
   "stack-design-claude-code",
+  "agent-team-orchestration",
 ];
 
 const POPULAR_SLUGS_EN = [
@@ -324,6 +325,7 @@ const POPULAR_SLUGS_EN = [
   "security-best-practices",
   "real-costs-claude-code",
   "stack-design-claude-code",
+  "agent-team-orchestration",
 ];
 
 function buildLlmsTxt(pagesByLocale: Map<string, MdxPage[]>): string {

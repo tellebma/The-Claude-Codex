@@ -2109,6 +2109,25 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Orchestrate a team of Claude agents",
+    description:
+      "A dated tour of the tools that turn Claude sessions into a team of agents: native Claude Code, Paperclip, claude-office, CrewAI and LangGraph compared.",
+    href: "/content/agent-team-orchestration",
+    section: "Content",
+    keywords: [
+      "claude agent teams",
+      "multi-agent orchestration",
+      "ai agent office",
+      "orchestrate claude agents",
+      "paperclip",
+      "claude-office",
+      "subagents",
+      "agent org chart",
+      "crewai",
+      "langgraph",
+    ],
+  },
+  {
     title: "Redoing a card with Impeccable and Playwright",
     description:
       "Claude Code design refactor example: we take a real Codex card and rebuild it with Impeccable and Playwright MCP, with before/after captures.",

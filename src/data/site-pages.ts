@@ -554,7 +554,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Guide complet pour créer des agents custom dans Claude Code. Frontmatter exhaustif (16 champs), focus sur effort, background, isolation worktree, initialPrompt et hooks par agent.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-26",
+    lastModified: "2026-06-04",
   },
   {
     path: "/agents/agent-teams",
@@ -581,7 +581,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Patterns d’orchestration pour combiner plusieurs agents Claude Code : séquentiel, parallèle, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-06-02",
+    lastModified: "2026-06-04",
   },
   {
     path: "/agents/orchestration-patterns",
@@ -1041,6 +1041,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+  },
+  {
+    path: "/content/agent-team-orchestration",
+    title: "Orchestrer une équipe d'agents Claude comme une organisation",
+    description:
+      "Panorama daté des outils pour transformer des sessions Claude en équipe d'agents : Claude Code natif, Paperclip, claude-office, CrewAI et LangGraph comparés.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
   },
   {
     path: "/content/refaire-une-card-avec-impeccable-et-playwright",

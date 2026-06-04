@@ -102,7 +102,7 @@ Dans ComfyUI, le sampler (algorithme de débruitage) et le scheduler (stratégie
 
 L'architecture est directe : Claude Code appelle un tool MCP, le serveur MCP charge le fichier JSON du workflow, applique les paramètres dynamiques reçus, puis POST sur `http://127.0.0.1:8188/prompt`. ComfyUI exécute le workflow et écrit l'image dans son dossier `output/`.
 
-Le wrapper ci-dessous utilise le même pattern `McpServer` + `server.tool()` que les autres exemples du site, présenté dans [Créer un MCP en TypeScript](/fr/mcp/create-mcp-typescript/).
+Le wrapper ci-dessous utilise le même pattern `McpServer` + `server.tool()` que les autres exemples du site, présenté dans [Créer un MCP en TypeScript](/mcp/create-mcp-typescript/).
 
 <Steps>
 <Step title="Créer le projet et installer les dépendances" stepNumber={1}>
@@ -218,7 +218,7 @@ main().catch((err: unknown) => {
 
 </Step>
 
-<Step title="Configurer Claude Code pour utiliser le MCP" stepNumber={4}>
+<Step title="Configurer Claude Code pour utiliser le MCP" stepNumber={4} isLast>
 
 Ajoute (ou crée) `.mcp.json` à la racine de ton projet Claude Code :
 
@@ -319,5 +319,5 @@ Le cas le plus productif : tu veux comparer 10 formulations de prompt sur le mê
 
 ## Prochaines étapes
 
-- [MCP ComfyUI local, tutoriel complet](/fr/mcp/comfyui-mcp-local/) : mise en place de ComfyUI depuis zéro, installation de Flux Schnell, et connexion initiale à Claude Code.
-- [Panorama Claude Code + IA générative](/fr/use-cases/ia-generative-creative/) : les quatre patterns d'intégration et la matrice de décision pour choisir entre local et cloud.
+- [MCP ComfyUI local, tutoriel complet](/mcp/comfyui-mcp-local/) : mise en place de ComfyUI depuis zéro, installation de Flux Schnell, et connexion initiale à Claude Code.
+- [Panorama Claude Code + IA générative](/use-cases/ia-generative-creative/) : les quatre patterns d'intégration et la matrice de décision pour choisir entre local et cloud.

@@ -51,7 +51,7 @@ Tu installes ComfyUI sur ta machine, tu lances un serveur MCP qui expose une API
 Les valeurs de latence ci-dessus sont des ordres de grandeur observés sur des configurations RTX 3090 / 4090 avec Flux Schnell fp8 en 4 étapes. Elles varient selon le GPU, la résolution cible et le nombre d'étapes de débruitage.
 </Callout>
 
-Pour la mise en place complète, voir [Tuto C2 : MCP ComfyUI local](/fr/mcp/comfyui-mcp-local/).
+Pour la mise en place complète, voir [MCP ComfyUI local](/mcp/comfyui-mcp-local/).
 
 ---
 
@@ -100,7 +100,7 @@ Tu construis un agent autonome avec le SDK Anthropic. L'agent reçoit une demand
 
 **Quand l'utiliser :** tu veux automatiser la génération dans un pipeline GitHub Actions ou Vercel, tu génères des images depuis un serveur sans GPU, tu as besoin de paralléliser la génération de centaines d'images, ou tu veux intégrer la génération dans un workflow éditorial complet.
 
-Pour l'implémentation complète en TypeScript et Python, voir [Tuto C3 : Agent Claude SDK](/fr/agents/agent-generation-assets/).
+Pour l'implémentation complète en TypeScript et Python, voir [Agent Claude SDK : générer et publier des assets](/agents/agent-generation-assets/).
 
 ---
 
@@ -149,7 +149,7 @@ Le coût d'un appel API cloud à $0.04 par image représente $20 pour 500 images
 
 Tu bénéficies aussi du contrôle maximal : LoRA pour ton style graphique propre, ControlNet pour respecter des gabarits, résolutions personnalisées. Et tes données ne sortent jamais de ta machine.
 
-Pour démarrer : [Tuto C2 : MCP ComfyUI local](/fr/mcp/comfyui-mcp-local/).
+Pour démarrer : [MCP ComfyUI local](/mcp/comfyui-mcp-local/).
 
 ### Tu veux intégrer la génération dans un pipeline CI/CD
 
@@ -159,7 +159,7 @@ Un runner GitHub Actions n'a pas de GPU. Une edge function Vercel non plus. Le p
 
 C'est aussi le pattern le plus robuste pour la production : tu contrôles exactement ce qui se passe, tu peux ajouter des retry, des fallbacks, des logs structurés, une intégration avec ton système d'alerte.
 
-Pour démarrer : [Tuto C3 : Agent Claude SDK](/fr/agents/agent-generation-assets/).
+Pour démarrer : [Agent Claude SDK : générer et publier des assets](/agents/agent-generation-assets/).
 
 ### Tu veux tester rapidement sans installer quoi que ce soit
 
@@ -193,7 +193,7 @@ Flux 1.1 Pro de Black Forest Labs n'est disponible que via des API cloud (Replic
 
 Les quatre patterns sont décrits ici en surface. Chacun fait l'objet d'un tuto dédié :
 
-- [Tuto C2 : MCP ComfyUI local](/fr/mcp/comfyui-mcp-local/) : installation de ComfyUI, Flux Schnell, serveur MCP, premier prompt depuis Claude Code.
-- [Tuto C3 : Agent Claude SDK](/fr/agents/agent-generation-assets/) : implémentation complète de l'agent en Python et TypeScript, gestion des erreurs, calcul du coût réel.
-- [Piloter un workflow ComfyUI JSON](/fr/mcp/comfyui-workflow-piloting/) : éditer dynamiquement un workflow exporté depuis Claude Code (sampler, ControlNet, A/B de prompts).
-- [Concevoir un workflow MCP avec Playwright](/fr/mcp/workflow-design-playwright/) : pour les workflows visuels pilotés par navigateur, une approche complémentaire à la génération d'images.
+- [MCP ComfyUI local](/mcp/comfyui-mcp-local/) : installation de ComfyUI, Flux Schnell, serveur MCP, premier prompt depuis Claude Code.
+- [Agent Claude SDK : générer et publier des assets](/agents/agent-generation-assets/) : implémentation complète de l'agent en Python et TypeScript, gestion des erreurs, calcul du coût réel.
+- [Piloter un workflow ComfyUI JSON](/mcp/comfyui-workflow-piloting/) : éditer dynamiquement un workflow exporté depuis Claude Code (sampler, ControlNet, A/B de prompts).
+- [Concevoir un workflow MCP avec Playwright](/mcp/workflow-design-playwright/) : pour les workflows visuels pilotés par navigateur, une approche complémentaire à la génération d'images.

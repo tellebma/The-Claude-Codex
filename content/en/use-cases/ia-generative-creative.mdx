@@ -51,7 +51,7 @@ You install ComfyUI on your machine, run an MCP server that exposes an API to Cl
 The latency figures above are ballpark estimates observed on RTX 3090 / 4090 setups running Flux Schnell fp8 at 4 denoising steps. They vary with GPU model, output resolution, and step count.
 </Callout>
 
-For the full setup guide, see [Tutorial C2: local ComfyUI MCP](/en/mcp/comfyui-mcp-local/).
+For the full setup guide, see [Local ComfyUI MCP](/mcp/comfyui-mcp-local/).
 
 ---
 
@@ -100,7 +100,7 @@ You build an autonomous agent using the Anthropic SDK. The agent receives a natu
 
 **When to use it:** you want to automate generation in a GitHub Actions or Vercel pipeline, you're generating images from a server with no GPU, you need to parallelize generation of hundreds of images, or you want to integrate generation into a complete editorial workflow.
 
-For the full TypeScript and Python implementation, see [Tutorial C3: Claude Agent SDK](/en/agents/agent-generation-assets/).
+For the full TypeScript and Python implementation, see [Claude Agent SDK: generate and publish assets](/agents/agent-generation-assets/).
 
 ---
 
@@ -149,7 +149,7 @@ Cloud API calls at $0.04 per image add up to $20 for 500 images. Over a year, th
 
 You also get maximum control: LoRA for your own graphic style, ControlNet to respect layout templates, custom resolutions. And your data never leaves your machine.
 
-Get started: [Tutorial C2: local ComfyUI MCP](/en/mcp/comfyui-mcp-local/).
+Get started: [Local ComfyUI MCP](/mcp/comfyui-mcp-local/).
 
 ### You want to plug image generation into a CI/CD pipeline
 
@@ -159,7 +159,7 @@ A GitHub Actions runner has no GPU. A Vercel edge function doesn't either. Patte
 
 It's also the most robust pattern for production: you control exactly what happens, you can add retries, fallbacks, structured logs, and alerting integration.
 
-Get started: [Tutorial C3: Claude Agent SDK](/en/agents/agent-generation-assets/).
+Get started: [Claude Agent SDK: generate and publish assets](/agents/agent-generation-assets/).
 
 ### You want to test quickly without installing anything
 
@@ -193,7 +193,7 @@ Black Forest Labs' Flux 1.1 Pro is only available through cloud APIs (Replicate 
 
 Each of the four patterns has a dedicated deep-dive tutorial:
 
-- [Tutorial C2: local ComfyUI MCP](/en/mcp/comfyui-mcp-local/): ComfyUI setup, Flux Schnell, MCP server, first prompt from Claude Code.
-- [Tutorial C3: Claude Agent SDK](/en/agents/agent-generation-assets/): full agent implementation in Python and TypeScript, error handling, real cost breakdown.
-- [Pilot a ComfyUI JSON workflow](/en/mcp/comfyui-workflow-piloting/): dynamically edit an exported workflow from Claude Code (sampler, ControlNet, prompt A/B testing).
-- [Design an MCP workflow with Playwright](/en/mcp/workflow-design-playwright/): for browser-driven visual workflows, a complementary approach to image generation.
+- [Local ComfyUI MCP](/mcp/comfyui-mcp-local/): ComfyUI setup, Flux Schnell, MCP server, first prompt from Claude Code.
+- [Claude Agent SDK: generate and publish assets](/agents/agent-generation-assets/): full agent implementation in Python and TypeScript, error handling, real cost breakdown.
+- [Pilot a ComfyUI JSON workflow](/mcp/comfyui-workflow-piloting/): dynamically edit an exported workflow from Claude Code (sampler, ControlNet, prompt A/B testing).
+- [Design an MCP workflow with Playwright](/mcp/workflow-design-playwright/): for browser-driven visual workflows, a complementary approach to image generation.

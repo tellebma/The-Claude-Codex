@@ -17,9 +17,9 @@ themes: ["tutorial", "architecture", "tooling"]
 
 Tu veux automatiser la génération d'images pour ton blog, tes réseaux, ou ton pipeline de contenu ? Cet article te montre comment bâtir un agent Claude SDK complet : il reçoit une demande en langage naturel, génère une image via l'API Replicate/Flux, l'optimise en WebP, puis la publie sur ton storage. Le tout orchestré par Claude avec trois outils simples.
 
-## 1. Pourquoi préférer le cloud pour la génération d'images
+## Pourquoi préférer le cloud pour la génération d'images
 
-La génération d'images en local (via ComfyUI ou Automatic1111) a ses avantages : tu contrôles tout, les coûts au volume sont faibles, et tu peux personnaliser les modèles. Mais elle impose un GPU dédié, un serveur toujours allumé, et une infrastructure à maintenir. Pour l'article sur ComfyUI local, voir [C2 : MCP ComfyUI local](/fr/mcp/comfyui-mcp-local/).
+La génération d'images en local (via ComfyUI ou Automatic1111) a ses avantages : tu contrôles tout, les coûts au volume sont faibles, et tu peux personnaliser les modèles. Mais elle impose un GPU dédié, un serveur toujours allumé, et une infrastructure à maintenir. Pour l'article sur ComfyUI local, voir [MCP ComfyUI local](/mcp/comfyui-mcp-local/).
 
 Le cloud change l'équation dans plusieurs situations :
 
@@ -47,12 +47,12 @@ Les chiffres de latence ci-dessous (5-20s en local, 4-10s en cloud) sont des ord
 
 Le détail du choix local vs cloud (seuils de volume, coût total sur 1000 images) fera l'objet d'un comparatif dédié à venir.
 
-## 2. Architecture de l'agent
+## Architecture de l'agent
 
 <Callout type="info" title="Vue d'ensemble de l'agent">
 L'agent repose sur trois outils que Claude orchestre selon la demande :
 
-```
+```text
 Claude Agent (claude-sonnet-4-6)
   ├── tool: generate_image
   │     └── Appelle Replicate API (Flux 1.1 Pro)
@@ -72,7 +72,7 @@ Ce pattern en trois outils est volontairement simple. Tu peux l'étendre avec un
 
 **Pourquoi laisser Claude décider de l'ordre des outils ?** L'agent peut parfois choisir d'appeler `optimize_webp` avant même que `generate_image` ait fini si tu lui passes une URL existante. Cette flexibilité est le coeur du pattern agentic : Claude adapte la séquence selon le contexte, pas selon un script figé.
 
-## 3. Implémentation step-by-step
+## Implémentation pas à pas
 
 L'agent se construit en quatre étapes identiques quel que soit le langage. On commence par la version Python, puis la version TypeScript équivalente plus bas. Choisis celle qui correspond à ta stack, les deux produisent le même comportement.
 
@@ -233,7 +233,7 @@ def upload_storage(local_path: str, s3_key: str) -> str:
 
 </Step>
 
-<Step title="Boucle d'exécution de l'agent" stepNumber={4}>
+<Step title="Boucle d'exécution de l'agent" stepNumber={4} isLast>
 
 ```python
 # agent.py
@@ -495,7 +495,7 @@ export async function uploadStorage(
 
 </Step>
 
-<Step title="Boucle d'exécution de l'agent" stepNumber={4}>
+<Step title="Boucle d'exécution de l'agent" stepNumber={4} isLast>
 
 ```typescript
 // agent.ts
@@ -606,7 +606,7 @@ npx tsx agent.ts
 
 </Steps>
 
-## 4. Gestion des erreurs
+## Gestion des erreurs
 
 Deux types d'erreurs dominent en pratique : les limites de débit (rate limits) et les filtres de contenu.
 
@@ -686,7 +686,7 @@ client = replicate.Client(
 output = client.run("black-forest-labs/flux-1.1-pro", input={"prompt": "..."})
 ```
 
-## 5. Coût d'exécution réel
+## Coût d'exécution réel
 
 <Callout type="info" title="Tarifs constatés au 2026-05-11">
 Les tarifs ci-dessous sont ceux relevés sur les pages officielles Replicate et Anthropic à la date du 2026-05-11. Ils peuvent évoluer.
@@ -732,10 +732,10 @@ Pour des campagnes de contenu massives, deux leviers :
 2. Génère en parallèle : envoie plusieurs prompts à Replicate simultanément. Le coût reste identique, mais le temps total est divisé par le nombre de requêtes parallèles.
 </Callout>
 
-## 6. Prochaines étapes
+## Prochaines étapes
 
 L'agent que tu viens de construire est une base solide. Tu peux l'intégrer dans des workflows plus larges :
 
-- [Panorama Claude Code + IA générative](/fr/use-cases/ia-generative-creative/) : les quatre patterns d'intégration comparés, pour situer cet agent dans l'ensemble des approches possibles.
-- [Le SDK agent en détail](/fr/agents/agent-sdk/) : aller plus loin sur la boucle d'exécution, le streaming et la gestion d'état d'un agent Claude.
+- [Panorama Claude Code + IA générative](/use-cases/ia-generative-creative/) : les quatre patterns d'intégration comparés, pour situer cet agent dans l'ensemble des approches possibles.
+- [Le SDK agent en détail](/agents/agent-sdk/) : aller plus loin sur la boucle d'exécution, le streaming et la gestion d'état d'un agent Claude.
 - Un comparatif local vs cloud (seuils de volume, coût total) et un pipeline d'assets blog Next.js automatique compléteront cette série prochainement.

@@ -199,7 +199,7 @@ The download takes time: 17 GB to transfer.
 
 </Step>
 
-<Step title="Launch ComfyUI" stepNumber={6}>
+<Step title="Launch ComfyUI" stepNumber={6} isLast>
 
 ```bash
 python main.py
@@ -273,7 +273,7 @@ Once connected, Claude Code has access to the following tools:
 
 ### Alternative: minimal TypeScript wrapper
 
-If you prefer a more direct integration without an intermediary server, here is a minimal TypeScript wrapper that POSTs directly to the ComfyUI API. It uses the same `McpServer` + `server.tool()` API as the [Build a TypeScript MCP](/en/mcp/create-mcp-typescript/) tutorial, to stay consistent with the other site examples.
+If you prefer a more direct integration without an intermediary server, here is a minimal TypeScript wrapper that POSTs directly to the ComfyUI API. It uses the same `McpServer` + `server.tool()` API as the [Build a TypeScript MCP](/mcp/create-mcp-typescript/) tutorial, to stay consistent with the other site examples.
 
 ```typescript
 // comfyui-mcp-wrapper.ts
@@ -439,7 +439,7 @@ The `GPU-Util` column should jump to 90-100% during generation. If it stays at 0
 
 You have ComfyUI running locally and Claude Code that can generate images. The logical next moves:
 
-- [Piloting a ComfyUI JSON workflow from Claude Code](/en/mcp/comfyui-workflow-piloting/): go further with custom workflows, advanced sampling parameters, and img2img techniques.
-- [Claude Code + generative AI overview](/en/use-cases/ia-generative-creative/): place this local setup among the four integration patterns, and learn when to switch to the cloud.
+- [Piloting a ComfyUI JSON workflow from Claude Code](/mcp/comfyui-workflow-piloting/): go further with custom workflows, advanced sampling parameters, and img2img techniques.
+- [Claude Code + generative AI overview](/use-cases/ia-generative-creative/): place this local setup among the four integration patterns, and learn when to switch to the cloud.
 
 A detailed local vs cloud comparison (total cost, when a local GPU becomes worth it against Replicate or fal.ai APIs) will round out this series.

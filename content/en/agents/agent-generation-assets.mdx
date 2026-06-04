@@ -17,9 +17,9 @@ themes: ["tutorial", "architecture", "tooling"]
 
 You want to automate image generation for your blog, social media, or content pipeline? This article shows you how to build a complete Claude SDK agent: it receives a request in natural language, generates an image via the Replicate/Flux API, optimizes it to WebP, then publishes it to your storage. Everything orchestrated by Claude with three simple tools.
 
-## 1. Why prefer the cloud for image generation
+## Why prefer the cloud for image generation
 
-Local image generation (via ComfyUI or Automatic1111) has its advantages: you control everything, costs at volume are low, and you can customize models. But it requires a dedicated GPU, an always-on server, and infrastructure to maintain. For the article on local ComfyUI, see [C2 - Local ComfyUI MCP](/en/mcp/comfyui-mcp-local/).
+Local image generation (via ComfyUI or Automatic1111) has its advantages: you control everything, costs at volume are low, and you can customize models. But it requires a dedicated GPU, an always-on server, and infrastructure to maintain. For the article on local ComfyUI, see [Local ComfyUI MCP](/mcp/comfyui-mcp-local/).
 
 The cloud changes the equation in several situations:
 
@@ -47,12 +47,12 @@ The latency figures below (5-20s local, 4-10s cloud) are rough orders of magnitu
 
 The full local vs cloud trade-off (volume thresholds, total cost over 1000 images) will be covered in a dedicated comparison coming soon.
 
-## 2. Agent architecture
+## Agent architecture
 
 <Callout type="info" title="Agent overview">
 The agent relies on three tools that Claude orchestrates based on the request:
 
-```
+```text
 Claude Agent (claude-sonnet-4-6)
   ├── tool: generate_image
   │     └── Calls Replicate API (Flux 1.1 Pro)
@@ -72,7 +72,7 @@ This three-tool pattern is intentionally simple. You can extend it with a fourth
 
 **Why let Claude decide the tool order?** The agent can sometimes choose to call `optimize_webp` before `generate_image` has finished if you pass it an existing URL. This flexibility is the core of the agentic pattern: Claude adapts the sequence to context, rather than following a fixed script.
 
-## 3. Step-by-step implementation
+## Step-by-step implementation
 
 The agent is built in four identical steps regardless of language. We start with the Python version, then the equivalent TypeScript version further down. Pick the one that matches your stack, both produce the same behavior.
 
@@ -233,7 +233,7 @@ def upload_storage(local_path: str, s3_key: str) -> str:
 
 </Step>
 
-<Step title="Agent execution loop" stepNumber={4}>
+<Step title="Agent execution loop" stepNumber={4} isLast>
 
 ```python
 # agent.py
@@ -494,7 +494,7 @@ export async function uploadStorage(
 
 </Step>
 
-<Step title="Agent execution loop" stepNumber={4}>
+<Step title="Agent execution loop" stepNumber={4} isLast>
 
 ```typescript
 // agent.ts
@@ -605,7 +605,7 @@ npx tsx agent.ts
 
 </Steps>
 
-## 4. Error handling
+## Error handling
 
 Two types of errors dominate in practice: rate limits and content filters.
 
@@ -685,7 +685,7 @@ client = replicate.Client(
 output = client.run("black-forest-labs/flux-1.1-pro", input={"prompt": "..."})
 ```
 
-## 5. Real execution cost
+## Real execution cost
 
 <Callout type="info" title="Prices recorded on 2026-05-11">
 The prices below were read from the official Replicate and Anthropic pages on 2026-05-11. They may change.
@@ -731,10 +731,10 @@ For large content campaigns, two levers:
 2. Generate in parallel: send multiple prompts to Replicate simultaneously. The cost stays the same, but total execution time is divided by the number of parallel requests.
 </Callout>
 
-## 6. Next steps
+## Next steps
 
 The agent you just built is a solid foundation. You can integrate it into broader workflows:
 
-- [Claude Code + generative AI overview](/en/use-cases/ia-generative-creative/): the four integration patterns compared, to place this agent among the full range of approaches.
-- [The agent SDK in depth](/en/agents/agent-sdk/): go further on the execution loop, streaming and state management of a Claude agent.
+- [Claude Code + generative AI overview](/use-cases/ia-generative-creative/): the four integration patterns compared, to place this agent among the full range of approaches.
+- [The agent SDK in depth](/agents/agent-sdk/): go further on the execution loop, streaming and state management of a Claude agent.
 - A local vs cloud comparison (volume thresholds, total cost) and an automated Next.js blog asset pipeline will round out this series soon.

@@ -199,7 +199,7 @@ Le téléchargement prend du temps : 17 Go à télécharger.
 
 </Step>
 
-<Step title="Lancer ComfyUI" stepNumber={6}>
+<Step title="Lancer ComfyUI" stepNumber={6} isLast>
 
 ```bash
 python main.py
@@ -273,7 +273,7 @@ Une fois connecté, Claude Code dispose des outils suivants :
 
 ### Alternative : wrapper TypeScript minimal
 
-Si tu préfères une intégration plus directe sans serveur intermédiaire, voici un wrapper minimal en TypeScript qui POST directement sur l'API ComfyUI. Il utilise la même API `McpServer` + `server.tool()` que le tutoriel [Créer un MCP en TypeScript](/fr/mcp/create-mcp-typescript/), pour rester cohérent avec les autres exemples du site.
+Si tu préfères une intégration plus directe sans serveur intermédiaire, voici un wrapper minimal en TypeScript qui POST directement sur l'API ComfyUI. Il utilise la même API `McpServer` + `server.tool()` que le tutoriel [Créer un MCP en TypeScript](/mcp/create-mcp-typescript/), pour rester cohérent avec les autres exemples du site.
 
 ```typescript
 // comfyui-mcp-wrapper.ts
@@ -439,7 +439,7 @@ La colonne `GPU-Util` doit monter à 90-100% pendant la génération. Si elle re
 
 Tu as ComfyUI qui tourne en local et Claude Code qui peut générer des images. La suite logique :
 
-- [Piloter un workflow JSON ComfyUI depuis Claude Code](/fr/mcp/comfyui-workflow-piloting/) : aller plus loin avec les workflows personnalisés, les paramètres de sampling avancés et les techniques img2img.
-- [Panorama Claude Code + IA générative](/fr/use-cases/ia-generative-creative/) : situer ce setup local parmi les quatre patterns d'intégration, et savoir quand basculer vers le cloud.
+- [Piloter un workflow JSON ComfyUI depuis Claude Code](/mcp/comfyui-workflow-piloting/) : aller plus loin avec les workflows personnalisés, les paramètres de sampling avancés et les techniques img2img.
+- [Panorama Claude Code + IA générative](/use-cases/ia-generative-creative/) : situer ce setup local parmi les quatre patterns d'intégration, et savoir quand basculer vers le cloud.
 
 Un comparatif détaillé local vs cloud (coût total, quand un GPU local devient rentable face aux APIs Replicate ou fal.ai) viendra compléter cette série.

@@ -416,7 +416,9 @@
       "create-mcp-typescript": "Create a TypeScript MCP",
       "create-mcp-python": "Create a Python MCP",
       "advanced-protocol": "Advanced MCP protocol",
-      "workflow-design-playwright": "Playwright design workflow"
+      "workflow-design-playwright": "Playwright design workflow",
+      "comfyui-mcp-local": "Local ComfyUI MCP (GPU)",
+      "comfyui-workflow-piloting": "Pilot a ComfyUI JSON workflow"
     },
     "plugins": {
       "title": "Plugins",
@@ -452,7 +454,8 @@
       "orchestration-patterns": "Command/Agent/Skill patterns",
       "agent-sdk": "Claude Agent SDK",
       "performance-limits": "Performance & limits",
-      "background-agents": "Background Agents"
+      "background-agents": "Background Agents",
+      "agent-generation-assets": "Asset generation agent"
     },
     "prompting": {
       "title": "Prompting",
@@ -486,7 +489,8 @@
       "overview": "Overview",
       "business": "8 business use cases",
       "success-stories": "Success stories",
-      "no-code": "No-code tutorials"
+      "no-code": "No-code tutorials",
+      "ia-generative-creative": "Claude Code + generative AI"
     },
     "ecosystem": {
       "title": "Ecosystem",

@@ -653,6 +653,25 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "repetitif",
     ],
   },
+  // Claude Code + IA générative
+  {
+    title: "Claude Code + IA générative : un workflow créatif moderne",
+    description:
+      "Intégrer la génération d'images IA dans ton flow Claude Code. 4 patterns (MCP local, MCP cloud, Agent SDK, Skill) comparés sur latence, coût et contrôle.",
+    href: "/use-cases/ia-generative-creative",
+    section: "Cas d'usage",
+    keywords: [
+      "ia générative claude",
+      "ia générative claude code",
+      "génération images ia",
+      "workflow créatif claude code",
+      "comfyui claude code",
+      "flux replicate",
+      "patterns intégration ia",
+      "mcp local cloud agent skill",
+      "générer des images claude code",
+    ],
+  },
   // Ecosystem
   {
     title: "Ecosysteme Claude Code : repos, skills, plugins, MCP",
@@ -1648,6 +1667,25 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "alertes",
     ],
   },
+  // Agent de génération d'assets
+  {
+    title: "Agent Claude qui génère et publie tes assets visuels",
+    description:
+      "Tutoriel pour bâtir un agent Claude SDK qui génère des images via Flux/Replicate, optimise en WebP et upload. Architecture, code TypeScript et Python, coûts.",
+    href: "/agents/agent-generation-assets",
+    section: "Agents",
+    keywords: [
+      "agent génération assets",
+      "agent claude images",
+      "claude agent sdk images",
+      "ia générative claude",
+      "flux replicate api",
+      "génération images agent",
+      "optimisation webp",
+      "upload storage assets",
+      "pipeline assets visuels",
+    ],
+  },
   // Content (MDX)
   {
     title: "Contenus éditoriaux",
@@ -1762,6 +1800,45 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "designer avec claude code",
       "iteration design",
       "playwright screenshot claude code",
+    ],
+  },
+  // ComfyUI MCP local
+  {
+    title: "ComfyUI MCP local : générer des images sur ton GPU",
+    description:
+      "Tutoriel pour brancher ComfyUI à Claude Code via MCP, générer des images en local sur ton GPU, installer Flux Schnell et débugger les erreurs CUDA/OOM.",
+    href: "/mcp/comfyui-mcp-local",
+    section: "MCP",
+    keywords: [
+      "comfyui mcp",
+      "comfyui claude code",
+      "générer des images claude code",
+      "ia générative claude",
+      "génération images locale gpu",
+      "flux schnell",
+      "stable diffusion local",
+      "diffusion model",
+      "cuda oom",
+      "image generation mcp",
+    ],
+  },
+  // ComfyUI workflow piloting
+  {
+    title: "Piloter un workflow ComfyUI JSON depuis Claude Code",
+    description:
+      "Tutoriel pour exposer un workflow ComfyUI exporté en JSON via un outil MCP custom et le faire éditer dynamiquement par Claude Code (sampler, ControlNet).",
+    href: "/mcp/comfyui-workflow-piloting",
+    section: "MCP",
+    keywords: [
+      "comfyui workflow",
+      "comfyui json",
+      "workflow comfyui claude code",
+      "mcp custom comfyui",
+      "controlnet",
+      "sampler comfyui",
+      "éditer workflow ia",
+      "piloter comfyui",
+      "ia générative claude",
     ],
   },
   // MCP Security

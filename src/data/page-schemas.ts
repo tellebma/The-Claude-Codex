@@ -228,6 +228,199 @@ const claudeCouncilHowTo: Record<string, SchemaBuilder> = {
 };
 
 /**
+ * HowTo : installer ComfyUI en local et le brancher a Claude Code via MCP.
+ * Etapes derivees des <Step> du MDX (Cloner -> Lancer ComfyUI).
+ */
+const comfyuiMcpLocalHowTo: Record<string, SchemaBuilder> = {
+  fr: (locale) =>
+    createHowToSchema({
+      title: "Brancher ComfyUI a Claude Code via MCP",
+      description:
+        "Installer ComfyUI en local et generer des images sur son GPU depuis Claude Code via MCP, etape par etape.",
+      url: url("/mcp/comfyui-mcp-local"),
+      locale,
+      steps: [
+        {
+          name: "Cloner ComfyUI",
+          text: "Recuperer le depot ComfyUI en local avec git clone.",
+        },
+        {
+          name: "Creer un environnement virtuel Python",
+          text: "Isoler les dependances dans un venv Python dedie.",
+        },
+        {
+          name: "Installer PyTorch avec support CUDA",
+          text: "Installer la build PyTorch correspondant a la version CUDA de la machine.",
+        },
+        {
+          name: "Installer les dependances ComfyUI",
+          text: "Installer les paquets requis depuis requirements.txt.",
+        },
+        {
+          name: "Telecharger Flux Schnell (fp8)",
+          text: "Recuperer le modele Flux Schnell en version fp8 et le placer dans le dossier des modeles.",
+        },
+        {
+          name: "Lancer ComfyUI",
+          text: "Demarrer le serveur ComfyUI, puis le brancher a Claude Code via le MCP pour generer des images.",
+        },
+      ],
+    }),
+  en: (locale) =>
+    createHowToSchema({
+      title: "Connect ComfyUI to Claude Code via MCP",
+      description:
+        "Install ComfyUI locally and generate images on your GPU from Claude Code via MCP, step by step.",
+      url: url("/mcp/comfyui-mcp-local"),
+      locale,
+      steps: [
+        {
+          name: "Clone ComfyUI",
+          text: "Pull the ComfyUI repository locally with git clone.",
+        },
+        {
+          name: "Create a Python virtual environment",
+          text: "Isolate dependencies in a dedicated Python venv.",
+        },
+        {
+          name: "Install PyTorch with CUDA support",
+          text: "Install the PyTorch build matching the machine's CUDA version.",
+        },
+        {
+          name: "Install ComfyUI dependencies",
+          text: "Install the required packages from requirements.txt.",
+        },
+        {
+          name: "Download Flux Schnell (fp8)",
+          text: "Download the Flux Schnell fp8 model and place it in the models folder.",
+        },
+        {
+          name: "Launch ComfyUI",
+          text: "Start the ComfyUI server, then wire it to Claude Code via MCP to generate images.",
+        },
+      ],
+    }),
+};
+
+/**
+ * HowTo : piloter un workflow ComfyUI JSON depuis Claude Code via un MCP custom.
+ * Etapes derivees des <Step> du MDX.
+ */
+const comfyuiWorkflowPilotingHowTo: Record<string, SchemaBuilder> = {
+  fr: (locale) =>
+    createHowToSchema({
+      title: "Piloter un workflow ComfyUI JSON depuis Claude Code",
+      description:
+        "Exposer un workflow ComfyUI exporte en JSON via un MCP custom et le faire editer dynamiquement par Claude Code.",
+      url: url("/mcp/comfyui-workflow-piloting"),
+      locale,
+      steps: [
+        {
+          name: "Creer le projet et installer les dependances",
+          text: "Initialiser le projet du serveur MCP et installer ses dependances.",
+        },
+        {
+          name: "Preparer le fichier de workflow JSON",
+          text: "Exporter le workflow ComfyUI en JSON (API format) et le placer dans le projet.",
+        },
+        {
+          name: "Ecrire le wrapper MCP",
+          text: "Coder l'outil MCP qui charge le JSON, modifie les noeuds (sampler, ControlNet, prompt) et l'envoie a ComfyUI.",
+        },
+        {
+          name: "Configurer Claude Code pour utiliser le MCP",
+          text: "Declarer le serveur MCP dans Claude Code pour piloter le workflow en langage naturel.",
+        },
+      ],
+    }),
+  en: (locale) =>
+    createHowToSchema({
+      title: "Pilot a ComfyUI JSON workflow from Claude Code",
+      description:
+        "Expose an exported ComfyUI workflow JSON via a custom MCP and have Claude Code edit it dynamically.",
+      url: url("/mcp/comfyui-workflow-piloting"),
+      locale,
+      steps: [
+        {
+          name: "Create the project and install dependencies",
+          text: "Initialize the MCP server project and install its dependencies.",
+        },
+        {
+          name: "Prepare the JSON workflow file",
+          text: "Export the ComfyUI workflow as JSON (API format) and add it to the project.",
+        },
+        {
+          name: "Write the MCP wrapper",
+          text: "Code the MCP tool that loads the JSON, edits nodes (sampler, ControlNet, prompt) and sends it to ComfyUI.",
+        },
+        {
+          name: "Configure Claude Code to use the MCP",
+          text: "Register the MCP server in Claude Code to drive the workflow in natural language.",
+        },
+      ],
+    }),
+};
+
+/**
+ * HowTo : agent Claude SDK qui genere et publie des assets visuels.
+ * Etapes derivees du pipeline decrit dans le MDX (generer -> optimiser -> upload).
+ */
+const agentGenerationAssetsHowTo: Record<string, SchemaBuilder> = {
+  fr: (locale) =>
+    createHowToSchema({
+      title: "Construire un agent Claude qui genere et publie des assets",
+      description:
+        "Batir un agent Claude SDK qui genere des images via Flux/Replicate, les optimise en WebP et les upload sur un storage.",
+      url: url("/agents/agent-generation-assets"),
+      locale,
+      steps: [
+        {
+          name: "Cadrer l'agent et ses outils",
+          text: "Definir le role de l'agent et les outils dont il dispose : generation d'image, optimisation, upload.",
+        },
+        {
+          name: "Generer l'image via Flux/Replicate",
+          text: "Appeler l'API Flux/Replicate depuis l'outil de generation pour produire l'image.",
+        },
+        {
+          name: "Optimiser en WebP",
+          text: "Convertir et compresser l'image generee en WebP pour le web.",
+        },
+        {
+          name: "Uploader sur le storage",
+          text: "Envoyer l'asset optimise sur le storage cible et recuperer son URL publique.",
+        },
+      ],
+    }),
+  en: (locale) =>
+    createHowToSchema({
+      title: "Build a Claude agent that generates and publishes assets",
+      description:
+        "Build a Claude SDK agent that generates images via Flux/Replicate, optimizes them to WebP and uploads them to storage.",
+      url: url("/agents/agent-generation-assets"),
+      locale,
+      steps: [
+        {
+          name: "Frame the agent and its tools",
+          text: "Define the agent's role and the tools it can use: image generation, optimization, upload.",
+        },
+        {
+          name: "Generate the image via Flux/Replicate",
+          text: "Call the Flux/Replicate API from the generation tool to produce the image.",
+        },
+        {
+          name: "Optimize to WebP",
+          text: "Convert and compress the generated image to WebP for the web.",
+        },
+        {
+          name: "Upload to storage",
+          text: "Send the optimized asset to the target storage and return its public URL.",
+        },
+      ],
+    }),
+};
+
+/**
  * ItemList : les 5 outils d'orchestration multi-agents compares dans
  * l'article (Claude Code natif, Paperclip, claude-office, CrewAI, LangGraph).
  * Sources verifiees 2026-06-04 (cf. commentaires de tete du MDX).
@@ -304,12 +497,15 @@ const agentOrchestrationItemList: Record<string, SchemaBuilder> = {
 };
 
 const PAGE_SCHEMAS: Record<string, Record<string, SchemaBuilder>> = {
-  "/content/agent-team-orchestration": agentOrchestrationItemList,
   "/mcp/workflow-design-playwright": workflowDesignPlaywrightHowTo,
+  "/mcp/comfyui-mcp-local": comfyuiMcpLocalHowTo,
+  "/mcp/comfyui-workflow-piloting": comfyuiWorkflowPilotingHowTo,
+  "/agents/agent-generation-assets": agentGenerationAssetsHowTo,
   "/content/refaire-une-card-avec-impeccable-et-playwright": redoCardHowTo,
   "/content/redo-a-card-with-impeccable-and-playwright": redoCardHowTo,
   "/skills/huashu-design": huashuDesignSoftware,
   "/skills/claude-council": claudeCouncilHowTo,
+  "/content/agent-team-orchestration": agentOrchestrationItemList,
 };
 
 /**

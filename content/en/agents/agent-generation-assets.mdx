@@ -2,10 +2,10 @@
 title: "Build a Claude agent that generates and publishes your visual assets"
 description: "Tutorial to build a Claude SDK agent that generates images via Flux/Replicate API, optimizes to WebP and uploads to your storage. Architecture, TypeScript and Python code, error handling and real cost."
 badge: "NEW"
-order: 10
+order: 11
 section: "agents"
 datePublished: "2026-05-11"
-dateModified: "2026-05-11"
+dateModified: "2026-06-04"
 themes: ["tutorial", "architecture", "tooling"]
 ---
 
@@ -14,8 +14,6 @@ themes: ["tutorial", "architecture", "tooling"]
 {/* source: replicate.com/black-forest-labs/flux-1.1-pro, consulted 2026-05-11 */}
 {/* source: replicate.com/black-forest-labs/flux-dev, consulted 2026-05-11 */}
 {/* source: replicate.com/black-forest-labs/flux-schnell, consulted 2026-05-11 */}
-
-# Build a Claude agent that generates and publishes your visual assets
 
 You want to automate image generation for your blog, social media, or content pipeline? This article shows you how to build a complete Claude SDK agent: it receives a request in natural language, generates an image via the Replicate/Flux API, optimizes it to WebP, then publishes it to your storage. Everything orchestrated by Claude with three simple tools.
 
@@ -47,7 +45,7 @@ The latency figures below (5-20s local, 4-10s cloud) are rough orders of magnitu
 | CI/CD | Difficult | Native |
 | Data control | Full | Per Replicate ToS |
 
-For a detailed comparison, see [S3 Comparison - Local vs cloud](/en/use-cases/image-ia-local-vs-cloud/) (coming soon).
+The full local vs cloud trade-off (volume thresholds, total cost over 1000 images) will be covered in a dedicated comparison coming soon.
 
 ## 2. Agent architecture
 
@@ -76,8 +74,9 @@ This three-tool pattern is intentionally simple. You can extend it with a fourth
 
 ## 3. Step-by-step implementation
 
-<Tabs>
-<div label="Python">
+The agent is built in four identical steps regardless of language. We start with the Python version, then the equivalent TypeScript version further down. Pick the one that matches your stack, both produce the same behavior.
+
+### Python version
 
 <Steps>
 
@@ -328,8 +327,7 @@ if __name__ == "__main__":
 
 </Steps>
 
-</div>
-<div label="TypeScript">
+### TypeScript version
 
 <Steps>
 
@@ -607,9 +605,6 @@ npx tsx agent.ts
 
 </Steps>
 
-</div>
-</Tabs>
-
 ## 4. Error handling
 
 Two types of errors dominate in practice: rate limits and content filters.
@@ -740,5 +735,6 @@ For large content campaigns, two levers:
 
 The agent you just built is a solid foundation. You can integrate it into broader workflows:
 
-- [Use case S2 - Automated Next.js blog assets](/en/use-cases/assets-blog-automatique/): full editorial pipeline automation, from writing to published image on your CDN.
-- [S3 Comparison - Local vs cloud](/en/use-cases/image-ia-local-vs-cloud/): when to invest in a local GPU, when to stay on the cloud API. Break-even analysis by volume.
+- [Claude Code + generative AI overview](/en/use-cases/ia-generative-creative/): the four integration patterns compared, to place this agent among the full range of approaches.
+- [The agent SDK in depth](/en/agents/agent-sdk/): go further on the execution loop, streaming and state management of a Claude agent.
+- A local vs cloud comparison (volume thresholds, total cost) and an automated Next.js blog asset pipeline will round out this series soon.

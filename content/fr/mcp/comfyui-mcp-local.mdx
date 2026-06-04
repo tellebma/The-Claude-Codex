@@ -2,10 +2,10 @@
 title: "MCP ComfyUI local : générer des images sur ton GPU depuis Claude Code"
 description: "Tutoriel complet pour brancher ComfyUI à Claude Code via MCP, générer des images en local sur ton GPU, comprendre la diffusion, installer Flux Schnell et débugger les erreurs CUDA/OOM."
 badge: "NEW"
-order: 6
+order: 12
 section: "mcp"
 datePublished: "2026-05-11"
-dateModified: "2026-05-11"
+dateModified: "2026-06-04"
 themes: ["tutorial", "tooling", "architecture"]
 ---
 
@@ -439,5 +439,7 @@ La colonne `GPU-Util` doit monter à 90-100% pendant la génération. Si elle re
 
 Tu as ComfyUI qui tourne en local et Claude Code qui peut générer des images. La suite logique :
 
-- [S1 - Piloter un workflow JSON ComfyUI depuis Claude Code](/fr/mcp/comfyui-workflow-piloting/) : aller plus loin avec les workflows personnalisés, les paramètres de sampling avancés et les techniques img2img.
-- [S3 - IA générative locale vs cloud : comparatif complet](/fr/use-cases/image-ia-local-vs-cloud/) : quand vaut-il vraiment la peine d'avoir un GPU local, et quand les APIs cloud (Replicate, fal.ai) sont-elles plus rentables ?
+- [Piloter un workflow JSON ComfyUI depuis Claude Code](/fr/mcp/comfyui-workflow-piloting/) : aller plus loin avec les workflows personnalisés, les paramètres de sampling avancés et les techniques img2img.
+- [Panorama Claude Code + IA générative](/fr/use-cases/ia-generative-creative/) : situer ce setup local parmi les quatre patterns d'intégration, et savoir quand basculer vers le cloud.
+
+Un comparatif détaillé local vs cloud (coût total, quand un GPU local devient rentable face aux APIs Replicate ou fal.ai) viendra compléter cette série.

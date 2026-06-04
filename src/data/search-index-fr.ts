@@ -2048,6 +2048,26 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
     ],
   },
   {
+    title: "Orchestrer une équipe d'agents Claude",
+    description:
+      "Panorama date des outils pour transformer des sessions Claude en equipe d'agents : Claude Code natif, Paperclip, claude-office, CrewAI et LangGraph compares.",
+    href: "/content/agent-team-orchestration",
+    section: "Contenus",
+    keywords: [
+      "orchestrer agents claude",
+      "equipe d'agents ia",
+      "paperclip",
+      "claude-office",
+      "multi-agents",
+      "agent teams claude code",
+      "subagents",
+      "org chart agents",
+      "crewai",
+      "langgraph",
+      "orchestration multi-agents",
+    ],
+  },
+  {
     title: "Refaire une card avec Impeccable et Playwright",
     description:
       "Exemple Claude Code design : on reprend une vraie card du Codex et on la refait avec Impeccable et Playwright MCP, captures avant/apres a l'appui.",

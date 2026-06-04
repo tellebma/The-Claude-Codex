@@ -11,6 +11,7 @@
 
 import {
   createHowToSchema,
+  createItemListSchema,
   createSoftwareApplicationSchema,
 } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/metadata";
@@ -226,7 +227,84 @@ const claudeCouncilHowTo: Record<string, SchemaBuilder> = {
     }),
 };
 
+/**
+ * ItemList : les 5 outils d'orchestration multi-agents compares dans
+ * l'article (Claude Code natif, Paperclip, claude-office, CrewAI, LangGraph).
+ * Sources verifiees 2026-06-04 (cf. commentaires de tete du MDX).
+ */
+const agentOrchestrationItemList: Record<string, SchemaBuilder> = {
+  fr: (locale) =>
+    createItemListSchema({
+      name: "Outils pour orchestrer une équipe d'agents Claude",
+      description:
+        "Cinq façons d'orchestrer plusieurs agents Claude, du ponctuel à l'organisation persistante, comparées au 4 juin 2026.",
+      locale,
+      items: [
+        {
+          position: 1,
+          name: "Claude Code natif (subagents et agent teams)",
+          url: "https://code.claude.com/docs/en/agent-teams",
+        },
+        {
+          position: 2,
+          name: "Paperclip",
+          url: "https://github.com/paperclipai/paperclip",
+        },
+        {
+          position: 3,
+          name: "claude-office",
+          url: "https://github.com/paulrobello/claude-office",
+        },
+        {
+          position: 4,
+          name: "CrewAI",
+          url: "https://github.com/crewAIInc/crewAI",
+        },
+        {
+          position: 5,
+          name: "LangGraph",
+          url: "https://github.com/langchain-ai/langgraph",
+        },
+      ],
+    }),
+  en: (locale) =>
+    createItemListSchema({
+      name: "Tools to orchestrate a team of Claude agents",
+      description:
+        "Five ways to orchestrate several Claude agents, from one-off to a persistent organization, compared on 4 June 2026.",
+      locale,
+      items: [
+        {
+          position: 1,
+          name: "Native Claude Code (subagents and agent teams)",
+          url: "https://code.claude.com/docs/en/agent-teams",
+        },
+        {
+          position: 2,
+          name: "Paperclip",
+          url: "https://github.com/paperclipai/paperclip",
+        },
+        {
+          position: 3,
+          name: "claude-office",
+          url: "https://github.com/paulrobello/claude-office",
+        },
+        {
+          position: 4,
+          name: "CrewAI",
+          url: "https://github.com/crewAIInc/crewAI",
+        },
+        {
+          position: 5,
+          name: "LangGraph",
+          url: "https://github.com/langchain-ai/langgraph",
+        },
+      ],
+    }),
+};
+
 const PAGE_SCHEMAS: Record<string, Record<string, SchemaBuilder>> = {
+  "/content/agent-team-orchestration": agentOrchestrationItemList,
   "/mcp/workflow-design-playwright": workflowDesignPlaywrightHowTo,
   "/content/refaire-une-card-avec-impeccable-et-playwright": redoCardHowTo,
   "/content/redo-a-card-with-impeccable-and-playwright": redoCardHowTo,

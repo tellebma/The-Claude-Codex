@@ -33,7 +33,7 @@ jobs:
     # Les baselines generees ici sont donc comparables en CI sans bruit cross-env.
     # MAINTENANCE : version d'image a aligner sur @playwright/test (package.json).
     container:
-      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      image: mcr.microsoft.com/playwright:v1.60.0-noble
       options: --ipc=host
     timeout-minutes: 25
     steps:

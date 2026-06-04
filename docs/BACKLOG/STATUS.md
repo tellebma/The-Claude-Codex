@@ -1,6 +1,6 @@
 # Backlog : tableau de bord
 
-> Derniere mise a jour : 2026-06-03 (Merges develop : #257 integration TUTO-6/7/8 + SR-3 + article tokens, puis #261 EPIC Stack design DSK complet hors captures ; Claude Council 8/8 stories en PR #262 ; CI E2E migree en container Playwright)
+> Derniere mise a jour : 2026-06-04 (5 PRs mergees sur develop : #257 TUTO-6/7/8 + SR-3 + tokens, #261 EPIC Stack design complet, #262 Claude Council 8/8, #265 reprise articles IA generative (4 articles), #264 article agent-team-orchestration ; develop = 125 articles FR ; CI E2E en container Playwright ; nettoyage 16 branches mortes + 6 PRs redondantes)
 
 ---
 
@@ -16,18 +16,20 @@
 | [Bugfix search Vercel redirect 2026-05](EPIC-bugfix-search-vercel-redirect-2026-05.md) | 2 | 2 | 0 | 0 | 100% ✅ (cloture 2026-05-10) |
 | [SEO/GEO mai 2026](EPIC-seo-geo-may-2026.md) | 9 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-11) |
 | [Vercel Metrics 2026](EPIC-vercel-metrics-2026.md) | 11 | 9 | 0 | 0 | 100% ✅ (cloture 2026-05-27 : 9 livres, VM-8 + VM-12 descopes — Vercel PoC, Matomo source de verite) |
-| [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 9 | 0 | 1 | 90% 🔄 (Sprint 1 : DSK-1/3/4/5/9/10 ; Sprint 2/3 : DSK-6/7/8 livres 2026-06-03 via pipeline 4 agents ; ~24/28 SP — branche feat/dsk-content-2026-06 ; DSK-2 deja sur develop = EPIC complet hors captures Playwright manuelles DSK-6/8) |
+| [Stack design Claude Code 2026-05](EPIC-design-stack-skills-mcp-2026-05.md) | 10 | 10 | 0 | 0 | 100% ✅ (merge develop #261 le 2026-06-04 ; pipeline 4 agents pour DSK-6/7/8, relicence MIT Huashu reconciliee ; reliquat hors stories : captures Playwright manuelles DSK-6/8) |
 | [Ecosystem trending repos 2026-05](EPIC-ecosystem-trending-repos-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture 2026-05-12) |
 | [Polish heros sections 2026-05](EPIC-polish-section-heroes-content-grid-2026-05.md) | 12 | 0 | 0 | 12 | 0% 🆕 (en attente skill Impeccable) |
 | [Langue espagnole 2026-05](EPIC-i18n-espagnol-2026-05.md) | 11 | 0 | 0 | 11 | 0% 🆕 (~500M locuteurs natifs, vide concurrentiel ES) |
 | [Content /security-review 2026-05](EPIC-content-security-review-2026-05.md) | 8 | 8 | 0 | 0 | 100% ✅ (cloture 2026-05-31 : SR-3 screenshots + comparaison plugin everything-claude-code livre, EPIC complet) |
 | [Ecosystem discovery script 2026-05](EPIC-ecosystem-discovery-script-2026-05.md) | 8 | 0 | 0 | 8 | 0% 🆕 (automation chore W5 EPIC ECO, cron mensuel + PR draft) |
 | [Content find-skills 2026-05](EPIC-content-find-skills-2026-05.md) | 7 | 6 | 0 | 1 | 87% 🔄 (FS-1/FS-2/FS-4/FS-5/FS-6/FS-7 livres, 13/15 SP ; reste FS-3 capture demo manuelle) |
-| [Content Claude Council 2026-06](EPIC-content-claude-council-2026-06.md) | 8 | 8 | 0 | 0 | 100% 🔄 (CC-1 a CC-8 livres en branche feat/claude-council-2026-06, PR draft develop ; page /skills/claude-council FR+EN + composant CouncilBuilder, coverage 95%/100%, 15 E2E ; non merge) |
+| [Content Claude Council 2026-06](EPIC-content-claude-council-2026-06.md) | 8 | 8 | 0 | 0 | 100% ✅ (merge develop #262 le 2026-06-04 ; page /skills/claude-council FR+EN + CouncilBuilder, coverage 95%/100%, 15 E2E ; HowTo migre dans le registre page-schemas au merge) |
 | [Content page redesign 2026-05](EPIC-content-page-redesign-2026-05.md) | 12 | 12 | 0 | 0 | 100% ✅ (cloture : Sprints 1-3 livres #240/#243, release prod 1.10.0) |
-| [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 5 | 1 | 4 | 64% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; TUTO-6 livre : batch 1 `skills` (12 routes), batch 2 `prompting` (24 routes), batch 3 `mcp` (20 routes), batch 4 `agents` (18 routes) ; **TUTO-7 `advanced` livre 2026-05-30** : 32 routes (16 FR + 16 EN), 12 tests a11y batch 5, build/audit liens OK ; **TUTO-8 regression cleanup en cours** : garde statique article-shell + doc architecture, code legacy conserve car encore utilise ; restent controles manuels Lighthouse/WebPageTest/GSC/visuels + TUTO-9/10 monitoring) |
+| Articles IA generative V1 (plan 2026-05-11, reprise 2026-06-04) | 6 | 4 | 0 | 2 | 67% 🔄 (4 articles FR+EN merges #265 via pipeline 4 agents : comfyui-mcp-local, comfyui-workflow-piloting, agent-generation-assets, ia-generative-creative ; restent S2 assets-blog-automatique + S3 image-ia-local-vs-cloud, arbitrage PO) |
+| Article agent-team-orchestration 2026-06 | 1 | 1 | 0 | 0 | 100% ✅ (merge #264 le 2026-06-04 : panorama Paperclip / claude-office / CrewAI / LangGraph / agent teams natif, ItemList JSON-LD, fact-check zero correction) |
+| [Tuto-pages article-shell 2026-05](EPIC-tuto-pages-article-shell-2026-05.md) | 10 | 8 | 0 | 2 | 80% 🔄 (TUTO-2 SectionPeers #215, TUTO-3 pilote #248, TUTO-5 getting-started complet #249 — composant TutoArticleContent factorise (TUTO-4) livre avec #248 ; TUTO-6 livre : batch 1 `skills` (12 routes), batch 2 `prompting` (24 routes), batch 3 `mcp` (20 routes), batch 4 `agents` (18 routes) ; **TUTO-7 `advanced` livre 2026-05-30** : 32 routes (16 FR + 16 EN), 12 tests a11y batch 5, build/audit liens OK ; **TUTO-6/7/8 merges develop via #257 le 2026-06-04** (garde statique article-shell + baselines visuelles regenerees en container Playwright) ; restent TUTO-9/10 monitoring GSC/Matomo + controles manuels Lighthouse/WebPageTest) |
 
-**Total projet** : 138/191 stories (72%) · ~322/441 SP livres (73%) — (VM-8 + VM-12 descopes : retires du denominateur)
+**Total projet** : 170/206 stories (83%) · ~347/462 SP livres (75%) — (VM-8 + VM-12 descopes retires du denominateur ; articles IA generative et agent-team-orchestration comptes en stories, hors decompte SP)
 
 > EPIC **Refonte graphique 2026-04** cloture le 2026-05-07 mais l'audit PO en recette a revele que l'EPIC ne couvrait que la migration vers tokens (22/32 stories invisibles a l'oeil) + 3 nouveaux composants. Les ~70% manquants du SYNTHESIS (article shell 3 colonnes, animations signature, FAQ/Alert/NextSteps, light mode polish) sont consolides dans l'EPIC **Refonte premium 2026-05**.
 

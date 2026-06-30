@@ -2484,6 +2484,32 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "tesla",
     ],
   },
+  // Sonnet 5 / Fable 5
+  {
+    title: "Claude Sonnet 5 et Fable 5 : ce qui change pour vous dans Claude Code",
+    description:
+      "Anthropic lance Claude Sonnet 5 et Claude Fable 5 le 30 juin 2026. Prix, contexte, nouveau tokenizer, thinking adaptatif et implications pratiques pour Claude Code.",
+    href: "/content/sonnet-5-fable-5-nouveaux-modeles",
+    section: "Contenus",
+    keywords: [
+      "claude sonnet 5",
+      "claude fable 5",
+      "nouveaux modeles",
+      "claude-sonnet-5",
+      "claude-fable-5",
+      "opus 4.8",
+      "haiku 4.5",
+      "mythos 5",
+      "tokenizer",
+      "thinking adaptatif",
+      "extended thinking",
+      "tarif introductif",
+      "prix anthropic",
+      "comparatif modeles",
+      "annonce",
+      "2026",
+    ],
+  },
   // About
   {
     title: "À propos du Claude Codex",

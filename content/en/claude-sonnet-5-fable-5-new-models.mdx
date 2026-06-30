@@ -1,0 +1,134 @@
+---
+title: "Claude Sonnet 5 and Fable 5: what actually changes for Claude Code users"
+description: "Anthropic ships Claude Sonnet 5 and Claude Fable 5 on June 30, 2026. Pricing, context window, new tokenizer, adaptive thinking: what really changes in your Claude Code sessions."
+badge: "New"
+section: "content"
+order: 18
+datePublished: "2026-06-30"
+dateModified: "2026-06-30"
+themes: ["comparison", "tooling"]
+---
+
+## Quick answer
+
+Anthropic is shipping **Claude Sonnet 5** today, June 30, 2026: a likely new default for most of your Claude Code sessions, with a 1M token context window and thinking that now adjusts itself. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */} Alongside it, **Claude Fable 5** has been generally available since June 9, 2026: Anthropic's most capable widely released model to date, but with safety guardrails that change how it answers. {/* source: platform.claude.com (Claude Fable 5 overview), retrieved 2026-06-30 */} Neither replaces Opus or Haiku: both sit alongside the existing lineup. The comparison table and practical implications are below.
+
+## Two launches, two philosophies
+
+Picture your model lineup as a garage of mechanics. **Haiku** is the fast, cheap apprentice: great for oil changes and quick checks. **Sonnet** is the generalist mechanic you see almost every day: good on 90% of issues, reasonable on the bill. **Opus** is the senior expert you call for the tricky diagnostics. **Fable** is the manufacturer specialist you only see by appointment: very good at what it does, but it never shows you its full diagnostic notes (just a summary, if you ask), and it can decline a repair it considers unsafe.
+
+Sonnet 5 touches your day-to-day usage directly. Fable 5 is a more deliberate, occasional choice, reserved for tasks that justify its price and its particular behavior.
+
+## Claude Sonnet 5: the model you'll use most
+
+### What changed on the spec sheet
+
+Sonnet 5 (API identifier `claude-sonnet-5`) costs **$3 / $15 per million tokens** (input/output), with an introductory rate of **$2 / $10** through **August 31, 2026**. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */} The context window grows to **1M tokens**, with a maximum output of **128k tokens**. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */} Priority Tier is not available for this model yet. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */}
+
+Anthropic positions Sonnet 5 as the best combination of speed and intelligence across the whole Sonnet line, with quality close to Opus on coding and agentic tasks. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */}
+
+<Callout type="info" title="No xhigh effort level here">
+Unlike Opus 4.7, Sonnet 5 doesn't offer an `xhigh` effort level. Default effort is `high`. Likewise, high-resolution 2576px vision remains an Opus 4.7-only capability, not a Sonnet 5 feature.
+</Callout>
+
+### The real behavior change: adaptive thinking
+
+Sonnet 5 turns on adaptive thinking by default: the model itself decides how much reasoning depth a task needs, without you configuring it. This is a behavior change compared to Sonnet 4.6. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */}
+
+The flip side: the manual `budget_tokens` parameter for extended thinking is gone. If your scripts, hooks, or SDK integration call the API directly with that parameter, you'll get an HTTP 400 error. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */} Same goes for non-default sampling parameters like `temperature`, `top_p`, or `top_k`: any non-default value also returns a 400 error. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, retrieved 2026-06-30 */}
+
+<Callout type="warning" title="Check your custom API calls">
+If you have a hook, an internal proxy, or an agent SDK that hardcodes `thinking.budget_tokens`, `temperature`, `top_p`, or `top_k`, test it against Sonnet 5 before rolling it out to production. The default behavior is no longer tunable that way: the model adjusts its own effort.
+</Callout>
+
+### The new tokenizer trap
+
+Sonnet 5 uses a new tokenizer that produces roughly **30% more tokens** than Sonnet 4.6 for strictly identical text. {/* source: https://platform.claude.com/docs/en/about-claude/models/migration-guide.md, retrieved 2026-06-30 */} In practice: your code, your prompts, and your file contents don't change, but their token "weight" goes up. Price per million tokens stays comparable to Sonnet 4.6, but since every exchange consumes more of them, your real-world costs and the available room in your context window need to be recalculated, not assumed stable.
+
+<Callout type="tip" title="Recalculate before you panic">
+A 30% increase in token count doesn't mean a 30% increase in your bill: it depends on the actual rate applied (the introductory pricing partially offsets it). The right move is to compare a typical session before and after with `/cost`, not to extrapolate blindly.
+</Callout>
+
+## Claude Fable 5: the specialist you call for the hard cases
+
+Fable 5 (API identifier `claude-fable-5`) has been generally available since **June 9, 2026** on the Claude API, Claude Platform on AWS, Bedrock, Vertex AI, and Microsoft Foundry. {/* source: platform.claude.com (Claude Fable 5 release notes), retrieved 2026-06-30 */} Anthropic describes it as its most capable widely released model to date. {/* source: platform.claude.com (Claude Fable 5 release notes), retrieved 2026-06-30 */}
+
+It costs **$10 / $50 per million tokens**, with a default context window of **1M tokens** and a maximum output of **128k tokens**. {/* source: platform.claude.com (Claude Fable 5 release notes), retrieved 2026-06-30 */} That's more than double Sonnet 5's price, and twice as expensive as Opus 4.8 on both input and output.
+
+### Three behaviors to know before using it
+
+1. **Thinking is always on.** There's no "thinking off" mode for Fable 5: only the level adapts automatically to task complexity. {/* source: platform.claude.com (Claude Fable 5 release notes), retrieved 2026-06-30 */}
+2. **The raw reasoning chain is never exposed.** You can request a summary via `thinking.display: "summarized"`, but by default (`"omitted"`), you see nothing of the intermediate reasoning. {/* source: platform.claude.com (Claude Fable 5 release notes), retrieved 2026-06-30 */}
+3. **The model can refuse a request.** Internal safety classifiers can trigger a refusal, returned as `stop_reason: "refusal"` in a 200 HTTP response (not an error). Server-side and client-side fallback mechanisms exist to handle this case. {/* source: platform.claude.com (Claude Fable 5 release notes), retrieved 2026-06-30 */}
+
+<Callout type="warning" title="No zero-data-retention">
+Fable 5 enforces a mandatory 30-day data retention period and isn't available in a zero-data-retention configuration. If you work with sensitive data or under strict compliance constraints, that's worth checking before adopting this model, not after.
+</Callout>
+
+### Don't confuse Fable 5 with Mythos 5
+
+Here's today's trap: **Fable 5 is not the successor to Claude Mythos Preview**. That role belongs to **Claude Mythos 5**, available in limited access through the Project Glasswing program. Fable 5 and Mythos 5 share the same technical specs and the same price, but Mythos 5 doesn't carry Fable 5's safety classifiers. If you see a reference to "Mythos" in an announcement or docs, that's not the same product described here.
+
+## Comparison table: the 4 current models
+
+| Model | API identifier | Input ($/MTok) | Output ($/MTok) | Context | Max output | Best for |
+|---|---|---|---|---|---|---|
+| Claude Haiku 4.5 | `claude-haiku-4-5` | $1 | $5 | 200k tokens | 64k tokens | Simple, fast, high-volume tasks |
+| Claude Sonnet 5 | `claude-sonnet-5` | $3 ($2 intro) | $15 ($10 intro) | 1M tokens | 128k tokens | Daily Claude Code usage, everyday dev |
+| Claude Opus 4.8 | `claude-opus-4-8` | $5 | $25 | 1M tokens | 128k tokens | Complex reasoning, advanced agentic code |
+| Claude Fable 5 | `claude-fable-5` | $10 | $50 | 1M tokens | 128k tokens | The hardest cases, with safety guardrails |
+
+Sonnet 5's introductory rate ($2 / $10) expires on August 31, 2026. After that date, the standard rate ($3 / $15) applies automatically, no action needed on your end. {/* source: https://platform.claude.com/docs/en/release-notes/api.md and platform.claude.com (Opus 4.8, Haiku 4.5, Fable 5 model pages), retrieved 2026-06-30 */}
+
+## What this actually changes in your Claude Code workflow
+
+<Steps>
+<Step title="Find scripts that hit the API directly" stepNumber={1}>
+Search your hooks, SDK agents, or CI integrations for any call that manually sets `thinking.budget_tokens`, `temperature`, `top_p`, or `top_k`. With Sonnet 5, these calls will fail with a 400 error until they're updated.
+</Step>
+
+<Step title="Switch to Sonnet 5 via flag or environment variable" stepNumber={2}>
+
+```bash
+# One-off session
+claude --model claude-sonnet-5
+
+# Default for the whole shell
+export ANTHROPIC_MODEL="claude-sonnet-5"
+```
+
+</Step>
+
+<Step title="Recalculate your token budget, not just your dollar budget" stepNumber={3}>
+Run `/cost` on a representative session before and after switching. With roughly 30% more tokens for identical text, your context window also fills up faster: watch for when `/compact` becomes necessary sooner than before.
+</Step>
+
+<Step title="Reserve Fable 5 for tasks that actually justify it" stepNumber={4} isLast>
+Given its price and behavior (always-on thinking, hidden reasoning, possible refusals, no zero-data-retention), Fable 5 isn't meant to become your default model. Keep it for the most demanding tasks, with full awareness of its constraints.
+</Step>
+</Steps>
+
+## FAQ
+
+**Does Sonnet 5 become the new default model in Claude Code?**
+That's not a verified fact at this point: public documentation as of June 30, 2026 describes the model's characteristics, not an imposed default change. Check your configuration (`ANTHROPIC_MODEL`, `--model` flag) before assuming an automatic switch.
+
+**Should I worry about the 30% token increase?**
+Don't panic, but do recalculate. The introductory pricing offsets part of the increase through August 31, 2026. Measure with `/cost` instead of extrapolating.
+
+**Is Fable 5 directly accessible in Claude Code?**
+It's available via the Claude API, AWS Bedrock, Google Vertex AI, and Microsoft Foundry. If your Claude Code setup is configured to point at one of these providers, you can target `claude-fable-5` via `ANTHROPIC_MODEL` or `--model`.
+
+**Can I turn off Fable 5's thinking?**
+No. Thinking is always on for Fable 5, only its level adjusts automatically. That's a structural difference from the rest of the lineup.
+
+**Are Mythos 5 and Fable 5 the same thing?**
+No. They share the same specs and price, but Mythos 5 (limited access via Project Glasswing) is the successor to Mythos Preview and doesn't carry the safety classifiers present in Fable 5.
+
+## Next steps
+
+- [The real costs of Claude Code](/content/real-costs-claude-code): recalculate your budget with the new pricing
+- [Why your tokens cost more in some languages](/content/token-cost-by-language): understand the impact of a tokenizer change
+- [Plan Mode vs Thinking Mode](/content/plan-vs-thinking-mode): what adaptive thinking changes for your workflows
+- [Multi-provider: AWS Bedrock and Google Vertex AI](/advanced/multi-provider): configure Claude Code to reach Fable 5
+- [CLI reference](/reference/cli): every flag to switch models, including `--model`

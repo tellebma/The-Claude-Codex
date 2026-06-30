@@ -4,7 +4,7 @@ description: "Faire baisser la facture Anthropic sans sacrifier la qualité. Pat
 order: 15
 section: "advanced"
 datePublished: "2026-05-11"
-dateModified: "2026-05-11"
+dateModified: "2026-06-30"
 themes: ["guide", "performance"]
 ---
 
@@ -12,9 +12,9 @@ themes: ["guide", "performance"]
 
 ## TL;DR
 
-- Claude Code peut coûter cher rapidement : 1 session de 4h sur un gros projet = 1 à 5 $ en API key, et bien plus si Opus 4.7 est utilisé partout.
+- Claude Code peut coûter cher rapidement : 1 session de 4h sur un gros projet = 1 à 5 $ en API key, et bien plus si Opus 4.8 est utilisé partout.
 - 5 leviers concrets pour réduire la facture : **prompt caching natif** (jusqu'à 90 % d'économie sur le cache hit), **commande `/compact`** (réduit la conversation), **skill `caveman`** (65 % de tokens en moins en sortie), **`claude-code-router`** (bascule Haiku/Sonnet/Opus selon le contexte), **abonnement Claude Max** (forfait au lieu du pay-as-you-go).
-- Le plus gros gain est souvent **le bon choix de modèle** : Haiku 4.5 pour 80 % des tâches, Sonnet 4.6 pour le quotidien complexe, Opus 4.7 uniquement pour l'architecture et le debugging difficile.
+- Le plus gros gain est souvent **le bon choix de modèle** : Haiku 4.5 pour 80 % des tâches, Sonnet 5 pour le quotidien complexe, Opus 4.8 uniquement pour l'architecture et le debugging difficile.
 
 ## Comprendre où va l'argent
 
@@ -27,7 +27,7 @@ Avant d'optimiser, il faut savoir ce qui coûte. Sur une session Claude Code typ
 5. **Sessions parallèles / agents délégués** : chacun a son contexte propre
 
 <Callout type="info" title="Ratios prix 2026">
-Au 2026-05-11, chez Anthropic : input 1$/MTok pour Haiku, ~3$ pour Sonnet, ~15$ pour Opus. Output 5× plus cher. Le cache hit est facturé ~10% du prix input normal. Vérifie les chiffres actuels sur [anthropic.com/pricing](https://www.anthropic.com/pricing) (les prix changent).
+Au 2026-06-30, chez Anthropic : input $1/MTok pour Haiku 4.5, $3 pour Sonnet 5, $5 pour Opus 4.8, $10 pour Fable 5. Output ~5× plus cher pour chaque modèle. Le cache hit est facturé ~10% du prix input normal. Vérifie les chiffres actuels sur [anthropic.com/pricing](https://www.anthropic.com/pricing) (les prix changent).
 </Callout>
 
 ## Levier 1 : Prompt caching natif (jusqu'à 90 % d'économie)
@@ -77,8 +77,8 @@ Mesures rapportées par l'auteur : **65 % de réduction des tokens output** sur 
 Logique typique :
 
 - **Haiku 4.5** : lectures de fichiers, exécution de tests, opérations git simples
-- **Sonnet 4.6** : édition de code, refactoring, debugging standard
-- **Opus 4.7** : architecture, debugging complexe, conception d'algorithme
+- **Sonnet 5** : édition de code, refactoring, debugging standard
+- **Opus 4.8** : architecture, debugging complexe, conception d'algorithme
 
 Économie typique mesurée par l'auteur : **30 à 50 %** sur la facture mensuelle d'un dev qui utilisait Opus partout. La latence baisse aussi (Haiku répond en ~2s vs Opus ~8s).
 

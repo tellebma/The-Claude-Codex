@@ -2465,6 +2465,32 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "tesla",
     ],
   },
+  // Sonnet 5 / Fable 5
+  {
+    title: "Claude Sonnet 5 and Fable 5: what changes for Claude Code users",
+    description:
+      "Anthropic ships Claude Sonnet 5 and Claude Fable 5 on June 30, 2026. Pricing, context window, new tokenizer, adaptive thinking, and practical implications for Claude Code.",
+    href: "/content/claude-sonnet-5-fable-5-new-models",
+    section: "Content",
+    keywords: [
+      "claude sonnet 5",
+      "claude fable 5",
+      "new models",
+      "claude-sonnet-5",
+      "claude-fable-5",
+      "opus 4.8",
+      "haiku 4.5",
+      "mythos 5",
+      "tokenizer",
+      "adaptive thinking",
+      "extended thinking",
+      "introductory pricing",
+      "anthropic pricing",
+      "model comparison",
+      "announcement",
+      "2026",
+    ],
+  },
   // About
   {
     title: "About The Claude Codex",

@@ -4,7 +4,7 @@ description: "Lower your Anthropic bill without sacrificing quality. Concrete pa
 order: 15
 section: "advanced"
 datePublished: "2026-05-11"
-dateModified: "2026-05-11"
+dateModified: "2026-06-30"
 themes: ["guide", "performance"]
 ---
 
@@ -12,9 +12,9 @@ themes: ["guide", "performance"]
 
 ## TL;DR
 
-- Claude Code can get expensive fast: a 4h session on a large project costs $1-5 in API key, much more if Opus 4.7 is used everywhere.
+- Claude Code can get expensive fast: a 4h session on a large project costs $1-5 in API key, much more if Opus 4.8 is used everywhere.
 - 5 concrete levers to reduce the bill: **native prompt caching** (up to 90% savings on cache hit), **`/compact` command** (shrinks conversation), **`caveman` skill** (65% fewer output tokens), **`claude-code-router`** (switches Haiku/Sonnet/Opus by context), **Claude Max subscription** (flat rate instead of pay-as-you-go).
-- The biggest gain is often **picking the right model**: Haiku 4.5 for 80% of tasks, Sonnet 4.6 for daily complex work, Opus 4.7 only for architecture and tough debugging.
+- The biggest gain is often **picking the right model**: Haiku 4.5 for 80% of tasks, Sonnet 5 for daily complex work, Opus 4.8 only for architecture and tough debugging.
 
 ## Understanding where the money goes
 
@@ -27,7 +27,7 @@ Before optimizing, know what costs. On a typical Claude Code session:
 5. **Parallel sessions / delegated agents**: each has its own context
 
 <Callout type="info" title="2026 price ratios">
-As of 2026-05-11 at Anthropic: input $1/MTok for Haiku, ~$3 for Sonnet, ~$15 for Opus. Output 5× more expensive. Cache hit is billed at ~10% of normal input price. Check current rates at [anthropic.com/pricing](https://www.anthropic.com/pricing) (prices change).
+As of 2026-06-30 at Anthropic: input $1/MTok for Haiku 4.5, $3 for Sonnet 5, $5 for Opus 4.8, $10 for Fable 5. Output ~5× more expensive across the board. Cache hit is billed at ~10% of normal input price. Check current rates at [anthropic.com/pricing](https://www.anthropic.com/pricing) (prices change).
 </Callout>
 
 ## Lever 1: Native prompt caching (up to 90% savings)
@@ -77,8 +77,8 @@ Author-reported: **65% reduction in output tokens** on common tasks, with minor 
 Typical logic:
 
 - **Haiku 4.5**: file reads, running tests, simple git operations
-- **Sonnet 4.6**: code edits, refactoring, standard debugging
-- **Opus 4.7**: architecture, complex debugging, algorithm design
+- **Sonnet 5**: code edits, refactoring, standard debugging
+- **Opus 4.8**: architecture, complex debugging, algorithm design
 
 Author-measured savings: **30 to 50%** on a developer's monthly bill who used Opus everywhere. Latency also drops (Haiku replies in ~2s vs Opus ~8s).
 

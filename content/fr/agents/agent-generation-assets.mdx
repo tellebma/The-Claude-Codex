@@ -5,7 +5,7 @@ badge: "NEW"
 order: 11
 section: "agents"
 datePublished: "2026-05-11"
-dateModified: "2026-06-04"
+dateModified: "2026-06-30"
 themes: ["tutorial", "architecture", "tooling"]
 ---
 
@@ -53,7 +53,7 @@ Le détail du choix local vs cloud (seuils de volume, coût total sur 1000 image
 L'agent repose sur trois outils que Claude orchestre selon la demande :
 
 ```text
-Claude Agent (claude-sonnet-4-6)
+Claude Agent (claude-sonnet-5)
   ├── tool: generate_image
   │     └── Appelle Replicate API (Flux 1.1 Pro)
   │           → retourne une URL d'image temporaire
@@ -264,7 +264,7 @@ def run_agent(user_message: str) -> str:
 
     while True:
         response = client.messages.create(
-            model="claude-sonnet-4-6",
+            model="claude-sonnet-5",
             max_tokens=1024,
             system=SYSTEM_PROMPT,
             tools=TOOLS,
@@ -545,7 +545,7 @@ export async function runAgent(userMessage: string): Promise<string> {
 
   while (true) {
     const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
+      model: "claude-sonnet-5",
       max_tokens: 1024,
       system: SYSTEM_PROMPT,
       tools: TOOLS,
@@ -688,21 +688,21 @@ output = client.run("black-forest-labs/flux-1.1-pro", input={"prompt": "..."})
 
 ## Coût d'exécution réel
 
-<Callout type="info" title="Tarifs constatés au 2026-05-11">
-Les tarifs ci-dessous sont ceux relevés sur les pages officielles Replicate et Anthropic à la date du 2026-05-11. Ils peuvent évoluer.
+<Callout type="info" title="Tarifs constatés au 2026-06-30">
+Les tarifs Flux ci-dessous sont ceux relevés sur les pages officielles Replicate à la date du 2026-05-11. Le tarif Claude Sonnet 5 est celui constaté au 2026-06-30 (prix identique au tarif Sonnet 4.6 précédent : $3/$15 par MTok). Ils peuvent évoluer.
 </Callout>
 
 {/* source: replicate.com/black-forest-labs/flux-1.1-pro, consulté 2026-05-11 */}
 {/* source: replicate.com/black-forest-labs/flux-dev, consulté 2026-05-11 */}
 {/* source: replicate.com/black-forest-labs/flux-schnell, consulté 2026-05-11 */}
-{/* source: docs.anthropic.com/en/about-claude/models/overview, consulté 2026-05-11 */}
+{/* source: docs.anthropic.com/en/about-claude/models/overview, consulté 2026-06-30 (mise à jour Sonnet 5) */}
 
-**Grille tarifaire (au 2026-05-11) :**
+**Grille tarifaire (au 2026-06-30) :**
 
 | Composant | Tarif |
 |---|---|
-| Claude Sonnet 4.6 (input) | $3 / million de tokens |
-| Claude Sonnet 4.6 (output) | $15 / million de tokens |
+| Claude Sonnet 5 (input) | $3 / million de tokens |
+| Claude Sonnet 5 (output) | $15 / million de tokens |
 | Flux 1.1 Pro | $0.04 / image |
 | Flux Dev | $0.025 / image |
 | Flux Schnell | $0.003 / image |

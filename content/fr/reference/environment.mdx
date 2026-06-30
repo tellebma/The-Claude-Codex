@@ -5,7 +5,7 @@ badge: "Env"
 section: "reference"
 order: 4
 datePublished: "2026-03-11"
-dateModified: "2026-05-09"
+dateModified: "2026-06-30"
 ---
 
 ## En bref
@@ -110,7 +110,7 @@ Cette variable écrase le champ `customApiUrl` de `settings.json`. Utile quand l
 |-------|--------|
 | **Description** | Modèle Claude par défaut pour toutes les sessions |
 | **Requis** | Non |
-| **Défaut** | `claude-sonnet-4-6` |
+| **Défaut** | dernier modèle Sonnet de la configuration installée (vérifiez avec `claude config get model`) |
 | **Format** | Identifiant de modèle Anthropic |
 
 ```bash
@@ -118,18 +118,18 @@ Cette variable écrase le champ `customApiUrl` de `settings.json`. Utile quand l
 export CLAUDE_MODEL="claude-haiku-4-5"
 
 # Opus pour les tâches de raisonnement complexe
-export CLAUDE_MODEL="claude-opus-4-6"
+export CLAUDE_MODEL="claude-opus-4-8"
 
 # Surcharge ponctuelle sans toucher au fichier rc
-CLAUDE_MODEL="claude-opus-4-6" claude --print "tâche difficile"
+CLAUDE_MODEL="claude-opus-4-8" claude --print "tâche difficile"
 ```
 
 `ANTHROPIC_MODEL` est un alias accepté pour `CLAUDE_MODEL`. Les deux fonctionnent de façon identique. Utilisez `CLAUDE_MODEL` dans les nouvelles configurations pour rester cohérent avec la doc officielle.
 
 Identifiants de modèles courants :
 - `claude-haiku-4-5` : Rapide et économique, bon pour l'automatisation
-- `claude-sonnet-4-6` : Équilibre recommandé entre capacités et coût
-- `claude-opus-4-6` : Raisonnement le plus profond, coût le plus élevé
+- `claude-sonnet-5` : Équilibre recommandé entre capacités et coût
+- `claude-opus-4-8` : Raisonnement le plus profond, coût le plus élevé
 
 ---
 
@@ -454,7 +454,7 @@ Ouvrez `settings.json` (niveau User ou Workspace) et ajoutez :
 {
   "claudeCode.environmentVariables": {
     "ANTHROPIC_BASE_URL": "https://passerelle-ia.entreprise.com/anthropic",
-    "CLAUDE_MODEL": "claude-sonnet-4-6",
+    "CLAUDE_MODEL": "claude-sonnet-5",
     "DISABLE_AUTOUPDATER": "1",
     "BASH_MAX_OUTPUT_LENGTH": "30000",
     "NO_PROXY": "localhost,127.0.0.1,*.intranet"
@@ -477,7 +477,7 @@ Le nom du paramètre s'écrit en camelCase : `claudeCode.environmentVariables`. 
 ```bash
 # Ajouter dans ~/.bashrc ou ~/.zshrc
 export ANTHROPIC_API_KEY="sk-ant-api03-..."
-export CLAUDE_MODEL="claude-sonnet-4-6"
+export CLAUDE_MODEL="claude-sonnet-5"
 export DISABLE_TELEMETRY=1
 ```
 
@@ -491,7 +491,7 @@ Si vous exécutez Claude Code via un service systemd :
 # ~/.config/systemd/user/claude-code.service
 [Service]
 Environment=ANTHROPIC_API_KEY=sk-ant-api03-...
-Environment=CLAUDE_MODEL=claude-sonnet-4-6
+Environment=CLAUDE_MODEL=claude-sonnet-5
 Environment=DISABLE_AUTOUPDATER=1
 ```
 
@@ -501,7 +501,7 @@ Ou utilisez `EnvironmentFile=/etc/claude-code/env` pour charger depuis un fichie
 
 ```dockerfile
 # Passer au build (config non-secrète uniquement)
-ARG CLAUDE_MODEL=claude-sonnet-4-6
+ARG CLAUDE_MODEL=claude-sonnet-5
 ENV CLAUDE_MODEL=$CLAUDE_MODEL
 ENV DISABLE_AUTOUPDATER=1
 ENV BASH_MAX_OUTPUT_LENGTH=30000
@@ -636,8 +636,8 @@ export NO_PROXY="passerelle-ia.entreprise.com,localhost,127.0.0.1"
 | `ANTHROPIC_API_KEY` | Oui* | Aucun | Auth |
 | `ANTHROPIC_AUTH_TOKEN` | Non | Aucun | Auth |
 | `ANTHROPIC_BASE_URL` | Non | `https://api.anthropic.com` | Auth / Réseau |
-| `ANTHROPIC_MODEL` | Non | `claude-sonnet-4-6` | Comportement |
-| `CLAUDE_MODEL` | Non | `claude-sonnet-4-6` | Comportement |
+| `ANTHROPIC_MODEL` | Non | `claude-sonnet-5` | Comportement |
+| `CLAUDE_MODEL` | Non | `claude-sonnet-5` | Comportement |
 | `CLAUDE_CODE_USE_BEDROCK` | Non | Non défini | Auth |
 | `CLAUDE_CODE_USE_VERTEX` | Non | Non défini | Auth |
 | `MAX_THINKING_TOKENS` | Non | `31999` | Comportement |
@@ -669,7 +669,7 @@ export NO_PROXY="passerelle-ia.entreprise.com,localhost,127.0.0.1"
 ```bash
 # ~/.zshrc ou ~/.bashrc
 export ANTHROPIC_API_KEY="sk-ant-api03-..."
-export CLAUDE_MODEL="claude-sonnet-4-6"
+export CLAUDE_MODEL="claude-sonnet-5"
 export MAX_THINKING_TOKENS=10000
 export DISABLE_TELEMETRY=1
 ```
@@ -724,7 +724,7 @@ CLAUDE_CONFIG_DIR="/opt/claude-code/config"
     Quatre sources lues dans cet ordre : variables du processus shell, fichier .env à la racine du projet, ~/.claude/env, puis settings.json (clé claudeCode.environmentVariables).
   </FaqItem>
   <FaqItem question="Comment changer de modèle Claude Code ?">
-    Définissez ANTHROPIC_MODEL avec un identifiant valide, par exemple ANTHROPIC_MODEL=claude-sonnet-4-6. Vous pouvez aussi le faire par session via l'argument --model.
+    Définissez ANTHROPIC_MODEL avec un identifiant valide, par exemple ANTHROPIC_MODEL=claude-sonnet-5. Vous pouvez aussi le faire par session via l'argument --model.
   </FaqItem>
   <FaqItem question="Peut-on désactiver des comportements via une variable ?">
     Oui. Par exemple DISABLE_AUTOUPDATER=1, DISABLE_TELEMETRY=1, DISABLE_AUTOCOMPACT=1 ou MAX_THINKING_TOKENS=0. La référence complète liste les variables et leurs valeurs acceptées.

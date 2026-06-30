@@ -215,6 +215,33 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/mcp/workflow-design-playwright",
+    title: "Designer avec Claude Code et Playwright MCP : workflow",
+    description:
+      "Workflow pas à pas pour valider un composant Claude Code avec Playwright MCP : screenshots multi-viewport, critique, itération et contrôle a11y.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/mcp/comfyui-mcp-local",
+    title: "ComfyUI MCP local : générer des images sur ton GPU",
+    description:
+      "Tutoriel pour brancher ComfyUI à Claude Code via MCP, générer des images en local sur ton GPU, installer Flux Schnell et débugger les erreurs CUDA/OOM.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
+  },
+  {
+    path: "/mcp/comfyui-workflow-piloting",
+    title: "Piloter un workflow ComfyUI JSON depuis Claude Code",
+    description:
+      "Tutoriel pour exposer un workflow ComfyUI exporté en JSON via un outil MCP custom et le faire éditer dynamiquement par Claude Code (sampler, ControlNet).",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
+  },
+  {
     path: "/skills",
     title: "Les Skills Claude Code",
     description:
@@ -302,7 +329,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Maîtrisez l'Extended Thinking et le Plan Mode de Claude Code. Activation, cas d'usage, chain-of-thought, différences entre Haiku, Sonnet et Opus, impact sur les coûts.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-06-30",
   },
   {
     path: "/prompting/chaining-and-agents",
@@ -329,7 +356,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "La qualité du contexte Claude Code s'effondre par paliers. Comprendre la dumb zone, utiliser /compact dirigé, préférer le rewind à la correction, et le pattern test-time compute.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-26",
+    lastModified: "2026-06-30",
   },
   {
     path: "/future",
@@ -437,7 +464,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les Skills Claude Code expliqués : workflows Markdown réutilisables déclenchés par slash commands. Fonctionnement, création, et différences avec les MCP et plugins.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-27",
+    lastModified: "2026-06-02",
   },
   {
     path: "/skills/best-skills",
@@ -446,7 +473,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les 6 meilleurs Skills Claude Code 2026 : TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing, Security Review. Installation et exemples copiables.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-09",
+    lastModified: "2026-06-03",
   },
   {
     path: "/skills/find-skills",
@@ -455,7 +482,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Le méta-skill #1 sur skills.sh (1.6M installs en 2026) qui apprend à Claude Code à trouver, vérifier et installer le bon skill via npx skills.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-05-17",
+    lastModified: "2026-06-02",
+  },
+  {
+    path: "/skills/claude-council",
+    title: "Claude Council : faire délibérer plusieurs IA",
+    description:
+      "Le pattern LLM Council de Karpathy adapté à Claude : faire délibérer plusieurs IA, review croisée anonyme, synthèse d'un Chairman, et un générateur de prompt.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-02",
   },
   {
     path: "/skills/impeccable",
@@ -464,7 +500,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Skill Apache 2.0 de Paul Bakaus avec 23 commandes design (/polish, /audit, /typeset…) et 27 règles anti-patterns pour élever la qualité visuelle des sorties Claude Code.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-05-18",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/skills/huashu-design",
+    title: "Huashu Design : skill de prototypage HTML Claude Code",
+    description:
+      "Huashu Design, le skill MIT de Huasheng (花叔) qui génère prototypes HTML cliquables, decks PPTX et animations MP4 depuis Claude Code. Vérifié juin 2026.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
   },
   {
     path: "/skills/create-custom",
@@ -509,7 +554,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Guide complet pour créer des agents custom dans Claude Code. Frontmatter exhaustif (16 champs), focus sur effort, background, isolation worktree, initialPrompt et hooks par agent.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-26",
+    lastModified: "2026-06-04",
   },
   {
     path: "/agents/agent-teams",
@@ -536,7 +581,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Patterns d’orchestration pour combiner plusieurs agents Claude Code : séquentiel, parallèle, pipeline, split-role. Gestion du contexte, worktrees et bonnes pratiques.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-12",
+    lastModified: "2026-06-04",
   },
   {
     path: "/agents/orchestration-patterns",
@@ -564,6 +609,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+  },
+  {
+    path: "/agents/agent-generation-assets",
+    title: "Agent Claude qui génère et publie tes assets visuels",
+    description:
+      "Tutoriel pour bâtir un agent Claude SDK qui génère des images via Flux/Replicate, optimise en WebP et upload. Architecture, code TypeScript et Python, coûts.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-30",
   },
   {
     path: "/use-cases",
@@ -600,6 +654,15 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+  },
+  {
+    path: "/use-cases/ia-generative-creative",
+    title: "Claude Code + IA générative : un workflow créatif moderne",
+    description:
+      "Intégrer la génération d'images IA dans ton flow Claude Code. 4 patterns (MCP local, MCP cloud, Agent SDK, Skill) comparés sur latence, coût et contrôle.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-30",
   },
   {
     path: "/ecosystem",
@@ -734,7 +797,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Configurez Claude Code avec AWS Bedrock, Google Vertex AI ou un proxy OpenAI-compatible. Gestion des credentials, sélection de modèle par tâche et configuration enterprise.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/advanced/mcp-profiles",
@@ -797,7 +860,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Faire baisser la facture Anthropic sans sacrifier la qualité. 5 leviers : prompt caching natif, /compact, caveman, claude-code-router, abonnement Max.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/advanced/observabilite-monitoring",
@@ -833,7 +896,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Toutes les slash commands, raccourcis clavier, fichiers de configuration et modes d’exécution de Claude Code en un seul endroit. Format dense et copiable.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/reference/cli",
@@ -842,7 +905,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Référence exhaustive de la commande claude : tous les flags, sous-commandes mcp/config/doctor, modes d’exécution et exemples concrets.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/reference/settings",
@@ -851,7 +914,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Toutes les options du fichier settings.json : 3 niveaux de configuration, permissions, MCP, modèles, outils et exemples complets.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/reference/environment",
@@ -860,7 +923,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Documentation officielle des variables d’environnement Claude Code : ANTHROPIC_API_KEY, BASE_URL, AUTH_TOKEN, MODEL, proxy. Exemples shell, Docker, CI/CD.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-05-09",
+    lastModified: "2026-06-30",
   },
   {
     path: "/configurator",
@@ -971,6 +1034,34 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-03-12",
   },
   {
+    path: "/content/stack-design-claude-code",
+    title: "Stack design Claude Code : retour après 1 mois de refonte",
+    description:
+      "Quels skills installer pour designer avec Claude Code en 2026 : Impeccable, UI UX Pro Max, Taste Skill, Huashu Design + Playwright MCP. Retour d'expérience daté et comparatif.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
+    path: "/content/agent-team-orchestration",
+    title: "Orchestrer une équipe d'agents Claude comme une organisation",
+    description:
+      "Panorama daté des outils pour transformer des sessions Claude en équipe d'agents : Claude Code natif, Paperclip, claude-office, CrewAI et LangGraph comparés.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-04",
+  },
+  {
+    path: "/content/refaire-une-card-avec-impeccable-et-playwright",
+    pathsByLocale: { en: "/content/redo-a-card-with-impeccable-and-playwright" },
+    title: "Refaire une card avec Impeccable et Playwright : démo",
+    description:
+      "Exemple Claude Code design : on reprend une vraie card du Codex et on la refait avec Impeccable et Playwright MCP, captures avant/après à l'appui.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-03",
+  },
+  {
     path: "/content/couts-reels-claude-code",
     pathsByLocale: { en: "/content/real-costs-claude-code" },
     title: "Coûts réels de Claude Code : tokens, MCP et abonnements",
@@ -978,7 +1069,17 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Calcul concret des coûts Claude Code selon votre usage : prix Anthropic à jour, impact des MCP, comparatif des plans, et stratégies pour optimiser votre budget.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-06-30",
+  },
+  {
+    path: "/content/cout-tokens-par-langue",
+    pathsByLocale: { en: "/content/token-cost-by-language" },
+    title: "Pourquoi vos tokens coûtent plus cher dans certaines langues",
+    description:
+      "À contenu égal, le nombre de tokens varie selon la langue (jusqu'à 15× d'écart selon les études). Impacts sur le coût, la latence et le contexte, et ce que ça change pour Claude Code.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-05-28",
   },
   {
     path: "/content/mythes-claude-code",
@@ -1056,7 +1157,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Ce que les system prompts fuités révèlent sur l'architecture interne de Claude Code, et ce qu'on peut en déduire pour écrire de meilleurs CLAUDE.md.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-12",
+    lastModified: "2026-06-03",
   },
   {
     path: "/content/garry-tan-stack-claude-code",
@@ -1075,6 +1176,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-12",
+  },
+  {
+    path: "/content/sonnet-5-fable-5-nouveaux-modeles",
+    pathsByLocale: { en: "/content/claude-sonnet-5-fable-5-new-models" },
+    title: "Claude Sonnet 5 et Fable 5 : ce qui change vraiment pour vous dans Claude Code",
+    description:
+      "Anthropic lance Claude Sonnet 5 et Claude Fable 5 le 30 juin 2026. Prix, contexte, nouveau tokenizer, thinking adaptatif : ce que ça change concrètement dans vos sessions Claude Code.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-06-30",
   },
   {
     path: "/about",

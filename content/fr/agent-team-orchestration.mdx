@@ -1,0 +1,179 @@
+---
+title: "Orchestrer une équipe d'agents Claude comme une organisation"
+description: "Panorama daté des outils pour transformer des sessions Claude en équipe d'agents : Claude Code natif, Paperclip, claude-office, CrewAI et LangGraph comparés."
+section: "content"
+order: 16
+datePublished: "2026-06-04"
+dateModified: "2026-06-04"
+themes: ["comparison", "architecture", "productivity"]
+---
+
+{/* source primaire : docs et repos officiels, vérifiés 2026-06-04 */}
+{/* Claude Code agent teams : https://code.claude.com/docs/en/agent-teams (v2.1.32, flag CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS) */}
+{/* Paperclip : github.com/paperclipai/paperclip (MIT, ~69k★ 2026-06-04, v2026.529.0) + paperclip.ing */}
+{/* claude-office : github.com/paulrobello/claude-office (MIT, ~415★ 2026-06-04, v0.15.0) */}
+{/* CrewAI : github.com/crewAIInc/crewAI (MIT, ~52.8k★ 2026-05-28, v1.14.6) */}
+{/* LangGraph : github.com/langchain-ai/langgraph (MIT, ~33.8k★ 2026-06-04, v1.2.4) */}
+
+Un seul agent Claude, c'est un développeur très rapide qui ne fait qu'une chose à la fois. Plusieurs agents qui se coordonnent, c'est une équipe. Et dès qu'on parle d'équipe, les vraies questions arrivent : qui fait quoi, qui valide, combien ça coûte, qui répond du résultat.
+
+Cet article fait le tour des outils qui transforment des sessions Claude en organisation, avec des rôles, une hiérarchie, des objectifs et de la gouvernance. Tous les chiffres ci-dessous ont été vérifiés le 4 juin 2026 sur les sources officielles. Ils bougent vite, re-vérifiez avant de décider.
+
+<Callout type="info" title="En bref (citable)">
+Cinq façons d'orchestrer plusieurs agents Claude, selon que vous voulez du ponctuel ou une organisation qui dure. <time dateTime="2026-06-04">Vérifié le 4 juin 2026</time>.
+
+- **Claude Code natif** : subagents (workers isolés) et agent teams (expérimentales, flag `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`, v2.1.32+). Rien à installer.
+- **Paperclip** : org chart, budgets par agent, gouvernance. MIT, ~69k★. Install `npx paperclipai onboard --yes`.
+- **claude-office** : visualisation pixel art temps réel de vos sessions. MIT, ~415★.
+- **CrewAI** : framework Python role-based, crews et manager. MIT, ~52,8k★.
+- **LangGraph** : framework Python par graphe d'états, bas niveau. MIT, ~33,8k★.
+- **Quand démarrer** : restez sur le natif pour le ponctuel, passez à Paperclip pour une organisation persistante.
+</Callout>
+
+## Ce que Claude Code fait déjà sans rien installer
+
+Avant de chercher un outil tiers, regardez ce qui est déjà dans la boîte. Claude Code propose deux mécanismes de parallélisation.
+
+Les **subagents** sont des workers focalisés. Le main agent en lance un, le subagent travaille dans sa propre fenêtre de contexte, puis rapporte son résultat. Ils ne se parlent pas entre eux. C'est le bon outil quand seul le résultat compte. Voir la page [créer un subagent](/agents/create-subagent).
+
+Les **agent teams** vont plus loin. Une session devient le team lead : elle crée l'équipe, lance des teammates, assigne les tâches et synthétise. Chaque teammate est une session Claude Code complète, avec son propre contexte, et les teammates communiquent directement entre eux via une mailbox et une task list partagée.
+
+<Callout type="warning" title="Statut expérimental, daté du 2026-06-04">
+Les agent teams sont expérimentales et désactivées par défaut. Il faut Claude Code v2.1.32 ou plus, et activer la variable `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`. Limites connues officielles : pas de reprise des teammates in-process via `/resume`, une seule équipe à la fois, pas d'équipes imbriquées, lead fixe pour toute la durée de vie.
+</Callout>
+
+Activer les agent teams tient en une entrée de configuration :
+
+<CodeBlock
+  language="json"
+  code={`{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}`}
+/>
+
+Ensuite, on décrit l'équipe en langage naturel et Claude la monte :
+
+<CodeBlock
+  language="text"
+  code={`Crée une équipe pour relire la PR #142. Lance trois relecteurs :
+- un sur les implications de sécurité
+- un sur l'impact performance
+- un sur la couverture de tests
+Qu'ils relisent chacun et rapportent leurs constats.`}
+/>
+
+La doc officielle recommande 3 à 5 teammates et 5 à 6 tâches par teammate. Les définitions de subagents servent de rôles réutilisables, et trois hooks (`TeammateIdle`, `TaskCreated`, `TaskCompleted`) posent des quality gates. Pour le détail des patterns, voir [orchestration d'agents](/agents/orchestration).
+
+## Quand un orchestrateur dédié se justifie
+
+Les agent teams couvrent l'éphémère : une mission, on monte l'équipe, on nettoie. Elles ne gardent ni rôles persistants, ni budgets dans le temps, ni org chart durable, ni historique de coûts par agent.
+
+Un orchestrateur dédié devient utile quand vous voulez traiter vos agents comme une organisation qui dure : des postes avec une fiche de poste, des objectifs qui survivent à la session, des budgets mensuels, des approbations obligatoires, un suivi de dépenses par agent et par projet. C'est le moment de regarder les outils tiers.
+
+## Paperclip : faire tourner une organisation d'agents
+
+[Paperclip](https://github.com/paperclipai/paperclip) est l'outil qui pousse le plus loin la métaphore de l'entreprise. Sa tagline officielle : "The app people use to manage AI agents for work".
+
+C'est une appli Node.js (TypeScript, UI React, base PostgreSQL) sous licence MIT. Au 2026-06-04, le repo affiche environ 69 000 étoiles et une release récente, v2026.529.0 datée du 30 mai 2026. Le projet est activement maintenu. Installation en une commande : `npx paperclipai onboard --yes`.
+
+Ce qui le distingue d'un simple framework, c'est qu'il modélise une organisation complète :
+
+- **Org chart** : hiérarchies, rôles et lignes de reporting. Chaque agent a un chef, un titre et une fiche de poste.
+- **Objectifs** : une chaîne Mission, Objectif de projet, Objectif d'agent, Tâche. Chaque tâche remonte à la mission, donc l'agent voit le pourquoi, pas juste un titre.
+- **Budgets** : un budget mensuel par agent. Quand la limite est atteinte, l'agent s'arrête. Pas de dérapage de coûts.
+- **Gouvernance** : vous gardez la main. Vous validez les recrutements, pouvez override la stratégie, mettre en pause ou arrêter n'importe quel agent. Un agent ne peut pas en recruter un autre sans approbation.
+- **Suivi des coûts** : par agent, par tâche, par projet, par objectif.
+
+Paperclip se branche sur plusieurs runtimes, dont Claude et Claude Code (le site officiel cite aussi Codex, Gemini, Cursor, OpenClaw, OpenCode). Vous apportez vos agents, Paperclip leur donne une structure.
+
+## Voir son équipe d'agents : claude-office
+
+Piloter une équipe d'agents, c'est bien. La voir travailler, c'est plus parlant. [claude-office](https://github.com/paulrobello/claude-office) est une simulation de bureau en pixel art qui visualise en temps réel les opérations de Claude Code.
+
+L'agent principal apparaît en patron, les subagents en employés, chacun avec son état (en train de travailler, de déléguer, en attente), des bulles de pensée et un tableau blanc à douze modes (todo list, usage des outils, org chart). C'est sous licence MIT, en Next.js plus PixiJS côté front et FastAPI côté back. Au 2026-06-04, le repo compte environ 415 étoiles, version 0.15.0. C'est jeune, mais c'est exactement l'outil quand on veut transformer ses sessions Claude en bureau virtuel pour suivre qui fait quoi d'un coup d'œil. Une variante existe en plugin JetBrains sous le nom Pixel Office.
+
+## Frameworks code : CrewAI et LangGraph
+
+Si vous codez votre orchestration en Python plutôt que de piloter des sessions Claude Code, deux frameworks dominent.
+
+[CrewAI](https://github.com/crewAIInc/crewAI) (MIT, environ 52,8k étoiles au 2026-05-28, v1.14.6) raisonne en agents qui jouent un rôle, regroupés en crews, avec un process hiérarchique où un manager agent délègue. C'est l'approche la plus proche de l'idée d'équipe avec des rôles. Il se branche sur différents LLM par configuration, dont les modèles Anthropic.
+
+[LangGraph](https://github.com/langchain-ai/langgraph) (MIT, environ 33,8k étoiles au 2026-06-04, v1.2.4) modélise l'orchestration comme un graphe d'états, avec exécution durable et human-in-the-loop. Plus bas niveau, plus de contrôle, modèle-agnostique et branchable sur Claude via LangChain.
+
+<Callout type="info" title="Un grand nom en mode maintenance">
+AutoGen de Microsoft revient souvent dans les comparatifs. Au 2026-06-04, sa dernière version Python (0.7.5) date du 30 septembre 2025 et le projet est en mode maintenance : Microsoft renvoie les nouveaux projets vers Microsoft Agent Framework. À garder en tête avant de bâtir dessus.
+</Callout>
+
+## Comparatif
+
+<ComparisonTable
+  caption="Orchestration d'agents avec Claude, vérifié le 4 juin 2026"
+  columns={[
+    { key: "native", label: "Claude Code natif", recommended: true },
+    { key: "paperclip", label: "Paperclip" },
+    { key: "office", label: "claude-office" },
+    { key: "crew", label: "CrewAI" },
+    { key: "lang", label: "LangGraph" },
+  ]}
+  rows={[
+    {
+      feature: "Type",
+      values: {
+        native: "Intégré",
+        paperclip: "Org chart",
+        office: "Visualisation",
+        crew: "Framework",
+        lang: "Framework",
+      },
+    },
+    {
+      feature: "Org chart persistant",
+      values: { native: "no", paperclip: "yes", office: "partial", crew: "partial", lang: "no" },
+    },
+    {
+      feature: "Budgets par agent",
+      values: { native: "no", paperclip: "yes", office: "no", crew: "no", lang: "no" },
+    },
+    {
+      feature: "Gouvernance / approbations",
+      values: { native: "partial", paperclip: "yes", office: "no", crew: "partial", lang: "yes" },
+    },
+    {
+      feature: "Sans écrire de code",
+      values: { native: "yes", paperclip: "yes", office: "yes", crew: "no", lang: "no" },
+    },
+    {
+      feature: "Licence",
+      values: { native: "Propriétaire", paperclip: "MIT", office: "MIT", crew: "MIT", lang: "MIT" },
+    },
+    {
+      feature: "Étoiles GitHub (2026-06-04)",
+      values: { native: "n/a", paperclip: "~69k", office: "~415", crew: "~52,8k", lang: "~33,8k" },
+    },
+  ]}
+/>
+
+## Trois exemples concrets
+
+**Relecture de PR en parallèle.** C'est le cas d'usage le plus simple pour démarrer avec les agent teams natives. Trois teammates relisent la même PR sous trois angles (sécurité, performance, tests), puis le lead synthétise. Aucun outil tiers à installer.
+
+**Équipe éditoriale qui maintient un site de doc.** Un rédacteur produit le brouillon, un réviseur le retravaille, un fact-checker vérifie les chiffres et les sources. C'est exactement le pipeline qui a servi à écrire cet article. Le pattern de délibération, où des agents se challengent avant de trancher, est détaillé dans [le council de Claude](/skills/claude-council).
+
+**Petite organisation persistante.** Une équipe d'agents avec des rôles stables (un qui surveille les dépendances, un qui répond aux issues, un qui rédige les release notes), un budget mensuel par poste, et une validation humaine pour toute action sensible. C'est là que Paperclip prend tout son sens, là où les agent teams natives ne suffisent plus.
+
+## Limites et coûts
+
+Le premier réflexe doit rester la sobriété. La doc officielle est claire : une équipe d'agents consomme bien plus de tokens qu'une session unique, et le coût croît linéairement avec le nombre de teammates. Pour une tâche routinière ou très séquentielle, un seul agent reste plus efficace et moins cher.
+
+La gouvernance n'est pas un détail. Plus vous donnez d'autonomie à des agents, plus il faut des garde-fous : budgets, approbations, possibilité d'arrêter net. Un agent qui boucle sans limite, c'est une facture qui grimpe.
+
+Enfin, l'écosystème bouge très vite. Les agent teams sont expérimentales, claude-office est jeune, les compteurs d'étoiles gonflent. Ne choisissez pas sur la hype, choisissez sur ce dont vous avez réellement besoin : de la parallélisation ponctuelle, ou une organisation qui dure.
+
+## Prochaines étapes
+
+- Démarrer simple avec les patterns d'[orchestration d'agents](/agents/orchestration)
+- Définir des rôles réutilisables : [créer un subagent](/agents/create-subagent)
+- Voir le pattern de délibération avec [le council de Claude](/skills/claude-council)
+- Comparer avec la [stack design Claude Code](/content/stack-design-claude-code) pour un autre panorama d'outils daté

@@ -1,0 +1,125 @@
+---
+title: "UI UX Pro Max: the multi-stack design skill for Claude Code"
+description: "MIT skill by nextlevelbuilder with 67 UI styles, 161 palettes and 57 font pairings to generate consistent interfaces with Claude Code across 15 stacks. Reviewed June 2, 2026."
+section: "skills"
+order: 7
+datePublished: "2026-06-02"
+dateModified: "2026-06-03"
+themes: ["reference", "tooling"]
+---
+
+{/* primary source: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill (accessed 2026-06-02) */}
+{/* secondary source: https://ui-ux-pro-max-skill.nextlevelbuilder.io/ (accessed 2026-06-02) */}
+
+<Callout type="info" title="In short">
+**UI UX Pro Max** is an open-source skill from the [nextlevelbuilder](https://github.com/nextlevelbuilder) organization that hands Claude Code a ready-to-use library of design patterns: **67 UI styles**, **161 palettes**, **57 font pairings** and **99 UX guidelines**, across **15 stacks** (React, Next.js, Vue, Flutter, SwiftUI...). Install: `npm install -g uipro-cli` then `uipro init --ai claude`. MIT license, 86.5k★ on GitHub. <time dateTime="2026-06-02">Reviewed June 2, 2026</time>.
+</Callout>
+
+## Actionable TL;DR
+
+- **Promise**: multi-platform design intelligence — patterns rather than vocabulary
+- **License**: MIT, free (open source)
+- **Install**: `npm install -g uipro-cli` then `uipro init --ai claude`
+- **What sets it apart**: a bank of 67 styles + 161 palettes aligned by product type, multi-stack
+- **Keep in mind**: 86.5k★ as of 2026-06-02, a fast-rising counter (see the honesty note below)
+
+## The promise, quoted verbatim
+
+> "An AI SKILL that provide design intelligence for building professional UI/UX multiple platforms"
+
+Source: [github.com/nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill), reviewed 2026-06-02. The official wording has a few rough edges in English, quoted here as is.
+
+Where [Impeccable](/en/skills/impeccable) teaches Claude a designer's vocabulary, UI UX Pro Max takes the opposite angle: it provides a catalog. Instead of reasoning about principles, the skill offers concrete choices, a named style, a palette matched to an industry, a font pairing that has already been tested. Claude picks from that catalog instead of improvising.
+
+## What it changes in practice
+
+**Without the skill**, asking Claude Code for "an analytics dashboard for a fintech" often yields a grid of grey cards, a generic blue and default charts with no color coherence.
+
+**With the skill**, the same prompt leans on a palette built for fintech (sober tones, one trust accent), a named style (for example an information-dense minimalism), a font pairing that stays legible at small sizes, and a chart type recommended for the data shown. The result is not magic, but it starts from a coherent base instead of a blank page.
+
+The difference with Impeccable boils down to this: Impeccable filters out what looks bad, UI UX Pro Max proposes what works. The two are complementary.
+
+## Installation
+
+```bash
+npm install -g uipro-cli
+uipro init --ai claude
+```
+
+The `uipro init --ai claude` command wires the skill into Claude Code for the current project. An alternative path exists through the Claude Code plugin marketplace:
+
+```bash
+/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
+```
+
+<Callout type="info" title="Install path depends on your version">
+The CLI path (`uipro-cli`) is the one documented first on the repo as of 2026-06-02. The `/plugin marketplace` path depends on your Claude Code version. When in doubt, follow the repo README, which is authoritative.
+{/* source: github.com/nextlevelbuilder/ui-ux-pro-max-skill, verified 2026-06-02 */}
+</Callout>
+
+## What the catalog contains
+
+The skill is essentially a structured knowledge bank. The figures announced on the repo as of 2026-06-02:
+
+| Block | Volume | Use |
+|------|--------|-------|
+| UI styles | 67 | Glassmorphism, Claymorphism, Minimalism, Brutalism and more |
+| Palettes | 161 | Aligned by product category |
+| Font pairings | 57 | Typography combinations with Google Fonts import |
+| Reasoning rules | 161 | Industry-specific design system generation |
+| UX guidelines | 99 | Best practices, anti-patterns, accessibility |
+| Chart types | 25 | Recommendations for dashboards and analytics |
+| Supported stacks | 15 | React, Next.js, Vue, Flutter, SwiftUI... |
+
+<Callout type="warning" title="Star counter: read it with caution">
+The repo shows 86.5k★ as of 2026-06-02, up from 76.4k★ a month earlier. Growth that fast in a few months can reflect promotion campaigns as much as real usage. The main decision criterion stays what the skill produces in your project, not its star count.
+{/* source: github.com/nextlevelbuilder/ui-ux-pro-max-skill, verified 2026-06-02 */}
+</Callout>
+
+## Typical workflow with Claude Code
+
+<Steps>
+<Step title="Frame the product" stepNumber={1}>
+Give the product context: "dashboard for a fitness app, mainstream audience, energetic tone". The skill maps that context to a category and a palette.
+</Step>
+
+<Step title="Pick a style" stepNumber={2}>
+Ask Claude to propose 2 or 3 styles out of the 67, with their palette and font pairing. You settle on one option.
+</Step>
+
+<Step title="Generate" stepNumber={3}>
+Claude produces the component or page in your stack (React, Vue, Flutter...) applying the chosen style, its tokens and its UX guidelines.
+</Step>
+
+<Step title="Validate visually" stepNumber={4} isLast>
+Check the render with [Playwright MCP](/en/mcp/): mobile and desktop screenshot, contrast control, adjustments. This is the step the skill alone does not cover.
+</Step>
+</Steps>
+
+## Failure modes to know
+
+**Case 1 — Too much choice kills the choice.** With 67 styles and 161 palettes, a vague brief pushes Claude to hesitate or mix registers. The catalog only helps if you set a direction. With no constraint, you get a patchwork.
+
+**Case 2 — An existing in-house design system.** If your project enforces its own tokens, the UI UX Pro Max catalog becomes redundant, even contradictory. In that case the skill is best for exploring ideas upstream, not for producing the final code.
+
+## Who is it for?
+
+- **Recommended** if you start an interface from scratch and want a coherent visual starting point without reasoning about palette and fonts yourself, especially on a non-React stack (Flutter, SwiftUI, Vue).
+- **Recommended alongside** [Impeccable](/en/skills/impeccable): UI UX Pro Max proposes the direction, Impeccable filters anti-patterns. The combo covers both weaknesses.
+- **Avoid** if you already have a strict design system: you will fight the catalog rather than lean on it.
+
+## Alternatives to know
+
+- **Impeccable** (`pbakaus/impeccable`): anti-pattern and design-vocabulary approach rather than a catalog. Lighter to install. See the [Impeccable page](/en/skills/impeccable).
+- **Taste Skill** (`Leonxlnx/taste-skill`): anti-slop framework with several per-style sub-skills. See the [Taste Skill page](/en/skills/taste-skill).
+- **Huashu Design** (`alchaincyf/huashu-design`): focused on HTML prototypes and presentations, MIT-licensed since 2026-05-14 (re-check before commercial use). See the [Huashu Design page](/en/skills/huashu-design).
+
+To dig deeper: [Skills vs MCP vs Plugins comparison](/en/skills/comparison), [must-have skills 2026](/en/skills/best-skills), [find-skills to discover more](/en/skills/find-skills).
+
+## Going further
+
+- **Official site**: [ui-ux-pro-max-skill.nextlevelbuilder.io](https://ui-ux-pro-max-skill.nextlevelbuilder.io/)
+- **GitHub repo**: [github.com/nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) — MIT, 86.5k★ as of 2026-06-02
+- **Validation workflow**: combine with [Playwright MCP](/en/mcp/) to check the real multi-viewport render
+
+UI UX Pro Max is the skill to reach for when you start from a blank page and want a coherent visual base in one question. It does not replace a fine-grained critique of the render, which stays the job of Playwright and an anti-pattern skill like Impeccable.

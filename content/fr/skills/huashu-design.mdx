@@ -1,0 +1,116 @@
+---
+title: "Huashu Design : skill de prototypage HTML Claude Code"
+description: "Huashu Design, le skill MIT de Huasheng (花叔) qui génère prototypes HTML cliquables, decks PPTX et animations MP4 depuis Claude Code. Vérifié juin 2026."
+section: "skills"
+order: 9
+datePublished: "2026-06-03"
+dateModified: "2026-06-03"
+themes: ["reference", "tooling"]
+---
+
+{/* source primaire : https://github.com/alchaincyf/huashu-design (README + LICENSE), consulté 2026-06-03 */}
+{/* licence vérifiée via API GitHub : spdx_id = MIT, relicence 2026-05-14, consulté 2026-06-03 */}
+
+<Callout type="info" title="En bref">
+**Huashu Design** est un skill de design HTML-natif de [Huasheng (花叔)](https://github.com/alchaincyf) qui transforme une phrase en livrable : prototype cliquable, deck de slides exportable en PPTX, animation MP4/GIF. Il fonctionne avec Claude Code, Cursor, Codex, OpenClaw, Hermes et tout agent compatible skills markdown. Installation : `npx skills add alchaincyf/huashu-design`. Licence MIT, 16k★ GitHub. <time dateTime="2026-06-03">Vérifié le 3 juin 2026</time>.
+</Callout>
+
+<Callout type="warning" title="Licence : a changé une fois, vérifie avant un usage commercial">
+Huashu Design est aujourd'hui sous **licence MIT**, donc libre pour un usage personnel comme commercial, sans frais. Mais ce n'était pas le cas avant le 2026-05-14 : le projet était sous une "Personal Use License" qui restreignait l'usage commercial. La licence a déjà changé une fois. Avant d'intégrer ce skill dans un produit commercialisé ou un livrable client, ouvre le fichier `LICENSE` du repo et confirme qu'il est toujours en MIT à la date où tu lis ces lignes.
+{/* source: github.com/alchaincyf/huashu-design README + LICENSE (MIT, relicence 2026-05-14), vérifié 2026-06-03 */}
+</Callout>
+
+## TL;DR actionnable
+
+- **Promesse** : "Type. Hit enter. A finished design lands in your lap."
+- **Licence** : MIT au 2026-06-03 (était restrictive avant le 2026-05-14, voir l'encart)
+- **Installation** : `npx skills add alchaincyf/huashu-design`
+- **Ce qui le distingue** : il sort des livrables finis (prototype cliquable, deck PPTX, vidéo), pas seulement du code de composant
+- **À garder en tête** : cœur de documentation en chinois, 16k★ au 2026-06-03
+
+## La promesse, citée mot pour mot
+
+> "Type. Hit enter. A finished design lands in your lap."
+
+Source : [github.com/alchaincyf/huashu-design](https://github.com/alchaincyf/huashu-design), vérifié 2026-06-03.
+
+Là où Impeccable et Taste Skill produisent du code de composant à intégrer, Huashu Design vise un cran plus loin : un artefact présentable tel quel. Un prototype HTML cliquable avec un cadre iPhone, un deck de slides que tu ouvres dans PowerPoint, une animation exportée en MP4. Le skill embarque aussi un conseiller de direction artistique et une critique de design notée sur cinq dimensions.
+
+## Ce que ça change en pratique
+
+**Sans Huashu Design**, transformer une idée en démo cliquable demande de générer le code, le câbler, lancer un serveur, capturer l'écran, puis monter un support à part pour présenter.
+
+**Avec Huashu Design**, une phrase comme "prototype mobile d'une app de méditation, 3 écrans, ambiance apaisante" sort un prototype HTML cliquable encadré dans un mockup iPhone, prêt à montrer. Pour un comité produit, le même skill génère un deck de slides exportable en PPTX éditable. C'est l'angle "livrable de présentation" plutôt que "composant de production".
+
+## Installation
+
+```bash
+npx skills add alchaincyf/huashu-design
+```
+
+Le skill s'installe au niveau de ton profil et fonctionne avec plusieurs harnais. Au 2026-06-03, le repo cite Claude Code, Cursor, Codex, OpenClaw, Hermes et tout agent capable de lire des skills au format markdown.
+
+## Ce qu'il sait produire
+
+Au 2026-06-03, le README liste les capacités suivantes :
+
+| Livrable | Détail |
+|----------|--------|
+| Prototypes interactifs | HTML cliquable, cadre iPhone, navigation entre écrans |
+| Decks de slides | HTML présentable, export PPTX éditable |
+| Motion design | Export MP4/GIF avec musique de fond |
+| Variantes de design | Plusieurs directions proposées, ajustements en direct |
+| Infographies | Data viz de qualité print |
+| Conseiller artistique | 5 écoles × 20 philosophies de design |
+| Critique experte | Notation sur 5 dimensions, radar + liste d'actions |
+
+{/* source: github.com/alchaincyf/huashu-design README, vérifié 2026-06-03 */}
+
+## Workflow type avec Claude Code
+
+<Steps>
+<Step title="Décrire le livrable" stepNumber={1}>
+Une phrase qui précise le format voulu : "prototype mobile cliquable" ou "deck de 8 slides sur le lancement produit". Le format oriente ce que le skill génère.
+</Step>
+
+<Step title="Choisir une direction" stepNumber={2}>
+Demander au conseiller de proposer 2 ou 3 directions artistiques. Tu tranches avant que le skill produise le livrable complet.
+</Step>
+
+<Step title="Générer puis ajuster" stepNumber={3}>
+Le skill sort le prototype ou le deck. Les tweaks en direct permettent de corriger une couleur, un espacement, un titre sans tout régénérer.
+</Step>
+
+<Step title="Exporter" stepNumber={4} isLast>
+Export PPTX pour un deck, MP4/GIF pour une animation. Pour un prototype destiné au web, valide le rendu avec [Playwright MCP](/mcp/workflow-design-playwright) avant de l'intégrer.
+</Step>
+</Steps>
+
+## Cas d'échec à connaître
+
+**Cas 1 : barrière de langue.** Le cœur de la documentation (le SKILL.md) est rédigé en chinois. Les instructions précises et les exemples avancés sont moins accessibles si tu ne lis pas le chinois. Le README couvre l'essentiel en anglais, mais tu passes à côté d'une partie de la finesse.
+
+**Cas 2 : mauvais outil pour du code de production.** Huashu Design excelle sur le livrable de présentation, pas sur le composant React intégré à un design system existant. Si ton besoin est "une carte produit dans mon app Next.js", [Impeccable](/skills/impeccable) ou [UI UX Pro Max](/skills/ui-ux-pro-max) sont plus adaptés.
+
+## Pour qui ?
+
+- **Recommandé** si tu dois présenter une idée vite : prototype cliquable pour un user test, deck pour un comité, animation pour une démo. Le gain de temps sur le livrable est net.
+- **Recommandé** pour explorer une direction artistique en amont, grâce au conseiller intégré.
+- **À éviter** comme générateur de composants de production : ce n'est pas son terrain. Et si tu vises un usage commercial, re-vérifie la licence (elle a déjà changé une fois).
+
+## Alternatives à connaître
+
+- **Impeccable** (`pbakaus/impeccable`) : vocabulaire design et anti-patterns, orienté composant de production. Voir la [fiche Impeccable](/skills/impeccable).
+- **UI UX Pro Max** (`nextlevelbuilder/ui-ux-pro-max-skill`) : catalogue de styles et palettes multi-stack. Voir la [fiche UI UX Pro Max](/skills/ui-ux-pro-max).
+- **Taste Skill** (`Leonxlnx/taste-skill`) : famille de sous-skills par registre visuel. Voir la [fiche Taste Skill](/skills/taste-skill).
+
+Pour creuser : [comparatif Skills vs MCP vs Plugins](/skills/comparison), [les skills incontournables 2026](/skills/best-skills), [find-skills pour en découvrir d'autres](/skills/find-skills).
+
+## Aller plus loin
+
+- **Repo GitHub** : [github.com/alchaincyf/huashu-design](https://github.com/alchaincyf/huashu-design) : MIT, 16k★ au 2026-06-03
+- **Auteur** : Huasheng (花叔), [@AlchainHust](https://github.com/alchaincyf)
+- **Workflow de validation** : pour un prototype web, combiner avec [Playwright MCP](/mcp/workflow-design-playwright) pour vérifier le rendu réel
+- **La stack complète** : [stack design Claude Code, retour après 1 mois](/content/stack-design-claude-code)
+
+Huashu Design est le skill à dégainer quand le livrable compte autant que le code : une démo cliquable, un deck, une vidéo. Pour du composant de production intégré, d'autres skills de la stack sont plus directs.

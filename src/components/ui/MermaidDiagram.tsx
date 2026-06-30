@@ -193,9 +193,9 @@ export function MermaidDiagram({
        */}
       <section
         ref={containerRef}
-        tabIndex={0}
+        tabIndex={rendered ? 0 : -1}
         aria-label={accessibleName}
-        aria-hidden={!rendered}
+        aria-hidden={rendered ? undefined : true}
         className={`overflow-x-auto rounded-xl border border-slate-200/50 bg-white p-6 dark:border-slate-700/50 dark:bg-slate-900 motion-safe:transition-opacity motion-safe:duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 ${
           rendered ? "opacity-100" : "opacity-0"
         }`}

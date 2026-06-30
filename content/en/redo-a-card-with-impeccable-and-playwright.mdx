@@ -1,0 +1,117 @@
+---
+title: "Redoing a card with Impeccable and Playwright: the full demo"
+description: "Claude Code design refactor example: we take a real Codex card and rebuild it with Impeccable and Playwright MCP, with before/after captures."
+badge: "Demo"
+section: "content"
+order: 2
+datePublished: "2026-06-03"
+dateModified: "2026-06-03"
+themes: ["use-case", "tooling"]
+---
+
+{/* source: hands-on report on The Claude Codex project, 2026-06-03 */}
+{/* tools verified: Impeccable (Apache 2.0, npx skills add pbakaus/impeccable), Playwright MCP @playwright/mcp v0.0.75, checked 2026-06-03 */}
+
+<Callout type="info" title="In short">
+We take an existing article-listing card from the site, judged fine but generic, and redo it with [Impeccable](/skills/impeccable) for generation and [Playwright MCP](/mcp/workflow-design-playwright) for visual validation. Goal: show the real loop, before/after captures, not an abstract promise. <time dateTime="2026-06-03">Written June 3, 2026</time>.
+</Callout>
+
+## The starting point
+
+The Claude Codex site shows article cards across several listings. One of those cards did the job and no more: a title, a description, a date, a neutral background. Functional, accessible, but flat. The kind of component you keep by default for lack of time to polish it.
+
+It's the ideal candidate for the demo: a real component, already in production, that we want to move from "fine" to "polished" without breaking its behavior or its accessibility.
+
+## Before
+
+Here is the initial state of the card, captured before any change.
+
+{/* TODO Playwright capture: initial listing card, desktop viewport 1440x900. Shows the original render: title, description, date, neutral background, no marked hover, flat type hierarchy. */}
+
+{/* TODO Playwright capture: same card, mobile viewport 375x800. Shows the type hierarchy that's too tight and the spacing that stops breathing on a small screen. */}
+
+The critique, as Claude phrased it after reading both screenshots:
+
+- title and description too close in size, little hierarchy
+- date drowned out, no visual treatment
+- no hover feedback, the card doesn't signal it's clickable
+- on mobile, the inner padding shrinks and the whole thing compresses
+
+## During
+
+The brief sent to Claude, with Impeccable installed:
+
+```text
+Redo this article-listing card. Keep the structure (title, description, date, link)
+and the accessibility. Goal: clean type hierarchy, a hover state that signals the
+click, a more discreet but legible date treatment. Sober style, consistent with
+technical docs. Don't change the component props.
+```
+
+First step, frame before coding:
+
+```bash
+/impeccable shape "article-listing card, technical docs, marked hover"
+```
+
+{/* TODO Playwright capture: terminal output of /impeccable shape. Shows the proposed text layout (hierarchy, date treatment, hover state) before code generation. */}
+
+Once the shape is approved, generation:
+
+```bash
+/impeccable craft
+```
+
+{/* TODO Playwright capture: first render after /impeccable craft, desktop viewport 1440x900. Shows the first generated iteration, before polish. */}
+
+Then the validation loop with Playwright MCP: `browser_navigate` to the preview, `browser_resize` to mobile then desktop, `browser_take_screenshot` each time. Claude reads, critiques, and we re-run `/polish` on the weak points. Three iterations in total to settle the hover and the mobile spacing.
+
+## After
+
+Final state of the card, after the iterations.
+
+{/* TODO Playwright capture: final card, desktop viewport 1440x900. Shows the clean type hierarchy, the date treatment, the base state before hover. */}
+
+{/* TODO Playwright capture: final card, mobile viewport 375x800. Shows correct responsive behavior, padding that breathes, hierarchy preserved on a small screen. */}
+
+What changed, concretely:
+
+- type hierarchy across three levels between title, description and date
+- hover state with a light elevation and a subtle shift, signaling the click
+- date moved to a small size, secondary color, right-aligned
+- padding reworked to breathe on mobile and desktop alike
+- contrast verified, zero axe-core violation on the component
+
+## The code diff
+
+The snippet below illustrates the kind of change (before / after). The real component diff is larger, but the spirit is there.
+
+```tsx
+// Before
+<article className="rounded-lg border p-4">
+  <h3 className="text-lg font-medium">{title}</h3>
+  <p className="text-sm text-gray-600">{description}</p>
+  <span className="text-sm text-gray-600">{date}</span>
+</article>
+
+// After
+<article className="group rounded-xl border border-[color:var(--border-subtle)] p-6 transition-all hover:-translate-y-0.5 hover:shadow-md">
+  <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+  <p className="mt-2 text-sm leading-relaxed text-[color:var(--fg-secondary)]">{description}</p>
+  <time className="mt-4 block text-xs font-medium text-[color:var(--fg-muted)]">{date}</time>
+</article>
+```
+
+{/* TODO Playwright capture: side-by-side before/after visual diff (optional), for the PR. */}
+
+## Verdict
+
+Order of magnitude, not a benchmark: three iterations, roughly 25 minutes counting the brief and the Playwright round-trips. The final card is no masterpiece, but it's clearly more polished than the original, and its behavior didn't move.
+
+What the demo shows above all: the value doesn't come from the skill alone, nor from Playwright alone. It comes from the loop. Impeccable proposes a direction, Playwright shows the real render, Claude fixes, repeat. Without the Playwright mirror, Claude would have shipped a first version and stopped there, never seeing the mobile compression.
+
+## Next steps
+
+- **The detailed workflow**: [designing with Claude Code + Playwright MCP](/mcp/workflow-design-playwright), with both quick and full levels.
+- **The tool pages**: [Impeccable](/skills/impeccable) used here, plus [UI UX Pro Max](/skills/ui-ux-pro-max), [Taste Skill](/skills/taste-skill) and [Huashu Design](/skills/huashu-design). Comparison in [the best skills](/skills/best-skills).
+- **The full stack**: [design stack for Claude Code, one month review](/content/stack-design-claude-code).

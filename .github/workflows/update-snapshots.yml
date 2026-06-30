@@ -28,16 +28,28 @@ jobs:
   update-visual-snapshots:
     name: Regenerate visual snapshots
     runs-on: ubuntu-latest
+    # Container Playwright officiel = MEME image que e2e-visual de pr-checks.yml
+    # (browsers preinstalls, pas de `playwright install` qui hangait sur apt).
+    # Les baselines generees ici sont donc comparables en CI sans bruit cross-env.
+    # MAINTENANCE : version d'image a aligner sur @playwright/test (package.json).
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
     timeout-minutes: 25
     steps:
       - name: Resolve PR head ref
         id: pr
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # curl + node au lieu du CLI `gh` : absent de l'image container Playwright
+        # (gh n'est preinstalle que sur les runners hosted).
         run: |
           pr_number="${{ github.event.inputs.pr_number }}"
-          head_ref=$(gh pr view "$pr_number" --json headRefName --jq '.headRefName' --repo "${{ github.repository }}")
-          head_sha=$(gh pr view "$pr_number" --json headRefOid --jq '.headRefOid' --repo "${{ github.repository }}")
+          pr_json=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${pr_number}")
+          head_ref=$(printf '%s' "$pr_json" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).head.ref))")
+          head_sha=$(printf '%s' "$pr_json" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).head.sha))")
           echo "head_ref=$head_ref" >> "$GITHUB_OUTPUT"
           echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
           echo "Resolved PR #$pr_number → branch $head_ref @ $head_sha"
@@ -58,9 +70,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Build site (SSG export)
         env:
           NEXT_TELEMETRY_DISABLED: 1
@@ -76,6 +85,9 @@ jobs:
 
       - name: Configure git
         run: |
+          # En container, le workspace monte appartient a un autre uid : sans
+          # safe.directory, git refuse d'operer ("detected dubious ownership").
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 

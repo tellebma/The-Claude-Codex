@@ -1,0 +1,144 @@
+---
+title: "Designer avec Claude Code et Playwright MCP : workflow"
+description: "Workflow pas à pas pour valider un composant Claude Code avec Playwright MCP : screenshots multi-viewport, critique, itération et contrôle a11y."
+section: "mcp"
+order: 11
+datePublished: "2026-06-03"
+dateModified: "2026-06-03"
+themes: ["tutorial", "tooling"]
+---
+
+{/* source : github.com/microsoft/playwright-mcp (@playwright/mcp v0.0.75, 7 mai 2026), consulté 2026-06-03 */}
+
+<Callout type="info" title="En bref">
+Un skill design produit un composant. **Playwright MCP** sert à le regarder dans un vrai navigateur, sur mobile et desktop, avant que tu ouvres toi-même la page. Claude lit le screenshot, repère ce qui cloche, et itère. C'est la boucle qui fait passer une sortie "fonctionnelle mais générique" à une sortie soignée. Package : `@playwright/mcp` (v0.0.75 au 2026-06-03). <time dateTime="2026-06-03">Vérifié le 3 juin 2026</time>.
+</Callout>
+
+## TL;DR actionnable
+
+- **Le pivot** : aucun skill design ne livre du visuel correct à 100 %. Playwright MCP ferme la boucle en montrant le rendu réel à Claude.
+- **Le minimum** : `browser_navigate` sur ta preview locale, puis `browser_take_screenshot`. Claude critique, tu itères.
+- **Le complet** : ajoute le multi-viewport (`browser_resize`), un contrôle a11y via `browser_evaluate`, et un screenshot avant/après pour la PR.
+- **Setup** : Playwright MCP est dans le profil "dev" standard. Vérifie avec `/mcp` dans Claude Code.
+- **À combiner avec** : [Impeccable](/skills/impeccable), [Taste Skill](/skills/taste-skill) ou [UI UX Pro Max](/skills/ui-ux-pro-max) pour la génération.
+
+## Pourquoi Playwright dans la boucle design
+
+Un skill design habille un composant, mais il travaille à l'aveugle : il ne voit jamais ce que le navigateur rend vraiment. Playwright MCP, c'est le miroir que tu tends à Claude après qu'il a habillé un composant. Sans miroir, Claude devine. Avec, il voit exactement ce que le navigateur affiche sur mobile et sur desktop, et corrige avant que tu ouvres la page toi-même.
+
+Le pipeline tient en quelques étapes répétées en boucle :
+
+<WorkflowDiagram
+  ariaLabel="Workflow design avec Claude Code et Playwright MCP"
+  steps={[
+    { label: "Brief", description: "Décrire le composant voulu" },
+    { label: "Génération", description: "Le skill design produit le code" },
+    { label: "Capture", description: "Playwright screenshot multi-viewport" },
+    { label: "Critique", description: "Claude lit le rendu et repère les défauts" },
+    { label: "Itération", description: "Re-génération ciblée" },
+    { label: "Validé", description: "Prêt pour la PR" },
+  ]}
+/>
+
+## Setup
+
+Playwright MCP est livré dans le profil "dev" standard de Claude Code. Pour vérifier qu'il répond, tape `/mcp` dans Claude Code : tu dois voir `playwright` dans la liste des serveurs actifs.
+
+Si tu pars d'un poste vierge, la voie ad hoc :
+
+```bash
+npx @playwright/mcp@latest
+```
+
+Côté skill design, installe celui qui correspond à ton besoin avant de commencer :
+
+```bash
+npx skills add pbakaus/impeccable
+```
+
+## Le workflow, deux niveaux
+
+Le workflow complet fait neuf étapes, mais tu n'en as pas toujours besoin. La version rapide suffit pour un contrôle visuel en 10 minutes. La version complète ajoute le multi-viewport, l'a11y et le commit, pour un composant destiné à la production.
+
+### Version rapide (10 min)
+
+<Steps>
+  <Step title="Générer le composant" stepNumber={1}>
+    Brief design court, puis génération via ton skill : `/impeccable craft "carte produit minimaliste avec hover"`. Claude écrit le composant dans ton projet.
+  </Step>
+  <Step title="Lancer la preview et naviguer" stepNumber={2}>
+    Démarre le serveur (`npm run dev`), puis demande à Claude d'ouvrir la page avec l'outil `browser_navigate` sur l'URL locale (par exemple `http://localhost:3000/preview`).
+  </Step>
+  <Step title="Capturer et critiquer" stepNumber={3} isLast>
+    Claude prend un screenshot avec `browser_take_screenshot`, le lit, et liste les défauts visibles (contraste, alignement, hiérarchie). Tu itères en relançant une commande du skill (`/polish` par exemple). Deux passes suffisent souvent.
+  </Step>
+</Steps>
+
+### Version complète (9 étapes)
+
+<Steps>
+  <Step title="Vérifier le MCP" stepNumber={1}>
+    `/mcp` dans Claude Code : confirme que `playwright` est actif. Installe le skill design choisi si ce n'est pas déjà fait.
+  </Step>
+  <Step title="Écrire le brief" stepNumber={2}>
+    Décris le composant, ses contraintes, et une référence visuelle si tu en as une (image locale lue via l'outil filesystem du MCP).
+  </Step>
+  <Step title="Générer" stepNumber={3}>
+    Invoque le skill : `/impeccable craft "..."` ou l'équivalent Taste / UI UX Pro Max. Claude produit le composant.
+  </Step>
+  <Step title="Capturer en multi-viewport" stepNumber={4}>
+    Serveur lancé, Claude utilise `browser_navigate` sur la route, puis `browser_resize` en 375x800 (mobile) et `browser_take_screenshot`, puis `browser_resize` en 1440x900 (desktop) et un second screenshot.
+  </Step>
+  <Step title="Critique visuelle" stepNumber={5}>
+    Claude lit les deux captures et identifie les défauts : contraste insuffisant, alignement cassé sur mobile, hiérarchie typo faible, espacement irrégulier.
+  </Step>
+  <Step title="Itérer" stepNumber={6}>
+    `/impeccable polish` ou `/taste critique` avec le diff identifié. Claude régénère le composant. Reviens à l'étape 4. Deux à quatre boucles sont typiques.
+  </Step>
+  <Step title="Contrôle d'accessibilité" stepNumber={7}>
+    Claude exécute axe-core dans la page via `browser_evaluate` (injection puis `axe.run()`), et vérifie zéro violation WCAG 2.1 AA sur le composant.
+  </Step>
+  <Step title="Capture avant/après" stepNumber={8}>
+    Garde le premier screenshot et le dernier. Le diff visuel sert de preuve dans la PR.
+  </Step>
+  <Step title="Commit" stepNumber={9} isLast>
+    Composant prêt pour PR, avec les captures avant/après en commentaire.
+  </Step>
+</Steps>
+
+## Les outils MCP utilisés
+
+Tous ces outils viennent du serveur `@playwright/mcp`. Claude les appelle pour toi ; tu décris l'intention, lui exécute.
+
+| Outil | Rôle dans la boucle |
+|-------|---------------------|
+| `browser_navigate` | Ouvrir la route de preview locale |
+| `browser_resize` | Régler le viewport (mobile, tablette, desktop) |
+| `browser_take_screenshot` | Capturer le rendu pour critique |
+| `browser_snapshot` | Récupérer l'arbre d'accessibilité (alternative texte au screenshot) |
+| `browser_evaluate` | Exécuter du JS dans la page, dont axe-core pour l'a11y |
+| `browser_console_messages` | Lire les erreurs console qui faussent le rendu |
+
+Pour le détail de chaque MCP et leur configuration, voir [la section MCP](/mcp/) et [créer son premier workflow MCP](/mcp/first-workflow).
+
+## Cas d'usage avancés
+
+**Multi-viewport systématique.** Une carte qui passe bien en desktop déborde souvent en 375px. Capture toujours les deux. Le mobile révèle les hiérarchies typographiques trop serrées et les paddings qui ne respirent plus.
+
+**Contrôle a11y au runtime.** Le screenshot ne dit pas tout : un contraste limite passe à l'œil mais échoue à axe-core. Lancer `axe.run()` via `browser_evaluate` attrape ces violations avant la PR. C'est un complément, pas un remplacement de la critique visuelle.
+
+**Captures de régression.** Sur le projet The Claude Codex, les captures Playwright alimentent aussi la régression visuelle (seuil de tolérance bas). Le même outil sert donc à designer et à verrouiller le rendu dans le temps.
+
+## Limitations
+
+- **Le screenshot n'est pas le navigateur de l'utilisateur.** Polices système, échelle d'affichage, extensions : Playwright capture un environnement contrôlé, pas le poste réel d'un visiteur.
+- **L'a11y automatique attrape une partie des problèmes seulement.** axe-core ne juge ni la pertinence d'un texte alternatif, ni la logique de navigation au clavier. La critique humaine reste nécessaire.
+- **Surface d'attaque MCP.** Donner à un agent un navigateur pilotable a des implications de sécurité. Avant de l'utiliser sur des pages sensibles ou authentifiées, lis [la sécurité des MCP](/mcp/securite-mcp).
+- **Versions qui bougent.** L'API du MCP évolue vite (v0.0.75 au 2026-06-03). Un nom d'outil peut changer entre deux versions ; vérifie la liste à jour sur le repo officiel.
+
+## Prochaines étapes
+
+- **Choisir le skill de génération** : [Impeccable](/skills/impeccable) pour le vocabulaire design, [UI UX Pro Max](/skills/ui-ux-pro-max) pour un catalogue de styles, [Taste Skill](/skills/taste-skill) pour piloter un registre visuel, ou [Huashu Design](/skills/huashu-design) pour un prototype présentable. Vue d'ensemble dans [les meilleurs skills](/skills/best-skills).
+- **Voir le workflow en action** : l'article [refaire une card avec Impeccable et Playwright](/content/refaire-une-card-avec-impeccable-et-playwright) déroule la boucle sur un vrai composant du site.
+- **Comprendre la stack complète** : [stack design Claude Code, retour après 1 mois](/content/stack-design-claude-code).
+- **Générer les visuels, pas seulement les valider** : [Claude Code + IA générative](/use-cases/ia-generative-creative) compare les façons de produire des images depuis Claude Code, du [MCP ComfyUI local](/mcp/comfyui-mcp-local) à l'agent.

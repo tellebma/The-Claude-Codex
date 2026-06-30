@@ -1,0 +1,134 @@
+---
+title: "Claude Sonnet 5 et Fable 5 : ce qui change vraiment pour vous dans Claude Code"
+description: "Anthropic lance Claude Sonnet 5 et Claude Fable 5 le 30 juin 2026. Prix, contexte, nouveau tokenizer, thinking adaptatif : ce que ça change concrètement dans vos sessions Claude Code."
+badge: "Nouveau"
+section: "content"
+order: 18
+datePublished: "2026-06-30"
+dateModified: "2026-06-30"
+themes: ["comparison", "tooling"]
+---
+
+## En bref
+
+Anthropic lance **Claude Sonnet 5** ce 30 juin 2026 : nouveau modèle par défaut potentiel pour la plupart de vos sessions Claude Code, avec un contexte de 1M tokens et un thinking qui s'ajuste désormais tout seul. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */} En parallèle, **Claude Fable 5** est en disponibilité générale depuis le 9 juin 2026 : c'est le modèle le plus capable qu'Anthropic ait largement publié à ce jour, mais avec des garde-fous de sécurité qui changent sa façon de répondre. {/* source: platform.claude.com (présentation Claude Fable 5), consulté 2026-06-30 */} Aucun des deux ne remplace Opus ou Haiku : ils s'ajoutent à la gamme. Le tableau comparatif et les implications pratiques sont plus bas.
+
+## Deux lancements, deux philosophies
+
+Pensez à votre gamme de modèles comme à un garage automobile. **Haiku** est l'apprenti mécano : rapide, pas cher, parfait pour les vidanges et les petits contrôles. **Sonnet** est le mécanicien généraliste que vous voyez presque tous les jours : bon sur 90 % des pannes, raisonnable côté facture. **Opus** est l'expert senior qu'on appelle pour les diagnostics compliqués. **Fable**, lui, c'est le spécialiste constructeur qu'on ne consulte que sur rendez-vous : il est très bon, mais il ne vous montre jamais ses notes de diagnostic complètes (juste un résumé, si vous le demandez), et il peut refuser une réparation qu'il juge dangereuse.
+
+Sonnet 5 touche directement votre usage quotidien. Fable 5 est un choix plus ponctuel, réservé aux tâches qui justifient son prix et son comportement particulier.
+
+## Claude Sonnet 5 : le modèle que vous utiliserez le plus souvent
+
+### Ce qui change sur la fiche technique
+
+Sonnet 5 (identifiant API `claude-sonnet-5`) coûte **3 $ / 15 $ par million de tokens** (entrée/sortie), avec un tarif introductif de **2 $ / 10 $** jusqu'au **31 août 2026**. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */} La fenêtre de contexte passe à **1M tokens**, avec une sortie maximale de **128k tokens**. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */} Le Priority Tier n'est pas disponible pour ce modèle pour l'instant. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */}
+
+Anthropic positionne Sonnet 5 comme la meilleure combinaison de vitesse et d'intelligence de toute la gamme Sonnet, avec une qualité proche d'Opus sur le code et les tâches agentiques. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */}
+
+<Callout type="info" title="Pas de mode xhigh ici">
+Contrairement à Opus 4.7, Sonnet 5 ne propose pas de niveau d'effort `xhigh`. L'effort par défaut est `high`. De même, la vision haute résolution 2576px reste une fonctionnalité réservée à Opus 4.7, pas à Sonnet 5.
+</Callout>
+
+### Le vrai changement de comportement : le thinking adaptatif
+
+Sonnet 5 active le thinking adaptatif par défaut : le modèle décide lui-même de la profondeur de raisonnement nécessaire, sans que vous ayez à le configurer. C'est un changement de comportement par rapport à Sonnet 4.6. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */}
+
+La contrepartie : le paramètre manuel `budget_tokens` pour l'extended thinking est supprimé. Si vos scripts, vos hooks ou votre intégration SDK appellent l'API directement avec ce paramètre, vous recevrez une erreur HTTP 400. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */} Même chose pour des paramètres d'échantillonnage non standards comme `temperature`, `top_p` ou `top_k` : toute valeur non par défaut renvoie aussi une erreur 400. {/* source: https://platform.claude.com/docs/en/release-notes/api.md, consulté 2026-06-30 */}
+
+<Callout type="warning" title="Vérifiez vos appels API personnalisés">
+Si vous avez un hook, un proxy interne ou un agent SDK qui passe `thinking.budget_tokens`, `temperature`, `top_p` ou `top_k` en dur, testez-le avec Sonnet 5 avant de basculer en production. Le comportement par défaut n'est plus configurable de cette façon : le modèle ajuste lui-même son effort.
+</Callout>
+
+### Le piège du nouveau tokenizer
+
+Sonnet 5 utilise un nouveau tokenizer qui produit environ **30 % de tokens en plus** que Sonnet 4.6 pour un texte strictement identique. {/* source: https://platform.claude.com/docs/en/about-claude/models/migration-guide.md, consulté 2026-06-30 */} Concrètement : votre code, vos prompts et le contenu de vos fichiers ne changent pas, mais leur "poids" en tokens augmente. Le prix par million de tokens reste comparable à Sonnet 4.6, mais comme chaque échange en consomme davantage, vos coûts réels et la place disponible dans votre contexte doivent être recalculés plutôt que supposés stables.
+
+<Callout type="tip" title="Recalculez avant de paniquer">
+Une hausse de 30 % du nombre de tokens ne veut pas dire une hausse de 30 % de votre facture : tout dépend du tarif réellement appliqué (le tarif introductif compense en partie). Le bon réflexe est de comparer une session type avant/après avec `/cost`, pas d'extrapoler dans le vide.
+</Callout>
+
+## Claude Fable 5 : le spécialiste qu'on appelle pour les cas difficiles
+
+Fable 5 (identifiant API `claude-fable-5`) est en disponibilité générale depuis le **9 juin 2026** sur l'API Claude, Claude Platform on AWS, Bedrock, Vertex AI et Microsoft Foundry. {/* source: platform.claude.com (release notes Claude Fable 5), consulté 2026-06-30 */} Anthropic le présente comme son modèle le plus capable en disponibilité large à ce jour. {/* source: platform.claude.com (release notes Claude Fable 5), consulté 2026-06-30 */}
+
+Il coûte **10 $ / 50 $ par million de tokens**, avec une fenêtre de contexte de **1M tokens par défaut** et une sortie maximale de **128k tokens**. {/* source: platform.claude.com (release notes Claude Fable 5), consulté 2026-06-30 */} C'est plus du double du prix de Sonnet 5, et deux fois plus cher qu'Opus 4.8 sur l'entrée comme sur la sortie.
+
+### Trois comportements à connaître avant de l'utiliser
+
+1. **Le thinking est toujours actif.** Il n'existe pas de mode "thinking désactivé" pour Fable 5 : seul le niveau s'adapte automatiquement à la complexité de la tâche. {/* source: platform.claude.com (release notes Claude Fable 5), consulté 2026-06-30 */}
+2. **La chaîne de raisonnement brute n'est jamais exposée.** Vous pouvez demander un résumé via `thinking.display: "summarized"`, mais par défaut (`"omitted"`), vous ne voyez rien du raisonnement intermédiaire. {/* source: platform.claude.com (release notes Claude Fable 5), consulté 2026-06-30 */}
+3. **Le modèle peut refuser une requête.** Des classifieurs de sécurité internes peuvent déclencher un refus, renvoyé comme `stop_reason: "refusal"` dans une réponse HTTP 200 (pas une erreur). Des mécanismes de repli côté serveur ou côté client existent pour gérer ce cas. {/* source: platform.claude.com (release notes Claude Fable 5), consulté 2026-06-30 */}
+
+<Callout type="warning" title="Pas de zero-data-retention">
+Fable 5 impose une rétention de données obligatoire de 30 jours et n'est pas disponible en configuration zero-data-retention. Si vous travaillez sur des données sensibles ou sous contrainte de conformité stricte, c'est un point à vérifier avant d'adopter ce modèle, et pas après.
+</Callout>
+
+### Ne confondez pas Fable 5 et Mythos 5
+
+C'est le piège du jour : **Fable 5 n'est pas le successeur de Claude Mythos Preview**. Ce rôle revient à **Claude Mythos 5**, disponible en accès limité via le programme Project Glasswing. Fable 5 et Mythos 5 partagent les mêmes spécifications techniques et le même prix, mais Mythos 5 n'a pas les classifieurs de sécurité de Fable 5. Si vous voyez une référence à "Mythos" dans une annonce ou une documentation, ce n'est pas le même produit que celui décrit ici.
+
+## Tableau comparatif des 4 modèles actuels
+
+| Modèle | Identifiant API | Entrée ($/MTok) | Sortie ($/MTok) | Contexte | Sortie max | Idéal pour |
+|---|---|---|---|---|---|---|
+| Claude Haiku 4.5 | `claude-haiku-4-5` | 1 $ | 5 $ | 200k tokens | 64k tokens | Tâches simples, rapides, volumineuses |
+| Claude Sonnet 5 | `claude-sonnet-5` | 3 $ (2 $ intro) | 15 $ (10 $ intro) | 1M tokens | 128k tokens | Usage quotidien Claude Code, dev courant |
+| Claude Opus 4.8 | `claude-opus-4-8` | 5 $ | 25 $ | 1M tokens | 128k tokens | Raisonnement complexe, code agentique poussé |
+| Claude Fable 5 | `claude-fable-5` | 10 $ | 50 $ | 1M tokens | 128k tokens | Cas les plus exigeants, avec garde-fous de sécurité |
+
+Le tarif introductif de Sonnet 5 (2 $ / 10 $) expire le 31 août 2026. Passé cette date, le tarif standard (3 $ / 15 $) s'applique automatiquement, sans action de votre part. {/* source: https://platform.claude.com/docs/en/release-notes/api.md et platform.claude.com (pages modèles Opus 4.8, Haiku 4.5, Fable 5), consulté 2026-06-30 */}
+
+## Ce que ça change concrètement dans votre usage de Claude Code
+
+<Steps>
+<Step title="Identifiez vos scripts qui touchent l'API directement" stepNumber={1}>
+Cherchez dans vos hooks, vos agents SDK ou vos intégrations CI tout appel qui fixe manuellement `thinking.budget_tokens`, `temperature`, `top_p` ou `top_k`. Avec Sonnet 5, ces appels échoueront avec une erreur 400 tant qu'ils ne sont pas adaptés.
+</Step>
+
+<Step title="Basculez sur Sonnet 5 via le flag ou la variable d'environnement" stepNumber={2}>
+
+```bash
+# Session ponctuelle
+claude --model claude-sonnet-5
+
+# Par défaut pour tout le shell
+export ANTHROPIC_MODEL="claude-sonnet-5"
+```
+
+</Step>
+
+<Step title="Recalculez votre budget tokens, pas seulement votre budget en dollars" stepNumber={3}>
+Lancez `/cost` sur une session représentative avant et après bascule. Avec ~30 % de tokens en plus pour un texte identique, votre fenêtre de contexte se remplit aussi plus vite : surveillez le moment où `/compact` devient nécessaire.
+</Step>
+
+<Step title="Réservez Fable 5 aux cas qui le justifient vraiment" stepNumber={4} isLast>
+Vu son prix et son comportement (thinking permanent, raisonnement masqué, refus possibles, pas de zero-data-retention), Fable 5 n'a pas vocation à devenir votre modèle par défaut. Gardez-le pour les tâches les plus exigeantes, en connaissance de cause sur ses contraintes.
+</Step>
+</Steps>
+
+## FAQ
+
+**Sonnet 5 devient-il le nouveau modèle par défaut de Claude Code ?**
+Ce n'est pas un fait vérifié à ce stade : la documentation publique au 30 juin 2026 décrit les caractéristiques du modèle, pas un changement de défaut imposé. Vérifiez votre configuration (`ANTHROPIC_MODEL`, flag `--model`) avant de supposer un changement automatique.
+
+**Dois-je m'inquiéter de la hausse de 30 % de tokens ?**
+Pas de panique, mais un recalcul s'impose. Le tarif introductif compense une partie de la hausse jusqu'au 31 août 2026. Mesurez avec `/cost` plutôt que d'extrapoler.
+
+**Fable 5 est-il accessible directement dans Claude Code ?**
+Il est disponible via l'API Claude, AWS Bedrock, Google Vertex AI et Microsoft Foundry. Si votre installation Claude Code est configurée pour pointer vers l'un de ces providers, vous pouvez cibler `claude-fable-5` via `ANTHROPIC_MODEL` ou `--model`.
+
+**Puis-je désactiver le thinking de Fable 5 ?**
+Non. Le thinking est toujours actif sur Fable 5, seul son niveau s'adapte automatiquement. C'est une différence structurelle avec les autres modèles de la gamme.
+
+**Mythos 5 et Fable 5, c'est la même chose ?**
+Non. Ils partagent les mêmes specs et le même prix, mais Mythos 5 (accès limité via Project Glasswing) est le successeur de Mythos Preview et n'a pas les classifieurs de sécurité présents sur Fable 5.
+
+## Prochaines étapes
+
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : recalculez votre budget avec les nouveaux tarifs
+- [Pourquoi vos tokens coûtent plus cher dans certaines langues](/content/cout-tokens-par-langue) : comprendre l'impact d'un changement de tokenizer
+- [Mode Plan vs Mode Thinking](/content/mode-plan-vs-thinking) : ce que le thinking adaptatif change pour vos workflows
+- [Multi-provider : AWS Bedrock et Google Vertex AI](/advanced/multi-provider) : configurer Claude Code pour accéder à Fable 5
+- [Référence CLI](/reference/cli) : tous les flags pour changer de modèle, dont `--model`

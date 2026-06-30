@@ -55,6 +55,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "mcp.create-mcp-typescript", href: "/mcp/create-mcp-typescript" },
       { labelKey: "mcp.create-mcp-python", href: "/mcp/create-mcp-python" },
       { labelKey: "mcp.advanced-protocol", href: "/mcp/advanced-protocol" },
+      {
+        labelKey: "mcp.workflow-design-playwright",
+        href: "/mcp/workflow-design-playwright",
+      },
+      { labelKey: "mcp.comfyui-mcp-local", href: "/mcp/comfyui-mcp-local" },
+      { labelKey: "mcp.comfyui-workflow-piloting", href: "/mcp/comfyui-workflow-piloting" },
     ],
   },
   plugins: {
@@ -75,7 +81,11 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "skills.what-are-skills", href: "/skills/what-are-skills" },
       { labelKey: "skills.best-skills", href: "/skills/best-skills" },
       { labelKey: "skills.find-skills", href: "/skills/find-skills" },
+      { labelKey: "skills.claude-council", href: "/skills/claude-council" },
       { labelKey: "skills.impeccable", href: "/skills/impeccable" },
+      { labelKey: "skills.ui-ux-pro-max", href: "/skills/ui-ux-pro-max" },
+      { labelKey: "skills.taste-skill", href: "/skills/taste-skill" },
+      { labelKey: "skills.huashu-design", href: "/skills/huashu-design" },
       { labelKey: "skills.create-custom", href: "/skills/create-custom" },
       { labelKey: "skills.comparison", href: "/skills/comparison" },
     ],
@@ -93,6 +103,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "agents.agent-sdk", href: "/agents/agent-sdk" },
       { labelKey: "agents.performance-limits", href: "/agents/performance-limits" },
       { labelKey: "agents.background-agents", href: "/agents/background-agents" },
+      { labelKey: "agents.agent-generation-assets", href: "/agents/agent-generation-assets" },
     ],
   },
   prompting: {
@@ -135,6 +146,7 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
       { labelKey: "use-cases.business", href: "/use-cases/business" },
       { labelKey: "use-cases.success-stories", href: "/use-cases/success-stories" },
       { labelKey: "use-cases.no-code", href: "/use-cases/no-code" },
+      { labelKey: "use-cases.ia-generative-creative", href: "/use-cases/ia-generative-creative" },
     ],
   },
   ecosystem: {

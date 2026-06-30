@@ -1,3 +1,15 @@
+# [1.12.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.11.0...v1.12.0) (2026-06-30)
+
+
+### Features
+
+* **content:** article orchestration d'équipes d'agents Claude (FR+EN) ([c2d0063](https://github.com/tellebma/The-Claude-Codex/commit/c2d0063c542c12f12d8315724f79b87759ee1f6f))
+* **content:** article Sonnet 5 / Fable 5 + mise à jour des pages obsolètes ([#275](https://github.com/tellebma/The-Claude-Codex/issues/275)) ([43d5966](https://github.com/tellebma/The-Claude-Codex/commit/43d59662ddff2713ec5c4b9e155b84eacb2010f1)), closes [#257](https://github.com/tellebma/The-Claude-Codex/issues/257)
+* **content:** articles IA générative — ComfyUI MCP, agent assets, use-case créatif (FR+EN) ([5ea87cb](https://github.com/tellebma/The-Claude-Codex/commit/5ea87cbfd6f4142c43a0c01e60c377c3bf27ff3c))
+* **content:** Claude Council — pattern LLM Council + générateur (CC-1 à CC-8) ([0aa1956](https://github.com/tellebma/The-Claude-Codex/commit/0aa1956eca9185245e8d363c00c0a2fbc999b0f7))
+* **content:** EPIC Stack design Claude Code (DSK-1/3/4/5/6/7/8/9/10) ([6b5148a](https://github.com/tellebma/The-Claude-Codex/commit/6b5148a935a29e6c39391bc4f003b70bdee4c028))
+* intégration consolidée develop (TUTO-6/7/8 + SR-3 + article tokens) ([17ef2d3](https://github.com/tellebma/The-Claude-Codex/commit/17ef2d33d3d55076fcb47ff732f67034fb0b3b50))
+
 # [1.11.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.10.0...v1.11.0) (2026-05-28)
 
 

@@ -11,6 +11,13 @@ interface ArticlePagerProps {
   readonly next: PagerEntry | null;
   readonly previousLabel: string;
   readonly nextLabel: string;
+  /**
+   * Categorie d'evenement Matomo emise au clic (TUTO-10), captee par
+   * `useTutoComponentTracking` via les attributs `data-track-*`. Defaut
+   * `"article_pager"` (pages `/content/[slug]`) ; les pages tuto passent
+   * explicitement `"tuto_pager"` pour ne pas melanger les deux usages.
+   */
+  readonly analyticsCategory?: string;
 }
 
 /**
@@ -29,6 +36,7 @@ export function ArticlePager({
   next,
   previousLabel,
   nextLabel,
+  analyticsCategory = "article_pager",
 }: Readonly<ArticlePagerProps>) {
   if (!prev && !next) return null;
 
@@ -40,6 +48,8 @@ export function ArticlePager({
       {prev ? (
         <Link
           href={prev.href}
+          data-track-category={analyticsCategory}
+          data-track-action="prev"
           className="group block rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-5 py-5 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-[var(--shadow-md)]"
         >
           <p className="mb-1.5 inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.05em] text-[color:var(--fg-muted)]">
@@ -59,6 +69,8 @@ export function ArticlePager({
       {next ? (
         <Link
           href={next.href}
+          data-track-category={analyticsCategory}
+          data-track-action="next"
           className="group block rounded-2xl border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] px-5 py-5 text-right transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-brand-400 hover:shadow-[var(--shadow-md)]"
         >
           <p className="mb-1.5 inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.05em] text-[color:var(--fg-muted)]">

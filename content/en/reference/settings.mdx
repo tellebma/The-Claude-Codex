@@ -5,7 +5,7 @@ badge: "Config"
 section: "reference"
 order: 3
 datePublished: "2026-03-11"
-dateModified: "2026-03-30"
+dateModified: "2026-06-30"
 ---
 
 ## The 5 configuration levels
@@ -75,7 +75,7 @@ The three remaining levels correspond to JSON files. They are merged at the star
 ```json
 {
   // Default model for all sessions
-  "model": "claude-sonnet-4-6",
+  "model": "claude-sonnet-5",
 
   // Enable Extended Thinking
   "alwaysThinkingEnabled": false,
@@ -127,12 +127,12 @@ The default Claude model for all sessions.
 | Value | Description |
 |-------|-------------|
 | `claude-haiku-4-5` | Fast and affordable, 90% of Sonnet's capabilities |
-| `claude-sonnet-4-6` | Best quality/cost balance (recommended) |
-| `claude-opus-4-6` | Deepest reasoning, slower |
+| `claude-sonnet-5` | Best quality/cost balance (recommended) |
+| `claude-opus-4-8` | Deepest reasoning, slower |
 
 ```json
 {
-  "model": "claude-sonnet-4-6"
+  "model": "claude-sonnet-5"
 }
 ```
 
@@ -581,7 +581,7 @@ All calls to the Anthropic API will route through the proxy, regardless of the d
 ```json
 // ~/.claude/settings.json
 {
-  "model": "claude-sonnet-4-6",
+  "model": "claude-sonnet-5",
   "alwaysThinkingEnabled": false,
   "autoCompact": true,
   "permissions": {
@@ -602,7 +602,7 @@ All calls to the Anthropic API will route through the proxy, regardless of the d
 ```json
 // .claude/settings.json
 {
-  "model": "claude-sonnet-4-6",
+  "model": "claude-sonnet-5",
   "allowedTools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
   "permissions": {
     "deny": ["Bash(rm -rf:*)", "Bash(sudo:*)", "WebFetch"]

@@ -257,15 +257,15 @@ Pilote sur 3 sections distinctes (1 onboarding lineaire + 1 dense + 1 courte) po
 
 > En tant que **SEO owner**, je veux un suivi GSC structure pour valider l'option C avec des donnees.
 
-**Statut** : a faire en parallele de TUTO-5, TUTO-6, TUTO-7.
+**Statut** : 🔄 **REPLANIFIE 2026-07-01**. Decouverte critique en reprenant l'EPIC apres une pause d'un mois : TUTO-6/7/8 etaient merges sur `develop` depuis le 2026-06-04 mais **jamais deployes en production** (`main` etait reste bloque a la release du 2026-05-28 jusqu'au merge de la PR #276 le 2026-07-01). Les rapports GSC hebdo (`claude-code-obsidian-brain/raw/analytics/`) couvrant cette periode ne mesurent donc PAS l'effet du rollout : ils montrent l'ancien layout. Analyse retrospective faite quand meme (semaines 2026-05-22 a 2026-06-26) : tendance globale saine (clics GSC 135→267, impressions 45,8k→88,2k sur 5 semaines), pas de signal d'alarme site-large. Seul point note hors-scope EPIC : `/en/reference/environment/` capte 42k+ impressions pour 0,0 % de CTR (probable souci de title/meta, a investiguer separement). **Le vrai J0 de mesure demarre le 2026-07-01** (date du deploiement prod reel) ; J-7/J+7/J+14/J+28 a recalculer depuis cette date.
 
 **Implementation** : snapshot impressions / clics / position / CTR par section a J-7, J+7, J+14, J+28 dans `reports/tuto-rollout-{section}.md`.
 
 **Criteres d'acceptation** :
-- [ ] Rapport Markdown par section, 4 colonnes (J-7, J+7, J+14, J+28).
-- [ ] Source de verite : rapport hebdo `claude-code-obsidian-brain/raw/analytics/{date}/REPORT.md`.
+- [ ] Rapport Markdown par section, 4 colonnes (J-7, J+7, J+14, J+28) — a generer a partir du 2026-07-08 (J+7 reel).
+- [x] Source de verite identifiee et accessible : rapport hebdo `claude-code-obsidian-brain/raw/analytics/{date}/REPORT.md` (mirroir GitHub `tellebma/claude-code-obsidian-brain`).
 - [ ] Seuil rollback : section qui perd > 15 % d'impressions a J+14 declenche freeze + revert. Granularite section, pas page (signal trop bruite a la page).
-- [ ] Rapport final consolide a J+28 du dernier batch.
+- [ ] Rapport final consolide a J+28 du dernier batch (~2026-07-29).
 
 **Fichiers** : `reports/tuto-rollout-{section}.md` x 6.
 
@@ -275,17 +275,17 @@ Pilote sur 3 sections distinctes (1 onboarding lineaire + 1 dense + 1 courte) po
 
 > En tant que **product**, je veux mesurer l'usage reel des composants UX cibles.
 
-**Statut** : a faire J+30 apres dernier rollout.
+**Statut** : 🔄 **EN COURS**. Trackers implementes le 2026-07-01 (branche `feat/tuto-9-10-monitoring`). Verification prealable : Event Tracking et Segmentation sont des fonctionnalites **gratuites** de l'edition Community Matomo auto-hebergee (confirme via la page officielle matomo.org/pricing — seuls Funnels/Heatmaps/A-B Testing/White Label sont payants), donc aucun obstacle de licence.
 
-**Implementation** : ajouter trackers Matomo sur `ArticlePager` (clic prev/next), profondeur scroll, clic sur `SectionPeers` (item + lien overview).
+**Implementation** : nouveau hook `useTutoComponentTracking` (listener delegue `click` capture-phase, meme pattern que `useExternalLinkTracking`) monte dans `AnalyticsTracker`. Les elements cibles portent des attributs `data-track-category` / `data-track-action` / `data-track-label` plutot que des handlers `onClick` directs, ce qui permet de garder `ArticlePager` et `SectionPeers` en Server Components. `ArticlePager` recoit une nouvelle prop `analyticsCategory` (defaut `"article_pager"` pour les pages `/content/[slug]`, `"tuto_pager"` passe explicitement par `TutoArticleContent`) pour ne pas melanger les deux usages du composant partage.
 
 **Criteres d'acceptation** :
-- [ ] Categories Matomo definies : `tuto_pager` (action prev/next), `tuto_section_peers` (action item_click / overview_click), `tuto_scroll` (deja couvert par `useScrollDepthTracking`).
-- [ ] Dashboard Matomo segment "tuto" cree.
-- [ ] Rapport J+30 : taux de clic prev/next, taux de clic SectionPeers, profondeur scroll par section.
+- [x] Categories Matomo definies : `tuto_pager` (action `prev`/`next`), `tuto_section_peers` (action `item_click` / `overview_click`), `tuto_scroll` (deja couvert par `useScrollDepthTracking`).
+- [ ] Dashboard Matomo segment "tuto" cree (action manuelle dans l'UI Matomo, hors code).
+- [ ] Rapport J+30 (~2026-07-31) : taux de clic prev/next, taux de clic SectionPeers, profondeur scroll par section.
 - [ ] Decision documentee : option C validee ou EPIC suite (`SectionOverview` collapsible sur `advanced`) si discovery insuffisante.
 
-**Fichiers** : `src/lib/analytics/matomo.ts`, `src/components/layout/SectionPeers.tsx`, `src/components/layout/ArticlePager.tsx`.
+**Fichiers** : `src/hooks/useTutoComponentTracking.ts` (nouveau), `src/components/layout/AnalyticsTracker.tsx`, `src/components/layout/ArticlePager.tsx`, `src/components/layout/TutoArticleContent.tsx`, `src/components/layout/SectionPeers.tsx`. Tests : `__tests__/hooks/useTutoComponentTracking.test.tsx` (nouveau), `__tests__/components/ArticlePager.test.tsx`, `__tests__/components/SectionPeers.test.tsx`.
 
 ---
 

@@ -329,7 +329,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Maîtrisez l'Extended Thinking et le Plan Mode de Claude Code. Activation, cas d'usage, chain-of-thought, différences entre Haiku, Sonnet et Opus, impact sur les coûts.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-06-30",
   },
   {
     path: "/prompting/chaining-and-agents",
@@ -356,7 +356,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "La qualité du contexte Claude Code s'effondre par paliers. Comprendre la dumb zone, utiliser /compact dirigé, préférer le rewind à la correction, et le pattern test-time compute.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-04-26",
+    lastModified: "2026-06-30",
   },
   {
     path: "/future",
@@ -617,7 +617,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Tutoriel pour bâtir un agent Claude SDK qui génère des images via Flux/Replicate, optimise en WebP et upload. Architecture, code TypeScript et Python, coûts.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-06-04",
+    lastModified: "2026-06-30",
   },
   {
     path: "/use-cases",
@@ -662,7 +662,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Intégrer la génération d'images IA dans ton flow Claude Code. 4 patterns (MCP local, MCP cloud, Agent SDK, Skill) comparés sur latence, coût et contrôle.",
     priority: 0.7,
     changeFrequency: "monthly",
-    lastModified: "2026-06-04",
+    lastModified: "2026-06-30",
   },
   {
     path: "/ecosystem",
@@ -797,7 +797,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Configurez Claude Code avec AWS Bedrock, Google Vertex AI ou un proxy OpenAI-compatible. Gestion des credentials, sélection de modèle par tâche et configuration enterprise.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/advanced/mcp-profiles",
@@ -860,7 +860,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Faire baisser la facture Anthropic sans sacrifier la qualité. 5 leviers : prompt caching natif, /compact, caveman, claude-code-router, abonnement Max.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-05-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/advanced/observabilite-monitoring",
@@ -896,7 +896,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Toutes les slash commands, raccourcis clavier, fichiers de configuration et modes d’exécution de Claude Code en un seul endroit. Format dense et copiable.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/reference/cli",
@@ -905,7 +905,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Référence exhaustive de la commande claude : tous les flags, sous-commandes mcp/config/doctor, modes d’exécution et exemples concrets.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/reference/settings",
@@ -914,7 +914,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Toutes les options du fichier settings.json : 3 niveaux de configuration, permissions, MCP, modèles, outils et exemples complets.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-03-11",
+    lastModified: "2026-06-30",
   },
   {
     path: "/reference/environment",
@@ -923,7 +923,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Documentation officielle des variables d’environnement Claude Code : ANTHROPIC_API_KEY, BASE_URL, AUTH_TOKEN, MODEL, proxy. Exemples shell, Docker, CI/CD.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-05-09",
+    lastModified: "2026-06-30",
   },
   {
     path: "/configurator",
@@ -1069,7 +1069,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Calcul concret des coûts Claude Code selon votre usage : prix Anthropic à jour, impact des MCP, comparatif des plans, et stratégies pour optimiser votre budget.",
     priority: 0.75,
     changeFrequency: "monthly",
-    lastModified: "2026-04-20",
+    lastModified: "2026-06-30",
   },
   {
     path: "/content/cout-tokens-par-langue",
@@ -1176,6 +1176,26 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-12",
+  },
+  {
+    path: "/content/sonnet-5-fable-5-nouveaux-modeles",
+    pathsByLocale: { en: "/content/claude-sonnet-5-fable-5-new-models" },
+    title: "Claude Sonnet 5 et Fable 5 : ce qui change vraiment pour vous dans Claude Code",
+    description:
+      "Claude Sonnet 5, vrai complément à Opus 4.8 : prix, contexte, tokenizer, thinking adaptatif. Et pourquoi Fable 5, suspendu depuis le 12 juin 2026 sur ordre du gouvernement américain, reste indisponible.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-01",
+  },
+  {
+    path: "/content/fable-5-est-de-retour",
+    pathsByLocale: { en: "/content/fable-is-back-what-you-must-know" },
+    title: "Fable 5 est de retour : ce qu'il faut savoir",
+    description:
+      "Fable 5 redéployé le 1er juillet 2026 après trois semaines de suspension : calendrier complet, nouvelles garanties de sécurité et conditions d'accès pour Claude Code.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-01",
   },
   {
     path: "/about",

@@ -5,7 +5,7 @@ badge: "CLI"
 section: "reference"
 order: 2
 datePublished: "2026-03-11"
-dateModified: "2026-03-11"
+dateModified: "2026-06-30"
 ---
 
 ## Commande principale : `claude`
@@ -18,7 +18,7 @@ claude [OPTIONS] [PROMPT]
 
 | Flag | Alias | Type | Description |
 |------|-------|------|-------------|
-| `--model <id>` | `-m` | string | Modèle à utiliser (`claude-haiku-4-5`, `claude-sonnet-4-6`, `claude-opus-4-6`, etc.) |
+| `--model <id>` | `-m` | string | Modèle à utiliser (`claude-haiku-4-5`, `claude-sonnet-5`, `claude-opus-4-8`, etc.) |
 | `--print` | `-p` | boolean | Mode non-interactif : affiche la réponse et quitte |
 | `--output-format <fmt>` | | string | Format de sortie : `text` (défaut), `json`, `stream-json` |
 | `--verbose` | | boolean | Affiche les appels d'outils et métadonnées (debug) |
@@ -52,7 +52,7 @@ Ce flag bypasse toutes les confirmations de Claude Code, y compris avant des act
 claude
 
 # Session interactive avec un modèle spécifique
-claude --model claude-opus-4-6
+claude --model claude-opus-4-8
 
 # Mode print : exécuter une tâche et quitter
 claude --print "Explique le code dans src/auth.ts"
@@ -280,9 +280,9 @@ claude config [SOUS-COMMANDE] [OPTIONS]
 claude config list
 
 claude config get model
-# → claude-sonnet-4-6
+# → claude-sonnet-5
 
-claude config set model claude-opus-4-6
+claude config set model claude-opus-4-8
 
 claude config add allowedTools "Bash"
 claude config remove allowedTools "Bash"

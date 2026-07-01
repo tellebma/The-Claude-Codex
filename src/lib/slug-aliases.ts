@@ -18,6 +18,8 @@ const SLUG_ALIASES: Readonly<Record<string, string>> = {
   "ne-pas-donner-cles-api-a-claude-code": "do-not-give-api-keys-to-claude-code",
   "refaire-une-card-avec-impeccable-et-playwright":
     "redo-a-card-with-impeccable-and-playwright",
+  "sonnet-5-fable-5-nouveaux-modeles": "claude-sonnet-5-fable-5-new-models",
+  "fable-5-est-de-retour": "fable-is-back-what-you-must-know",
   // content : EN → FR
   "security-best-practices": "bonnes-pratiques-securite",
   "ci-cd-cyber-security": "ci-cd-cyber-securite",
@@ -29,6 +31,8 @@ const SLUG_ALIASES: Readonly<Record<string, string>> = {
   "do-not-give-api-keys-to-claude-code": "ne-pas-donner-cles-api-a-claude-code",
   "redo-a-card-with-impeccable-and-playwright":
     "refaire-une-card-avec-impeccable-et-playwright",
+  "claude-sonnet-5-fable-5-new-models": "sonnet-5-fable-5-nouveaux-modeles",
+  "fable-is-back-what-you-must-know": "fable-5-est-de-retour",
   // mcp : FR ↔ EN
   "securite-mcp": "mcp-security",
   "mcp-security": "securite-mcp",

@@ -5,7 +5,7 @@ badge: "Budget"
 section: "content"
 order: 6
 datePublished: "2026-03-11"
-dateModified: "2026-04-20"
+dateModified: "2026-06-30"
 themes: ["reference", "tooling"]
 ---
 
@@ -24,7 +24,7 @@ There are two types of tokens, billed differently:
 
 Output tokens typically cost 3 to 5 times more than input tokens.
 
-## Official Anthropic pricing (March 2026)
+## Official Anthropic pricing (June 2026)
 
 <Callout type="warning" title="Prices subject to change">
 Anthropic pricing may change. Always check current rates at [anthropic.com/pricing](https://www.anthropic.com/pricing) before budgeting. The figures below are those published at the time of writing.
@@ -34,9 +34,10 @@ Anthropic pricing may change. Always check current rates at [anthropic.com/prici
 
 | Model | Input (per million tokens) | Output (per million tokens) |
 |-------|----------------------------|------------------------------|
-| Claude Haiku 4.5 | ~$0.80 | ~$4 |
-| Claude Sonnet 4.6 | ~$3 | ~$15 |
-| Claude Opus 4.6 | ~$15 | ~$75 |
+| Claude Haiku 4.5 | $1 | $5 |
+| Claude Sonnet 5 | $3 (intro price $2 until August 31, 2026) | $15 (intro price $10) |
+| Claude Opus 4.8 | $5 | $25 |
+| Claude Fable 5 | $10 | $50 |
 
 **For a typical development session** with Sonnet (the default model):
 
@@ -204,7 +205,7 @@ Use eager loading with Prisma. Keep TypeScript types."
 
 ### 4. Prefer Sonnet over Opus unless the task warrants it
 
-Opus costs 5x more than Sonnet. For most development tasks, Sonnet is sufficient. Reserve Opus for:
+Opus costs about 1.7x more than Sonnet at the standard rate (2.5x during Sonnet 5's launch pricing window, through August 31, 2026). For most development tasks, Sonnet is sufficient. Reserve Opus for:
 - Complex system architecture
 - In-depth security analysis
 - Massive refactors requiring a global view

@@ -4,11 +4,12 @@ import { Suspense } from "react";
 import { useScrollDepthTracking } from "@/hooks/useScrollDepthTracking";
 import { useExternalLinkTracking } from "@/hooks/useExternalLinkTracking";
 import { useMatomoPageviewTracking } from "@/hooks/useMatomoPageviewTracking";
+import { useTutoComponentTracking } from "@/hooks/useTutoComponentTracking";
 
 /**
  * Invisible tracker component.
  *
- * Renders nothing; its sole purpose is to activate three Matomo hooks
+ * Renders nothing; its sole purpose is to activate four Matomo hooks
  * on the client :
  * - `useMatomoPageviewTracking` (SEO-8) : emet un pageview a chaque
  *   navigation App Router cote client. Le snippet `<head>` n'en fire
@@ -19,6 +20,9 @@ import { useMatomoPageviewTracking } from "@/hooks/useMatomoPageviewTracking";
  *   a 25 / 50 / 75 / 100% une seule fois par page.
  * - `useExternalLinkTracking` : evenements `navigation / external_link_click`
  *   a chaque clic sur un lien externe.
+ * - `useTutoComponentTracking` (TUTO-10) : evenements `tuto_pager` /
+ *   `tuto_section_peers` a chaque clic sur `ArticlePager` (pages tuto) ou
+ *   `SectionPeers`.
  *
  * Mount it inside layouts that wrap content pages (e.g. `SectionLayout`)
  * ou directement dans les page.tsx hors layout (cf. SEO-9 PR no 166).
@@ -40,6 +44,7 @@ function MatomoPageviewWrapper() {
 export function AnalyticsTracker() {
   useScrollDepthTracking();
   useExternalLinkTracking();
+  useTutoComponentTracking();
   return (
     <Suspense fallback={null}>
       <MatomoPageviewWrapper />

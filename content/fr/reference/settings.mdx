@@ -5,7 +5,7 @@ badge: "Config"
 section: "reference"
 order: 3
 datePublished: "2026-03-11"
-dateModified: "2026-03-30"
+dateModified: "2026-06-30"
 ---
 
 ## Les 5 niveaux de configuration
@@ -75,7 +75,7 @@ Le fichier `.claude/settings.local.json` est gitignored par défaut. C'est là q
 ```json
 {
   // Modèle par défaut pour toutes les sessions
-  "model": "claude-sonnet-4-6",
+  "model": "claude-sonnet-5",
 
   // Activation de l'Extended Thinking
   "alwaysThinkingEnabled": false,
@@ -127,12 +127,12 @@ Le modèle Claude à utiliser par défaut pour toutes les sessions.
 | Valeur | Description |
 |--------|-------------|
 | `claude-haiku-4-5` | Rapide et économique, 90% des capacités de Sonnet |
-| `claude-sonnet-4-6` | Meilleur équilibre qualité/coût (recommandé) |
-| `claude-opus-4-6` | Raisonnement le plus profond, plus lent |
+| `claude-sonnet-5` | Meilleur équilibre qualité/coût (recommandé) |
+| `claude-opus-4-8` | Raisonnement le plus profond, plus lent |
 
 ```json
 {
-  "model": "claude-sonnet-4-6"
+  "model": "claude-sonnet-5"
 }
 ```
 
@@ -581,7 +581,7 @@ Tous les appels à l'API Anthropic passeront par le proxy, quel que soit le fich
 ```json
 // ~/.claude/settings.json
 {
-  "model": "claude-sonnet-4-6",
+  "model": "claude-sonnet-5",
   "alwaysThinkingEnabled": false,
   "autoCompact": true,
   "permissions": {
@@ -602,7 +602,7 @@ Tous les appels à l'API Anthropic passeront par le proxy, quel que soit le fich
 ```json
 // .claude/settings.json
 {
-  "model": "claude-sonnet-4-6",
+  "model": "claude-sonnet-5",
   "allowedTools": ["Read", "Write", "Edit", "Bash", "Glob", "Grep"],
   "permissions": {
     "deny": ["Bash(rm -rf:*)", "Bash(sudo:*)", "WebFetch"]

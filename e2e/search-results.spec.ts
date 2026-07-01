@@ -14,6 +14,8 @@ import { test, expect } from "@playwright/test";
 const BASE = process.env.VERCEL_PREVIEW_URL || process.env.PLAYWRIGHT_BASE_URL;
 
 test.describe("Search globale en production Vercel (B-SRC-2)", () => {
+  // Reason: requires VERCEL_PREVIEW_URL pointing to a deployed build (vercel.json
+  // routing only applies in preview/prod, not in `npm run dev`).
   test.skip(
     !BASE || BASE.includes("localhost"),
     "requires VERCEL_PREVIEW_URL pointing to a deployed build"

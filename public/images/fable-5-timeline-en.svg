@@ -1,0 +1,37 @@
+<svg viewBox="0 0 920 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fable5TimelineEnTitle">
+  <title id="fable5TimelineEnTitle">Timeline of Fable 5's return, from June 9 to July 1, 2026</title>
+  <rect x="0" y="0" width="920" height="260" fill="#ffffff" />
+
+  <!-- timeline -->
+  <line x1="90" y1="120" x2="830" y2="120" stroke="#cbd5e1" stroke-width="3" />
+
+  <!-- Step 1: GA launch -->
+  <circle cx="90" cy="120" r="13" fill="#06b6d4" />
+  <text x="90" y="80" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#0f172a">Jun 9, 2026</text>
+  <text x="90" y="100" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#64748b">GA launch</text>
+  <text x="90" y="160" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">Fable 5 and</text>
+  <text x="90" y="178" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">Mythos 5</text>
+
+  <!-- Step 2: suspension -->
+  <circle cx="337" cy="120" r="13" fill="#ef4444" />
+  <text x="337" y="80" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#0f172a">Jun 12, 2026</text>
+  <text x="337" y="100" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#64748b">Suspension</text>
+  <text x="337" y="160" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">US government</text>
+  <text x="337" y="178" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">directive</text>
+
+  <!-- Step 3: Mythos partial restore -->
+  <circle cx="583" cy="120" r="13" fill="#f59e0b" />
+  <text x="583" y="80" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#0f172a">Jun 27, 2026</text>
+  <text x="583" y="100" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#64748b">Partial restore</text>
+  <text x="583" y="160" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">Mythos 5 for</text>
+  <text x="583" y="178" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">~100 organizations</text>
+
+  <!-- Step 4: Fable 5 back -->
+  <circle cx="830" cy="120" r="15" fill="#22c55e" stroke="#0f172a" stroke-width="1.5" />
+  <text x="830" y="80" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="700" fill="#0f172a">Jul 1, 2026</text>
+  <text x="830" y="100" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#64748b">Fable 5 is back</text>
+  <text x="830" y="160" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">Access restored</text>
+  <text x="830" y="178" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" fill="#0f172a">globally</text>
+
+  <text x="460" y="235" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#94a3b8">Source: anthropic.com/news, Euronews, Gizmodo — accessed 2026-07-01</text>
+</svg>

@@ -1,7 +1,8 @@
 import { Suspense, type ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { SectionHero } from "@/components/layout/SectionHero";
 import {
   countAllArticles,
   getAllMdxFiles,
@@ -459,51 +460,22 @@ export default async function ContentIndexPage({
           }}
         />
       ) : null}
-      {/* Hero CTN-4 */}
-      <section
-        className="relative overflow-hidden"
-        style={{ background: "var(--gradient-hero)" }}
-      >
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at top left, var(--gradient-hero-radial-1), transparent 60%), radial-gradient(ellipse at bottom right, var(--gradient-hero-radial-2), transparent 60%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="cc-eyebrow inline-flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className="relative inline-flex h-2 w-2"
-              >
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[color:var(--brand-primary)] opacity-60 motion-reduce:animate-none" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[color:var(--brand-primary)]" />
-              </span>
-              {totalArticles}&nbsp;{t.eyebrowGuides}
-            </p>
-            <h1
-              className="cc-h1 mt-4"
-              style={{ textWrap: "balance" }}
-            >
-              {t.heroTitle}{" "}
-              <span className="text-gradient">{t.heroTitleHighlight}</span>
-            </h1>
-            <p
-              className="cc-lead mx-auto mt-6 max-w-[60ch]"
-              style={{ textWrap: "pretty" }}
-            >
-              {t.heroSubtitle}
-            </p>
-            <ContentHeroActions
-              primaryLabel={t.ctaFilter}
-              secondaryLabel={t.ctaLatest}
-            />
-          </div>
-        </div>
-      </section>
+      {/* Hero CTN-4 / POL-3 : SectionHero editorial */}
+      <SectionHero
+        category={`${totalArticles} ${t.eyebrowGuides}`}
+        categoryIcon={BookOpen}
+        title={t.heroTitle}
+        titleHighlight={t.heroTitleHighlight}
+        highlightInline
+        lead={t.heroSubtitle}
+        tone="dark"
+        actions={
+          <ContentHeroActions
+            primaryLabel={t.ctaFilter}
+            secondaryLabel={t.ctaLatest}
+          />
+        }
+      />
 
       {/* Pinned + Latest combines (CTN-3) */}
       <section

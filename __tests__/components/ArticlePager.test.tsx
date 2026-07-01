@@ -101,4 +101,39 @@ describe("ArticlePager", () => {
     const link = screen.getByRole("link");
     expect(link.className).toContain("text-right");
   });
+
+  it("TUTO-10: defaults the Matomo tracking category to article_pager", () => {
+    render(
+      <ArticlePager
+        prev={sampleArticle}
+        next={sampleNext}
+        previousLabel="P"
+        nextLabel="N"
+      />
+    );
+    const links = screen.getAllByRole("link");
+    expect(links[0].getAttribute("data-track-category")).toBe(
+      "article_pager"
+    );
+    expect(links[0].getAttribute("data-track-action")).toBe("prev");
+    expect(links[1].getAttribute("data-track-category")).toBe(
+      "article_pager"
+    );
+    expect(links[1].getAttribute("data-track-action")).toBe("next");
+  });
+
+  it("TUTO-10: lets callers override the Matomo tracking category", () => {
+    render(
+      <ArticlePager
+        prev={sampleArticle}
+        next={sampleNext}
+        previousLabel="P"
+        nextLabel="N"
+        analyticsCategory="tuto_pager"
+      />
+    );
+    const links = screen.getAllByRole("link");
+    expect(links[0].getAttribute("data-track-category")).toBe("tuto_pager");
+    expect(links[1].getAttribute("data-track-category")).toBe("tuto_pager");
+  });
 });

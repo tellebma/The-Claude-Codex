@@ -2469,7 +2469,7 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
   {
     title: "Claude Sonnet 5 and Fable 5: what changes for Claude Code users",
     description:
-      "Anthropic ships Claude Sonnet 5 and Claude Fable 5 on June 30, 2026. Pricing, context window, new tokenizer, adaptive thinking, and practical implications for Claude Code.",
+      "Claude Sonnet 5, a real complement to Opus 4.8: pricing, context window, tokenizer, adaptive thinking. Fable 5, suspended since June 12, 2026 by US government order, remains unavailable.",
     href: "/content/claude-sonnet-5-fable-5-new-models",
     section: "Content",
     keywords: [
@@ -2487,6 +2487,33 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "introductory pricing",
       "anthropic pricing",
       "model comparison",
+      "fable 5 suspended",
+      "fable 5 banned",
+      "announcement",
+      "2026",
+    ],
+  },
+  // Fable 5 is back
+  {
+    title: "Fable Is Back: What You Must Know",
+    description:
+      "Fable 5 redeployed on July 1, 2026 after three weeks of suspension: full timeline, new safety guarantees, and access conditions for Claude Code.",
+    href: "/content/fable-is-back-what-you-must-know",
+    section: "Content",
+    keywords: [
+      "fable is back",
+      "fable 5 is back",
+      "claude fable 5",
+      "claude-fable-5",
+      "mythos 5",
+      "redeployment",
+      "export controls lifted",
+      "us government suspension",
+      "project glasswing",
+      "jailbreak",
+      "safety classifier",
+      "opus 4.8",
+      "july 1 2026",
       "announcement",
       "2026",
     ],

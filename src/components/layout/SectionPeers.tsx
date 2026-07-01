@@ -80,6 +80,9 @@ export async function SectionPeers({
         <Link
           href={itemHref}
           aria-current={isActive ? "page" : undefined}
+          data-track-category="tuto_section_peers"
+          data-track-action="item_click"
+          data-track-label={section}
           className={clsx(
             "block rounded-md px-3 py-2 text-sm transition-colors",
             isActive
@@ -117,6 +120,9 @@ export async function SectionPeers({
           <div className="mt-2 border-t border-[color:var(--border-default)] pt-2">
             <Link
               href={overviewHref}
+              data-track-category="tuto_section_peers"
+              data-track-action="overview_click"
+              data-track-label={section}
               className="block rounded-md px-3 py-2 text-xs font-medium text-[color:var(--brand-primary)] hover:underline"
             >
               {t("section-peers.overviewLink", { section: sectionTitle })}
@@ -137,6 +143,9 @@ export async function SectionPeers({
           <ul className="space-y-0.5">{listItems}</ul>
           <Link
             href={overviewHref}
+            data-track-category="tuto_section_peers"
+            data-track-action="overview_click"
+            data-track-label={section}
             className="mt-3 inline-block rounded-md text-xs font-medium text-[color:var(--brand-primary)] hover:underline"
           >
             {t("section-peers.overviewLink", { section: sectionTitle })}

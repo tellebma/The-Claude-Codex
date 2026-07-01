@@ -1,0 +1,112 @@
+---
+title: "Fable 5 est de retour : ce qu'il faut savoir"
+description: "Fable 5 redéployé le 1er juillet 2026 après trois semaines de suspension : calendrier complet, nouvelles garanties de sécurité et conditions d'accès pour Claude Code."
+badge: "Nouveau"
+section: "content"
+order: 19
+datePublished: "2026-07-01"
+dateModified: "2026-07-01"
+themes: ["guide", "tooling"]
+---
+
+## En bref
+
+Claude Fable 5 est de nouveau disponible depuis aujourd'hui, mercredi **1er juillet 2026**, sur Claude Platform, Claude.ai, Claude Code et Claude Cowork, partout dans le monde. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Trois semaines après sa suspension par le gouvernement américain le 12 juin 2026, Anthropic a obtenu la levée complète des contrôles à l'export le 30 juin, avec un redéploiement annoncé pour le lendemain. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Le tarif n'a pas bougé (10 $ / 50 $ par million de tokens), mais l'accès inclus dans votre plan est temporairement plafonné jusqu'au 7 juillet. Si vous découvrez l'affaire, l'article sœur revient sur les specs techniques de Fable 5 et le détail de la suspension : [Claude Sonnet 5 et Fable 5, ce qui change vraiment](/content/sonnet-5-fable-5-nouveaux-modeles).
+
+<Callout type="warning" title="Mythos 5 reste à part">
+Ne confondez pas Fable 5 avec Mythos 5. Mythos 5 reste en accès restreint via le programme Project Glasswing : son ouverture a été partiellement restaurée le 27 juin pour environ une centaine d'organisations américaines de cyberdéfense et d'infrastructures critiques, mais Anthropic continue de négocier séparément un élargissement plus large. {/* source: https://www.euronews.com/2026/06/27/anthropic-cleared-to-restore-mythos-5-access-to-certain-us-organisations, consulté 2026-07-01 */} Le retour du 1er juillet ne concerne que Fable 5.
+</Callout>
+
+## Comment on en est arrivé là
+
+Reprenons la chronologie depuis le début, parce qu'elle explique pourquoi les conditions de retour sont particulières. Fable 5 et Mythos 5 sont passés en disponibilité générale le 9 juin 2026. Trois jours plus tard, le 12 juin, le gouvernement américain a ordonné leur suspension totale via une directive de contrôle des exportations invoquant la sécurité nationale, après la découverte évoquée d'une méthode de contournement des garde-fous de Fable 5, signalée par un chercheur travaillant chez Amazon. Le 27 juin, l'accès à Mythos 5 a été partiellement restauré pour une centaine d'organisations américaines de cyberdéfense et d'infrastructures critiques. {/* source: https://www.euronews.com/2026/06/27/anthropic-cleared-to-restore-mythos-5-access-to-certain-us-organisations, consulté 2026-07-01 */} Le 30 juin, le gouvernement a annoncé la levée complète des contrôles à l'export sur Fable 5, avec un redéploiement fixé au mercredi 1er juillet. {/* source: https://gizmodo.com/claude-fable-5-will-be-back-online-wednesday-anthropic-says-2000779882, consulté 2026-07-01 */}
+
+![Frise chronologique du retour de Fable 5, du 9 juin au 1er juillet 2026](/images/fable-5-timeline-fr.svg)
+
+| Date | Événement |
+|---|---|
+| 9 juin 2026 | Disponibilité générale de Fable 5 et Mythos 5 |
+| 12 juin 2026 | Suspension totale sur ordre du gouvernement américain |
+| 27 juin 2026 | Accès à Mythos 5 partiellement restauré pour une centaine d'organisations américaines de cyberdéfense et d'infrastructures critiques |
+| 30 juin 2026 | Levée complète des contrôles à l'export annoncée pour Fable 5 |
+| 1er juillet 2026 | Fable 5 pleinement redéployé sur Claude Platform, Claude.ai, Claude Code et Claude Cowork |
+
+{/* source: https://www.anthropic.com/news/redeploying-fable-5, https://www.euronews.com/2026/06/27/anthropic-cleared-to-restore-mythos-5-access-to-certain-us-organisations, https://gizmodo.com/claude-fable-5-will-be-back-online-wednesday-anthropic-says-2000779882, consulté 2026-07-01 */}
+
+AWS, Google Cloud (Vertex AI) et Microsoft Foundry ne sont pas encore réactivés : Anthropic indique les remettre en ligne "aussi vite que possible", sans date précise au 1er juillet. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Si vous passez par un de ces trois providers, patientez encore un peu avant de basculer.
+
+## Ce qui a changé côté sécurité
+
+Le contournement à l'origine de la suspension n'a pas juste été corrigé au coup par coup : Anthropic a ajouté un classifieur de sécurité amélioré qui cible spécifiquement cette technique, et le bloque dans plus de 99 % des cas. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Les requêtes bloquées par ce classifieur ne se contentent pas d'un refus sec : elles sont automatiquement redirigées vers Opus 4.8. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */}
+
+Plus largement, Anthropic, Amazon, Microsoft, Google et d'autres partenaires du programme Project Glasswing ont développé conjointement un cadre de sévérité des jailbreaks (industry jailbreak severity framework). Il évalue un contournement selon quatre critères : le gain de capacité qu'il procure, l'étendue de ce gain, la facilité de transformation en arme ("weaponization"), et la facilité avec laquelle il peut être découvert. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */}
+
+<Callout type="info" title="Le tarif n'a pas bougé">
+Fable 5 reste à **10 $ / 50 $ par million de tokens** (entrée/sortie), exactement le même prix qu'avant la suspension. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Si vous aviez déjà fait vos calculs de coût avant le 12 juin, ils restent valables.
+</Callout>
+
+## Ce que ça change pour votre plan, jusqu'au 7 juillet
+
+C'est le point le plus concret pour un usage quotidien de Claude Code : les conditions d'accès au retour ne sont pas identiques à celles d'avant la suspension, et elles sont temporaires.
+
+- Les plans **Pro, Max, Team** et certains plans **Enterprise** incluent Fable 5 jusqu'à 50 % de leurs limites d'usage hebdomadaires, jusqu'au **7 juillet 2026**. Au-delà de ce plafond, l'usage bascule sur des crédits payants. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */}
+- Les sièges **Enterprise standards** n'ont aucune allocation incluse : Fable 5 y est accessible uniquement via crédits payants. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */}
+- Les sièges **Enterprise premium** ont un accès gratuit à Fable 5 jusqu'au 7 juillet 2026. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */}
+
+Ce que ça signifie en pratique : si vous êtes sur Pro, Max ou Team, vous pouvez tester Fable 5 dès aujourd'hui sans surcoût, mais seulement sur la moitié de votre quota hebdomadaire habituel, et seulement pendant une semaine. Passé cette fenêtre, mieux vaut vérifier les tarifs en vigueur avant de généraliser son usage.
+
+## Comment activer Fable 5 dans Claude Code
+
+<Steps>
+<Step title="Vérifiez votre plan et son allocation Fable 5" stepNumber={1}>
+Avant de basculer, confirmez si vous êtes sur Pro, Max, Team, Enterprise standard ou Enterprise premium. C'est ce plan qui détermine si votre usage de Fable 5 jusqu'au 7 juillet est inclus, plafonné à 50 % de vos limites hebdomadaires, ou entièrement facturé en crédits.
+</Step>
+
+<Step title="Basculez sur Fable 5 via le flag ou la variable d'environnement" stepNumber={2}>
+
+```bash
+# Session ponctuelle
+claude --model claude-fable-5
+
+# Par défaut pour tout le shell
+export ANTHROPIC_MODEL="claude-fable-5"
+```
+
+</Step>
+
+<Step title="Surveillez votre quota hebdomadaire avant le 7 juillet" stepNumber={3}>
+Lancez `/cost` régulièrement sur vos sessions Fable 5. La fenêtre à 50 % de vos limites d'usage se referme le 7 juillet 2026 : au-delà, chaque token supplémentaire passe par des crédits payants au tarif standard de 10 $ / 50 $ par million de tokens.
+</Step>
+
+<Step title="Ne comptez pas dessus sur AWS, Vertex AI ou Microsoft Foundry pour l'instant" stepNumber={4} isLast>
+Si votre configuration Claude Code passe par Bedrock, Vertex AI ou Microsoft Foundry, `claude-fable-5` n'est pas encore réactivé sur ces providers. Repassez temporairement sur l'API Claude directe si vous voulez tester le modèle dès maintenant, ou attendez la réactivation annoncée "aussi vite que possible" par Anthropic.
+</Step>
+</Steps>
+
+## FAQ
+
+**Fable 5 est-il de nouveau accessible dans Claude Code aujourd'hui ?**
+Oui, depuis le 1er juillet 2026, sur Claude Platform, Claude.ai, Claude Code et Claude Cowork, à l'échelle mondiale. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Ciblez `claude-fable-5` via `--model` ou `ANTHROPIC_MODEL` comme n'importe quel autre modèle.
+
+**Le prix a-t-il changé depuis la suspension ?**
+Non. Fable 5 reste à 10 $ / 50 $ par million de tokens (entrée/sortie), identique au tarif d'avant le 12 juin 2026. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */}
+
+**Que se passe-t-il après le 7 juillet 2026 ?**
+Le plafond de 50 % des limites d'usage hebdomadaires pour Pro, Max, Team et certains plans Enterprise s'arrête à cette date. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Au-delà, l'usage supplémentaire passe par des crédits payants. Anthropic n'a pas communiqué de nouvelle règle pour l'après-7-juillet à ce stade : à vérifier auprès de votre plan au moment venu.
+
+**Le contournement qui a causé la suspension a-t-il été corrigé ?**
+Anthropic a déployé un classifieur de sécurité amélioré qui cible spécifiquement cette technique et la bloque dans plus de 99 % des cas ; les requêtes bloquées sont redirigées vers Opus 4.8 plutôt que de simplement échouer. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */}
+
+**Mythos 5 est-il aussi de retour ?**
+Pas de la même façon. Mythos 5 reste en accès restreint via Project Glasswing. Son accès a été partiellement restauré le 27 juin pour une centaine d'organisations américaines de cyberdéfense et d'infrastructures critiques, et Anthropic continue de négocier séparément un élargissement plus large. {/* source: https://www.euronews.com/2026/06/27/anthropic-cleared-to-restore-mythos-5-access-to-certain-us-organisations, consulté 2026-07-01 */}
+
+**Dois-je m'attendre à une nouvelle suspension ?**
+Rien dans les annonces officielles ne le suggère au 1er juillet 2026 : la levée des contrôles à l'export est présentée comme complète, pas provisoire. {/* source: https://www.anthropic.com/news/redeploying-fable-5, consulté 2026-07-01 */} Le cadre de sévérité des jailbreaks développé avec Amazon, Microsoft, Google et d'autres partenaires de Project Glasswing vise justement à traiter ce type d'incident en amont plutôt qu'après coup.
+
+## Prochaines étapes
+
+- [Redeploying Fable 5](https://www.anthropic.com/news/redeploying-fable-5) : l'annonce officielle d'Anthropic, source de cet article
+- [Claude Sonnet 5 et Fable 5, ce qui change vraiment](/content/sonnet-5-fable-5-nouveaux-modeles) : specs techniques complètes de Fable 5 et détail de la suspension du 12 juin
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : recalculez votre budget si vous intégrez Fable 5 à votre usage
+- [Multi-provider : AWS Bedrock et Google Vertex AI](/advanced/multi-provider) : configurer Claude Code en attendant la réactivation de Fable 5 sur ces providers
+- [Référence CLI](/reference/cli) : tous les flags pour changer de modèle, dont `--model`

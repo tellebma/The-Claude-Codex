@@ -1182,10 +1182,10 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     pathsByLocale: { en: "/content/claude-sonnet-5-fable-5-new-models" },
     title: "Claude Sonnet 5 et Fable 5 : ce qui change vraiment pour vous dans Claude Code",
     description:
-      "Anthropic lance Claude Sonnet 5 et Claude Fable 5 le 30 juin 2026. Prix, contexte, nouveau tokenizer, thinking adaptatif : ce que ça change concrètement dans vos sessions Claude Code.",
+      "Claude Sonnet 5, vrai complément à Opus 4.8 : prix, contexte, tokenizer, thinking adaptatif. Et pourquoi Fable 5, suspendu depuis le 12 juin 2026 sur ordre du gouvernement américain, reste indisponible.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-06-30",
+    lastModified: "2026-07-01",
   },
   {
     path: "/about",

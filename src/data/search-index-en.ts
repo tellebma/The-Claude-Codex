@@ -2469,7 +2469,7 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
   {
     title: "Claude Sonnet 5 and Fable 5: what changes for Claude Code users",
     description:
-      "Anthropic ships Claude Sonnet 5 and Claude Fable 5 on June 30, 2026. Pricing, context window, new tokenizer, adaptive thinking, and practical implications for Claude Code.",
+      "Claude Sonnet 5, a real complement to Opus 4.8: pricing, context window, tokenizer, adaptive thinking. Fable 5, suspended since June 12, 2026 by US government order, remains unavailable.",
     href: "/content/claude-sonnet-5-fable-5-new-models",
     section: "Content",
     keywords: [
@@ -2487,6 +2487,8 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "introductory pricing",
       "anthropic pricing",
       "model comparison",
+      "fable 5 suspended",
+      "fable 5 banned",
       "announcement",
       "2026",
     ],

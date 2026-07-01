@@ -314,22 +314,64 @@
     }
   },
   "features": {
-    "createWebsite": { "title": "Create a website", "description": "From landing page to full e-commerce, Claude Code generates, structures and deploys your web projects." },
-    "generateDocs": { "title": "Generate documents", "description": "Reports, presentations, technical documentation: let AI structure and write for you." },
-    "automate": { "title": "Automate your tasks", "description": "Scripts, CI/CD pipelines, data migrations. Turn hours of work into minutes." },
-    "analyzeData": { "title": "Analyze data", "description": "Connect your sources, explore your datasets and get insights in natural language." },
-    "codeNoDev": { "title": "Code without being a dev", "description": "Describe what you want in plain language. Claude Code translates your ideas into working code." },
-    "designUI": { "title": "Design interfaces", "description": "Create modern and accessible interfaces by simply describing your vision." },
-    "connectTools": { "title": "Connect your tools", "description": "With MCPs, integrate Gmail, Slack, GitHub, databases and much more." },
-    "deploy": { "title": "Deploy to production", "description": "Docker, CI/CD, monitoring: Claude Code handles your infrastructure from A to Z." }
+    "createWebsite": {
+      "title": "Create a website",
+      "description": "From landing page to full e-commerce, Claude Code generates, structures and deploys your web projects."
+    },
+    "generateDocs": {
+      "title": "Generate documents",
+      "description": "Reports, presentations, technical documentation: let AI structure and write for you."
+    },
+    "automate": {
+      "title": "Automate your tasks",
+      "description": "Scripts, CI/CD pipelines, data migrations. Turn hours of work into minutes."
+    },
+    "analyzeData": {
+      "title": "Analyze data",
+      "description": "Connect your sources, explore your datasets and get insights in natural language."
+    },
+    "codeNoDev": {
+      "title": "Code without being a dev",
+      "description": "Describe what you want in plain language. Claude Code translates your ideas into working code."
+    },
+    "designUI": {
+      "title": "Design interfaces",
+      "description": "Create modern and accessible interfaces by simply describing your vision."
+    },
+    "connectTools": {
+      "title": "Connect your tools",
+      "description": "With MCPs, integrate Gmail, Slack, GitHub, databases and much more."
+    },
+    "deploy": {
+      "title": "Deploy to production",
+      "description": "Docker, CI/CD, monitoring: Claude Code handles your infrastructure from A to Z."
+    }
   },
   "audience": {
-    "developers": { "title": "Developers", "description": "Accelerate your workflow 10x. Code review, refactoring, automated tests, assisted debugging. Your ultimate copilot." },
-    "entrepreneurs": { "title": "Entrepreneurs", "description": "Launch your MVP in days instead of weeks. Prototype, iterate and deploy without a tech team." },
-    "creatives": { "title": "Creatives & Designers", "description": "Transform your mockups into living websites. Generate animations, custom UI components." },
-    "students": { "title": "Students", "description": "Learn by doing. Claude Code explains every concept, fixes your mistakes and guides you step by step." },
-    "curious": { "title": "Curious & Self-taught", "description": "Explore the world of code without prerequisites. Ask questions, experiment, create your first projects." },
-    "teams": { "title": "Teams & Managers", "description": "Standardize your workflows, auto-document, and give superpowers to your entire team." }
+    "developers": {
+      "title": "Developers",
+      "description": "Accelerate your workflow 10x. Code review, refactoring, automated tests, assisted debugging. Your ultimate copilot."
+    },
+    "entrepreneurs": {
+      "title": "Entrepreneurs",
+      "description": "Launch your MVP in days instead of weeks. Prototype, iterate and deploy without a tech team."
+    },
+    "creatives": {
+      "title": "Creatives & Designers",
+      "description": "Transform your mockups into living websites. Generate animations, custom UI components."
+    },
+    "students": {
+      "title": "Students",
+      "description": "Learn by doing. Claude Code explains every concept, fixes your mistakes and guides you step by step."
+    },
+    "curious": {
+      "title": "Curious & Self-taught",
+      "description": "Explore the world of code without prerequisites. Ask questions, experiment, create your first projects."
+    },
+    "teams": {
+      "title": "Teams & Managers",
+      "description": "Standardize your workflows, auto-document, and give superpowers to your entire team."
+    }
   },
   "paths": {
     "ctaLabel": "Start this path",
@@ -337,25 +379,40 @@
       "level": "Beginner",
       "title": "The fundamentals",
       "description": "Never used Claude Code? Perfect. We start from zero, together.",
-      "items": ["Install Claude Code in 5 minutes", "Understand the terminal and the basics", "Your first guided project step by step", "Essential commands to know"]
+      "items": [
+        "Install Claude Code in 5 minutes",
+        "Understand the terminal and the basics",
+        "Your first guided project step by step",
+        "Essential commands to know"
+      ]
     },
     "intermediate": {
       "level": "Intermediate",
       "title": "Tool mastery",
       "description": "You know how to use Claude Code? Discover MCPs, Skills and advanced prompting.",
-      "items": ["Connect your favorite tools via MCPs", "Create and use custom Skills", "Prompting techniques that make a difference", "Automate your daily workflows"]
+      "items": [
+        "Connect your favorite tools via MCPs",
+        "Create and use custom Skills",
+        "Prompting techniques that make a difference",
+        "Automate your daily workflows"
+      ]
     },
     "advanced": {
       "level": "Advanced",
       "title": "Expert & Architect",
       "description": "Push Claude Code to its limits. Multi-agents, complex workflows, deployments.",
-      "items": ["Multi-agent orchestration", "Complex workflows and prompt chaining", "CI/CD and automated deployment", "Create your own MCP servers"]
+      "items": [
+        "Multi-agent orchestration",
+        "Complex workflows and prompt chaining",
+        "CI/CD and automated deployment",
+        "Create your own MCP servers"
+      ]
     }
   },
   "glossary": {
     "analogyLabel": "Analogy:",
     "learnMoreAbout": "Learn more about {term}",
-    "learnMoreLink": "Learn more about this term \u2192"
+    "learnMoreLink": "Learn more about this term →"
   },
   "configuratorTeaser": {
     "title": "Configure your",
@@ -705,6 +762,27 @@
       "hoverTitle": "Hover this card",
       "hoverBody": "3px upward translation, base duration with an ease-out curve. Disabled when prefers-reduced-motion is active.",
       "reducedMotion": "All animations respect prefers-reduced-motion: the translation is removed for users who request it."
+    }
+  },
+  "newsletter": {
+    "badge": "Newsletter",
+    "title": "Join the community",
+    "titleHighlight": "generative AI",
+    "description": "The best tips, tutorials and Claude news, straight to your inbox. No spam, unsubscribe in one click.",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Subscribe",
+    "submitting": "Subscribing…",
+    "honeypotLabel": "Do not fill this field",
+    "successTitle": "You're in!",
+    "successMessage": "Thanks! Check your inbox to confirm your subscription.",
+    "alreadySubscribed": "You're already subscribed. Thanks for sticking around!",
+    "privacy": "We respect your privacy. No data resold, unsubscribe anytime.",
+    "errors": {
+      "invalid_email": "This email address looks invalid. Please check it.",
+      "rate_limited": "You just subscribed. Please wait a moment before retrying.",
+      "not_configured": "Subscription is temporarily unavailable. Please try again later.",
+      "error": "Something went wrong. Please try again in a moment."
     }
   }
 }

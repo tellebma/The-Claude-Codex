@@ -2512,6 +2512,31 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "2026",
     ],
   },
+  // Fable 5 de retour
+  {
+    title: "Fable 5 est de retour : ce qu'il faut savoir",
+    description:
+      "Fable 5 redéployé le 1er juillet 2026 après trois semaines de suspension : calendrier complet, nouvelles garanties de sécurité et conditions d'accès pour Claude Code.",
+    href: "/content/fable-5-est-de-retour",
+    section: "Contenus",
+    keywords: [
+      "fable 5 de retour",
+      "fable 5 est de retour",
+      "claude fable 5",
+      "claude-fable-5",
+      "mythos 5",
+      "redeploiement",
+      "levee des controles a l'export",
+      "suspension gouvernement americain",
+      "project glasswing",
+      "jailbreak",
+      "classifieur de securite",
+      "opus 4.8",
+      "1er juillet 2026",
+      "annonce",
+      "2026",
+    ],
+  },
   // About
   {
     title: "À propos du Claude Codex",

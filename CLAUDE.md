@@ -245,8 +245,12 @@ En plus du pageview, les événements suivants sont envoyés via `window._paq` (
 | `configurator` | `configurator_start` | — | `trackConfigurator.start()` au mount de `ConfiguratorWizard` |
 | `configurator` | `configurator_step` | `1` .. `4` | à chaque changement d'étape |
 | `configurator` | `configurator_complete` | — | premier affichage du preview (preset ou étape 4 validée) |
+| `tuto_pager` / `article_pager` | `prev` / `next` | URL absolue de la page ciblée | `useTutoComponentTracking` (TUTO-10), clic sur `ArticlePager` — catégorie `tuto_pager` sur les pages tuto (`TutoArticleContent`), `article_pager` par défaut sur les articles `/content/[slug]` |
+| `tuto_section_peers` | `item_click` / `overview_click` | clé de section (ex. `skills`) | `useTutoComponentTracking` (TUTO-10), clic sur un item ou le lien overview de `SectionPeers` |
 
-Ces hooks sont montés via `<AnalyticsTracker />` (composant `"use client"` invisible) inclus dans `SectionLayout`. Pour instrumenter une page hors `SectionLayout`, importer et monter le composant côté client. Tous les helpers sont SSR-safe : garde `typeof window !== 'undefined'` et `Array.isArray(window._paq)`. Aucune donnée personnelle n'est envoyée : uniquement des URLs cibles et des labels contrôlés côté code.
+Ces hooks sont montés via `<AnalyticsTracker />` (composant `"use client"` invisible) inclus dans `SectionLayout` et `TutoArticleContent`. Pour instrumenter une page hors de ces deux shells, importer et monter le composant côté client. Tous les helpers sont SSR-safe : garde `typeof window !== 'undefined'` et `Array.isArray(window._paq)`. Aucune donnée personnelle n'est envoyée : uniquement des URLs cibles et des labels contrôlés côté code.
+
+`useTutoComponentTracking` utilise un listener délégué `click` capture-phase générique (sur le modèle de `useExternalLinkTracking`) : tout élément portant `data-track-category` + `data-track-action` (et optionnellement `data-track-label`) déclenche un `trackEvent`. `ArticlePager` expose une prop `analyticsCategory` pour différencier son usage tuto vs article.
 
 ## Docker & déploiement
 

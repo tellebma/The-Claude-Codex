@@ -162,6 +162,7 @@ export async function TutoArticleContent({
       <ArticlePager
         previousLabel={tCommon("previous")}
         nextLabel={tCommon("next")}
+        analyticsCategory="tuto_pager"
         prev={
           prevHref && prev
             ? { href: prevHref, title: prev.frontmatter.title }

@@ -205,4 +205,39 @@ describe("SectionPeers", () => {
       expect(wrapper?.getAttribute("data-section")).toBe("agents");
     });
   });
+
+  describe("TUTO-10: Matomo tracking attributes", () => {
+    it("tags every item link with tuto_section_peers / item_click", async () => {
+      await renderAsync(SectionPeers({ section: "skills", locale: "fr" }));
+      const itemLinks = screen
+        .getAllByRole("link")
+        .filter(
+          (el) => el.getAttribute("data-track-action") === "item_click"
+        );
+      expect(itemLinks.length).toBeGreaterThan(0);
+      for (const link of itemLinks) {
+        expect(link.getAttribute("data-track-category")).toBe(
+          "tuto_section_peers"
+        );
+        expect(link.getAttribute("data-track-label")).toBe("skills");
+      }
+    });
+
+    it("tags both overview links (accordeon + aside) with overview_click", async () => {
+      await renderAsync(SectionPeers({ section: "skills", locale: "fr" }));
+      const overviewLinks = screen
+        .getAllByRole("link")
+        .filter(
+          (el) => el.getAttribute("data-track-action") === "overview_click"
+        );
+      // Une occurrence par variante (< xl accordeon + >= xl aside)
+      expect(overviewLinks).toHaveLength(2);
+      for (const link of overviewLinks) {
+        expect(link.getAttribute("data-track-category")).toBe(
+          "tuto_section_peers"
+        );
+        expect(link.getAttribute("data-track-label")).toBe("skills");
+      }
+    });
+  });
 });

@@ -1,3 +1,66 @@
+# [1.12.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.11.0...v1.12.0) (2026-06-30)
+
+
+### Features
+
+* **content:** article orchestration d'équipes d'agents Claude (FR+EN) ([c2d0063](https://github.com/tellebma/The-Claude-Codex/commit/c2d0063c542c12f12d8315724f79b87759ee1f6f))
+* **content:** article Sonnet 5 / Fable 5 + mise à jour des pages obsolètes ([#275](https://github.com/tellebma/The-Claude-Codex/issues/275)) ([43d5966](https://github.com/tellebma/The-Claude-Codex/commit/43d59662ddff2713ec5c4b9e155b84eacb2010f1)), closes [#257](https://github.com/tellebma/The-Claude-Codex/issues/257)
+* **content:** articles IA générative — ComfyUI MCP, agent assets, use-case créatif (FR+EN) ([5ea87cb](https://github.com/tellebma/The-Claude-Codex/commit/5ea87cbfd6f4142c43a0c01e60c377c3bf27ff3c))
+* **content:** Claude Council — pattern LLM Council + générateur (CC-1 à CC-8) ([0aa1956](https://github.com/tellebma/The-Claude-Codex/commit/0aa1956eca9185245e8d363c00c0a2fbc999b0f7))
+* **content:** EPIC Stack design Claude Code (DSK-1/3/4/5/6/7/8/9/10) ([6b5148a](https://github.com/tellebma/The-Claude-Codex/commit/6b5148a935a29e6c39391bc4f003b70bdee4c028))
+* intégration consolidée develop (TUTO-6/7/8 + SR-3 + article tokens) ([17ef2d3](https://github.com/tellebma/The-Claude-Codex/commit/17ef2d33d3d55076fcb47ff732f67034fb0b3b50))
+
+# [1.11.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.10.0...v1.11.0) (2026-05-28)
+
+
+### Bug Fixes
+
+* **content:** corrections fact-check getting-started + what-are-skills ([#250](https://github.com/tellebma/The-Claude-Codex/issues/250)) ([1dba4a0](https://github.com/tellebma/The-Claude-Codex/commit/1dba4a01cf57ba184b0226be91f00af66f555c51))
+
+
+### Features
+
+* **layout:** TUTO-3 pilote migration pages tuto vers ArticleShell ([#248](https://github.com/tellebma/The-Claude-Codex/issues/248)) ([2f50ae8](https://github.com/tellebma/The-Claude-Codex/commit/2f50ae8f36a9e07a2e08bb156d8f5dc8bf7f9817))
+* **layout:** TUTO-5 rollout getting-started complet vers ArticleShell ([#249](https://github.com/tellebma/The-Claude-Codex/issues/249)) ([22f350c](https://github.com/tellebma/The-Claude-Codex/commit/22f350cf149ffa516f9eb74f7b8b6dc8ed5cfb2c))
+
+# [1.10.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.9.1...v1.10.0) (2026-05-27)
+
+
+### Bug Fixes
+
+* **ci:** CTN-7 utiliser gh CLI au lieu de peter-evans/create-pull-request ([#231](https://github.com/tellebma/The-Claude-Codex/issues/231)) ([4ec410d](https://github.com/tellebma/The-Claude-Codex/commit/4ec410d778c7f194a7e735f14d3b9dc02c6b7904))
+* **content:** 404 articles, filtres themes vides, espacement pager, liens GitHub internals ([#224](https://github.com/tellebma/The-Claude-Codex/issues/224)) ([39b97ff](https://github.com/tellebma/The-Claude-Codex/commit/39b97fff1eefb88952c4ef306e1d5c352a0a6165))
+* **content:** bloqueurs revue éditoriale + SEO avant release ([#210](https://github.com/tellebma/The-Claude-Codex/issues/210)) ([46f1ac3](https://github.com/tellebma/The-Claude-Codex/commit/46f1ac3ee5896df8a8d1aa9274670c19eb0c58b3)), closes [#208](https://github.com/tellebma/The-Claude-Codex/issues/208)
+* **stats:** CTN-6 auth Matomo en POST (token dans le body, plus en GET) ([#239](https://github.com/tellebma/The-Claude-Codex/issues/239)) ([6fa8932](https://github.com/tellebma/The-Claude-Codex/commit/6fa8932d0c7661e9bec7b7bc310ee09037a7e633))
+* **stats:** CTN-6 endpoint Matomo /index.php + handler error JSON ([#236](https://github.com/tellebma/The-Claude-Codex/issues/236)) ([8e88126](https://github.com/tellebma/The-Claude-Codex/commit/8e881269788afce788ac0581cfb4153572c4fda1)), closes [#232](https://github.com/tellebma/The-Claude-Codex/issues/232) [#233](https://github.com/tellebma/The-Claude-Codex/issues/233)
+* **stats:** CTN-6 format date Matomo period=range exige YYYY-MM-DD ([#233](https://github.com/tellebma/The-Claude-Codex/issues/233)) ([62917dd](https://github.com/tellebma/The-Claude-Codex/commit/62917ddee815400a6911423aefb7abccd180710a))
+* **stats:** CTN-6 parser tolerant aux URLs Matomo avec domaine ([#232](https://github.com/tellebma/The-Claude-Codex/issues/232)) ([c11f225](https://github.com/tellebma/The-Claude-Codex/commit/c11f225a99252251e7479812ed7ae99cd1ed7024))
+* **ui:** Pinned hero card moins large, fallback icone thematique au lieu de gros texte ([#225](https://github.com/tellebma/The-Claude-Codex/issues/225)) ([8db9e63](https://github.com/tellebma/The-Claude-Codex/commit/8db9e6368fb0fd66a84f8b591315a88a5a1a12e2))
+
+
+### Features
+
+* **advanced:** ECO-7 page optimisation tokens et coûts (5 leviers) ([#198](https://github.com/tellebma/The-Claude-Codex/issues/198)) ([da1f913](https://github.com/tellebma/The-Claude-Codex/commit/da1f913cdf2b156bac1b4a66decdf85a97e96b1d))
+* **advanced:** ECO-9 observabilité et monitoring Claude Code ([#199](https://github.com/tellebma/The-Claude-Codex/issues/199)) ([f0ba214](https://github.com/tellebma/The-Claude-Codex/commit/f0ba214812115c949ec2e3d4cad6357568206f9a))
+* **advanced:** SR-2/SR-4/SR-5 page /security-review Claude Code (FR + EN + cablage) ([#202](https://github.com/tellebma/The-Claude-Codex/issues/202)) ([cd4e526](https://github.com/tellebma/The-Claude-Codex/commit/cd4e526e1d27616db8ebbe7f88dc1e72a3322552)), closes [#201](https://github.com/tellebma/The-Claude-Codex/issues/201)
+* **ci:** CTN-7 workflow hebdo weekly-article-stats + builder PR body ([#228](https://github.com/tellebma/The-Claude-Codex/issues/228)) ([f934319](https://github.com/tellebma/The-Claude-Codex/commit/f93431979240469e4a183e27d76fdcd4b8d48450))
+* **content:** CTN-10 vignettes Open Graph par article ([#240](https://github.com/tellebma/The-Claude-Codex/issues/240)) ([d0b5e75](https://github.com/tellebma/The-Claude-Codex/commit/d0b5e75f7293b52d735f395fb8f08e289ebe6106)), closes [#225](https://github.com/tellebma/The-Claude-Codex/issues/225)
+* **content:** CTN-3 section combinee Pinned + Latest avec cascade ([#222](https://github.com/tellebma/The-Claude-Codex/issues/222)) ([4b50514](https://github.com/tellebma/The-Claude-Codex/commit/4b505147317e9c328040e61080b482166c2788b7))
+* **content:** CTN-4 refonte hero /content + JSON-LD CollectionPage etendu ([#220](https://github.com/tellebma/The-Claude-Codex/issues/220)) ([fe42c73](https://github.com/tellebma/The-Claude-Codex/commit/fe42c7311186586f8b44e490162d11c1c57f8ee1)), closes [#all-articles](https://github.com/tellebma/The-Claude-Codex/issues/all-articles) [#pinned-latest](https://github.com/tellebma/The-Claude-Codex/issues/pinned-latest)
+* **content:** CTN-8 + CTN-9 sections Most read + Trending sur /content ([#234](https://github.com/tellebma/The-Claude-Codex/issues/234)) ([a38e13f](https://github.com/tellebma/The-Claude-Codex/commit/a38e13f8c65134969285f45dcfc9113855e7cc40))
+* **content:** ECO-10/11/12 cloture EPIC Ecosystem + SR-1 + EPIC discovery ([#201](https://github.com/tellebma/The-Claude-Codex/issues/201)) ([a5b9829](https://github.com/tellebma/The-Claude-Codex/commit/a5b982954f4caf6d1739f6719f5c966fd66d78ad))
+* **content:** SR-6 cross-links bidirectionnels /security-review ([#203](https://github.com/tellebma/The-Claude-Codex/issues/203)) ([264248c](https://github.com/tellebma/The-Claude-Codex/commit/264248c558150f04fd68b3b6abc9fe9c6a0aab75))
+* **content:** SR-7 audit redaction + SEO page /security-review (FR + EN) ([#204](https://github.com/tellebma/The-Claude-Codex/issues/204)) ([6009cb6](https://github.com/tellebma/The-Claude-Codex/commit/6009cb6387610858c993ceee72e77dc9f35acccb))
+* **getting-started:** ECO-8 templates et starter kits Claude Code ([#200](https://github.com/tellebma/The-Claude-Codex/issues/200)) ([7f06937](https://github.com/tellebma/The-Claude-Codex/commit/7f06937e1763685eaca73e59b25ebfe4c63b4f91))
+* **landing:** cartes 'Ce que vous pouvez faire' cliquables + lien voir tous les articles ([#241](https://github.com/tellebma/The-Claude-Codex/issues/241)) ([e21d32e](https://github.com/tellebma/The-Claude-Codex/commit/e21d32e2bef22fa9d4186490418da585fefd6a10))
+* **layout:** CTN-14 ContentSectionsNav scroll-spy + sticky (EPIC Content page redesign Sprint 1) ([#219](https://github.com/tellebma/The-Claude-Codex/issues/219)) ([535c7da](https://github.com/tellebma/The-Claude-Codex/commit/535c7da7d0d2bb78b7cd1d5c25f6b40d9250ae4e))
+* **layout:** TUTO-2 composant SectionPeers + ouverture EPIC tuto-pages article-shell ([#215](https://github.com/tellebma/The-Claude-Codex/issues/215)) ([ca0c6f2](https://github.com/tellebma/The-Claude-Codex/commit/ca0c6f2dbf99631ef1347993501b942b6e81ed24))
+* **skills:** DSK-2 fiche outil Impeccable (FR + EN, EPIC Stack design Sprint 1) ([#209](https://github.com/tellebma/The-Claude-Codex/issues/209)) ([215d37e](https://github.com/tellebma/The-Claude-Codex/commit/215d37e66cf6fd5358b168d4eca0e8d9faa76eda))
+* **stats:** CTN-6 script refresh-article-stats.ts + schema ArticleStatsFile ([#226](https://github.com/tellebma/The-Claude-Codex/issues/226)) ([94e28c5](https://github.com/tellebma/The-Claude-Codex/commit/94e28c5669a8c8f3babe46ccddac4346b70771dc))
+* **ui:** CTN-13 URL state filtres themes ([#230](https://github.com/tellebma/The-Claude-Codex/issues/230)) ([8e32a78](https://github.com/tellebma/The-Claude-Codex/commit/8e32a78b1ebf885a851624f84bb03318322d28d1))
+* **ui:** CTN-2 composant ArticleCard a 3 variants (grid, hero, row) ([#218](https://github.com/tellebma/The-Claude-Codex/issues/218)) ([464544d](https://github.com/tellebma/The-Claude-Codex/commit/464544deb017486d87e352634dee0da23640554a)), closes [#217](https://github.com/tellebma/The-Claude-Codex/issues/217)
+* **ui:** CTN-5 ArticleThemeFilter chips Type/Domaine + OR logique ([#221](https://github.com/tellebma/The-Claude-Codex/issues/221)) ([b93a296](https://github.com/tellebma/The-Claude-Codex/commit/b93a2965778582cae38fcc61aaf39d306accd811))
+
 ## [1.9.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.9.0...v1.9.1) (2026-05-11)
 
 

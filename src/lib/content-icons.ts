@@ -19,12 +19,12 @@ interface ContentRule {
   readonly color: ContentColor;
 }
 
-const GUIDE_SLUGS: ReadonlyArray<string> = [
+const GUIDE_SLUGS: ReadonlySet<string> = new Set([
   "getting-started-intro",
   "mcp-guide",
   "prompting-guide",
   "skills-guide",
-];
+]);
 
 /**
  * Règles ordonnées slug → icône + couleur (POL-3).
@@ -64,7 +64,7 @@ const CONTENT_RULES: ReadonlyArray<ContentRule> = [
     color: "brand",
   },
   {
-    match: (s) => GUIDE_SLUGS.includes(s),
+    match: (s) => GUIDE_SLUGS.has(s),
     icon: BookOpen,
     color: "brand",
   },

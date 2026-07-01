@@ -164,8 +164,21 @@ test.describe("/skills/claude-council — générateur CouncilBuilder", () => {
     await expect(roleInputs).toHaveCount(3);
   });
 
-  test("FR : le bouton copier confirme la copie", async ({ page, context }) => {
-    await context.grantPermissions(["clipboard-write"]);
+  test("FR : le bouton copier confirme la copie", async ({
+    page,
+    context,
+    browserName,
+  }) => {
+    // clipboard-write n'existe que sur chromium en tant que permission du
+    // Permissions API : grantPermissions jette immediatement sur
+    // firefox/webkit. Ces navigateurs n'exigent pas ce grant explicite en
+    // contexte de test automatise (verifie : navigator.clipboard.writeText
+    // y reussit directement) ; le fallback document.execCommand("copy") du
+    // composant reste un filet pour les contextes ou l'API clipboard native
+    // echoue reellement.
+    if (browserName === "chromium") {
+      await context.grantPermissions(["clipboard-write"]);
+    }
     await page.goto(FR_PATH);
     await page
       .getByRole("button", { name: "Copier", exact: true })

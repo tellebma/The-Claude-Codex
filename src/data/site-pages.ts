@@ -1188,6 +1188,16 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     lastModified: "2026-07-01",
   },
   {
+    path: "/content/fable-5-est-de-retour",
+    pathsByLocale: { en: "/content/fable-is-back-what-you-must-know" },
+    title: "Fable 5 est de retour : ce qu'il faut savoir",
+    description:
+      "Fable 5 redéployé le 1er juillet 2026 après trois semaines de suspension : calendrier complet, nouvelles garanties de sécurité et conditions d'accès pour Claude Code.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-01",
+  },
+  {
     path: "/about",
     title: "À propos du Claude Codex",
     description:

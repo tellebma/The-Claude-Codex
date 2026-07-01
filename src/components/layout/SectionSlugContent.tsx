@@ -161,6 +161,9 @@ export default async function SectionSlugContent({
               <ArticleDates
                 datePublished={frontmatter.datePublished}
                 dateModified={frontmatter.dateModified}
+                publishedLabel={tCommon("published")}
+                modifiedLabel={tCommon("updated")}
+                locale={locale === "en" ? "en-US" : "fr-FR"}
               />
             </div>
           </div>

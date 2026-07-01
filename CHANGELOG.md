@@ -1,3 +1,17 @@
+# [1.13.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.12.0...v1.13.0) (2026-07-01)
+
+
+### Bug Fixes
+
+* **content:** Fable 5 suspendu par le gouvernement US + Sonnet 5 vs Opus 4.8 ([#279](https://github.com/tellebma/The-Claude-Codex/issues/279)) ([14a290f](https://github.com/tellebma/The-Claude-Codex/commit/14a290fcc1ba8ad7fa2b44dff10138fc44e50f32))
+
+
+### Features
+
+* **analytics:** TUTO-10 trackers Matomo + replanification TUTO-9 ([#277](https://github.com/tellebma/The-Claude-Codex/issues/277)) ([0d21d2a](https://github.com/tellebma/The-Claude-Codex/commit/0d21d2a6e8ca6f4d7940df502e3415dadc751c6a))
+* **content:** Fable 5 est de retour (FR+EN) + fix i18n dates ([#282](https://github.com/tellebma/The-Claude-Codex/issues/282)) ([46442e5](https://github.com/tellebma/The-Claude-Codex/commit/46442e5ef89706d532f126c7c0347fb5d00b589c))
+* **ui:** POL-1/2/3 SectionHero, SectionCardGrid, refonte hero /content ([#278](https://github.com/tellebma/The-Claude-Codex/issues/278)) ([a5f8d19](https://github.com/tellebma/The-Claude-Codex/commit/a5f8d194c17d66d3eb9f70353a91c3f243c8d887))
+
 # [1.12.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.11.0...v1.12.0) (2026-06-30)
 
 

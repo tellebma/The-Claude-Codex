@@ -3,12 +3,16 @@ import { Calendar, RefreshCw } from "lucide-react";
 interface ArticleDatesProps {
   readonly datePublished?: string;
   readonly dateModified?: string;
+  readonly publishedLabel?: string;
+  readonly modifiedLabel?: string;
+  /** Locale BCP-47 used to format dates (default "fr-FR"). */
+  readonly locale?: string;
 }
 
-function formatDate(dateStr: string): string {
+function formatDate(dateStr: string, locale: string): string {
   const [year, month, day] = dateStr.split("-").map(Number);
   const date = new Date(year, month - 1, day);
-  return date.toLocaleDateString("fr-FR", {
+  return date.toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -22,6 +26,9 @@ function formatDate(dateStr: string): string {
 export function ArticleDates({
   datePublished,
   dateModified,
+  publishedLabel = "Publié le",
+  modifiedLabel = "Mis à jour le",
+  locale = "fr-FR",
 }: ArticleDatesProps) {
   if (!datePublished && !dateModified) return null;
 
@@ -31,7 +38,7 @@ export function ArticleDates({
         <span className="inline-flex items-center gap-1.5">
           <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
           <time dateTime={datePublished}>
-            Publié le {formatDate(datePublished)}
+            {publishedLabel} {formatDate(datePublished, locale)}
           </time>
         </span>
       )}
@@ -39,7 +46,7 @@ export function ArticleDates({
         <span className="inline-flex items-center gap-1.5">
           <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
           <time dateTime={dateModified}>
-            Mis à jour le {formatDate(dateModified)}
+            {modifiedLabel} {formatDate(dateModified, locale)}
           </time>
         </span>
       )}

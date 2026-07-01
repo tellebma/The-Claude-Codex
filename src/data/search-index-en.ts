@@ -2493,6 +2493,31 @@ export const searchIndexEn: ReadonlyArray<SearchEntry> = [
       "2026",
     ],
   },
+  // Fable 5 is back
+  {
+    title: "Fable Is Back: What You Must Know",
+    description:
+      "Fable 5 redeployed on July 1, 2026 after three weeks of suspension: full timeline, new safety guarantees, and access conditions for Claude Code.",
+    href: "/content/fable-is-back-what-you-must-know",
+    section: "Content",
+    keywords: [
+      "fable is back",
+      "fable 5 is back",
+      "claude fable 5",
+      "claude-fable-5",
+      "mythos 5",
+      "redeployment",
+      "export controls lifted",
+      "us government suspension",
+      "project glasswing",
+      "jailbreak",
+      "safety classifier",
+      "opus 4.8",
+      "july 1 2026",
+      "announcement",
+      "2026",
+    ],
+  },
   // About
   {
     title: "About The Claude Codex",

@@ -163,6 +163,7 @@ export default async function ContentPage({ params }: ContentPageProps) {
         dateModified={frontmatter.dateModified}
         publishedLabel={tCommon("published")}
         modifiedLabel={tCommon("updated")}
+        locale={locale === "en" ? "en-US" : "fr-FR"}
         themeBadges={
           frontmatter.themes && frontmatter.themes.length > 0 ? (
             <ThemeBadges themes={frontmatter.themes} />

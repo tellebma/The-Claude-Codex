@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { setRequestLocale } from "next-intl/server";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { Link } from "@/i18n/navigation";
@@ -564,13 +564,11 @@ export default async function ContentIndexPage({
           />
 
           <div className="mt-10 sm:mt-12">
-            <Suspense fallback={null}>
-              <ArticleThemeFilter
-                articles={all}
-                cardsBySlug={cardsBySlug}
-                labels={buildFilterLabels(t)}
-              />
-            </Suspense>
+            <ArticleThemeFilter
+              articles={all}
+              cardsBySlug={cardsBySlug}
+              labels={buildFilterLabels(t)}
+            />
           </div>
         </div>
       </section>

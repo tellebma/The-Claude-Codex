@@ -10,7 +10,6 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SearchX } from "lucide-react";
 
 import {
@@ -38,6 +37,12 @@ export function serializeThemeFilters(
 ): string | null {
   if (active.size === 0) return null;
   return Array.from(active).join(",");
+}
+
+function readThemeParamFromLocation(): ReadonlySet<ThemeKey> {
+  if (globalThis.window === undefined) return new Set();
+  const params = new URLSearchParams(globalThis.location.search);
+  return parseThemeQueryParam(params.get(THEME_QUERY_PARAM));
 }
 
 const TYPE_KEYS: ReadonlyArray<ContentTypeKey> = [
@@ -149,10 +154,6 @@ export function ArticleThemeFilter({
   cardsBySlug,
   labels,
 }: ArticleThemeFilterProps) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-
   const [active, setActive] = useState<ReadonlySet<ThemeKey>>(
     () => new Set<ThemeKey>(),
   );
@@ -161,25 +162,25 @@ export function ArticleThemeFilter({
   useEffect(() => {
     if (hydratedRef.current) return;
     hydratedRef.current = true;
-    const fromUrl = parseThemeQueryParam(
-      searchParams?.get(THEME_QUERY_PARAM) ?? null,
-    );
+    const fromUrl = readThemeParamFromLocation();
     if (fromUrl.size > 0) {
       setActive(fromUrl);
     }
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     if (!hydratedRef.current) return;
-    const others = new URLSearchParams(searchParams?.toString() ?? "");
+    const others = new URLSearchParams(globalThis.location.search);
     others.delete(THEME_QUERY_PARAM);
     const serialized = serializeThemeFilters(active);
     const themeChunk = serialized ? `${THEME_QUERY_PARAM}=${serialized}` : "";
     const othersChunk = others.toString();
     const qs = [themeChunk, othersChunk].filter(Boolean).join("&");
-    const target = qs ? `${pathname}?${qs}` : pathname;
-    router.replace(target, { scroll: false });
-  }, [active, pathname, router, searchParams]);
+    const target = qs
+      ? `${globalThis.location.pathname}?${qs}`
+      : globalThis.location.pathname;
+    globalThis.history.replaceState(globalThis.history.state, "", target);
+  }, [active]);
 
   const filteredArticles = useMemo(
     () => articles.filter((a) => matchesActiveFilters(a, active)),

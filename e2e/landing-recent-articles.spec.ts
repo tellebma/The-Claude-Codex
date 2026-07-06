@@ -17,6 +17,7 @@ for (const { code, regionName } of LOCALES) {
   test.describe(`Landing /${code}/ — section "Articles recents"`, () => {
     test(`chaque card mene a une page valide (pas de 404)`, async ({ page }) => {
       await page.goto(`/${code}/`);
+      await page.waitForLoadState("networkidle");
 
       const region = page.getByRole("region", { name: regionName });
       await expect(region).toBeVisible();
@@ -51,6 +52,7 @@ for (const { code, regionName } of LOCALES) {
         expect(response!.ok(), `${href} -> status ${response!.status()}`).toBe(
           true
         );
+        await page.waitForLoadState("networkidle");
         const title = await page.title();
         expect(title.trim().length, `${href} -> title vide`).toBeGreaterThan(0);
         await expect(

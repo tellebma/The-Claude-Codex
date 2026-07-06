@@ -2,19 +2,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import React from "react";
 
-const navMocks = vi.hoisted(() => ({
-  replace: vi.fn(),
-  push: vi.fn(),
-  searchParams: new URLSearchParams(),
-  pathname: "/fr/content/",
-}));
-
-vi.mock("next/navigation", () => ({
-  useSearchParams: () => navMocks.searchParams,
-  usePathname: () => navMocks.pathname,
-  useRouter: () => ({ replace: navMocks.replace, push: navMocks.push }),
-}));
-
 import {
   ArticleThemeFilter,
   parseThemeQueryParam,
@@ -69,10 +56,7 @@ const cardsBySlug: Record<string, React.ReactNode> = Object.fromEntries(
 describe("ArticleThemeFilter", () => {
   beforeEach(() => {
     (window as unknown as { _paq: unknown[] })._paq = [];
-    navMocks.replace.mockReset();
-    navMocks.push.mockReset();
-    navMocks.searchParams = new URLSearchParams();
-    navMocks.pathname = "/fr/content/";
+    window.history.replaceState(null, "", "/fr/content/");
   });
 
   afterEach(() => {
@@ -383,10 +367,7 @@ describe("serializeThemeFilters (CTN-13)", () => {
 describe("ArticleThemeFilter URL state (CTN-13)", () => {
   beforeEach(() => {
     (window as unknown as { _paq: unknown[] })._paq = [];
-    navMocks.replace.mockReset();
-    navMocks.push.mockReset();
-    navMocks.searchParams = new URLSearchParams();
-    navMocks.pathname = "/fr/content/";
+    window.history.replaceState(null, "", "/fr/content/");
   });
 
   afterEach(() => {
@@ -399,7 +380,7 @@ describe("ArticleThemeFilter URL state (CTN-13)", () => {
   });
 
   it("applies filters parsed from ?theme= at mount", () => {
-    navMocks.searchParams = new URLSearchParams("theme=security,tutorial");
+    window.history.replaceState(null, "", "/fr/content/?theme=security,tutorial");
     render(
       <ArticleThemeFilter
         articles={articles}
@@ -417,7 +398,7 @@ describe("ArticleThemeFilter URL state (CTN-13)", () => {
   });
 
   it("ignores unknown keys silently in the URL parameter", () => {
-    navMocks.searchParams = new URLSearchParams("theme=tutorial,fake,security");
+    window.history.replaceState(null, "", "/fr/content/?theme=tutorial,fake,security");
     render(
       <ArticleThemeFilter
         articles={articles}
@@ -433,7 +414,7 @@ describe("ArticleThemeFilter URL state (CTN-13)", () => {
     ).toHaveAttribute("aria-pressed", "true");
   });
 
-  it("calls router.replace with scroll:false after toggling a chip", () => {
+  it("writes ?theme= to the URL after toggling a chip", () => {
     render(
       <ArticleThemeFilter
         articles={articles}
@@ -441,16 +422,13 @@ describe("ArticleThemeFilter URL state (CTN-13)", () => {
         labels={labels}
       />,
     );
-    navMocks.replace.mockClear();
     fireEvent.click(screen.getByRole("button", { name: /Sécurité/ }));
-    expect(navMocks.replace).toHaveBeenCalled();
-    const [url, opts] = navMocks.replace.mock.calls.at(-1)!;
-    expect(url).toBe("/fr/content/?theme=security");
-    expect(opts).toEqual({ scroll: false });
+    expect(window.location.pathname).toBe("/fr/content/");
+    expect(window.location.search).toBe("?theme=security");
   });
 
   it("removes ?theme= from URL when filters are cleared via reset", () => {
-    navMocks.searchParams = new URLSearchParams("theme=security");
+    window.history.replaceState(null, "", "/fr/content/?theme=security");
     render(
       <ArticleThemeFilter
         articles={articles}
@@ -458,15 +436,12 @@ describe("ArticleThemeFilter URL state (CTN-13)", () => {
         labels={labels}
       />,
     );
-    navMocks.replace.mockClear();
     const resetButtons = screen.getAllByRole("button", {
       name: /Réinitialiser les filtres/,
     });
     fireEvent.click(resetButtons[0]);
-    expect(navMocks.replace).toHaveBeenCalled();
-    const lastCall = navMocks.replace.mock.calls.at(-1)!;
-    expect(lastCall[0]).toBe("/fr/content/");
-    expect(lastCall[1]).toEqual({ scroll: false });
+    expect(window.location.search).toBe("");
+    expect(window.location.pathname).toBe("/fr/content/");
   });
 
   it("preserves the order of selection when serializing multiple themes", () => {
@@ -477,14 +452,26 @@ describe("ArticleThemeFilter URL state (CTN-13)", () => {
         labels={labels}
       />,
     );
-    navMocks.replace.mockClear();
     fireEvent.click(screen.getByRole("button", { name: /Sécurité/ }));
     fireEvent.click(screen.getByRole("button", { name: /Architecture/ }));
-    const lastUrl = navMocks.replace.mock.calls.at(-1)![0] as string;
-    expect(lastUrl).toMatch(/\?theme=security,architecture$/);
+    expect(window.location.search).toBe("?theme=security,architecture");
   });
 
-  it("does not throw when searchParams is empty at mount", () => {
+  it("preserves unrelated query params when writing the theme filter", () => {
+    window.history.replaceState(null, "", "/fr/content/?utm_source=newsletter");
+    render(
+      <ArticleThemeFilter
+        articles={articles}
+        cardsBySlug={cardsBySlug}
+        labels={labels}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Sécurité/ }));
+    expect(window.location.search).toContain("theme=security");
+    expect(window.location.search).toContain("utm_source=newsletter");
+  });
+
+  it("does not throw when the URL has no query string at mount", () => {
     expect(() =>
       render(
         <ArticleThemeFilter

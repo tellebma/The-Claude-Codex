@@ -40,8 +40,8 @@ export function serializeThemeFilters(
 }
 
 function readThemeParamFromLocation(): ReadonlySet<ThemeKey> {
-  if (typeof window === "undefined") return new Set();
-  const params = new URLSearchParams(window.location.search);
+  if (typeof globalThis.window === "undefined") return new Set();
+  const params = new URLSearchParams(globalThis.location.search);
   return parseThemeQueryParam(params.get(THEME_QUERY_PARAM));
 }
 
@@ -170,16 +170,16 @@ export function ArticleThemeFilter({
 
   useEffect(() => {
     if (!hydratedRef.current) return;
-    const others = new URLSearchParams(window.location.search);
+    const others = new URLSearchParams(globalThis.location.search);
     others.delete(THEME_QUERY_PARAM);
     const serialized = serializeThemeFilters(active);
     const themeChunk = serialized ? `${THEME_QUERY_PARAM}=${serialized}` : "";
     const othersChunk = others.toString();
     const qs = [themeChunk, othersChunk].filter(Boolean).join("&");
     const target = qs
-      ? `${window.location.pathname}?${qs}`
-      : window.location.pathname;
-    window.history.replaceState(window.history.state, "", target);
+      ? `${globalThis.location.pathname}?${qs}`
+      : globalThis.location.pathname;
+    globalThis.history.replaceState(globalThis.history.state, "", target);
   }, [active]);
 
   const filteredArticles = useMemo(

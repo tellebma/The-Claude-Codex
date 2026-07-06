@@ -1,3 +1,12 @@
+## [1.13.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.0...v1.13.1) (2026-07-06)
+
+
+### Bug Fixes
+
+* **ci:** develop-merge E2E — hang playwright install + echecs firefox ([#287](https://github.com/tellebma/The-Claude-Codex/issues/287)) ([d3a4898](https://github.com/tellebma/The-Claude-Codex/commit/d3a4898346d5837ac6e964ad5445753d632efa71))
+* **ci:** HOME=/root pour lancer firefox dans le container Playwright ([#288](https://github.com/tellebma/The-Claude-Codex/issues/288)) ([f32019b](https://github.com/tellebma/The-Claude-Codex/commit/f32019b747a7a219098647211e4d2302852166bf))
+* **seo:** prérend la grille complète des articles de /content/ (SSG) ([#292](https://github.com/tellebma/The-Claude-Codex/issues/292)) ([8dd630b](https://github.com/tellebma/The-Claude-Codex/commit/8dd630b80accb84703103e54c58226de1bb67078))
+
 # [1.13.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.12.0...v1.13.0) (2026-07-01)
 
 

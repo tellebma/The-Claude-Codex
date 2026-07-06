@@ -40,7 +40,7 @@ export function serializeThemeFilters(
 }
 
 function readThemeParamFromLocation(): ReadonlySet<ThemeKey> {
-  if (typeof globalThis.window === "undefined") return new Set();
+  if (globalThis.window === undefined) return new Set();
   const params = new URLSearchParams(globalThis.location.search);
   return parseThemeQueryParam(params.get(THEME_QUERY_PARAM));
 }

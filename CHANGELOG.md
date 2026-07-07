@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.1...v1.13.2) (2026-07-07)
+
+
+### Bug Fixes
+
+* **404:** corrige un mismatch d'hydratation React sur la page 404 ([#294](https://github.com/tellebma/The-Claude-Codex/issues/294)) ([6482aac](https://github.com/tellebma/The-Claude-Codex/commit/6482aacbf9c7d8a25d4aca771d4cb82c2ea536ab)), closes [#418](https://github.com/tellebma/The-Claude-Codex/issues/418)
+
 ## [1.13.1](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.0...v1.13.1) (2026-07-06)
 
 

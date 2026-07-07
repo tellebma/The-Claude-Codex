@@ -2,11 +2,13 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 
-// Mock next/navigation
-const mockPathname = vi.fn(() => "/unknown/path");
-vi.mock("next/navigation", () => ({
-  usePathname: () => mockPathname(),
-}));
+// Le composant lit window.location.pathname (post-montage, via useEffect)
+// plutot que usePathname() : la page 404 est statiquement pre-rendue sans
+// contexte d'URL, donc le pathname reel n'est connu qu'une fois monte cote
+// client (cf. commentaire dans NotFoundClient.tsx).
+function setPathname(path: string): void {
+  window.history.pushState({}, "", path);
+}
 
 // Mock next/link (link as native anchor for tests)
 vi.mock("next/link", () => ({
@@ -95,13 +97,12 @@ const bundles = { fr: FR_BUNDLE, en: EN_BUNDLE };
 
 describe("NotFoundClient", () => {
   beforeEach(() => {
-    mockPathname.mockReset();
     mockSearchEntries.mockReset();
     mockSearchEntries.mockReturnValue([]);
   });
 
   it("affiche le titre et le subtitle FR par défaut", () => {
-    mockPathname.mockReturnValue("/unknown/path");
+    setPathname("/unknown/path");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     expect(screen.getByText("Page introuvable")).toBeInTheDocument();
@@ -109,7 +110,7 @@ describe("NotFoundClient", () => {
   });
 
   it("affiche le titre EN quand defaultLocale=en", () => {
-    mockPathname.mockReturnValue("/unknown/path");
+    setPathname("/unknown/path");
     render(<NotFoundClient defaultLocale="en" bundles={bundles} />);
 
     expect(screen.getByText("Page not found")).toBeInTheDocument();
@@ -117,7 +118,7 @@ describe("NotFoundClient", () => {
   });
 
   it("affiche l'URL demandée quand elle n'est pas la racine", () => {
-    mockPathname.mockReturnValue("/page-inexistante");
+    setPathname("/page-inexistante");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     expect(screen.getByText("URL :")).toBeInTheDocument();
@@ -125,7 +126,7 @@ describe("NotFoundClient", () => {
   });
 
   it("n'affiche pas la section URL si le pathname est racine", () => {
-    mockPathname.mockReturnValue("/");
+    setPathname("/");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     expect(screen.queryByText("URL :")).not.toBeInTheDocument();
@@ -133,7 +134,7 @@ describe("NotFoundClient", () => {
 
   it("utilise les fallback suggestions quand aucune recherche ne matche", () => {
     mockSearchEntries.mockReturnValue([]);
-    mockPathname.mockReturnValue("/unknown");
+    setPathname("/unknown");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     expect(screen.getByText("Par où commencer FR")).toBeInTheDocument();
@@ -150,7 +151,7 @@ describe("NotFoundClient", () => {
         keywords: [],
       },
     ] as ReturnType<typeof searchEntries>);
-    mockPathname.mockReturnValue("/mcp");
+    setPathname("/mcp");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     expect(screen.getByText("Suggestions FR")).toBeInTheDocument();
@@ -158,7 +159,7 @@ describe("NotFoundClient", () => {
   });
 
   it("affiche le bouton 'Retour accueil' pointant vers /fr", () => {
-    mockPathname.mockReturnValue("/unknown");
+    setPathname("/unknown");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     const homeLink = screen.getByText("Retour accueil").closest("a");
@@ -166,7 +167,7 @@ describe("NotFoundClient", () => {
   });
 
   it("affiche le bouton 'Back home' pointant vers /en quand EN", () => {
-    mockPathname.mockReturnValue("/unknown");
+    setPathname("/unknown");
     render(<NotFoundClient defaultLocale="en" bundles={bundles} />);
 
     const homeLink = screen.getByText("Back home").closest("a");
@@ -174,7 +175,7 @@ describe("NotFoundClient", () => {
   });
 
   it("rend le robot avec aria-label", () => {
-    mockPathname.mockReturnValue("/");
+    setPathname("/");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     const robot = screen.getByTestId("mock-robot");
@@ -182,7 +183,7 @@ describe("NotFoundClient", () => {
   });
 
   it("dispatche un event keydown Ctrl+K au clic sur 'Ouvrir recherche'", () => {
-    mockPathname.mockReturnValue("/unknown");
+    setPathname("/unknown");
     const spy = vi.spyOn(document, "dispatchEvent");
 
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
@@ -198,7 +199,7 @@ describe("NotFoundClient", () => {
   });
 
   it("affiche les articles récents quand il y en a dans le bundle", () => {
-    mockPathname.mockReturnValue("/");
+    setPathname("/");
     render(<NotFoundClient defaultLocale="fr" bundles={bundles} />);
 
     expect(screen.getByText("Article récent 1")).toBeInTheDocument();

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import NextLink from "next/link";
-import { usePathname } from "next/navigation";
 import {
   ArrowRight,
   FileText,
@@ -63,12 +62,19 @@ export function NotFoundClient({
   defaultLocale,
   bundles,
 }: NotFoundClientProps) {
-  const routerPathname = usePathname() ?? "/";
+  // Le chemin reel n'est connu qu'une fois monte cote client : la page 404
+  // est pre-rendue statiquement (export SSG) sans contexte d'URL, donc lire
+  // usePathname() des le rendu initial produit un texte different entre le
+  // HTML pre-rendu et l'hydratation (React error #418). On garde "/" comme
+  // valeur neutre identique serveur/client, puis on bascule sur la vraie
+  // valeur apres le montage.
+  const [routerPathname, setRouterPathname] = useState<string>("/");
   const [clientLocale, setClientLocale] = useState<Locale>(defaultLocale);
 
   useEffect(() => {
     if (globalThis.window === undefined) return;
     const actualPath = globalThis.location.pathname;
+    setRouterPathname(actualPath);
     const detected = detectLocaleFromPath(actualPath);
     if (detected !== null && detected !== clientLocale) {
       setClientLocale(detected);

@@ -50,7 +50,9 @@ export function Callout({ type = "info", title, children }: Readonly<CalloutProp
       <div className="flex items-start gap-3">
         {/* IconComponent herite de la couleur du conteneur (currentColor sur les SVG lucide) */}
         <IconComponent className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
-        <div>
+        {/* min-w-0 : sans ca, cet item flex garde sa largeur min-content et
+            deborde quand le contenu porte un mot/URL/code non secable. */}
+        <div className="min-w-0">
           <p className="mb-1 font-semibold">{title ?? t(type)}</p>
           <div className="text-sm leading-relaxed text-[color:var(--fg-secondary)]">
             {children}

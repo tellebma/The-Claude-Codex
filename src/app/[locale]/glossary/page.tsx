@@ -271,7 +271,7 @@ function GlossaryCard({ entry, t }: GlossaryCardProps) {
       )}
     >
       <div className="flex items-start justify-between gap-4">
-        <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+        <h3 className="min-w-0 text-lg font-bold text-slate-900 dark:text-white">
           {entry.term}
         </h3>
         {entry.link && (

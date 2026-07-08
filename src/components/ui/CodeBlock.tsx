@@ -67,7 +67,7 @@ export function CodeBlock({
 
   return (
     <div
-      className="group my-4 overflow-hidden rounded-xl border border-[color:var(--code-border)] bg-[color:var(--code-bg)]"
+      className="group my-4 min-w-0 overflow-hidden rounded-xl border border-[color:var(--code-border)] bg-[color:var(--code-bg)]"
       suppressHydrationWarning
     >
       {filename && (

@@ -282,7 +282,7 @@ export default async function DesignSystemPage({
         title={t("semantic.title")}
         description={t("semantic.description")}
       >
-        <div className="grid gap-8 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div>
             <h3 className="cc-h3 mb-4">{t("semantic.bgGroup")}</h3>
             <ul className="space-y-3">
@@ -361,7 +361,7 @@ export default async function DesignSystemPage({
         title={t("surfaces.title")}
         description={t("surfaces.description")}
       >
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <SurfaceCard
             surfaceClass="cc-surface-page"
             label={t("surfaces.page")}
@@ -390,7 +390,7 @@ export default async function DesignSystemPage({
         title={t("status.title")}
         description={t("status.description")}
       >
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatusPill
             label={t("status.success")}
             token="--color-success"
@@ -421,7 +421,7 @@ export default async function DesignSystemPage({
         title={t("cards.title")}
         description={t("cards.description")}
       >
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <article className="cc-card p-6">
             <p className="cc-eyebrow mb-2">{t("cards.staticLabel")}</p>
             <h3 className="cc-h3">.cc-card</h3>
@@ -444,7 +444,7 @@ export default async function DesignSystemPage({
         title={t("callouts.title")}
         description={t("callouts.description")}
       >
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="cc-callout cc-callout-info">
             <p className="font-semibold">{t("callouts.info.title")}</p>
             <p className="cc-body-sm mt-1">{t("callouts.info.body")}</p>
@@ -485,7 +485,7 @@ export default async function DesignSystemPage({
         title={t("shadows.title")}
         description={t("shadows.description")}
       >
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {SHADOW_TOKENS.map((s) => (
             <ShadowCard key={s.var} varName={s.var} label={s.label} />
           ))}
@@ -529,7 +529,7 @@ export default async function DesignSystemPage({
         title={t("motion.title")}
         description={t("motion.description")}
       >
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           <article
             className="ds-motion-card group rounded-2xl border border-[var(--border-default)] bg-[var(--bg-elevated)] p-6 shadow-[var(--shadow-card)]"
             style={{
@@ -546,7 +546,7 @@ export default async function DesignSystemPage({
             </p>
           </article>
 
-          <ul className="md:col-span-2 grid gap-2 self-start">
+          <ul className="md:col-span-2 grid grid-cols-1 gap-2 self-start">
             {MOTION_TOKENS.map((m) => (
               <li
                 key={m.var}

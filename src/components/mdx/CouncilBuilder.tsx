@@ -176,7 +176,9 @@ export function CouncilBuilder() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Controls */}
-        <div className="flex flex-col gap-5">
+        {/* min-w-0 : items de grille shrinkables, sinon le <pre> du preview
+            (lignes longues non secables) force la colonne au-dela du viewport. */}
+        <div className="flex min-w-0 flex-col gap-5">
           {/* Mode */}
           <fieldset className="flex flex-col gap-2">
             <legend className="mb-1 text-sm font-semibold text-[var(--fg-primary)]">
@@ -329,7 +331,7 @@ export function CouncilBuilder() {
         </div>
 
         {/* Output */}
-        <div className="flex flex-col gap-3">
+        <div className="flex min-w-0 flex-col gap-3">
           <div
             role="tablist"
             aria-label={t("outputLegend")}

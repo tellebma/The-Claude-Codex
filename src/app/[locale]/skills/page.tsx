@@ -720,7 +720,7 @@ export default async function SkillsPage({
             description="Chaque type repond a un besoin different. Combinez-les pour un maximum d'efficacite."
           />
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
             {/* Built-in Skills */}
             <div className="glass-card p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
@@ -943,7 +943,7 @@ mon-projet/
             />
           </AnimateOnScroll>
 
-          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
+          <StaggerChildren className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             {topSkills.map((skill) => {
               const Icon = skill.icon;
               return (
@@ -1001,7 +1001,7 @@ mon-projet/
                 </div>
                 <div className="mt-2 h-full w-px bg-slate-200 dark:bg-slate-700" />
               </div>
-              <div className="pb-10">
+              <div className="min-w-0 pb-10">
                 <h3 className="text-xl font-bold">
                   Creer le dossier Skills
                 </h3>
@@ -1025,7 +1025,7 @@ mon-projet/
                 </div>
                 <div className="mt-2 h-full w-px bg-slate-200 dark:bg-slate-700" />
               </div>
-              <div className="pb-10">
+              <div className="min-w-0 pb-10">
                 <h3 className="text-xl font-bold">
                   Creer le fichier du Skill
                 </h3>
@@ -1050,7 +1050,7 @@ mon-projet/
                 </div>
                 <div className="mt-2 h-full w-px bg-slate-200 dark:bg-slate-700" />
               </div>
-              <div className="pb-10">
+              <div className="min-w-0 pb-10">
                 <h3 className="text-xl font-bold">
                   Ecrire les instructions du Skill
                 </h3>
@@ -1140,7 +1140,7 @@ export function Button({
                 </div>
                 <div className="mt-2 h-full w-px bg-slate-200 dark:bg-slate-700" />
               </div>
-              <div className="pb-10">
+              <div className="min-w-0 pb-10">
                 <h3 className="text-xl font-bold">
                   Tester votre Skill
                 </h3>
@@ -1175,7 +1175,7 @@ $ claude
                   5
                 </div>
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="text-xl font-bold">
                   Iterer et affiner
                 </h3>
@@ -1209,7 +1209,7 @@ $ claude
             description="Trois exemples concrets qui montrent la puissance des Skills combines dans des scenarios reels."
           />
 
-          <div className="mt-16 grid gap-8 lg:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-3">
             {useCases.map((useCase) => {
               const Icon = useCase.icon;
               return (
@@ -1261,7 +1261,7 @@ $ claude
             centered
           />
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
             <Link
               href={`/${locale}/prompting`}
               className="glass-card group flex items-start gap-4 p-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"

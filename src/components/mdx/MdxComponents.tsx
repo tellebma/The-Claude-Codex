@@ -133,7 +133,7 @@ export const mdxComponents: MDXComponents = {
     const isExternal = props.href?.startsWith("http") || props.target === "_blank";
     return (
       <a
-        className="rounded text-[var(--brand-700)] underline underline-offset-2 transition-colors hover:text-[var(--brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-page)]"
+        className="rounded text-[var(--brand-700)] underline underline-offset-2 transition-colors [overflow-wrap:anywhere] hover:text-[var(--brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-page)]"
         {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         {...props}
       >
@@ -149,9 +149,11 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   // Inline code (not inside a fenced code block)
+  // overflow-wrap:anywhere : les identifiants longs (variables d'env, URLs)
+  // sans espace doivent pouvoir se couper, sinon ils debordent sur mobile.
   code: (props: React.HTMLAttributes<HTMLElement>) => (
     <code
-      className="rounded bg-[var(--bg-subtle)] px-1.5 py-0.5 font-mono text-sm text-[var(--fg-primary)]"
+      className="rounded bg-[var(--bg-subtle)] px-1.5 py-0.5 font-mono text-sm text-[var(--fg-primary)] [overflow-wrap:anywhere]"
       {...props}
     />
   ),
@@ -209,7 +211,10 @@ export const mdxComponents: MDXComponents = {
   // .art-table-wrap, .art-table.
   table: (props: React.HTMLAttributes<HTMLTableElement>) => (
     <div className="my-6 overflow-hidden rounded-2xl border border-[color:var(--border-default)]">
-      <div className="overflow-x-auto">
+      {/* relative : etablit un bloc conteneur pour les enfants position:absolute
+          (ex. les marqueurs sr-only des liens externes), sinon ils s'echappent
+          du conteneur scrollable et elargissent la page sur mobile. */}
+      <div className="relative overflow-x-auto">
         <table
           className="w-full border-collapse text-sm [&_tbody_tr:hover_td]:bg-[color:rgba(6,182,212,0.04)] [&_tbody_tr:last-child_td]:border-b-0"
           {...props}
@@ -267,7 +272,7 @@ export function createLocaleMdxComponents(locale: string): MDXComponents {
       const isExternal = href?.startsWith("http") || props.target === "_blank";
       return (
         <a
-          className="rounded text-[var(--brand-700)] underline underline-offset-2 transition-colors hover:text-[var(--brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-page)]"
+          className="rounded text-[var(--brand-700)] underline underline-offset-2 transition-colors [overflow-wrap:anywhere] hover:text-[var(--brand-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-page)]"
           {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
           {...props}
           href={href}

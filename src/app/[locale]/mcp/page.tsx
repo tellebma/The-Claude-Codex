@@ -740,7 +740,7 @@ export default async function McpPage({
             </div>
           </AnimateOnScroll>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {subPages.map((page) => {
               const Icon = page.icon;
               const styles = colorStyles[page.color];
@@ -819,7 +819,7 @@ export default async function McpPage({
             </div>
 
             {/* Visual analogy */}
-            <div className="mt-12 grid gap-6 sm:grid-cols-3">
+            <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
               <div className="glass-card p-6 text-center">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-brand-500/5">
                   <Terminal className="h-7 w-7 text-brand-700 dark:text-brand-400" aria-hidden="true" />
@@ -1032,7 +1032,7 @@ export default async function McpPage({
             />
           </AnimateOnScroll>
 
-          <StaggerChildren className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
+          <StaggerChildren className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.08}>
             {recommendedMcps.map((mcp) => (
               <div
                 key={mcp.name}
@@ -1169,7 +1169,7 @@ export default async function McpPage({
           />
 
           <div className="mt-16 space-y-6">
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <FeatureCard
                 icon={Shield}
                 title={t.bpLeastPrivilege}

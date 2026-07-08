@@ -94,7 +94,7 @@ function CellValue({ value }: { readonly value: string }) {
  */
 export function ComparisonTable({ columns, rows, caption }: ComparisonTableProps) {
   return (
-    <div className="my-6 overflow-x-auto rounded-xl border border-[color:var(--border-default)]">
+    <div className="relative my-6 overflow-x-auto rounded-xl border border-[color:var(--border-default)]">
       <table className="w-full border-collapse text-sm" role="table">
         {caption && (
           <caption className="px-4 pb-3 pt-2 text-left text-sm text-[color:var(--fg-muted)] caption-bottom">

@@ -1014,7 +1014,11 @@
     margin: 0 auto;
     padding: 56px 32px 80px;
     display: grid;
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr) et non 1fr : sans le minimum a 0, la piste vaut
+       minmax(auto, 1fr) et ne peut pas descendre sous la min-content de
+       son contenu. Un tableau ou un bloc de code large forcerait alors la
+       colonne au-dela du viewport (scroll horizontal sur mobile). */
+    grid-template-columns: minmax(0, 1fr);
     gap: 32px;
     align-items: start;
   }
@@ -1039,6 +1043,13 @@
   .art-body {
     grid-column: 1;
     grid-row: 1;
+    /* min-width: 0 pour neutraliser le min-width: auto par defaut des items
+       de grille : sans ca, la min-content du corps (tableaux, code) empeche
+       la colonne de retrecir et provoque un debordement horizontal. */
+    min-width: 0;
+    /* Filet de securite : tout mot/URL trop long se coupe plutot que de
+       forcer un debordement horizontal. */
+    overflow-wrap: break-word;
     font-size: 17px;
     line-height: 1.75;
     color: var(--fg-primary);

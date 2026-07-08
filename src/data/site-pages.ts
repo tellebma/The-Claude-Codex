@@ -1185,7 +1185,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Claude Sonnet 5, vrai complément à Opus 4.8 : prix, contexte, tokenizer, thinking adaptatif. Et pourquoi Fable 5, suspendu depuis le 12 juin 2026 sur ordre du gouvernement américain, reste indisponible.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-07-01",
+    lastModified: "2026-07-08",
   },
   {
     path: "/content/fable-5-est-de-retour",
@@ -1195,7 +1195,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Fable 5 redéployé le 1er juillet 2026 après trois semaines de suspension : calendrier complet, nouvelles garanties de sécurité et conditions d'accès pour Claude Code.",
     priority: 0.8,
     changeFrequency: "monthly",
-    lastModified: "2026-07-01",
+    lastModified: "2026-07-08",
   },
   {
     path: "/about",

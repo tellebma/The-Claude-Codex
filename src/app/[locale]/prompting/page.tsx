@@ -978,7 +978,7 @@ export default async function PromptingPage({
                   {mistake.title}
                 </h3>
 
-                <div className="grid gap-6 lg:grid-cols-2">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   {/* Bad example */}
                   <div>
                     <div className="mb-3 flex items-center gap-2">
@@ -1254,7 +1254,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
                 {t.claudeMdLevelsTitle}
               </h3>
 
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div className="rounded-xl border border-slate-200/40 p-5 dark:border-slate-700/40">
                   <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500/10">
                     <Sparkles className="h-5 w-5 text-brand-700 dark:text-brand-400" aria-hidden="true" />
@@ -1315,7 +1315,7 @@ Repo : monorepo avec apps/ (web, api) et packages/ (ui, utils, config)
             centered
           />
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Link
               href={`/${locale}/getting-started`}
               className="group rounded-xl border border-slate-700/50 bg-slate-800/50 p-6 text-left backdrop-blur transition-all hover:-translate-y-1 hover:border-brand-500/30 hover:bg-slate-800/80"

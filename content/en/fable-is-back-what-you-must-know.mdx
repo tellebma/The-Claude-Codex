@@ -5,13 +5,13 @@ badge: "New"
 section: "content"
 order: 19
 datePublished: "2026-07-01"
-dateModified: "2026-07-01"
+dateModified: "2026-07-08"
 themes: ["guide", "tooling"]
 ---
 
 ## Quick answer
 
-Claude Fable 5 is available again as of today, Wednesday **July 1, 2026**, on Claude Platform, Claude.ai, Claude Code, and Claude Cowork, worldwide. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */} Three weeks after the US government suspended it on June 12, 2026, Anthropic secured a full lift of the export controls on June 30, with a redeployment announced for the following day. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */} Pricing hasn't moved ($10 / $50 per million tokens), but the access included in your plan is temporarily capped until July 7. If you're just catching up on the story, the sister article covers Fable 5's technical specs and the full details of the suspension: [Claude Sonnet 5 and Fable 5: what actually changes for Claude Code users](/content/claude-sonnet-5-fable-5-new-models).
+Claude Fable 5 is available again as of today, Wednesday **July 1, 2026**, on Claude Platform, Claude.ai, Claude Code, and Claude Cowork, worldwide. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */} Three weeks after the US government suspended it on June 12, 2026, Anthropic secured a full lift of the export controls on June 30, with a redeployment announced for the following day. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */} Pricing hasn't moved ($10 / $50 per million tokens), but the access included in your plan is temporarily capped until July 12. If you're just catching up on the story, the sister article covers Fable 5's technical specs and the full details of the suspension: [Claude Sonnet 5 and Fable 5: what actually changes for Claude Code users](/content/claude-sonnet-5-fable-5-new-models).
 
 <Callout type="warning" title="Mythos 5 stays separate">
 Don't confuse Fable 5 with Mythos 5. Mythos 5 remains restricted-access through the Project Glasswing program: its availability was partially restored on June 27 for roughly a hundred US cyberdefense and critical-infrastructure organizations, but Anthropic is still negotiating a broader rollout separately. {/* source: https://www.euronews.com/2026/06/27/anthropic-cleared-to-restore-mythos-5-access-to-certain-us-organisations, retrieved 2026-07-01 */} Today's July 1 return concerns Fable 5 only.
@@ -45,21 +45,21 @@ More broadly, Anthropic, Amazon, Microsoft, Google, and other Project Glasswing 
 Fable 5 stays at **$10 / $50 per million tokens** (input/output), the exact same price as before the suspension. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */} If you'd already run your cost calculations before June 12, they still hold.
 </Callout>
 
-## What this changes for your plan, until July 7
+## What this changes for your plan, until July 12
 
 This is the most concrete point for day-to-day Claude Code usage: the access conditions for this return aren't the same as before the suspension, and they're temporary.
 
-- **Pro, Max, Team** plans, and some **Enterprise** plans, include Fable 5 up to 50% of their weekly usage limits, through **July 7, 2026**. Beyond that cap, usage switches over to paid credits. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */}
+- **Pro, Max, Team** plans, and some **Enterprise** plans, include Fable 5 up to 50% of their weekly usage limits, through **July 12, 2026**. Beyond that cap, usage switches over to paid credits. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */}
 - **Standard Enterprise** seats have no included allocation at all: Fable 5 is only accessible there through paid credits. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */}
-- **Premium Enterprise** seats get free access to Fable 5 through July 7, 2026. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */}
+- **Premium Enterprise** seats get free access to Fable 5 through July 12, 2026. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */}
 
-What this means in practice: if you're on Pro, Max, or Team, you can test Fable 5 today at no extra cost, but only on half your usual weekly quota, and only for one week. Once that window closes, check the pricing in effect before rolling it out more broadly.
+What this means in practice: if you're on Pro, Max, or Team, you can test Fable 5 today at no extra cost, but only on half your usual weekly quota, and only through July 12. Once that window closes, check the pricing in effect before rolling it out more broadly.
 
 ## How to enable Fable 5 in Claude Code
 
 <Steps>
 <Step title="Check your plan and its Fable 5 allocation" stepNumber={1}>
-Before switching, confirm whether you're on Pro, Max, Team, standard Enterprise, or premium Enterprise. That plan determines whether your Fable 5 usage through July 7 is included, capped at 50% of your weekly limits, or billed entirely in credits.
+Before switching, confirm whether you're on Pro, Max, Team, standard Enterprise, or premium Enterprise. That plan determines whether your Fable 5 usage through July 12 is included, capped at 50% of your weekly limits, or billed entirely in credits.
 </Step>
 
 <Step title="Switch to Fable 5 via the flag or environment variable" stepNumber={2}>
@@ -74,8 +74,8 @@ export ANTHROPIC_MODEL="claude-fable-5"
 
 </Step>
 
-<Step title="Watch your weekly quota before July 7" stepNumber={3}>
-Run `/cost` regularly on your Fable 5 sessions. The 50%-of-usage-limits window closes on July 7, 2026: past that date, every extra token runs through paid credits at the standard rate of $10 / $50 per million tokens.
+<Step title="Watch your weekly quota before July 12" stepNumber={3}>
+Run `/cost` regularly on your Fable 5 sessions. The 50%-of-usage-limits window closes on July 12, 2026: past that date, every extra token runs through paid credits at the standard rate of $10 / $50 per million tokens.
 </Step>
 
 <Step title="Don't count on it on AWS, Vertex AI, or Microsoft Foundry for now" stepNumber={4} isLast>
@@ -91,8 +91,8 @@ Yes, since July 1, 2026, on Claude Platform, Claude.ai, Claude Code, and Claude 
 **Has the price changed since the suspension?**
 No. Fable 5 stays at $10 / $50 per million tokens (input/output), identical to the rate before June 12, 2026. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */}
 
-**What happens after July 7, 2026?**
-The 50%-of-weekly-usage-limits cap for Pro, Max, Team, and some Enterprise plans ends on that date. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */} Beyond that, extra usage runs through paid credits. Anthropic hasn't announced a new rule for the period after July 7 at this point: check with your plan when the time comes.
+**What happens after July 12, 2026?**
+The 50%-of-weekly-usage-limits cap for Pro, Max, Team, and some Enterprise plans ends on that date. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */} Beyond that, extra usage runs through paid credits. Anthropic hasn't announced a new rule for the period after July 12 at this point: check with your plan when the time comes.
 
 **Was the workaround that caused the suspension fixed?**
 Anthropic deployed an improved safety classifier that specifically targets this technique and blocks it in over 99% of cases; blocked requests get redirected to Opus 4.8 instead of simply failing. {/* source: https://www.anthropic.com/news/redeploying-fable-5, retrieved 2026-07-01 */}

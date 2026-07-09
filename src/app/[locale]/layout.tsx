@@ -52,16 +52,26 @@ const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
  * App Router, y compris la premiere. Sans cette delegation, Next.js
  * App Router (navigation client-side) ne firerait qu'un seul pageview
  * par session.
+ *
+ * Note (anti-adblock, 2026-07-09) : le tracker JS et l'endpoint de
+ * tracking sont servis sous l'alias generique `js/` (plugin Matomo
+ * CustomJsTracker, deja actif sur matomo.tellebma.fr) plutot que les
+ * noms par defaut `matomo.js` / `matomo.php`, qui sont bloques par les
+ * listes de filtres (EasyPrivacy, Brave/uBlock) quel que soit le
+ * domaine. Verifie en direct : GET https://matomo.tellebma.fr/js/ sert
+ * la lib JS, et les requetes de tracking (idsite/rec) y repondent aussi
+ * (content-type image/gif). setRequestMethod POST evite en plus les
+ * patterns d'URL de tracking en GET.
  */
 const matomoTrackingScript = MATOMO_ENABLED
   ? `
   var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking']);
+  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking'], ['setRequestMethod', 'POST']);
   (function() {
     var u = '${MATOMO_URL}/';
-    _paq.push(['setTrackerUrl', u + 'matomo.php'], ['setSiteId', '${MATOMO_SITE_ID}']);
+    _paq.push(['setTrackerUrl', u + 'js/'], ['setSiteId', '${MATOMO_SITE_ID}']);
     var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
-    g.async = true; g.src = u + 'matomo.js'; s.parentNode.insertBefore(g, s);
+    g.async = true; g.src = u + 'js/'; s.parentNode.insertBefore(g, s);
   })();
 `
   : "";

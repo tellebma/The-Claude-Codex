@@ -41,7 +41,7 @@ Test Playwright depuis `https://claude-codex.fr/fr/` :
 |--------|----------|--------|
 | Web Analytics (pageview) | `POST /_vercel/insights/view` | ✅ `200` |
 | Speed Insights (vitals) | `POST /_vercel/speed-insights/vitals` | ✅ déclenché sur interaction utilisateur |
-| Matomo (pageview) | `POST https://matomo.tellebma.fr/matomo.php` | ✅ `200` (cookieless) |
+| Matomo (pageview) | `POST https://matomo.tellebma.fr/js/` (alias anti-adblock depuis 2026-07-09, ex-`matomo.php`) | ✅ `200` (cookieless) |
 
 Le `200` sur l'endpoint `_vercel/insights/view` indique que Web Analytics est bien activée dans le dashboard Vercel — sinon Vercel renverrait `403` ou `404`.
 
@@ -59,10 +59,12 @@ L'API Vercel publique n'expose pas l'état des toggles Analytics / Speed Insight
 
 | Variable | Valeur attendue |
 |----------|-----------------|
-| `NEXT_PUBLIC_MATOMO_URL` | `https://matomo.tellebma.fr` |
+| `NEXT_PUBLIC_MATOMO_URL` | `https://analytics.tellebma.fr` |
 | `NEXT_PUBLIC_MATOMO_SITE_ID` | `1` |
 
 Toutes deux portées publiques (`NEXT_PUBLIC_*`), pas de secret. Le code dans `src/lib/analytics/matomo.ts` est SSR-safe et no-op si l'une des deux est absente.
+
+**Changement de domaine (2026-07-09)** : `matomo.tellebma.fr` est bloqué par les listes de filtres ad-block (le mot "matomo" est reconnu comme signature du produit, indépendamment du chemin — testé avec le chemin générique `js/` qui reste bloqué). `analytics.tellebma.fr` pointe vers le même backend Matomo et n'est pas bloqué (confirmé par test). Mettre à jour `NEXT_PUBLIC_MATOMO_URL` sur les 3 environnements (production/preview/development) et redéployer (la variable est inlinée au build, pas lue au runtime). `matomo.tellebma.fr` reste autorisé dans la CSP en parallèle pendant la transition.
 
 ## Critères d'acceptation VM-1 — état actuel
 

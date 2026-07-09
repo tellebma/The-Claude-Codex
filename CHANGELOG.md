@@ -1,3 +1,10 @@
+## [1.13.4](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.3...v1.13.4) (2026-07-09)
+
+
+### Bug Fixes
+
+* **analytics:** autorise analytics.tellebma.fr dans la CSP ([#301](https://github.com/tellebma/The-Claude-Codex/issues/301)) ([5708b19](https://github.com/tellebma/The-Claude-Codex/commit/5708b197454c823725d4e98b74e727c0480b695b)), closes [#298](https://github.com/tellebma/The-Claude-Codex/issues/298)
+
 ## [1.13.3](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.2...v1.13.3) (2026-07-09)
 
 

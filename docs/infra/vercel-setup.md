@@ -59,10 +59,12 @@ L'API Vercel publique n'expose pas l'état des toggles Analytics / Speed Insight
 
 | Variable | Valeur attendue |
 |----------|-----------------|
-| `NEXT_PUBLIC_MATOMO_URL` | `https://matomo.tellebma.fr` |
+| `NEXT_PUBLIC_MATOMO_URL` | `https://analytics.tellebma.fr` |
 | `NEXT_PUBLIC_MATOMO_SITE_ID` | `1` |
 
 Toutes deux portées publiques (`NEXT_PUBLIC_*`), pas de secret. Le code dans `src/lib/analytics/matomo.ts` est SSR-safe et no-op si l'une des deux est absente.
+
+**Changement de domaine (2026-07-09)** : `matomo.tellebma.fr` est bloqué par les listes de filtres ad-block (le mot "matomo" est reconnu comme signature du produit, indépendamment du chemin — testé avec le chemin générique `js/` qui reste bloqué). `analytics.tellebma.fr` pointe vers le même backend Matomo et n'est pas bloqué (confirmé par test). Mettre à jour `NEXT_PUBLIC_MATOMO_URL` sur les 3 environnements (production/preview/development) et redéployer (la variable est inlinée au build, pas lue au runtime). `matomo.tellebma.fr` reste autorisé dans la CSP en parallèle pendant la transition.
 
 ## Critères d'acceptation VM-1 — état actuel
 

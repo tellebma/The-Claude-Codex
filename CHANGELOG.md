@@ -1,3 +1,11 @@
+## [1.13.3](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.2...v1.13.3) (2026-07-09)
+
+
+### Bug Fixes
+
+* **analytics:** contourne le blocage ad-block du tracker Matomo ([#298](https://github.com/tellebma/The-Claude-Codex/issues/298)) ([0eb1ff2](https://github.com/tellebma/The-Claude-Codex/commit/0eb1ff2da8c3ea2ab1cc059dfd0730e9c1ae9177))
+* **security:** autorise api.github.com et vercel.live dans la CSP ([#299](https://github.com/tellebma/The-Claude-Codex/issues/299)) ([5531490](https://github.com/tellebma/The-Claude-Codex/commit/55314909f6b0951cf2235bc83b3e28e9afe35896))
+
 ## [1.13.2](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.1...v1.13.2) (2026-07-07)
 
 

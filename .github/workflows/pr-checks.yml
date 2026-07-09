@@ -388,6 +388,38 @@ jobs:
             test-results/
           retention-days: 14
 
+  deploy-firebase-preview:
+    # Canal de preview par PR (id auto = pr<numero>, expire 7j, commentaire
+    # natif posté sur la PR par l'action elle-même). Skip sur les PRs de
+    # forks : le secret FIREBASE_SERVICE_ACCOUNT_* n'est pas exposé aux
+    # workflows `pull_request` déclenchés depuis un fork (même garde que
+    # pr-metrics-comment plus bas).
+    name: Deploy Firebase preview channel
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [build]
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Download build artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: next-out
+          path: out/
+
+      - name: Deploy Firebase preview channel
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLAUDE_CODEX_FR }}
+          projectId: claude-codex-fr
+
   sonarqube:
     name: SonarQube scan
     runs-on: ubuntu-latest
@@ -421,7 +453,7 @@ jobs:
 
   pr-metrics-comment:
     # Commentaire sticky unique qui consolide toutes les métriques d'analyse
-    # (Sonar, Lighthouse, Lychee, tests, Vercel). Tourne avec if: always()
+    # (Sonar, Lighthouse, Lychee, tests, Firebase). Tourne avec if: always()
     # pour reporter l'état même si un job amont a failed. Skip les PRs
     # Dependabot (pas d'accès aux secrets Sonar). Le header: pr-metrics
     # garantit qu'un seul commentaire existe par PR, mis à jour à chaque push.
@@ -616,15 +648,6 @@ jobs:
             echo "errors_icon=${errors_icon}"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Compute Vercel preview block
-        id: vercel
-        run: |
-          # Vercel déploie désormais de lui-même via son intégration GitHub
-          # (Connect GitHub Actions, cf. notify-vercel dans cd.yml et
-          # develop-merge.yml). L'URL précise de la preview est publiée par
-          # l'action "Vercel Preview Comments" directement sur la PR.
-          echo "block=🚀 **Preview Vercel** déployée automatiquement par l'intégration GitHub. URL publiée par le commentaire Vercel natif ci-dessus." >> "$GITHUB_OUTPUT"
-
       - name: Compute CI job icons
         id: jobs
         run: |
@@ -647,7 +670,7 @@ jobs:
           message: |
             ## 📊 Métriques CI — PR #${{ github.event.pull_request.number }}
 
-            ${{ steps.vercel.outputs.block }}
+            🚀 **Preview Firebase Hosting** déployée automatiquement sur un canal dédié à cette PR. URL publiée par le commentaire natif de l'action `action-hosting-deploy` ci-dessus.
 
             ### ✨ Quality Gate SonarQube — ${{ steps.sonar.outputs.qg_icon }} `${{ steps.sonar.outputs.qg_status }}`
 

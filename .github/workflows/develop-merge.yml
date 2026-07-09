@@ -139,34 +139,41 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
-  notify-vercel:
-    # Notifie Vercel du statut de la CI pour son feature "Connect GitHub Actions"
-    # (Settings → Git → Connected GitHub Actions). Vercel attend ce check avant
-    # de promouvoir le deploy de l'environnement "dev" (branche develop).
-    # `if: always()` fait tourner le job quel que soit le résultat des `needs:`,
-    # le step suivant fail si un job needs est KO → l'action vercel (post:)
-    # envoie alors un status "failure" à Vercel, qui abandonne le deploy.
-    name: Notify Vercel (CI gate)
+  deploy-firebase-develop:
+    # Déploie sur un canal Firebase Hosting "develop" persistant (renouvelé à
+    # 30j à chaque push) — équivalent de l'ancien environnement "dev" Vercel.
+    # Réutilise l'artifact du job `build` : les valeurs Matomo placeholder
+    # sont volontairement conservées ici pour ne pas polluer les vraies
+    # stats Matomo avec du trafic de staging.
+    name: Deploy to Firebase Hosting (develop channel)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: [build, e2e-full, docker-verify]
-    if: always()
+    if: |
+      needs.build.result == 'success' &&
+      needs.e2e-full.result == 'success' &&
+      needs.docker-verify.result == 'success'
     permissions:
       contents: read
-      statuses: write
+      checks: write
     steps:
-      - name: Notify Vercel (register check)
-        uses: vercel/repository-dispatch/actions/status@30f760c6640485cd92f8c785ef361382555fb712 # v1
+      - name: Checkout
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+      - name: Download build artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
-          name: 'Vercel - the-claude-codex: ci'
-      - name: Reflect CI result
-        run: |
-          b="${{ needs.build.result }}"
-          e="${{ needs.e2e-full.result }}"
-          d="${{ needs.docker-verify.result }}"
-          echo "build=$b e2e-full=$e docker-verify=$d"
-          if [ "$b" != "success" ] || [ "$e" != "success" ] || [ "$d" != "success" ]; then
-            exit 1
-          fi
+          name: next-out
+          path: out/
+
+      - name: Deploy to Firebase Hosting develop channel
+        uses: FirebaseExtended/action-hosting-deploy@500ac625ca2dd40cbd15f7659af953801858032a # v0.11.0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLAUDE_CODEX_FR }}
+          projectId: claude-codex-fr
+          channelId: develop
+          expires: 30d
 
   docker-verify:
     name: Docker build & Trivy scan

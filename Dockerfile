@@ -13,7 +13,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Matomo analytics — NEXT_PUBLIC_* vars are inlined at build time by Next.js
 # (static export reads them during `npm run build`, not at runtime)
-ARG NEXT_PUBLIC_MATOMO_URL=https://matomo.tellebma.fr
+# analytics.tellebma.fr (pas matomo.tellebma.fr) : cf. #301, "matomo" dans le
+# nom de domaine est bloqué par les listes de filtres anti-pub, quel que soit
+# le chemin.
+ARG NEXT_PUBLIC_MATOMO_URL=https://analytics.tellebma.fr
 ARG NEXT_PUBLIC_MATOMO_SITE_ID=3
 ENV NEXT_PUBLIC_MATOMO_URL=$NEXT_PUBLIC_MATOMO_URL
 ENV NEXT_PUBLIC_MATOMO_SITE_ID=$NEXT_PUBLIC_MATOMO_SITE_ID

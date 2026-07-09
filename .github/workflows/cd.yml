@@ -56,12 +56,15 @@ jobs:
     # Build dédié avec les VRAIES valeurs Matomo — ne pas réutiliser l'artifact
     # du job `verify` ci-dessus, qui build avec des placeholders CI
     # (matomo.example.com) uniquement pour valider que `next build` passe.
+    # URL analytics.tellebma.fr (pas matomo.tellebma.fr) : cf. #301, le mot
+    # "matomo" dans le nom de domaine est lui-même bloqué par les listes de
+    # filtres anti-pub (EasyPrivacy/uBlock), indépendamment du chemin.
     name: Deploy to Firebase Hosting (live)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [verify]
     env:
-      NEXT_PUBLIC_MATOMO_URL: https://matomo.tellebma.fr
+      NEXT_PUBLIC_MATOMO_URL: https://analytics.tellebma.fr
       NEXT_PUBLIC_MATOMO_SITE_ID: "3"
     steps:
       - name: Checkout

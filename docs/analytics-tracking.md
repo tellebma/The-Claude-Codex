@@ -20,14 +20,20 @@ Matomo cookieless                       Hook React (client)
 (self-hosted)                           AnalyticsTracker
        ▲                                       │
        │                                       │
-       │  POST matomo.php                      │ pousse dans window._paq
+       │  POST js/ (alias anti-adblock)        │ pousse dans window._paq
        │                                       │
        └───────────  window._paq  ────────────┘
                           ▲
                           │
                   loaded async via
-                  matomo.js (head)
+                  js/ (head)
 ```
+
+Note (2026-07-09) : l'endpoint et le fichier JS sont servis sous l'alias
+generique `js/` (plugin Matomo `CustomJsTracker`) plutot que les noms par
+defaut `matomo.js`/`matomo.php`, bloques par les listes de filtres
+(EasyPrivacy, Brave/uBlock) independamment du domaine. Voir le commentaire
+dans `src/app/[locale]/layout.tsx` pour le detail de la verification.
 
 Trois sources d'evenements alimentent `_paq` :
 
@@ -124,9 +130,9 @@ seule fois au load initial. Toutes les navigations suivantes (`Link`,
    NEXT_PUBLIC_MATOMO_URL=https://matomo.example.com
    NEXT_PUBLIC_MATOMO_SITE_ID=1
    ```
-2. `npm run dev` puis ouvrir DevTools Network -> filtrer "matomo.php".
+2. `npm run dev` puis ouvrir DevTools Network -> filtrer "js/".
 3. Naviguer entre 2 pages : verifier qu'une nouvelle requete vers
-   `matomo.php?action_name=...&url=...` part a chaque navigation.
+   `js/?action_name=...&url=...` part a chaque navigation.
 4. Scroller jusqu'a 75 % : verifier l'event `e_c=engagement&e_a=scroll_depth&e_n=75`.
 5. Cliquer un lien externe (ex: anthropic.com) : verifier l'event
    `e_c=navigation&e_a=external_link_click&e_n=https%3A%2F%2F...`.
@@ -135,6 +141,6 @@ seule fois au load initial. Toutes les navigations suivantes (`Link`,
 
 Pour valider le fix SEO-8 sur preview/prod :
 1. Ouvrir preview Vercel.
-2. Ouvrir DevTools Network, filtrer "matomo.php".
+2. Ouvrir DevTools Network, filtrer "js/".
 3. Cliquer entre 5 pages differentes : verifier que 5 requetes partent.
 4. Pre-fix, on observait 1 requete totale au load initial.

@@ -41,7 +41,7 @@ Test Playwright depuis `https://claude-codex.fr/fr/` :
 |--------|----------|--------|
 | Web Analytics (pageview) | `POST /_vercel/insights/view` | ✅ `200` |
 | Speed Insights (vitals) | `POST /_vercel/speed-insights/vitals` | ✅ déclenché sur interaction utilisateur |
-| Matomo (pageview) | `POST https://matomo.tellebma.fr/matomo.php` | ✅ `200` (cookieless) |
+| Matomo (pageview) | `POST https://matomo.tellebma.fr/js/` (alias anti-adblock depuis 2026-07-09, ex-`matomo.php`) | ✅ `200` (cookieless) |
 
 Le `200` sur l'endpoint `_vercel/insights/view` indique que Web Analytics est bien activée dans le dashboard Vercel — sinon Vercel renverrait `403` ou `404`.
 

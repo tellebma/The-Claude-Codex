@@ -240,7 +240,7 @@ function isInternalLink(href: string | undefined): boolean {
   if (!href.startsWith("/")) return false;
   if (href.startsWith("//")) return false;
   // Already has a locale prefix
-  if (/^\/(?:fr|en)(?:\/|$)/.test(href)) return false;
+  if (/^\/(?:fr|en|es)(?:\/|$)/.test(href)) return false;
   // Static file downloads in public/ are served without locale prefix
   if (hasStaticFileExtension(href)) return false;
   return true;

@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { validateThemes, type ThemeKey } from "./themes";
+import { locales } from "@/i18n/config";
 
 /**
  * Frontmatter shape expected in MDX content files.
@@ -174,6 +175,29 @@ export function getSectionMdxSlugs(
 }
 
 /**
+ * Slugs to pass to `generateStaticParams` for a section's `[slug]` route.
+ *
+ * `output: 'export'` cannot build a route whose `generateStaticParams`
+ * returns `[]` for one parent param combination -- it fails the whole build
+ * with a misleading "missing generateStaticParams()" error even though the
+ * function is present (see https://github.com/vercel/next.js/issues/71862).
+ * This happens for any locale that has no MDX content yet for a given
+ * section (e.g. a newly added locale mid-rollout). Falling back to the
+ * default locale's slug list works around it: the page component already
+ * calls `notFound()` when the slug isn't actually available for the current
+ * locale, so the generated `/{locale}/{section}/<default-locale-slug>/`
+ * routes render a clean static 404 instead of crashing the build.
+ */
+export function getSectionSlugParams(
+  section: string,
+  locale: string
+): Array<{ slug: string }> {
+  const localSlugs = getSectionMdxSlugs(section, locale);
+  const slugs = localSlugs.length > 0 ? localSlugs : getSectionMdxSlugs(section, DEFAULT_LOCALE);
+  return slugs.map((slug) => ({ slug }));
+}
+
+/**
  * Reads a single MDX file from a section subdirectory by slug.
  * Falls back to the default locale if the file doesn't exist in the requested locale.
  */
@@ -231,14 +255,12 @@ const SECTIONS_FOR_COUNT: ReadonlyArray<string> = [
  */
 export function countAllArticles(): number {
   const slugs = new Set<string>();
-  for (const slug of getAllMdxSlugs("fr")) slugs.add(slug);
-  for (const slug of getAllMdxSlugs("en")) slugs.add(slug);
-  for (const section of SECTIONS_FOR_COUNT) {
-    for (const slug of getSectionMdxSlugs(section, "fr")) {
-      slugs.add(`${section}/${slug}`);
-    }
-    for (const slug of getSectionMdxSlugs(section, "en")) {
-      slugs.add(`${section}/${slug}`);
+  for (const locale of locales) {
+    for (const slug of getAllMdxSlugs(locale)) slugs.add(slug);
+    for (const section of SECTIONS_FOR_COUNT) {
+      for (const slug of getSectionMdxSlugs(section, locale)) {
+        slugs.add(`${section}/${slug}`);
+      }
     }
   }
   return slugs.size;
@@ -262,7 +284,7 @@ function collectTimestamps(
 /** Date de derniere modification globale du contenu (RG-32). */
 export function getLastModifiedDate(): Date | null {
   const dates: number[] = [];
-  for (const locale of ["fr", "en"] as const) {
+  for (const locale of locales) {
     collectTimestamps(getAllMdxFiles(locale), dates);
     for (const section of SECTIONS_FOR_COUNT) {
       collectTimestamps(getAllSectionMdxFiles(section, locale), dates);
@@ -369,7 +391,7 @@ export function getMostRecentArticles(
 ): ReadonlyArray<RecentArticle> {
   const seen = new Map<string, RecentEntry>();
 
-  for (const locale of ["fr", "en"] as const) {
+  for (const locale of locales) {
     collectArticles(getAllMdxFiles(locale), null, locale, preferredLocale, seen);
     for (const section of SECTIONS_FOR_COUNT) {
       collectArticles(

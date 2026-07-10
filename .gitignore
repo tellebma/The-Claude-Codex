@@ -85,6 +85,7 @@ doc/settings.local.json
 # Generated at build time by scripts/generate-search-index.ts
 /public/search-index-fr.json
 /public/search-index-en.json
+/public/search-index-es.json
 
 # Private/local docs — kept local, never on public GitHub
 docs/TODO/

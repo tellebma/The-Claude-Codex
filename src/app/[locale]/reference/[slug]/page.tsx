@@ -1,7 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { BookOpen } from "lucide-react";
-import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
+import { getSectionMdxBySlug, getSectionMdxSlugs, getSectionSlugParams } from "@/lib/mdx";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
@@ -18,7 +18,7 @@ export function generateStaticParams({
 }: {
   params: { locale: string };
 }): Array<{ slug: string }> {
-  return [...getSectionMdxSlugs(SECTION, params.locale)].map((slug) => ({ slug }));
+  return getSectionSlugParams(SECTION, params.locale);
 }
 
 export async function generateMetadata({

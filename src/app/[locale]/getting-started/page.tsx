@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/config";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -167,21 +168,96 @@ const translations = {
       "Master the art of communicating with Claude Code for precise, high-quality results.",
     promptingLink: "Learn prompting",
   },
+  es: {
+    metaTitle: "Primeros pasos con Claude Code",
+    metaDescription:
+      "Guía completa para instalar, configurar y usar Claude Code. De cero a tu primer proyecto en minutos.",
+    howToTitle: "Primeros pasos con Claude Code",
+    howToDescription:
+      "Guía completa para instalar, configurar y usar Claude Code.",
+    steps: [
+      {
+        name: "Descubrir Claude Code",
+        text: "Entender qué es Claude Code, a quién se dirige y qué lo diferencia de otras herramientas.",
+      },
+      {
+        name: "Instalar los requisitos y Claude Code",
+        text: "Instalar Node.js y ejecutar el comando npm install -g @anthropic-ai/claude-code.",
+      },
+      {
+        name: "Configurar tu entorno",
+        text: "Configurar tu clave API, el archivo settings.json y el archivo CLAUDE.md.",
+      },
+      {
+        name: "Crear tu primer proyecto",
+        text: "Lanzar Claude Code en una carpeta y crear un sitio web completo en 5 minutos.",
+      },
+    ],
+    heroBadge: "Guía paso a paso",
+    heroTitle: "Primeros pasos con",
+    heroSubtitle:
+      "Estás en el lugar correcto. Ya seas un desarrollador experimentado o nunca hayas abierto una terminal, esta guía te acompaña desde la instalación hasta tu primer proyecto real. Sin jerga innecesaria, solo lo esencial.",
+    guidesCount: "4 guías",
+    guidesTitle: "Sigue el recorrido",
+    guidesDescription:
+      "Cada guía aborda un aspecto esencial de Claude Code. Síguelas en orden o elige directamente la que te interese.",
+    readGuide: "Leer la guía",
+    subPages: [
+      {
+        title: "¿Qué es Claude Code?",
+        description:
+          "Descubre qué hace único a Claude Code, compáralo con otras herramientas (Copilot, Cursor) y explora casos de uso concretos.",
+      },
+      {
+        title: "Requisitos e instalación",
+        description:
+          "Instala Claude Code en pocos minutos: Node.js 18+, el comando npm, autenticación con clave API o Max.",
+      },
+      {
+        title: "Configuración del entorno",
+        description:
+          "Configura la clave API, el archivo settings.json, el potente CLAUDE.md y los permisos de seguridad.",
+      },
+      {
+        title: "Primer proyecto paso a paso",
+        description:
+          "Tutorial práctico: crea un sitio web completo en 5 minutos, itera sobre el resultado y descubre las buenas prácticas.",
+      },
+    ],
+    nextBadge: "¿Y ahora qué?",
+    nextTitle: "Estás listo. Continúa tu",
+    nextTitleHighlight: "aprendizaje",
+    nextDescription:
+      "Ahora que Claude Code está instalado y configurado, explora las funciones avanzadas que van a transformar tu día a día.",
+    mcpTitle: "Los MCP",
+    mcpDescription:
+      "Conecta Claude Code a Gmail, GitHub, Slack, tus bases de datos y decenas de otras herramientas.",
+    mcpLink: "Descubrir los MCP",
+    skillsTitle: "Los Skills",
+    skillsDescription:
+      "Crea capacidades reutilizables para automatizar tus tareas repetitivas y estandarizar tus flujos de trabajo.",
+    skillsLink: "Explorar los Skills",
+    promptingTitle: "El Prompting",
+    promptingDescription:
+      "Domina el arte de comunicarte con Claude Code para obtener resultados precisos y de alta calidad.",
+    promptingLink: "Aprender prompting",
+  },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as Locale] ?? translations.fr;
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
     path: `/${locale}/getting-started`,
     locale,
+    availableLocales: ["fr", "en", "es"],
   });
 }
 
 function buildHowToJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as Locale] ?? translations.fr;
   return createHowToSchema({
     title: t.howToTitle,
     description: t.howToDescription,
@@ -224,7 +300,7 @@ export default async function GettingStartedPage({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as Locale] ?? translations.fr;
 
   /*
    * JSON-LD structured data -- safe: static schema built at build time

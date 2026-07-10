@@ -1,0 +1,81 @@
+---
+title: "Awesome Claude Plugins: marketplace oficial + ecosistema de la comunidad"
+description: "Los plugins de Claude Code que hay que conocer. Marketplace oficial de Anthropic, plugins de la comunidad con gran impacto, marketplaces alternativos. Datos de GitHub verificados el 2026-05-11."
+order: 3
+section: "ecosystem"
+datePublished: "2026-05-11"
+dateModified: "2026-05-11"
+themes: ["reference", "tooling"]
+---
+
+{/* source: GitHub API repos data, consulté 2026-05-11 */}
+
+## Resumen
+
+- Los **plugins** son integraciones empaquetadas que se distribuyen mediante marketplace. Más estructurados que un skill, más ligeros que un agente personalizado.
+- Referencia oficial: [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) (19k★), directorio gestionado por Anthropic con plugins validados.
+- 3 plugins de la comunidad merecen instalación inmediata: **claude-hud** (HUD visual en tiempo real), **compound-engineering-plugin** (flujos de trabajo cross-tool), **claudian** (integración con Obsidian).
+- 2 marketplaces alternativos amplían el alcance más allá del repositorio oficial: `alirezarezvani/claude-skills` (245+ plugins) y `jeremylongshore/claude-code-plugins-plus-skills` (425 plugins).
+
+<Callout type="info" title="Plugin vs Skill vs Agente">
+Un **plugin** se distribuye mediante marketplace, expone una API pública y tiene un ciclo de vida versionado. Un **skill** es un archivo markdown aislado. Un **agente** es una delegación de tarea. Consulta [`/skills/comparison`](/skills/comparison) para ver la matriz comparativa.
+</Callout>
+
+## 1. Marketplace oficial de Anthropic
+
+El directorio de referencia. Plugins validados y mantenidos por Anthropic.
+
+| Repositorio | ⭐ | Particularidad |
+|------|---:|---------------|
+| [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official) | 19 105 | Directorio oficial. Los plugins se evalúan por calidad y seguridad antes de publicarse. |
+| [`anthropics/knowledge-work-plugins`](https://github.com/anthropics/knowledge-work-plugins) | 12 028 | Repositorio open source de plugins para knowledge workers (Claude Cowork). Orientado a perfiles no técnicos. |
+
+## 2. Plugins de la comunidad con gran impacto
+
+Plugins de la comunidad con tracción real (al menos 10k★, actualización reciente).
+
+| Repositorio | ⭐ | Qué aporta |
+|------|---:|------------------|
+| [`jarrodwatts/claude-hud`](https://github.com/jarrodwatts/claude-hud) | 22 385 | **HUD visual**: muestra en tiempo real el uso de contexto, las herramientas activas, los agentes en ejecución y la tarea en curso. |
+| [`EveryInc/compound-engineering-plugin`](https://github.com/EveryInc/compound-engineering-plugin) | 16 540 | **Compound engineering**: flujos de trabajo cruzados entre Claude Code + Codex + Cursor. Plugin oficial de Every. |
+| [`YishenTu/claudian`](https://github.com/YishenTu/claudian) | 10 936 | **Integración con Obsidian**: incrusta Claude Code/Codex como colaborador de IA en tu vault. |
+
+## 3. Marketplaces alternativos
+
+Marketplaces de terceros que van más allá del alcance del directorio oficial.
+
+| Repositorio | ⭐ | Volumen |
+|------|---:|--------|
+| [`alirezarezvani/claude-skills`](https://github.com/alirezarezvani/claude-skills) | 14 441 | 245+ skills y plugins de agente, cross-tool (Claude Code, Codex, Gemini CLI, Cursor y 8 más). |
+| [`jeremylongshore/claude-code-plugins-plus-skills`](https://github.com/jeremylongshore/claude-code-plugins-plus-skills) | 2 159 | **425 plugins + 2 810 skills + 200 agentes**. Marketplace open source `tonsofskills.com` con CLI `ccpi`. |
+| [`davepoon/buildwithclaude`](https://github.com/davepoon/buildwithclaude) | 2 909 | Hub unificado: colecciones de Skills + Agents + Commands + Hooks + Plugins + Marketplace. |
+
+## 4. Plugins de nicho destacables
+
+Para casos de uso específicos, pero bien resueltos.
+
+| Repositorio | ⭐ | Para quién |
+|------|---:|----------|
+| [`ykdojo/claude-code-tips`](https://github.com/ykdojo/claude-code-tips) | 8 205 | No es un plugin en sentido estricto, pero reúne 45 tips oficiales + status line personalizada + system prompts. |
+| [`zhukunpenglinyutong/jetbrains-cc-gui`](https://github.com/zhukunpenglinyutong/jetbrains-cc-gui) | 3 365 | Plugin GUI de JetBrains para Claude Code + Codex (IntelliJ, WebStorm, PyCharm, etc.). |
+| [`agenticnotetaking/arscontexta`](https://github.com/agenticnotetaking/arscontexta) | 3 324 | Genera sistemas de conocimiento individualizados a partir de conversaciones. |
+| [`ZeframLou/call-me`](https://github.com/ZeframLou/call-me) | 2 589 | Minimalista: permite que Claude Code te llame por teléfono. Un gadget, pero divertido. |
+
+## Cómo elegir
+
+Tres pasos:
+
+1. **Empieza por lo oficial**: explora primero [`anthropics/claude-plugins-official`](https://github.com/anthropics/claude-plugins-official). Es la base validada. Ahí encontrarás los plugins esenciales para el día a día (formateo, lint, tests).
+2. **Añade 1-2 plugins de la comunidad**: `claude-hud` es imprescindible a nivel visual (saber qué está pasando durante las ejecuciones largas). `compound-engineering-plugin` si alternas entre varias herramientas de IA.
+3. **Marketplaces de terceros**: solo si buscas un plugin concreto que no encuentras en otro sitio. Presta atención a la seguridad (los plugins no auditados pueden ejecutar código arbitrario).
+
+<Callout type="warning" title="Seguridad de los plugins de terceros">
+Un plugin tiene acceso a tu CLI y potencialmente a tu sistema de archivos. Antes de instalar un plugin de la comunidad, lee el código fuente (o como mínimo el README y el manifest). Prioriza los plugins con más de 10k★ y un mantenedor activo. Los plugins de "tonsofskills.com" y otros marketplaces no oficiales no están auditados por Anthropic.
+</Callout>
+
+## Próximos pasos
+
+- Explora los **servidores MCP** por categoría: [`/ecosystem/awesome-mcp-servers`](/ecosystem/awesome-mcp-servers).
+- Entiende los **plugins oficiales**: [`/plugins`](/plugins).
+- Instala tu primer plugin: [`/plugins/setup`](/plugins/setup).
+- Compara **plugins vs skills vs agentes**: [`/skills/comparison`](/skills/comparison).

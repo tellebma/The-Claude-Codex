@@ -1,0 +1,77 @@
+---
+title: "Por qué tus tokens cuestan más en ciertos idiomas"
+description: "A igualdad de contenido, una frase en francés, en japonés o en hindi no cuesta el mismo número de tokens que en inglés. Explicación del fenómeno, fuentes científicas, y qué cambia para Claude Code."
+badge: "Tokens"
+section: "content"
+order: 17
+datePublished: "2026-05-28"
+dateModified: "2026-05-28"
+themes: ["guide", "productivity"]
+---
+
+## El mismo texto, un coste diferente
+
+Las API de los modelos de lenguaje facturan por **token**, esos fragmentos de texto que el modelo recorta antes de razonar. Y hay un hecho que suele sorprender: para expresar exactamente la misma idea, el número de tokens cambia según el idioma. El inglés es por lo general el más compacto. Muchos otros idiomas, sobre todo los que no usan el alfabeto latino, se dividen en muchos más fragmentos.
+
+Consecuencia directa: como la factura depende del número de tokens, dos personas que hacen la misma pregunta en dos idiomas distintos no pagan el mismo precio.
+
+{/* source: https://arxiv.org/abs/2305.15425 (Petrov et al., NeurIPS 2023), consultado 2026-05-28 */}
+{/* source: https://arxiv.org/abs/2305.13707 (Ahia et al., 2023), consultado 2026-05-28 */}
+
+## Lo que dice la investigación
+
+El fenómeno está documentado por trabajos revisados por pares.
+
+<Callout type="info" title="Hasta 15 veces más tokens">
+En el estudio **« Language Model Tokenizers Introduce Unfairness Between Languages »** (Petrov, La Malfa, Torr y Bibi, presentado en NeurIPS 2023), los autores muestran que un mismo texto traducido a distintos idiomas produce longitudes de tokenización que pueden variar **hasta 15 veces**. La diferencia aparece ya en la etapa de tokenización, antes incluso de que se consulte al modelo.
+</Callout>
+
+Un segundo estudio, **« Do All Languages Cost the Same? Tokenization in the Era of Commercial Language Models »** (Ahia, Kumar, Gonen, Kasai, Mortensen, Smith y Tsvetkov, 2023), midió el coste y la utilidad de la API de OpenAI en **22 idiomas** tipológicamente variados. Su conclusión es clara: los hablantes de un buen número de esos idiomas están **sobrefacturados y a la vez obtienen peores resultados**, y a menudo son poblaciones para las que estos servicios ya son los menos asequibles.
+
+## Por qué existe esta diferencia
+
+Los modelos dividen el texto con un tokenizador entrenado con grandes corpus, muy mayoritariamente anglófonos. El tokenizador aprende entonces fragmentos eficientes para el inglés: las palabras comunes caben en un solo token.
+
+Para un idioma menos representado, o escrito en otro sistema (ideogramas, escrituras no latinas), el tokenizador no ha aprendido atajos. Recae en unidades más pequeñas, a veces letra por letra o byte por byte. El mismo significado exige entonces muchos más tokens.
+
+Una analogía: imagina un diccionario de abreviaturas pensado para el inglés. Las palabras inglesas tienen su sigla corta. Las palabras de otro idioma, ausentes del diccionario, hay que deletrearlas enteras. El mensaje es idéntico, pero ocupa mucho más espacio.
+
+## Tres consecuencias concretas
+
+El estudio de Petrov y sus coautores identifica explícitamente tres efectos de este desequilibrio.
+
+<Steps>
+<Step title="El coste" stepNumber={1}>
+Más tokens para el mismo contenido significa una factura más alta, tanto en la entrada como en la salida, ya que la tarificación es por token.
+</Step>
+
+<Step title="La latencia" stepNumber={2}>
+El modelo procesa y genera token por token. Un texto más fragmentado tarda más en leerse y producirse, por lo que las respuestas son más lentas.
+</Step>
+
+<Step title="La ventana de contexto" stepNumber={3} isLast>
+La ventana de contexto se cuenta en tokens. Un idioma ávido de tokens "llena" la ventana más rápido: se puede dar menos contexto al modelo con el mismo presupuesto.
+</Step>
+</Steps>
+
+## ¿Y para Claude Code?
+
+Las cifras de arriba proceden de estudios sobre los tokenizadores de OpenAI y sobre tokenizadores multilingües. Pero el mecanismo es general: **cualquier LLM comercial facturado por token está afectado**, incluido Claude, que tiene su propio tokenizador y también factura los tokens de entrada y de salida.
+
+<Callout type="warning" title="Sin multiplicador mágico">
+La magnitud exacta de la diferencia depende del tokenizador y del modelo concreto. Los valores "hasta 15×" o "22 idiomas" son los de los estudios citados, no una cifra oficial propia de Claude. Para conocer el coste real de un texto dado con Claude, mídelo en lugar de estimarlo.
+</Callout>
+
+En la práctica, si usas Claude Code de forma intensiva y multilingüe, ten en cuenta que el volumen de tokens, y por tanto el presupuesto, no es el mismo según el idioma de tus prompts, de tus archivos y de las respuestas esperadas.
+
+## Qué puedes hacer
+
+- **Medir antes de suponer.** La API de Anthropic ofrece un recuento de tokens (`count_tokens`) que permite comprobar el coste real de un prompt en un idioma dado, sin adivinarlo.
+- **Elegir el idioma según lo que esté en juego.** Para tareas voluminosas y repetitivas donde el idioma importa poco (instrucciones técnicas, consignas internas), redactar en inglés puede reducir el consumo. Para contenido destinado a personas, la calidad y la exactitud son lo primero: no sacrifiques la claridad por unos pocos tokens.
+- **Cuidar el contexto.** Como un idioma ávido llena la ventana más rápido, un `CLAUDE.md` conciso y prompts bien dirigidos cuentan todavía más en esos idiomas.
+
+## Próximos pasos
+
+- [Costes reales de Claude Code](/content/couts-reels-claude-code): entender qué se factura, plan por plan.
+- [Gestión del contexto](/prompting/context-management): sacar el máximo partido a una ventana limitada.
+- Fuentes: [Petrov et al., NeurIPS 2023](https://arxiv.org/abs/2305.15425) y [Ahia et al., 2023](https://arxiv.org/abs/2305.13707).

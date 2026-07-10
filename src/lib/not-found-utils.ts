@@ -4,7 +4,7 @@
  * React Three Fiber qui ne s'exécute pas en jsdom).
  */
 
-export type Locale = "fr" | "en";
+export type Locale = "fr" | "en" | "es";
 
 /**
  * Convertit un pathname en une requête de recherche pertinente. Retire les
@@ -27,6 +27,7 @@ export function pathToQuery(pathname: string): string {
  */
 export function detectLocaleFromPath(pathname: string): Locale | null {
   if (pathname.startsWith("/en/") || pathname === "/en") return "en";
+  if (pathname.startsWith("/es/") || pathname === "/es") return "es";
   if (pathname.startsWith("/fr/") || pathname === "/fr") return "fr";
   return null;
 }

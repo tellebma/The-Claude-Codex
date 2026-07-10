@@ -1,0 +1,290 @@
+---
+title: "Requisitos previos e instalación"
+description: "Instala Claude Code en pocos minutos. Requisitos previos (Node.js 18+, terminal, cuenta Anthropic), instalación por npm, autenticación con clave API o Max, y solución de errores habituales."
+section: "getting-started"
+order: 2
+datePublished: "2026-03-09"
+dateModified: "2026-05-27"
+themes: ["tutorial", "tooling"]
+---
+
+<Callout type="tip" title="¿Nuevo con los ordenadores?">
+Si palabras como "terminal", "Node.js" o "clave API" te suenan misteriosas, empieza por nuestra página de [requisitos previos para principiantes absolutos](/getting-started/prerequisites-zero). Lo explica todo en lenguaje humano, con analogías concretas.
+</Callout>
+
+## Actualizado en mayo de 2026
+
+Tres cambios que debes conocer antes de instalar en mayo de 2026:
+
+- **Se recomienda Node.js 22** (Node 18 dejó de tener soporte en abril de 2025 y Node 20 lo perderá en abril de 2026; algunos scripts de herramientas ya exigen Node 20+).
+- **El plan Claude Max** se ha convertido en la vía de autenticación más económica para un uso individual habitual (frente a `ANTHROPIC_API_KEY` con facturación por tokens consumidos). Elige según tu perfil de consumo.
+- **La instalación mediante `npm i -g @anthropic-ai/claude-code`** sigue siendo la única oficial. Desconfía de forks o paquetes no verificados. Consulta la [página de seguridad](/content/bonnes-pratiques-securite) para las comprobaciones de procedencia.
+
+<Callout type="warning" title="Claude Code no es gratis">
+Para usar Claude Code necesitas **una suscripción Claude de pago** (Pro, Max o Team) **o una clave API** (facturación por uso a través de la consola de Anthropic). Ninguna de las dos opciones es gratuita: prevé el presupuesto antes de empezar. Consulta la sección [Autenticación](#autenticacion) más abajo para el detalle de ambos métodos, y la [página de precios de Anthropic](https://claude.com/pricing) para las tarifas actualizadas, que cambian con regularidad.
+</Callout>
+
+## Requisitos previos
+
+Antes de instalar Claude Code, comprueba que tienes estos tres elementos. Si te falta alguno, no te preocupes, te lo explicamos justo debajo.
+
+<Card title="Node.js 18 o superior" variant="accent">
+Claude Code funciona gracias a Node.js, el motor JavaScript que permite ejecutar código en el servidor. Necesitas al menos la versión 18 (se recomienda la versión 22 LTS).
+
+Descárgalo en [nodejs.org](https://nodejs.org) o usa un gestor de versiones como `nvm`.
+
+<Screenshot src="/images/screenshots/nodejs-download.png" alt="Página de descarga de Node.js en nodejs.org con la pestaña Windows seleccionada, versión LTS 22.13.x y opciones nvm/npm" caption="La página nodejs.org/download ofrece un instalador oficial para Windows (.msi) además de una distribución binaria. Para la mayoría de usuarios, el instalador de Windows es suficiente." />
+</Card>
+
+<Card title="Un terminal" variant="accent">
+Claude Code vive en el terminal. En **macOS**, usa Terminal o iTerm2. En **Windows**, usa PowerShell o WSL (Windows Subsystem for Linux). En **Linux**, cualquier emulador de terminal sirve.
+</Card>
+
+<Card title="Una suscripción Claude" variant="accent">
+Lo más simple y rentable: una **suscripción Claude Pro, Max o Team** desde [claude.com](https://claude.com). Pro ya incluye Claude Code, Max añade 5x o 20x la capacidad de Pro, y Team está pensado para equipos con un workspace compartido.
+
+Si prefieres pagar exactamente por lo que usas (uso muy puntual), puedes en su lugar crear una **clave API** en [console.anthropic.com](https://console.anthropic.com). Consulta la sección [Autenticación](#autenticacion) más abajo para ambos métodos.
+</Card>
+
+### Comprueba tu versión de Node.js
+
+Abre tu terminal y escribe el siguiente comando:
+
+<TerminalScreenshot
+  title="Terminal - zsh"
+  lines={[
+    { type: "command", content: "node --version" },
+    { type: "highlight", content: "v22.4.0" },
+    { type: "comment", content: "# Perfecto, ya estás listo" }
+  ]}
+/>
+
+<Callout type="warning" title="¿Versión demasiado antigua?">
+Si ves un número inferior a v18.0.0, o si el comando no se reconoce, necesitas instalar o actualizar Node.js. Consulta la sección de solución de problemas al final de esta página.
+</Callout>
+
+## Instalación de Claude Code
+
+La instalación se hace con un único comando. Abre tu terminal y ejecuta:
+
+<TerminalScreenshot
+  title="Terminal - macOS (zsh)"
+  lines={[
+    { type: "command", content: "npm install -g @anthropic-ai/claude-code" },
+    { type: "empty", content: "" },
+    { type: "output", content: "added 1 package, and audited 1 package in 3s" },
+    { type: "output", content: "" },
+    { type: "output", content: "found 0 vulnerabilities" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "+ @anthropic-ai/claude-code@2.1.152" }
+  ]}
+/>
+
+<TerminalScreenshot
+  title="PowerShell - Windows"
+  lines={[
+    { type: "command", content: "npm install -g @anthropic-ai/claude-code", promptSymbol: ">" },
+    { type: "empty", content: "" },
+    { type: "output", content: "added 1 package, and audited 1 package in 4s" },
+    { type: "output", content: "" },
+    { type: "output", content: "found 0 vulnerabilities" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "+ @anthropic-ai/claude-code@2.1.152" }
+  ]}
+/>
+
+Este comando instala Claude Code **globalmente** en tu máquina. Esto significa que el comando `claude` estará disponible desde cualquier carpeta de tu sistema.
+
+<Callout type="info" title="¿Por qué el flag -g?">
+El flag `-g` significa "global". Sin este flag, el paquete se instalaría solo en la carpeta actual. Con `-g`, Claude Code se convierte en una herramienta del sistema accesible desde cualquier lugar, como `git` o `node`.
+</Callout>
+
+### Verifica la instalación
+
+Después de instalar, comprueba que todo funciona:
+
+<TerminalScreenshot
+  title="Terminal - zsh"
+  lines={[
+    { type: "command", content: "claude --version" },
+    { type: "highlight", content: "@anthropic-ai/claude-code 2.1.152" }
+  ]}
+/>
+
+Si el comando se reconoce y muestra un número de versión, la instalación se ha completado con éxito.
+
+## Autenticación
+
+En el primer arranque, Claude Code te pedirá que te autentiques. Hay dos métodos disponibles.
+
+### Método 1: Clave API (pago por uso)
+
+Es el método más flexible. Pagas únicamente lo que consumes.
+
+<Steps>
+<Step title="Genera una clave API" stepNumber={1}>
+Ve a [console.anthropic.com](https://console.anthropic.com), inicia sesión y luego entra en **API Keys** y pulsa **Create Key**. Copia la clave generada (empieza por `sk-ant-`).
+</Step>
+
+<Step title="Configura la variable de entorno" stepNumber={2}>
+Añade tu clave API en tu archivo de configuración del shell:
+
+```bash
+# Añade esta línea a tu ~/.bashrc o ~/.zshrc
+export ANTHROPIC_API_KEY="sk-ant-tu-clave-aqui"
+
+# Recarga tu configuración
+source ~/.bashrc  # o source ~/.zshrc
+```
+</Step>
+
+<Step title="Lanza Claude Code" stepNumber={3} isLast>
+Sitúate en una carpeta de proyecto y ejecuta el comando `claude`. La autenticación será automática gracias a la variable de entorno.
+
+<TerminalScreenshot
+  title="Terminal - primer arranque"
+  lines={[
+    { type: "command", content: "cd ~/mi-proyecto && claude" },
+    { type: "empty", content: "" },
+    { type: "highlight", content: "  ╔═══════════════════════════════════╗" },
+    { type: "highlight", content: "  ║  Welcome to Claude Code (2.1.152) ║" },
+    { type: "highlight", content: "  ╚═══════════════════════════════════╝" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Analysing project structure..." },
+    { type: "output", content: "  ✓ Found CLAUDE.md" },
+    { type: "output", content: "  ✓ Authenticated via API key" },
+    { type: "empty", content: "" },
+    { type: "output", content: "  Type your request or /help for commands" },
+    { type: "empty", content: "" },
+    { type: "prompt", content: "> " }
+  ]}
+/>
+</Step>
+</Steps>
+
+<Callout type="warning" title="Seguridad de tu clave API">
+Nunca compartas tu clave API. Nunca la subas a un repositorio Git. Si crees que se ha expuesto, regenérala de inmediato desde [console.anthropic.com](https://console.anthropic.com).
+</Callout>
+
+### Método 2: Suscripción Claude Max / Pro / Team
+
+Si tienes una suscripción Claude (Max, Pro o Team), puedes usar Claude Code sin una clave API separada.
+
+<Steps>
+<Step title="Lanza Claude Code" stepNumber={1}>
+Ejecuta simplemente el comando `claude` en tu terminal:
+
+```bash
+claude
+```
+</Step>
+
+<Step title="Elige el método de autenticación" stepNumber={2}>
+Claude Code te ofrece dos opciones. Selecciona **Claude App**:
+
+```text
+? How would you like to authenticate?
+> Claude App (Max subscription)
+  Anthropic Console (API key)
+```
+</Step>
+
+<Step title="Inicia sesión en tu navegador" stepNumber={3} isLast>
+Se abre automáticamente un navegador. Inicia sesión con tu cuenta Claude. Una vez autenticado, vuelve al terminal: Claude Code está listo.
+</Step>
+</Steps>
+
+<Callout type="tip" title="¿Qué suscripción elegir?">
+La suscripción **Max 5x** (desde $100/mes) ofrece un uso intensivo de Claude Code con 5 veces la capacidad de Pro. La suscripción **Max 20x** ($200/mes) da prioridad absoluta sin latencia (20 veces la capacidad de Pro). La suscripción **Pro** (~$17-20/mes según facturación anual o mensual) es adecuada para un uso moderado. La clave API (pago por uso) es ideal para probar o para un uso puntual; calcula unos $5-15 por día de uso activo.
+</Callout>
+
+### Comparación de planes
+
+<Callout type="warning" title="Las tarifas cambian con regularidad">
+Anthropic ajusta sus planes y precios varias veces al año (reorganización de niveles, nuevos planes empresariales, cambios promocionales). Las cifras siguientes y la captura que las acompaña son indicativas a **9 de mayo de 2026**. Antes de suscribirte, comprueba siempre las tarifas vigentes en la [página oficial de precios de Anthropic](https://claude.com/pricing).
+</Callout>
+
+<Screenshot src="/images/screenshots/claude-pricing.png" alt="Captura de los planes Pro y Max en claude.com/pricing: Pro a 17 dólares al mes en facturación anual o 20 dólares al mes en mensual, Max desde 100 dólares al mes" caption="Extracto de claude.com/pricing a 9 de mayo de 2026. Pro incluye Claude Code, Max añade 5x o 20x la capacidad de Pro. Para las cifras actualizadas, abre claude.com/pricing." />
+
+<PricingTable />
+
+## Solución de problemas: errores habituales
+
+### "command not found: node" o versión demasiado antigua
+
+Node.js no está instalado o tu versión es demasiado antigua.
+
+```bash
+# Instalar nvm (gestor de versiones de Node.js)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+
+# Reiniciar el terminal y luego:
+nvm install 22
+nvm use 22
+
+# Comprobar
+node --version
+# v22.x.x
+```
+
+### "EACCES: permission denied"
+
+npm no tiene permisos para instalar paquetes globales.
+
+<Callout type="warning" title="Nunca uses sudo con npm">
+El comando `sudo npm install -g` es una mala práctica que genera problemas de permisos en cascada. Usa en su lugar una de las soluciones de abajo.
+</Callout>
+
+**Solución 1: Configurar el prefijo de npm** (recomendado)
+
+```bash
+mkdir -p ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+# Relanza la instalación
+npm install -g @anthropic-ai/claude-code
+```
+
+**Solución 2: Usar nvm**
+
+Si usas `nvm`, los problemas de permisos se gestionan automáticamente.
+
+### "command not found: claude"
+
+El terminal no encuentra el comando `claude` después de la instalación.
+
+```bash
+# Comprueba dónde instala npm los paquetes globales
+npm config get prefix
+
+# La subcarpeta bin/ de esa ruta debe estar en tu PATH
+# Si has configurado ~/.npm-global:
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Si cerraste y volviste a abrir tu terminal después de instalar y el problema persiste, comprueba que la carpeta bin de npm esté realmente en tu variable `PATH`.
+
+### "API key not found" o "Invalid API key"
+
+```bash
+# Comprueba que la variable está definida
+echo $ANTHROPIC_API_KEY
+
+# Si no aparece nada, la variable no está configurada
+# Comprueba tu archivo de configuración del shell
+cat ~/.bashrc | grep ANTHROPIC
+
+# Asegúrate de que la clave empieza por sk-ant-
+# y que no ha sido revocada en console.anthropic.com
+```
+
+## Próximos pasos
+
+Claude Code está instalado y ya estás autenticado. Pasemos a configurar tu entorno para sacarle el máximo partido a la herramienta.
+
+- [Configura tu entorno](/getting-started/environment-setup): API key, settings.json y CLAUDE.md
+- [Tu primer proyecto](/getting-started/first-project): crea un sitio web en 5 minutos
+- [Volver a la vista general](/getting-started): todas las páginas de la guía

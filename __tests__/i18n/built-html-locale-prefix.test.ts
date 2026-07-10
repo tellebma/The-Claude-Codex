@@ -20,6 +20,7 @@ const OUT_DIR = join(process.cwd(), "out");
 const ALLOWED_PREFIXES = [
   "/fr/",
   "/en/",
+  "/es/",
   "/_next/",
   "/icon",
   "/apple-touch",
@@ -34,6 +35,7 @@ const ALLOWED_PREFIXES = [
   "/500",
   "/fr", // "/fr" exact (rare, but e.g. root Link)
   "/en",
+  "/es",
 ];
 
 function isAllowed(href: string): boolean {

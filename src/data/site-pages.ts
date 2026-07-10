@@ -19,7 +19,18 @@ export interface PageInfo {
    * `path`. The keys are locale codes (e.g. "fr", "en").
    */
   readonly pathsByLocale?: Readonly<Record<string, string>>;
+  /**
+   * Locales that actually have content for this page, used by the sitemap
+   * and by `createPageMetadata` (hreflang alternates). Defaults to
+   * `["fr", "en"]` when omitted. Only add "es" once a real ES translation
+   * exists for the page -- listing a locale without content produces a
+   * broken hreflang/sitemap entry pointing at a 404 (cf. EPIC
+   * i18n-espagnol-2026-05).
+   */
+  readonly localesAvailable?: ReadonlyArray<string>;
 }
+
+const ES_INFRA_LOCALES = ["fr", "en", "es"] as const;
 
 export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   {
@@ -32,6 +43,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     // Mise a jour RG-30 : la landing a ete remaniee en RG-18 (hero split,
     // typo display-1) et completee en RG-32 (CodexStatsBand, RecentArticles).
     lastModified: "2026-04-30",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/getting-started",
@@ -41,6 +53,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.9,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/getting-started/prerequisites-zero",
@@ -68,6 +81,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-05-27",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/getting-started/environment-setup",
@@ -122,6 +136,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.9,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/mcp/what-are-mcps",
@@ -140,6 +155,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/mcp/best-productivity",
@@ -167,6 +183,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/mcp/first-workflow",
@@ -249,6 +266,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting",
@@ -258,6 +276,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-05-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/basics",
@@ -276,6 +295,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/templates",
@@ -303,6 +323,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/advanced",
@@ -339,6 +360,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-11",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/non-dev-prompting",
@@ -438,6 +460,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-04-23",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/plugins/best-design",
@@ -474,6 +497,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/skills/find-skills",
@@ -537,6 +561,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/agents/what-are-agents",
@@ -699,6 +724,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-11",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/ecosystem/awesome-mcp-servers",
@@ -744,6 +770,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/enterprise/faq",
@@ -771,6 +798,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-11",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/advanced/hooks",
@@ -780,6 +808,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-04-26",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/advanced/headless-ci",
@@ -924,6 +953,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-06-30",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/configurator",
@@ -1014,6 +1044,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-04-23",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/limits/vs-cursor",
@@ -1041,6 +1072,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/agent-team-orchestration",
@@ -1050,6 +1082,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-06-04",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/refaire-une-card-avec-impeccable-et-playwright",
@@ -1060,6 +1093,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/couts-reels-claude-code",
@@ -1080,6 +1114,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-05-28",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/mythes-claude-code",
@@ -1139,6 +1174,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-04-21",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/ci-cd-cyber-securite",
@@ -1158,6 +1194,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/garry-tan-stack-claude-code",
@@ -1167,6 +1204,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-12",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/karpathy-claude-md-analyse",
@@ -1176,6 +1214,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-12",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/sonnet-5-fable-5-nouveaux-modeles",
@@ -1186,6 +1225,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-07-01",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/fable-5-est-de-retour",
@@ -1196,6 +1236,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-07-01",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/about",

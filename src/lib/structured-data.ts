@@ -18,7 +18,9 @@ function ensureTrailingSlash(url: string): string {
  * Maps a locale code to a BCP 47 language tag for schema.org inLanguage.
  */
 export function localeToLanguageTag(locale: string): string {
-  return locale === "en" ? "en-US" : "fr-FR";
+  if (locale === "en") return "en-US";
+  if (locale === "es") return "es-ES";
+  return "fr-FR";
 }
 
 interface WebSiteSchemaOptions {

@@ -1,10 +1,18 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL, SITE_PAGES } from "@/lib/metadata";
 import type { PageInfo } from "@/data/site-pages";
-import { locales, defaultLocale } from "@/i18n/config";
+import { defaultLocale } from "@/i18n/config";
 
 // Requis par Next 15 pour exporter les routes Metadata en SSG (`output: 'export'`).
 export const dynamic = "force-static";
+
+/**
+ * Locales listed for a page when it doesn't set `localesAvailable`
+ * explicitly. Kept in sync with `createPageMetadata`'s own default so a page
+ * not yet opted into ES doesn't get a broken sitemap/hreflang entry pointing
+ * at a 404 (cf. EPIC i18n-espagnol-2026-05).
+ */
+const DEFAULT_LOCALES: ReadonlyArray<string> = ["fr", "en"];
 
 /** Ensures a URL path ends with / to match trailingSlash: true. */
 function withSlash(url: string): string {
@@ -23,7 +31,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];
 
   for (const page of SITE_PAGES) {
-    for (const locale of locales) {
+    const pageLocales = page.localesAvailable ?? DEFAULT_LOCALES;
+
+    for (const locale of pageLocales) {
       const pageUrl = withSlash(
         `${SITE_URL}/${locale}${resolvePath(page, locale)}`
       );
@@ -37,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         alternates: {
           languages: {
             ...Object.fromEntries(
-              locales.map((l) => [
+              pageLocales.map((l) => [
                 l,
                 withSlash(`${SITE_URL}/${l}${resolvePath(page, l)}`),
               ])

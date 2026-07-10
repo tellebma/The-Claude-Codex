@@ -5,6 +5,13 @@ export const SITE_NAME = "The Claude Codex";
 export const SITE_LOCALE = "fr_FR";
 export const DEFAULT_OG_IMAGE = "/og/og-default.png";
 
+/** Maps a locale code to its OpenGraph `og:locale` value. Defaults to fr_FR. */
+function localeToOgLocale(locale: string): string {
+  if (locale === "en") return "en_US";
+  if (locale === "es") return "es_ES";
+  return "fr_FR";
+}
+
 interface PageMetadataOptions {
   readonly title: string;
   readonly description: string;
@@ -14,6 +21,14 @@ interface PageMetadataOptions {
   readonly type?: "website" | "article";
   readonly publishedTime?: string;
   readonly modifiedTime?: string;
+  /**
+   * Locales that actually have content for this page, used to build the
+   * `alternates.languages` hreflang map. Defaults to `["fr", "en"]` to match
+   * existing behavior. Pass `["fr", "en", "es"]` only for pages that have a
+   * real ES translation -- listing a locale without content produces a
+   * broken hreflang pointing at a 404.
+   */
+  readonly availableLocales?: ReadonlyArray<string>;
 }
 
 /**
@@ -29,26 +44,26 @@ export function createPageMetadata({
   type = "article",
   publishedTime,
   modifiedTime,
+  availableLocales = ["fr", "en"],
 }: PageMetadataOptions): Metadata {
   const canonicalUrl = `${SITE_URL}${path}`;
   const imageUrl = ogImage ?? DEFAULT_OG_IMAGE;
-  const ogLocale = locale === "en" ? "en_US" : "fr_FR";
+  const ogLocale = localeToOgLocale(locale);
 
-  // Build alternate path by swapping locale prefix
-  const altLocale = locale === "en" ? "fr" : "en";
-  const pathWithoutLocale = path.replace(/^\/(fr|en)/, "");
-  const altUrl = `${SITE_URL}/${altLocale}${pathWithoutLocale}`;
+  const pathWithoutLocale = path.replace(/^\/(fr|en|es)/, "");
+  const languages: Record<string, string> = {};
+  for (const l of availableLocales) {
+    languages[l] =
+      l === locale ? canonicalUrl : `${SITE_URL}/${l}${pathWithoutLocale}`;
+  }
+  languages["x-default"] = `${SITE_URL}/fr${pathWithoutLocale}`;
 
   return {
     title,
     description,
     alternates: {
       canonical: canonicalUrl,
-      languages: {
-        fr: locale === "fr" ? canonicalUrl : altUrl,
-        en: locale === "en" ? canonicalUrl : altUrl,
-        "x-default": `${SITE_URL}/fr${pathWithoutLocale}`,
-      },
+      languages,
     },
     openGraph: {
       title: `${title} | ${SITE_NAME}`,

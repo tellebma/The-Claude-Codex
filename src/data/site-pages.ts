@@ -19,7 +19,18 @@ export interface PageInfo {
    * `path`. The keys are locale codes (e.g. "fr", "en").
    */
   readonly pathsByLocale?: Readonly<Record<string, string>>;
+  /**
+   * Locales that actually have content for this page, used by the sitemap
+   * and by `createPageMetadata` (hreflang alternates). Defaults to
+   * `["fr", "en"]` when omitted. Only add "es" once a real ES translation
+   * exists for the page -- listing a locale without content produces a
+   * broken hreflang/sitemap entry pointing at a 404 (cf. EPIC
+   * i18n-espagnol-2026-05).
+   */
+  readonly localesAvailable?: ReadonlyArray<string>;
 }
+
+const ES_INFRA_LOCALES = ["fr", "en", "es"] as const;
 
 export const SITE_PAGES: ReadonlyArray<PageInfo> = [
   {
@@ -32,6 +43,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     // Mise a jour RG-30 : la landing a ete remaniee en RG-18 (hero split,
     // typo display-1) et completee en RG-32 (CodexStatsBand, RecentArticles).
     lastModified: "2026-04-30",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/getting-started",
@@ -41,6 +53,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.9,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/getting-started/prerequisites-zero",
@@ -122,6 +135,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.9,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/mcp/what-are-mcps",
@@ -249,6 +263,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting",
@@ -258,6 +273,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-05-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/basics",
@@ -537,6 +553,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/agents/what-are-agents",
@@ -771,6 +788,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-03-11",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/advanced/hooks",

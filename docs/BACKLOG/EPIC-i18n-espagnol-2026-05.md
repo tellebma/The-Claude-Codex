@@ -4,7 +4,7 @@
 > Date d'ouverture : 2026-05-12
 > Effort estimé : **34 SP** (11 stories sur 4 sprints)
 > Pré-requis : EPIC SEO/GEO terminé ✅, EPIC Bugfix search Vercel terminé ✅ (pattern i18n stable)
-> Priorité : Backlog moyen terme (post-ECO Sprint 2 + Polish Heros)
+> Priorité : **#1 — priorité maximale** (remontée par le PO le 2026-07-10 ; passe devant les autres EPICs backlog). Objectif : lancer Sprint 1 dès qu'un contributeur natif ES est identifié pour valider le glossaire (ES-3).
 
 ---
 

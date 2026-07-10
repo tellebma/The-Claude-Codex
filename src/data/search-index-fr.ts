@@ -2537,6 +2537,35 @@ export const searchIndexFr: ReadonlyArray<SearchEntry> = [
       "2026",
     ],
   },
+  // GPT-5.6 vs Claude Sonnet 5
+  {
+    title: "GPT-5.6 vs Claude Sonnet 5 : le vrai comparatif pour les devs Claude Code",
+    description:
+      "GPT-5.6 (Sol, Terra, Luna) est sorti le 9 juillet 2026. Prix, contexte, benchmarks TerminalBench et SWE-bench, et un point METR à connaître, face à Claude Sonnet 5 et Fable 5.",
+    href: "/content/gpt-5-6-vs-claude-sonnet-5",
+    section: "Contenus",
+    keywords: [
+      "gpt-5.6",
+      "gpt 5.6",
+      "openai",
+      "sol",
+      "terra",
+      "luna",
+      "claude sonnet 5",
+      "claude fable 5",
+      "claude-sonnet-5",
+      "claude-fable-5",
+      "terminalbench",
+      "swe-bench pro",
+      "metr",
+      "reward hacking",
+      "comparatif modeles",
+      "openai vs anthropic",
+      "gouvernement americain",
+      "9 juillet 2026",
+      "2026",
+    ],
+  },
   // About
   {
     title: "À propos du Claude Codex",

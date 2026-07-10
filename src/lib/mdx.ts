@@ -175,6 +175,29 @@ export function getSectionMdxSlugs(
 }
 
 /**
+ * Slugs to pass to `generateStaticParams` for a section's `[slug]` route.
+ *
+ * `output: 'export'` cannot build a route whose `generateStaticParams`
+ * returns `[]` for one parent param combination -- it fails the whole build
+ * with a misleading "missing generateStaticParams()" error even though the
+ * function is present (see https://github.com/vercel/next.js/issues/71862).
+ * This happens for any locale that has no MDX content yet for a given
+ * section (e.g. a newly added locale mid-rollout). Falling back to the
+ * default locale's slug list works around it: the page component already
+ * calls `notFound()` when the slug isn't actually available for the current
+ * locale, so the generated `/{locale}/{section}/<default-locale-slug>/`
+ * routes render a clean static 404 instead of crashing the build.
+ */
+export function getSectionSlugParams(
+  section: string,
+  locale: string
+): Array<{ slug: string }> {
+  const localSlugs = getSectionMdxSlugs(section, locale);
+  const slugs = localSlugs.length > 0 ? localSlugs : getSectionMdxSlugs(section, DEFAULT_LOCALE);
+  return slugs.map((slug) => ({ slug }));
+}
+
+/**
  * Reads a single MDX file from a section subdirectory by slug.
  * Falls back to the default locale if the file doesn't exist in the requested locale.
  */

@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.4...v1.14.0) (2026-07-10)
+
+
+### Features
+
+* **deploy:** configure Firebase Hosting as Vercel alternative ([#297](https://github.com/tellebma/The-Claude-Codex/issues/297)) ([ec9623b](https://github.com/tellebma/The-Claude-Codex/commit/ec9623bc0cda9dafb2f88f6a196529d17898291c)), closes [#298](https://github.com/tellebma/The-Claude-Codex/issues/298) [#299](https://github.com/tellebma/The-Claude-Codex/issues/299) [#301](https://github.com/tellebma/The-Claude-Codex/issues/301) [#301](https://github.com/tellebma/The-Claude-Codex/issues/301)
+
 ## [1.13.4](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.3...v1.13.4) (2026-07-09)
 
 

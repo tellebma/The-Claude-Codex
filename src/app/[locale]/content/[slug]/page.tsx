@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import { getMdxBySlug, getAllMdxSlugs, getAllMdxFiles } from "@/lib/mdx";
+import { defaultLocale } from "@/i18n/config";
 import { MdxRenderer } from "@/components/mdx/MdxRenderer";
 import { ArticleSubNav } from "@/components/layout/ArticleSubNav";
 import { ArticleHero } from "@/components/layout/ArticleHero";
@@ -29,13 +30,24 @@ interface ContentPageProps {
  * ensures URLs stay in sync with the locale-specific slugs on disk, which
  * matters when slugs diverge between languages (for example when a French
  * slug has been translated to English).
+ *
+ * `output: 'export'` cannot build a route whose `generateStaticParams`
+ * returns `[]` for one parent param combination -- it fails the whole build
+ * with a misleading "missing generateStaticParams()" error even though the
+ * function is present (see https://github.com/vercel/next.js/issues/71862).
+ * This happens today for `locale: "es"` since `content/es/` doesn't exist
+ * yet. Falling back to the default locale's slug list works around it: the
+ * generated `/es/content/<fr-slug>/` pages simply render the default-locale
+ * fallback content via `getMdxBySlug`'s own existing fallback -- the same
+ * behavior already relied on for FR/EN content gaps, just extended to ES.
  */
 export function generateStaticParams({
   params,
 }: {
   params: { locale: string };
 }): Array<{ slug: string }> {
-  const slugs = getAllMdxSlugs(params.locale);
+  const localSlugs = getAllMdxSlugs(params.locale);
+  const slugs = localSlugs.length > 0 ? localSlugs : getAllMdxSlugs(defaultLocale);
   return [...slugs].map((slug) => ({ slug }));
 }
 

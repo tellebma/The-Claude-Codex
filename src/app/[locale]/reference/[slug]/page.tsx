@@ -2,6 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { BookOpen } from "lucide-react";
 import { getSectionMdxBySlug, getSectionMdxSlugs } from "@/lib/mdx";
+import { defaultLocale } from "@/i18n/config";
 import { createPageMetadata } from "@/lib/metadata";
 import { createFAQPageSchema } from "@/lib/structured-data";
 import { getPageFaqs } from "@/data/page-faqs";
@@ -13,12 +14,26 @@ interface PageProps {
   readonly params: Promise<{ locale: string; slug: string }>;
 }
 
+/**
+ * `output: 'export'` cannot build a route whose `generateStaticParams`
+ * returns `[]` for one parent param combination -- it fails the whole build
+ * with a misleading "missing generateStaticParams()" error even though the
+ * function is present (see https://github.com/vercel/next.js/issues/71862).
+ * This happens today for `locale: "es"` since this section has no ES MDX
+ * content yet. Falling back to the default locale's slug list works around
+ * it: the page component already calls `notFound()` when the slug isn't
+ * actually available for the current locale, so the generated
+ * `/es/{section}/<fr-slug>/` routes render a clean static 404 instead of
+ * crashing the build.
+ */
 export function generateStaticParams({
   params,
 }: {
   params: { locale: string };
 }): Array<{ slug: string }> {
-  return [...getSectionMdxSlugs(SECTION, params.locale)].map((slug) => ({ slug }));
+  const localSlugs = getSectionMdxSlugs(SECTION, params.locale);
+  const slugs = localSlugs.length > 0 ? localSlugs : getSectionMdxSlugs(SECTION, defaultLocale);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

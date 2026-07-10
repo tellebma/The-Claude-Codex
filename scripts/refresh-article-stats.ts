@@ -453,7 +453,7 @@ function findRepoRoot(): string {
 
 export function collectArticleDates(repoRoot: string): ReadonlyMap<string, Date> {
   const map = new Map<string, Date>();
-  for (const locale of ["fr", "en"] as const) {
+  for (const locale of ["fr", "en", "es"] as const) {
     const dir = path.join(repoRoot, CONTENT_REL_PATH, locale);
     if (!fs.existsSync(dir)) continue;
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {

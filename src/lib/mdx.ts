@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { validateThemes, type ThemeKey } from "./themes";
+import { locales } from "@/i18n/config";
 
 /**
  * Frontmatter shape expected in MDX content files.
@@ -231,14 +232,12 @@ const SECTIONS_FOR_COUNT: ReadonlyArray<string> = [
  */
 export function countAllArticles(): number {
   const slugs = new Set<string>();
-  for (const slug of getAllMdxSlugs("fr")) slugs.add(slug);
-  for (const slug of getAllMdxSlugs("en")) slugs.add(slug);
-  for (const section of SECTIONS_FOR_COUNT) {
-    for (const slug of getSectionMdxSlugs(section, "fr")) {
-      slugs.add(`${section}/${slug}`);
-    }
-    for (const slug of getSectionMdxSlugs(section, "en")) {
-      slugs.add(`${section}/${slug}`);
+  for (const locale of locales) {
+    for (const slug of getAllMdxSlugs(locale)) slugs.add(slug);
+    for (const section of SECTIONS_FOR_COUNT) {
+      for (const slug of getSectionMdxSlugs(section, locale)) {
+        slugs.add(`${section}/${slug}`);
+      }
     }
   }
   return slugs.size;
@@ -262,7 +261,7 @@ function collectTimestamps(
 /** Date de derniere modification globale du contenu (RG-32). */
 export function getLastModifiedDate(): Date | null {
   const dates: number[] = [];
-  for (const locale of ["fr", "en"] as const) {
+  for (const locale of locales) {
     collectTimestamps(getAllMdxFiles(locale), dates);
     for (const section of SECTIONS_FOR_COUNT) {
       collectTimestamps(getAllSectionMdxFiles(section, locale), dates);
@@ -369,7 +368,7 @@ export function getMostRecentArticles(
 ): ReadonlyArray<RecentArticle> {
   const seen = new Map<string, RecentEntry>();
 
-  for (const locale of ["fr", "en"] as const) {
+  for (const locale of locales) {
     collectArticles(getAllMdxFiles(locale), null, locale, preferredLocale, seen);
     for (const section of SECTIONS_FOR_COUNT) {
       collectArticles(

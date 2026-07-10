@@ -1,0 +1,177 @@
+---
+title: "Calculadora de coste total (TCO)"
+description: "Estima el coste de Claude Code para tu equipo: comparativa de planes, ROI, benchmarks de LLM (Claude, GPT, Gemini, DeepSeek, Qwen, Mistral, modelos locales) y comparación con Copilot, Cursor, Windsurf, Aider."
+section: "enterprise"
+order: 4
+datePublished: "2026-03-12"
+dateModified: "2026-03-12"
+---
+
+## Los planes de Claude Code
+
+Anthropic ofrece varias fórmulas de acceso a Claude Code. La elección correcta depende del tamaño de tu equipo, del volumen de uso y de tus exigencias de cumplimiento normativo.
+
+### Planes disponibles
+
+| Plan | Precio | Límite de uso | Ideal para |
+|---|---|---|---|
+| **Pro** | 20 $/mes/usuario | Uso moderado (posible throttling) | Desarrolladores individuales, equipos pequeños |
+| **Max 5x** | 100 $/mes/usuario | 5x la capacidad de Pro | Equipos de 5 a 20 devs, uso diario |
+| **Max 20x** | 200 $/mes/usuario | 20x la capacidad de Pro | Equipos intensivos, proyectos grandes |
+| **API Team** | ~30 a 60 $/mes/usuario | Pago por uso (tokens consumidos) | Equipos técnicos, control granular de costes |
+
+<Callout type="info" title="API Team: el coste varía según el uso">
+Con el plan API pagas por consumo (tokens de entrada y de salida). Un desarrollador medio consume entre 30 y 60 $ al mes. Los perfiles intensivos (arquitectos, devs senior en grandes refactorizaciones) pueden llegar a 100-150 $.
+</Callout>
+
+## Coste por tamaño de equipo
+
+Aquí tienes una estimación realista del coste mensual según el plan y el número de desarrolladores.
+
+| Número de devs | Pro (20 $) | Max 5x (100 $) | Max 20x (200 $) | API (~40 $/dev) |
+|---|---|---|---|---|
+| **10 devs** | 200 $ | 1 000 $ | 2 000 $ | ~400 $ |
+| **50 devs** | 1 000 $ | 5 000 $ | 10 000 $ | ~2 000 $ |
+| **200 devs** | 4 000 $ | 20 000 $ | 40 000 $ | ~8 000 $ |
+
+## Comparativa de las herramientas de asistencia al código
+
+| Herramienta | Tipo | Precio/usuario/mes | Puntos fuertes | Limitaciones |
+|---|---|---|---|---|
+| **Claude Code Max 5x** | Agente de terminal | 100 $ | Terminal nativo, 200K de contexto, MCP, agentes autónomos | Sin IDE integrado |
+| **GitHub Copilot Business** | Plugin de IDE | 39 $ | Integración profunda con el IDE, Copilot Chat, modo agente | Contexto limitado, sin terminal |
+| **Cursor Business** | IDE (fork de VS Code) | 40 $ | IDE completo, visión, multimodelo | Ligado al editor Cursor |
+| **Windsurf Pro** | IDE (fork de VS Code) | 15 $ | Buena relación calidad/precio, "Flows" multietapa | Ecosistema más joven |
+| **Aider** | Agente de terminal (OSS) | Gratis (claves API) | Open source, git nativo, funciona con cualquier modelo | Configuración manual, sin GUI |
+| **Codestral (Mistral)** | API de código | ~0,30 $/MTok de entrada | 256K de contexto, 80+ lenguajes, muy económico | Sin herramienta integrada (API en bruto) |
+
+### Lo que el precio no cuenta
+
+El precio mostrado no cuenta toda la historia:
+
+- **Copilot a 39 $** ofrece autocompletado y chat, pero sin acceso a terminal, sin MCP, sin ejecución de comandos. Para tareas complejas (refactorización multiarchivo, generación de tests E2E, automatización de CI) hace falta multiplicar las interacciones manuales.
+- **Cursor a 40 $** es un IDE completo pero te ata a un editor específico. Si tu equipo usa VS Code, Neovim o JetBrains, supone un cambio de hábitos.
+- **Claude Code a 100 $** cuesta más en apariencia, pero actúa directamente en tu entorno. Una refactorización que lleva 3 horas manualmente lleva 20 minutos. Sobre el salario de un dev senior, la herramienta se amortiza en unos pocos días.
+- **Windsurf a 15 $** ofrece la mejor relación calidad/precio para un IDE agéntico, pero su ecosistema es más reciente.
+- **Aider** es gratis y open source, pero pagas las claves API del modelo subyacente. Es una buena opción para equipos que quieren un control total.
+- **Codestral (Mistral)** es 7 veces más barato que GPT-4.1 por token, lo que lo hace interesante para autocompletado de alto volumen.
+
+<Callout type="tip" title="Enfoque multiherramienta">
+Muchos equipos combinan un agente de IDE (Cursor o Windsurf) para el día a día y un agente de terminal (Claude Code o Aider) para las tareas complejas. No es una elección excluyente.
+</Callout>
+
+## Benchmarks de los LLM para código
+
+Las puntuaciones siguientes comparan los modelos en los principales benchmarks de código. SWE-bench Verified mide la capacidad de resolver bugs reales en proyectos open source. HumanEval mide la generación de funciones aisladas.
+
+<Callout type="warning" title="Cómo leer estas cifras">
+Las puntuaciones de SWE-bench dependen del harness usado (el agente que orquesta el modelo). Un mismo modelo puede puntuar 10 puntos más o menos según el scaffold. HumanEval está muy saturado: todos los modelos de frontera superan el 90 %, lo que lo convierte en un mal criterio de diferenciación. Las puntuaciones marcadas con ~ son aproximadas.
+</Callout>
+
+### Modelos en la nube (API de pago)
+
+| Modelo | Proveedor | SWE-bench Verified | HumanEval | Aider Polyglot | Precio API (entrada/salida por MTok) |
+|---|---|---|---|---|---|
+| **Claude Opus 4** | Anthropic | 72,5 % | 94,5 % | - | 15 $ / 75 $ |
+| **Claude Sonnet 4** | Anthropic | 72,7 % | 95,1 % | - | 3 $ / 15 $ |
+| **GPT-4.1** | OpenAI | 54,6 % | ~90 % | - | 2 $ / 8 $ |
+| **GPT-4o** | OpenAI | 33,2 % | 90,2 % | - | 2,50 $ / 10 $ |
+| **Gemini 2.5 Pro** | Google | 63,8-71,8 % | ~90 %+ | 74,0 % | 1,25 $ / 10 $ |
+| **Mistral Large 2** | Mistral | - | 92,0 % | - | 2 $ / 6 $ |
+| **Codestral** | Mistral | - | 86,6 % | - | 0,30 $ / 0,90 $ |
+
+### Modelos chinos
+
+| Modelo | Proveedor | SWE-bench Verified | HumanEval | Aider Polyglot | Precio API |
+|---|---|---|---|---|---|
+| **DeepSeek V3** | DeepSeek | 38,8 % | 90,2 % | 71,6 % | 0,28 $ / 0,42 $ |
+| **Qwen 2.5 Coder 32B** | Alibaba | ~nivel GPT-4o | 92,7 % | - | Open-weight |
+| **Qwen 3 235B** | Alibaba | ~61,7 % | ~93 % | - | 0,70 $ / 2,80 $ |
+
+<Callout type="info" title="DeepSeek y Qwen: relación calidad/precio inigualable">
+DeepSeek V3 cuesta unas 10 veces menos que Claude Sonnet por token. Los modelos chinos progresan muy rápido en los benchmarks de código. A vigilar para tareas de alto volumen donde el presupuesto prima sobre la calidad máxima.
+</Callout>
+
+### Modelos locales (open-weight)
+
+Estos modelos se ejecutan en tu propio hardware. Todos los datos permanecen en local, lo que responde a exigencias de soberanía.
+
+| Modelo | Tamaño | VRAM requerida (Q4) | HumanEval | Caso de uso |
+|---|---|---|---|---|
+| **Qwen 2.5 Coder 32B** | 32B | ~20 GB | 92,7 % | Mejor modelo local para código, rivaliza con GPT-4o |
+| **Mistral Small 3.2** | 24B | ~15 GB | 92,9 % | Excelente generalista + código |
+| **Phi-4** | 14B | ~9 GB | 82,6 % | Buena relación rendimiento/tamaño, fuerte en STEM |
+| **Qwen 3 7B** | 7B | ~5 GB | 76,0 % | Mejor modelo < 8B para código |
+| **Llama 3.3 8B** | 8B | ~5 GB | 72,6 % | Funciona con 8 GB de RAM |
+| **CodeGemma 7B** | 7B | ~5 GB | 60,4 % | Desfasado (2024), mejor optar por Qwen 3 7B |
+
+<Callout type="tip" title="¿Qué GPU para qué modelo?">
+**8 GB VRAM** (GPU de consumo): Qwen 3 7B o Llama 3.3 8B. **16 GB**: Qwen 2.5 Coder 14B o Phi-4. **24 GB** (RTX 4090): Qwen 2.5 Coder 32B o Mistral Small 3.2, con un rendimiento cercano al de la nube.
+</Callout>
+
+## Retorno de la inversión (ROI)
+
+El ROI depende de dos variables: el coste de la herramienta y el tiempo ganado por desarrollador.
+
+### Estimación del tiempo ganado
+
+Los informes de equipos en producción muestran ganancias variables según el tipo de tarea:
+
+| Tarea | Ganancia de tiempo estimada |
+|---|---|
+| Escritura de tests | 40 a 60 % |
+| Scaffolding / boilerplate | 50 a 70 % |
+| Revisión de código (primera pasada) | 30 a 50 % |
+| Documentación técnica | 40 a 60 % |
+| Depuración | 20 a 40 % |
+| Refactorización | 30 a 50 % |
+
+De media, los equipos reportan una ganancia de **5 a 10 horas por desarrollador a la semana** en tareas repetitivas.
+
+### Cálculo concreto
+
+Para un desarrollador con un salario bruto cargado de 80 000 EUR al año (coste para el empleador):
+
+- Coste por hora: ~42 EUR/h (basado en 1 900 horas trabajadas)
+- Ganancia de 7h/semana: 294 EUR/semana ahorrados
+- Coste de Claude Code Max 5x: ~92 EUR/mes (~23 EUR/semana)
+- **ROI: 12 veces el coste de la herramienta**
+
+Incluso con una ganancia modesta de 3h/semana, el ROI se mantiene positivo desde el primer mes.
+
+## Calculadora interactiva
+
+Usa la calculadora de abajo para estimar el coste y el ROI adaptados a tu equipo.
+
+<TcoCalculator />
+
+## Recomendaciones por perfil de equipo
+
+### Startup (5-15 devs)
+
+**Plan recomendado: Max 5x (100 $/dev/mes)**
+
+El plan Pro (20 $) se quedará corto en cuanto tus desarrolladores usen Claude Code a diario. El throttling del plan Pro rompe el flujo de trabajo. Max 5x ofrece un buen equilibrio entre coste y capacidad.
+
+### Scale-up (15-100 devs)
+
+**Plan recomendado: API Team o Max 5x según los perfiles**
+
+Combina planes: API para los desarrolladores ocasionales, Max 5x para los usuarios intensivos. La API permite un control fino de los costes y evita pagar 100 $ por un dev que usa la herramienta 3 veces por semana.
+
+### Gran empresa (100+ devs)
+
+**Plan recomendado: API Team vía Bedrock/Vertex**
+
+A esta escala, la API vía AWS Bedrock o Google Vertex ofrece la mejor relación flexibilidad/coste/cumplimiento. Ventajas:
+
+- Facturación consolidada en tu cuenta cloud
+- Cero retención de datos por parte de Anthropic
+- Cumplimiento del RGPD simplificado (datos en tu región)
+- Control granular de permisos vía IAM
+
+## Próximos pasos
+
+- [Guía de adopción en equipo](/enterprise/team-adoption): lanza un piloto estructurado
+- [Seguridad y cumplimiento](/enterprise/security-compliance): encuadra la seguridad antes del despliegue
+- [FAQ Enterprise](/enterprise/faq): respuestas a las preguntas frecuentes sobre costes

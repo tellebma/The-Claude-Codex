@@ -6,6 +6,8 @@
 > Pré-requis : EPIC SEO/GEO terminé ✅, EPIC Bugfix search Vercel terminé ✅ (pattern i18n stable)
 > Priorité : Backlog moyen terme (post-ECO Sprint 2 + Polish Heros)
 
+> **MVP livré le 2026-07-10** (PR #308, mergée sur `develop` puis promue en prod via release #310, v1.15.0). Scope volontairement réduit par rapport aux stories ci-dessous (décision PO en session : pas 100% du site, priorité aux pages à plus fort trafic) — voir le détail exact livré vs hors-scope juste avant les "Stories détaillées".
+
 ---
 
 ## Contexte
@@ -91,6 +93,30 @@ Trois options, **option B retenue** comme MVP.
 - Workflow agent qui traduit automatiquement les futurs MDX ajoutés (Sprint 4, story ES-10)
 - Audit qualité native ES par traducteur pro (post-MVP)
 - A/B test pour mesurer le retour sur audience (post-MVP)
+
+---
+
+## MVP livré 2026-07-10 — écart vs stories initiales
+
+Réalisé via 3 agents parallèles (infra + 2 lots de contenu) puis intégration/durcissement manuel, sur la branche `feat/i18n-espagnol` (PR #308).
+
+**Livré (couvre ES-1, ES-2, ES-6, ES-7 entièrement ; ES-3, ES-4, ES-5 partiellement) :**
+- Locale `es` dans `src/i18n/config.ts`, `LanguageSwitcher` 3 langues, `slug-aliases.ts` refactoré (mapping par locale au lieu d'un toggle binaire fr/en)
+- `messages/es.json` complet — **571 clés** (le chiffre "437" de ES-4 est obsolète, `fr.json` a grossi depuis mai) + `docs/i18n/glossary-es.md` (~40 entrées, **pas encore validé par un locuteur natif** — cf. risque résiduel ci-dessous)
+- `BetaTranslationBanner` (ES-6) affichée uniquement en locale `es`, dismissible
+- SEO (ES-7) : hreflang/sitemap conditionnés par page via un nouveau champ `localesAvailable` sur `PageInfo` (`src/data/site-pages.ts`) — évite les hreflang cassés vers du contenu ES inexistant
+- Recherche full-text (`SearchDialog`) étendue à l'ES (`scripts/generate-search-index.ts`, `src/lib/search-live.ts`) — non prévu dans les stories initiales, découvert et corrigé en session (sans ce fix la recherche serait restée muette sur tout le contenu ES)
+- **23 pages de contenu traduites** (au lieu des 5 cornerstone de ES-5) : les 10 derniers articles `/content/*` + les 13 pages doc les plus consultées (GSC + Matomo, semaine du 2026-06-27) — `reference/environment`, `mcp/setup`, `advanced/hooks`, `prompting/directives`, `getting-started/installation`, `limits/vs-copilot`, `mcp/best-design`, `enterprise/tco-calculator`, `ecosystem/awesome-plugins`, `plugins/best-essential`, `prompting/chaining-and-agents`, `skills/best-skills`, `prompting/claude-md`
+- 6 pages overview traduites (getting-started, mcp, prompting, skills, agents, advanced) — pas dans le scope MVP initial (ES-5 ne prévoyait que le cornerstone landing)
+- Bug Next.js `output: 'export'` corrigé (`generateStaticParams` vide pour une locale fait planter tout le build) et factorisé dans `getSectionSlugParams` (`src/lib/mdx.ts`) après détection de duplication de code par le Quality Gate SonarQube
+
+**Hors scope / pas fait (ne pas supposer livré) :**
+- ES-8 (`llms.txt`/`llms-full.txt`) : **pas régénéré pour l'ES**, `scripts/generate-llms-txt.ts` reste codé en dur `["fr", "en"]`
+- ES-9, ES-10, ES-11 : intégralement hors scope (Sprint 4 jamais attaqué)
+- Glossaire ES-3 non validé par un locuteur natif (risque qualité de traduction documenté dans l'EPIC, toujours ouvert)
+- ~61 pages restantes non traduites (84 pages totales − 23 livrées)
+
+**Reliquat suggéré pour un futur sprint** : ES-8 (llms.txt), validation glossaire, puis prioriser la suite par trafic réel une fois les 23 pages ES indexées.
 
 ---
 

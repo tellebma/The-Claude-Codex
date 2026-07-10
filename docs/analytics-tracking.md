@@ -38,8 +38,12 @@ dans `src/app/[locale]/layout.tsx` pour le detail de la verification.
 Trois sources d'evenements alimentent `_paq` :
 
 1. **Snippet `<head>`** dans `src/app/[locale]/layout.tsx` : initialise
-   `_paq`, `disableCookies`, `setDoNotTrack`, `enableLinkTracking`. Ne fire
-   plus de `trackPageView` au load (delegate au hook React, cf. SEO-8).
+   `_paq`, `disableCookies`, `setDoNotTrack`, `enableLinkTracking`,
+   `enableHeartBeatTimer` (2026-07-09, ping toutes les 15s tant que l'onglet
+   est actif/visible — permet de mesurer un temps sur page reel meme sur
+   les visites a une seule page, sinon `avg_time_on_page` reste a 0 par
+   construction). Ne fire plus de `trackPageView` au load (delegate au hook
+   React, cf. SEO-8).
 
 2. **`useMatomoPageviewTracking`** (SEO-8) monte dans `AnalyticsTracker` :
    ecoute les changements de `usePathname()` + `useSearchParams()` et

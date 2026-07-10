@@ -63,11 +63,18 @@ const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
  * la lib JS, et les requetes de tracking (idsite/rec) y repondent aussi
  * (content-type image/gif). setRequestMethod POST evite en plus les
  * patterns d'URL de tracking en GET.
+ *
+ * Note (heartbeat, 2026-07-09) : enableHeartBeatTimer envoie un ping
+ * toutes les 15s (defaut) tant que l'onglet est actif/visible, pour que
+ * Matomo puisse mesurer le temps reellement passe sur une page meme
+ * quand la visite ne contient qu'une seule page (bounce). Sans ca,
+ * avg_time_on_page reste a 0 par construction sur ces visites (le calcul
+ * se base sur le timestamp de l'action suivante, qui n'existe jamais).
  */
 const matomoTrackingScript = MATOMO_ENABLED
   ? `
   var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking'], ['setRequestMethod', 'POST']);
+  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking'], ['setRequestMethod', 'POST'], ['enableHeartBeatTimer']);
   (function() {
     var u = '${MATOMO_URL}/';
     _paq.push(['setTrackerUrl', u + 'js/'], ['setSiteId', '${MATOMO_SITE_ID}']);

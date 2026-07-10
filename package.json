@@ -29,7 +29,9 @@
     "test:mutation": "stryker run",
     "docker:build": "docker build -t tellebma/the-claude-codex .",
     "docker:push": "docker push tellebma/the-claude-codex",
-    "docker:release": "npm run docker:build && npm run docker:push"
+    "docker:release": "npm run docker:build && npm run docker:push",
+    "deploy:firebase:preview": "npm run build && npx firebase-tools hosting:channel:deploy preview",
+    "deploy:firebase": "npm run build && npx firebase-tools deploy --only hosting"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",

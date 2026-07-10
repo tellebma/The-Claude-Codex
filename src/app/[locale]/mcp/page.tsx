@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/config";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -591,21 +592,301 @@ claude
       },
     ],
   },
+  es: {
+    metaTitle: "Los MCP para Claude Code",
+    metaDescription:
+      "Descubre los MCP (Model Context Protocol) para conectar Claude Code a tus herramientas favoritas: GitHub, Slack, Gmail, bases de datos y mucho más.",
+    jsonLdTitle: "Los MCP para Claude Code",
+    jsonLdDescription:
+      "Descubre los MCP (Model Context Protocol) para conectar Claude Code a tus herramientas favoritas.",
+    heroBadge: "Model Context Protocol",
+    heroTitle1: "Los ",
+    heroTitle2: "MCP",
+    heroTitle3: ": dale",
+    heroTitle4: "superpoderes a Claude Code",
+    heroDescription:
+      "Conecta Claude Code a tus herramientas favoritas (GitHub, Slack, Gmail, bases de datos) y conviértelo en un asistente todopoderoso que actúa en tu entorno real.",
+    subPagesBadge: "6 guías",
+    subPagesTitle: "Explora los MCP en profundidad",
+    subPagesDescription:
+      "De la teoría a la práctica, cada guía cubre un aspecto esencial de los MCP. Síguelas en orden o elige directamente la que te interese.",
+    readGuide: "Leer la guía",
+    conceptBadge: "Concepto",
+    conceptTitle: "¿Qué es un MCP?",
+    conceptDescription:
+      "El Model Context Protocol es el adaptador universal entre Claude Code y el resto del mundo digital.",
+    analogyTitle: "La analogía simple",
+    analogyP1:
+      "Imagina que Claude Code es un experto polivalente encerrado en una habitación. Es brillante, pero no puede ",
+    analogyP1Bold1: "tocar",
+    analogyP1Mid: " nada fuera de esa habitación. Los MCP son ",
+    analogyP1Bold2: "enchufes universales",
+    analogyP1End:
+      " que conectas entre Claude y tus herramientas: tu bandeja de correo, tu código fuente, tus bases de datos, tu navegador...",
+    analogyP2:
+      "Cada MCP abre una puerta nueva. Sin MCP, Claude Code solo puede leer y escribir archivos locales. Con los MCP, puede enviar un mensaje de Slack, crear una pull request en GitHub, ejecutar una consulta SQL y mucho más. ",
+    analogyP2Bold: "Todo desde el terminal",
+    analogyP2End: ".",
+    withoutMcp: "Sin MCP",
+    withoutMcpDesc:
+      "Claude Code lee y escribe archivos locales. Potente, pero aislado.",
+    plusMcp: "+ MCP",
+    plusMcpDesc:
+      "Conectas adaptadores que enlazan Claude con tus servicios.",
+    result: "Resultado",
+    resultDesc:
+      "Un asistente que actúa en tu entorno real, no solo en un chat.",
+    archBadge: "Arquitectura",
+    archTitle: "¿Cómo funciona?",
+    archDescription:
+      "El MCP actúa como un puente estandarizado entre Claude Code y los servicios externos.",
+    flowYou: "Tú",
+    flowYouDesc: "\u0022Muéstrame las issues abiertas en GitHub\u0022",
+    flowClaude: "Claude Code",
+    flowClaudeDesc: "Entiende tu petición y llama al MCP adecuado",
+    flowMcpServer: "MCP Server",
+    flowMcpServerDesc: "Traduce la petición en llamadas a la API",
+    flowService: "Servicio externo",
+    flowServiceDesc: "GitHub, Slack, Gmail, BD...",
+    calloutProtocolTitle: "Protocolo estándar",
+    calloutProtocol:
+      "El MCP es un protocolo abierto creado por Anthropic. Cada MCP server expone un conjunto de herramientas (tools) que Claude Code puede llamar automáticamente. No necesitas escribir código, solo configurar la conexión.",
+    installBadge: "Instalación",
+    installTitle: "¿Cómo instalar un MCP?",
+    installDescription:
+      "Tres pasos sencillos para conectar un nuevo servicio a Claude Code.",
+    installStep1Title: "Abrir la configuración de Claude Code",
+    installStep1Desc:
+      "Los MCP se configuran en el archivo ",
+    installStep1DescEnd:
+      " de Claude Code. Puedes modificarlo directamente o usar el comando dedicado.",
+    installStep1Code: `# Abrir la configuración desde Claude Code
+claude mcp add <nombre-del-mcp> -- <comando> <args>
+
+# O editar manualmente el archivo de configuración
+# ~/.claude/settings.json (configuración global)
+# .claude/settings.json  (configuración por proyecto)`,
+    installStep2Title: "Añadir el MCP en settings.json",
+    installStep2Desc: "Cada MCP se declara en la sección ",
+    installStep2DescEnd: ". Esta es la estructura típica:",
+    installStep2Code: `{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/ruta/a/tu/carpeta"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_tu_token_aqui"
+      }
+    }
+  }
+}`,
+    calloutSecurityTitle: "Seguridad de los tokens",
+    calloutSecurity:
+      "Nunca subas tus tokens a un repositorio Git. Usa variables de entorno o un gestor de secretos para la información sensible. Prefiere la configuración global (",
+    calloutSecurityEnd: ") para tus tokens personales.",
+    installStep3Title: "Comprobar que el MCP está activo",
+    installStep3Desc:
+      "Reinicia Claude Code y comprueba que las herramientas del MCP están disponibles. Claude Code detecta automáticamente los MCP configurados al arrancar.",
+    installStep3Code: `# Listar los MCP configurados
+claude mcp list
+
+# Probar un MCP pidiéndole a Claude que lo use
+claude "Lista los archivos de mi carpeta de proyecto"`,
+    calloutTipTitle: "Consejo",
+    calloutTip:
+      "Si un MCP no se conecta, comprueba que el comando (npx, uvx, etc.) está instalado y accesible en tu PATH. También puedes revisar los logs con ",
+    recBadge: "Recomendaciones",
+    recTitle: "Los MCP imprescindibles",
+    recDescription:
+      "Nuestra selección de los mejores MCP servers para empezar y avanzar con Claude Code.",
+    tutorialBadge: "Tutorial",
+    tutorialTitle: "Tu primer flujo de trabajo MCP",
+    tutorialDescription:
+      "Instala y usa el MCP Filesystem en 5 minutos para descubrir el poder de los MCP.",
+    tutoStep1Title: "Instalar el MCP Filesystem",
+    tutoStep1Desc:
+      "El MCP Filesystem es el más sencillo para empezar. Permite que Claude Code lea y manipule los archivos de una carpeta que tú elijas.",
+    tutoStep1Code: `# Añadir el MCP Filesystem en un solo comando
+claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /home/tu-usuario/proyectos`,
+    tutoStep2Title: "Comprobar la configuración",
+    tutoStep2Desc:
+      "Asegúrate de que el MCP está bien registrado en tu configuración.",
+    tutoStep2Code: `claude mcp list
+
+# Resultado esperado:
+# filesystem: connected
+#   Tools: read_file, write_file, list_directory, search_files, ...`,
+    tutoStep3Title: "Usar el MCP en una conversación",
+    tutoStep3Desc:
+      "Lanza Claude Code y pídele que use los archivos. Detectará automáticamente el MCP Filesystem y lo usará.",
+    tutoStep3Code: `# Lanzar Claude Code
+claude
+
+# Luego pide, por ejemplo:
+> Lista todos los archivos TypeScript de mi carpeta de proyectos
+> y dame un resumen de cada archivo.
+
+# Claude hará automáticamente:
+# 1. Usar list_directory para explorar la carpeta
+# 2. Usar read_file para leer cada archivo .ts
+# 3. Darte un resumen estructurado`,
+    tutoStep4Title: "Ir más allá",
+    tutoStep4Desc:
+      "Combina varios MCP para crear flujos de trabajo potentes. Por ejemplo, usa Filesystem + GitHub para analizar un proyecto local y crear automáticamente una pull request.",
+    tutoStep4Code: `{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/tu-usuario/proyectos"
+      ]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_..."
+      }
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "xoxb-..."
+      }
+    }
+  }
+}`,
+    calloutWorkflowTitle: "Flujo de trabajo real",
+    calloutWorkflow:
+      "Prueba: \u0022Analiza los archivos modificados esta semana en mi proyecto, crea una pull request con un resumen de los cambios y envía una notificación de Slack al equipo.\u0022 Claude Code encadenará los tres MCP automáticamente.",
+    bestPracticesBadge: "Buenas prácticas",
+    bestPracticesTitle: "Sacar el máximo partido a los MCP",
+    bpLeastPrivilege: "Principio de mínimo privilegio",
+    bpLeastPrivilegeDesc:
+      "Concede a cada MCP solo los permisos necesarios. Limita las carpetas accesibles al MCP Filesystem y usa tokens con permisos restringidos para GitHub.",
+    bpProjectConfig: "Configuración por proyecto",
+    bpProjectConfigDesc:
+      "Usa el archivo .claude/settings.json en la raíz de cada proyecto para MCP específicos. Reserva la configuración global (~/.claude/settings.json) para los MCP universales.",
+    bpCombine: "Combina los MCP",
+    bpCombineDesc:
+      "El verdadero potencial surge cuando Claude encadena varios MCP en un mismo flujo de trabajo. Filesystem + GitHub + Slack = automatización completa.",
+    bpDocument: "Documenta tus configuraciones",
+    bpDocumentDesc:
+      "Añade un archivo CLAUDE.md en la raíz de tus proyectos para explicar qué MCP se usan y por qué. Claude Code lo leerá automáticamente.",
+    calloutLimitsTitle: "Límites que debes conocer",
+    calloutLimits:
+      "Los MCP ejecutan acciones reales (envío de mensajes, creación de archivos, peticiones a API). Claude Code siempre pedirá confirmación antes de ejecutar una acción sensible. No desactives esta protección con ",
+    calloutLimitsEnd: " en producción.",
+    nextTitle1: "Continúa tu ",
+    nextTitle2: "aprendizaje",
+    nextDescription:
+      "Los MCP son solo una pieza del puzle. Descubre los Skills para enseñar comportamientos personalizados a Claude Code, y domina el prompting avanzado para resultados excepcionales.",
+    nextSkillsCta: "Descubrir los Skills",
+    nextPromptingCta: "Dominar el prompting",
+    recommendedMcps: [
+      {
+        name: "Filesystem",
+        description:
+          "Leer y escribir archivos, explorar directorios, buscar contenido. La herramienta básica para interactuar con tu sistema de archivos.",
+        difficulty: "Principiante",
+        useCase: "Organizar, analizar y transformar tus archivos locales",
+      },
+      {
+        name: "GitHub",
+        description:
+          "Gestionar pull requests e issues, buscar código, consultar workflows de CI/CD. Imprescindible para desarrolladores.",
+        difficulty: "Intermedio",
+        useCase: "Automatizar la gestión de tus repositorios",
+      },
+      {
+        name: "PostgreSQL / SQLite",
+        description:
+          "Consultar tus bases de datos directamente desde Claude Code. Ejecutar consultas SQL, analizar esquemas, exportar resultados.",
+        difficulty: "Intermedio",
+        useCase: "Explorar y analizar tus datos sin salir del terminal",
+      },
+      {
+        name: "Puppeteer / Playwright",
+        description:
+          "Automatizar un navegador web: hacer capturas de pantalla, rellenar formularios, hacer scraping de páginas, probar interfaces.",
+        difficulty: "Avanzado",
+        useCase: "Pruebas E2E, web scraping y automatización de navegador",
+      },
+      {
+        name: "Slack",
+        description:
+          "Leer y enviar mensajes, gestionar canales, buscar en el historial. Conecta la comunicación de tu equipo con Claude.",
+        difficulty: "Principiante",
+        useCase: "Automatizar notificaciones y la vigilancia del equipo",
+      },
+      {
+        name: "Gmail",
+        description:
+          "Leer, buscar y clasificar tus correos. Crear borradores, analizar conversaciones, extraer información clave.",
+        difficulty: "Principiante",
+        useCase: "Ahorrar tiempo en la gestión de tu correo",
+      },
+    ],
+    subPages: [
+      {
+        title: "Entender los MCP en 5 minutos",
+        description:
+          "El protocolo MCP explicado de forma sencilla: arquitectura cliente-servidor, JSON-RPC, diferencias con plugins y skills.",
+      },
+      {
+        title: "Instalar y configurar un MCP",
+        description:
+          "El archivo .mcp.json, el comando claude mcp add, los tres métodos de instalación y cómo depurar los problemas más comunes.",
+      },
+      {
+        title: "Top MCP de productividad",
+        description:
+          "Figma, Lighthouse, Gmail, Slack, Google Calendar: los MCP que transforman tu día a día profesional.",
+      },
+      {
+        title: "Top MCP de desarrollo",
+        description:
+          "Context7, Sentry, Linear, PostgreSQL, GitHub: los MCP esenciales para desarrolladores.",
+      },
+      {
+        title: "Top MCP de diseño y UI",
+        description:
+          "Playwright, Chrome DevTools, 21st.dev Magic, Puppeteer: ver e interactuar con la web.",
+      },
+      {
+        title: "Crear tu primer flujo de trabajo MCP",
+        description:
+          "Tutorial práctico: combina Context7 + GitHub + Playwright en un flujo de trabajo completo.",
+      },
+    ],
+  },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
     path: `/${locale}/mcp`,
     locale,
+    availableLocales: ["fr", "en", "es"],
   });
 }
 
 function buildArticleJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
   return createArticleSchema({
     title: t.jsonLdTitle,
     description: t.jsonLdDescription,
@@ -665,7 +946,7 @@ export default async function McpPage({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
 
   const subPages = SUB_PAGES_META.map((meta, i) => ({
     ...meta,

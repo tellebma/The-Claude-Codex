@@ -1,0 +1,795 @@
+---
+title: "Sistema de Hooks"
+description: "Automatiza tus flujos de trabajo de Claude Code con los 32 eventos de hooks (PreToolUse, PostToolUse, SubagentStart, PermissionRequest, WorktreeCreate, etc.). Autoformato, notificaciones, informes de sesión, patrones avanzados."
+section: "advanced"
+order: 1
+datePublished: "2026-03-11"
+dateModified: "2026-04-26"
+---
+
+## ¿Qué es un hook?
+
+Los hooks son **comandos de shell que se disparan automáticamente** en momentos concretos del ciclo de ejecución de Claude Code. Piénsalos como escuchadores de eventos a nivel de terminal: Claude realiza una acción, tu hook reacciona.
+
+A diferencia de los MCP (que amplían las capacidades de Claude) o de las Skills (que definen comportamientos), los hooks **interceptan el flujo de ejecución** para inyectar lógica externa.
+
+<Callout type="info" title="¿Desde qué versión?">
+Los hooks están disponibles desde Claude Code 1.x. Comprueba tu versión con `claude --version` y actualiza con `npm update -g @anthropic-ai/claude-code`.
+</Callout>
+
+## Los tipos de hooks
+
+Claude Code expone un ciclo de vida amplio con **32 eventos** de anclaje. Los seis primeros cubren el 90 % de los usos habituales:
+
+| Tipo | Se dispara | Uso típico |
+|------|--------------|---------------|
+| `SessionStart` | Al arrancar una sesión | Comprobar requisitos, cargar una configuración |
+| `PreToolUse` | Antes de ejecutar una herramienta | Validar parámetros, bloquear acciones |
+| `PostToolUse` | Después de ejecutar una herramienta | Autoformato, notificaciones, logs |
+| `Stop` | Cuando Claude termina la sesión | Informe de sesión, limpieza |
+| `Notification` | Cuando Claude envía una notificación | Alertas de Slack, correos |
+| `PermissionRequest` | Antes de que se solicite un permiso | Aprobar automáticamente ciertas acciones, enrutar a otro modelo |
+
+La referencia exhaustiva de los 32 eventos (útiles para power users: subagentes, worktrees, compactación, channels) está documentada más abajo, en la sección [Referencia completa](#referencia-completa-de-los-32-eventos).
+
+## Configuración en settings.json
+
+Los hooks se declaran en tu archivo `settings.json` (`~/.claude/settings.json` para global, o `.claude/settings.json` para un proyecto):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Validación antes de bash...' && exit 0"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "prettier --write \"$CLAUDE_TOOL_OUTPUT_FILE\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Sesión terminada' >> ~/.claude/session.log"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Estructura de un hook
+
+```
+hooks:
+  <TipoDeHook>:           # PreToolUse | PostToolUse | Stop | Notification
+    - matcher: "<herramienta>"  # Nombre de la herramienta a interceptar (opcional para Stop/Notification)
+      hooks:
+        - type: "command" # Único tipo disponible por ahora
+          command: "..."  # Comando de shell ejecutado
+```
+
+El **matcher** acepta el nombre exacto de una herramienta de Claude Code: `Bash`, `Write`, `Edit`, `Read`, `WebFetch`, etc. Se omite en `Stop`, `Notification` y `SessionStart`.
+
+## Variables de entorno disponibles
+
+Tus comandos de hook reciben varias variables de entorno inyectadas por Claude Code:
+
+| Variable | Disponible en | Contenido |
+|----------|----------------|---------|
+| `CLAUDE_TOOL_NAME` | PreToolUse, PostToolUse | Nombre de la herramienta (`Bash`, `Write`, etc.) |
+| `CLAUDE_TOOL_INPUT` | PreToolUse | Parámetros JSON de la herramienta |
+| `CLAUDE_TOOL_OUTPUT` | PostToolUse | Resultado de la herramienta (stdout) |
+| `CLAUDE_TOOL_OUTPUT_FILE` | PostToolUse (Write, Edit) | Ruta del archivo escrito o modificado |
+| `CLAUDE_SESSION_ID` | Todos | Identificador único de la sesión |
+
+## Ejemplos concretos
+
+### PreToolUse: validar los parámetros de un comando de shell
+
+Este hook bloquea cualquier comando `rm -rf` sobre rutas peligrosas:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo $CLAUDE_TOOL_INPUT | python3 -c \"import sys, json; cmd = json.load(sys.stdin).get('command', ''); exit(1 if 'rm -rf /' in cmd else 0)\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="Códigos de salida">
+Si tu hook devuelve un código de salida **distinto de cero** (`exit 1`), Claude Code **interrumpe la acción** y notifica el error al usuario. Usa `exit 0` para dejar que la acción continúe.
+</Callout>
+
+### PostToolUse: autoformato con Prettier
+
+Formatea automáticamente cada archivo escrito por Claude Code:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f \"$CLAUDE_TOOL_OUTPUT_FILE\" ] && npx prettier --write \"$CLAUDE_TOOL_OUTPUT_FILE\" 2>/dev/null || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f \"$CLAUDE_TOOL_OUTPUT_FILE\" ] && npx prettier --write \"$CLAUDE_TOOL_OUTPUT_FILE\" 2>/dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### PostToolUse: notificación de Slack tras un commit
+
+Primero crea el script de notificación:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/notify-slack.sh
+
+TOOL_INPUT=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "import sys, json; d = json.load(sys.stdin); print(d.get('command', ''))")
+
+# Se dispara solo con git commit
+if echo "$TOOL_INPUT" | grep -q "git commit"; then
+  COMMIT_MSG=$(git log --oneline -1 2>/dev/null || echo "Commit creado")
+  
+  curl -s -X POST "$SLACK_WEBHOOK_URL" \
+    -H 'Content-type: application/json' \
+    -d "{\"text\": \":white_check_mark: Claude Code creó un commit: \`$COMMIT_MSG\`\"}" > /dev/null
+fi
+
+exit 0
+```
+
+Luego configura el hook en `settings.json`:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/notify-slack.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="Seguridad de los webhooks">
+Nunca pongas la URL del webhook de Slack directamente en `settings.json`. Usa una variable de entorno: `export SLACK_WEBHOOK_URL="https://hooks.slack.com/..."` en tu `~/.bashrc` o `~/.zshrc`.
+</Callout>
+
+### Stop: generar un informe de sesión
+
+Crea el script de informe:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/session-report.sh
+
+LOG_FILE=~/.claude/sessions/$(date +%Y-%m-%d).log
+mkdir -p ~/.claude/sessions
+
+{
+  echo "=== Sesión $(date '+%Y-%m-%d %H:%M:%S') ==="
+  echo "Session ID: $CLAUDE_SESSION_ID"
+  echo "Directorio: $(pwd)"
+  echo "Rama Git: $(git branch --show-current 2>/dev/null || echo 'N/A')"
+  echo ""
+} >> "$LOG_FILE"
+
+exit 0
+```
+
+Y luego en `settings.json`:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/session-report.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### SessionStart: comprobar los requisitos al arrancar
+
+Este hook comprueba que Docker esté en ejecución antes de empezar una sesión de desarrollo. Si Docker está apagado, Claude lo sabe desde el principio en lugar de descubrirlo a mitad de una tarea.
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/check-prerequisites.sh
+
+# Comprobar que Docker está en marcha
+if ! docker info > /dev/null 2>&1; then
+  echo "AVISO: Docker no está en ejecución. Los comandos relacionados con contenedores fallarán." >&2
+fi
+
+# Mostrar el contexto del proyecto al arrancar
+echo "Proyecto: $(basename $(pwd))"
+echo "Rama: $(git branch --show-current 2>/dev/null || echo 'N/A')"
+echo "Node: $(node --version 2>/dev/null || echo 'No instalado')"
+
+exit 0
+```
+
+Y luego en `settings.json`:
+
+```json
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/check-prerequisites.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="SessionStart para el contexto del proyecto">
+SessionStart es ideal para inyectar automáticamente información de contexto al arrancar: métricas del proyecto, tickets abiertos, versión del último despliegue. Así Claude cuenta con ese contexto desde la primera interacción.
+</Callout>
+
+### PermissionRequest: gestionar las aprobaciones automáticamente
+
+El hook `PermissionRequest` se ejecuta cuando Claude solicita un permiso al usuario. Un código de salida `0` aprueba automáticamente, un código `1` fuerza la confirmación manual.
+
+Este script aprueba automáticamente los comandos Git de lectura (inofensivos) y bloquea los comandos de escritura en red para pedir confirmación:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/smart-permissions.sh
+
+TOOL=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('tool_name', ''))
+" 2>/dev/null)
+
+COMMAND=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('command', ''))
+" 2>/dev/null)
+
+# Aprobar automáticamente los comandos Git de solo lectura
+SAFE_GIT_CMDS="git status|git diff|git log|git branch|git show"
+if echo "$COMMAND" | grep -qE "$SAFE_GIT_CMDS"; then
+  exit 0  # Aprobado automáticamente
+fi
+
+# Pedir confirmación para git push y git force
+if echo "$COMMAND" | grep -qE "git push|git force|git reset --hard"; then
+  exit 1  # Solicita confirmación manual
+fi
+
+# Por defecto: dejar que Claude Code lo gestione
+exit 0
+```
+
+```json
+{
+  "hooks": {
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/smart-permissions.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="warning" title="PermissionRequest y seguridad">
+Un hook PermissionRequest que devuelve siempre `exit 0` desactiva de facto todas las peticiones de confirmación. Sé preciso en tus condiciones para no aprobar nunca acciones destructivas por error.
+</Callout>
+
+## Patrones avanzados
+
+### Hooks condicionales por tipo de archivo
+
+Aplicar Prettier solo a archivos TypeScript y JavaScript:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/format-if-ts.sh
+
+FILE="$CLAUDE_TOOL_OUTPUT_FILE"
+
+if [[ "$FILE" =~ \.(ts|tsx|js|jsx|json|css|scss)$ ]]; then
+  npx prettier --write "$FILE" 2>/dev/null
+fi
+
+exit 0
+```
+
+### Hooks encadenados: lint + formato + test
+
+Ejecuta una cadena de comprobaciones tras cada escritura de archivo:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/quality-chain.sh
+
+FILE="$CLAUDE_TOOL_OUTPUT_FILE"
+
+if [[ -z "$FILE" ]] || [[ ! -f "$FILE" ]]; then
+  exit 0
+fi
+
+# Paso 1: Formato
+npx prettier --write "$FILE" 2>/dev/null || true
+
+# Paso 2: Lint (sin bloquear)
+npx eslint --fix "$FILE" 2>/dev/null || true
+
+# Paso 3: Comprobación TypeScript (sin bloquear)
+if [[ "$FILE" =~ \.(ts|tsx)$ ]]; then
+  npx tsc --noEmit 2>/dev/null || true
+fi
+
+exit 0
+```
+
+### Hook de validación de secretos
+
+Bloquea cualquier escritura que contenga patrones de secretos:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/check-secrets.sh
+# Hook PreToolUse sobre Write/Edit
+
+FILE_CONTENT=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('content', '') + d.get('new_string', ''))
+" 2>/dev/null)
+
+# Patrones a bloquear (claves API habituales)
+PATTERNS=(
+  "sk-[a-zA-Z0-9]{48}"
+  "AKIA[0-9A-Z]{16}"
+  "AIza[0-9A-Za-z-_]{35}"
+  "ghp_[a-zA-Z0-9]{36}"
+)
+
+for pattern in "${PATTERNS[@]}"; do
+  if echo "$FILE_CONTENT" | grep -qE "$pattern"; then
+    echo "ERROR: Secreto detectado en el contenido (patrón: $pattern)" >&2
+    exit 1
+  fi
+done
+
+exit 0
+```
+
+### Enrutado de modelo según la complejidad
+
+Este patrón usa un hook `PreToolUse` para redirigir las herramientas de lectura simples (grep, lectura de archivo) hacia Haiku, más económico, y reservar Opus para las tareas complejas. Claude Code lee la salida del hook para adaptar el modelo usado.
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'model: haiku'"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+<Callout type="tip" title="Enrutado y ahorro de tokens">
+Combinar el enrutado de modelo con agentes autónomos puede reducir significativamente los costes: las subtareas de recopilación de información (lectura, búsqueda) corren en Haiku mientras la lógica principal se queda en Sonnet u Opus.
+</Callout>
+
+### Recordatorio de continuación tras Stop
+
+Claude a veces se detiene prematuramente sin haber verificado su trabajo. Este hook `Stop` relanza automáticamente un aviso de verificación:
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/nudge-continue.sh
+
+# Comprueba si la sesión se detuvo sin haber lanzado los tests
+LAST_OUTPUT=$(cat ~/.claude/last_output.txt 2>/dev/null || echo "")
+
+if ! echo "$LAST_OUTPUT" | grep -qE "test|lint|check|verify"; then
+  echo "Recordatorio: ¿has comprobado que los tests pasan y que el lint está limpio?"
+fi
+
+exit 0
+```
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/nudge-continue.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Registro estructurado en JSON
+
+Auditar cada acción de Claude Code en un archivo JSON facilita el análisis posterior a la sesión (qué archivos se modificaron, qué comandos se ejecutaron, cuánto tiempo tomó):
+
+```bash
+#!/bin/bash
+# ~/.claude/hooks/audit-log.sh
+# Hook PostToolUse (todas las herramientas)
+
+LOG_FILE=~/.claude/audit/$(date +%Y-%m-%d).jsonl
+mkdir -p ~/.claude/audit
+
+# Construir la entrada JSON
+python3 -c "
+import sys, json, os
+from datetime import datetime
+
+entry = {
+  'timestamp': datetime.utcnow().isoformat() + 'Z',
+  'session_id': os.environ.get('CLAUDE_SESSION_ID', ''),
+  'tool': os.environ.get('CLAUDE_TOOL_NAME', ''),
+  'file': os.environ.get('CLAUDE_TOOL_OUTPUT_FILE', ''),
+  'success': True
+}
+print(json.dumps(entry))
+" >> "$LOG_FILE"
+
+exit 0
+```
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/audit-log.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+El archivo `~/.claude/audit/2026-03-30.jsonl` contendrá una línea JSON por acción, fácil de analizar con `jq`:
+
+```bash
+# Listar todos los archivos modificados hoy
+cat ~/.claude/audit/$(date +%Y-%m-%d).jsonl | jq -r 'select(.file != "") | .file' | sort -u
+```
+
+### Hooks bajo demanda con slash commands
+
+Los slash commands pueden activar o desactivar hooks al vuelo. Es útil para alternar entre un modo "prudente" y un modo "rápido" según la naturaleza del trabajo.
+
+Crea dos scripts en `~/.claude/commands/`:
+
+```bash
+#!/bin/bash
+# ~/.claude/commands/careful.sh
+# Activado por /careful — bloquea los comandos destructivos
+
+COMMAND=$(echo "$CLAUDE_TOOL_INPUT" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+print(d.get('command', ''))
+" 2>/dev/null)
+
+DANGEROUS_PATTERNS="rm -rf|DROP TABLE|DELETE FROM|truncate|format [A-Z]:"
+
+if echo "$COMMAND" | grep -qiE "$DANGEROUS_PATTERNS"; then
+  echo "BLOQUEADO por el modo /careful: se detectó un comando potencialmente destructivo." >&2
+  exit 1
+fi
+
+exit 0
+```
+
+```bash
+#!/bin/bash
+# ~/.claude/commands/freeze.sh
+# Activado por /freeze — bloquea las ediciones fuera de la carpeta actual
+
+FILE="$CLAUDE_TOOL_OUTPUT_FILE"
+ALLOWED_DIR="$(pwd)"
+
+if [[ -n "$FILE" ]] && [[ "$FILE" != "$ALLOWED_DIR"* ]]; then
+  echo "BLOQUEADO por el modo /freeze: edición fuera de $ALLOWED_DIR prohibida." >&2
+  exit 1
+fi
+
+exit 0
+```
+
+Configúralos como hooks condicionales en `settings.json`:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/.claude/.careful ] && bash ~/.claude/commands/careful.sh || true"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -f ~/.claude/.freeze ] && bash ~/.claude/commands/freeze.sh || true"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Crea después los slash commands para activar/desactivar estos modos:
+
+```bash
+# ~/.claude/commands/careful.md
+Activa el modo prudente: bloquea los comandos destructivos (rm -rf, DROP TABLE, etc.).
+
+touch ~/.claude/.careful
+echo "Modo /careful activado. Los comandos destructivos serán bloqueados."
+```
+
+```bash
+# ~/.claude/commands/freeze.md
+Congela las modificaciones fuera de la carpeta actual.
+
+touch ~/.claude/.freeze
+echo "Modo /freeze activado. Las ediciones se limitan a $(pwd)."
+```
+
+Para desactivar: `/uncareful` y `/unfreeze`, que eliminan los archivos marcadores con `rm -f ~/.claude/.careful`.
+
+<Callout type="tip" title="Archivos marcadores">
+El patrón de los archivos marcadores (`touch ~/.claude/.careful`) es simple y robusto: no hay base de datos, no hay variables de entorno que propagar. Un archivo existe = modo activo. No existe = modo inactivo.
+</Callout>
+
+## Solución de problemas
+
+### Mi hook no se dispara
+
+1. Comprueba el nombre exacto del matcher (distingue mayúsculas: `Bash`, no `bash`)
+2. Recarga Claude Code: cierra y vuelve a abrir la sesión
+3. Valida el JSON de tu `settings.json`:
+
+```bash
+cat ~/.claude/settings.json | python3 -m json.tool
+```
+
+### Mi hook bloquea todas las acciones
+
+Un `exit 1` inesperado puede bloquear a Claude. Añade un `|| true` en los comandos no críticos:
+
+```bash
+# Mal: puede bloquear si npx no está instalado
+npx prettier --write "$FILE"
+
+# Bien: no bloquea aunque falle
+npx prettier --write "$FILE" 2>/dev/null || true
+```
+
+### Depurar un hook
+
+Registra la salida de tu hook para analizar su comportamiento:
+
+```bash
+#!/bin/bash
+# Añade estas líneas al principio del script para depurar
+exec 2>> ~/.claude/hooks.log
+set -x  # Activa el modo trace (cada comando queda registrado)
+
+# Tu código de hook...
+```
+
+### El hook es demasiado lento
+
+Los hooks bloquean la ejecución de Claude Code. Para operaciones largas, usa la ejecución en segundo plano:
+
+```bash
+#!/bin/bash
+# Lanza la notificación de forma asíncrona
+(curl -s -X POST "$SLACK_WEBHOOK_URL" -d '{"text":"Done!"}' > /dev/null 2>&1) &
+
+exit 0  # Retorna de inmediato
+```
+
+## Referencia completa de los 32 eventos
+
+La lista exhaustiva de los eventos de hooks agrupada por fase del ciclo de vida. La mayoría de los eventos comparten el mismo formato de configuración (`matcher` + `command`) y reciben las mismas variables de entorno básicas (`CLAUDE_SESSION_ID`).
+
+### Ciclo de sesión
+
+| Evento | Descripción |
+|---|---|
+| `Setup` | En el primerísimo arranque (antes de SessionStart). Ideal para descargar assets, comprobar la autenticación |
+| `SessionStart` | Arranque de una sesión interactiva |
+| `SessionEnd` | Fin de una sesión (terminada normalmente, distinto de Stop) |
+| `Stop` | Claude termina su turno o la sesión |
+| `ConfigChange` | Modificación de `settings.json` o de los permisos en caliente |
+
+### Herramientas y ejecución
+
+| Evento | Descripción |
+|---|---|
+| `PreToolUse` | Antes de ejecutar una herramienta (Bash, Write, etc.) |
+| `PostToolUse` | Después de ejecutar una herramienta |
+| `PermissionRequest` | Antes de que una solicitud de permiso llegue al usuario |
+| `UserPromptSubmit` | Envío de un prompt del usuario (antes de que Claude lo procese) |
+| `Notification` | Emisión de una notificación (push de escritorio, channels) |
+
+### Subagentes y orquestación
+
+| Evento | Descripción |
+|---|---|
+| `SubagentStart` | Arranque de un subagente (vía Agent tool) |
+| `SubagentStop` | Fin de ejecución de un subagente |
+| `TeammateIdle` | Un teammate (en modo Agent Teams) queda inactivo |
+| `TaskCompleted` | Una tarea del sistema /tasks se marca como completada |
+
+### Compactación y contexto
+
+| Evento | Descripción |
+|---|---|
+| `PreCompact` | Antes de la autocompactación del contexto |
+| `PostCompact` | Después de la autocompactación (resumen disponible en la salida) |
+| `ContextThreshold` | Umbral de llenado alcanzado (configurable, p. ej. 50 %, 80 %) |
+
+### Worktrees y archivos
+
+| Evento | Descripción |
+|---|---|
+| `WorktreeCreate` | Creación de un worktree (`claude -w` o `isolation: worktree`) |
+| `WorktreeRemove` | Eliminación de un worktree |
+| `FileWatcherTrigger` | Modificación de un archivo vigilado (en modo watch) |
+| `MCPServerConnect` | Conexión establecida con un servidor MCP |
+| `MCPServerDisconnect` | Desconexión de un servidor MCP |
+
+### Rutinas y planificación en la nube
+
+| Evento | Descripción |
+|---|---|
+| `RoutineStart` | Lanzamiento de una rutina en la nube (cron `/schedule`) |
+| `RoutineComplete` | Fin de una rutina en la nube |
+| `LoopIteration` | Turno de un `/loop` local |
+
+### Errores y observabilidad
+
+| Evento | Descripción |
+|---|---|
+| `ErrorOccurred` | Error no capturado por Claude (útil para Sentry) |
+| `RateLimitHit` | Límite de tokens o de peticiones alcanzado |
+| `CostThreshold` | Umbral de coste alcanzado (`--max-budget-usd`) |
+
+### Channels (eventos push)
+
+| Evento | Descripción |
+|---|---|
+| `ChannelMessage` | Recepción de un mensaje de Telegram/Discord/Slack vía channels |
+| `ChannelEvent` | Evento que no es un mensaje procedente de un channel |
+
+### Reservados / experimentales
+
+| Evento | Descripción |
+|---|---|
+| `Heartbeat` | Tick periódico (1/min, experimental) |
+| `BackgroundAgentStart` | Arranque de un Background Agent |
+| `BackgroundAgentStop` | Fin de un Background Agent |
+
+<Callout type="info" title="Disponibilidad por versión">
+Los eventos `Setup`, `SubagentStart/Stop`, `WorktreeCreate/Remove`, `RoutineStart/Complete`, `ChannelMessage` requieren Claude Code v2.1.106+. Para la versión exacta de cada evento, consulta `claude --help hooks` o la documentación oficial.
+</Callout>
+
+## Configuración de equipo vs. personal
+
+Con tantos eventos, la separación entre equipo y personal se vuelve crítica. Claude Code lee dos archivos de hooks en este orden:
+
+| Archivo | Alcance | ¿Versionado? |
+|---|---|---|
+| `.claude/hooks-config.json` | Equipo (commit en el repo) | Sí |
+| `.claude/hooks-config.local.json` | Personal (en gitignore) | No |
+
+Los hooks personales (TTS, sonidos, auditoría local) van en `.local`. Los hooks de equipo (enforcement de lint, escaneo de secretos, log de auditoría centralizado) van en el archivo versionado.
+
+```bash
+# .gitignore
+.claude/hooks-config.local.json
+```
+
+## Próximos pasos
+
+Los hooks son potentes por sí solos, pero alcanzan todo su potencial combinados con el modo headless para pipelines de CI/CD.

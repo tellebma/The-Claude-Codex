@@ -1,11 +1,13 @@
 import type { SearchEntry } from "@/data/search-index-fr";
 import { searchIndexFr } from "@/data/search-index-fr";
 import { searchIndexEn } from "@/data/search-index-en";
+import { searchIndexEs } from "@/data/search-index-es";
 
 // Re-export for backward compatibility
 export type { SearchEntry } from "@/data/search-index-fr";
 export { searchIndexFr } from "@/data/search-index-fr";
 export { searchIndexEn } from "@/data/search-index-en";
+export { searchIndexEs } from "@/data/search-index-es";
 
 function normalizeText(text: string): string {
   return text
@@ -57,10 +59,15 @@ function scoreEntries(
   return scored.map((item) => item.entry);
 }
 
+function resolveIndex(locale: string): ReadonlyArray<SearchEntry> {
+  if (locale === "en") return searchIndexEn;
+  if (locale === "es") return searchIndexEs;
+  return searchIndexFr;
+}
+
 export function searchEntries(
   query: string,
   locale: string = "fr"
 ): ReadonlyArray<SearchEntry> {
-  const index = locale === "en" ? searchIndexEn : searchIndexFr;
-  return scoreEntries(index, query);
+  return scoreEntries(resolveIndex(locale), query);
 }

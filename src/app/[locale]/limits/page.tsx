@@ -57,11 +57,11 @@ const translations = {
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params; const t = translations[locale as "fr" | "en"];
+  const { locale } = await params; const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createPageMetadata({ title: t.metaTitle, description: t.metaDescription, path: `/${locale}/limits`, locale });
 }
 function buildArticleJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createArticleSchema({ title: t.metaTitle, description: t.metaDescription, url: `${SITE_URL}/${locale}/limits`, locale, datePublished: "2026-03-12", dateModified: "2026-03-12" });
 }
 
@@ -78,7 +78,7 @@ const colorStyles = {
 
 export default async function LimitsPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params; setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   /* JSON-LD: safe -- static schema from our own constants, serialized via JSON.stringify. No user input. */
   const jsonLdHtml = serializeJsonLd(buildArticleJsonLd(locale));
   return (

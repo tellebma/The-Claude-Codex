@@ -66,7 +66,7 @@ const translations = {
 export default function GlossaryPage() {
   const [query, setQuery] = useState("");
   const locale = useLocale();
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
 
   const filteredTerms = useMemo(
     () => (query.trim().length > 0 ? searchGlossary(query) : glossaryTerms),

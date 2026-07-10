@@ -1,0 +1,711 @@
+{
+  "common": {
+    "skipToContent": "Ir al contenido principal",
+    "home": "Inicio",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "back": "Volver",
+    "overview": "Visión general",
+    "readGuide": "Leer la guía",
+    "openSource": "Proyecto de código abierto.",
+    "copiedCode": "Código copiado",
+    "copyCode": "Copiar código",
+    "scrollToTop": "Volver arriba de la página",
+    "lightMode": "Cambiar a modo claro",
+    "darkMode": "Cambiar a modo oscuro",
+    "tableOfContents": "Tabla de contenidos",
+    "onThisPage": "En esta página",
+    "guides": "Guías",
+    "tools": "Herramientas",
+    "resources": "Recursos",
+    "pageNotFound": "Página no encontrada",
+    "pageNotFoundDescription": "La página que buscas no existe o ha sido movida.",
+    "backToHome": "Volver al inicio",
+    "opensNewTab": "(se abre en una pestaña nueva)",
+    "share": "Compartir",
+    "copyLink": "Copiar enlace",
+    "linkCopied": "Enlace copiado",
+    "published": "Publicado el",
+    "updated": "Actualizado el"
+  },
+  "about": {
+    "badge": "Acerca de",
+    "title": "La guía",
+    "titleHighlight": "Claude Codex",
+    "subtitle": "The Claude Codex es una guía comunitaria para democratizar Claude Code. Gratuita, de código abierto y sin rastreo intrusivo.",
+    "missionBadge": "Misión",
+    "missionTitle": "Hacer que Claude Code sea accesible para todos",
+    "missionDescription": "Una guía completa, práctica y accesible, escrita tanto para principiantes como para expertos.",
+    "missionP1": "Claude Code está transformando la forma de desarrollar, aprender y crear. Pero la documentación oficial, aunque buena, sigue siendo técnica y está dispersa.",
+    "missionP2": "The Claude Codex reúne en un solo lugar las buenas prácticas, la experiencia de la comunidad, guías paso a paso y ejemplos concretos.",
+    "missionP3": "Para los desarrolladores que quieren dominar la herramienta, para quienes no programan y quieren empezar, y para los equipos que buscan adoptar Claude Code a gran escala.",
+    "valuesBadge": "Valores",
+    "valuesTitle": "Lo que nos guía",
+    "valueFreeTitle": "Gratis y abierto",
+    "valueFreeDesc": "Sin muros de pago, sin registro. El código fuente del sitio está disponible en GitHub y la documentación tiene licencia libre.",
+    "valueForAllTitle": "Para todos los perfiles",
+    "valueForAllDesc": "Desarrollador experimentado, estudiante, emprendedor sin conocimientos técnicos: la guía se adapta a tu nivel y a tus casos de uso.",
+    "valueIndependentTitle": "Independiente",
+    "valueIndependentDesc": "Sin asociaciones comerciales encubiertas ni patrocinios ocultos. Escribimos lo que creemos útil, punto.",
+    "valueFrenchTitle": "De raíces francófonas",
+    "valueFrenchDesc": "La guía nació en francés, con una traducción al inglés cuidada y ahora también en español, porque las comunidades tech no anglófonas merecen recursos de calidad.",
+    "authorBadge": "Autor",
+    "authorTitle": "¿Quién está detrás de este proyecto?",
+    "authorName": "Maxime Bellet",
+    "authorRole": "Desarrollador fullstack, apasionado por la IA y las herramientas para desarrolladores",
+    "authorP1": "Uso Claude Code a diario y quise compartir lo que voy aprendiendo. Este sitio es el resultado de cientos de horas de iteración, pruebas y conversaciones con la comunidad.",
+    "authorP2": "El código, el contenido y la estructura son de acceso libre. Si quieres contribuir, corregir alguna imprecisión o proponer una mejora, los PR son bienvenidos.",
+    "github": "Ver en GitHub",
+    "sourceCode": "Código fuente del sitio",
+    "ctaTitle": "Listo para empezar",
+    "ctaHighlight": "tu camino",
+    "ctaDescription": "La guía está lista. Elige el recorrido que mejor se adapte a ti y empieza ahora.",
+    "ctaGuide": "Leer la guía",
+    "ctaGithub": "Contribuir en GitHub"
+  },
+  "navigation": {
+    "mainNav": "Navegación principal",
+    "menuToggle": "Menú de navegación",
+    "gettingStarted": "Empezar",
+    "mcp": "MCP",
+    "skills": "Skills",
+    "prompting": "Prompting",
+    "useCases": "Casos de uso",
+    "personas": "Recorridos",
+    "enterprise": "Empresa",
+    "advanced": "Avanzado",
+    "content": "Contenidos",
+    "limits": "Límites",
+    "reference": "Referencia",
+    "configurator": "Configurador",
+    "glossary": "Glosario",
+    "future": "Visión",
+    "agents": "Agentes",
+    "about": "Acerca de",
+    "more": "Más"
+  },
+  "landing": {
+    "stats": {
+      "ariaLabel": "El Codex en cifras",
+      "articles": "artículos publicados",
+      "sections": "secciones de documentación",
+      "languages": "idiomas",
+      "lastUpdate": "última actualización"
+    },
+    "recent": {
+      "ariaLabel": "Artículos recientes",
+      "title": "Los últimos artículos",
+      "subtitle": "Las incorporaciones más recientes al Codex.",
+      "readArticle": "Leer el artículo",
+      "filterAll": "Todas",
+      "viewAll": "Ver todos nuestros artículos"
+    },
+    "trust": {
+      "label": "Por qué el Codex",
+      "openSource": "100 % de código abierto",
+      "bilingual": "FR + EN + ES, contenido espejo",
+      "noTracking": "Sin cookies de terceros",
+      "officialMcp": "MCP oficial incluido"
+    }
+  },
+  "articleCard": {
+    "readLabel": "Leer el artículo: {title}",
+    "readCta": "Leer el artículo",
+    "pinnedLabel": "Destacado",
+    "trendingLabel": "Tendencia",
+    "deltaLabel": "Tendencia, +{delta}%",
+    "readingMinutes": "{minutes} min de lectura",
+    "dateToday": "hoy",
+    "dateYesterday": "ayer",
+    "dateDaysAgo": "hace {days} días"
+  },
+  "themes": {
+    "badgesLabel": "Temas del artículo",
+    "tutorial": "Tutorial",
+    "guide": "Guía",
+    "reference": "Referencia",
+    "comparison": "Comparativa",
+    "use-case": "Caso de uso",
+    "security": "Seguridad",
+    "devsecops": "DevSecOps",
+    "architecture": "Arquitectura",
+    "performance": "Rendimiento",
+    "tooling": "Herramientas",
+    "productivity": "Productividad",
+    "migration": "Migración"
+  },
+  "footer": {
+    "description": "La guía de referencia gratuita para dominar Claude Code. Creada por la comunidad, para la comunidad. Sin muros de pago, sin rastreo, solo conocimiento compartido.",
+    "visionFuture": "Visión y futuro",
+    "claudeCodeOfficial": "Claude Code (oficial)",
+    "anthropicDocs": "Documentación de Anthropic",
+    "mcpRegistry": "MCP Registry"
+  },
+  "search": {
+    "trigger": "Buscar...",
+    "triggerShort": "Buscar",
+    "dialogTitle": "Búsqueda global",
+    "placeholder": "Busca un tema, una página...",
+    "inputLabel": "Buscar",
+    "close": "Cerrar la búsqueda",
+    "cancel": "Cancelar",
+    "clear": "Borrar búsqueda",
+    "noResults": "Sin resultados para \"{query}\"",
+    "noResultsHint": "Prueba con otras palabras clave o explora estas secciones populares.",
+    "typeToSearch": "Empieza a escribir para explorar el sitio",
+    "popularSearches": "Sugerencias populares",
+    "suggestions": "Secciones recomendadas",
+    "suggestGettingStarted": "Empezar con Claude Code",
+    "suggestMcp": "Descubrir los servidores MCP",
+    "suggestPrompting": "Aprender prompting",
+    "suggestSkills": "Explorar los Skills",
+    "resultsLabel": "Resultados de búsqueda",
+    "resultCount": "{count, plural, =0 {Sin resultados} =1 {1 resultado} other {# resultados}}",
+    "escToClose": "para cerrar",
+    "arrowsToNavigate": "navegar",
+    "enterToOpen": "abrir",
+    "minCharsHint": "Escribe al menos 2 caracteres",
+    "searching": "Buscando…",
+    "loadError": "No se pudo cargar el índice de búsqueda. Inténtalo de nuevo en un momento.",
+    "matchesInPage": "{count, plural, =1 {1 coincidencia} other {# coincidencias}}",
+    "titleBadge": "Título",
+    "moreResults": "+ {count} resultados más. Afina tu búsqueda.",
+    "browseAll": "Explorar la documentación",
+    "browseAllAria": "Explorar la documentación"
+  },
+  "councilBuilder": {
+    "title": "Generador de Council",
+    "subtitle": "Elige el modo, los asesores y el Chairman. Todo se genera en tu navegador, no se envía ninguna llamada.",
+    "modeLegend": "Modo",
+    "modePersona": "Multi-personas (un solo Claude)",
+    "modeModel": "Multi-modelos (varias IA)",
+    "countLabel": "Número de asesores",
+    "countDecrease": "Quitar un asesor",
+    "countIncrease": "Añadir un asesor",
+    "callsEstimate": "≈ {count} llamadas por pregunta",
+    "advisorsLabel": "Asesores",
+    "advisorsHeading": "Los asesores",
+    "roleField": "Rol del asesor {index}",
+    "briefField": "Misión en una frase",
+    "chairmanField": "Chairman (quien redacta la síntesis)",
+    "questionField": "Tu pregunta",
+    "questionPlaceholder": "¿Qué decisión difícil quieres someter al council?",
+    "outputLegend": "Salida generada",
+    "tabPrompt": "Prompt",
+    "tabSkill": "SKILL.md",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "promptIntroPersona": "Vas a interpretar un consejo formado por varios expertos que deliberan sobre mi pregunta. Encarna cada rol a continuación por turnos y luego haz la síntesis como Chairman.",
+    "promptIntroModel": "Aquí tienes una deliberación de council para reproducir con varios modelos. Cada modelo siguiente es un asesor independiente; un Chairman hará la síntesis final.",
+    "stage1Heading": "Etapa 1: primeras opiniones",
+    "stage1Body": "Cada asesor responde a la pregunta de forma independiente, sin ver las respuestas de los demás.",
+    "stage2Heading": "Etapa 2: revisión cruzada (anónima)",
+    "stage2Body": "Presenta a cada asesor las demás respuestas sin revelar a sus autores y pídele que las clasifique según exactitud y profundidad.",
+    "stage3Heading": "Etapa 3: síntesis final",
+    "stage3Body": "El Chairman lee todas las opiniones y clasificaciones, arbitra los desacuerdos y produce una recomendación única y argumentada.",
+    "chairmanLabel": "El Chairman designado es:",
+    "questionLabel": "Pregunta",
+    "fallbackQuestion": "(sustitúyelo por tu pregunta)",
+    "skillDescription": "Hace deliberar a un consejo con varias perspectivas sobre una pregunta difícil, con revisión cruzada anónima y síntesis de un Chairman. Se activa cuando el usuario quiere varias opiniones que se cuestionen entre sí sobre una decisión sin respuesta evidente.",
+    "skillWhenToUse": "Usa este skill para decisiones de alto impacto sin una respuesta claramente correcta: arbitrajes de arquitectura, decisiones estratégicas, textos sensibles que conviene cuestionar. Evítalo para preguntas factuales con una única respuesta (resulta demasiado costoso).",
+    "skillInstructions": "Desarrolla la deliberación en tres etapas:",
+    "roleSkeptic": {
+      "role": "Escéptico",
+      "brief": "busca fallos, riesgos e hipótesis sin verificar."
+    },
+    "roleAdvocate": {
+      "role": "Defensor",
+      "brief": "defiende la opción más prometedora y muestra su valor."
+    },
+    "rolePractitioner": {
+      "role": "Práctico",
+      "brief": "piensa en la ejecución concreta, los costes y las restricciones reales."
+    },
+    "roleGeneralist": {
+      "role": "Generalista",
+      "brief": "toma perspectiva y conecta la pregunta con el contexto más amplio."
+    },
+    "roleContrarian": {
+      "role": "Contrarian",
+      "brief": "defiende deliberadamente el ángulo opuesto para poner a prueba la solidez."
+    },
+    "roleVisionary": {
+      "role": "Visionario",
+      "brief": "explora las consecuencias a largo plazo y las opciones más audaces."
+    }
+  },
+  "breadcrumb": {
+    "ariaLabel": "Ruta de navegación",
+    "home": "Inicio",
+    "sections": {
+      "getting-started": "Empezar",
+      "mcp": "MCP",
+      "plugins": "Plugins",
+      "skills": "Skills",
+      "agents": "Agentes",
+      "prompting": "Prompting",
+      "future": "Visión",
+      "configurator": "Configurador",
+      "content": "Contenidos",
+      "use-cases": "Casos de uso",
+      "ecosystem": "Ecosistema",
+      "enterprise": "Empresa",
+      "advanced": "Avanzado",
+      "reference": "Referencia",
+      "limits": "Límites",
+      "personas": "Recorridos",
+      "glossary": "Glosario"
+    }
+  },
+  "callout": {
+    "info": "Información",
+    "tip": "Consejo",
+    "warning": "Atención",
+    "error": "Error"
+  },
+  "videoEmbed": {
+    "play": "Reproducir vídeo: {title}",
+    "thumbnail": "Miniatura del vídeo: {title}"
+  },
+  "hero": {
+    "badge": "Guía gratuita y de código abierto",
+    "title": "Domina",
+    "titleHighlight": "Claude Code",
+    "titleEnd": "desde cero",
+    "subtitle": "La guía de referencia para aprovechar todo el potencial de la IA en tu día a día. Ya seas desarrollador, emprendedor o simplemente curioso, todo empieza aquí.",
+    "ctaPrimary": "Empezar la guía",
+    "ctaSecondary": "Descubrir los MCP",
+    "terminalPrompt": "Créame un sitio web moderno con una landing page,",
+    "terminalPrompt2": "un sistema de autenticación y un panel de administración.",
+    "terminalResponse": "¡Claro! Voy a crear tu proyecto paso a paso...",
+    "terminalStep1": "Analizando los requisitos...",
+    "terminalStep2": "Creando la arquitectura...",
+    "terminalStep3": "Generando el código...",
+    "terminalDone": "listo",
+    "terminalInProgress": "en curso"
+  },
+  "sections": {
+    "features": {
+      "badge": "Posibilidades",
+      "title": "Lo que puedes hacer con Claude Code",
+      "description": "Claude Code no es un simple chatbot. Es un compañero de creación que entiende tu contexto y actúa en tu entorno."
+    },
+    "audience": {
+      "badge": "Para todos",
+      "title": "Sea cual sea tu perfil, Claude Code es para ti",
+      "description": "La IA ya no es solo cosa de ingenieros. Cualquier persona creativa, ambiciosa o simplemente curiosa puede sacarle partido."
+    },
+    "paths": {
+      "badge": "Recorridos",
+      "title": "Elige tu camino",
+      "description": "Tres recorridos adaptados a tu nivel. Empieza donde estás y avanza a tu ritmo."
+    },
+    "configurator": {
+      "badge": "Configurador",
+      "title": "Tu configuración a medida en 2 minutos",
+      "description": "No hace falta leerlo todo. Responde a unas pocas preguntas y recibe una configuración personalizada, lista para usar."
+    },
+    "cta": {
+      "title": "Listo para transformar tu forma de",
+      "titleHighlight": "trabajar",
+      "description": "La guía es gratuita, de código abierto y está pensada para durar. Empieza ahora y únete a una comunidad que empuja los límites de lo posible.",
+      "ctaPrimary": "Empezar ahora",
+      "ctaSecondary": "Ver la visión"
+    }
+  },
+  "features": {
+    "createWebsite": { "title": "Crear un sitio web", "description": "De la landing page a un e-commerce completo, Claude Code genera, estructura y despliega tus proyectos web." },
+    "generateDocs": { "title": "Generar documentos", "description": "Informes, presentaciones, documentación técnica: deja que la IA estructure y redacte por ti." },
+    "automate": { "title": "Automatizar tus tareas", "description": "Scripts, pipelines de CI/CD, migraciones de datos. Convierte horas de trabajo en pocos minutos." },
+    "analyzeData": { "title": "Analizar datos", "description": "Conecta tus fuentes, explora tus datasets y obtén insights en lenguaje natural." },
+    "codeNoDev": { "title": "Programar sin ser dev", "description": "Describe lo que quieres en español. Claude Code traduce tus ideas en código funcional." },
+    "designUI": { "title": "Diseñar interfaces", "description": "Crea interfaces modernas y accesibles simplemente describiendo tu visión." },
+    "connectTools": { "title": "Conectar tus herramientas", "description": "Gracias a los MCP, integra Gmail, Slack, GitHub, bases de datos y mucho más." },
+    "deploy": { "title": "Desplegar en producción", "description": "Docker, CI/CD, monitorización: Claude Code gestiona tu infraestructura de principio a fin." }
+  },
+  "audience": {
+    "developers": { "title": "Desarrolladores", "description": "Acelera tu flujo de trabajo x10. Revisión de código, refactorización, pruebas automatizadas, depuración asistida. Tu copiloto definitivo." },
+    "entrepreneurs": { "title": "Emprendedores", "description": "Lanza tu MVP en días en lugar de semanas. Crea prototipos, itera y despliega sin equipo técnico." },
+    "creatives": { "title": "Creativos y diseñadores", "description": "Convierte tus maquetas en sitios vivos. Genera animaciones y componentes de UI a medida." },
+    "students": { "title": "Estudiantes", "description": "Aprende haciendo. Claude Code explica cada concepto, corrige tus errores y te guía paso a paso." },
+    "curious": { "title": "Curiosos y autodidactas", "description": "Explora el mundo del código sin requisitos previos. Haz preguntas, experimenta y crea tus primeros proyectos." },
+    "teams": { "title": "Equipos y managers", "description": "Estandariza tus flujos de trabajo, documenta automáticamente y da superpoderes a todo tu equipo." }
+  },
+  "paths": {
+    "ctaLabel": "Empezar este recorrido",
+    "beginner": {
+      "level": "Principiante",
+      "title": "Los fundamentos",
+      "description": "¿Nunca has usado Claude Code? Perfecto. Empezamos desde cero, juntos.",
+      "items": ["Instalar Claude Code en 5 minutos", "Entender el terminal y lo básico", "Tu primer proyecto guiado paso a paso", "Los comandos esenciales que debes conocer"]
+    },
+    "intermediate": {
+      "level": "Intermedio",
+      "title": "Dominio de las herramientas",
+      "description": "¿Ya sabes usar Claude Code? Descubre los MCP, los Skills y el prompting avanzado.",
+      "items": ["Conectar tus herramientas favoritas mediante los MCP", "Crear y usar Skills personalizados", "Técnicas de prompting que marcan la diferencia", "Automatizar tus flujos de trabajo diarios"]
+    },
+    "advanced": {
+      "level": "Avanzado",
+      "title": "Experto y arquitecto",
+      "description": "Lleva Claude Code al límite. Multiagentes, flujos de trabajo complejos, despliegues.",
+      "items": ["Orquestación multiagente", "Flujos de trabajo complejos y encadenado de prompts", "CI/CD y despliegue automatizado", "Crear tus propios servidores MCP"]
+    }
+  },
+  "glossary": {
+    "analogyLabel": "Analogía:",
+    "learnMoreAbout": "Más información sobre {term}",
+    "learnMoreLink": "Más información sobre este término →"
+  },
+  "configuratorTeaser": {
+    "title": "Configura tu",
+    "titleHighlight": "entorno ideal",
+    "description": "Responde a unas pocas preguntas sencillas y obtén una configuración de Claude Code personalizada: MCP recomendados, archivo CLAUDE.md generado y consejos adaptados a tu perfil.",
+    "pillGuided": "Configuración guiada",
+    "pillMcp": "MCP recomendados",
+    "pillClaudeMd": "CLAUDE.md generado",
+    "cta": "Iniciar el configurador"
+  },
+  "metadata": {
+    "siteTitle": "Domina Claude Code",
+    "siteDescription": "La guía de referencia gratuita para dominar Claude Code. MCP, Skills, Prompting avanzado, para desarrolladores y no desarrolladores."
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "fr": "Français",
+    "en": "English",
+    "es": "Español"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "subtitle": "Esta página no existe o ha sido movida. Whobee te propone algunas pistas para encontrar tu camino.",
+    "suggestionsTitle": "Quizás buscabas...",
+    "fallbackTitle": "¿Por dónde empezar?",
+    "searchHint": "Abrir la búsqueda",
+    "backToHome": "Volver al inicio",
+    "openSearch": "Abrir la búsqueda",
+    "urlLabel": "URL solicitada:",
+    "recentTitle": "Artículos recientes",
+    "robotAlt": "Robot 3D interactivo que sigue tu cursor"
+  },
+  "sectionNav": {
+    "section-peers": {
+      "toggleLabel": "Páginas de la sección {section}",
+      "overviewLink": "Ver toda la sección {section}"
+    },
+    "getting-started": {
+      "title": "Empezar",
+      "overview": "Visión general",
+      "prerequisites-zero": "Requisitos para principiantes totales",
+      "what-is-claude-code": "¿Qué es Claude Code?",
+      "installation": "Requisitos e instalación",
+      "environment-setup": "Configuración del entorno",
+      "first-project": "Primer proyecto paso a paso",
+      "templates-starter-kits": "Plantillas y starter kits",
+      "faq-beginner": "FAQ para principiantes"
+    },
+    "mcp": {
+      "title": "MCP",
+      "overview": "Visión general",
+      "what-are-mcps": "Entender los MCP",
+      "setup": "Instalar y configurar",
+      "best-productivity": "Top MCP de productividad",
+      "best-development": "Top MCP de desarrollo",
+      "best-design": "Top MCP de diseño y UI",
+      "first-workflow": "Primer flujo de trabajo MCP",
+      "securite-mcp": "Seguridad de los MCP",
+      "create-mcp-typescript": "Crear un MCP en TypeScript",
+      "create-mcp-python": "Crear un MCP en Python",
+      "advanced-protocol": "Protocolo MCP avanzado",
+      "workflow-design-playwright": "Flujo de diseño con Playwright",
+      "comfyui-mcp-local": "ComfyUI MCP local (GPU)",
+      "comfyui-workflow-piloting": "Pilotar un flujo ComfyUI JSON"
+    },
+    "plugins": {
+      "title": "Plugins",
+      "overview": "Visión general",
+      "what-are-plugins": "Entender los plugins",
+      "setup": "Instalar y gestionar",
+      "best-essential": "Top plugins esenciales",
+      "best-design": "Plugins de diseño y frontend",
+      "best-security": "Plugins de seguridad y calidad"
+    },
+    "skills": {
+      "title": "Skills",
+      "overview": "Visión general",
+      "what-are-skills": "¿Qué es un Skill?",
+      "best-skills": "Top Skills recomendados",
+      "find-skills": "Encontrar un Skill (find-skills)",
+      "claude-council": "Claude Council (hacer deliberar a varias IA)",
+      "impeccable": "Impeccable (skill de diseño)",
+      "ui-ux-pro-max": "UI UX Pro Max (skill de diseño)",
+      "taste-skill": "Taste Skill (skill de diseño)",
+      "huashu-design": "Huashu Design (skill de diseño)",
+      "create-custom": "Crear un Skill personalizado",
+      "comparison": "Skills vs MCP vs Plugins"
+    },
+    "agents": {
+      "title": "Agentes",
+      "overview": "Visión general",
+      "what-are-agents": "Entender los agentes",
+      "create-subagent": "Crear un subagente",
+      "agent-teams": "Agent Teams",
+      "best-agents": "Top agentes por caso de uso",
+      "orchestration": "Orquestación avanzada",
+      "orchestration-patterns": "Patrones Command/Agent/Skill",
+      "agent-sdk": "Claude Agent SDK",
+      "performance-limits": "Rendimiento y límites",
+      "background-agents": "Background Agents",
+      "agent-generation-assets": "Agente de generación de assets"
+    },
+    "prompting": {
+      "title": "Prompting",
+      "overview": "Visión general",
+      "basics": "Los fundamentos del prompting",
+      "directives": "Directivas avanzadas",
+      "templates": "Plantillas por profesión",
+      "mistakes": "Errores que evitar",
+      "claude-md": "Guía CLAUDE.md",
+      "advanced": "Prompting avanzado",
+      "context-management": "Gestión del contexto",
+      "thinking-and-planning": "Extended Thinking y Plan Mode",
+      "chaining-and-agents": "Chaining y multiagentes",
+      "non-dev-prompting": "Prompting para no desarrolladores",
+      "power-tips": "Power Tips",
+      "context-rot": "Context rot: ¿1M de tokens útiles?"
+    },
+    "future": {
+      "title": "Visión",
+      "overview": "Visión general",
+      "why-ai-matters": "La IA y las profesiones del desarrollo",
+      "trends-2026": "Tendencias IA 2026",
+      "roadmap": "Roadmap del proyecto"
+    },
+    "configurator": {
+      "title": "Configurador",
+      "interactive": "Configurador interactivo"
+    },
+    "use-cases": {
+      "title": "Casos de uso",
+      "overview": "Visión general",
+      "business": "8 casos de uso de negocio",
+      "success-stories": "Historias de éxito",
+      "no-code": "Tutoriales sin código",
+      "ia-generative-creative": "Claude Code + IA generativa"
+    },
+    "ecosystem": {
+      "title": "Ecosistema",
+      "overview": "Visión general",
+      "top-repos-github": "Top repos de GitHub",
+      "awesome-skills": "Awesome Skills",
+      "awesome-plugins": "Awesome Plugins",
+      "awesome-mcp-servers": "Awesome MCP Servers"
+    },
+    "enterprise": {
+      "title": "Empresa",
+      "overview": "Visión general",
+      "security-compliance": "Seguridad y cumplimiento",
+      "team-adoption": "Guía de adopción para equipos",
+      "tco-calculator": "Calculadora de TCO",
+      "faq": "FAQ para empresas",
+      "governance": "Gobernanza y roles"
+    },
+    "advanced": {
+      "title": "Avanzado",
+      "overview": "Visión general",
+      "hooks": "Sistema de Hooks",
+      "headless-ci": "Modo Headless y CI/CD",
+      "multi-provider": "Multi-proveedor y Enterprise",
+      "mcp-profiles": "Perfiles MCP por misión",
+      "worktrees": "Git Worktrees",
+      "permissions-sandbox": "Permisos y Sandbox",
+      "workflows": "Flujos de trabajo avanzados",
+      "browser-automation": "Automatización de navegador",
+      "ultraplan": "Ultraplan: planificar en la nube",
+      "rpi-workflow": "RPI: Research, Plan, Implement",
+      "cross-model-workflow": "Cross-Model: Claude + Codex/Gemini",
+      "methodologies-ecosystem": "Ecosistema de metodologías",
+      "memoire-persistante": "Memoria persistente",
+      "optimisation-tokens": "Optimización de tokens",
+      "observabilite-monitoring": "Observabilidad y monitorización",
+      "security-review": "Comando /security-review"
+    },
+    "reference": {
+      "title": "Referencia",
+      "overview": "Visión general",
+      "cheatsheet": "Cheatsheet: referencia rápida",
+      "cli": "CLI: todos los flags",
+      "settings": "settings.json: configuración",
+      "environment": "Variables de entorno",
+      "voice-mode": "Voice Mode"
+    },
+    "limits": {
+      "title": "Límites",
+      "overview": "Visión general",
+      "known-limitations": "Límites conocidos",
+      "vs-copilot": "Claude Code vs Copilot",
+      "vs-cursor": "Claude Code vs Cursor",
+      "when-not-to-use": "Cuándo NO usar Claude Code"
+    },
+    "personas": {
+      "title": "Recorridos",
+      "overview": "Visión general",
+      "developer": "Recorrido desarrollador",
+      "team-lead": "Recorrido lead técnico",
+      "non-dev": "Recorrido no desarrollador",
+      "freelance": "Recorrido freelance",
+      "student": "Recorrido estudiante"
+    },
+    "content": {
+      "title": "Contenidos",
+      "all-articles": "Todos los artículos",
+      "getting-started-intro": "Introducción a Claude Code",
+      "mcp-guide": "Guía completa de los MCP",
+      "skills-guide": "Guía completa de los Skills",
+      "prompting-guide": "Guía del prompting",
+      "future-vision": "Visión y tendencias IA",
+      "couts-reels": "Costes reales de Claude Code",
+      "mythes": "8 ideas equivocadas sobre Claude Code",
+      "securite": "Guía de seguridad"
+    }
+  },
+  "designSystem": {
+    "metaTitle": "Design System · Tokens C1 (interno)",
+    "metaDescription": "Página interna de referencia para los tokens C1 del Claude Codex: tipografía, paletas, superficies, callouts, radios y movimiento.",
+    "hero": {
+      "eyebrow": "Interno · Tokens C1",
+      "title": "Sistema de diseño del Claude Codex",
+      "subtitle": "Esta página enumera todos los tokens visuales del sitio. Sirve de referencia para desarrolladores y diseñadores, para comprobar que un nuevo componente reutiliza bien el sistema existente.",
+      "notice": "Página no listada en la navegación pública. Indexación desactivada. Usa siempre un token semántico en lugar de un valor fijo."
+    },
+    "typography": {
+      "eyebrow": "01 · Tipografía",
+      "title": "Escala tipográfica",
+      "description": "Todas las clases utilitarias están definidas en globals.css. Codifican a la vez el tamaño, la altura de línea, el peso y el color semántico de cada rol de texto.",
+      "sample": {
+        "cc-display-1": "Display 1: para el hero principal",
+        "cc-display-2": "Display 2: secundario fuerte",
+        "cc-h1": "H1 de una página de sección",
+        "cc-h1-doc": "H1 de una página de documentación",
+        "cc-h2": "H2 estándar de una sección",
+        "cc-h2-article": "H2 de un artículo editorial",
+        "cc-h2-doc": "H2 de una página de documentación",
+        "cc-h3": "H3: subsección",
+        "cc-h4": "H4: título pequeño de bloque",
+        "cc-lead": "Párrafo de introducción que da paso a la lectura con suavidad.",
+        "cc-body": "Texto de cuerpo estándar para el contenido habitual.",
+        "cc-body-sm": "Texto de cuerpo más pequeño, para notas o leyendas largas.",
+        "cc-caption": "Leyenda discreta para metadatos",
+        "cc-eyebrow": "Ceja de sección"
+      },
+      "tracking": {
+        "tight": "tracking display, peso 800",
+        "tightDoc": "tracking -0.025em, peso 800",
+        "tight2": "tracking -0.02em, peso 700",
+        "tightSmall": "tracking -0.015em, peso 700",
+        "normal": "tracking neutro",
+        "wide": "tracking 0.08em, mayúsculas"
+      }
+    },
+    "palettes": {
+      "eyebrow": "02 · Paletas",
+      "title": "Colores primitivos",
+      "description": "Once niveles por paleta, expuestos tanto como variables CSS como utilidades de Tailwind. Los componentes solo deberían usar estos valores hex para casos particulares documentados.",
+      "brand": "Brand (cian)",
+      "accent": "Accent (ámbar)",
+      "slate": "Neutros (slate)"
+    },
+    "semantic": {
+      "eyebrow": "03 · Tokens semánticos",
+      "title": "Colores semánticos",
+      "description": "Los componentes deben usar estos tokens de forma prioritaria. Cambian automáticamente entre claro y oscuro mediante la clase .dark.",
+      "bgGroup": "Fondos",
+      "fgGroup": "Textos",
+      "borderGroup": "Bordes",
+      "brandGroup": "Brand semántico",
+      "bgPageUsage": "Fondo principal de la página",
+      "bgSubtleUsage": "Fondo de sección secundaria",
+      "bgElevatedUsage": "Fondo de tarjeta o superficie flotante",
+      "fgPrimaryUsage": "Texto principal, títulos",
+      "fgSecondaryUsage": "Texto secundario, descripciones",
+      "fgMutedUsage": "Texto discreto, metadatos",
+      "fgOnBrandUsage": "Texto sobre fondo brand (contraste AA)",
+      "borderSubtleUsage": "Borde ligero, separadores",
+      "borderDefaultUsage": "Borde estándar de tarjeta",
+      "borderStrongUsage": "Borde marcado, focus",
+      "brandPrimaryUsage": "Color de acción principal (AA sobre fg-on-brand)",
+      "brandHoverUsage": "Estado hover de las acciones principales",
+      "brand700Usage": "Alias histórico de brand-700",
+      "brand800Usage": "Alias histórico de brand-800"
+    },
+    "surfaces": {
+      "eyebrow": "04 · Superficies",
+      "title": "Tres niveles de superficie",
+      "description": "page → subtle → elevated. Las clases utilitarias .cc-surface-* gestionan tanto el color de fondo como el texto y la sombra, si la hay.",
+      "page": "Page",
+      "subtle": "Subtle",
+      "elevated": "Elevated",
+      "pageUsage": "Fondo de la página de mayor nivel, sin sombra.",
+      "subtleUsage": "Fondo más suave para separar secciones.",
+      "elevatedUsage": "Superficie flotante, con --shadow-elevated."
+    },
+    "status": {
+      "eyebrow": "05 · Estados",
+      "title": "Colores de estado",
+      "description": "Los cuatro estados estándar. Acompaña siempre el color con una etiqueta para mantener la accesibilidad de personas daltónicas.",
+      "success": "Éxito",
+      "warning": "Advertencia",
+      "error": "Error",
+      "info": "Info"
+    },
+    "cards": {
+      "eyebrow": "06 · Tarjetas",
+      "title": "Tarjeta semántica",
+      "description": "La clase .cc-card aplica un fondo, un borde, un radio y una sombra coherentes. Añadir data-interactive=\"true\" activa la traslación al pasar el cursor.",
+      "staticLabel": "Estática",
+      "interactiveLabel": "Interactiva",
+      "staticDescription": "Tarjeta de presentación clásica, sin interacción. Se usa para contenido informativo.",
+      "interactiveDescription": "Pasa el cursor sobre esta tarjeta para ver la elevación y el glow brand."
+    },
+    "callouts": {
+      "eyebrow": "07 · Callouts",
+      "title": "Recuadros semánticos",
+      "description": "Cuatro variantes para MDX. Los colores de borde y texto respetan un contraste AA tanto en claro como en oscuro.",
+      "info": {
+        "title": "Información",
+        "body": "Bloque neutro para precisar un elemento de contexto o señalar un recurso."
+      },
+      "tip": {
+        "title": "Consejo",
+        "body": "Bloque positivo para compartir una buena práctica o un atajo útil."
+      },
+      "warning": {
+        "title": "Atención",
+        "body": "Bloque de alerta para señalar una trampa frecuente o un punto de vigilancia."
+      },
+      "error": {
+        "title": "Error",
+        "body": "Bloque rojo para errores bloqueantes o comportamientos que deben evitarse."
+      }
+    },
+    "radius": {
+      "eyebrow": "08 · Radios",
+      "title": "Radios de borde",
+      "description": "Siete niveles de radio para cubrir todas las superficies, desde la insignia plana hasta el círculo perfecto."
+    },
+    "shadows": {
+      "eyebrow": "09 · Sombras",
+      "title": "Profundidad",
+      "description": "Seis niveles de sombra más dos glows de color. Los valores se ajustan en modo oscuro para seguir siendo perceptibles sobre fondo oscuro."
+    },
+    "motion": {
+      "eyebrow": "10 · Motion",
+      "title": "Duraciones y curvas",
+      "description": "Todas las transiciones del sitio usan estos tokens. Prefiere ease-out para una entrada natural y ease-spring para un rebote ligero.",
+      "hoverLabel": "Demo hover",
+      "hoverTitle": "Pasa el cursor sobre esta tarjeta",
+      "hoverBody": "Traslación de 3px hacia arriba, con la duración base y una curva ease-out. Se desactiva si prefers-reduced-motion está activo.",
+      "reducedMotion": "Todas las animaciones respetan prefers-reduced-motion: la traslación se neutraliza para quienes lo soliciten."
+    }
+  }
+}

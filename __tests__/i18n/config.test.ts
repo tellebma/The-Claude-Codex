@@ -7,7 +7,8 @@ describe("i18n/config", () => {
   it("exposes the expected locales", () => {
     expect(config.locales).toContain("fr");
     expect(config.locales).toContain("en");
-    expect(config.locales).toHaveLength(2);
+    expect(config.locales).toContain("es");
+    expect(config.locales).toHaveLength(3);
   });
 
   it("defaultLocale is part of locales", () => {

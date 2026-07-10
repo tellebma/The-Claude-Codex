@@ -1,0 +1,188 @@
+---
+title: "Las mejores extensiones esenciales 2026"
+description: "Los recursos comunitarios imprescindibles de Claude Code: Everything Claude Code, Context7, Repomix y Prompt Improver. Instalación y casos de uso."
+section: "plugins"
+order: 3
+datePublished: "2026-03-09"
+dateModified: "2026-04-23"
+---
+
+## Los recursos que todo desarrollador de Claude Code debería conocer
+
+Estos recursos comunitarios son los **fundamentos** del ecosistema de Claude Code. Enriquecen considerablemente tu experiencia diaria: agentes especializados, documentación actualizada, análisis de codebase y mejora de prompts.
+
+<Callout type="info" title="Extensiones comunitarias, no plugins oficiales">
+Los recursos que se presentan en esta página son **proyectos de la comunidad**, no publicados oficialmente por Anthropic. Se instalan de forma manual (copia de archivos, npm o `/install-github`). No existe un comando `/plugin install` en Claude Code.
+</Callout>
+
+---
+
+## Everything Claude Code: la colección completa
+
+**Proyecto comunitario** | Categoría: Agents, Rules & Skills | Autor: [punkpeye](https://github.com/punkpeye)
+
+[Everything Claude Code](https://github.com/affaan-m/everything-claude-code) es una de las colecciones comunitarias más conocidas del ecosistema. Reúne una **colección de agentes especializados, reglas y skills** listos para usar que cubren los casos de uso más habituales del desarrollo.
+
+<Callout type="info" title="Proyecto comunitario open source">
+Everything Claude Code está alojado en GitHub en [github.com/affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code). Es un proyecto de la comunidad, sin afiliación con Anthropic.
+</Callout>
+
+### Qué aporta
+
+- **Agentes especializados**: `senior-dev`, `architect`, `reviewer`, `debugger`, `optimizer`, cada uno con una experiencia y un estilo de respuesta adaptados
+- **Rules de flujo de trabajo**: convenciones de código, buenas prácticas, guías de revisión de PR
+- **Skills**: comandos slash para las tareas habituales (TDD, refactorización, documentación)
+- **Plantillas CLAUDE.md**: archivos de configuración optimizados para distintos stacks
+
+### Instalación
+
+```bash
+# Con /install-github (recomendado)
+/install-github affaan-m/everything-claude-code
+
+# O manualmente
+git clone https://github.com/affaan-m/everything-claude-code /tmp/ecc
+mkdir -p .claude/agents .claude/rules .claude/commands
+cp -r /tmp/ecc/agents/ .claude/
+cp -r /tmp/ecc/rules/ .claude/
+cp -r /tmp/ecc/commands/ .claude/
+```
+
+### Casos de uso
+
+- **Revisión de código completa**: *"Como agente reviewer, analiza mi última PR y sugiere mejoras"*
+- **Arquitectura de un nuevo módulo**: *"Como architect, ayúdame a diseñar el sistema de notificaciones"*
+- **Depuración avanzada**: *"Como debugger, ayúdame a entender por qué los tests E2E fallan en CI"*
+- **Optimización**: *"Como optimizer, analiza el rendimiento de mi API y propón mejoras"*
+
+<Callout type="tip" title="Adapta los agentes a tu proyecto">
+Los agentes de Everything Claude Code son archivos Markdown: puedes modificarlos libremente para adaptarlos a las convenciones de tu equipo. Haz un fork del repositorio y personalízalo según tus necesidades.
+</Callout>
+
+---
+
+## Context7: la documentación siempre actualizada
+
+**Servidor MCP** | Categoría: Documentación | Autor: [Upstash](https://upstash.com/)
+
+Context7 resuelve un problema importante: el **conocimiento desactualizado**. Claude Code tiene una fecha de corte para su conocimiento. Context7 es un **servidor MCP** (no un plugin) que le permite acceder a la **documentación más reciente** de cualquier biblioteca o framework, en tiempo real.
+
+<Callout type="info" title="Context7 es un MCP, no un plugin">
+Context7 se instala como un **servidor MCP** en tu `settings.json`, no como un archivo Markdown. Su paquete npm es `@upstash/context7-mcp`. Lo desarrolla Upstash y es open source en [github.com/upstash/context7](https://github.com/upstash/context7).
+</Callout>
+
+### Instalación
+
+```bash
+# Con el comando Claude
+claude mcp add context7 -- npx -y @upstash/context7-mcp
+```
+
+### Configuración JSON
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  }
+}
+```
+
+### Casos de uso
+
+- **API desconocida**: *"Usa Context7 para encontrar cómo usar useOptimistic de React 19"*
+- **Migración de versión**: *"¿Qué breaking changes hay en Next.js 15 respecto a Next.js 14?"*
+- **Comprobación de sintaxis**: *"Comprueba en la documentación de Tailwind si la clase text-balance está disponible en la v3"*
+
+---
+
+## Repomix: análisis completo de codebase
+
+**Herramienta CLI de npm** | Categoría: Análisis | Autor: [yamadashy](https://github.com/yamadashy)
+
+[Repomix](https://github.com/yamadashy/repomix) es una **herramienta CLI** (no un plugin) que condensa toda una codebase en un único archivo estructurado, optimizado para pasarlo a Claude Code como contexto. En lugar de leer archivo por archivo, Claude Code obtiene una vista de conjunto completa y organizada de tu proyecto.
+
+<Callout type="info" title="Repomix en npm">
+Repomix está disponible en [npmjs.com/package/repomix](https://www.npmjs.com/package/repomix). Su repositorio de código está en [github.com/yamadashy/repomix](https://github.com/yamadashy/repomix).
+</Callout>
+
+### Qué aporta
+
+- **Condensación inteligente**: genera un único archivo de texto con todo tu código, en un formato optimizado para LLMs
+- **Filtrado configurable**: excluye `node_modules`, archivos binarios y todo lo que configures
+- **Estadísticas**: cuenta los tokens para estimar el uso del contexto
+- **Múltiples formatos**: salida en texto plano, XML o Markdown
+
+### Instalación y uso
+
+```bash
+# Uso sin instalación (npx)
+npx repomix
+
+# O instalación global
+npm install -g repomix
+
+# Analizar el directorio actual
+repomix
+
+# Analizar excluyendo ciertos archivos
+repomix --ignore "node_modules/**,*.lock,dist/**"
+
+# Salida en un archivo específico
+repomix --output context.txt
+
+# Pasar el resultado a Claude Code:
+# "Aquí tienes mi codebase [pega el contenido de context.txt]. Explica la arquitectura."
+```
+
+### Casos de uso
+
+- **Onboarding**: *"Analiza esta codebase y dame un resumen de la arquitectura, las tecnologías y las convenciones"*
+- **Análisis de impacto**: *"Si modifico este módulo, ¿qué otros archivos se verán probablemente afectados?"*
+- **Detección de deuda técnica**: *"Identifica las zonas de deuda técnica en este proyecto y prioriza las refactorizaciones"*
+- **Documentación**: *"Genera documentación de arquitectura a partir del análisis del código"*
+
+---
+
+## Prompt Improver: prompts optimizados
+
+**Artefacto de The Claude Codex** | Categoría: Prompting | Impulsado por Claude
+
+[Prompt Improver](https://claude.ai/public/artifacts/bda730ce-564e-4bc6-80a7-7767bba5bafd) es un Artefacto interactivo de Claude que hemos creado para ayudarte a redactar mejores prompts. Pega un borrador y obtén una versión reestructurada que aplica las técnicas de prompting presentadas en esta guía.
+
+<Callout type="info" title="Cero instalación, todo en el navegador">
+Publicado públicamente en claude.ai, el artefacto se ejecuta del lado del cliente: nada que clonar, nada que desplegar. También puedes abrirlo en tu propia cuenta de Claude para hacerle un fork y personalizar sus reglas.
+</Callout>
+
+### Qué aporta
+
+- **Análisis de estructura**: identifica si tu prompt carece de contexto, restricciones o formato objetivo
+- **Sugerencias concretas**: reformula las partes vagas en instrucciones precisas y estructuradas
+- **Buenas prácticas aplicadas**: etiquetas XML, chain-of-thought, asignación de rol, ejemplos
+
+### Caso de uso manual
+
+Incluso sin una herramienta automatizada, puedes mejorar tus prompts en Claude Code aplicando estos principios directamente:
+
+- **Prompt vago**: *"Haz un formulario de contacto"*
+- **Prompt mejorado**: *"Crea un formulario de contacto en React con los campos nombre, email y mensaje. Validación con Zod en el cliente. Gestión de errores explícita. Estado de carga durante el envío. Mensaje de éxito tras el envío. Componentes accesibles (WCAG AA) con atributos aria adecuados. Tests unitarios con React Testing Library."*
+
+---
+
+## Resumen
+
+| Recurso | Tipo | Fuente | Mejor para |
+|--------|------|---------|---------------|
+| **Everything Claude Code** | Agents, Rules, Skills | [GitHub](https://github.com/affaan-m/everything-claude-code) | Flujo de trabajo completo de desarrollo |
+| **Context7** | Servidor MCP | [GitHub](https://github.com/upstash/context7) | Documentación actualizada, migración |
+| **Repomix** | CLI de npm | [GitHub](https://github.com/yamadashy/repomix) | Analizar y comprender una codebase |
+| **Prompt Improver** | Artefacto Claude | [Abrir](https://claude.ai/public/artifacts/bda730ce-564e-4bc6-80a7-7767bba5bafd) | Mejorar la calidad de los prompts |
+
+## Próximos pasos
+
+- [Extensiones de diseño y frontend](/plugins/best-design): los mejores recursos para diseño y UI
+- [Extensiones de seguridad y calidad](/plugins/best-security): protege y mejora la calidad de tu código
+- [Instalar y gestionar tus extensiones](/plugins/setup): guía de instalación y configuración

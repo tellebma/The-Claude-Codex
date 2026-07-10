@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/config";
 import {
   loadSearchIndex,
   runSearch,
@@ -170,7 +171,7 @@ export function SearchDialog() {
       if (targetLocale === locale) {
         router.push(pathWithoutLocale);
       } else {
-        router.push(pathWithoutLocale, { locale: targetLocale as "fr" | "en" });
+        router.push(pathWithoutLocale, { locale: targetLocale as Locale });
       }
     },
     [navigateTo, router, locale]

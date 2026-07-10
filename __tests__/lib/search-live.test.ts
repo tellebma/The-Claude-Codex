@@ -133,4 +133,30 @@ describe("loadSearchIndex", () => {
 
     await expect(loadSearchIndex("en")).rejects.toThrow(/search index/i);
   });
+
+  it("fetches the es index for the es locale", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response(JSON.stringify(DOCS)));
+
+    await loadSearchIndex("es");
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "/search-index-es.json",
+      expect.any(Object)
+    );
+  });
+
+  it("falls back to the fr index for an unknown locale", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(new Response(JSON.stringify(DOCS)));
+
+    await loadSearchIndex("de");
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      "/search-index-fr.json",
+      expect.any(Object)
+    );
+  });
 });

@@ -5,7 +5,7 @@ import type {
 import type { SearchEntry } from "@/lib/search-index";
 import { getRecentArticles } from "@/lib/recent-articles";
 
-export type Locale = "fr" | "en";
+export type Locale = "fr" | "en" | "es";
 
 export const NOT_FOUND_STRINGS_FR: NotFoundStrings = {
   title: "Page introuvable",
@@ -31,6 +31,19 @@ export const NOT_FOUND_STRINGS_EN: NotFoundStrings = {
   searchHint: "Open search",
   urlLabel: "Requested URL:",
   robotAlt: "Interactive 3D robot tracking your cursor",
+};
+
+export const NOT_FOUND_STRINGS_ES: NotFoundStrings = {
+  title: "Página no encontrada",
+  subtitle:
+    "Esta página no existe o ha sido movida. Whobee te propone algunas pistas para encontrar tu camino.",
+  suggestionsTitle: "Quizás buscabas...",
+  fallbackTitle: "¿Por dónde empezar?",
+  recentTitle: "Artículos recientes",
+  backToHome: "Volver al inicio",
+  searchHint: "Abrir la búsqueda",
+  urlLabel: "URL solicitada:",
+  robotAlt: "Robot 3D interactivo que sigue tu cursor",
 };
 
 type SuggestionPage = Pick<SearchEntry, "title" | "description" | "href">;
@@ -73,6 +86,26 @@ export const FALLBACK_SUGGESTIONS_EN: ReadonlyArray<SuggestionPage> = [
   },
 ];
 
+export const FALLBACK_SUGGESTIONS_ES: ReadonlyArray<SuggestionPage> = [
+  {
+    title: "Inicio",
+    description: "Volver a la página principal de la guía.",
+    href: "/",
+  },
+  {
+    title: "Configurador",
+    description:
+      "Genera tu configuración de Claude Code personalizada en 2 minutos.",
+    href: "/configurator",
+  },
+  {
+    title: "Empezar",
+    description:
+      "Instalación, primeros pasos y tu primer proyecto guiado.",
+    href: "/getting-started",
+  },
+];
+
 export function getNotFoundBundles(): Readonly<Record<Locale, NotFoundBundle>> {
   return {
     fr: {
@@ -84,6 +117,11 @@ export function getNotFoundBundles(): Readonly<Record<Locale, NotFoundBundle>> {
       strings: NOT_FOUND_STRINGS_EN,
       fallbackSuggestions: FALLBACK_SUGGESTIONS_EN,
       recentArticles: getRecentArticles("en", 4),
+    },
+    es: {
+      strings: NOT_FOUND_STRINGS_ES,
+      fallbackSuggestions: FALLBACK_SUGGESTIONS_ES,
+      recentArticles: getRecentArticles("es", 4),
     },
   };
 }

@@ -58,11 +58,11 @@ const coursesJsonLd = { "@context": "https://schema.org", "@type": "ItemList", i
 const coursesJsonLdHtml = serializeJsonLd(coursesJsonLd);
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params; const t = translations[locale as "fr" | "en"];
+  const { locale } = await params; const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createPageMetadata({ title: t.metaTitle, description: t.metaDescription, path: `/${locale}/personas`, locale });
 }
 function buildArticleJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createArticleSchema({ title: t.metaTitle, description: t.metaDescription, url: `${SITE_URL}/${locale}/personas`, locale, datePublished: "2026-03-12", dateModified: "2026-03-12" });
 }
 
@@ -80,7 +80,7 @@ const colorStyles = {
 
 export default async function PersonasPage({ params }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params; setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   /* JSON-LD: safe -- static schema, no user input */
   const articleJsonLdHtml = serializeJsonLd(buildArticleJsonLd(locale));
   return (

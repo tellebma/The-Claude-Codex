@@ -93,7 +93,29 @@ const EN_BUNDLE = {
   recentArticles: [],
 };
 
-const bundles = { fr: FR_BUNDLE, en: EN_BUNDLE };
+const ES_BUNDLE = {
+  strings: {
+    title: "Página no encontrada",
+    subtitle: "Test subtitle ES",
+    suggestionsTitle: "Suggestions ES",
+    fallbackTitle: "Por donde empezar ES",
+    recentTitle: "Recientes",
+    backToHome: "Volver al inicio",
+    searchHint: "Abrir busqueda",
+    urlLabel: "URL:",
+    robotAlt: "Robot",
+  },
+  fallbackSuggestions: [
+    {
+      title: "Inicio ES",
+      description: "Fallback 1 ES",
+      href: "/",
+    },
+  ],
+  recentArticles: [],
+};
+
+const bundles = { fr: FR_BUNDLE, en: EN_BUNDLE, es: ES_BUNDLE };
 
 describe("NotFoundClient", () => {
   beforeEach(() => {

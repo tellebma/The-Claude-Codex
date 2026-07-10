@@ -32,6 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       "Découvrez les agents et subagents Claude Code. Créez des agents spécialisés, orchestrez des workflows multi-agents et automatisez vos processus de développement.",
     path: `/${locale}/agents`,
     locale,
+    availableLocales: ["fr", "en", "es"],
   });
 }
 

@@ -1,0 +1,138 @@
+---
+title: "gstack de Garry Tan: veredicto tras un mes de uso en equipo hispanohablante"
+description: "Review crítica de la stack de Claude Code de Garry Tan (CEO de YC). 35 comandos, filosofía solo founder, lo que funciona y lo que falla en contexto hispanohablante."
+section: "content"
+order: 15
+datePublished: "2026-05-12"
+dateModified: "2026-05-12"
+themes: ["use-case", "productivity"]
+---
+
+## TL;DR
+
+- **gstack** es la configuración de Claude Code de [Garry Tan](https://x.com/garrytan), presidente de Y Combinator, publicada en código abierto en [github.com/garrytan/gstack](https://github.com/garrytan/gstack). 35 slash commands organizados para que un dev solo "ship como un equipo de veinte".
+{/* source: https://api.github.com/repos/garrytan/gstack, consultado 2026-05-12 */}
+- A 12 de mayo de 2026, el repo muestra **94 518 estrellas** y **14 002 forks** desde su creación el 11 de marzo de 2026. Licencia MIT, TypeScript, último push el mismo día. La viralidad es real.
+{/* source: GitHub API repos/garrytan/gstack, consultado 2026-05-12 (stargazers_count: 94518, forks_count: 14002, created_at: 2026-03-11) */}
+- Lo que funciona: un flujo de trabajo opinado de principio a fin, roles encarnados (CEO, Eng Manager, QA, SRE...), una orquestación fluida entre `/office-hours`, `/autoplan`, `/ship`.
+- Lo que falla: curva de aprendizaje pronunciada, sesgo cultural de startup de SF muy asumido, redundancia con otros skills ya instalados, y parte del utillaje (GStack Browser, gbrain) que da por hecho que aceptas toda la stack.
+
+<Callout type="info" title="Sobre qué base está escrita esta review">
+Lectura del repo oficial, de los 35 comandos documentados y de la filosofía "equipo de veinte" tal como la presenta Garry Tan. En la práctica, en un proyecto TypeScript/Next.js de tamaño medio, durante unas cuatro semanas. El veredicto es subjetivo y así se asume: es una review, no una ficha de producto.
+</Callout>
+
+---
+
+## Quién es Garry Tan y por qué su repo se hizo viral
+
+Garry Tan es presidente y CEO de [Y Combinator](https://www.ycombinator.com/) desde 2023. Antes de YC, cofundó Posterous (adquirida por Twitter), fue uno de los primeros ingenieros/diseñadores de Palantir, e invirtió muy pronto en Coinbase, Instacart, Rippling.
+{/* source: https://github.com/garrytan/gstack README párrafo introductorio, consultado 2026-05-12 */}
+
+El repo se publicó el 11 de marzo de 2026 y superó las 94 000 estrellas en dos meses. Tres factores explican la viralidad:
+
+1. **La autoridad de la señal**. Cuando el jefe de YC abre su setup personal de Claude Code, el ecosistema mira.
+2. **Una promesa fuerte**. Tan documenta un ratio "810x" de productividad (en líneas de código lógicas por día, 2013 frente a 2026), a la vez que dirige YC a tiempo completo. La cifra es polémica y el autor lo sabe: incluso publica un documento de metodología dedicado para explicar la controversia.
+{/* source: docs/ON_THE_LOC_CONTROVERSY.md de garrytan/gstack, cita directa "Logical SLOC/day: 14 [2013], 11,417 [2026], 810x [multiple]", consultado 2026-05-12 */}
+3. **El timing**. El repo llega en pleno boom del ecosistema de "starter kits" de Claude Code (gstack, claude-code-templates, SuperClaude, GSD) y capitaliza la narrativa de "un dev solo puede shippear como un equipo".
+
+---
+
+## Qué hace gstack en concreto
+
+gstack se instala como un skill global de Claude Code mediante un único comando de clonado. La filosofía es simple: cada slash command encarna un **rol de equipo**, y los comandos se encadenan en un ciclo "Pensar → Planificar → Construir → Examinar → Testear → Entregar → Reflexionar".
+
+<CodeBlock language="bash" code={`# Instalación (según el README oficial)
+git clone --single-branch --depth 1 \\
+  https://github.com/garrytan/gstack.git ~/.claude/skills/gstack \\
+  && cd ~/.claude/skills/gstack && ./setup`} />
+
+Una vez instalado, dispones de **35 slash commands**. Los más estructurantes:
+
+| Comando | Rol encarnado | Uso típico |
+|----------|--------------|---------------|
+| `/office-hours` | YC Office Hours | Reformula el problema mediante 6 preguntas forzosas, antes de escribir ninguna línea de código |
+| `/plan-ceo-review` | CEO / Founder | Busca el "producto de 10 estrellas" oculto en la petición |
+| `/plan-eng-review` | Eng Manager | Cierra arquitectura, flujo de datos, casos límite, tests |
+| `/plan-design-review` | Senior Designer | Puntúa cada dimensión visual de 0 a 10 y detecta el "AI slop" |
+| `/autoplan` | Review Pipeline | Encadena CEO → design → eng → DX y solo escala las decisiones de gusto |
+| `/review` | Staff Engineer | Encuentra los bugs que pasan CI pero explotan en producción |
+| `/qa` | QA Lead | Prueba la app en un navegador real, corrige, genera un test de regresión |
+| `/ship` | Release Engineer | Sincroniza main, tests, audita cobertura, push, abre la PR |
+| `/cso` | Chief Security Officer | OWASP Top 10 + STRIDE, exclusiones de falsos positivos |
+
+{/* source: README.md de garrytan/gstack, tabla de skills, consultado 2026-05-12 */}
+
+Junto a estos comandos "de negocio", gstack incluye también un utillaje de navegador (`/browse`, `/open-gstack-browser`, `/pair-agent` para coordinar varios agentes IA en la misma sesión), barreras de seguridad (`/careful`, `/freeze`, `/guard`), y un sistema de memoria de proyecto mediante `/learn`.
+
+---
+
+## Lo que funciona bien
+
+**El flujo de trabajo es opinado y esa es su fuerza.** La mayoría de las stacks públicas dejan que el usuario componga sus propias secuencias. gstack asume una opinión: empiezas con `/office-hours`, planificas con `/autoplan`, construyes, haces `/review`, lanzas `/qa`, haces `/ship`. Para un dev que empieza con Claude Code, es un carril cómodo que evita la parálisis del "por dónde empiezo".
+
+**La encarnación de roles funciona.** Pedirle a Claude que sea "CEO que cuestiona el alcance" o "Eng Manager que fuerza las hipótesis ocultas" da respuestas cualitativamente distintas de un prompt genérico. `/plan-eng-review` en particular es eficaz para sacar los casos límite que se habrían pasado por alto.
+
+**`/qa` es probablemente el comando más útil.** Pilotaje real de un navegador Chromium, capturas de pantalla, correcciones atómicas con generación automática de tests de regresión. Es el tipo de bucle que uno debería haber escrito por sí mismo y nunca se tomó el tiempo de montar.
+
+**La memoria de proyecto vía `/learn` compensa la pérdida de contexto entre sesiones.** Para un uso prolongado en un mismo codebase, el sistema acumula patrones, trampas, preferencias, y los reinyecta. Ver también nuestra guía sobre la [memoria persistente](/advanced/memoire-persistante) para el contexto general.
+
+---
+
+## Lo que falla en la práctica
+
+<Callout type="warning" title="Los límites asumidos de un setup ultra personal">
+gstack es ante todo el setup personal de un fundador estadounidense que shippea solo a un ritmo muy alto. Lo que funciona para él no se traslada mecánicamente.
+</Callout>
+
+**Curva de aprendizaje pronunciada.** 35 comandos es mucho. Antes de haber integrado cuál usar en qué momento, se pierde tiempo leyendo el README. Los primeros días, uno vuelve constantemente a la lista para recordar si es `/plan-design-review` (antes) o `/design-review` (después).
+
+**Sesgo cultural de startup de SF muy asumido.** El vocabulario está impregnado de YC: "10-star product", "office hours", "design shotgun", "AI slop", "founder mode". En un proyecto de un equipo constituido, las preguntas de `/plan-ceo-review` ("¿cuál es el producto diez veces más ambicioso oculto en esta petición?") a menudo caen en saco roto. Ya hay un PO, un encuadre, un presupuesto. El modo CEO se vuelve redundante con tu verdadero PM.
+
+**Redundancia con otros skills si ya los tienes.** Si ya tienes un skill de revisión de código, uno de QA y uno de gestión de releases, instalar gstack duplica los comandos. Y en algunos casos, los comandos de gstack y tus comandos existentes se pisan porque ambos escriben en `CLAUDE.md`.
+
+**Parte del paquete es cautivo del ecosistema Tan.** `/open-gstack-browser`, `gbrain`, `/sync-gbrain` dan por hecho que aceptas toda la stack. Si no quieres eso, aproximadamente una cuarta parte de los comandos se vuelve inútil. Es una elección, pero hay que saberlo antes de instalar.
+
+**El eslogan "equipo de veinte" es marketing.** En la práctica, gstack sustituye a un equipo de veinte tan bien como Photoshop sustituye a un estudio creativo: elimina fricciones, no compra criterio. Las decisiones de producto, arquitectura y seguridad siguen siendo tuyas.
+
+---
+
+## Aplicabilidad en contexto hispanohablante
+
+Algunos ajustes concretos si pruebas gstack en un proyecto ES o LATAM:
+
+- **Traducir los roles mentalmente.** "CEO review" se convierte en "revisión de producto / encuadre". "Eng manager" se convierte en "tech lead". Sin eso, la salida de Claude sigue teñida de startup estadounidense.
+- **Desactivar o ignorar los comandos de growth/exploración de diseño** (`/design-shotgun`, `/design-consultation`) si trabajas en B2B con restricciones, un back-office o un proyecto regulado (banca, salud, sector público). Parten de la base de que tienes libertad para reconstruirlo todo desde cero.
+- **Leer el código de los comandos antes de `/ship` en un proyecto sensible.** `/ship` empuja a `main` tras los tests, lo que supone una organización Git muy permisiva. Si tu equipo trabaja en GitFlow estricto con revisión obligatoria y un entorno de staging separado, hay que adaptarlo o no usarlo.
+- **Las preguntas de `/cso` son sólidas** (OWASP + STRIDE), pero no sustituyen una revisión de un verdadero responsable de seguridad, y mucho menos un pentest. Bien para la primera pasada, no para el cumplimiento normativo.
+
+**Casos en los que gstack no funciona.** Equipos muy orientados a proceso (banca, seguros, defensa), proyectos bajo restricción fuerte (regulatoria, certificación), o contextos donde cada commit pasa por revisión humana multinivel. La velocidad de gstack se vuelve un riesgo, no una ventaja.
+
+---
+
+## Alternativas
+
+gstack no es la única stack preconfigurada para Claude Code. Nuestra [comparativa de plantillas y starter kits](/getting-started/templates-starter-kits) cubre claude-code-templates, SuperClaude, GSD y otros. La lógica de elección:
+
+- **gstack**: estás solo o eres muy pequeño, shippeas rápido, aceptas la opinión fuerte
+- **SuperClaude**: quieres una estructura modular y un sistema de personas más formalizado
+- **claude-code-templates**: quieres un punto de partida mínimo y configurarlo tú mismo
+
+Para el subconjunto "skills" más específico (sin toda la infraestructura de flujo de trabajo), ver también nuestra [selección de los mejores skills](/skills/best-skills).
+
+---
+
+## Veredicto
+
+gstack merece sus estrellas: es una de las pocas stacks donde el autor realmente ha vivido su herramienta y la ha moldeado con el uso, no con la especulación. Para un solo founder que quiere un carril claro, es probablemente el setup más completo del mercado en mayo de 2026.
+
+En un equipo hispanohablante con proceso establecido, es menos evidente. La mitad de los comandos aporta una ganancia real (`/qa`, `/review`, `/ship`, `/investigate`, `/learn`), la otra mitad suena hueca o necesita demasiada adaptación para valer la pena. Mi uso estabilizado tras cuatro semanas: seis comandos de 35, el resto desinstalado o ignorado.
+
+**Recomendación pragmática**: haz un fork del repo, quédate con los comandos que encajan con tu flujo de trabajo, retira los demás, y adapta el vocabulario a tu equipo. La licencia MIT está hecha para eso.
+
+## Recursos
+
+- Repo oficial: [github.com/garrytan/gstack](https://github.com/garrytan/gstack)
+- Doc de metodología de productividad: `docs/ON_THE_LOC_CONTROVERSY.md` en el repo
+- Comparativa de stacks de Claude Code: [/getting-started/templates-starter-kits](/getting-started/templates-starter-kits)
+- Skills a instalar a la carta: [/skills/best-skills](/skills/best-skills)
+- Para la memoria entre sesiones: [/advanced/memoire-persistante](/advanced/memoire-persistante)

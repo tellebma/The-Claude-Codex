@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { BetaTranslationBanner } from "@/components/layout/BetaTranslationBanner";
 import { VercelMetrics } from "@/components/layout/VercelMetrics";
 import { routing } from "@/i18n/routing";
 import {
@@ -62,11 +63,18 @@ const MATOMO_ENABLED = MATOMO_URL !== "" && MATOMO_SITE_ID !== "";
  * la lib JS, et les requetes de tracking (idsite/rec) y repondent aussi
  * (content-type image/gif). setRequestMethod POST evite en plus les
  * patterns d'URL de tracking en GET.
+ *
+ * Note (heartbeat, 2026-07-09) : enableHeartBeatTimer envoie un ping
+ * toutes les 15s (defaut) tant que l'onglet est actif/visible, pour que
+ * Matomo puisse mesurer le temps reellement passe sur une page meme
+ * quand la visite ne contient qu'une seule page (bounce). Sans ca,
+ * avg_time_on_page reste a 0 par construction sur ces visites (le calcul
+ * se base sur le timestamp de l'action suivante, qui n'existe jamais).
  */
 const matomoTrackingScript = MATOMO_ENABLED
   ? `
   var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking'], ['setRequestMethod', 'POST']);
+  _paq.push(['disableCookies'], ['setDoNotTrack', true], ['enableLinkTracking'], ['setRequestMethod', 'POST'], ['enableHeartBeatTimer']);
   (function() {
     var u = '${MATOMO_URL}/';
     _paq.push(['setTrackerUrl', u + 'js/'], ['setSiteId', '${MATOMO_SITE_ID}']);
@@ -87,13 +95,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const isEn = locale === "en";
+  const isEs = locale === "es";
   const tMeta = await getTranslations({ locale, namespace: "metadata" });
 
   const siteDescription = tMeta("siteDescription");
   const siteTitle = tMeta("siteTitle");
-  const ogAlt = isEn
-    ? `${SITE_NAME} | Reference guide to master Claude Code`
-    : `${SITE_NAME} | Guide de référence pour maîtriser Claude Code`;
+  const ogAlt = (() => {
+    if (isEn) return `${SITE_NAME} | Reference guide to master Claude Code`;
+    if (isEs) return `${SITE_NAME} | Guía de referencia para dominar Claude Code`;
+    return `${SITE_NAME} | Guide de référence pour maîtriser Claude Code`;
+  })();
+  const ogLocaleTag = (() => {
+    if (isEn) return "en_US";
+    if (isEs) return "es_ES";
+    return "fr_FR";
+  })();
 
   // Each locale gets its own canonical under /{locale}/.
   // The root / 301-redirects to /fr/ via Nginx and is not a content URL.
@@ -111,6 +127,7 @@ export async function generateMetadata({
       languages: {
         fr: `${SITE_URL}/fr/`,
         en: `${SITE_URL}/en/`,
+        es: `${SITE_URL}/es/`,
         "x-default": `${SITE_URL}/fr/`,
       },
     },
@@ -118,7 +135,7 @@ export async function generateMetadata({
       title: SITE_NAME,
       description: siteDescription,
       type: "website",
-      locale: isEn ? "en_US" : "fr_FR",
+      locale: ogLocaleTag,
       siteName: SITE_NAME,
       url: canonicalUrl,
       images: [
@@ -217,6 +234,7 @@ export default async function LocaleLayout({
             </a>
             <div className="flex min-h-screen flex-col">
               <Header />
+              {locale === "es" && <BetaTranslationBanner />}
               <main id="main-content" className="flex-1">
                 {children}
               </main>

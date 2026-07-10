@@ -124,10 +124,10 @@ describe("SITE_PAGES data integrity", () => {
       if (!enPath) continue;
       if (lastSegment(enPath) === lastSegment(page.path)) continue; // slug identique : pas d'alias requis
 
-      if (getAlternateLocalePath(page.path) !== enPath) {
+      if (getAlternateLocalePath(page.path, "fr", "en") !== enPath) {
         missing.push(`FR->EN: ${page.path} should map to ${enPath}`);
       }
-      if (getAlternateLocalePath(enPath) !== page.path) {
+      if (getAlternateLocalePath(enPath, "en", "fr") !== page.path) {
         missing.push(`EN->FR: ${enPath} should map to ${page.path}`);
       }
     }

@@ -1,0 +1,118 @@
+---
+title: "Rehacer una card con Impeccable y Playwright: demo"
+description: "Ejemplo de diseño con Claude Code: retomamos una card real del Codex y la rehacemos con Impeccable y Playwright MCP, con capturas antes/después."
+badge: "Demo"
+section: "content"
+order: 2
+datePublished: "2026-06-03"
+dateModified: "2026-06-03"
+themes: ["use-case", "tooling"]
+---
+
+{/* source: retorno de experiencia sobre el proyecto The Claude Codex, 2026-06-03 */}
+{/* herramientas verificadas: Impeccable (Apache 2.0, npx skills add pbakaus/impeccable), Playwright MCP @playwright/mcp v0.0.75, consultado 2026-06-03 */}
+
+<Callout type="info" title="En resumen">
+Tomamos una card de listado de artículo ya existente en el sitio, considerada correcta pero genérica, y la rehacemos con [Impeccable](/skills/impeccable) para la generación y [Playwright MCP](/mcp/workflow-design-playwright) para la validación visual. Objetivo: mostrar el bucle real, capturas antes/después, no una promesa abstracta. <time dateTime="2026-06-03">Escrito el 3 de junio de 2026</time>.
+</Callout>
+
+## El punto de partida
+
+El sitio The Claude Codex muestra cards de artículos en varios listados. Una de esas cards cumplía sin más: un título, una descripción, una fecha, un fondo neutro. Funcional, accesible, pero sin relieve. El tipo de componente que se mantiene por defecto por falta de tiempo para cuidarlo.
+
+Es el candidato ideal para la demo: un componente real, ya en producción, que queremos hacer pasar de "correcto" a "cuidado" sin romper su comportamiento ni su accesibilidad.
+
+## Antes
+
+Este es el estado inicial de la card, capturado antes de cualquier modificación.
+
+{/* TODO capture Playwright: card de listado inicial, viewport desktop 1440x900. Muestra el render original: título, descripción, fecha, fondo neutro, sin hover marcado, jerarquía tipográfica plana. */}
+
+{/* TODO capture Playwright: misma card, viewport mobile 375x800. Muestra la jerarquía tipográfica demasiado apretada y el espaciado que no respira en pantalla pequeña. */}
+
+La crítica, tal como la formuló Claude tras leer las dos capturas:
+
+- título y descripción demasiado próximos en tamaño, poca jerarquía
+- fecha perdida, sin tratamiento visual
+- sin retroalimentación al pasar el ratón, la card no señala que es clicable
+- en mobile, el padding interno se reduce y el conjunto se aprieta
+
+## Durante
+
+El brief enviado a Claude, con Impeccable instalado:
+
+```text
+Rehaz esta card de listado de artículo. Mantén la estructura (título, descripción,
+fecha, enlace) y la accesibilidad. Objetivo: jerarquía tipográfica clara, un estado
+de hover que señale el clic, un tratamiento de la fecha más discreto pero legible.
+Estilo sobrio, coherente con una documentación técnica. No cambies las props del
+componente.
+```
+
+Primer paso, encuadrar antes de programar:
+
+```bash
+/impeccable shape "card de listado de artículo, doc técnica, hover marcado"
+```
+
+{/* TODO capture Playwright: salida de terminal de /impeccable shape. Muestra el layout textual propuesto (jerarquía, tratamiento de la fecha, estado hover) antes de generar el código. */}
+
+Una vez validado el shape, la generación:
+
+```bash
+/impeccable craft
+```
+
+{/* TODO capture Playwright: primer render tras /impeccable craft, viewport desktop 1440x900. Muestra la primera iteración generada, antes del pulido. */}
+
+Después, el bucle de validación con Playwright MCP: `browser_navigate` en la preview, `browser_resize` en mobile y desktop, `browser_take_screenshot` en cada paso. Claude lee, critica, y relanzamos `/polish` sobre los puntos débiles. Tres iteraciones en total para ajustar el hover y el espaciado mobile.
+
+## Después
+
+Estado final de la card, tras las iteraciones.
+
+{/* TODO capture Playwright: card final, viewport desktop 1440x900. Muestra la jerarquía tipográfica clara, el tratamiento de la fecha, el estado base antes del hover. */}
+
+{/* TODO capture Playwright: card final, viewport mobile 375x800. Muestra el responsive correcto, el padding que respira, la jerarquía preservada en pantalla pequeña. */}
+
+Lo que cambió, en concreto:
+
+- jerarquía tipográfica en tres niveles entre título, descripción y fecha
+- estado de hover con una elevación ligera y un desplazamiento sutil, que señala el clic
+- fecha pasada a cuerpo pequeño, color secundario, alineada a la derecha
+- padding revisado para respirar tanto en mobile como en desktop
+- contraste verificado, cero violaciones axe-core en el componente
+
+## El diff de código
+
+El extracto de abajo ilustra el tipo de cambio (antes / después). El diff real del componente es más amplio, pero la idea es esa.
+
+```tsx
+// Antes
+<article className="rounded-lg border p-4">
+  <h3 className="text-lg font-medium">{title}</h3>
+  <p className="text-sm text-gray-600">{description}</p>
+  <span className="text-sm text-gray-600">{date}</span>
+</article>
+
+// Después
+<article className="group rounded-xl border border-[color:var(--border-subtle)] p-6 transition-all hover:-translate-y-0.5 hover:shadow-md">
+  <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+  <p className="mt-2 text-sm leading-relaxed text-[color:var(--fg-secondary)]">{description}</p>
+  <time className="mt-4 block text-xs font-medium text-[color:var(--fg-muted)]">{date}</time>
+</article>
+```
+
+{/* TODO capture Playwright: diff visual antes/después lado a lado (opcional), para la PR. */}
+
+## Veredicto
+
+Orden de magnitud vivido, no un benchmark: tres iteraciones, unos 25 minutos contando la redacción del brief y las idas y vueltas con Playwright. La card final no es una obra maestra, pero está claramente más cuidada que la original, y su comportamiento no ha cambiado.
+
+Lo que la demo muestra sobre todo: el valor no viene del skill solo, ni de Playwright solo. Viene del bucle. Impeccable propone una dirección, Playwright muestra el render real, Claude corrige, se repite. Sin el espejo de Playwright, Claude habría entregado una primera versión y se habría quedado ahí, sin ver el apretujamiento en mobile.
+
+## Próximos pasos
+
+- **El flujo de trabajo detallado**: [diseñar con Claude Code + Playwright MCP](/mcp/workflow-design-playwright), con los dos niveles rápido y completo.
+- **Las fichas de herramientas**: [Impeccable](/skills/impeccable) usado aquí, pero también [UI UX Pro Max](/skills/ui-ux-pro-max), [Taste Skill](/skills/taste-skill) y [Huashu Design](/skills/huashu-design). Comparativa en [los mejores skills](/skills/best-skills).
+- **La stack completa**: [stack de diseño de Claude Code, balance después de 1 mes](/content/stack-design-claude-code).

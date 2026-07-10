@@ -1,0 +1,408 @@
+---
+title: "La guía completa de CLAUDE.md"
+description: "Todo sobre el archivo CLAUDE.md: función, estructura, buenas prácticas, comando /init, diferencias con settings.json y .claude/rules/. Ejemplos reales y recomendaciones."
+section: "prompting"
+order: 5
+datePublished: "2026-03-10"
+dateModified: "2026-03-30"
+---
+
+## ¿Qué es el CLAUDE.md?
+
+El archivo `CLAUDE.md` es el **contexto persistente** de tu proyecto. Claude Code lo lee automáticamente al inicio de cada sesión y lo usa como base para todas sus respuestas. Es tu forma más eficaz de transformar a Claude de un asistente generalista en un miembro de tu equipo que conoce tu proyecto al dedillo.
+
+<Callout type="info" title="La analogía de la guía de onboarding">
+Imagina que recibes a un nuevo desarrollador en tu equipo. Le entregas un documento que resume: el stack técnico, las convenciones de código, la arquitectura del proyecto, los comandos útiles y las reglas a respetar. El CLAUDE.md es exactamente ese documento, solo que lo lee Claude en cada nueva sesión.
+</Callout>
+
+## Generar un CLAUDE.md con `/init`
+
+La forma más rápida de crear un CLAUDE.md es usar el comando integrado `/init`. Analiza automáticamente tu proyecto y genera un archivo adaptado.
+
+```bash
+# En tu terminal, lanza Claude Code en la raíz del proyecto
+claude
+
+# Luego escribe el comando /init
+> /init
+```
+
+<Steps>
+<Step title="Análisis automático" stepNumber={1}>
+Claude escanea tu codebase: `package.json`, `tsconfig.json`, estructura de carpetas, archivos de configuración, dependencias instaladas.
+</Step>
+
+<Step title="Generación del CLAUDE.md" stepNumber={2}>
+Claude genera un archivo CLAUDE.md en la raíz de tu proyecto con las secciones relevantes: stack, comandos, arquitectura, convenciones.
+</Step>
+
+<Step title="Personalización" stepNumber={3} isLast>
+Relee el archivo generado y ajústalo. Añade tus convenciones específicas, quita lo que no sea relevante y completa las secciones que falten.
+</Step>
+</Steps>
+
+<Callout type="tip" title="Consejo: el CLAUDE.md se versiona">
+Sube tu CLAUDE.md al repositorio. Todo el equipo se beneficia del mismo contexto. Actualízalo cuando las convenciones evolucionen, igual que harías con un archivo `.eslintrc` o un `tsconfig.json`.
+</Callout>
+
+## Estructura recomendada
+
+Un CLAUDE.md eficaz sigue una estructura de 6 secciones. El orden importa: la información más importante va primero, porque Claude le da más peso.
+
+<Callout type="warning" title="Mantén tu CLAUDE.md por debajo de 200 líneas">
+Un CLAUDE.md demasiado largo sobrecarga el contexto de Claude y diluye las instrucciones importantes. Apunta a 100-200 líneas como máximo. Si necesitas más detalle, usa los archivos `.claude/rules/` para las reglas temáticas.
+</Callout>
+
+### Sección 1: Presentación del proyecto
+
+```markdown
+# CLAUDE.md
+
+Sitio de documentación Next.js 14 (App Router), TypeScript estricto, Tailwind CSS, MDX.
+Desplegado vía Docker (Nginx Alpine). 100% estático (SSG), sin SSR ni API routes.
+URL: https://mi-sitio.es
+```
+
+Esta sección le da a Claude el contexto mínimo para entender *qué* proyecto acompaña. Sé breve: 2-3 líneas bastan.
+
+### Sección 2: Comandos
+
+```markdown
+## Comandos
+
+- `npm run dev`: servidor de dev (puerto 3000)
+- `npm run build`: build de producción
+- `npm run lint`: ESLint + Prettier
+- `npm run type-check`: verificación TypeScript
+- `npm run test`: Vitest en modo watch
+- `npm run test:coverage`: cobertura de tests
+```
+
+Claude usa estos comandos para ejecutar las verificaciones necesarias. Lista todos los comandos que Claude podría necesitar usar.
+
+### Sección 3: Arquitectura
+
+```markdown
+## Arquitectura
+
+/app                  → Páginas y layouts (App Router)
+/components/ui        → Componentes reutilizables
+/components/layout    → Header, Footer, Sidebar
+/lib                  → Utilidades y helpers
+/content              → Archivos MDX
+/public               → Assets estáticos
+```
+
+Esta sección ayuda a Claude a moverse por tu codebase y a crear los archivos en el lugar correcto.
+
+### Sección 4: Estilo de código
+
+```markdown
+## Estilo de código
+
+- TypeScript estricto, nunca `any`
+- Solo exports nombrados, sin default exports (salvo páginas de Next.js)
+- Componentes funcionales con hooks, sin clases React
+- Solo Tailwind CSS, sin CSS personalizado
+- Archivos < 400 líneas, funciones < 50 líneas
+- Inmutabilidad: siempre crear objetos nuevos, nunca mutar
+```
+
+Estas son las reglas que Claude debe respetar **siempre** en este proyecto. Sé explícito.
+
+### Sección 5: Contenido y redacción
+
+```markdown
+## Contenido
+
+- Todo el contenido está en español con tildes
+- Tono: accesible, entusiasta, nunca condescendiente
+- Usar analogías concretas para los conceptos técnicos
+- Bloques de código con lenguaje especificado para el resaltado de sintaxis
+```
+
+Si tu proyecto contiene documentación o contenido editorial, estas reglas garantizan la coherencia.
+
+### Sección 6: Reglas importantes
+
+```markdown
+## Reglas importantes
+
+- NUNCA secretos, claves API ni .env en el repositorio
+- Accesibilidad: WCAG 2.1 AA como mínimo
+- Imágenes en WebP con lazy loading
+- Puntuación Lighthouse objetivo: > 90 en las 4 métricas
+```
+
+Las reglas críticas que nunca deben violarse. Claude las trata como restricciones prioritarias.
+
+## Ejemplo real de un CLAUDE.md bien escrito
+
+Aquí tienes un CLAUDE.md completo para un proyecto SaaS típico.
+
+```markdown
+# CLAUDE.md
+
+MiApp: SaaS de gestión de proyectos. Monorepo pnpm.
+Stack: Next.js 14 (App Router), TypeScript, Tailwind CSS, Prisma, PostgreSQL.
+API: tRPC. Auth: NextAuth.js v5. Despliegue: Vercel.
+
+## Comandos
+
+- `pnpm dev`: Dev (turbo)
+- `pnpm build`: Build producción
+- `pnpm lint`: ESLint
+- `pnpm type-check`: TypeScript
+- `pnpm test`: Vitest
+- `pnpm db:push`: Push del schema de Prisma
+- `pnpm db:seed`: Seed de datos de prueba
+
+## Arquitectura
+
+apps/web/           → Frontend Next.js
+apps/api/           → API tRPC
+packages/ui/        → Design system compartido
+packages/db/        → Schema y cliente de Prisma
+packages/config/    → Configuraciones de ESLint, TypeScript, Tailwind
+
+## Estilo de código
+
+- TypeScript estricto (nada de any, nada de as unknown)
+- Inmutabilidad obligatoria
+- Basado en features: src/features/[feature]/{components,hooks,utils}
+- Patrón Repository para el acceso a datos
+- Errores gestionados con Result<T, E> (sin throw)
+
+## Convenciones
+
+- Commits: feat:, fix:, refactor:, test:, docs:
+- PR: descripción detallada + plan de pruebas
+- Tests: TDD obligatorio, cobertura > 80%
+- Respuestas de API: { success, data, error, meta }
+
+## Seguridad
+
+- Nada de secretos hardcodeados (solo .env)
+- Inputs validados con Zod en todas las fronteras
+- Consultas Prisma parametrizadas
+- Rate limiting en los endpoints públicos
+```
+
+Este CLAUDE.md tiene unas 50 líneas. Cubre lo esencial sin sobrecargar el contexto.
+
+## Los 3 niveles de CLAUDE.md
+
+Claude Code admite archivos CLAUDE.md en varios niveles, del más global al más específico.
+
+<Card title="Nivel 1: Global" variant="accent">
+**Ruta**: `~/.claude/CLAUDE.md`
+
+Tus preferencias personales aplicadas a **todos** tus proyectos: idioma preferido, estilo de commit, convenciones personales. Este archivo se lee primero.
+</Card>
+
+<Card title="Nivel 2: Proyecto" variant="accent">
+**Ruta**: `./CLAUDE.md` (raíz del proyecto)
+
+El contexto específico del proyecto: stack, arquitectura, convenciones de equipo. Es el archivo más importante. Se comparte con el equipo vía el repositorio.
+</Card>
+
+<Card title="Nivel 3: Módulo" variant="accent">
+**Ruta**: `./src/features/auth/CLAUDE.md`
+
+El contexto ultraespecífico de un módulo: esquema de datos, restricciones de negocio, APIs externas. Úsalo para módulos complejos que tienen sus propias reglas.
+</Card>
+
+La jerarquía funciona por acumulación: los tres niveles se combinan, y el nivel más específico tiene prioridad en caso de conflicto.
+
+## Cómo carga Claude los archivos CLAUDE.md
+
+No basta con crear los archivos: hay que saber cuáles carga Claude, y en qué momento. Hay dos mecanismos distintos.
+
+### Carga hacia arriba (ancestor loading)
+
+Al arrancar, Claude recorre el árbol de carpetas desde tu directorio actual hasta la raíz del sistema. Cada `CLAUDE.md` que encuentra en el camino se carga, del más lejano al más cercano. El más cercano tiene prioridad.
+
+```
+/                          ← CLAUDE.md cargado 1º
+  home/
+    tu/
+      proyectos/
+        miapp/             ← cwd al arrancar
+          CLAUDE.md        ← cargado 2º (prioritario)
+          src/
+            CLAUDE.md      ← todavía no cargado
+```
+
+Si lanzas Claude desde `/miapp`, solo se cargan `/.../miapp/CLAUDE.md` y los CLAUDE.md superiores. El archivo en `src/` todavía no.
+
+### Carga hacia abajo (descendant loading)
+
+Claude carga los archivos CLAUDE.md de las subcarpetas de forma **perezosa**: solo cuando toca un archivo dentro de esa subcarpeta. Si `src/components/CLAUDE.md` existe y Claude abre un archivo en `src/components/`, carga ese CLAUDE.md en ese momento.
+
+<Callout type="tip" title="Los hermanos no se hablan entre sí">
+Los archivos CLAUDE.md en carpetas hermanas nunca se cargan mutuamente. `src/auth/CLAUDE.md` y `src/payments/CLAUDE.md` son independientes. Cada uno solo se activa cuando Claude toca sus propios archivos.
+</Callout>
+
+**Ejemplo concreto**: con este árbol de carpetas...
+
+```
+/proyecto/
+  CLAUDE.md                       ← cargado al arrancar
+  src/
+    CLAUDE.md                     ← cargado al arrancar (cwd = /proyecto)
+    auth/
+      CLAUDE.md                   ← cargado cuando Claude lee src/auth/
+    payments/
+      CLAUDE.md                   ← cargado cuando Claude lee src/payments/
+```
+
+...si el cwd es `/proyecto`, los dos primeros archivos se cargan de inmediato. Los otros dos esperan a que Claude entre en sus respectivas carpetas.
+
+## CLAUDE.md vs settings.json vs .claude/rules/
+
+Estos tres archivos tienen funciones distintas y complementarias. Así es como se usan.
+
+| Archivo | Función | Alcance | Contenido |
+|---------|------|--------|---------|
+| **CLAUDE.md** | Contexto del proyecto | Se lee en cada sesión | Stack, arquitectura, convenciones, comandos |
+| **settings.json** | Configuración técnica | Comportamiento de Claude | Modelo, permisos, tools permitidas |
+| **.claude/rules/** | Reglas temáticas | Se cargan por tema | Seguridad, tests, rendimiento, git |
+
+```bash
+# Estructura completa de la configuración de Claude Code
+proyecto/
+  CLAUDE.md                    # Contexto del proyecto (versionado)
+  .claude/
+    settings.json             # Configuración técnica (versionado o no)
+    commands/                 # Skills del proyecto
+      review-pr.md
+      deploy.md
+    rules/                    # Reglas temáticas (versionadas)
+      security.md
+      testing.md
+      performance.md
+~/.claude/
+  CLAUDE.md                   # Preferencias globales
+  settings.json              # Configuración global
+  commands/                  # Skills personales
+  rules/                     # Reglas globales
+```
+
+<Callout type="tip" title="La regla simple">
+- **CLAUDE.md** = lo que Claude debe **saber** sobre el proyecto
+- **settings.json** = lo que Claude debe **hacer** (o no hacer) técnicamente
+- **.claude/rules/** = las **reglas detalladas** por tema (demasiado largas para el CLAUDE.md)
+</Callout>
+
+## .claude/rules/: dividir las instrucciones en archivos temáticos
+
+Cuando tu CLAUDE.md empieza a superar las 150 líneas, es señal de que algunas secciones merecen su propio archivo. La carpeta `.claude/rules/` está pensada para eso: Claude carga automáticamente todos los archivos que encuentra ahí al arrancar.
+
+```
+.claude/
+  rules/
+    code-style.md      ← convenciones TypeScript, nomenclatura, estructura
+    testing.md         ← estrategia de test, cobertura requerida, mocks
+    security.md        ← reglas de seguridad, gestión de secretos
+    deployment.md      ← proceso de despliegue, checklist pre-prod
+```
+
+Cada archivo se centra en un único tema. Cuando modificas las reglas de test, editas `testing.md` sin tocar el resto. Es más mantenible y facilita las revisiones de código.
+
+<Callout type="tip" title="Una buena división">
+Deja en `CLAUDE.md` lo que se aplica a todo: stack, comandos, arquitectura. Mueve a `.claude/rules/` las reglas largas o específicas de un dominio. Si un archivo de reglas supera las 100 líneas, divídelo aún más.
+</Callout>
+
+## Directivas condicionales con `<important>`
+
+Algunas reglas solo se aplican en contextos concretos. La etiqueta `<important if="...">` garantiza que Claude no las ignore cuando se cumple la condición, aunque el resto del CLAUDE.md sea denso.
+
+```markdown
+<important if="editing auth code">
+Comprueba siempre los permisos antes de modificar los archivos en src/auth/.
+Nunca almacenes tokens en texto plano en el código.
+Toda modificación del middleware de auth debe ir acompañada de un test.
+</important>
+
+<important if="writing database migrations">
+Prueba la migración sobre un dump de producción antes de validarla.
+Escribe siempre la migración inversa (down migration).
+Nunca elimines una columna sin un periodo de deprecación.
+</important>
+```
+
+Es más fuerte que un comentario Markdown normal: Claude entiende que estas instrucciones tienen una prioridad alta en cuanto se cumple la condición.
+
+<Callout type="warning" title="No abuses de esto">
+Reserva `<important if="...">` para las reglas que hayan causado problemas concretos en tu proyecto. Si todo es "importante", nada lo es de verdad.
+</Callout>
+
+## Memoria de los agentes
+
+Cuando usas subagentes (agentes lanzados por un agente principal), cada uno puede tener su propia memoria persistente, independiente del CLAUDE.md. Hay tres niveles:
+
+| Tipo | Almacenamiento | Alcance |
+|------|----------|--------|
+| `memory: user` | `~/.claude/agent-memory/` | Cross-proyecto, personal |
+| `memory: project` | `.claude/agent-memory/` | Compartido con el equipo |
+| `memory: local` | `.claude/agent-memory-local/` | Personal, en este proyecto |
+
+Las 200 primeras líneas del archivo `MEMORY.md` correspondiente se inyectan automáticamente al arrancar el agente. Es útil para agentes especializados que necesitan recordar decisiones pasadas: un agente de code review que retiene tus preferencias, un agente de documentación que conoce el estilo editorial del proyecto, etc.
+
+<Callout type="info" title="MEMORY.md vs CLAUDE.md">
+El CLAUDE.md describe el proyecto (invariante). La memoria del agente almacena lo que el agente ha aprendido con el tiempo (evolutivo). Ambos se complementan.
+</Callout>
+
+## Buenas prácticas
+
+### Qué hay que poner en el CLAUDE.md
+
+- El stack técnico y las versiones importantes
+- Los comandos de build, test y lint
+- El árbol del proyecto (simplificado)
+- Las convenciones de código no estándar
+- Los patrones arquitectónicos usados
+- Las reglas de nomenclatura
+
+### Qué NO hay que poner
+
+- Secretos, tokens o contraseñas (usa `.env`)
+- Código o snippets demasiado largos (usa las rules)
+- Instrucciones contradictorias
+- Información que cambia a menudo (ponla en las rules)
+- Más de 200 líneas de contenido
+
+### Actualización del CLAUDE.md
+
+Actualiza tu CLAUDE.md cuando:
+- Añadas una nueva tecnología al stack
+- Cambies de convención de código
+- Añadas un nuevo patrón arquitectónico
+- Se incorpore un nuevo miembro al equipo (añade las convenciones del equipo)
+- Notes que Claude repite los mismos errores (añade la regla correspondiente)
+
+Una forma sencilla de mantener el CLAUDE.md actualizado: después de corregir un error recurrente, pídele directamente a Claude que actualice el archivo para reflejar la regla. Lo hace bien, y evita repetir las mismas conversaciones.
+
+### Comportamientos deterministas: settings.json en vez de CLAUDE.md
+
+Algunos comportamientos no deben depender de la interpretación del texto. Para esos casos, `settings.json` es más fiable que el CLAUDE.md:
+
+- Prohibir ciertas herramientas (p. ej. `Bash` por razones de seguridad)
+- Configurar los permisos de lectura/escritura
+- Forzar un modelo concreto para un agente
+- Gestionar la atribución en los commits
+
+El CLAUDE.md es texto que Claude *interpreta*. `settings.json` es configuración que Claude *obedece*.
+
+<Callout type="warning" title="Sin reglas contradictorias">
+Si tu CLAUDE.md dice "usa siempre TypeScript estricto" pero tu settings.json permite archivos `.js`, Claude puede quedar desorientado. Comprueba que ambos archivos sean coherentes entre sí.
+</Callout>
+
+## Próximos pasos
+
+Tu CLAUDE.md ya está en marcha. Explora los temas relacionados.
+
+- [Prompting avanzado y multiagente](/prompting/advanced): técnicas avanzadas para aprovechar el contexto
+- [Crear una Skill personalizada](/skills/create-custom): convierte tus flujos de trabajo en slash commands
+- [Entender los agentes](/agents/what-are-agents): configura agentes en tu CLAUDE.md
+- [El configurador de Claude Code](/configurator): herramienta interactiva para generar tu configuración

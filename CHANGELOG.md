@@ -1,3 +1,16 @@
+# [1.15.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.14.0...v1.15.0) (2026-07-10)
+
+
+### Bug Fixes
+
+* **analytics:** heartbeat timer Matomo pour mesurer le temps sur page ([#307](https://github.com/tellebma/The-Claude-Codex/issues/307)) ([667618f](https://github.com/tellebma/The-Claude-Codex/commit/667618fb16aee81868634f12e1719c7357dca5c9))
+
+
+### Features
+
+* **content:** compare GPT-5.6 to Claude Sonnet 5 and Fable 5 ([#309](https://github.com/tellebma/The-Claude-Codex/issues/309)) ([a60edaa](https://github.com/tellebma/The-Claude-Codex/commit/a60edaa045a52e8094bae6e07ac220d22d5d642b)), closes [hi#resolution](https://github.com/hi/issues/resolution)
+* **i18n:** ajoute la locale espagnole (MVP — 23 pages traduites) ([#308](https://github.com/tellebma/The-Claude-Codex/issues/308)) ([9cb3ae7](https://github.com/tellebma/The-Claude-Codex/commit/9cb3ae7e2fe488af6d796296dcc0d2e072ba90bf)), closes [vercel/next.js#71862](https://github.com/vercel/next.js/issues/71862) [vercel/next.js#71862](https://github.com/vercel/next.js/issues/71862)
+
 # [1.14.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.13.4...v1.14.0) (2026-07-10)
 
 

@@ -42,7 +42,7 @@ vi.mock("@/i18n/navigation", () => ({
 
 // Mock @/i18n/config
 vi.mock("@/i18n/config", () => ({
-  locales: ["fr", "en"] as const,
+  locales: ["fr", "en", "es"] as const,
   defaultLocale: "fr" as const,
 }));
 

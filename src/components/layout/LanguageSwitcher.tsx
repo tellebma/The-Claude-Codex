@@ -11,10 +11,11 @@ import clsx from "clsx";
 const localeLabels: Record<Locale, string> = {
   fr: "FR",
   en: "EN",
+  es: "ES",
 };
 
 export function LanguageSwitcher() {
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
   const pathname = usePathname();
   const t = useTranslations("languageSwitcher");
 
@@ -26,7 +27,9 @@ export function LanguageSwitcher() {
       />
       {locales.map((l) => {
         const isActive = l === locale;
-        const href = isActive ? pathname : getAlternateLocalePath(pathname);
+        const href = isActive
+          ? pathname
+          : getAlternateLocalePath(pathname, locale, l);
 
         return (
           <Link

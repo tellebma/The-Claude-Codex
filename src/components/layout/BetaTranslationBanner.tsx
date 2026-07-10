@@ -71,10 +71,9 @@ export function BetaTranslationBanner() {
             rel="noopener noreferrer"
             className="font-medium text-[color:var(--brand-primary)] underline underline-offset-2 hover:text-[color:var(--brand-hover)]"
           >
-            Informa de errores en GitHub
-            <span className="sr-only"> (se abre en una pestaña nueva)</span>
+            Informa de errores en GitHub<span className="sr-only"> (se abre en una pestaña nueva)</span>
           </a>
-          .
+          {"."}
         </span>
       </div>
       <button

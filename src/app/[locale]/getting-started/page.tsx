@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/config";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -245,7 +246,7 @@ const translations = {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
@@ -256,7 +257,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 function buildHowToJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
   return createHowToSchema({
     title: t.howToTitle,
     description: t.howToDescription,
@@ -299,7 +300,7 @@ export default async function GettingStartedPage({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
 
   /*
    * JSON-LD structured data -- safe: static schema built at build time

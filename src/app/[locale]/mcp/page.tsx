@@ -1,4 +1,5 @@
 import { setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/config";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -874,7 +875,7 @@ claude
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
@@ -885,7 +886,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 function buildArticleJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
   return createArticleSchema({
     title: t.jsonLdTitle,
     description: t.jsonLdDescription,
@@ -945,7 +946,7 @@ export default async function McpPage({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
+  const t = translations[locale as Locale] ?? translations.fr;
 
   const subPages = SUB_PAGES_META.map((meta, i) => ({
     ...meta,

@@ -105,6 +105,11 @@ export async function generateMetadata({
     if (isEs) return `${SITE_NAME} | Guía de referencia para dominar Claude Code`;
     return `${SITE_NAME} | Guide de référence pour maîtriser Claude Code`;
   })();
+  const ogLocaleTag = (() => {
+    if (isEn) return "en_US";
+    if (isEs) return "es_ES";
+    return "fr_FR";
+  })();
 
   // Each locale gets its own canonical under /{locale}/.
   // The root / 301-redirects to /fr/ via Nginx and is not a content URL.
@@ -130,7 +135,7 @@ export async function generateMetadata({
       title: SITE_NAME,
       description: siteDescription,
       type: "website",
-      locale: isEn ? "en_US" : isEs ? "es_ES" : "fr_FR",
+      locale: ogLocaleTag,
       siteName: SITE_NAME,
       url: canonicalUrl,
       images: [

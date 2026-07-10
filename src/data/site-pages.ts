@@ -81,6 +81,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-05-27",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/getting-started/environment-setup",
@@ -154,6 +155,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/mcp/best-productivity",
@@ -181,6 +183,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-03-09",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/mcp/first-workflow",
@@ -292,6 +295,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/templates",
@@ -319,6 +323,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-10",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/advanced",
@@ -355,6 +360,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-03-11",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/prompting/non-dev-prompting",
@@ -454,6 +460,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-04-23",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/plugins/best-design",
@@ -490,6 +497,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/skills/find-skills",
@@ -716,6 +724,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-11",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/ecosystem/awesome-mcp-servers",
@@ -761,6 +770,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-03-12",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/enterprise/faq",
@@ -798,6 +808,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-04-26",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/advanced/headless-ci",
@@ -942,6 +953,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-06-30",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/configurator",
@@ -1032,6 +1044,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-04-23",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/limits/vs-cursor",
@@ -1059,6 +1072,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/agent-team-orchestration",
@@ -1068,6 +1082,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-06-04",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/refaire-une-card-avec-impeccable-et-playwright",
@@ -1078,6 +1093,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/couts-reels-claude-code",
@@ -1098,6 +1114,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.7,
     changeFrequency: "monthly",
     lastModified: "2026-05-28",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/mythes-claude-code",
@@ -1157,6 +1174,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.85,
     changeFrequency: "monthly",
     lastModified: "2026-04-21",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/ci-cd-cyber-securite",
@@ -1176,6 +1194,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-06-03",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/garry-tan-stack-claude-code",
@@ -1185,6 +1204,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-12",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/karpathy-claude-md-analyse",
@@ -1194,6 +1214,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.75,
     changeFrequency: "monthly",
     lastModified: "2026-05-12",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/sonnet-5-fable-5-nouveaux-modeles",
@@ -1204,6 +1225,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-07-01",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/content/fable-5-est-de-retour",
@@ -1214,6 +1236,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     priority: 0.8,
     changeFrequency: "monthly",
     lastModified: "2026-07-01",
+    localesAvailable: ES_INFRA_LOCALES,
   },
   {
     path: "/about",

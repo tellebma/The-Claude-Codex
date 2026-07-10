@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       "Hooks, mode headless, intégration CI/CD, multi-provider et configuration enterprise. Maîtrisez les fonctionnalités avancées de Claude Code.",
     path: `/${locale}/advanced`,
     locale,
+    availableLocales: ["fr", "en", "es"],
   });
 }
 

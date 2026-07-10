@@ -131,7 +131,7 @@ const colorStyles = {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
@@ -141,7 +141,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 function buildArticleJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createArticleSchema({
     title: t.metaTitle,
     description: t.metaDescription,
@@ -157,7 +157,7 @@ export default async function EcosystemPage({
 }: Readonly<{ params: Promise<{ locale: string }> }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   const jsonLdHtml = serializeJsonLd(buildArticleJsonLd(locale));
 
   return (

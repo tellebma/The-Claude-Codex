@@ -32,7 +32,7 @@ const translations = {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
@@ -49,7 +49,7 @@ export default async function ConfiguratorPage({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"];
+  const t = translations[locale as "fr" | "en"] ?? translations.fr;
   return (
     <>
       {/* Hero section */}

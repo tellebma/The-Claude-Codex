@@ -749,6 +749,365 @@ Relations: User 1-N Project, Project 1-N Task, User 1-N Task"`,
       },
     ],
   },
+  es: {
+    metaTitle: "Prompting en Claude Code: 5 principios + plantillas para buenos prompts",
+    metaDescription:
+      "Domina el prompting en Claude Code: 5 principios fundamentales, plantillas listas para copiar, errores comunes y técnicas avanzadas para resultados perfectos.",
+    jsonLdDescription:
+      "Técnicas, plantillas y buenas prácticas para sacar el máximo partido a la IA.",
+    heroBadge: "Guía de prompting",
+    heroTitleStart: "El arte del ",
+    heroTitleHighlight: "prompting",
+    heroTitleEnd: "con Claude Code",
+    heroSubtitle:
+      "Domina el arte de comunicarte con la IA. Un buen prompt marca la diferencia entre una respuesta genérica y un resultado adaptado exactamente a tus necesidades.",
+    heroCtaPrimary: "Descubrir los fundamentos",
+    heroCtaSecondary: "Ver las plantillas",
+    fundamentalsBadge: "Fundamentos",
+    fundamentalsTitle: "Los 5 principios del buen prompting",
+    fundamentalsDescription:
+      "Estos principios son la base de toda interacción eficaz con Claude Code. Domínalos y obtendrás resultados 10 veces mejores.",
+    principleLabel: "Principio",
+    goldenRuleTitle: "La regla de oro",
+    goldenRuleContent:
+      "Imagina que le delegas una tarea a un compañero brillante que no sabe nada de tu proyecto. ¿Qué le dirías para que acierte a la primera? Eso es exactamente lo que hay que decirle a Claude.",
+    templatesBadge: "Plantillas",
+    templatesTitle: "Prompts listos para usar",
+    templatesDescription:
+      "Copia, adapta y usa estas plantillas en tus proyectos. Cada plantilla sigue los 5 principios y ha sido optimizada para obtener los mejores resultados.",
+    templateCustomizeTitle: "Cómo personalizar",
+    templateCustomizeContent:
+      "Sustituye los elementos entre [CORCHETES] por tus propios valores. Añade o quita secciones según tus necesidades. Esta plantilla es un punto de partida, no un formato rígido.",
+    mistakesBadge: "A evitar",
+    mistakesTitle: "Errores comunes de prompting",
+    mistakesDescription:
+      "Aprende a reconocer y corregir los prompts poco eficaces. Cada ejemplo muestra un antes/después concreto.",
+    mistakeBadLabel: "Qué no hacer",
+    mistakeGoodLabel: "Qué hacer",
+    mistakeBadFilename: "mal-prompt.md",
+    mistakeGoodFilename: "buen-prompt.md",
+    mistakeAdviceTitle: "Consejo",
+    advancedBadge: "Avanzado",
+    advancedTitle: "Prompting avanzado para power users",
+    advancedDescription:
+      "Ve más allá de lo básico con técnicas que aprovechan todo el potencial de Claude Code.",
+    chainingTitle: "Prompt chaining (encadenado en varias etapas)",
+    chainingDescription:
+      "Divide una tarea compleja en una secuencia de prompts donde cada etapa alimenta la siguiente.",
+    chainingTipTitle: "Por qué funciona",
+    chainingTipContent:
+      "El encadenado obliga a Claude a concentrarse en una sola tarea a la vez. Cada etapa produce un resultado de mayor calidad porque el contexto está más enfocado.",
+    multiAgentTitle: "Orquestación multiagente",
+    multiAgentDescription:
+      "Usa varios agentes especializados que trabajan en paralelo sobre distintos aspectos de un problema.",
+    multiAgentTipTitle: "Paralelismo",
+    multiAgentTipContent:
+      "Los agentes independientes pueden trabajar simultáneamente. Esto reduce el tiempo de trabajo y aporta perspectivas diferentes sobre el mismo problema.",
+    workflowTitle: "Flujos de trabajo complejos con agentes",
+    workflowDescription:
+      "Combina encadenado, multiagentes y contexto persistente para flujos de trabajo de producción.",
+    claudeMdBadge: "Arma secreta",
+    claudeMdTitle: "CLAUDE.md: tu arma secreta",
+    claudeMdDescription:
+      "El archivo CLAUDE.md es el contexto persistente que Claude Code lee en cada sesión. Es la clave para obtener resultados coherentes y adaptados a tu proyecto.",
+    claudeMdStructureTitle: "Estructura de un CLAUDE.md eficaz",
+    claudeMdStructureDescription:
+      "Un buen CLAUDE.md convierte a Claude en un miembro de tu equipo que conoce tu proyecto al dedillo.",
+    claudeMdPlacementTitle: "Dónde colocar el archivo",
+    claudeMdPlacementContent:
+      "en la raíz de tu proyecto. Claude Code lo lee automáticamente al inicio de cada sesión. También puedes tener archivos CLAUDE.md por carpeta para un contexto específico de un módulo.",
+    claudeMdWarningTitle: "Atención",
+    claudeMdWarningContent:
+      "Nunca pongas secretos, tokens o contraseñas en tu CLAUDE.md. Este archivo suele subirse al repositorio y debe poder hacerse público sin riesgo.",
+    claudeMdLevelsTitle: "Los 3 niveles de CLAUDE.md",
+    claudeMdGlobalTitle: "Global",
+    claudeMdGlobalDescription:
+      "Preferencias personales aplicadas a todos tus proyectos (idioma, estilo, convenciones generales).",
+    claudeMdProjectTitle: "Proyecto",
+    claudeMdProjectDescription:
+      "Contexto específico del proyecto: stack, arquitectura, convenciones del equipo, agentes configurados.",
+    claudeMdModuleTitle: "Módulo",
+    claudeMdModuleDescription:
+      "Contexto ultra específico para un módulo: esquema, API, restricciones de negocio particulares.",
+    nextStepsBadge: "¿Y ahora qué?",
+    nextStepsTitle: "Continúa tu aprendizaje",
+    nextStepsDescription:
+      "El prompting es una habilidad que mejora con la práctica. Explora las demás guías para convertirte en un experto de Claude Code.",
+    nextStepGettingStartedTitle: "Empezar con Claude Code",
+    nextStepGettingStartedDescription:
+      "Instalación, configuración y primeros pasos para arrancar con buen pie.",
+    nextStepGettingStartedLink: "Leer la guía",
+    nextStepMcpTitle: "Los MCP en detalle",
+    nextStepMcpDescription:
+      "Conecta Claude Code a Gmail, GitHub, Slack y decenas de otras herramientas.",
+    nextStepMcpLink: "Explorar los MCP",
+    nextStepSkillsTitle: "Crear Skills",
+    nextStepSkillsDescription:
+      "Automatiza tus flujos de trabajo con Skills personalizados y reutilizables.",
+    nextStepSkillsLink: "Descubrir los Skills",
+    backToHome: "Volver al inicio",
+    principles: [
+      {
+        title: "Sé específico",
+        description:
+          "Aporta contexto y restricciones claras. Cuanto más preciso sea tu prompt, más relevante será la respuesta.",
+        example: `# Vago
+"Hazme un formulario"
+
+# Específico
+"Crea un formulario de contacto en React con TypeScript.
+Campos: nombre (obligatorio), email (obligatorio, válido), mensaje (obligatorio, mín. 20 caracteres).
+Usa react-hook-form con validación Zod.
+Estilo con Tailwind CSS, responsive mobile-first.
+Muestra un toast de confirmación después del envío."`,
+      },
+      {
+        title: "Define un rol",
+        description:
+          "Dale una identidad a Claude para encuadrar sus respuestas. El rol influye en el nivel de detalle, el vocabulario y el enfoque.",
+        example: `"Eres un arquitecto de software senior especializado en React y Next.js.
+Priorizas la mantenibilidad, el rendimiento y las buenas prácticas.
+Comentas tu código en español y explicas cada decisión de arquitectura."`,
+      },
+      {
+        title: "Especifica el formato esperado",
+        description:
+          "Indica claramente la estructura de respuesta deseada: código, lista, tabla, JSON, markdown, etc.",
+        example: `"Genera la respuesta con el siguiente formato:
+1. Un resumen en 2-3 frases
+2. El código completo con comentarios inline
+3. Una tabla de dependencias necesarias (nombre | versión | uso)
+4. Las instrucciones de instalación paso a paso"`,
+      },
+      {
+        title: "Da ejemplos (few-shot)",
+        description:
+          "Muéstrale a Claude lo que esperas con ejemplos concretos. Es la técnica más potente para obtener exactamente el formato que quieres.",
+        example: `"Genera nombres de variables siguiendo este patrón:
+
+Ejemplo 1: usuario conectado → isUserLoggedIn
+Ejemplo 2: número de productos en el carrito → cartItemCount
+Ejemplo 3: fecha de última actualización → lastUpdatedAt
+
+Ahora genera para:
+- formulario en proceso de envío
+- error de validación del email
+- lista de pedidos filtrados"`,
+      },
+      {
+        title: "Itera y refina",
+        description:
+          "El prompting es un diálogo. Refina progresivamente tus peticiones según las respuestas que obtengas.",
+        example: `# Iteración 1
+"Crea un componente Button"
+
+# Iteración 2
+"Añade las variantes: primary, secondary, ghost y danger"
+
+# Iteración 3
+"Añade soporte de iconos a la izquierda y a la derecha,
+un estado loading con un spinner, y la prop disabled"
+
+# Iteración 4
+"Añade tests unitarios con Testing Library
+y stories de Storybook para cada variante"`,
+      },
+    ],
+    templates: [
+      {
+        category: "Desarrollo web",
+        description:
+          "Para crear componentes, páginas o funcionalidades web completas.",
+        code: `Eres un desarrollador senior de React/Next.js/TypeScript.
+
+Crea un componente React que [DESCRIPCIÓN DEL COMPONENTE].
+
+Contexto técnico:
+- Framework: Next.js 14 (App Router)
+- Lenguaje: TypeScript (modo strict)
+- Estilo: Tailwind CSS
+- Gestión de estado: [zustand / React Context / ninguno]
+
+Especificaciones funcionales:
+- [Funcionalidad 1]
+- [Funcionalidad 2]
+- [Funcionalidad 3]
+
+Restricciones:
+- Responsive mobile-first
+- Accesible (ARIA, gestión del foco)
+- Rendimiento optimizado (memo, lazy loading si es necesario)
+- Gestión de errores y estados de carga
+
+Genera el código completo con:
+1. El componente principal
+2. Los tipos/interfaces de TypeScript
+3. Un ejemplo de uso
+4. Los tests unitarios (Vitest + Testing Library)`,
+        filename: "template-desarrollo-web.txt",
+      },
+      {
+        category: "Documentación",
+        description:
+          "Para generar documentación técnica clara y estructurada.",
+        code: `Eres un redactor técnico senior.
+
+Redacta la documentación técnica para [NOMBRE DEL PROYECTO/MÓDULO].
+
+Público objetivo: [desarrolladores junior / equipo interno / open-source]
+
+Estructura esperada:
+1. Visión general (2-3 frases)
+2. Instalación y requisitos previos
+3. Configuración
+4. Guía de inicio rápido (Quick Start)
+5. Referencia de API (cada función con parámetros, retorno, ejemplo)
+6. Ejemplos de uso avanzados
+7. FAQ y resolución de problemas
+
+Convenciones:
+- Ejemplos de código en [TypeScript/Python/etc.]
+- Todos los fragmentos deben ser copiables y funcionales
+- Usa admoniciones (nota, aviso, consejo) cuando sea pertinente
+- Incluye un índice navegable al principio del documento`,
+        filename: "template-documentacion.txt",
+      },
+      {
+        category: "Automatización",
+        description:
+          "Para crear scripts y pipelines de automatización robustos.",
+        code: `Eres un ingeniero DevOps/SRE senior.
+
+Crea un script que automatice [DESCRIPCIÓN DE LA TAREA].
+
+Entorno:
+- SO: [Linux/macOS/Windows]
+- Lenguaje: [Bash/Python/Node.js]
+- Herramientas disponibles: [Docker, GitHub Actions, etc.]
+
+Funcionamiento esperado:
+1. [Paso 1 del proceso]
+2. [Paso 2 del proceso]
+3. [Paso 3 del proceso]
+
+Requisitos:
+- Gestión de errores robusta (exit codes, try/catch)
+- Logging con niveles (info, warn, error)
+- Modo dry-run para probar sin ejecutar
+- Variables configurables vía .env o argumentos CLI
+- Idempotente (se puede relanzar sin efectos secundarios)
+
+Genera:
+1. El script completo y comentado
+2. El archivo .env.example
+3. El README de uso
+4. Un ejemplo de cron/schedule si es pertinente`,
+        filename: "template-automatizacion.txt",
+      },
+      {
+        category: "Análisis de datos",
+        description:
+          "Para explorar, transformar y visualizar datos de forma eficaz.",
+        code: `Eres un data analyst senior experto en Python.
+
+Analiza este dataset CSV y [OBJETIVO DEL ANÁLISIS].
+
+Información sobre los datos:
+- Fuente: [descripción de la fuente]
+- Columnas principales: [col1, col2, col3, ...]
+- Volumen: [número aproximado de filas]
+- Periodo: [rango temporal de los datos]
+
+Análisis solicitado:
+1. Exploración: estadísticas descriptivas, valores ausentes, distribuciones
+2. Limpieza: gestión de outliers, normalización, codificación
+3. Análisis: [correlaciones / tendencias / segmentación / predicción]
+4. Visualización: gráficos pertinentes con matplotlib/seaborn
+
+Formato de salida:
+- Código Python completo (pandas, numpy, matplotlib)
+- Comentarios explicando cada paso
+- Interpretación de los resultados en lenguaje no técnico
+- Recomendaciones basadas en los insights`,
+        filename: "template-analisis-datos.txt",
+      },
+      {
+        category: "Creación de contenido",
+        description:
+          "Para redactar contenido estructurado, atractivo y optimizado.",
+        code: `Eres un redactor web senior especializado en [ÁREA].
+
+Redacta un artículo de blog sobre [TEMA].
+
+Parámetros:
+- Tono: [profesional / desenfadado / pedagógico]
+- Longitud: [800-1200 palabras]
+- Público objetivo: [descripción del lector tipo]
+- Objetivo: [informar / convencer / tutorial]
+
+Estructura:
+1. Título llamativo (máx. 60 caracteres)
+2. Introducción con gancho (problema/pregunta)
+3. 3-5 secciones con subtítulos H2
+4. Ejemplos concretos y datos cuantificados
+5. Conclusión con llamada a la acción
+
+SEO:
+- Palabra clave principal: [palabra-clave]
+- Palabras clave secundarias: [palabra-clave-2, palabra-clave-3]
+- Meta description (máx. 155 caracteres)
+- Sugerencias de enlaces internos
+
+Restricciones:
+- Sin jerga innecesaria
+- Frases cortas (máx. 20 palabras)
+- Un párrafo = una idea
+- Incluye listas con viñetas para facilitar la lectura`,
+        filename: "template-contenido.txt",
+      },
+    ],
+    mistakes: [
+      {
+        title: "Demasiado vago",
+        bad: `"Hazme un sitio web"`,
+        good: `"Crea una landing page para una app SaaS de gestión de proyectos.
+Stack: Next.js 14, TypeScript, Tailwind CSS.
+Secciones: hero con CTA, features (3 columnas), pricing (3 planes), FAQ en acordeón.
+Diseño: moderno, modo oscuro, animaciones sutiles al hacer scroll."`,
+        tip: "Cuanto más preciso seas, menos iteraciones necesitarás.",
+      },
+      {
+        title: "Sin contexto",
+        bad: `"Corrige este bug"`,
+        good: `"Tengo un error 'TypeError: Cannot read property map of undefined'
+en mi componente ProductList.tsx (línea 42).
+Este componente recibe una prop 'products' desde una API REST.
+El error solo aparece en el primer render, antes de que la API responda.
+Aquí está el componente: [código]"`,
+        tip: "Da siempre el contexto: archivo, error exacto, comportamiento esperado frente al obtenido.",
+      },
+      {
+        title: "Pedirlo todo de golpe",
+        bad: `"Créame una app completa con auth, dashboard, API, base de datos, tests, CI/CD y despliegue"`,
+        good: `"Empecemos por la base de datos.
+Crea el esquema Prisma para una app de gestión de tareas con:
+- Tabla User (id, email, name, createdAt)
+- Tabla Project (id, name, ownerId, createdAt)
+- Tabla Task (id, title, status, projectId, assigneeId, dueDate)
+Relaciones: User 1-N Project, Project 1-N Task, User 1-N Task"`,
+        tip: "Divide los proyectos grandes en etapas. Una petición clara = una respuesta precisa.",
+      },
+      {
+        title: "No iterar",
+        bad: `"No es lo que quería" (sin más detalles)`,
+        good: `"El componente está bien estructurado, pero me gustaría 3 cambios:
+1. Sustituye el botón azul por un degradado teal-to-cyan
+2. Añade una animación fadeIn al montar el componente
+3. El campo email debe validar el formato en tiempo real (no solo al enviar)"`,
+        tip: "Di con precisión qué está bien, qué no funciona y qué quieres cambiar.",
+      },
+    ],
+  },
 };
 
 const principleIcons = [Target, UserCheck, FileOutput, ListChecks, RefreshCcw];
@@ -763,17 +1122,18 @@ const templateMeta = [
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
   return createPageMetadata({
     title: t.metaTitle,
     description: t.metaDescription,
     path: `/${locale}/prompting`,
     locale,
+    availableLocales: ["fr", "en", "es"],
   });
 }
 
 function buildArticleJsonLd(locale: string) {
-  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
   return createArticleSchema({
     title: t.metaTitle,
     description: t.jsonLdDescription,
@@ -791,7 +1151,7 @@ export default async function PromptingPage({
 }>) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const t = translations[locale as "fr" | "en"] ?? translations.fr;
+  const t = translations[locale as "fr" | "en" | "es"] ?? translations.fr;
   return (
     <>
       {/* JSON-LD structured data — safe: static schema from hardcoded values, no user input */}

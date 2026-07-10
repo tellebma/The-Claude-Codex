@@ -1,0 +1,604 @@
+---
+title: "Top 6 Skills de Claude Code 2026: TDD, Code Review, Frontend, Plan"
+description: "Las 6 mejores Skills de Claude Code 2026: TDD Guide, Code Reviewer, Frontend Design, Plan, E2E Testing, Security Review. Instalación y ejemplos listos para copiar."
+section: "skills"
+order: 2
+datePublished: "2026-03-10"
+dateModified: "2026-06-03"
+---
+
+<Callout type="tip" title="Ver también">Esta selección la hace a mano la redacción. Para dejar que el propio Claude descubra e instale un skill adaptado a una necesidad concreta (sin leer 10 README), consulta el meta-skill [`find-skills`](/skills/find-skills), que consulta el leaderboard de skills.sh y aplica criterios de calidad explícitos.</Callout>
+
+## Las Skills imprescindibles
+
+Aquí tienes las Skills más populares y útiles del ecosistema Claude Code en 2026. Cada una transforma a Claude en un **experto especializado** para una tarea concreta. Están clasificadas por categoría para ayudarte a encontrar la que necesitas.
+
+<Callout type="info" title="¿Dónde encontrar estas Skills?">
+Las Skills presentadas aquí están disponibles como archivos Markdown para colocar en `.claude/commands/` (proyecto) o `~/.claude/commands/` (personal). Algunas están incluidas en [extensiones comunitarias](/plugins/best-essential) como **everything-claude-code** ([github.com/affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code)). También puedes crearlas tú mismo inspirándote en los ejemplos de abajo.
+</Callout>
+
+---
+
+## Desarrollo y calidad
+
+### TDD Guide
+
+El Skill **TDD Guide** convierte a Claude en un coach de desarrollo guiado por tests. Impone una disciplina estricta: escribir primero el test, hacer que falle y luego implementar lo mínimo necesario para que pase.
+
+```bash
+# Invocación
+/user:tdd-guide crear una función de validación de email
+```
+
+**Casos de uso:**
+- Implementar una nueva funcionalidad con una cobertura de tests sólida
+- Aprender TDD sobre un proyecto existente
+- Refactorizar código legacy añadiendo tests primero
+
+**Lo que hace el Skill:**
+
+<Steps>
+<Step title="RED: escribir el test" stepNumber={1}>
+Claude escribe un test que describe el comportamiento esperado. El test debe fallar porque la funcionalidad todavía no existe.
+</Step>
+
+<Step title="GREEN: implementar" stepNumber={2}>
+Claude escribe el código mínimo para que el test pase. Sin optimización prematura, solo lo estrictamente necesario.
+</Step>
+
+<Step title="REFACTOR: mejorar" stepNumber={3} isLast>
+Claude refactoriza el código asegurándose de que los tests siguen pasando. Comprueba la cobertura y propone casos límite adicionales.
+</Step>
+</Steps>
+
+<Card title="Ejemplo de resultado" variant="default">
+El Skill produce un archivo de test (`email-validator.test.ts`) y un archivo de implementación (`email-validator.ts`), con un informe de cobertura que muestra un 95%+ sobre la funcionalidad.
+</Card>
+
+---
+
+### Code Reviewer
+
+El **Code Reviewer** simula una revisión de código hecha por un desarrollador senior. Analiza el diff actual y produce un informe estructurado con sugerencias concretas.
+
+```bash
+# Revisar el diff actual respecto a main
+/user:code-reviewer
+
+# Revisar un diff específico
+/user:code-reviewer develop
+```
+
+**Casos de uso:**
+- Revisar tu código antes de crear una Pull Request
+- Obtener una segunda mirada automatizada sobre cambios críticos
+- Formar a los juniors en buenas prácticas de code review
+
+**Lo que verifica el Skill:**
+- Bugs lógicos y casos límite no gestionados
+- Fallos de seguridad (inyecciones, XSS, CSRF)
+- Problemas de rendimiento (bucles anidados, consultas N+1)
+- Cumplimiento de las convenciones del proyecto (vía CLAUDE.md)
+- Cobertura de tests de los cambios
+- Código duplicado y oportunidades de refactorización
+
+<Callout type="tip" title="Combínalo con TDD Guide">
+Usa **TDD Guide** para implementar y luego **Code Reviewer** para verificar. Esta combinación cubre a la vez la calidad de los tests y la calidad del código.
+</Callout>
+
+---
+
+### Debugging
+
+El Skill **Debugging** estructura el enfoque de resolución de bugs. En lugar de ir a tientas, Claude sigue un método sistemático para identificar y corregir el problema.
+
+```bash
+# Depurar un error específico
+/user:debugging TypeError: Cannot read property 'map' of undefined
+
+# Depurar con contexto
+/user:debugging el formulario de contacto no envía los datos
+```
+
+**Casos de uso:**
+- Resolver errores de runtime con un enfoque estructurado
+- Investigar bugs intermitentes
+- Entender comportamientos inesperados en código complejo
+
+**Lo que hace el Skill:**
+1. Reproducir el problema (identificar las condiciones exactas)
+2. Aislar la causa raíz (no el síntoma)
+3. Proponer una corrección mínima y focalizada
+4. Añadir un test de regresión
+5. Comprobar que no se introduce ningún efecto secundario
+
+---
+
+## Arquitectura y planificación
+
+### Plan
+
+El Skill **Plan** es tu asistente de planificación para funcionalidades complejas. Descompone una petición en fases, identifica los riesgos y produce un plan de acción detallado.
+
+```bash
+# Planificar una nueva funcionalidad
+/user:plan añadir un sistema de autenticación OAuth2
+
+# Planificar una migración
+/user:plan migrar de REST a GraphQL
+```
+
+**Casos de uso:**
+- Empezar una funcionalidad compleja sin saber por dónde arrancar
+- Estimar el esfuerzo de desarrollo de una tarea
+- Identificar dependencias y riesgos antes de programar
+- Crear una hoja de ruta técnica para un epic
+
+**Lo que produce el Skill:**
+- Un **PRD** (Product Requirements Document) sintético
+- Una lista de tareas ordenadas con dependencias
+- Los riesgos identificados y las estrategias de mitigación
+- Los archivos que se crearán o modificarán
+- Una estimación de complejidad (S/M/L/XL)
+
+<Card title="Consejo de uso" variant="accent">
+Lanza **Plan** antes de cualquier funcionalidad que toque más de 3 archivos. El tiempo invertido en planificar siempre se recupera durante la implementación. Combínalo con el [agente arquitecto](/agents) para las decisiones estructurales.
+</Card>
+
+---
+
+### Brainstorming
+
+El **Brainstorming** ayuda a explorar ideas y soluciones desde varios ángulos. Claude adopta distintas perspectivas para enriquecer la reflexión.
+
+```bash
+# Explorar soluciones técnicas
+/user:brainstorm qué base de datos elegir para un sistema de chat en tiempo real
+
+# Explorar enfoques de producto
+/user:brainstorm cómo mejorar la experiencia de onboarding
+```
+
+**Casos de uso:**
+- Elegir entre varios enfoques técnicos
+- Explorar soluciones creativas a un problema
+- Preparar una RFC o una propuesta técnica
+- Evaluar los compromisos (trade-offs) de una arquitectura
+
+**Lo que hace el Skill:**
+- Genera de 3 a 5 enfoques distintos
+- Evalúa cada enfoque según criterios (rendimiento, mantenibilidad, coste, complejidad)
+- Identifica los compromisos de cada solución
+- Recomienda el enfoque más adecuado al contexto del proyecto
+
+---
+
+## Tests y seguridad
+
+### E2E Testing
+
+El Skill **E2E Testing** genera tests end-to-end para los recorridos de usuario críticos. Se centra en frameworks populares como Playwright y Cypress.
+
+```bash
+# Generar tests E2E para un recorrido
+/user:e2e-testing recorrido de registro e inicio de sesión
+
+# Generar para un framework específico
+/user:e2e-testing --framework playwright carrito de compra
+```
+
+**Casos de uso:**
+- Cubrir los recorridos críticos antes de una release
+- Automatizar los tests de regresión en los flujos principales
+- Generar tests para funcionalidades existentes sin cobertura
+
+**Lo que produce el Skill:**
+
+```typescript
+// Ejemplo de salida para un recorrido de registro
+import { test, expect } from "@playwright/test";
+
+test.describe("Registro de usuario", () => {
+  test("registro con datos válidos", async ({ page }) => {
+    await page.goto("/register");
+    await page.fill("[name=email]", "test@example.com");
+    await page.fill("[name=password]", "SecureP@ss123");
+    await page.fill("[name=confirmPassword]", "SecureP@ss123");
+    await page.click("button[type=submit]");
+    await expect(page).toHaveURL("/dashboard");
+    await expect(
+      page.getByText("Bienvenido")
+    ).toBeVisible();
+  });
+
+  test("muestra un error con un email inválido", async ({ page }) => {
+    await page.goto("/register");
+    await page.fill("[name=email]", "invalid-email");
+    await page.click("button[type=submit]");
+    await expect(
+      page.getByText("Email inválido")
+    ).toBeVisible();
+  });
+});
+```
+
+---
+
+### Security Review
+
+El **Security Review** analiza tu código desde el ángulo de la seguridad. Identifica vulnerabilidades conocidas (OWASP Top 10) y propone correcciones.
+
+```bash
+# Auditoría de seguridad global
+/user:security-review
+
+# Auditoría centrada en un módulo
+/user:security-review src/auth/
+```
+
+**Casos de uso:**
+- Auditoría de seguridad antes del despliegue en producción
+- Verificación de los endpoints de API expuestos
+- Revisión de la gestión de secretos y tokens
+- Cumplimiento OWASP para aplicaciones web
+
+**Lo que verifica el Skill:**
+- Inyecciones SQL y NoSQL
+- Fallos XSS (Cross-Site Scripting)
+- Problemas de autenticación y autorización
+- Exposición de datos sensibles (claves API, tokens, contraseñas)
+- Mala configuración de seguridad (CORS, cabeceras, CSP)
+- Dependencias con vulnerabilidades conocidas (CVE)
+
+<Callout type="warning" title="No sustituye a una auditoría profesional">
+El Skill Security Review es un excelente primer filtro, pero no sustituye a una auditoría de seguridad profesional para las aplicaciones críticas. Úsalo como complemento a tus prácticas de seguridad existentes.
+</Callout>
+
+---
+
+## Diseño y frontend
+
+### Frontend Design
+
+El **Frontend Design** ayuda a diseñar e implementar interfaces de usuario modernas. Integra los principios de design system y las buenas prácticas de accesibilidad.
+
+```bash
+# Crear un componente UI
+/user:frontend-design crear un componente de tabla de precios responsive
+
+# Mejorar un componente existente
+/user:frontend-design mejorar la accesibilidad del componente Modal
+```
+
+**Casos de uso:**
+- Crear componentes UI accesibles y responsive
+- Implementar un design system coherente
+- Convertir un mockup de Figma en código
+- Mejorar la UX de un componente existente
+
+**Lo que produce el Skill:**
+- Componente React/Vue/Svelte funcional
+- Estilos Tailwind CSS optimizados para responsive
+- Atributos de accesibilidad (ARIA, gestión del foco, contraste)
+- Variantes de tema (light/dark mode)
+- Tests de componente con Testing Library
+
+### Skills de diseño: el stack recomendado
+
+Más allá del Frontend Design integrado, varios skills de terceros elevan notablemente la calidad visual de las salidas de Claude Code. Nuestro [balance tras un mes de rediseño](/content/stack-design-claude-code) detalla cómo combinarlos con Playwright MCP. En resumen:
+
+- **[Impeccable](/skills/impeccable)**: 23 comandos de diseño y reglas anti-patrones, Apache 2.0. El más rápido de instalar para el mayor salto de calidad.
+- **[UI UX Pro Max](/skills/ui-ux-pro-max)**: catálogo de 67 estilos y 161 paletas en 15 stacks, MIT. Ideal para partir de cero.
+- **[Taste Skill](/skills/taste-skill)**: familia de subskills por registro visual (minimalista, brutalista...), MIT. Para alternar entre varios estilos.
+- **[Huashu Design](/skills/huashu-design)**: prototipos HTML y presentaciones. Bajo licencia MIT desde el 2026-05-14 (la licencia ya ha cambiado una vez, vuelve a comprobarla antes de un uso comercial).
+
+La combinación de mayor rendimiento si partes de cero: Impeccable + Playwright MCP para verificar el resultado real.
+
+---
+
+## Skills no técnicas
+
+Claude Code no es solo para desarrolladores. Estas Skills convierten a Claude en un asistente especializado para tareas del día a día: redacción, organización, comunicación. No requieren ninguna competencia técnica.
+
+### Email Profesional
+
+Redacta emails adaptados al destinatario y al contexto. El Skill identifica el tono adecuado (formal, semiformal, informal) y propone sistemáticamente una versión concisa y una versión detallada.
+
+```bash
+/user:email-pro hacer seguimiento a un cliente que no ha respondido a mi presupuesto desde hace 10 días
+```
+
+**Casos de uso:**
+- Seguimiento de clientes y proveedores
+- Respuestas diplomáticas a peticiones difíciles
+- Emails de prospección o seguimiento comercial
+- Comunicación interna (anuncios, solicitudes de información)
+
+[Descargar este skill](/skills/email-pro.md)
+
+---
+
+### Resumen de documento
+
+Genera un resumen estructurado de cualquier documento: acta de reunión, informe, artículo, especificación técnica. El resumen incluye los puntos clave, las decisiones, las acciones a realizar y las zonas poco claras.
+
+```bash
+/user:resume-document [pegar el texto o indicar la ruta del archivo]
+```
+
+**Casos de uso:**
+- Sintetizar un acta de reunión de 2 horas en 10 líneas
+- Extraer las decisiones y acciones de un hilo de emails largo
+- Resumir un artículo o informe para compartirlo con el equipo
+- Preparar un brief a partir de varios documentos
+
+[Descargar este skill](/skills/resume-document.md)
+
+---
+
+### Planificación de proyecto
+
+Descompone un proyecto en fases, tareas e hitos. Cada tarea se estima en esfuerzo (S/M/L/XL) con sus dependencias. El Skill también identifica los riesgos y el camino crítico.
+
+```bash
+/user:planning-project organizar el lanzamiento de un nuevo producto, equipo de 5, deadline a finales de junio
+```
+
+**Casos de uso:**
+- Planificar un sprint o un trimestre
+- Descomponer un proyecto complejo antes de estimarlo
+- Preparar una hoja de ruta para la dirección
+- Organizar un evento o un lanzamiento
+
+[Descargar este skill](/skills/planning-project.md)
+
+---
+
+### Creación de presentaciones
+
+Crea el contenido estructurado de un slide deck: títulos llamativos, mensajes clave por diapositiva, visuales sugeridos y notas para el ponente. El Skill adapta la duración al tiempo de presentación.
+
+```bash
+/user:presentation-slides pitch de 15 min para la dirección sobre los resultados del Q1
+```
+
+**Casos de uso:**
+- Presentaciones de resultados para el comité de dirección
+- Pitchs de producto para clientes o inversores
+- Formaciones internas para los equipos
+- Presentaciones en conferencias
+
+[Descargar este skill](/skills/presentation-slides.md)
+
+---
+
+### Publicación en LinkedIn
+
+Un Skill extra para quienes gestionan una presencia en LinkedIn. Claude estructura el post con un gancho inicial, un desarrollo en puntos cortos y una llamada a la acción adaptada.
+
+```bash
+/user:linkedin-post compartir experiencia sobre la adopción de la IA en mi equipo de 10 personas
+```
+
+**Casos de uso:**
+- Compartir experiencias profesionales
+- Anuncios de contratación o nuevos proyectos
+- Reacciones a noticias del sector
+- Personal branding y posicionamiento de experto
+
+<Callout type="tip" title="Crea tu propio Skill de LinkedIn">
+El Skill de LinkedIn no está incluido en los archivos descargables porque cada persona tiene un estilo y un tono distintos. Parte de la [guía de creación de Skills](/skills/create-custom) y añade tus propias restricciones: tono, longitud, hashtags, tipo de post.
+</Callout>
+
+---
+
+## Taxonomía de las skills
+
+El equipo de Claude Code, junto con Thariq Shihipar, propuso una clasificación en 9 categorías para organizar mejor las skills según lo que automatizan realmente. Esta cuadrícula ayuda a identificar el tipo de skill que necesitas y a nombrar correctamente las que creas.
+
+### 1. Library & API Reference
+
+Skills que incorporan la documentación interna de una API o una librería: los gotchas, los patrones a evitar, las convenciones propias de tu stack. Claude no tiene que adivinar, tiene la respuesta en su contexto.
+
+Ejemplos: `stripe-api`, `internal-design-system`, `prisma-patterns`
+
+### 2. Product Verification
+
+Skills que lanzan verificaciones automatizadas sobre flujos de usuario: Playwright, tmux, smoke tests. Responden a la pregunta "¿esto sigue funcionando?" sin que tengas que abrir un navegador.
+
+Ejemplos: `verify-checkout-flow`, `smoke-test-auth`, `e2e-critical-paths`
+
+### 3. Data Fetching & Analysis
+
+Skills que se conectan a tus dashboards, bases de datos o APIs de analítica para obtener e interpretar métricas. Útiles para las revisiones diarias o las investigaciones de regresión.
+
+Ejemplos: `fetch-metrics`, `query-datadog`, `analyze-funnel`
+
+### 4. Business Process & Team Automation
+
+Skills que automatizan las tareas repetitivas de equipo: publicar el standup en Slack, crear un ticket de Jira a partir de un bug, enviar una notificación de despliegue.
+
+Ejemplos: `standup-post`, `create-ticket`, `notify-deploy`
+
+### 5. Code Scaffolding & Templates
+
+Skills que generan código boilerplate a partir de una plantilla definida por tu equipo. Garantizan que todos los archivos nuevos respeten las convenciones del proyecto desde el principio.
+
+Ejemplos: `new-migration`, `create-component`, `scaffold-api-endpoint`
+
+### 6. Code Quality & Review
+
+Skills que analizan el código según reglas precisas: estilo, complejidad, seguridad, coherencia con el resto del proyecto. Más finos que un linter, tienen en cuenta el contexto de negocio.
+
+Ejemplos: `adversarial-review`, `enforce-code-style`, `check-complexity`
+
+### 7. CI/CD & Deployment
+
+Skills que interactúan con tu pipeline de despliegue: vigilar una PR, disparar un despliegue, hacer cherry-pick de un fix hacia la rama de producción.
+
+Ejemplos: `babysit-pr`, `deploy-staging`, `cherry-pick-prod`
+
+### 8. Runbooks
+
+Skills de investigación multietapa disparados por un síntoma. Guían a Claude a través de una serie de comprobaciones ordenadas para identificar la causa raíz de un incidente, como un runbook de operaciones pero ejecutado automáticamente.
+
+Ejemplos: `investigate-latency-spike`, `diagnose-auth-failure`, `incident-response`
+
+### 9. Infrastructure Operations
+
+Skills de mantenimiento regular: limpieza de ramas, actualización de dependencias, rotación de secretos, auditorías de infraestructura. Automatizan las tareas que nadie quiere hacer pero que todos tienen que hacer.
+
+Ejemplos: `cleanup-stale-branches`, `update-dependencies`, `rotate-secrets`
+
+---
+
+## Buenas prácticas para escribir un skill
+
+Esto es lo que ha aprendido el equipo de Claude Code sobre la creación de skills eficaces. Estas reglas marcan la diferencia entre un skill que se usa una vez y un skill que se usa todos los días.
+
+**1. No enunciar lo evidente**
+
+Un skill debe centrarse en lo que saca a Claude de su comportamiento por defecto. No hace falta decirle "sé preciso" o "usa TypeScript si el proyecto está en TypeScript". Incluye solo lo que cambia algo.
+
+**2. La sección "Gotchas" es la más importante**
+
+Ahí es donde están las trampas que has descubierto por las malas: la API que devuelve un 200 incluso en caso de error, la función que modifica su argumento in situ, la variable de entorno que debe definirse antes que la otra. Un skill sin gotchas es un skill incompleto.
+
+**3. Progressive disclosure**
+
+No cargues todo en el archivo principal. Organiza tu skill en carpetas y pon en `SKILL.md` solo lo que es útil en cada invocación. La documentación de referencia va en `references/`, los scripts utilitarios en `scripts/`, los ejemplos en `examples/`.
+
+```
+.claude/skills/my-skill/
+  SKILL.md              # Archivo principal, cargado en cada invocación
+  references/           # Documentación de referencia (cargada si hace falta)
+  scripts/              # Scripts utilitarios
+  examples/             # Ejemplos de código
+  config.json           # Configuración del skill
+```
+
+**4. No "encarrilar" a Claude**
+
+Describe tus objetivos y restricciones, no los pasos a seguir. Si describes cada paso, impides que Claude adapte su enfoque al contexto real. Confía en él para encontrar el camino, oriéntalo hacia el destino.
+
+**5. El campo description es un disparador, no un resumen**
+
+La descripción de un skill le sirve a Claude para decidir si debe activarlo automáticamente en un contexto dado. Debe describir las situaciones que requieren ese skill, no su funcionamiento interno.
+
+<Callout type="tip" title="Ejemplo concreto">
+Descripción mala: "Este skill realiza una revisión de código adversarial del diff actual."
+
+Descripción buena: "Use when asked to review code, check a PR, or validate changes before merging. Activates automatically when the user mentions 'review', 'PR', or 'code quality'."
+</Callout>
+
+**6. Guardar la configuración en un `config.json`**
+
+Los parámetros que varían de un proyecto a otro (nombres de ramas, endpoints, umbrales de cobertura) no deben estar codificados a fuego en el archivo Markdown. Ponlos en un `config.json` junto al skill.
+
+**7. Incluir scripts que Claude combine**
+
+En lugar de pedirle a Claude que reconstruya los mismos comandos en cada invocación, proporciona scripts utilitarios en `scripts/`. Claude los combinará y los invocará según el contexto, sin reinventarlos.
+
+**8. Los hooks bajo demanda**
+
+Un skill puede activar o desactivar hooks de Claude dinámicamente. Por ejemplo, un skill de despliegue puede activar un hook "pre-commit" solo durante el proceso, y desactivarlo al terminar. Es más limpio que un hook global siempre activo.
+
+**9. Un skill por responsabilidad**
+
+La tentación es crear un mega-skill que lo haga todo. Resístela. Un skill enfocado es más fácil de mantener, más rápido de cargar y más preciso en sus resultados. Si tu skill supera las 200 líneas, probablemente son dos skills.
+
+---
+
+## Archivos de Skills descargables
+
+Todas las Skills presentadas en esta página están disponibles para descarga directa. Cópialas en `.claude/commands/` (proyecto) o `~/.claude/commands/` (personal) y quedan listas para usar de inmediato.
+
+### Skills técnicas
+
+| Skill | Descripción | Descargar |
+|---|---|---|
+| React Component | Crea componentes React accesibles y probados | [react-component.md](/skills/react-component.md) |
+| API Pattern | Genera endpoints de API REST completos | [api-pattern.md](/skills/api-pattern.md) |
+| Deploy Checklist | Guía el despliegue en producción | [deploy-checklist.md](/skills/deploy-checklist.md) |
+| TDD Guide | Impone el ciclo RED-GREEN-REFACTOR | [tdd-guide.md](/skills/tdd-guide.md) |
+| Code Reviewer | Revisión de código estructurada por gravedad | [code-reviewer.md](/skills/code-reviewer.md) |
+| Debug Sistemático | Método de depuración sin ir a tientas | [debug-systematic.md](/skills/debug-systematic.md) |
+
+### Skills no técnicas
+
+| Skill | Descripción | Descargar |
+|---|---|---|
+| Email Pro | Emails profesionales adaptados al contexto | [email-pro.md](/skills/email-pro.md) |
+| Resumen de Documento | Síntesis estructurada de documentos | [resume-document.md](/skills/resume-document.md) |
+| Planificación de Proyecto | Descomposición en fases y tareas | [planning-project.md](/skills/planning-project.md) |
+| Presentación Slides | Contenido estructurado para slide deck | [presentation-slides.md](/skills/presentation-slides.md) |
+
+<Callout type="info" title="¿Cómo usar estos archivos?">
+1. Descarga el archivo `.md` que quieras
+2. Colócalo en `~/.claude/commands/` para acceso global, o en `.claude/commands/` para un proyecto específico
+3. Reinicia Claude Code
+4. Escribe `/user:nombre-del-skill` o `/project:nombre-del-skill` seguido de tus argumentos
+</Callout>
+
+---
+
+## Resumen
+
+| Skill | Categoría | Comando | Ideal para |
+|---|---|---|---|
+| TDD Guide | Desarrollo | `/user:tdd-guide` | Nuevas funcionalidades |
+| Code Reviewer | Calidad | `/user:code-reviewer` | Antes de una PR |
+| Debugging | Desarrollo | `/user:debugging` | Resolución de bugs |
+| Debug Sistemático | Desarrollo | `/user:debug-systematic` | Bugs complejos |
+| Plan | Planificación | `/user:plan` | Funcionalidades complejas |
+| Brainstorming | Planificación | `/user:brainstorm` | Exploración de soluciones |
+| E2E Testing | Tests | `/user:e2e-testing` | Recorridos críticos |
+| Security Review | Seguridad | `/user:security-review` | Antes de un despliegue |
+| Frontend Design | Diseño | `/user:frontend-design` | Componentes UI |
+| React Component | Desarrollo | `/project:react-component` | Componentes React |
+| API Pattern | Desarrollo | `/project:api-pattern` | Endpoints REST |
+| Deploy Checklist | Ops | `/project:deploy-checklist` | Puesta en producción |
+| Email Pro | Comunicación | `/user:email-pro` | Emails profesionales |
+| Resumen de Documento | Productividad | `/user:resume-document` | Síntesis de documentos |
+| Planificación de Proyecto | Organización | `/user:planning-project` | Planificación |
+| Presentación | Comunicación | `/user:presentation-slides` | Slide decks |
+
+---
+
+## Encontrar Skills adaptadas a tus necesidades
+
+Las Skills presentadas en esta página son solo un vistazo de lo que existe. El ecosistema de Claude crece rápido y aparecen nuevas creaciones cada semana. Para ayudarte a explorar **toda** la riqueza disponible, existe un recurso imprescindible.
+
+<Card title="Awesome Claude Skills: la biblioteca comunitaria de referencia">
+
+El proyecto **Awesome Claude Skills**, mantenido por el equipo de [ComposioHQ](https://github.com/ComposioHQ), es un catálogo organizado y actualizado regularmente que recopila **decenas de Skills** listas para usar, clasificadas por categoría:
+
+- **Procesamiento de documentos**: PDF, DOCX, XLSX, presentaciones
+- **Herramientas de desarrollo**: CI/CD, linting, despliegue
+- **Datos y análisis**: pipelines, visualización, scraping
+- **Comunicación**: email, Slack, calendarios, CRM
+- **Productividad**: gestión de proyectos, automatización, flujos de trabajo
+- **Seguridad y sistemas**: auditorías, monitorización, infraestructura
+
+Tanto si buscas un Skill específico como si simplemente quieres inspiración, es el mejor punto de partida.
+
+</Card>
+
+<Card title="Acceder a la biblioteca completa" variant="accent">
+
+**[github.com/affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code)**
+
+Explora el catálogo, encuentra el Skill que se ajuste a tu necesidad e intégralo en cuestión de segundos en tu flujo de trabajo de Claude Code. Este repositorio comunitario reúne decenas de Skills, Agents y Rules listos para usar.
+
+</Card>
+
+---
+
+## Próximos pasos
+
+Ahora ya conoces las Skills más útiles y sabes dónde encontrar más. Pasemos a crear tus propias Skills a medida.
+
+- [Crear una Skill personalizada paso a paso](/skills/create-custom): escribe tus propias Skills adaptadas a tu flujo de trabajo
+- [Skills vs MCP vs Plugins](/skills/comparison): entiende cuándo usar cada herramienta
+- [¿Qué es una Skill?](/skills/what-are-skills): vuelve a los fundamentos
+- [Los mejores MCP de desarrollo](/mcp/best-development): combina tus Skills con Context7, GitHub y Sentry

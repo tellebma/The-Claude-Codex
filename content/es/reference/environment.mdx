@@ -1,0 +1,738 @@
+---
+title: "Variables de entorno de Claude Code: documentación oficial"
+description: "Documentación oficial de las variables de entorno de Claude Code: ANTHROPIC_API_KEY, BASE_URL, AUTH_TOKEN, MODEL, proxy. Ejemplos de shell, Docker y CI/CD."
+badge: "Env"
+section: "reference"
+order: 4
+datePublished: "2026-03-11"
+dateModified: "2026-06-30"
+---
+
+## En resumen
+
+Define `ANTHROPIC_API_KEY` en el rc de tu shell o en un archivo `.env`. Claude Code lee la variable al arrancar:
+
+```bash
+export ANTHROPIC_API_KEY="sk-ant-api03-..."
+```
+
+Para un proxy corporativo o un modelo distinto, usa `ANTHROPIC_BASE_URL` y `ANTHROPIC_MODEL`. Los detalles completos están más abajo.
+
+## Variables de entorno: principio y fuentes de lectura
+
+Una variable de entorno es un valor con nombre almacenado en tu sesión de shell, accesible por cualquier programa que se ejecute en ella. Imagina notas adhesivas pegadas a cada proceso: al arrancar, Claude Code las lee y adapta su comportamiento en consecuencia.
+
+Claude Code lee las variables de entorno desde cuatro fuentes, en este orden:
+
+1. **Entorno del sistema** (`/etc/environment`, `/etc/profile.d/`): alcance de toda la máquina, definido por los administradores
+2. **Archivos rc del shell** (`~/.bashrc`, `~/.zshrc`, `~/.profile`): ajustes persistentes por usuario
+3. **Archivo `.env`** en la carpeta del proyecto actual: sobrescrituras por proyecto (se carga automáticamente)
+4. **Parámetro de VS Code `claudeCode.environmentVariables`**: inyección desde el editor (ver sección dedicada)
+
+Los flags de CLI y las claves equivalentes en `settings.json` tienen prioridad sobre las variables de entorno cuando existe un equivalente directo.
+
+<Callout type="info" title="No hay carga automática de .env">
+Claude Code no carga los archivos `.env` automáticamente como sí hacen Vite o dotenv. Lee las variables que ya están exportadas en el shell. Para aislar la configuración por proyecto, exporta las variables en tu shell antes de lanzar Claude, o usa el parámetro de VS Code.
+</Callout>
+
+---
+
+## Variables de autenticación
+
+### `ANTHROPIC_API_KEY`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Clave API de Anthropic para la autenticación directa |
+| **Requerido** | Sí (salvo que hayas iniciado sesión con `claude login`) |
+| **Por defecto** | Ninguno |
+| **Formato** | `sk-ant-api03-...` |
+
+```bash
+# Persistencia en el archivo rc de tu shell
+export ANTHROPIC_API_KEY="sk-ant-api03-xxxxxxxxxxxx"
+
+# Sobrescritura puntual para un solo comando
+ANTHROPIC_API_KEY="sk-ant-..." claude --print "hola"
+
+# GitHub Actions: pasarla desde un secreto cifrado
+env:
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+```
+
+<Callout type="warning" title="Nunca subas esta clave a un repositorio">
+Si `ANTHROPIC_API_KEY` termina en un repositorio público, revócala de inmediato en console.anthropic.com y genera una clave nueva. Añade `.env` a tu `.gitignore` como primera línea de defensa.
+</Callout>
+
+---
+
+### `ANTHROPIC_AUTH_TOKEN`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Token bearer alternativo para proxies corporativos que rechazan la cabecera estándar `ANTHROPIC_API_KEY` |
+| **Requerido** | No |
+| **Por defecto** | Ninguno |
+| **Formato** | Cualquier cadena, enviada como `Authorization: Bearer <token>` |
+
+```bash
+export ANTHROPIC_AUTH_TOKEN="token-bearer-de-tu-proxy"
+```
+
+Algunas pasarelas de IA corporativas usan su propio formato de token. Usa esta variable cuando tu proxy devuelva `401 Unauthorized` a pesar de tener una `ANTHROPIC_API_KEY` válida.
+
+---
+
+### `ANTHROPIC_BASE_URL`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | URL base personalizada para todas las llamadas a la API de Anthropic |
+| **Requerido** | No |
+| **Por defecto** | `https://api.anthropic.com` |
+| **Formato** | URL completa, sin barra final |
+
+```bash
+# Pasarela de IA corporativa
+export ANTHROPIC_BASE_URL="https://pasarela-ia.empresa.com/anthropic"
+
+# Servidor mock local para pruebas
+export ANTHROPIC_BASE_URL="http://localhost:8080"
+```
+
+Esta variable sobrescribe el campo `customApiUrl` de `settings.json`. Es útil cuando el tráfico de la API pasa por un proxy gestionado por la empresa o por un endpoint regional.
+
+---
+
+### `ANTHROPIC_MODEL` / `CLAUDE_MODEL`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Modelo Claude por defecto para todas las sesiones |
+| **Requerido** | No |
+| **Por defecto** | el último modelo Sonnet de la configuración instalada (compruébalo con `claude config get model`) |
+| **Formato** | Identificador de modelo de Anthropic |
+
+```bash
+# Haiku para velocidad y ahorro
+export CLAUDE_MODEL="claude-haiku-4-5"
+
+# Opus para tareas de razonamiento complejo
+export CLAUDE_MODEL="claude-opus-4-8"
+
+# Sobrescritura puntual sin tocar el archivo rc
+CLAUDE_MODEL="claude-opus-4-8" claude --print "tarea difícil"
+```
+
+`ANTHROPIC_MODEL` es un alias aceptado de `CLAUDE_MODEL`. Ambos funcionan de forma idéntica. Usa `CLAUDE_MODEL` en las configuraciones nuevas para mantener la coherencia con la documentación oficial.
+
+Identificadores de modelo habituales:
+- `claude-haiku-4-5`: rápido y económico, adecuado para automatización
+- `claude-sonnet-5`: equilibrio recomendado entre capacidad y coste
+- `claude-opus-4-8`: el razonamiento más profundo, el coste más alto
+
+---
+
+### `CLAUDE_CODE_USE_BEDROCK`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Enruta las llamadas a la API a través de AWS Bedrock en lugar de la API de Anthropic |
+| **Requerido** | No |
+| **Por defecto** | No definido (usa la API de Anthropic) |
+| **Formato** | `1` para activar |
+
+```bash
+export CLAUDE_CODE_USE_BEDROCK=1
+export AWS_REGION="us-east-1"
+# Autenticación vía AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY
+# o vía rol IAM en EC2/ECS
+```
+
+Cuando esta variable está definida, Claude Code usa el SDK de AWS para autenticarse. `ANTHROPIC_API_KEY` se ignora; en su lugar se usan las credenciales de AWS.
+
+---
+
+### `CLAUDE_CODE_USE_VERTEX`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Enruta las llamadas a la API a través de Google Cloud Vertex AI |
+| **Requerido** | No |
+| **Por defecto** | No definido (usa la API de Anthropic) |
+| **Formato** | `1` para activar |
+
+```bash
+export CLAUDE_CODE_USE_VERTEX=1
+export CLOUD_ML_REGION="us-central1"
+export ANTHROPIC_VERTEX_PROJECT_ID="tu-proyecto-gcp"
+# Autenticarse vía gcloud application-default login
+```
+
+---
+
+## Variables de comportamiento
+
+### `MAX_THINKING_TOKENS`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Presupuesto de tokens para el razonamiento interno (Extended Thinking) |
+| **Requerido** | No |
+| **Por defecto** | `31999` cuando Extended Thinking está activado |
+| **Formato** | Número entero (mínimo: `1000`) |
+
+```bash
+# Reducir el presupuesto para bajar el coste en tareas rutinarias
+export MAX_THINKING_TOKENS=10000
+
+# Presupuesto completo para sesiones de arquitectura o depuración compleja
+export MAX_THINKING_TOKENS=31999
+
+# Desactivar de facto el razonamiento profundo (valor mínimo)
+export MAX_THINKING_TOKENS=1000
+```
+
+Solo se aplica cuando `alwaysThinkingEnabled: true` está en `settings.json`, o cuando Extended Thinking se activa manualmente. Reducir este valor acorta la cadena de pensamiento interna y disminuye el coste en tokens asociado.
+
+---
+
+### `BASH_MAX_OUTPUT_LENGTH`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Número máximo de caracteres capturados de una invocación de la herramienta Bash |
+| **Requerido** | No |
+| **Por defecto** | `10000` |
+| **Formato** | Número entero (caracteres) |
+
+```bash
+# Valor por defecto, adecuado para la mayoría de comandos
+export BASH_MAX_OUTPUT_LENGTH=10000
+
+# Aumentarlo para comandos con salida voluminosa (logs de build, suites de test)
+export BASH_MAX_OUTPUT_LENGTH=50000
+
+# Reducirlo para proteger la ventana de contexto en modelos costosos
+export BASH_MAX_OUTPUT_LENGTH=5000
+```
+
+Cuando un comando produce más caracteres que este límite, Claude Code trunca el resultado y añade una nota. Esto evita que un simple `cat archivo-grande.log` sature toda la ventana de contexto.
+
+---
+
+### `BASH_DEFAULT_TIMEOUT_MS` / `BASH_MAX_TIMEOUT_MS`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Timeout por defecto y límite absoluto para comandos Bash (milisegundos) |
+| **Requerido** | No |
+| **Por defecto** | `30000` / `600000` |
+| **Formato** | Número entero (milisegundos) |
+
+```bash
+export BASH_DEFAULT_TIMEOUT_MS=120000   # 2 min por defecto por comando
+export BASH_MAX_TIMEOUT_MS=600000       # 10 min de límite (el usuario no puede superarlo)
+```
+
+Aumenta `BASH_DEFAULT_TIMEOUT_MS` para builds lentos o suites de test largas. `BASH_MAX_TIMEOUT_MS` es el límite que el usuario no puede superar aunque sobrescriba el timeout manualmente en la conversación.
+
+---
+
+### `CLAUDE_CODE_MAX_OUTPUT_TOKENS`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Número máximo de tokens en la respuesta generada por Claude |
+| **Requerido** | No |
+| **Por defecto** | Máximo del modelo (varía según el modelo) |
+| **Formato** | Número entero |
+
+```bash
+# Limitar las respuestas para controlar costes en automatización
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
+
+# Permitir respuestas largas para generación de código
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=16000
+```
+
+---
+
+### `DISABLE_AUTOUPDATER`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Desactiva las comprobaciones e instalaciones automáticas de actualizaciones |
+| **Requerido** | No |
+| **Por defecto** | No definido (actualización automática activada) |
+| **Formato** | `1` para desactivar |
+
+```bash
+export DISABLE_AUTOUPDATER=1
+```
+
+Actívala siempre en CI/CD. Una actualización automática durante un pipeline puede cambiar el comportamiento de forma inesperada. Combínala con una instalación en versión fija: `npm install -g @anthropic-ai/claude-code@x.y.z`.
+
+---
+
+### `DISABLE_TELEMETRY`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Desactiva la telemetría de uso anónima enviada a Anthropic |
+| **Requerido** | No |
+| **Por defecto** | No definido (telemetría activa, opt-out) |
+| **Formato** | `1` para desactivar |
+
+```bash
+export DISABLE_TELEMETRY=1
+```
+
+---
+
+### `DISABLE_ERROR_REPORTING`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Desactiva los informes de error de Sentry |
+| **Requerido** | No |
+| **Por defecto** | No definido (informes de error activos) |
+| **Formato** | `1` para desactivar |
+
+```bash
+export DISABLE_ERROR_REPORTING=1
+```
+
+---
+
+### `DISABLE_COST_WARNINGS`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Suprime el aviso de coste que aparece en sesiones costosas |
+| **Requerido** | No |
+| **Por defecto** | No definido (avisos activados) |
+| **Formato** | `1` para desactivar |
+
+```bash
+export DISABLE_COST_WARNINGS=1
+```
+
+Útil en scripts no interactivos donde el aviso ensuciaría el parseo de stdout.
+
+---
+
+### `CLAUDE_CONFIG_DIR`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Directorio de configuración alternativo (sustituye a `~/.claude/`) |
+| **Requerido** | No |
+| **Por defecto** | `~/.claude/` |
+| **Formato** | Ruta absoluta a un directorio |
+
+```bash
+# Configuración aislada por proyecto
+export CLAUDE_CONFIG_DIR="$(pwd)/.claude-config"
+
+# Configuración compartida en un agente de CI
+export CLAUDE_CONFIG_DIR="/opt/claude-code/config"
+
+# Configuración efímera para contenedores desechables
+export CLAUDE_CONFIG_DIR="/tmp/claude-ci-$$"
+```
+
+---
+
+### `CLAUDE_CODE_DISABLE_TERMINAL_TITLE`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Evita que Claude Code modifique el título de la ventana del terminal |
+| **Requerido** | No |
+| **Por defecto** | No definido (título actualizado) |
+| **Formato** | `1` para desactivar |
+
+```bash
+export CLAUDE_CODE_DISABLE_TERMINAL_TITLE=1
+```
+
+Útil para usuarios de tmux y otros multiplexores de terminal que aprovechan la cadena del título para seguir los paneles.
+
+---
+
+## Variables de red y proxy
+
+### `HTTP_PROXY` / `HTTPS_PROXY`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Proxy HTTP/HTTPS para todas las conexiones salientes de Claude Code |
+| **Requerido** | No |
+| **Por defecto** | Ninguno |
+| **Formato** | `http://[usuario:contraseña@]host:puerto` o `socks5://host:puerto` |
+
+```bash
+# Proxy sin autenticación
+export HTTP_PROXY="http://proxy.empresa.com:8080"
+export HTTPS_PROXY="http://proxy.empresa.com:8080"
+
+# Proxy con autenticación (codifica los caracteres especiales de la contraseña en la URL)
+export HTTPS_PROXY="http://jdoe:c%40ntrasena@proxy.empresa.com:8080"
+
+# Proxy SOCKS5
+export HTTPS_PROXY="socks5://proxy.empresa.com:1080"
+```
+
+En redes corporativas, estas son las variables que hay que configurar con más frecuencia. Claude Code las usa para todas las peticiones salientes, incluidas las llamadas a la API hacia `api.anthropic.com`.
+
+---
+
+### `NO_PROXY`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Lista de dominios que evitan el proxy (separados por comas) |
+| **Requerido** | No |
+| **Por defecto** | Ninguno |
+| **Formato** | Nombres de host, IPs o dominios con comodines, separados por comas |
+
+```bash
+export NO_PROXY="localhost,127.0.0.1,::1,*.corp.ejemplo.com"
+
+# Combinar con HTTPS_PROXY
+export HTTPS_PROXY="http://proxy.empresa.com:8080"
+export NO_PROXY="localhost,127.0.0.1,*.intranet.empresa.com"
+```
+
+<Callout type="tip" title="Truco de red corporativa">
+Si tu organización enruta el tráfico de la API de Claude a través de una pasarela interna en lugar de la API pública de Anthropic, define `ANTHROPIC_BASE_URL` hacia esa pasarela y añade su nombre de host a `NO_PROXY` para evitar que el proxy corporativo intercepte la petición una segunda vez.
+</Callout>
+
+---
+
+## Variables MCP
+
+### `MCP_TIMEOUT` / `MCP_TOOL_TIMEOUT`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Timeouts (ms) para el handshake de arranque MCP y las llamadas a herramientas individuales |
+| **Requerido** | No |
+| **Por defecto** | `10000` / `60000` |
+| **Formato** | Número entero (milisegundos) |
+
+```bash
+export MCP_TIMEOUT=30000         # 30 s para servidores MCP lentos al arrancar
+export MCP_TOOL_TIMEOUT=120000   # 2 min para llamadas a herramientas de larga duración
+```
+
+---
+
+### `MAX_MCP_OUTPUT_TOKENS`
+
+| Campo | Valor |
+|-------|--------|
+| **Descripción** | Presupuesto de tokens combinado para todas las salidas de herramientas MCP en un mismo turno |
+| **Requerido** | No |
+| **Por defecto** | `25000` |
+| **Formato** | Número entero |
+
+```bash
+export MAX_MCP_OUTPUT_TOKENS=50000
+```
+
+---
+
+## `claudeCode.environmentVariables` en VS Code
+
+La extensión oficial de Claude Code para VS Code expone el parámetro `claudeCode.environmentVariables`, un objeto JSON que se inyecta en cada proceso de Claude Code lanzado desde el editor. Es la forma más limpia de configurar valores por workspace sin tocar los archivos de shell globales.
+
+Abre `settings.json` (a nivel de User o Workspace) y añade:
+
+```json
+{
+  "claudeCode.environmentVariables": {
+    "ANTHROPIC_BASE_URL": "https://pasarela-ia.empresa.com/anthropic",
+    "CLAUDE_MODEL": "claude-sonnet-5",
+    "DISABLE_AUTOUPDATER": "1",
+    "BASH_MAX_OUTPUT_LENGTH": "30000",
+    "NO_PROXY": "localhost,127.0.0.1,*.intranet"
+  }
+}
+```
+
+<Callout type="warning" title="Mantén los secretos fuera del workspace">
+El `.vscode/settings.json` de workspace normalmente se sube a git. Nunca pongas `ANTHROPIC_API_KEY` ahí. Defínela en la configuración de User (no versionada), o referencia la variable de shell con `${env:ANTHROPIC_API_KEY}` si tu versión de VS Code lo soporta.
+</Callout>
+
+El nombre del parámetro se escribe en camelCase: `claudeCode.environmentVariables`. Las claves internas distinguen mayúsculas de minúsculas: `ANTHROPIC_API_KEY` no equivale a `anthropic_api_key`.
+
+---
+
+## Persistir las variables según el entorno
+
+### Archivos rc del shell (desarrollo local)
+
+```bash
+# Añadir en ~/.bashrc o ~/.zshrc
+export ANTHROPIC_API_KEY="sk-ant-api03-..."
+export CLAUDE_MODEL="claude-sonnet-5"
+export DISABLE_TELEMETRY=1
+```
+
+Ejecuta `source ~/.zshrc` (o abre un terminal nuevo) tras modificarlo.
+
+### Servicio systemd de usuario
+
+Si ejecutas Claude Code mediante un servicio systemd:
+
+```ini
+# ~/.config/systemd/user/claude-code.service
+[Service]
+Environment=ANTHROPIC_API_KEY=sk-ant-api03-...
+Environment=CLAUDE_MODEL=claude-sonnet-5
+Environment=DISABLE_AUTOUPDATER=1
+```
+
+O usa `EnvironmentFile=/etc/claude-code/env` para cargar desde un archivo separado y no almacenar secretos en la unidad de servicio.
+
+### Docker
+
+```dockerfile
+# Pasar en tiempo de build (solo configuración no secreta)
+ARG CLAUDE_MODEL=claude-sonnet-5
+ENV CLAUDE_MODEL=$CLAUDE_MODEL
+ENV DISABLE_AUTOUPDATER=1
+ENV BASH_MAX_OUTPUT_LENGTH=30000
+```
+
+```bash
+# Pasar los secretos en tiempo de ejecución: nunca los incluyas en la imagen
+docker run \
+  -e ANTHROPIC_API_KEY="$ANTHROPIC_API_KEY" \
+  -e CLAUDE_MODEL=claude-haiku-4-5 \
+  mi-imagen-claude
+```
+
+### Gestores de secretos
+
+Para pipelines de producción, evita almacenar las claves API en bruto en archivos de shell. Recupéralas en tiempo de ejecución:
+
+```bash
+# AWS Secrets Manager
+export ANTHROPIC_API_KEY=$(aws secretsmanager get-secret-value \
+  --secret-id prod/anthropic-api-key \
+  --query SecretString \
+  --output text)
+
+# HashiCorp Vault
+export ANTHROPIC_API_KEY=$(vault kv get -field=value secret/anthropic)
+```
+
+---
+
+## Seguridad
+
+- Añade `.env` a `.gitignore` y a tu `.gitignore_global` para prevenir commits accidentales.
+- Nunca escribas `ANTHROPIC_API_KEY` directamente en un `Dockerfile`, un archivo YAML de CI o cualquier archivo versionado.
+- Usa los secretos del repositorio (GitHub Secrets, variables de GitLab CI) para los pipelines de CI/CD.
+- Rota tu clave API al menos cada 90 días. Rotación inmediata si sospechas de una exposición.
+- Audita quién tiene acceso de lectura a los archivos que contienen la clave (`~/.bashrc`, `/etc/environment`).
+
+```bash
+# Entradas mínimas de .gitignore
+.env
+.env.local
+.env.*.local
+*.key
+```
+
+<Callout type="warning" title="¿Clave API expuesta?">
+Ve a console.anthropic.com, revoca la clave de inmediato y genera un reemplazo. Una clave expuesta puede usarse para lanzar llamadas a la API facturadas en tu cuenta hasta que se revoque.
+</Callout>
+
+---
+
+## Orden de prioridad
+
+Cuando el mismo ajuste está presente en varias fuentes, Claude Code las resuelve en este orden. Las fuentes más tardías ganan:
+
+| Prioridad | Fuente |
+|----------|--------|
+| 1 (la más baja) | Entorno del sistema (`/etc/environment`) |
+| 2 | Archivo rc del shell del usuario (`~/.bashrc`, `~/.zshrc`) |
+| 3 | `export` por sesión o variable en línea |
+| 4 | Archivo `.env` del proyecto |
+| 5 | `claudeCode.environmentVariables` de VS Code |
+| 6 | Clave equivalente en `settings.json` (p. ej. `customApiUrl`) |
+| 7 (la más alta) | Flag de CLI (`--model`, `--max-turns`, etc.) |
+
+Los flags de CLI siempre ganan. Los valores de `settings.json` tienen prioridad sobre las variables de entorno cuando existe una clave equivalente directa.
+
+---
+
+## Solución de problemas
+
+### Comprobar qué variables ve Claude Code
+
+```bash
+# Listar todas las variables que contengan "claude" o "anthropic" (sin distinguir mayúsculas)
+env | grep -iE "claude|anthropic|proxy"
+
+# Comprobar el formato de la clave (debe empezar por sk-ant-)
+echo $ANTHROPIC_API_KEY | cut -c1-12
+```
+
+### Confirmar que una variable está definida en un shell nuevo
+
+```bash
+# Abrir un shell nuevo y probar
+bash -c 'echo $ANTHROPIC_API_KEY'
+```
+
+Si el resultado está vacío aunque tu sesión actual tenga el valor, falta el `export` en tu archivo rc (la variable puede estar definida sin `export`).
+
+### Depurar problemas al arrancar
+
+```bash
+# Mostrar la versión (confirma que la instalación funciona)
+claude --version
+
+# Probar que la clave API llega a Anthropic
+claude --print "hola" 2>&1 | head -20
+```
+
+### Variable definida pero ignorada
+
+Causas posibles:
+
+- La variable está definida pero no exportada (`VAR=valor` en lugar de `export VAR=valor`)
+- Una clave de `settings.json` con prioridad más alta la sobrescribe
+- Un error tipográfico en el nombre de la variable (usa `env | grep` para comprobarlo)
+- En VS Code, el `settings.json` de Workspace sobrescribe el `settings.json` de User con un valor en conflicto
+
+```bash
+# Comprobar que la variable está exportada, no solo definida
+export -p | grep ANTHROPIC
+```
+
+### `ANTHROPIC_BASE_URL` se ignora
+
+Comprueba que `HTTPS_PROXY` no esté interceptando y redirigiendo la petición. Añade el nombre de host de la base URL a `NO_PROXY`:
+
+```bash
+export ANTHROPIC_BASE_URL="https://pasarela-ia.empresa.com/anthropic"
+export HTTPS_PROXY="http://proxy.empresa.com:8080"
+export NO_PROXY="pasarela-ia.empresa.com,localhost,127.0.0.1"
+```
+
+---
+
+## Tabla de referencia completa
+
+| Variable | Requerido | Por defecto | Categoría |
+|----------|--------|--------|-----------|
+| `ANTHROPIC_API_KEY` | Sí* | Ninguno | Auth |
+| `ANTHROPIC_AUTH_TOKEN` | No | Ninguno | Auth |
+| `ANTHROPIC_BASE_URL` | No | `https://api.anthropic.com` | Auth / Red |
+| `ANTHROPIC_MODEL` | No | `claude-sonnet-5` | Comportamiento |
+| `CLAUDE_MODEL` | No | `claude-sonnet-5` | Comportamiento |
+| `CLAUDE_CODE_USE_BEDROCK` | No | No definido | Auth |
+| `CLAUDE_CODE_USE_VERTEX` | No | No definido | Auth |
+| `MAX_THINKING_TOKENS` | No | `31999` | Comportamiento |
+| `BASH_MAX_OUTPUT_LENGTH` | No | `10000` | Comportamiento |
+| `BASH_DEFAULT_TIMEOUT_MS` | No | `30000` | Comportamiento |
+| `BASH_MAX_TIMEOUT_MS` | No | `600000` | Comportamiento |
+| `CLAUDE_CODE_MAX_OUTPUT_TOKENS` | No | Límite del modelo | Comportamiento |
+| `DISABLE_AUTOUPDATER` | No | No definido | Comportamiento |
+| `DISABLE_TELEMETRY` | No | No definido | Comportamiento |
+| `DISABLE_ERROR_REPORTING` | No | No definido | Comportamiento |
+| `DISABLE_COST_WARNINGS` | No | No definido | Comportamiento |
+| `CLAUDE_CONFIG_DIR` | No | `~/.claude/` | Comportamiento |
+| `CLAUDE_CODE_DISABLE_TERMINAL_TITLE` | No | No definido | Comportamiento |
+| `HTTP_PROXY` | No | Ninguno | Red |
+| `HTTPS_PROXY` | No | Ninguno | Red |
+| `NO_PROXY` | No | Ninguno | Red |
+| `MCP_TIMEOUT` | No | `10000` | MCP |
+| `MCP_TOOL_TIMEOUT` | No | `60000` | MCP |
+| `MAX_MCP_OUTPUT_TOKENS` | No | `25000` | MCP |
+
+*Salvo que hayas iniciado sesión con `claude login` (cuenta Claude.ai Max)
+
+---
+
+## Ejemplos de configuración
+
+### Desarrollo local
+
+```bash
+# ~/.zshrc o ~/.bashrc
+export ANTHROPIC_API_KEY="sk-ant-api03-..."
+export CLAUDE_MODEL="claude-sonnet-5"
+export MAX_THINKING_TOKENS=10000
+export DISABLE_TELEMETRY=1
+```
+
+### CI/CD (GitHub Actions)
+
+```yaml
+# .github/workflows/claude.yml
+jobs:
+  claude-task:
+    runs-on: ubuntu-latest
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CLAUDE_MODEL: claude-haiku-4-5
+      DISABLE_AUTOUPDATER: "1"
+      DISABLE_COST_WARNINGS: "1"
+      CLAUDE_CODE_MAX_OUTPUT_TOKENS: "4096"
+      BASH_MAX_OUTPUT_LENGTH: "20000"
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install -g @anthropic-ai/claude-code@latest
+      - run: claude --print --max-turns 5 "Revisa la calidad del código"
+```
+
+### Red corporativa con proxy
+
+```bash
+# /etc/environment o perfil del sistema
+ANTHROPIC_API_KEY="sk-ant-..."
+ANTHROPIC_BASE_URL="https://pasarela-ia.empresa.com"
+HTTPS_PROXY="http://proxy-web.empresa.com:8080"
+NO_PROXY="localhost,127.0.0.1,pasarela-ia.empresa.com,*.interna.empresa.com"
+DISABLE_AUTOUPDATER=1
+CLAUDE_CONFIG_DIR="/opt/claude-code/config"
+```
+
+---
+
+## Preguntas frecuentes
+
+<Faq>
+  <FaqItem question="¿Qué es ANTHROPIC_API_KEY y dónde se define?">
+    Es la clave API de Anthropic con formato sk-ant-api03-... Se define en el rc de tu shell (.bashrc, .zshrc) o en un archivo .env del proyecto. Claude Code la lee al arrancar.
+  </FaqItem>
+  <FaqItem question="¿Qué diferencia hay entre ANTHROPIC_AUTH_TOKEN y ANTHROPIC_API_KEY?">
+    ANTHROPIC_API_KEY es la clave directa sk-ant-api03. ANTHROPIC_AUTH_TOKEN se usa en flujos OAuth y en proxies corporativos que inyectan un token Bearer.
+  </FaqItem>
+  <FaqItem question="¿Cómo configuro Claude Code detrás de un proxy corporativo?">
+    Define HTTPS_PROXY y NO_PROXY antes de lanzarlo. ANTHROPIC_BASE_URL también puede apuntar a tu pasarela interna (por ejemplo, gateway.corp/anthropic).
+  </FaqItem>
+  <FaqItem question="¿Desde dónde lee Claude Code las variables de entorno?">
+    Cuatro fuentes leídas en este orden: variables del proceso del shell, archivo .env en la raíz del proyecto, ~/.claude/env y, por último, settings.json (clave claudeCode.environmentVariables).
+  </FaqItem>
+  <FaqItem question="¿Cómo cambio el modelo de Claude Code?">
+    Define ANTHROPIC_MODEL con un identificador válido, por ejemplo ANTHROPIC_MODEL=claude-sonnet-5. También puedes hacerlo por sesión con el argumento --model.
+  </FaqItem>
+  <FaqItem question="¿Se puede desactivar algún comportamiento mediante una variable?">
+    Sí. Por ejemplo DISABLE_AUTOUPDATER=1, DISABLE_TELEMETRY=1, DISABLE_AUTOCOMPACT=1 o MAX_THINKING_TOKENS=0. La referencia completa lista las variables y sus valores aceptados.
+  </FaqItem>
+</Faq>
+
+## Próximos pasos
+
+- [settings.json: guía completa](/reference/settings): todas las claves de configuración y su prioridad frente a las variables de entorno
+- [CLI: referencia completa](/reference/cli): todos los flags del comando `claude`
+- [Hoja de referencia](/reference/cheatsheet): referencia rápida de comandos slash y atajos de teclado

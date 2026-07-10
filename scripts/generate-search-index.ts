@@ -27,7 +27,7 @@ interface SearchDoc {
   readonly description: string;
   readonly section: string;
   readonly href: string;
-  readonly locale: "fr" | "en";
+  readonly locale: "fr" | "en" | "es";
   readonly headings: ReadonlyArray<string>;
   readonly body: string;
 }
@@ -126,15 +126,31 @@ const SECTION_LABELS: Record<string, Record<string, string>> = {
     reference: "Reference",
     articles: "Article",
   },
+  es: {
+    "getting-started": "Primeros pasos",
+    mcp: "MCP",
+    skills: "Skills",
+    plugins: "Plugins",
+    agents: "Agentes",
+    prompting: "Prompting",
+    advanced: "Avanzado",
+    enterprise: "Empresa",
+    future: "Futuro",
+    personas: "Personas",
+    "use-cases": "Casos de uso",
+    limits: "Límites",
+    reference: "Referencia",
+    articles: "Artículo",
+  },
 };
 
-function sectionLabel(slug: string, locale: "fr" | "en"): string {
+function sectionLabel(slug: string, locale: "fr" | "en" | "es"): string {
   const first = slug.includes("/") ? slug.split("/")[0]! : "articles";
   const table = SECTION_LABELS[locale] ?? SECTION_LABELS["fr"]!;
   return table[first] ?? first;
 }
 
-function buildIndex(locale: "fr" | "en"): SearchDoc[] {
+function buildIndex(locale: "fr" | "en" | "es"): SearchDoc[] {
   const baseDir = path.join(CONTENT_DIR, locale);
   const files = walkMdx(baseDir);
   const docs: SearchDoc[] = [];
@@ -174,7 +190,7 @@ function main(): void {
     fs.mkdirSync(PUBLIC_DIR, { recursive: true });
   }
 
-  for (const locale of ["fr", "en"] as const) {
+  for (const locale of ["fr", "en", "es"] as const) {
     const docs = buildIndex(locale);
     const outPath = path.join(PUBLIC_DIR, `search-index-${locale}.json`);
     const payload = JSON.stringify(docs);

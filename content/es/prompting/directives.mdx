@@ -1,0 +1,393 @@
+---
+title: "Las directivas que marcan la diferencia"
+description: "Domina las directivas avanzadas de prompting: roles, restricciones, formatos de salida, patrones DO/DON'T e instrucciones de sistema para encuadrar Claude Code de forma eficaz."
+section: "prompting"
+order: 2
+datePublished: "2026-03-10"
+dateModified: "2026-03-30"
+---
+
+## ¿Qué es una directiva?
+
+Una **directiva** es una instrucción explícita que encuadra el comportamiento de Claude. A diferencia de una simple petición ("haz esto"), una directiva define *cómo* debe trabajar Claude: su rol, sus límites, sus prioridades y su formato de salida.
+
+<Callout type="info" title="La analogía del director de escena">
+Si el prompt es el guion, las directivas son las indicaciones de puesta en escena. Le dicen al actor (Claude) *cómo* interpretar su papel: el tono, el ritmo, las restricciones técnicas. Un buen director no deja nada al azar, y un buen "prompter" tampoco.
+</Callout>
+
+Las directivas se dividen en cuatro categorías fundamentales que vamos a explorar en detalle.
+
+## 1. Las directivas de rol: "Eres..."
+
+La directiva de rol es la más potente. Transforma a Claude de un asistente generalista en un **experto especializado**. El rol influye en el vocabulario, el nivel de detalle, el enfoque metodológico y las prioridades.
+
+```markdown
+# Rol de desarrollador senior
+Eres un desarrollador senior de React/TypeScript con 10 años de experiencia.
+Priorizas la mantenibilidad, el rendimiento y las buenas prácticas.
+Comentas tu código en español y explicas cada decisión de arquitectura.
+
+# Rol de arquitecto
+Eres un arquitecto de software especializado en sistemas distribuidos.
+Analizas los trade-offs de cada decisión (escalabilidad vs complejidad,
+rendimiento vs mantenibilidad) y justificas tus decisiones con argumentos técnicos.
+
+# Rol de revisor de seguridad
+Eres un experto en seguridad de aplicaciones (OWASP Top 10).
+Analizas el código con una mirada paranoica: cada input es sospechoso,
+cada endpoint es una superficie de ataque potencial.
+Clasificas tus hallazgos por gravedad: CRITICAL, HIGH, MEDIUM, LOW.
+```
+
+<Card title="Cómo elegir el rol adecuado" variant="highlight">
+- **Desarrollador**: para generar código de calidad producción
+- **Arquitecto**: para decisiones de diseño y estructura
+- **Revisor**: para analizar código existente
+- **Redactor técnico**: para la documentación
+- **DevOps**: para scripts, CI/CD e infraestructura
+- **Data analyst**: para análisis de datos y consultas SQL
+</Card>
+
+### Combinar varios roles
+
+Puedes asignarle a Claude varias facetas para cubrir distintos aspectos de una tarea.
+
+```markdown
+Eres un desarrollador fullstack senior Y un experto en accesibilidad WCAG 2.1.
+Cuando generas código de interfaz, aplicas sistemáticamente:
+- Los roles ARIA correctos
+- La gestión del foco por teclado
+- Contrastes de color conformes con AA
+- Alternativas textuales para los elementos visuales
+```
+
+## 2. Las directivas de restricciones
+
+Las restricciones delimitan el terreno de juego de Claude. Definen qué es obligatorio, qué está prohibido y qué es preferible. Gracias a las restricciones obtienes código conforme a *tus* estándares y no a convenciones genéricas.
+
+### El patrón ALWAYS/NEVER
+
+Este patrón es el más explícito para definir reglas absolutas. Claude las trata como prioridades máximas.
+
+```markdown
+## Reglas absolutas
+
+ALWAYS:
+- Usa TypeScript estricto (nada de any, nada de as unknown)
+- Gestiona los errores explícitamente con try/catch o tipos Result
+- Crea objetos inmutables (spread operator, Object.freeze)
+- Valida los inputs en la frontera del sistema
+- Nombra las variables en inglés, los comentarios en español
+
+NEVER:
+- Nunca mutes un objeto existente
+- Nunca uses console.log en producción (usa un logger estructurado)
+- Nunca uses valores mágicos (hardcodeados), usa constantes
+- Nunca crees un archivo de más de 400 líneas
+- Nunca subas secretos ni tokens al código
+```
+
+### Restricciones técnicas
+
+Las restricciones técnicas especifican el entorno, las dependencias permitidas y los límites del sistema.
+
+```markdown
+## Restricciones técnicas
+
+Stack permitido:
+- Framework: Next.js 14 (solo App Router, nada de Pages Router)
+- Estilos: Tailwind CSS (nada de CSS modules, nada de styled-components)
+- Estado: Zustand para el estado global, React state para el local
+- Formularios: react-hook-form + Zod para la validación
+- API: tRPC o Server Actions (nada de REST tradicional)
+- Tests: Vitest + Testing Library (nada de Jest, nada de Enzyme)
+
+Dependencias prohibidas:
+- Moment.js (usa date-fns o dayjs)
+- lodash completo (importa las funciones individualmente si hace falta)
+- jQuery (nunca)
+```
+
+## 3. Las directivas de formato de salida
+
+El formato de salida controla la estructura de la respuesta de Claude. Sin una directiva de formato, Claude elige un formato por defecto que puede no ajustarse a tus necesidades.
+
+```markdown
+## Formato de salida esperado
+
+Para cada componente React generado, entrega:
+
+1. **El componente**: código completo con tipos TypeScript
+2. **Los tipos**: interfaces y tipos exportados en un archivo separado
+3. **Los tests**: como mínimo: renderizado sin errores, props obligatorias, interacciones del usuario
+4. **El ejemplo de uso**: un snippet que muestre cómo usar el componente
+5. **Las notas**: limitaciones conocidas, mejoras posibles, dependencias requeridas
+```
+
+### Formatos especializados
+
+```markdown
+# Para un análisis de código
+Entrega tu análisis en este formato:
+| Archivo | Línea | Gravedad | Problema | Corrección sugerida |
+|---------|-------|----------|----------|---------------------|
+
+# Para una comparación técnica
+Entrega una tabla comparativa:
+| Criterio | Opción A | Opción B | Recomendación |
+|---------|----------|----------|----------------|
+
+# Para un plan de implementación
+Entrega un plan estructurado:
+## Fase 1: [nombre] (duración estimada)
+- [ ] Tarea 1
+- [ ] Tarea 2
+```
+
+## 4. Las directivas por ejemplos (few-shot)
+
+Mostrarle a Claude lo que esperas suele ser más eficaz que describirlo. La técnica del **few-shot prompting** consiste en dar ejemplos concretos del resultado esperado.
+
+```markdown
+Genera mensajes de commit siguiendo este patrón:
+
+Ejemplo 1: añadir un botón de inicio de sesión
+→ feat: add login button with OAuth2 redirect
+
+Ejemplo 2: corregir un bug de visualización en móvil
+→ fix: resolve navbar overflow on mobile viewport
+
+Ejemplo 3: reescritura del servicio de autenticación
+→ refactor: rewrite auth service with repository pattern
+
+Ahora, genera para:
+- añadir la paginación en la lista de productos
+- corregir el cálculo de IVA que redondeaba mal
+- actualizar las dependencias npm
+```
+
+<Callout type="tip" title="El poder del few-shot">
+Con 2-3 ejemplos bien elegidos, Claude entiende el patrón y lo reproduce fielmente. Es la técnica más fiable para obtener un formato de salida exacto.
+</Callout>
+
+## Los patrones DO/DON'T
+
+El patrón DO/DON'T es una versión estructurada y visual de las restricciones. Funciona especialmente bien en el archivo [CLAUDE.md](/prompting/claude-md) o en las [Skills](/skills/what-are-skills).
+
+```markdown
+## Convenciones de código
+
+DO:
+- Usa funciones flecha para los componentes React
+- Exporta los tipos e interfaces desde un archivo types.ts dedicado
+- Gestiona el loading, el error y el éxito en cada llamada a la API
+- Usa early returns para reducir el anidamiento
+
+DON'T:
+- No crees componentes de clase React
+- No uses useEffect para hacer fetching (usa useSWR o React Query)
+- No hagas prop drilling en más de 2 niveles
+- No uses el índice como key en listas dinámicas
+```
+
+## Dictado por voz: programar hablando
+
+Boris Cherny, el creador de Claude Code, programa principalmente dictando sus prompts. El dictado es unas tres veces más rápido que escribir para describir intenciones complejas, y obliga de forma natural a hablar en términos de intención en lugar de implementación.
+
+### Cómo activar el dictado
+
+**Claude Code nativo:**
+
+```bash
+# En Claude Code, simplemente escribe:
+/voice
+# El micrófono se activa, habla y luego pulsa Enter
+```
+
+**macOS (dictado del sistema):**
+
+```bash
+# Doble toque en la tecla Fn
+# El dictado del sistema de macOS se activa en cualquier aplicación
+# Funciona directamente en el terminal de Claude Code
+```
+
+**Wispr Flow (aplicación de terceros):**
+
+```bash
+# La más usada en la comunidad
+# Ventaja: puntuación automática, contexto de la aplicación
+# Instalación: wispr.flow
+```
+
+### Cuándo dictar, cuándo escribir
+
+El dictado no sirve para todo. Así se combinan ambos para obtener resultados óptimos:
+
+| Modo | Ideal para | Menos adecuado para |
+|------|-----------|-------------------|
+| **Dictado** | Describir una intención, explicar un contexto, formular una pregunta | Nombres de variables, rutas de archivos, código técnico exacto |
+| **Escritura** | Restricciones precisas, snippets de código, instrucciones ALWAYS/NEVER | Descripciones largas de funcionalidades |
+
+<Callout type="tip" title="La combinación ganadora">
+Dicta la intención ("quiero un componente de navegación responsive que se convierta en menú hamburguesa en móvil") y luego escribe las restricciones técnicas precisas. El dictado captura el "qué y por qué", la escritura captura el "cómo exactamente".
+</Callout>
+
+## Diagramas ASCII: visualizar antes de programar
+
+Pedirle a Claude que dibuje un diagrama ASCII es una de las técnicas más infravaloradas. En pocos segundos obtienes una representación visual de la arquitectura, del flujo de datos o de la estructura de un componente, sin necesitar ninguna herramienta externa.
+
+```markdown
+"Antes de programar, dibuja un diagrama ASCII de la arquitectura
+de este proyecto: los módulos principales, los flujos de datos entre ellos,
+y los puntos de entrada externos (API, usuario, cron)."
+```
+
+Claude producirá algo como esto:
+
+```
+┌─────────────────────────────────────────────────┐
+│                   Client (Browser)               │
+└──────────────────────┬──────────────────────────┘
+                       │ HTTP
+                       ▼
+┌─────────────────────────────────────────────────┐
+│              Next.js App (App Router)            │
+│  ┌──────────────┐    ┌────────────────────────┐ │
+│  │  Server      │    │  Client Components     │ │
+│  │  Components  │    │  (React state, hooks)  │ │
+│  └──────┬───────┘    └────────────┬───────────┘ │
+└─────────┼────────────────────────┼──────────────┘
+          │ SQL                    │ tRPC
+          ▼                        ▼
+   ┌─────────────┐        ┌──────────────────┐
+   │  PostgreSQL  │        │   API Routes     │
+   └─────────────┘        └──────────────────┘
+```
+
+<Callout type="info" title="Por qué ayuda">
+Un diagrama ASCII es una forma de prompt contextual invertido: le das a Claude la oportunidad de mostrarte su comprensión del sistema antes de que lo toque. Si el diagrama está mal, es el mejor momento para corregirlo, no después de 200 líneas de código.
+</Callout>
+
+### Prompts de diagrama útiles
+
+```markdown
+# Arquitectura global
+"Dibuja un diagrama ASCII de la arquitectura de este proyecto,
+con los principales flujos de datos."
+
+# Flujo de autenticación
+"Muéstrame el flujo de autenticación en ASCII:
+desde la introducción de la contraseña hasta el token JWT en base de datos."
+
+# Dependencias entre módulos
+"Dibuja un grafo ASCII de las dependencias entre los archivos
+de la carpeta src/services/. Identifica las dependencias circulares."
+
+# Modelo de datos
+"Representa el modelo de datos en ASCII (como un esquema ERD simplificado):
+tablas, columnas principales y relaciones."
+```
+
+## Combinar las directivas: un prompt completo
+
+Así es como los cuatro tipos de directivas se combinan en un prompt profesional.
+
+```markdown
+# Rol
+Eres un desarrollador backend senior especializado en API REST con Node.js/Express.
+
+# Tarea
+Crea un endpoint POST /api/users/register para el registro de un usuario.
+
+# Restricciones
+ALWAYS:
+- Valida el body con Zod (email, password, name)
+- Hashea la contraseña con bcrypt (12 rounds)
+- Devuelve un JWT access token (15 min) y un refresh token (7 días)
+- Registra cada intento de registro (éxito o fallo)
+
+NEVER:
+- Nunca almacenes la contraseña en texto plano
+- Nunca devuelvas el hash en la respuesta de la API
+- No uses any de TypeScript
+
+# Formato de salida
+1. El controller en src/controllers/auth.controller.ts
+2. El service en src/services/auth.service.ts
+3. El esquema Zod en src/schemas/auth.schema.ts
+4. Los tests unitarios del service
+5. Un ejemplo de petición curl para probarlo
+```
+
+## Directivas en el CLAUDE.md vs. en el prompt
+
+Es importante saber dónde colocar tus directivas para maximizar su eficacia.
+
+| Dónde | Cuándo | Ejemplo |
+|---|-------|---------|
+| **CLAUDE.md** | Reglas permanentes del proyecto | Stack, convenciones, patrones obligatorios |
+| **Skills** | Flujos de trabajo reutilizables | Revisión de PR, despliegue, onboarding |
+| **Prompt** | Instrucciones puntuales | Tarea específica a realizar ahora mismo |
+| **.claude/rules/** | Reglas temáticas | Seguridad, tests, rendimiento |
+
+<Callout type="tip" title="La jerarquía de las directivas">
+Las directivas del prompt actual tienen la prioridad más alta, seguidas de las Skills activadas, luego del CLAUDE.md y por último de las reglas globales. Si dos directivas se contradicen, gana la del nivel más específico.
+</Callout>
+
+## Ejemplos concretos por tipo de tarea
+
+### Para código frontend
+
+```markdown
+Eres un desarrollador frontend experto en React/Next.js.
+
+Reglas de interfaz:
+- Mobile-first, responsive en todos los breakpoints
+- Accesibilidad WCAG 2.1 AA como mínimo
+- Animaciones sutiles con framer-motion (sin sobrecargar)
+- Dark mode soportado mediante variables CSS o next-themes
+```
+
+### Para código backend
+
+```markdown
+Eres un desarrollador backend Node.js/TypeScript.
+
+Reglas de API:
+- Formato de respuesta uniforme: { success, data, error, meta }
+- Códigos HTTP semánticos (201 Created, 404 Not Found, 422 Unprocessable)
+- Rate limiting en todos los endpoints públicos
+- Paginación basada en cursor para las listas
+```
+
+### Para revisión de código
+
+```markdown
+Eres un revisor de código senior. Por cada problema encontrado, entrega:
+- Gravedad: CRITICAL / HIGH / MEDIUM / LOW
+- Categoría: bug, security, performance, maintainability, style
+- Archivo y línea afectados
+- Descripción del problema
+- Sugerencia de corrección con código
+```
+
+### Para análisis de datos
+
+```markdown
+Eres un data analyst senior. Para cada análisis:
+- Empieza con las estadísticas descriptivas
+- Identifica los outliers y los datos faltantes
+- Propón visualizaciones relevantes
+- Termina con recomendaciones accionables
+- Explica los resultados en lenguaje no técnico
+```
+
+## Próximos pasos
+
+Ahora que dominas las directivas, pasa a la práctica con plantillas concretas.
+
+- [Plantillas de prompts por perfil profesional](/prompting/templates): prompts completos listos para usar
+- [Errores habituales que evitar](/prompting/mistakes): las trampas más frecuentes al hacer prompting
+- [La guía completa de CLAUDE.md](/prompting/claude-md): automatiza tus directivas con el archivo de configuración
+- [Crear una Skill personalizada](/skills/create-custom): convierte tus directivas en slash commands reutilizables

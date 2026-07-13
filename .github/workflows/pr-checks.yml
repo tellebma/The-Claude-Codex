@@ -261,7 +261,7 @@ jobs:
 
       - name: Lychee link check
         id: lychee
-        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
           args: --config .lychee.toml --cache --root-dir ${{ github.workspace }}/out './out/**/*.html'
           fail: true
@@ -664,7 +664,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Post/update consolidated metrics comment
-        uses: marocchino/sticky-pull-request-comment@0ea0beb66eb9baf113663a64ec522f60e49231c0 # v3.0.4
+        uses: marocchino/sticky-pull-request-comment@5770ad5eb8f42dd2c4f34da00c94c5381e49af88 # v3.0.5
         with:
           header: pr-metrics
           message: |

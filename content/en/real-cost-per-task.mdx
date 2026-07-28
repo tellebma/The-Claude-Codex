@@ -1,0 +1,192 @@
+---
+title: "Real Cost Per Task: What the Per-Token Price Doesn't Tell You"
+description: "Tokenizer, reasoning budget, caching, long context, batching: the levers that actually determine the real bill for a task, well beyond the advertised price per million tokens."
+section: "content"
+order: 26
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["guide", "productivity"]
+---
+
+## The per-token price isn't the bill
+
+A consultant's hourly rate says nothing about the final cost of an engagement. It all depends on how much time they spend thinking before answering, whether they need to reread the whole file at every meeting or just the new pieces, and how big that file is. Language models work the same way. The price per million tokens shown on a pricing page is a starting point, not a bill.
+
+Our [article on the real costs of Claude Code](/content/real-costs-claude-code) already covers MCP, subscriptions, and day-to-day optimization strategies. This one goes further on one specific point: at an identical advertised price, two tasks can cost very different amounts. The tokenizer, the reasoning budget, caching, context length, and the billing mode chosen often weigh more than the catalog rate itself.
+
+<Callout type="warning" title="Prices dated July 28, 2026">
+All prices cited in this article are as observed on July 28, 2026, on vendors' official pages. Check current pricing before budgeting: this market moves fast.
+</Callout>
+
+## The tokenizer matters more than you'd think
+
+First pitfall, and the most counterintuitive: for identical text, two models don't produce the same number of tokens.
+
+Claude Opus 5 uses the tokenizer introduced with Opus 4.7. For the same text, this tokenizer produces roughly 30% more tokens than models predating Opus 4.7.
+
+{/* source: https://platform.claude.com/docs/en/about-claude/pricing, consulté 2026-07-28 */}
+
+Concretely, if you compare Opus 5 to an older Opus model at the same $5 / $25 per million token rate, Opus 5's bill still climbs: the same prompt and the same response consume more tokens. The listed price doesn't move, the billed quantity does. It's the kind of detail that never jumps out on a pricing page, and it explains why two models "at the same rate" can show different bills for the same volume of work.
+
+<Callout type="tip" title="Habit to build">
+Before comparing two models on catalog price alone, test them on the same real prompt and check the actual token count consumed (with `/cost` in Claude Code, or the `usage` field of the API response). The per-token rate never replaces a direct measurement.
+</Callout>
+
+## The reasoning budget is the dominant variable
+
+On Opus 5, reasoning effort is set from `low` to `max`, and thinking runs by default, with no need to explicitly enable it.
+
+{/* source: https://platform.claude.com/docs/en/build-with-claude/effort, consulté 2026-07-28 */}
+
+This setting weighs far more heavily on the bill than the choice of model itself, because reasoning tokens are billed as output tokens, and the value-for-money curve isn't linear. Opus 5's system card documents a precise example on FrontierBench v0.1, a benchmark of hard engineering tasks:
+
+| Effort | Score (mean reward) | Output tokens vs `xhigh` |
+|---|---|---|
+| `low` | 25% | -64% |
+| `high` | 39% | -19% |
+| `xhigh` | 44.4% (best score) | baseline |
+| `max` | 43% | within statistical noise |
+
+{/* source: system card Claude Opus 5, section 8.5, consulté 2026-07-28 */}
+
+Two lessons to draw from this. First, raising effort from `low` to `xhigh` nearly doubles the score, but at the cost of a much heavier token budget: going from `high` to `xhigh` adds still more output tokens to gain just 5.4 points. Second, pushing all the way to `max` brings nothing measurable here: the score actually dips slightly, within the noise margin. Paying for maximum effort on this task would have been pure waste.
+
+The practical takeaway: don't set effort once and forget it. A quick sweep across a representative sample of your tasks (low, high, xhigh) often shows that a mid-tier setting covers most of the quality for a fraction of the top tier's cost.
+
+## Caching changes the order of magnitude
+
+Prompt caching isn't an optimization detail, it's a lever that can cut the bill by a factor of ten.
+
+At Anthropic, on Opus 5: a 5-minute cache write costs $6.25/MTok (1.25x the base input rate), a 1-hour write costs $10/MTok (2x), and a cache-hit read costs $0.50/MTok (0.1x). The minimum cacheable prompt threshold is 512 tokens on Opus 5, versus 1,024 on Opus 4.8.
+
+{/* source: https://platform.claude.com/docs/en/about-claude/pricing, consulté 2026-07-28 */}
+
+At Moonshot, on Kimi K3, the gap is even starker: $0.30/MTok on input if the content is already cached, versus $3.00/MTok on a cache miss. A factor of 10 between the two, with no intermediate tier.
+
+{/* source: https://platform.kimi.ai/docs/pricing/chat-k3 et https://www.kimi.com/blog/kimi-k3, consultés 2026-07-28 */}
+
+At OpenAI, on GPT-5.6, cache writes cost 1.25x the uncached input rate, and reads keep the usual 90% discount, with a minimum cache lifetime of 30 minutes and explicit "cache breakpoints" to place in the prompt.
+
+{/* source: https://developers.openai.com/api/docs/models/gpt-5.6-sol, consulté 2026-07-28 */}
+
+Caching pays off when the same block of context, a CLAUDE.md file, a large codebase, an MCP tool schema, keeps coming back across several closely spaced calls. It doesn't pay off if each call starts with different context: in that case you pay the write premium (1.25x to 2x depending on the vendor) without ever hitting the read discount.
+
+<Callout type="tip" title="When to turn on caching">
+A Claude Code session that rereads the same large file or the same CLAUDE.md at every conversation turn is a natural caching candidate. A series of one-off requests over different contexts isn't: the write costs more than standard input, and you'll never recoup it if it's only read once.
+</Callout>
+
+## Long context isn't billed the same way everywhere
+
+A structural, little-known difference sets Anthropic apart from OpenAI on large contexts.
+
+At OpenAI, on GPT-5.6: beyond 272,000 input tokens, the entire request switches to 2x the input rate and 1.5x the output rate.
+
+{/* source: https://developers.openai.com/api/docs/models/gpt-5.6-sol, consulté 2026-07-28 */}
+
+At Anthropic, Opus 5's 1M-token window is billed at the standard rate, with no tier: "a 900k-token request is billed at the same per-token rate as a 9k-token request."
+
+{/* source: https://platform.claude.com/docs/en/about-claude/pricing, consulté 2026-07-28 */}
+
+Concretely, a task that loads 400,000 tokens of source code for a full security review crosses the 272K threshold at OpenAI and sees the entire request, not just the overage, double in input price. The same task at Anthropic stays at the base rate. For workloads that regularly push context past a few hundred thousand tokens, this rule weighs more heavily on the vendor decision than the catalog price at standard volume.
+
+## Batch and fast modes: two ways to buy time
+
+The batch API applies a 50% discount at both vendors, in exchange for asynchronous processing (results delivered later, not in real time).
+
+At Anthropic, on Opus 5: $2.50/MTok on input and $12.50/MTok on output in batch mode, versus $5/$25 synchronously.
+
+{/* source: https://platform.claude.com/docs/en/about-claude/pricing, consulté 2026-07-28 */}
+
+At OpenAI, on GPT-5.6: Sol drops to $2.50/$15.00, Terra to $1.25/$7.50, Luna to $0.50/$3.00.
+
+{/* source: https://developers.openai.com/api/docs/pricing.md, consulté 2026-07-28 */}
+
+Batch makes sense for anything that doesn't need an immediate answer: bulk documentation generation, log analysis, code migration across hundreds of files. It makes no sense for an interactive development session where you're waiting on the response to keep going.
+
+Conversely, Opus 5's fast mode (research preview) goes the opposite way: roughly 2.5x the default speed, for 2x the base price, meaning $10/MTok on input and $50/MTok on output. Available only on the direct Claude API, not on AWS or partner clouds, and incompatible with batch.
+
+{/* source: https://www.anthropic.com/news/claude-opus-5 et https://platform.claude.com/docs/en/about-claude/pricing, consultés 2026-07-28 */}
+
+This trade pays off when latency costs more than the token, typically in a CI pipeline where every minute of waiting blocks a chain of steps, or in interactive use where a developer sits idle in front of their terminal. It loses for any bulk processing where total time barely matters against volume: in that case, half-price batch is almost always the better call, absent an emergency.
+
+## Compare at equal performance, not equal price
+
+The real test isn't "which model costs the least per token," but "how much does the same level of result cost."
+
+Artificial Analysis independently measures, with its own harness, the real cost per task of its Intelligence Index v4.1:
+
+| Model (configuration) | Index | Cost per task |
+|---|---|---|
+| Claude Opus 5 (max) | 61 | $2.03 |
+| Claude Opus 5 (xhigh) | 60 | $1.56 |
+| Claude Fable 5 (with fallback) | 60 | $2.75 |
+| GPT-5.6 Sol (max) | 59 | $1.04 |
+| Kimi K3 (max) | 57 | $0.72 |
+
+{/* source: https://artificialanalysis.ai/leaderboards/models, consulté 2026-07-28 */}
+
+This "cost" is a per-task cost from the index, not a catalog rate per million tokens: it blends the model's price with its actual token consumption on the index's tasks. That's exactly what makes it a useful tool for comparing at similar performance rather than at identical advertised price.
+
+The Kimi K3 tech report documents comparisons of the same kind, worth taking for what they are: figures published by Moonshot, using its own harness and its own criteria. Three concrete examples:
+
+- On Kimi Code Bench 2.0, K3 trails Claude Fable 5 by 4 points, but at 38% of its cost. At effort `high`, K3 already matches Claude Opus 4.8's max-effort score for roughly a third of the cost.
+- On BrowseComp, K3 gets the best score in the comparison (91.2%) at $2.03 per task, half the cost of GPT-5.6 Sol (90.4%) and an order of magnitude less than the Claude models at max effort.
+- On GDPval-AA v2, K3 stays within 50 Elo points of GPT-5.6 Sol for 13% less cost, and 2.6 times cheaper than Claude Fable 5.
+
+{/* source: tech report Kimi K3, section 6.4, consulté 2026-07-28 */}
+
+<Callout type="info" title="Read these figures with caution">
+These three comparisons come from Moonshot's tech report, the vendor behind Kimi K3. The GDPval-AA v2 and AA-Briefcase costs they cite come themselves from Artificial Analysis's pay-per-token pricing observed on July 23, 2026, a third-party source, but the choice of benchmarks and the framing of the comparison remain Moonshot's own. Take it as a signal, not as a neutral verdict.
+</Callout>
+
+## Summary table of verified pricing
+
+Prices observed on July 28, 2026, in dollars per million tokens.
+
+| Model | Input | Output | Cache | Context |
+|---|---|---|---|---|
+| Claude Opus 5 | $5 | $25 | write 5min $6.25 / 1h $10, read $0.50 | 1M |
+| Claude Fable 5 | $10 | $50 | not publicly documented | 1M |
+| Claude Sonnet 5 | $2 ($3 from 08/31/2026) | $10 ($15 from 08/31/2026) | not publicly documented | 1M |
+| Claude Haiku 4.5 | $1 | $5 | not publicly documented | 200k |
+| GPT-5.6 Sol | $5 | $30 | read $0.50 | 1.05M |
+| GPT-5.6 Terra | $2.50 | $15 | read $0.25 | 1.05M (max input 922k) |
+| GPT-5.6 Luna | $1 | $6 | read $0.10 | 1.05M (max input 922k) |
+| Kimi K3 | $3 (cache miss) | $15 | cache hit $0.30 | ~1.05M |
+
+{/* sources: https://platform.claude.com/docs/en/about-claude/pricing, https://developers.openai.com/api/docs/models/gpt-5.6-sol, https://developers.openai.com/api/docs/models/gpt-5.6-terra.md, https://developers.openai.com/api/docs/models/gpt-5.6-luna.md, https://platform.kimi.ai/docs/pricing/chat-k3, consultés 2026-07-28 */}
+
+For GPT-5.6, cache writes add 1.25x the uncached input rate across all three variants. Beyond 272,000 input tokens, the entire request switches to 2x input and 1.5x output.
+
+## How to estimate the cost of a real task
+
+Comparing catalog prices never replaces a measurement on your own usage. Here's the order to follow.
+
+<Steps>
+<Step title="Isolate a representative task" stepNumber={1}>
+Pick a task representative of your real usage: a module refactor, a security review, test generation. Avoid measuring on a toy prompt, the input-to-output token ratio changes completely depending on the nature of the work.
+</Step>
+<Step title="Measure actual consumption, don't estimate it" stepNumber={2}>
+Run the task and read the actual consumption: `/cost` in Claude Code, or the `usage` field of the API response. Note input, output, and cache tokens (write and read) separately if caching is active.
+</Step>
+<Step title="Test at least two effort levels" stepNumber={3}>
+Replay the same task at a mid-tier effort and at the maximum effort available. If the quality gain is marginal, as in the FrontierBench example above, mid-tier effort is the right default choice.
+</Step>
+<Step title="Check whether caching applies" stepNumber={4}>
+If the same task repeats with a stable context (same file, same CLAUDE.md), turn on caching and compare cost across three consecutive calls. If there's only a single call, caching won't pay off: skip it.
+</Step>
+<Step title="Project onto real monthly volume" stepNumber={5}>
+Multiply the measured cost by how many times that task type repeats in a month. That figure, not the price per million tokens, is what should go into a budget.
+</Step>
+</Steps>
+
+One last factor worth not overlooking in this measurement: response speed varies sharply from one model to another, independent of price. Artificial Analysis reports, for instance, a time-to-first-token of 18.41 seconds for Claude Opus 5 at effort `high`, versus 2.04 seconds for GPT-5.6 Terra at the same effort. A factor of 9 that shows up on no pricing page, yet weighs directly on the real time spent waiting for a response, and therefore on productivity per dollar spent.
+
+{/* source: https://artificialanalysis.ai/leaderboards/providers, consulté 2026-07-28 */}
+
+## Next steps
+
+- [The real costs of Claude Code](/content/real-costs-claude-code): the baseline calculation, MCP included, subscriptions and day-to-day optimization strategies
+- [Context Management](/prompting/context-management): reducing input token volume at the source
+- [Extended Thinking and Plan Mode](/prompting/thinking-and-planning): when to enable deep thinking, and at what price
+- [Interactive Configurator](/configurator): generate a configuration tailored to your budget

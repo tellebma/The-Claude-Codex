@@ -35,7 +35,13 @@ test.describe("Navigation", () => {
 
   test("can navigate to Reference section", async ({ page }) => {
     await page.goto("/fr/");
-    await page.getByRole("link", { name: "Référence" }).first().click();
+    // exact: true obligatoire. Sans lui, le match se fait par sous-chaine et
+    // n'importe quel article dont le titre contient « reference » passe avant
+    // le lien de navigation (ex. « Benchmarks LLM : tableaux de reference »).
+    await page
+      .getByRole("link", { name: "Référence", exact: true })
+      .first()
+      .click();
     await expect(page).toHaveURL(/\/fr\/reference/);
     await expect(
       page.getByRole("heading", { level: 1 })

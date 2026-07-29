@@ -1,0 +1,97 @@
+---
+title: "Kimi K3: el primer modelo abierto de clase 3T, y lo que cambia de verdad"
+description: "Moonshot AI publica Kimi K3 a finales de julio de 2026: 2,78 billones de parámetros, una licencia con umbrales comerciales y un primer puesto open-weight en el Intelligence Index. El análisis sin ruido."
+badge: "Nuevo"
+section: "content"
+order: 22
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["guide", "tooling"]
+---
+
+## En resumen
+
+Moonshot AI ha publicado **Kimi K3**, descrito en su propio README como «el primer modelo abierto de clase 3T del mundo». {/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/README.md, consultado 2026-07-28 */} El repositorio oficial de GitHub recibió su primer commit el 27 de julio de 2026, y el blog de Moonshot anunciaba que los pesos completos «to be released by July 27, 2026». {/* source: https://api.github.com/repos/MoonshotAI/Kimi-K3/commits y https://www.kimi.com/blog/kimi-k3, consultados 2026-07-28 */} Ninguna página oficial escribe textualmente «lanzado el 27 de julio»: es una deducción sólida a partir de estas dos fuentes, no una cita literal.
+
+Este sitio habla de Claude Code a diario, no de Kimi. Pero un modelo abierto que reivindica el primer puesto en una clasificación de inteligencia independiente merece que se mire de verdad lo que hay bajo el capó, sin repetir los atajos que ya circulan sobre el tema.
+
+<Callout type="info" title="Falta una fuente, y no es un detalle menor">
+El post oficial en X de Moonshot anunciando Kimi K3 no se pudo consultar en el momento de la redacción (error de acceso por parte de la red social). Este artículo se apoya, por tanto, exclusivamente en el repositorio oficial de GitHub, el tech report en PDF y la documentación de la plataforma Kimi, fuentes en todo caso más sólidas que un post promocional.
+</Callout>
+
+## 2,78 billones de parámetros, pero solo 104 mil millones trabajan a la vez
+
+La tabla de especificaciones oficial anuncia **2,8 T de parámetros totales** para **104 B de parámetros activados**, y el tech report precisa estas cifras hasta la décima: 2,78 T en total, 104,2 B activados. {/* source: README §"Model Summary" y k3_tech_report.pdf Table 1, consultados 2026-07-28 */} La diferencia entre ambos números no es un detalle, es la arquitectura del modelo.
+
+Kimi K3 es un modelo Mixture-of-Experts, o MoE. La idea se parece a una gran consultora: la firma emplea a cientos de especialistas, pero un cliente dado nunca trata con todos a la vez. Para cada pregunta, solo se convoca a los expertos pertinentes. En concreto, K3 dispone de **896 expertos**, de los cuales **16 se seleccionan en cada palabra generada**, más 2 expertos compartidos que participan siempre. {/* source: README §"Model Summary", consultado 2026-07-28 */} Resultado: el modelo almacena 2,78 T de parámetros en disco, pero solo activa poco más de 100 B para producir un token dado. Esto es lo que hace que un modelo de este tamaño sea utilizable en la práctica, y no una simple proeza académica.
+
+El modelo apila 93 capas, de las cuales 69 usan un mecanismo de atención lineal bautizado Kimi Delta Attention (KDA) y 24 una atención más clásica de tipo Gated MLA, intercaladas periódicamente para mantener una visión de conjunto sobre la secuencia. {/* source: README §"Model Summary" y k3_tech_report.pdf §2, consultados 2026-07-28 */} Su ventana de contexto anunciada sube a **1 048 576 tokens**, es decir 1 M, y el tech report indica que el modelo extrapola directamente a ese tamaño sin ningún ajuste del encoding posicional, gracias a un diseño llamado NoPE que codifica la posición de forma implícita a través del mecanismo de KDA. {/* source: README §"Model Summary" y k3_tech_report.pdf §3.4, consultados 2026-07-28 */}
+
+Frente a su predecesor Kimi K2, el progreso es claro sobre el papel: K2 contaba con 1,04 T de parámetros totales para 32,6 B activados, con 384 expertos de los que 8 activos por token y una ventana de contexto de 128 K en entrenamiento. {/* source: k3_tech_report.pdf Table 1, consultado 2026-07-28 */} Moonshot reivindica además una ganancia de aproximadamente 2,5× en eficiencia de escalado durante el entrenamiento respecto a K2, medida en curvas de validación fuera de distribución. {/* source: README y k3_tech_report.pdf §3.2, consultados 2026-07-28 */} Ninguna puntuación numérica que compare K2 y K3 en un mismo benchmark aparece en las fuentes oficiales: la comparación que circula sigue siendo arquitectónica, no medida.
+
+## La licencia de Kimi K3: no es una «MIT modificada»
+
+Es el punto peor explicado en los resúmenes que ya circulan sobre K3. El texto de la licencia, publicado tal cual en el repositorio, se titula **Kimi K3 License**. {/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/LICENSE, consultado 2026-07-28 */} En la ficha de Hugging Face, el campo `license` muestra literalmente `other`. {/* source: https://huggingface.co/api/models/moonshotai/Kimi-K3, consultado 2026-07-28 */} No es ni una MIT, ni una MIT «modificada»: es una licencia propietaria construida sobre una estructura cercana a MIT, con dos cláusulas comerciales muy reales que conviene leer antes de imaginar construir un producto sobre ella.
+
+La primera cláusula afecta a los servicios de inferencia. Si explotas, solo o a través de tus filiales, un negocio de tipo Model-as-a-Service y tu facturación agregada supera los **20 millones de dólares en 12 meses consecutivos**, se vuelve obligatorio un acuerdo comercial aparte con Moonshot AI antes de cualquier uso comercial. {/* source: LICENSE, consultado 2026-07-28 */} La segunda afecta a la atribución: por encima de **100 millones de usuarios activos mensuales** o de **20 millones de dólares de ingresos mensuales**, el nombre «Kimi K3» debe aparecer de forma visible en la interfaz del producto. {/* source: LICENSE, consultado 2026-07-28 */}
+
+Para una empresa que quisiera construir un servicio en torno a K3, estos dos umbrales dejan en realidad un margen cómodo: la inmensa mayoría de los proyectos empiezan muy por debajo. El texto también prevé exenciones para el uso interno, o para un acceso a través de los productos oficiales de Moonshot o de socios de inferencia certificados. {/* source: LICENSE, consultado 2026-07-28 */} Queda claro que «pesos abiertos» no significa «sin condiciones»: superados esos límites, hay que contactar con license@moonshot.ai. {/* source: LICENSE, consultado 2026-07-28 */}
+
+<Callout type="warning" title="A comprobar antes de cualquier despliegue comercial">
+Si tu producto puede plausiblemente superar los 20 M$ de facturación en MaaS en 12 meses, o los 100 M de usuarios mensuales, lee el texto completo de la licencia antes de industrializar nada sobre K3. Este resumen simplifica cláusulas jurídicas reales, no las sustituye.
+</Callout>
+
+## Primer modelo abierto del Intelligence Index, con un matiz real que aportar
+
+El tech report de Moonshot cita una tabla de evaluaciones de terceros fechada el 23 de julio de 2026. En el Artificial Analysis Intelligence Index v4.1, K3 se sitúa **4.º de 580 modelos** en todas las categorías, pero **1.º entre los modelos de pesos abiertos** con una puntuación de 57. {/* source: k3_tech_report.pdf §6.3 y https://artificialanalysis.ai/models/kimi-k3, consultados 2026-07-28 */} La tabla del mismo tech report también acredita a K3 el primer puesto en WebDev Arena a 23 de julio de 2026, con la fórmula «the first open model to top this leaderboard». {/* source: k3_tech_report.pdf §6.3, consultado 2026-07-28 */} Una medición directa del leaderboard, hecha el 27 de julio de 2026 sobre 489 150 votos y 104 modelos, muestra una situación que ya ha cambiado: es **claude-opus-5-max** quien ocupa el primer puesto con 1 725 puntos, y Kimi K3 llega segundo en todas las categorías con 1 682, por delante de Claude Opus 5 en variante high (1 670) y Claude Fable 5 (1 629). {/* source: https://arena.ai/leaderboard/code, consultado 2026-07-28 */}
+
+Esto no cambia lo esencial: K3 sigue siendo el primer modelo de pesos abiertos de esta clasificación, y eso es lo que resulta histórico. Simplemente lo supera un modelo propietario, no otro modelo abierto.
+
+Una reserva estadística juega, además, a favor de K3 más que en su contra. La variante en cabeza, claude-opus-5-max, solo suma 686 votos en este leaderboard, frente a 3 777 de K3. {/* source: https://arena.ai/leaderboard/code, consultado 2026-07-28 */} Una diferencia de 43 puntos de Elo apoyada en menos de una quinta parte del volumen de votos no tiene nada de estadísticamente sólido: Opus 5 todavía está en fase de recopilación, y la clasificación puede moverse en ambos sentidos en las próximas semanas.
+
+Nada de esto responde a una intención de Moonshot. La cronología basta para explicarlo todo: las evaluaciones de terceros citadas en el tech report están congeladas a 23 de julio, Claude Opus 5 se anuncia al día siguiente, el 24 de julio, y el repositorio de K3 no se publica hasta el 27. {/* source: https://www.anthropic.com/news/claude-opus-5 y k3_tech_report.pdf §6.3, consultados 2026-07-28 */} La tabla comparativa de Moonshot cita, por tanto, a Claude Opus 4.8, el único modelo Opus disponible en el momento de su propia medición, no a Opus 5. Un tech report puede publicarse con una clasificación ya obsoleta sin que haya la menor falta de honestidad detrás: es simplemente el ritmo del sector, que hace que una instantánea caduque en pocos días. Ninguna fuente, ni de Moonshot ni de Anthropic, ofrece por ahora una puntuación numérica que compare directamente Kimi K3 y Claude Opus 5 en un mismo benchmark: esa comparación sencillamente todavía no existe.
+
+## Cómo probarlo, y dónde se atasca
+
+K3 es accesible a través de la API oficial de Moonshot, en `https://api.moonshot.ai/v1`, con el identificador `kimi-k3`. Un detalle a destacar: la API es compatible tanto con el formato OpenAI como con el formato Anthropic, lo que simplifica la integración para quien ya tenga código conectado a uno de los dos. {/* source: README §5 y https://platform.kimi.ai/docs/guide/kimi-k3-quickstart, consultados 2026-07-28 */}
+
+| Concepto | Tarifa oficial |
+|---|---|
+| Entrada, cache hit | 0,30 $ / millón de tokens |
+| Entrada, cache miss | 3,00 $ / millón de tokens |
+| Salida | 15,00 $ / millón de tokens |
+
+{/* source: https://platform.kimi.ai/docs/pricing/chat-k3 y https://www.kimi.com/blog/kimi-k3, consultados 2026-07-28 */}
+
+El thinking se ejecuta de forma permanente, y el campo `reasoning_effort` permite dosificar el esfuerzo entre `low`, `high` y `max` (`max` por defecto). Un punto técnico que no hay que pasar por alto si conectas K3 a tus propias herramientas: en modo multiturno con llamadas a herramientas, hay que reenviar el mensaje completo del asistente, incluido el campo `reasoning_content`, no solo el texto final. {/* source: README §6, consultado 2026-07-28 */} Para probarlo directamente desde la línea de comandos, Moonshot ofrece su propia CLI agéntica:
+
+<CodeBlock language="bash" code={`curl -fsSL https://code.kimi.com/kimi-code/install.sh | bash`} />
+
+{/* source: https://www.kimi.com/code, consultado 2026-07-28 */}
+
+Donde la cosa se complica es para quien quiera ejecutar K3 en local. Los pesos pesan alrededor de **1,56 TB**, repartidos en 96 archivos safetensors. {/* source: https://huggingface.co/api/models/moonshotai/Kimi-K3?blobs=true, consultado 2026-07-28 */} La documentación oficial de vLLM, el motor de inferencia recomendado por Moonshot, exige un mínimo de **8 GPU GB300** para desarrollo, con un despliegue multinodo recomendado en producción. {/* source: https://recipes.vllm.ai/moonshotai/Kimi-K3, consultado 2026-07-28 */} En cuanto a llama.cpp, el proyecto más popular para ejecutar modelos en local con hardware modesto, a 28 de julio de 2026 no existe ningún soporte oficial: una discusión comunitaria abierta en el repositorio del proyecto enumera los bloqueos técnicos pendientes, en particular la arquitectura propia de K3 que el código todavía no reconoce. {/* source: https://github.com/ggml-org/llama.cpp/discussions/26041, consultado 2026-07-28 */} En resumen, «pesos abiertos» no significa «ejecutable en un puesto de trabajo»: entre la API a pocos centavos el millón de tokens y el autoalojamiento con varias GPU de centro de datos, hoy no hay realmente un punto intermedio.
+
+<Steps>
+<Step title="Pasar por la API oficial" stepNumber={1}>
+El camino más sencillo sigue siendo `platform.kimi.ai`. La recarga mínima es de 1 $, y el formato de la petición acepta tanto la sintaxis OpenAI como la sintaxis Anthropic.
+</Step>
+<Step title="Instalar Kimi Code para un uso agéntico" stepNumber={2}>
+Si quieres probar K3 en tareas parecidas a lo que hace Claude Code (navegación de repositorio, ejecución de comandos, edición multiarchivo), la CLI Kimi Code es el camino recomendado por Moonshot.
+</Step>
+<Step title="Olvídate del autoalojamiento, salvo que ya tengas un clúster GB300" stepNumber={3} isLast>
+1,56 TB de pesos y un mínimo de 8 GPU de centro de datos: para la inmensa mayoría de los equipos, la API sigue siendo la única opción realista a corto plazo.
+</Step>
+</Steps>
+
+## Las puntuaciones merecen una lectura atenta
+
+La tabla de benchmarks del README compara K3 con Claude Fable 5, GPT-5.6 Sol, Claude Opus 4.8, GPT-5.5 y GLM-5.2, con harnesses que varían según el modelo: Kimi Code o Claude Code para K3 según la prueba, Claude Code para los modelos de Anthropic y GLM, Codex para los modelos de OpenAI. {/* source: README §3 y k3_tech_report.pdf, consultados 2026-07-28 */} No es un detalle cosmético: en Kimi Code Bench 2.0, K3 obtiene 72,9 con su propio harness pero 73,7 con Claude Code. {/* source: k3_tech_report.pdf §6.2, consultado 2026-07-28 */}
+
+La puntuación más destacada, un 91,2 en BrowseComp que sitúa a K3 en cabeza, también depende de una elección metodológica precisa: esa cifra usa una compactación automática del contexto activada a los 300 K tokens. Sin esta gestión del contexto, en la ventana completa de 1 M tokens, la puntuación baja a 90,4, es decir, prácticamente un empate con GPT-5.6 Sol. {/* source: k3_tech_report.pdf §6.2, consultado 2026-07-28 */} Moonshot también documenta, en su propia tabla, fallbacks y rechazos declarados por parte de la competencia: en Kimi Code Bench 2.0, Claude Fable 5 tuvo 13 fallbacks y un rechazo sobre 80 tareas, GPT-5.6 Sol 10 rechazos ligados a barreras de seguridad cibernética. {/* source: k3_tech_report.pdf, consultado 2026-07-28 */} Nada de esto invalida los resultados de K3, pero da la medida exacta de lo que significa un «primero de la clase» en este tipo de tabla: un contexto de medición preciso, no un absoluto.
+
+## Próximos pasos
+
+- La misma metodología de verificación aplicada a la competencia de OpenAI: comparativa entre GPT-5.6 y Claude Sonnet 5
+- [Claude Sonnet 5 y Fable 5: lo que cambia de verdad para ti en Claude Code](/content/sonnet-5-fable-5-nouveaux-modeles): los modelos de Anthropic que ya usas a diario
+- Poner en perspectiva las tarifas de Kimi K3 frente a tu uso actual: costes reales de Claude Code
+- Buenas prácticas de seguridad: las preguntas que hacerte antes de conectar un nuevo modelo a flujos de trabajo sensibles

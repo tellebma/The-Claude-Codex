@@ -37,6 +37,14 @@ const SLUG_GROUPS: ReadonlyArray<LocaleSlugGroup> = [
   { fr: "sonnet-5-fable-5-nouveaux-modeles", en: "claude-sonnet-5-fable-5-new-models" },
   { fr: "fable-5-est-de-retour", en: "fable-is-back-what-you-must-know" },
   { fr: "securite-mcp", en: "mcp-security" },
+  // Lot benchmarks LLM (juillet 2026). Les traductions ES reprennent le slug
+  // FR, donc aucune cle `es` n'est necessaire : le repli sur `group.fr` suffit.
+  { fr: "opus-5-face-aux-nouveaux-gpt", en: "opus-5-vs-new-gpt-models" },
+  { fr: "kimi-k3-ce-qui-change", en: "kimi-k3-what-changes" },
+  { fr: "kimi-k3-dans-le-tech-report", en: "kimi-k3-tech-report" },
+  { fr: "lire-un-benchmark-llm", en: "how-to-read-llm-benchmarks" },
+  { fr: "open-weights-vs-modeles-fermes", en: "open-weights-vs-closed-models" },
+  { fr: "cout-reel-par-tache", en: "real-cost-per-task" },
 ];
 
 /**

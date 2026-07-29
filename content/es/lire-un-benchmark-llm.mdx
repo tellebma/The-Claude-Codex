@@ -1,0 +1,114 @@
+---
+title: "Leer un benchmark de LLM sin que te la cuelen: la guía de supervivencia"
+description: "SWE-bench, BrowseComp, WebDev Arena: cada anuncio de modelo trae su ración de puntuaciones impresionantes. Nueve trampas reales, verificadas en julio de 2026, para aprender a descifrarlas tú mismo."
+section: "content"
+order: 24
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["guide", "tooling"]
+---
+
+## Un número solo nunca dice nada
+
+Un anuncio de modelo llega casi siempre con una tabla de puntuaciones y una frase del tipo «nuevo récord». El reflejo natural es comparar los números entre sí. Ese es justamente el error: una puntuación de benchmark depende del harness que la produjo, del nivel de esfuerzo de razonamiento, de la fecha de la medición y, a veces, de una elección editorial que no tiene nada de deshonesta pero que cambia por completo la lectura.
+
+Este artículo reúne nueve trampas metodológicas, cada una ilustrada con un caso real ocurrido en julio de 2026 en torno a los lanzamientos de Claude Opus 5, GPT-5.6 y Kimi K3. Nada abstracto: cada ejemplo se apoya en una fuente verificada. Los proveedores no mienten sobre sus benchmarks, eligen sus ángulos. Aprender a detectar esas elecciones es todo el objetivo de esta guía.
+
+## Trampa 1: la puntuación autoinformada no es una puntuación verificada
+
+Al 28 de julio de 2026, el leaderboard oficial de SWE-bench, alojado en swebench.com, no contiene ni Claude Opus 5 ni GPT-5.6. {/* source: https://www.swebench.com/, consultado 2026-07-28 */} Sus entradas más recientes datan de febrero de 2026. El 96,0 % de SWE-bench Verified atribuido a Claude Opus 5 viene únicamente de la system card de Anthropic, sección 8.2, promediado sobre cinco intentos. {/* source: Claude Opus 5 System Card, section 8.2, consultado 2026-07-28 */} Esta cifra nunca ha sido reproducida por un tercero independiente.
+
+Comparar ese 96,0 % con el ranking de swebench.com no tiene ningún sentido: habría que comparar dos cosas que existen en la misma página, y no es el caso aquí. Es un poco como comparar la nota que un restaurante se pone a sí mismo en su web con la de una guía que todavía no lo ha visitado. Las dos no hablan de la misma medida.
+
+<Callout type="warning" title="Tres regímenes de medición que hay que distinguir">
+Una cifra de benchmark siempre proviene de una de estas tres fuentes: el leaderboard oficial con envíos de proveedores, una evaluación independiente reproducida por un tercero (Artificial Analysis, Epoch AI, ARC Prize), o una tarjeta de modelo autodeclarada por el proveedor. Nunca mezcles las tres sin aclararlo.
+</Callout>
+
+## Trampa 2: el harness cambia el resultado
+
+Un mismo modelo probado por dos harnesses distintos no da la misma puntuación. En Kimi Code Bench 2.0, Kimi K3 obtiene 72,9 con su propio harness Kimi Code, y 73,7 con Claude Code. {/* source: k3_tech_report.pdf §6.2, consultado 2026-07-28 */} En DeepSWE, la diferencia va en sentido contrario: 67,5 con Kimi Code frente a 67,3 con mini-SWE-agent, el harness del leaderboard oficial. {/* source: k3_tech_report.pdf §6.2, consultado 2026-07-28 */}
+
+El leaderboard oficial de Terminal-Bench 2.1 confirma el fenómeno en otro modelo: Claude Code combinado con Fable 5 obtiene 83,8 %, frente a 80,4 % de Terminus 2 combinado con ese mismo Fable 5. Son 3,4 puntos de diferencia para un modelo estrictamente idéntico, debidos únicamente al harness. {/* source: https://www.tbench.ai/leaderboard/terminal-bench/2.1, consultado 2026-07-28 */}
+
+| Modelo | Harness | Puntuación Terminal-Bench 2.1 |
+|---|---|---|
+| Fable 5 | Claude Code | 83,8 % |
+| Fable 5 | Terminus 2 | 80,4 % |
+
+Una puntuación de benchmark sin el nombre de su harness es una frase a medio escribir.
+
+## Trampa 3: el presupuesto de razonamiento lo cambia todo
+
+Los modelos recientes exponen un control de esfuerzo de razonamiento, repartido en general en los niveles `low`, `medium`, `high`, `xhigh`, `max`. Claude Opus 5 funciona por defecto en la API y en Claude Code con esfuerzo `high`, pero Anthropic recomienda repetir un barrido completo de los niveles de esfuerzo en lugar de reutilizar un ajuste heredado de un modelo anterior. {/* source: https://platform.claude.com/docs/en/build-with-claude/effort, consultado 2026-07-28 */}
+
+El efecto sobre las puntuaciones es enorme. GPT-5.6 Sol en ARC-AGI-2 pasa de 42,5 % con esfuerzo `low` a 92,5 % con esfuerzo `max`, es decir, una diferencia de 50 puntos para el mismo modelo. {/* source: https://arcprize.org/results/openai-gpt-5-6-sol, consultado 2026-07-28 */} Claude Opus 5 aparece cinco veces en el top 25 del Artificial Analysis Intelligence Index, una vez por nivel de esfuerzo, con puntuaciones que van de 61 a 51 y costes por tarea de 2,03 $ a 0,36 $. {/* source: https://artificialanalysis.ai/leaderboards/models, consultado 2026-07-28 */}
+
+Un esfuerzo `max` nunca es gratis: es una elección que multiplica el volumen de tokens de razonamiento, y por tanto la factura, para arañar puntos. Una «puntuación de Claude Opus 5» o de «GPT-5.6» sin mencionar el esfuerzo no significa nada por sí sola. Es la segunda dimensión obligatoria de toda tabla de benchmark, junto a la puntuación: el precio pagado por obtenerla.
+
+## Trampa 4: la gestión de contexto es un scaffold disfrazado
+
+La puntuación más destacada del tech report de Kimi K3 es un 91,2 en BrowseComp. Esta cifra depende de una elección metodológica precisa: una compactación automática del contexto, activada a los 300 K tokens. Sin esta gestión de contexto, medido en la ventana completa de 1 M tokens, la puntuación baja a 90,4. {/* source: k3_tech_report.pdf §6.2, consultado 2026-07-28 */} En 90,4, K3 queda en empate estricto con GPT-5.6 Sol, que muestra exactamente la misma puntuación en la tabla publicada por OpenAI. {/* source: https://openai.com/index/gpt-5-6/, consultado 2026-07-28 */}
+
+Una técnica de compactación de contexto no es un detalle de ingeniería invisible: es una pieza del dispositivo de prueba, al mismo nivel que el harness. Dos modelos evaluados con políticas de gestión de contexto diferentes no miden exactamente lo mismo.
+
+## Trampa 5: los rechazos y fallbacks falsean las medias
+
+En Kimi Code Bench 2.0, un conjunto de 80 tareas, Claude Fable 5 activó 13 fallbacks y un rechazo. GPT-5.6 Sol activó 10, vinculados a sus barreras de ciberseguridad. {/* source: k3_tech_report.pdf, consultado 2026-07-28 */} Un fallback significa que la tarea se transfirió a otro modelo, a menudo más antiguo. Un rechazo significa que el modelo declinó explícitamente la tarea. En una tabla de puntuación media, ambos se cuentan como un fallo, exactamente igual que un intento en el que el modelo se equivocó.
+
+El mismo fenómeno aparece del lado de Anthropic en su propio benchmark FrontierBench: los clasificadores de seguridad de Opus 5 bloquearon el 5 % de las llamadas API en el 4 % de los intentos, con conmutación automática a Opus 4.8. Los de Fable 5 bloquearon el 42 % de las llamadas en el 26 % de los intentos. {/* source: Claude Opus 5 System Card, section 8.5, consultado 2026-07-28 */} Un modelo que rechaza una tarea por prudencia y un modelo que falla al intentarla no se comportan igual, pero una tabla de medias los trata de forma idéntica. Antes de comparar dos puntuaciones, vale la pena comprobar si una de las dos esconde una tasa de rechazo o de fallback más alta que la otra.
+
+## Trampa 6: la significancia estadística
+
+En el leaderboard WebDev Arena registrado el 27 de julio de 2026, Claude Opus 5 (variante max) ocupa el primer puesto con una puntuación de 1 725, apoyada en solo 686 votos. Kimi K3 es segundo con 1 682, pero con 3 777 votos. {/* source: https://arena.ai/leaderboard/code, consultado 2026-07-28 */} Una diferencia de 43 puntos de Elo construida con menos de una quinta parte del volumen de votos de su competidor no tiene nada de estadísticamente sólido. Opus 5 todavía está en fase de recolección, y este ranking puede moverse en ambos sentidos.
+
+El mismo leaderboard Arena, en su ranking de texto general, ilustra el problema a mayor escala: los puestos 2 a 10 se reparten entre 1486 y 1505 puntos, con márgenes de error de hasta ±12. {/* source: https://arena.ai/leaderboard/text, consultado 2026-07-28 */} Estos nueve modelos se solapan estadísticamente. Presentar al tercero del ranking como mejor que al octavo es un error de lectura, no un matiz.
+
+No hace falta ninguna fórmula para recordar la regla: cuanto menor sea el número de votos o de intentos, mayor debe ser la diferencia entre dos puntuaciones para que resulte creíble. Un ranking basado en unos pocos cientos de votos se lee con prudencia, sea cual sea el nombre del modelo en cabeza.
+
+## Trampa 7: el ranking caduca rápido
+
+El tech report de Kimi K3, publicado el 27 de julio de 2026, reivindica el primer puesto en WebDev Arena citando un registro del 23 de julio, con la frase «el primer modelo abierto en dominar este leaderboard». {/* source: k3_tech_report.pdf §6.3, consultado 2026-07-28 */} Un registro directo hecho el 27 de julio, el mismo día de la publicación del informe, muestra una situación ya diferente: Claude Opus 5 ocupa el primer puesto. {/* source: https://arena.ai/leaderboard/code, consultado 2026-07-28 */}
+
+No hay ninguna mala fe aquí. Claude Opus 5 fue anunciado el 24 de julio, {/* source: https://www.anthropic.com/news/claude-opus-5, consultado 2026-07-28 */} es decir, el día después del registro citado por Moonshot y tres días antes de la publicación de su propio informe. El ritmo de lanzamientos de modelos es hoy más rápido que el ciclo de redacción de un tech report. Un ranking fechado hace cuatro días ya puede estar obsoleto: hay que mirar siempre la fecha del registro, nunca solo la fecha de publicación del documento que lo cita.
+
+## Trampa 8: el mismo proveedor puede contradecirse
+
+En su propio artículo de anuncio de GPT-5.6, OpenAI escribe en el texto «un nuevo récord de 53,6» en Agents' Last Exam, «superando a Fable 5 por 13,1 puntos». La tabla de esa misma página atribuye 52,7 % a Sol y 40,5 % a Fable 5, es decir, una diferencia de 12,2 puntos, no 13,1. {/* source: https://openai.com/index/gpt-5-6/, consultado 2026-07-28 */} En BrowseComp, el texto anuncia «resultados de estado del arte con un 92,2 %», mientras que la tabla atribuye ese 92,2 % a la variante Sol Ultra, y solo 90,4 % a Sol a secas. {/* source: https://openai.com/index/gpt-5-6/, consultado 2026-07-28 */}
+
+No son mentiras: son dos formas de presentar una misma familia de resultados, una narrativa y redondeada, la otra tabular y precisa. La tabla, con sus notas al pie, sigue siendo siempre la fuente a privilegiar sobre el párrafo que la acompaña.
+
+## Trampa 9: las puntuaciones no son comparables entre proveedores
+
+En HealthBench Professional, OpenAI atribuye 60,5 % a GPT-5.6 Sol y precisa, en una nota al pie, que su método de puntuación «no es comparable con los resultados publicados en las system cards de Anthropic». {/* source: https://openai.com/index/gpt-5-6/, consultado 2026-07-28 */} Dos proveedores pueden citar el nombre de un mismo benchmark y medir cosas diferentes, sin que eso siempre quede escrito con tanta claridad como aquí. Un nombre de benchmark idéntico en dos tablas no es garantía de un método idéntico.
+
+## Contaminación y saturación: las trampas de fondo
+
+Dos problemas más estructurales merecen señalarse al final del recorrido. El primero es la contaminación: OpenAI publicó una página explicando por qué la empresa deja de evaluar SWE-bench Verified, alegando una contaminación creciente del conjunto de prueba (compuesto de scrapes de repositorios públicos de GitHub), tests defectuosos, y un riesgo de fuga en los datos de entrenamiento. {/* source: https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/, consultado 2026-07-28 */} OpenAI ahora recomienda reportar los resultados en el split público de SWE-bench Pro, considerado menos expuesto a este problema.
+
+El segundo es la saturación. En GPQA Diamond, la línea base de expertos con doctorado es del 65 %, la de GPT-4 en su lanzamiento del 39 %. Los mejores modelos actuales rondan el 94 %, y los tres primeros del ranking de Artificial Analysis se mantienen en 0,4 puntos de diferencia. {/* source: https://artificialanalysis.ai/evaluations/gpqa-diamond, consultado 2026-07-28 */} Un benchmark saturado ya no distingue nada entre modelos de frontera: solo mide un techo común.
+
+## La checklist para tener a mano
+
+Ante cualquier anuncio de modelo, diez preguntas bastan para filtrar la mayor parte del ruido:
+
+1. ¿Esta puntuación viene de un leaderboard independiente verificado, o solo de la tarjeta del proveedor?
+2. ¿Qué harness produjo esta cifra, y es el mismo para todos los modelos de la tabla?
+3. ¿Qué nivel de esfuerzo de razonamiento se usó, y es idéntico para todos?
+4. ¿Alguna gestión de contexto particular (compactación, truncamiento) influyó en el resultado?
+5. ¿Cuántos rechazos o fallbacks se contaron como fallos en la media?
+6. ¿El ranking se apoya en un número de votos o intentos suficiente para ser significativo?
+7. ¿En qué fecha se midió esta cifra, y ha cambiado algo un modelo más reciente desde entonces?
+8. ¿El texto del anuncio dice exactamente lo mismo que su propia tabla?
+9. ¿Este benchmark sigue siendo discriminante, o ya está saturado para los modelos recientes?
+10. ¿Existe riesgo de contaminación de los datos de entrenamiento en este conjunto de prueba?
+
+<Callout type="tip" title="El reflejo que hay que conservar">
+Una puntuación sin harness, sin esfuerzo, sin fecha y sin número de intentos no es un hecho verificable. Es un argumento de marketing disfrazado de número. Nada impide que sea cierta, pero nada garantiza que sea comparable a la de la tabla de al lado.
+</Callout>
+
+## Próximos pasos
+
+- Kimi K3: el primer modelo abierto de clase 3T, y lo que cambia de verdad: todas las trampas de este artículo aplicadas a un caso concreto
+- GPT-5.6 vs Claude Sonnet 5: la comparativa real para los devs de Claude Code: el mismo rigor aplicado a la competencia de OpenAI
+- [Claude Sonnet 5 y Fable 5: lo que cambia de verdad para ti en Claude Code](/content/sonnet-5-fable-5-nouveaux-modeles): los modelos de Anthropic detrás de parte de las puntuaciones citadas aquí
+- Costes reales de Claude Code: poner las puntuaciones en perspectiva frente a lo que realmente cuestan en el uso

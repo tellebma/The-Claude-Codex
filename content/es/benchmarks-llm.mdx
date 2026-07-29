@@ -1,0 +1,80 @@
+---
+title: "Benchmarks de LLM: tablas de referencia por categoría"
+description: "Terminal-Bench, SWE-bench, GPQA Diamond, Arena: las puntuaciones de los principales LLM organizadas por categoría, con la fuente, el estatus de editor o independiente y la fecha de cada medición."
+section: "content"
+order: 20
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["reference", "tooling"]
+---
+
+## Qué contiene esta página
+
+Esta página reúne, por categoría, las puntuaciones de los principales LLM en los benchmarks más seguidos hasta la fecha. Cada fila de cada tabla lleva su fuente, la fecha en la que se midió el valor y una insignia que indica si la cifra procede del editor del modelo o de una medición independiente. Última revisión global: 28 de julio de 2026.
+
+Ninguna cifra se copia en el texto de esta página: todas viven en las tablas, que siguen siendo la única fuente actualizada. El texto explica qué mide realmente cada familia de benchmarks y dónde encuentra sus límites.
+
+## Editor o independiente: la distinción que importa
+
+<Callout type="warning" title="Antes de leer las tablas">
+Una puntuación publicada por el editor de un modelo, en una system card o en un artículo de anuncio, no ha sido verificada por nadie más. Una puntuación publicada por un tercero que no vende ninguno de los modelos comparados (Artificial Analysis, Arena, el mantenedor oficial de un benchmark) se midió en condiciones que el editor no controla. Ambas tienen su utilidad, pero no pesan lo mismo.
+</Callout>
+
+Cada fila lleva por tanto una insignia Editor o Independiente, junto con el nombre del publisher. Un mismo modelo puede aparecer dos veces en el mismo benchmark, una vez bajo cada estatus: no es una redundancia, es la información más útil de la página. Antes de comparar dos filas entre sí, comprueba primero que llevan la misma insignia.
+
+## Codificación y agéntico
+
+Estos benchmarks hacen que el modelo resuelva tareas de desarrollo reales: corregir un error en un repositorio, conseguir que pase una batería de pruebas, ejecutar comandos en una terminal. El harness que envuelve al modelo, es decir, el agente que orquesta sus llamadas a herramientas, influye en el resultado tanto como el propio modelo. Un mismo modelo probado con dos harnesses distintos no produce la misma puntuación: la columna de notas registra el agente usado (`agent=`) cuando la fuente lo documenta.
+
+La clasificación oficial de SWE-bench Verified no ha recibido ninguna nueva entrada desde febrero de 2026. Las puntuaciones más recientes de esta categoría proceden por tanto solo de las cartas de los editores, no de un envío verificado en esa clasificación concreta.
+
+<BenchmarkTable benchmarkId="terminal-bench-2-1" />
+<BenchmarkTable benchmarkId="terminal-bench-2-1-aa" caption="Terminal-Bench 2.1, repetido por Artificial Analysis" />
+<BenchmarkTable benchmarkId="swe-bench-verified" />
+<BenchmarkTable benchmarkId="swe-bench-pro" />
+
+## Razonamiento
+
+GPQA Diamond y Humanity's Last Exam evalúan conocimientos de nivel experto sobre preguntas de respuesta cerrada, sin acceso a herramientas externas. GPQA Diamond está cerca de la saturación: los modelos más recientes se mantienen a menos de un punto de diferencia, lo que ya no distingue gran cosa entre ellos. Humanity's Last Exam sigue siendo más discriminante, pero su puntuación depende mucho del alcance elegido (solo texto o el conjunto completo) y del modelo usado para juzgar las respuestas abiertas, dos parámetros que la columna de notas precisa cuando se conocen.
+
+<BenchmarkTable benchmarkId="gpqa-diamond" />
+<BenchmarkTable benchmarkId="humanitys-last-exam" />
+
+## Agentes y herramientas
+
+GDPval-AA, OSWorld y BrowseComp miden capacidades más cercanas a un uso real: completar una tarea profesional puntuada por preferencia humana en GDPval-AA, manejar una interfaz gráfica de ordenador en OSWorld, navegar y buscar en la web para localizar una información precisa en BrowseComp. Estos benchmarks agénticos son más sensibles a los rechazos de seguridad y a las conmutaciones automáticas hacia otro modelo que una prueba de respuesta única: un rechazo o una conmutación cuenta como un fallo en la media final, igual que un error del modelo.
+
+<BenchmarkTable benchmarkId="gdpval-aa-v2" />
+<BenchmarkTable benchmarkId="osworld-2-0" />
+<BenchmarkTable benchmarkId="browsecomp" />
+
+## Contexto largo
+
+AA-LCR y OpenAI MRCR comprueban la capacidad de un modelo para localizar y razonar sobre información escondida en una ventana de contexto muy larga, en lugar de razonar en abstracto. Una puntuación alta aquí no dice nada sobre la calidad de razonamiento del mismo modelo en un contexto corto, y viceversa. Pocos editores publican este tipo de cifra para toda su gama, lo que explica tablas más cortas que en las demás categorías.
+
+<BenchmarkTable benchmarkId="aa-lcr" caption="AA-LCR: razonamiento sobre contexto largo" />
+<BenchmarkTable benchmarkId="openai-mrcr-v2-8-needle" />
+
+## Preferencia humana
+
+Text Arena y WebDev Arena clasifican los modelos mediante una puntuación Elo construida a partir de votos de preferencia humana a ciegas, no mediante una evaluación automática. El intervalo de confianza y el número de votos importan aquí más que la posición mostrada: en estas clasificaciones, varios modelos consecutivos suelen solaparse estadísticamente, y un modelo añadido recientemente puede mostrar una posición favorable con un volumen de votos aún reducido. La columna de notas recoge el intervalo de confianza (`ci=`) y el número de votos (`votes=`) cuando la fuente los publica.
+
+<BenchmarkTable benchmarkId="text-arena" />
+<BenchmarkTable benchmarkId="webdev-arena" />
+
+## Índices compuestos
+
+El Artificial Analysis Intelligence Index agrega varios benchmarks en una sola puntuación, ponderada según una metodología pública. Un índice compuesto simplifica la comparación pero oculta las diferencias entre categorías: dos modelos con un índice cercano pueden tener perfiles de fortalezas muy distintos según el subíndice que se mire. Da un orden de magnitud, no un veredicto.
+
+<BenchmarkTable benchmarkId="aa-intelligence-index-v4-1" />
+
+## Metodología y límites
+
+Esta página no cubre todas las trampas de lectura de una puntuación: el efecto del nivel de esfuerzo de razonamiento, la contaminación de los conjuntos de prueba, las contradicciones entre el texto de un anuncio y su propia tabla. El artículo [Leer un benchmark de LLM sin que te la cuelen](/content/lire-un-benchmark-llm) desarrolla nueve de estas trampas a partir de casos verificados. Las puntuaciones de esta página se actualizan periódicamente siguiendo el procedimiento de revisión del equipo editorial; la fecha de la última revisión global aparece en la cabecera de la página.
+
+## Próximos pasos
+
+- [Leer un benchmark de LLM sin que te la cuelen: la guía de supervivencia](/content/lire-un-benchmark-llm): las trampas metodológicas detrás de las cifras de esta página
+- [Kimi K3: el primer modelo abierto de clase 3T, y lo que cambia de verdad](/content/kimi-k3-ce-qui-change): un caso concreto donde entran en juego varios de estos benchmarks
+- [Opus 5, GPT-5.6, Kimi K3: tres lanzamientos, tres clasificaciones que se contradicen](/content/opus-5-face-aux-nouveaux-gpt): una lectura comparativa de las puntuaciones más discutidas de esta página
+- [Coste real por tarea: lo que el precio por token no te dice](/content/cout-reel-par-tache): poner estas puntuaciones en perspectiva frente a lo que cuestan de verdad en el uso diario

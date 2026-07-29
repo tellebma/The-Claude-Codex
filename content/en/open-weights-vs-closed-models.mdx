@@ -1,0 +1,119 @@
+---
+title: "Open Weights vs Closed Models: Where the Gap Really Stands in July 2026"
+description: "Kimi K3 tops the open-weight pack on the Intelligence Index, but licensing, hardware, and operations tell a different story. The real math for choosing."
+section: "content"
+order: 25
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["comparison", "architecture"]
+---
+
+## In short
+
+An open-weight model just climbed to the top of an independent intelligence ranking, ahead of nearly every proprietary model. Enough to make you wonder whether a single vendor's API is still the only sensible choice for a serious project.
+
+The answer comes in two parts. On paper, the capability gap has narrowed to a few points. On the ground, "open weights" means neither "open source" in the classic sense, nor "self-hostable," nor "free." These are three separate claims, and conflating them leads to bad architecture decisions.
+
+## The measured gap: a few points, not a chasm
+
+On the Artificial Analysis Intelligence Index v4.1, Kimi K3 (Moonshot AI) scores 57. {/* source: https://artificialanalysis.ai/models/kimi-k3, consulté 2026-07-28 */} That's first place among the open-weight models tracked by Artificial Analysis, out of 98 models in that category. {/* source: idem */}
+
+Across all models combined, the exact rank depends on the day you look. Moonshot's tech report, whose third-party evaluations are frozen as of July 23, places K3 at rank 4 out of 580 models. {/* source: k3_tech_report.pdf §6.3, consulté 2026-07-28 */} The Artificial Analysis leaderboard snapshot taken on July 28 for this article puts K3 at rank 7. {/* source: https://artificialanalysis.ai/leaderboards/models, consulté 2026-07-28 */} Between the two dates, Claude Opus 5 launched and now occupies several of the ranks above it: Opus 5 at effort max (61), Opus 5 at effort xhigh (60), Claude Fable 5 (60), GPT-5.6 Sol at effort max (59), Opus 5 at effort high (59), GPT-5.6 Sol at effort xhigh (58), then Kimi K3 (57). {/* source: idem */} None of this reflects any intent on Moonshot's part: the tech report was simply frozen the day before Opus 5 shipped.
+
+What matters is the raw gap. Between Kimi K3 and the best entry on the leaderboard (Opus 5, effort max, 61), there are 4 points. Between K3 and OpenAI's best entry (GPT-5.6 Sol, effort max, 59), there are 2 points. {/* source: https://artificialanalysis.ai/leaderboards/models, consulté 2026-07-28 */} On an index built from nine aggregated evaluations, with a 95% confidence interval under ±1 point as reported by Artificial Analysis, a 2-to-4-point gap reads as a real but minor difference, not a generational chasm. {/* source: https://artificialanalysis.ai/methodology/intelligence-benchmarking, consulté 2026-07-28 */}
+
+<Callout type="info" title="What we can't say">
+None of the sources consulted for this article document an open-weight model's score on this same index a year earlier. So it's impossible to claim the gap "is narrowing over time" without solid comparison data. We stick to today's snapshot.
+</Callout>
+
+## "Open weights" is neither "open source" nor "free"
+
+This is the most widely misunderstood part of the topic. Three distinct barriers separate an open-weight model from one that's actually ready to adopt without strings attached.
+
+### The license
+
+The Kimi K3 License, published in the official repository, is neither MIT nor an MIT variant. {/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/LICENSE, consulté 2026-07-28 */} On Hugging Face, the model card's `license` field literally reads `other`. {/* source: https://huggingface.co/api/models/moonshotai/Kimi-K3, consulté 2026-07-28 */} Two very real commercial clauses apply: beyond $20 million in aggregate revenue over 12 consecutive months from Model-as-a-Service usage, a separate agreement with Moonshot AI becomes mandatory; beyond 100 million monthly active users or $20 million in monthly revenue, the name "Kimi K3" must appear visibly in the product's interface. {/* source: idem */}
+
+Other leading open-weight models impose neither of these two conditions.
+
+| Model | Vendor | License | Commercial restriction |
+|---|---|---|---|
+| Kimi K3 | Moonshot AI | Kimi K3 License (custom license) | Separate agreement beyond $20M in MaaS revenue/12 months; visible attribution beyond 100M MAU or $20M/month |
+| GLM-5.2 | Z.ai | MIT | None |
+| DeepSeek-V4-Pro / V4-Flash | DeepSeek | MIT | None |
+| Qwen3.5 | Alibaba / Qwen | Apache 2.0 | None |
+| Mistral Medium 3.5 | Mistral AI | Modified MIT | Not detailed in the sources consulted |
+
+{/* sources: https://huggingface.co/zai-org/GLM-5.2, https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro, https://qwen.ai/blog?id=qwen3.5, https://mistral.ai/models/, consultés 2026-07-28 */}
+
+MiniMax M2.5 and Mistral Large 3 do publish open weights, but the exact text of their license couldn't be verified for this article: confirm it before any commercial use. {/* source: pages modèles respectives consultées 2026-07-28, licence exacte non lue */}
+
+<Callout type="warning" title="Check before going into production">
+For most projects, the Kimi K3 License thresholds ($20M revenue, 100M users) leave plenty of headroom. But "open weights" doesn't mean "no strings attached": read the full text before building a product on it, whatever the model.
+</Callout>
+
+### The hardware
+
+Kimi K3's weights weigh in at roughly 1.56TB, spread across 96 safetensors files. {/* source: https://huggingface.co/api/models/moonshotai/Kimi-K3?blobs=true, consulté 2026-07-28 */} The official vLLM documentation, the engine recommended by Moonshot, requires a minimum of 8 GB300 GPUs for development, with multi-node deployment advised for production; on ROCm, at least 8 MI355X or MI350X GPUs are needed. {/* source: https://recipes.vllm.ai/moonshotai/Kimi-K3, consulté 2026-07-28 */} No upstream support exists on llama.cpp as of July 28, 2026: an open community discussion on the project's official repository lists the remaining technical blockers, including an architecture the code doesn't recognize yet. {/* source: https://github.com/ggml-org/llama.cpp/discussions/26041, consulté 2026-07-28 */}
+
+In other words: this particular model isn't self-hostable by any small or mid-sized company. The entry ticket is measured in data-center clusters, not desktop servers.
+
+### The operations
+
+Loading a model is only the first step. Kimi K3 ships natively quantized (MXFP4 weights, MXFP8 activations, quantization-aware training applied as early as the SFT stage), which simplifies deployment compared to a bolted-on post-hoc quantization. {/* source: README §4, consulté 2026-07-28 */} From there you still need to pick an inference engine among the three recommended (vLLM, SGLang, TokenSpeed), track that engine's updates, manage availability and failover for a GPU cluster, and monitor performance over time. That's not a one-off job, it's ongoing operational overhead, comparable to what an API vendor already absorbs on your behalf.
+
+## The real economic math
+
+This is where the balance of power actually flips. The argument for open-weight models in 2026 is almost never self-hosting: it's API pricing and independence from a single vendor.
+
+| Model | Input ($/MTok) | Output ($/MTok) |
+|---|---|---|
+| Kimi K3 (cache miss) | 3.00 | 15.00 |
+| Claude Opus 5 | 5.00 | 25.00 |
+| Claude Fable 5 | 10.00 | 50.00 |
+
+{/* sources: https://platform.kimi.ai/docs/pricing/chat-k3, https://www.kimi.com/blog/kimi-k3, https://www.anthropic.com/news/claude-opus-5, https://platform.claude.com/docs/en/about-claude/pricing, consultés 2026-07-28 */}
+
+That's almost half the price of Opus 5 and more than three times cheaper than Fable 5, for a gap of just a few points on the intelligence index. Moonshot's tech report, using Artificial Analysis pricing from July 23 (so before Opus 5 shipped: the comparisons below are against Opus 4.8 and Fable 5), spells out the value-for-money case precisely: on Kimi Code Bench 2.0, K3 trails Fable 5 by 4 points at 38% of its cost; at high effort, K3 already matches Opus 4.8's max-effort score for roughly a third of the cost. {/* source: k3_tech_report.pdf §6.4, consulté 2026-07-28 */} On BrowseComp, K3 gets the best score in the table at $2.03 per task, half the cost of GPT-5.6 Sol and an order of magnitude less than the Claude models at max effort. {/* source: idem */} On GDPval-AA v2, K3 stays within 50 Elo points of GPT-5.6 Sol for 13% less cost, and 2.6 times cheaper than Fable 5. {/* source: idem */}
+
+The second half of the argument matters just as much: moving a workload to an open-weight model served by a second vendor, or possibly self-hosted later if the model allows it, removes the dependency on a single point of failure. It's not a question of raw performance, it's a question of architectural resilience.
+
+## What open models bring on top: verifiability
+
+The Kimi K3 tech report documents its architecture (hybrid Kimi Delta Attention and Gated MLA, MoE with 896 experts, a vision encoder trained from scratch), its optimizer (Per-Head Muon, Quantile Balancing for expert load balancing), and its full post-training recipe: SFT, then RL by domain and effort level, then multi-teacher distillation to merge the expert models. {/* source: k3_tech_report.pdf §2-4, consulté 2026-07-28 */}
+
+Closed-vendor announcements don't do this. Anthropic's Opus 5 announcement presents its gains as charts and relative phrasing ("doubles Opus 4.8's performance," "within 0.5% of Fable 5's best score") without detailing the training recipe. {/* source: https://www.anthropic.com/news/claude-opus-5, consulté 2026-07-28 */} System cards publish detailed safety scores and risk evaluations, which has real value, but neither Anthropic nor OpenAI publishes an optimizer, a parallelism scheme, or a scaling-law curve comparable to what Moonshot puts on the table. That's the real structural difference: a closed vendor publishes scores, an open model publishes a method that can be audited, partly reproduced, and critiqued on its merits.
+
+## The cybersecurity case
+
+This is genuinely a dilemma, with no obvious answer in either direction.
+
+Anthropic's and OpenAI's models refuse exploit-development tasks, which mechanically excludes them from any numeric comparison on this topic. The Kimi K3 tech report documents its own evaluation on an internal suite of 36 offensive tasks (16 in userland, 20 on the Linux kernel, roughly 540 expert-hours total): K3 solves 14 of 36, versus 8 of 36 for GLM-5.2. {/* source: k3_tech_report.pdf §6.2.2, consulté 2026-07-28 */} A joint independent evaluation from the UK AI Security Institute and NIST CAISI confirms K3 outperforms GLM-5.2 on exploit development (32% versus 24% on ExploitBench), but achieves arbitrary code execution on none of the 41 tasks tested, far behind frontier models genuinely capable in this area. {/* source: idem */}
+
+On the closed side, the logic runs in reverse: Opus 5's safety classifiers block exploit generation and pentesting at the API level, triggering roughly 85% less often than on Fable 5; GPT-5.6 Sol's cyber guardrails block, according to OpenAI, roughly ten times more potentially harmful activity than previous models. {/* source: https://www.anthropic.com/news/claude-opus-5 et https://openai.com/index/gpt-5-6/, consultés 2026-07-28 */}
+
+The structural point to remember: a guardrail imposed by an API vendor applies to every request, for every customer, with no user-side exception possible. An open-weight model has no remotely enforceable guardrail once downloaded: nothing stops a user from fine-tuning the model to strip out a refusal behavior. This isn't an argument for or against openness: it's a design trade-off each organization has to settle for itself based on actual use, not on a matter of principle.
+
+## When to choose what
+
+<Steps>
+<Step title="A hard capability ceiling is non-negotiable" stepNumber={1}>
+Frontier-level reasoning, complex agentic coding, budget not the main constraint: a closed model (Opus 5, GPT-5.6 Sol) keeps a 2-to-4-point lead on the intelligence index, with the vendor's support and guardrails included.
+</Step>
+<Step title="Cost per task or vendor independence matter most" stepNumber={2}>
+Kimi K3 through its official API costs less than half of Opus 5's price on both input and output, for a capability gap measured in points, not generations. That's the strongest argument for open models today, not self-hosting.
+</Step>
+<Step title="Self-hosting is genuinely on the table" stepNumber={3}>
+Forget frontier-class models like K3: 1.56TB of weights and a GB300 cluster are out of reach for any small or mid-sized company. If the goal is running a model on your own infrastructure, look at reasonably sized open models instead (Qwen3.5 27B under Apache 2.0, for instance), not 2.8T-parameter models.
+</Step>
+<Step title="The workflow touches offensive security" stepNumber={4} isLast>
+Closed models refuse exploit development by design. An open model lifts that barrier, which serves legitimate defensive research just as much as less advisable uses. Decide consciously, don't let that choice happen by default because you never checked the guardrails of the model you're plugging in.
+</Step>
+</Steps>
+
+## Next steps
+
+- [Kimi K3: the first open-weight 3T-class model, and what actually changes](/content/kimi-k3-what-changes): the model's full profile, its license in detail, and its architecture
+- [Opus 5 vs the new GPT models](/content/opus-5-vs-new-gpt-models): the numeric comparison on the closed-model side
+- [The real costs of Claude Code](/content/real-costs-claude-code): putting this comparison's pricing against your day-to-day usage
+- [Claude Code Security: 8 best practices + copy-paste checklist](/content/security-best-practices): the questions to ask before plugging a new model into sensitive workflows

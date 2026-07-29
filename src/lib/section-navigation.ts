@@ -248,6 +248,12 @@ export const sectionNavigation: Readonly<Record<string, SectionNavConfig>> = {
         href: "/content/bonnes-pratiques-securite",
         hrefByLocale: { en: "/content/security-best-practices" },
       },
+      { labelKey: "content.benchmarks-llm", href: "/content/benchmarks-llm" },
+      {
+        labelKey: "content.opus-5-vs-gpt",
+        href: "/content/opus-5-face-aux-nouveaux-gpt",
+        hrefByLocale: { en: "/content/opus-5-vs-new-gpt-models" },
+      },
     ],
   },
 };

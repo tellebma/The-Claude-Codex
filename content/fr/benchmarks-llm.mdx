@@ -1,0 +1,80 @@
+---
+title: "Benchmarks LLM : tableaux de référence par catégorie"
+description: "Terminal-Bench, SWE-bench, GPQA Diamond, Arena : les scores des principaux modèles LLM par catégorie, avec la source, le statut éditeur ou indépendant et la date de chaque relevé."
+section: "content"
+order: 20
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["reference", "tooling"]
+---
+
+## Ce que contient cette page
+
+Cette page rassemble, catégorie par catégorie, les scores des principaux modèles LLM sur les benchmarks les plus suivis à ce jour. Chaque ligne de chaque tableau porte sa source, la date à laquelle la valeur a été relevée, et un badge qui indique si le chiffre vient de l'éditeur du modèle ou d'une mesure indépendante. Dernier relevé global : 28 juillet 2026.
+
+Aucun chiffre n'est recopié dans le texte de cette page : ils vivent tous dans les tableaux, qui restent la seule source à jour. La prose explique ce que chaque famille de benchmarks mesure et où elle atteint ses limites.
+
+## Éditeur ou indépendant : la distinction qui compte
+
+<Callout type="warning" title="Avant de lire les tableaux">
+Un score publié par l'éditeur d'un modèle, dans une system card ou un article d'annonce, n'a été vérifié par personne d'autre que lui. Un score publié par un tiers qui ne vend aucun des modèles comparés (Artificial Analysis, Arena, le mainteneur officiel d'un benchmark) a été mesuré dans des conditions que l'éditeur ne contrôle pas. Les deux ont leur intérêt, mais ils ne pèsent pas le même poids.
+</Callout>
+
+Chaque ligne porte donc un badge Éditeur ou Indépendant, accompagné du nom du publisher. Un même modèle peut apparaître deux fois sur un même benchmark, une fois sous chaque statut : ce n'est pas une redondance, c'est l'information la plus utile de la page. Avant de comparer deux lignes entre elles, vérifiez d'abord qu'elles portent le même badge.
+
+## Codage et agentique
+
+Ces benchmarks font résoudre au modèle des tâches de développement réelles : corriger un bug dans un dépôt, faire passer une suite de tests, exécuter des commandes dans un terminal. Le harness qui encadre le modèle, c'est-à-dire l'agent qui orchestre ses appels d'outils, influence le résultat autant que le modèle lui-même. Un même modèle testé avec deux harnesses différents ne produit pas le même score : la colonne de notes précise l'agent utilisé (`agent=`) quand la source le documente.
+
+Le classement officiel de SWE-bench Verified n'a reçu aucune nouvelle soumission depuis février 2026. Les scores les plus récents de cette catégorie proviennent donc uniquement des cartes des éditeurs, pas d'une soumission vérifiée sur ce classement précis.
+
+<BenchmarkTable benchmarkId="terminal-bench-2-1" />
+<BenchmarkTable benchmarkId="terminal-bench-2-1-aa" caption="Terminal-Bench 2.1, rejoué par Artificial Analysis" />
+<BenchmarkTable benchmarkId="swe-bench-verified" />
+<BenchmarkTable benchmarkId="swe-bench-pro" />
+
+## Raisonnement
+
+GPQA Diamond et Humanity's Last Exam évaluent des connaissances de niveau expert sur des questions à réponse fermée, sans accès à des outils externes. GPQA Diamond approche la saturation : les modèles les plus récents se tiennent à moins d'un point d'écart, ce qui ne départage plus grand-chose entre eux. Humanity's Last Exam reste plus discriminant, mais son score dépend fortement du périmètre retenu (texte seul ou jeu complet) et du modèle utilisé pour juger les réponses ouvertes, deux paramètres que la colonne de notes précise quand ils sont connus.
+
+<BenchmarkTable benchmarkId="gpqa-diamond" />
+<BenchmarkTable benchmarkId="humanitys-last-exam" />
+
+## Agents et outils
+
+GDPval-AA, OSWorld et BrowseComp mesurent des capacités plus proches d'un usage réel : réaliser une tâche professionnelle notée par préférence humaine pour GDPval-AA, piloter une interface graphique d'ordinateur pour OSWorld, naviguer et rechercher sur le web pour retrouver une information précise pour BrowseComp. Ces benchmarks agentiques sont plus sensibles aux refus de sécurité et aux bascules automatiques vers un autre modèle qu'un test à réponse unique : un refus ou une bascule compte comme un échec dans la moyenne finale, au même titre qu'une erreur du modèle.
+
+<BenchmarkTable benchmarkId="gdpval-aa-v2" />
+<BenchmarkTable benchmarkId="osworld-2-0" />
+<BenchmarkTable benchmarkId="browsecomp" />
+
+## Long contexte
+
+AA-LCR et OpenAI MRCR testent la capacité d'un modèle à retrouver et à raisonner sur une information noyée dans une fenêtre de contexte très longue, plutôt qu'à raisonner dans l'absolu. Un score élevé ici ne présage rien de la qualité de raisonnement du même modèle sur un contexte court, et inversement. Peu d'éditeurs publient ce type de chiffre pour l'ensemble de leur gamme, ce qui explique des tableaux plus courts que dans les autres catégories.
+
+<BenchmarkTable benchmarkId="aa-lcr" caption="AA-LCR : raisonnement sur long contexte" />
+<BenchmarkTable benchmarkId="openai-mrcr-v2-8-needle" />
+
+## Préférence humaine
+
+Text Arena et WebDev Arena classent les modèles par un score Elo construit sur des votes de préférence humaine en aveugle, pas par une notation automatique. L'intervalle de confiance et le nombre de votes comptent alors plus que le rang affiché : sur ces classements, plusieurs modèles consécutifs se recouvrent souvent statistiquement, et un modèle récemment ajouté peut afficher un rang flatteur sur un volume de votes encore faible. La colonne de notes reporte l'intervalle de confiance (`ci=`) et le nombre de votes (`votes=`) quand la source les publie.
+
+<BenchmarkTable benchmarkId="text-arena" />
+<BenchmarkTable benchmarkId="webdev-arena" />
+
+## Indices composites
+
+L'Artificial Analysis Intelligence Index agrège plusieurs benchmarks en un seul score, pondéré selon une méthodologie publique. Un indice composite simplifie la comparaison mais masque les écarts entre catégories : deux modèles à indice proche peuvent avoir des profils de forces très différents selon le sous-score retenu. Il donne un ordre de grandeur, pas un verdict.
+
+<BenchmarkTable benchmarkId="aa-intelligence-index-v4-1" />
+
+## Méthodologie et limites
+
+Cette page ne couvre pas tous les pièges de lecture d'un score : effet du niveau d'effort de raisonnement, contamination des jeux de test, contradictions entre le texte d'une annonce et son propre tableau. L'article [Lire un benchmark LLM sans se faire avoir](/content/lire-un-benchmark-llm) détaille neuf de ces pièges à partir de cas vérifiés. Les scores de cette page sont mis à jour périodiquement selon la procédure de rafraîchissement suivie par l'équipe éditoriale ; la date du dernier relevé global figure en tête de page.
+
+## Prochaines étapes
+
+- [Lire un benchmark LLM sans se faire avoir : le guide de survie](/content/lire-un-benchmark-llm) : les pièges méthodologiques derrière les chiffres de cette page
+- [Kimi K3 : le premier modèle ouvert de classe 3T, et ce qui change vraiment](/content/kimi-k3-ce-qui-change) : un cas concret où plusieurs de ces benchmarks sont mobilisés
+- [Opus 5, GPT-5.6, Kimi K3 : trois lancements, trois classements qui se contredisent](/content/opus-5-face-aux-nouveaux-gpt) : une lecture comparative des scores les plus disputés de cette page
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : remettre ces scores en perspective face à ce qu'ils coûtent réellement à l'usage

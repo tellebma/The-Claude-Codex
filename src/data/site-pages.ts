@@ -1239,6 +1239,83 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     localesAvailable: ES_INFRA_LOCALES,
   },
   {
+    path: "/content/benchmarks-llm",
+    title: "Benchmarks LLM : tableaux de référence par catégorie",
+    description:
+      "Terminal-Bench, SWE-bench, GPQA Diamond, Arena : les scores des principaux modèles LLM par catégorie, avec la source, le statut éditeur ou indépendant et la date de chaque relevé.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-28",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/opus-5-face-aux-nouveaux-gpt",
+    pathsByLocale: { en: "/content/opus-5-vs-new-gpt-models" },
+    title: "Opus 5, GPT-5.6, Kimi K3 : trois lancements, trois classements qui se contredisent",
+    description:
+      "Claude Opus 5 (24 juillet 2026), GPT-5.6 (9 juillet) et Kimi K3 (27 juillet) sont sortis à quelques semaines d'écart. Prix, benchmarks, et pourquoi le trône WebDev Arena a changé de main en trois jours.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-28",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/kimi-k3-ce-qui-change",
+    pathsByLocale: { en: "/content/kimi-k3-what-changes" },
+    title: "Kimi K3 : le premier modèle ouvert de classe 3T, et ce qui change vraiment",
+    description:
+      "Moonshot AI publie Kimi K3 fin juillet 2026 : 2,78 billions de paramètres, une licence à seuils commerciaux et une première place open-weight sur l'Intelligence Index. Le décryptage sans le bruit.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-28",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/kimi-k3-dans-le-tech-report",
+    pathsByLocale: { en: "/content/kimi-k3-tech-report" },
+    title:
+      "Ce que le tech report de Kimi K3 apprend sur la construction d'un modèle frontière en 2026",
+    description:
+      "KDA, NoPE, Stable LatentMoE, Per-Head Muon : plongée dans les choix d'architecture de Kimi K3, le premier modèle open weight de classe 3T, expliqués sans jargon inutile.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-28",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/lire-un-benchmark-llm",
+    pathsByLocale: { en: "/content/how-to-read-llm-benchmarks" },
+    title: "Lire un benchmark LLM sans se faire avoir : le guide de survie",
+    description:
+      "SWE-bench, BrowseComp, WebDev Arena : chaque annonce de modèle apporte son lot de scores impressionnants. Neuf pièges réels, vérifiés en juillet 2026, pour apprendre à les décoder vous-même.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-28",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/open-weights-vs-modeles-fermes",
+    pathsByLocale: { en: "/content/open-weights-vs-closed-models" },
+    title: "Poids ouverts vs modèles fermés : où en est vraiment l'écart en juillet 2026",
+    description:
+      "Kimi K3 est premier des modèles à poids ouverts sur l'Intelligence Index, mais licence, matériel et exploitation racontent une autre histoire. Le vrai calcul pour choisir.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-28",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/cout-reel-par-tache",
+    pathsByLocale: { en: "/content/real-cost-per-task" },
+    title: "Coût réel par tâche : ce que le prix au token ne vous dit pas",
+    description:
+      "Tokenizer, budget de réflexion, cache, contexte long, batch : les leviers qui déterminent la facture réelle d'une tâche, bien au-delà du prix affiché par million de tokens.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-07-28",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
     path: "/about",
     title: "À propos du Claude Codex",
     description:

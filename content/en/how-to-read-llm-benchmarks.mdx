@@ -1,0 +1,114 @@
+---
+title: "How to Read an LLM Benchmark Without Getting Fooled: The Survival Guide"
+description: "SWE-bench, BrowseComp, WebDev Arena: every model announcement comes with its share of impressive scores. Nine real pitfalls, verified in July 2026, to help you decode them yourself."
+section: "content"
+order: 24
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["guide", "tooling"]
+---
+
+## A single number never means anything on its own
+
+A model announcement almost always comes with a table of scores and a phrase like "new record." The natural instinct is to compare the numbers directly. That's exactly the mistake: a benchmark score depends on the harness that produced it, the reasoning effort level, the measurement date, and sometimes an editorial choice that isn't dishonest but completely changes how the number should be read.
+
+This article gathers nine methodological pitfalls, each illustrated with a real case from July 2026 around the releases of Claude Opus 5, GPT-5.6, and Kimi K3. Nothing abstract here: every example rests on a verified source. Vendors don't lie about their benchmarks, they pick their angles. Learning to spot those choices is the whole point of this guide.
+
+## Pitfall 1: a self-reported score is not a verified score
+
+As of July 28, 2026, the official SWE-bench leaderboard, hosted at swebench.com, contains neither Claude Opus 5 nor GPT-5.6. {/* source: https://www.swebench.com/, consulté 2026-07-28 */} Its most recent entries date back to February 2026. The 96.0% SWE-bench Verified score attributed to Claude Opus 5 comes solely from Anthropic's system card, section 8.2, averaged over five runs. {/* source: Claude Opus 5 System Card, section 8.2, consulté 2026-07-28 */} That figure has never been reproduced by an independent third party.
+
+Comparing that 96.0% to the swebench.com ranking makes no sense: you'd need two things that exist on the same page, and that's not the case here. It's a bit like comparing the rating a restaurant gives itself on its own website to the rating of a guide that hasn't visited it yet. The two aren't measuring the same thing.
+
+<Callout type="warning" title="Three measurement regimes to tell apart">
+A benchmark figure always comes from one of three sources: the official leaderboard with vendor submissions, an independent evaluation reproduced by a third party (Artificial Analysis, Epoch AI, ARC Prize), or a self-reported model card from the vendor. Never mix the three without saying so.
+</Callout>
+
+## Pitfall 2: the harness changes the result
+
+The same model tested with two different harnesses doesn't produce the same score. On Kimi Code Bench 2.0, Kimi K3 scores 72.9 with its own Kimi Code harness, and 73.7 with Claude Code. {/* source: k3_tech_report.pdf §6.2, consulté 2026-07-28 */} On DeepSWE, the gap runs the other way: 67.5 with Kimi Code versus 67.3 with mini-SWE-agent, the official leaderboard's harness. {/* source: k3_tech_report.pdf §6.2, consulté 2026-07-28 */}
+
+The official Terminal-Bench 2.1 leaderboard confirms the phenomenon on another model: Claude Code paired with Fable 5 scores 83.8%, versus 80.4% for Terminus 2 paired with the same Fable 5. A 3.4-point gap for the exact same model, entirely due to the harness. {/* source: https://www.tbench.ai/leaderboard/terminal-bench/2.1, consulté 2026-07-28 */}
+
+| Model | Harness | Terminal-Bench 2.1 score |
+|---|---|---|
+| Fable 5 | Claude Code | 83.8% |
+| Fable 5 | Terminus 2 | 80.4% |
+
+A benchmark score without the name of its harness is a half-written sentence.
+
+## Pitfall 3: the reasoning effort budget changes everything
+
+Recent models expose a reasoning effort slider, usually split across the levels `low`, `medium`, `high`, `xhigh`, `max`. Claude Opus 5 defaults to effort `high` on the API and in Claude Code, but Anthropic recommends re-running a full sweep across effort levels rather than reusing a setting inherited from an earlier model. {/* source: https://platform.claude.com/docs/en/build-with-claude/effort, consulté 2026-07-28 */}
+
+The effect on scores is massive. GPT-5.6 Sol on ARC-AGI-2 goes from 42.5% at effort `low` to 92.5% at effort `max`, a 50-point swing for the same model. {/* source: https://arcprize.org/results/openai-gpt-5-6-sol, consulté 2026-07-28 */} Claude Opus 5 appears five times in the Artificial Analysis Intelligence Index top 25, once per effort level, with scores ranging from 61 to 51 and per-task costs from $2.03 to $0.36. {/* source: https://artificialanalysis.ai/leaderboards/models, consulté 2026-07-28 */}
+
+Effort `max` is therefore never free: it's a choice that multiplies the volume of reasoning tokens, and therefore the bill, to squeeze out a few extra points. A "Claude Opus 5 score" or a "GPT-5.6 score" with no mention of effort doesn't mean much on its own. That's the second mandatory dimension of any benchmark table, alongside the score itself: the price paid to get it.
+
+## Pitfall 4: context management is a disguised scaffold
+
+The most highlighted score in the Kimi K3 tech report is a 91.2 on BrowseComp. That number depends on a specific methodological choice: automatic context compaction, triggered at 300K tokens. Without that context management, measured on the full 1M-token window, the score drops to 90.4. {/* source: k3_tech_report.pdf §6.2, consulté 2026-07-28 */} At 90.4, K3 is in a strict tie with GPT-5.6 Sol, which shows the exact same score in the table published by OpenAI. {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */}
+
+A context compaction technique isn't an invisible engineering detail: it's a piece of the test setup, just like the harness. Two models evaluated under different context management policies aren't measuring exactly the same thing.
+
+## Pitfall 5: refusals and fallbacks distort averages
+
+On Kimi Code Bench 2.0, a set of 80 tasks, Claude Fable 5 triggered 13 fallbacks and one refusal. GPT-5.6 Sol triggered 10, tied to its cybersecurity guardrails. {/* source: k3_tech_report.pdf, consulté 2026-07-28 */} A fallback means the task got handed off to another model, often an older one. A refusal means the model explicitly declined the task. In an average-score table, both count as a failure, exactly like an attempt where the model simply got it wrong.
+
+The same phenomenon shows up on Anthropic's side, on its own FrontierBench benchmark: Opus 5's safety classifiers blocked 5% of API calls across 4% of runs, with automatic fallback to Opus 4.8. Fable 5's classifiers blocked 42% of calls across 26% of runs. {/* source: Claude Opus 5 System Card, section 8.5, consulté 2026-07-28 */} A model that refuses a task out of caution and a model that fails while attempting it don't behave the same way, but an averages table treats them identically. Before comparing two scores, it's worth checking whether one of them is hiding a higher refusal or fallback rate than the other.
+
+## Pitfall 6: statistical significance
+
+On the WebDev Arena leaderboard snapshot from July 27, 2026, Claude Opus 5 (max variant) sits in first place with a score of 1,725, resting on just 686 votes. Kimi K3 is second with 1,682, but on 3,777 votes. {/* source: https://arena.ai/leaderboard/code, consulté 2026-07-28 */} A 43-point Elo gap built on less than a fifth of its competitor's vote volume isn't statistically solid at all. Opus 5 is still in its data-collection phase, and this ranking could move in either direction.
+
+The same Arena leaderboard, on its general text ranking, illustrates the problem at a larger scale: ranks 2 through 10 spread between 1486 and 1505 points, with margins of error up to ±12. {/* source: https://arena.ai/leaderboard/text, consulté 2026-07-28 */} These nine models statistically overlap. Presenting the third-ranked model as better than the eighth-ranked one is a reading error, not a nuance.
+
+You don't need a formula to remember the rule: the smaller the number of votes or runs, the bigger the gap between two scores needs to be to be credible. A ranking based on a few hundred votes should be read with caution, whatever model sits at the top.
+
+## Pitfall 7: rankings go stale fast
+
+The Kimi K3 tech report, published on July 27, 2026, claims the top spot on WebDev Arena by citing a snapshot from July 23, with the phrase "the first open-weight model to dominate this leaderboard." {/* source: k3_tech_report.pdf §6.3, consulté 2026-07-28 */} A direct snapshot taken on July 27, the same day the report was published, shows an already different picture: Claude Opus 5 holds first place. {/* source: https://arena.ai/leaderboard/code, consulté 2026-07-28 */}
+
+There's no bad faith here. Claude Opus 5 was announced on July 24, {/* source: https://www.anthropic.com/news/claude-opus-5, consulté 2026-07-28 */} the day after the snapshot cited by Moonshot and three days before its own report was published. The pace of model releases today is faster than the writing cycle of a tech report. A ranking dated four days ago can already be obsolete: always look at the date of the snapshot, never just the publication date of the document citing it.
+
+## Pitfall 8: the same vendor can contradict itself
+
+In its own GPT-5.6 announcement post, OpenAI writes in the body text "a new record of 53.6" on Agents' Last Exam, "ahead of Fable 5 by 13.1 points." The table on the same page attributes 52.7% to Sol and 40.5% to Fable 5, a gap of 12.2 points, not 13.1. {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */} On BrowseComp, the text claims "state-of-the-art results at 92.2%," while the table attributes that 92.2% to the Sol Ultra variant, and only 90.4% to plain Sol. {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */}
+
+These aren't lies: they're two ways of presenting the same family of results, one narrative and rounded, the other tabular and precise. The table, footnotes included, is always the source to trust over the paragraph that accompanies it.
+
+## Pitfall 9: scores aren't comparable across vendors
+
+On HealthBench Professional, OpenAI attributes 60.5% to GPT-5.6 Sol and notes, in a footnote, that its scoring method "is not comparable to the results published in Anthropic's system cards." {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */} Two vendors can cite the same benchmark name and measure different things, without it always being spelled out in black and white like this. An identical benchmark name in two tables is no guarantee of an identical method.
+
+## Contamination and saturation: the deeper pitfalls
+
+Two more structural problems deserve a mention before wrapping up. The first is contamination: OpenAI published a page explaining why the company is discontinuing its SWE-bench Verified evaluations, citing growing contamination of the test set (built from scrapes of public GitHub repositories), flawed tests, and a risk of leakage into training data. {/* source: https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/, consulté 2026-07-28 */} OpenAI now recommends reporting results on the public split of SWE-bench Pro, considered less exposed to this problem.
+
+The second is saturation. On GPQA Diamond, the PhD-expert baseline is 65%, and GPT-4's score at launch was 39%. Today's best models hover around 94%, and the top three on Artificial Analysis's ranking sit within 0.4 points of each other. {/* source: https://artificialanalysis.ai/evaluations/gpqa-diamond, consulté 2026-07-28 */} A saturated benchmark no longer distinguishes anything between frontier models: it only measures a shared ceiling.
+
+## The checklist to keep handy
+
+Faced with any model announcement, ten questions are enough to filter out most of the noise:
+
+1. Does this score come from a verified independent leaderboard, or only from the vendor's card?
+2. Which harness produced this figure, and is it the same for every model in the table?
+3. What reasoning effort level was used, and is it the same across the board?
+4. Did a specific context management setup (compaction, truncation) influence the result?
+5. How many refusals or fallbacks were counted as failures in the average?
+6. Does the ranking rest on enough votes or runs to be statistically meaningful?
+7. When was this figure measured, and has a newer model changed the picture since then?
+8. Does the announcement's text say exactly the same thing as its own table?
+9. Is this benchmark still discriminating, or already saturated for recent models?
+10. Is there a risk of training-data contamination on this test set?
+
+<Callout type="tip" title="The habit worth keeping">
+A score with no harness, no effort level, no date, and no run count isn't a verifiable fact. It's a marketing argument dressed up as a number. Nothing rules out that it's true, but nothing guarantees it's comparable to the one in the table next to it.
+</Callout>
+
+## Next steps
+
+- [Kimi K3: the first open-weight 3T-class model, and what actually changes](/content/kimi-k3-what-changes): every pitfall in this article applied to a concrete case
+- [GPT-5.6 vs Claude Sonnet 5: the real comparison for Claude Code developers](/content/gpt-5-6-vs-claude-sonnet-5): the same rigor applied to OpenAI's competing models
+- [Claude Sonnet 5 and Fable 5: what actually changes for Claude Code users](/content/claude-sonnet-5-fable-5-new-models): the Anthropic models behind some of the scores cited here
+- [The real costs of Claude Code](/content/real-costs-claude-code): putting these scores in perspective against what they actually cost to use

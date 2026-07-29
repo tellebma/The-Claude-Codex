@@ -9,6 +9,7 @@ import { GlossaryTooltip } from "@/components/ui/GlossaryTooltip";
 import { KeyboardShortcut } from "@/components/ui/KeyboardShortcut";
 import { PricingTable } from "@/components/ui/PricingTable";
 import { ComparisonTable } from "@/components/ui/ComparisonTable";
+import { BenchmarkTable } from "@/components/ui/BenchmarkTable";
 import { TcoCalculator } from "@/components/ui/TcoCalculator";
 import { MermaidDiagram } from "@/components/ui/MermaidDiagram";
 import { Tabs } from "@/components/mdx/Tabs";
@@ -60,6 +61,7 @@ export const mdxComponents: MDXComponents = {
   KeyboardShortcut,
   PricingTable,
   ComparisonTable,
+  BenchmarkTable,
   TcoCalculator,
   MermaidDiagram,
   Tabs,

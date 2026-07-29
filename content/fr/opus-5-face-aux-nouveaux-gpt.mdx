@@ -1,0 +1,133 @@
+---
+title: "Opus 5, GPT-5.6, Kimi K3 : trois lancements, trois classements qui se contredisent"
+description: "Claude Opus 5 (24 juillet 2026), GPT-5.6 (9 juillet) et Kimi K3 (27 juillet) sont sortis à quelques semaines d'écart. Prix, benchmarks, et pourquoi le trône WebDev Arena a changé de main en trois jours."
+badge: "Nouveau"
+section: "content"
+order: 21
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["comparison", "tooling"]
+---
+
+## En bref
+
+Trois modèles frontière sont sortis à quelques semaines d'écart. GPT-5.6 le 9 juillet 2026 {/* source: https://developers.openai.com/api/docs/changelog.md, consulté 2026-07-28 */}, **Claude Opus 5** le 24 {/* source: https://www.anthropic.com/news/claude-opus-5, consulté 2026-07-28 */}, et **Kimi K3** de Moonshot AI le 27, trois jours plus tard à peine {/* source: https://api.github.com/repos/MoonshotAI/Kimi-K3/commits, consulté 2026-07-28 */}. Sur ce site, Opus 5 est le nouveau modèle par défaut de Claude Max et le plus puissant proposé sur Claude Pro {/* source: https://www.anthropic.com/news/claude-opus-5, consulté 2026-07-28 */}, ce qui suffit déjà à justifier un article. Mais ce qui rend cette semaine intéressante, ce n'est pas "qui gagne" : c'est que les trois labos publient des classements qui se contredisent d'un jour sur l'autre, parfois d'un tableau à l'autre dans le même document.
+
+Cet article compare les fiches techniques, montre où Opus 5 devance vraiment la concurrence, et où les chiffres qui circulent méritent une lecture plus prudente que le titre qui les accompagne.
+
+<Callout type="warning" title="Un classement peut devenir faux en trois jours">
+Le tech report de Kimi K3, publié le 27 juillet, revendique la première place sur le classement WebDev Arena avec un relevé daté du 23 juillet. Le relevé du 27 juillet, soit la date de publication du même document, place déjà Claude Opus 5 devant. Le détail est plus bas dans cet article.
+</Callout>
+
+## Les trois fiches techniques
+
+Sur le papier, les trois modèles jouent dans la même catégorie de prix, avec des approches d'"effort" de raisonnement comparables mais pas identiques.
+
+| Modèle | Entrée ($/MTok) | Sortie ($/MTok) | Contexte | Sortie max | Effort par défaut |
+|---|---|---|---|---|---|
+| Claude Opus 5 | 5 $ | 25 $ | 1M tokens | 128k tokens | `high` (5 niveaux : low à max) |
+| GPT-5.6 Sol | 5 $ | 30 $ | 1,05M tokens | 128k tokens | non documenté publiquement |
+| Kimi K3 | 3 $ (cache miss) / 0,30 $ (cache hit) | 15 $ | 1M tokens (1 048 576) | 131 072 par défaut, jusqu'à 1 048 576 | `max` (3 niveaux : low, high, max) |
+
+{/* source: https://platform.claude.com/docs/en/about-claude/pricing et https://platform.claude.com/docs/en/build-with-claude/effort, consulté 2026-07-28 */}
+{/* source: https://developers.openai.com/api/docs/models/gpt-5.6-sol et https://developers.openai.com/api/docs/guides/reasoning.md, consulté 2026-07-28 */}
+{/* source: https://platform.kimi.ai/docs/pricing/chat-k3 et https://platform.kimi.ai/docs/guide/kimi-k3-quickstart, consulté 2026-07-28 */}
+
+Le prix d'Opus 5 n'a pas bougé par rapport à Opus 4.8 : mêmes 5 $ / 25 $ par million de tokens. {/* source: https://platform.claude.com/docs/en/about-claude/models/whats-new-opus-5, consulté 2026-07-28 */} Kimi K3 est un cas à part : c'est un modèle à poids ouverts, une architecture MoE de 2,8 billions de paramètres au total dont 104 milliards activés par token, publiée sous une licence propriétaire Moonshot (pas une licence MIT modifiée, contrairement à ce qu'on lit parfois : au-delà de 20 millions de dollars de chiffre d'affaires annuel en usage "Model as a Service", un accord commercial séparé est requis). {/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/k3_tech_report.pdf, Table 1, et https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/LICENSE, consulté 2026-07-28 */} On y reviendra en détail dans un article dédié.
+
+## L'indice qui met (presque) tout le monde d'accord
+
+Artificial Analysis publie un Intelligence Index qui agrège plusieurs évaluations indépendantes. Sur le relevé du 28 juillet 2026, Claude Opus 5 (adaptive thinking, effort max) arrive en tête avec un score de 61, devant Claude Fable 5 (60) et GPT-5.6 Sol (59). {/* source: https://artificialanalysis.ai/models, consulté 2026-07-28 */} Et Opus 5 y est aussi moins cher : 3,85 $ le million de tokens en tarif blended contre 4,35 $ pour Sol. {/* source: https://artificialanalysis.ai/models/claude-opus-5 et https://artificialanalysis.ai/models/gpt-5-6-sol, consulté 2026-07-28 */}
+
+La nuance à garder : Opus 5 est nettement plus lent en débit, 54,8 tokens par seconde contre 76,0 pour Sol, même si son délai avant le premier token est meilleur (65 secondes contre 143). {/* source: https://artificialanalysis.ai/models/claude-opus-5 et https://artificialanalysis.ai/models/gpt-5-6-sol, consulté 2026-07-28 */} Premier de l'indice, oui. Le plus rapide à produire du texte, non.
+
+Autre nuance : ces chiffres bougent selon la date de mesure. Le tech report de Kimi K3, gelé le 23 juillet (la veille de la sortie d'Opus 5), donne une photo différente : GPT-5.6 Sol à 58,9, Fable 5 à 59,9, Opus 4.8 à 55,7, Kimi K3 à 57,1, quatrième sur 580 modèles. {/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/k3_tech_report.pdf, section 6.3, consulté 2026-07-28 */} Ce n'est pas une contradiction, c'est un instantané pris un jour donné : Opus 5 n'existait pas encore quand Moonshot a arrêté sa campagne de mesure.
+
+## Le trône WebDev Arena a changé de main en trois jours
+
+C'est l'histoire la plus révélatrice de cette semaine de sorties. WebDev Arena est un classement par vote humain qui évalue la qualité du code produit par un modèle sur des tâches de développement web.
+
+Le tech report de Kimi K3 revendique la première place : 1 678 Elo, relevé daté du 23 juillet 2026, présenté comme "the first open model to top this leaderboard". {/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/k3_tech_report.pdf, section 6.3, consulté 2026-07-28 */} Le document a été publié le 27 juillet, jour même de la sortie du modèle. {/* source: https://api.github.com/repos/MoonshotAI/Kimi-K3/commits, consulté 2026-07-28 */}
+
+Sauf que le relevé du classement en direct, à cette même date du 27 juillet, ne donne plus Kimi K3 en tête. Claude Opus 5 (variante `max`) est passé devant avec 1 725 points, Kimi K3 (`max`) suit à 1 682, puis Opus 5 (variante `high`) à 1 670, Fable 5 à 1 629 et GPT-5.6 Sol (`xhigh`) à 1 623. {/* source: https://arena.ai/leaderboard/code, consulté 2026-07-28 */} Le tech report qui annonce fièrement la première place ouverte affiche donc, le jour de sa propre publication, un classement déjà dépassé.
+
+Ce n'est pas une erreur de Moonshot : ses évaluations étaient gelées avant même la sortie d'Opus 5. C'est juste la preuve que sur ce type de classement, un chiffre a une date de péremption courte.
+
+<Callout type="info" title="Ce que la réserve statistique change">
+Claude Opus 5 (`max`) n'a que 686 votes sur le leaderboard WebDev Arena, contre 3 777 pour Kimi K3, 5 801 pour Fable 5 ou 5 340 pour GPT-5.6 Sol. {/* source: https://arena.ai/leaderboard/code, consulté 2026-07-28 */} Sur le leaderboard texte, l'intervalle de confiance d'Opus 5 est de ±12 points, contre ±4 pour les modèles installés depuis plus longtemps comme Claude Fable 5 ou Opus 4.6-thinking. {/* source: https://arena.ai/leaderboard/text, consulté 2026-07-28 */} Concrètement, l'écart entre la première et la troisième place sur WebDev Arena n'est pas statistiquement solide tant que le volume de votes n'a pas rattrapé celui des modèles plus anciens. La première place d'Opus 5 est réelle au moment du relevé, mais fragile.
+</Callout>
+
+## Le piège GPQA : ces chiffres ne viennent pas d'Anthropic
+
+Si vous cherchez un score GPQA Diamond ou AIME pour Claude Opus 5, vous ne le trouverez pas dans les publications d'Anthropic. La system card d'Opus 5 ne contient aucune occurrence de "GPQA" ni de "AIME". {/* source: https://www-cdn.anthropic.com/c5fbac3f0b1280a933ebd26d3cb8bb9f5bdeaf48/Claude%20Opus%205%20System%20Card.pdf, consulté 2026-07-28 */} Les seuls chiffres GPQA Diamond qui circulent pour des modèles Claude (Fable 5 à 92,6 %, Opus 4.8 à 92 %) viennent en réalité du tableau de comparaison publié par OpenAI dans son propre article de lancement de GPT-5.6, pas d'une mesure faite par Anthropic elle-même. {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */} Si un article cite "Claude a XX % sur GPQA", vérifiez toujours de quel labo vient réellement la mesure : Anthropic ne publie tout simplement pas ce benchmark.
+
+## swebench.com ne connaît ni Opus 5 ni GPT-5.6
+
+Le leaderboard officiel de SWE-bench Verified, tenu par l'équipe SWE-bench elle-même, n'a pas encore de ligne pour Opus 5 ni pour GPT-5.6 au 28 juillet 2026. Ses entrées les plus récentes datent de février 2026 ; le meilleur score y est de 76,80 % pour "Claude 4.5 Opus" en raisonnement élevé. {/* source: https://www.swebench.com/, consulté 2026-07-28 */}
+
+Les 96,0 % de SWE-bench Verified souvent cités pour Opus 5 viennent de la section 8.2 de la system card d'Anthropic, mesurés en interne. {/* source: https://www-cdn.anthropic.com/c5fbac3f0b1280a933ebd26d3cb8bb9f5bdeaf48/Claude%20Opus%205%20System%20Card.pdf, section 8.2, consulté 2026-07-28 */} C'est un score auto-rapporté, pas une entrée validée par le leaderboard officiel : harnais, conditions et date diffèrent, la comparaison directe avec les 76,80 % ci-dessus n'a pas de sens.
+
+## Les incohérences internes de l'article d'OpenAI
+
+Même en restant dans le seul document de lancement de GPT-5.6, deux passages se contredisent entre le texte et le tableau de chiffres qui l'accompagne.
+
+Sur Agents' Last Exam, le texte de l'article annonce "a new high of 53.6" et un écart de 13,1 points sur Claude Fable 5. Le tableau, lui, donne 52,7 % pour GPT-5.6 Sol et 40,5 % pour Fable 5, soit un écart de 12,2 points, pas 13,1. {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */}
+
+Sur BrowseComp, le texte revendique "state-of-the-art results at 92.2%" pour Sol. Le tableau attribue ce 92,2 % à une variante distincte, "Sol Ultra", et donne 90,4 % pour Sol seul. {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */} Deux détails qui ne changent pas la conclusion générale (GPT-5.6 reste très fort sur ces deux tests) mais qui rappellent qu'il faut toujours lire le tableau, pas seulement le texte qui l'accompagne.
+
+## Ce que ça change concrètement dans Claude Code
+
+<Steps>
+<Step title="Opus 5 est désormais votre modèle par défaut sur Max" stepNumber={1}>
+Sur Claude Max, Opus 5 remplace Opus 4.8 comme modèle par défaut. Sur Claude Pro, c'est le modèle le plus puissant disponible. {/* source: https://www.anthropic.com/news/claude-opus-5, consulté 2026-07-28 */} Vous n'avez rien à configurer pour en bénéficier.
+</Step>
+
+<Step title="L'effort par défaut est `high`" stepNumber={2}>
+Opus 5 supporte cinq niveaux d'effort (`low`, `medium`, `high`, `xhigh`, `max`), et Claude Code utilise `high` par défaut. {/* source: https://platform.claude.com/docs/en/build-with-claude/effort, consulté 2026-07-28 */} Si vos tâches les plus longues stagnaient sur l'ancien modèle, c'est le moment de tester `xhigh` ou `max`.
+</Step>
+
+<Step title="Une requête sans champ `thinking` tourne désormais avec adaptive thinking" stepNumber={3}>
+C'est un changement cassant si vous appelez l'API directement. Sur Opus 4.8, une requête sans champ `thinking` tournait sans thinking activé. Sur Opus 5, elle tourne avec adaptive thinking. {/* source: https://platform.claude.com/docs/en/about-claude/models/migration-guide, consulté 2026-07-28 */} Si vos scripts n'envoient jamais ce champ explicitement, vérifiez le comportement avant de migrer en production.
+</Step>
+
+<Step title="`thinking: disabled` avec effort `xhigh` ou `max` renvoie une erreur 400" stepNumber={4} isLast>
+Deuxième changement cassant : combiner `thinking: {"type": "disabled"}` avec un effort `xhigh` ou `max` n'est plus accepté sur Opus 5, contrairement à Opus 4.8. {/* source: https://platform.claude.com/docs/en/about-claude/models/migration-guide, consulté 2026-07-28 */} Il faut soit remonter le thinking à `low` ou `high`, soit retirer le champ `thinking`.
+</Step>
+</Steps>
+
+<CodeBlock language="json" code={`{
+  "model": "claude-opus-5",
+  "effort": "xhigh",
+  "thinking": { "type": "disabled" }
+}`} />
+
+Cette requête renvoyait un résultat valide sur Opus 4.8. Sur Opus 5, elle renvoie une erreur 400 : à cet effort, le thinking ne peut plus être désactivé.
+
+## Et Kimi K3 dans tout ça ?
+
+Kimi K3 ne tourne pas dans Claude Code : c'est un modèle à poids ouverts qui se déploie via vLLM, SGLang ou son propre moteur TokenSpeed, ou s'utilise via l'API compatible OpenAI et Anthropic de Moonshot. {/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/README.md, consulté 2026-07-28 */} Il n'apparaît dans cet article que parce qu'il est au centre de l'histoire du classement WebDev Arena. Sa fiche complète (licence, architecture, benchmarks détaillés) fait l'objet d'un article séparé.
+
+## FAQ
+
+**Opus 5 est-il vraiment meilleur que GPT-5.6 Sol ?**
+Sur l'Artificial Analysis Intelligence Index du 28 juillet 2026, oui : 61 contre 59, et à moindre coût blended. {/* source: https://artificialanalysis.ai/models, consulté 2026-07-28 */} Mais Sol produit du texte presque 1,4 fois plus vite. Aucun des deux n'est "meilleur" dans l'absolu : ça dépend de ce que vous mesurez.
+
+**Est-ce qu'Opus 5 est vraiment numéro 1 sur WebDev Arena ?**
+Au relevé du 27 juillet 2026, oui, avec 1 725 Elo. {/* source: https://arena.ai/leaderboard/code, consulté 2026-07-28 */} Mais avec seulement 686 votes contre plusieurs milliers pour ses concurrents directs, cette première place n'est pas encore statistiquement solide.
+
+**Pourquoi je ne trouve pas de score GPQA officiel pour Claude Opus 5 ?**
+Parce qu'Anthropic ne le publie pas. Les chiffres GPQA associés à des modèles Claude viennent des tableaux de comparaison d'OpenAI, pas d'Anthropic. {/* source: https://openai.com/index/gpt-5-6/, consulté 2026-07-28 */}
+
+**Les 96 % SWE-bench Verified d'Opus 5 sont-ils vérifiés indépendamment ?**
+Non. C'est un chiffre auto-rapporté par Anthropic dans sa system card. Le leaderboard officiel swebench.com ne contient ni Opus 5 ni GPT-5.6 au 28 juillet 2026. {/* source: https://www.swebench.com/, consulté 2026-07-28 */}
+
+**Dois-je changer mes scripts d'API après la sortie d'Opus 5 ?**
+Vérifiez deux points : si vous n'envoyez jamais de champ `thinking`, votre requête active désormais l'adaptive thinking par défaut ; et si vous combinez `thinking: disabled` avec un effort `xhigh` ou `max`, vous obtiendrez une erreur 400. {/* source: https://platform.claude.com/docs/en/about-claude/models/migration-guide, consulté 2026-07-28 */}
+
+## Prochaines étapes
+
+- [GPT-5.6 vs Claude Sonnet 5 : le vrai comparatif pour les devs Claude Code](/content/gpt-5-6-vs-claude-sonnet-5) : le comparatif publié au lancement de GPT-5.6, avant l'arrivée d'Opus 5
+- [Claude Sonnet 5 et Fable 5 : ce qui change vraiment pour vous dans Claude Code](/content/sonnet-5-fable-5-nouveaux-modeles) : fiche complète du reste de la gamme Claude 5
+- [Kimi K3 : ce qui change](/content/kimi-k3-ce-qui-change) : licence, poids ouverts, accès et positionnement du modèle de Moonshot AI
+- [Mode Plan vs Mode Thinking](/content/mode-plan-vs-thinking) : comprendre l'adaptive thinking et les niveaux d'effort
+- [Coûts réels de Claude Code](/content/couts-reels-claude-code) : recalculez votre budget avec Opus 5

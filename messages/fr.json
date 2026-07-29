@@ -263,6 +263,29 @@
     "warning": "Attention",
     "error": "Erreur"
   },
+  "benchmarks": {
+    "columns": {
+      "model": "Modèle",
+      "vendor": "Éditeur",
+      "license": "Licence",
+      "score": "Score",
+      "sourceType": "Statut",
+      "source": "Source",
+      "measuredAt": "Relevé le"
+    },
+    "sourceType": {
+      "vendorReported": "Éditeur",
+      "independent": "Indépendant"
+    },
+    "license": {
+      "proprietary": "Propriétaire",
+      "unknown": "Non documentée"
+    },
+    "empty": "Aucun score sourcé pour ce benchmark.",
+    "openSource": "Ouvrir la source du score de {model} dans un nouvel onglet",
+    "maintainer": "Classement maintenu par {maintainer}.",
+    "leaderboard": "Voir le classement officiel"
+  },
   "videoEmbed": {
     "play": "Lire la vidéo : {title}",
     "thumbnail": "Miniature de la vidéo : {title}"
@@ -566,7 +589,9 @@
       "future-vision": "Vision et tendances IA",
       "couts-reels": "Coûts réels de Claude Code",
       "mythes": "8 idées reçues sur Claude Code",
-      "securite": "Guide de sécurité"
+      "securite": "Guide de sécurité",
+      "benchmarks-llm": "Benchmarks LLM",
+      "opus-5-vs-gpt": "Opus 5, GPT-5.6 et Kimi K3"
     }
   },
   "designSystem": {

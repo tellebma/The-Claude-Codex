@@ -1,0 +1,188 @@
+---
+title: "What Kimi K3's tech report teaches about building a frontier model in 2026"
+description: "KDA, NoPE, Stable LatentMoE, Per-Head Muon: a deep dive into Kimi K3's architecture choices, the first open-weight model in the 3T class, explained without unnecessary jargon."
+badge: "New"
+section: "content"
+order: 23
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["reference", "architecture"]
+---
+
+## TL;DR
+
+- Kimi K3, released July 27, 2026 by Moonshot AI, is described by its creators as "the world's first open 3T-class model": 2.8 trillion total parameters, 104 billion activated per token, open weights under a proprietary license.
+- The tech report details seven architecture choices that, taken together, tell the story of how a frontier model gets built today: mixing two attention mechanisms instead of picking one, dropping positional encoding, stabilizing a 896-expert MoE, letting each layer draw from all the previous ones, adapting the optimizer head by head, training vision and text together from the start, and quantizing the model during training rather than after.
+- This isn't an academic exercise: each choice answers a concrete problem encountered at this scale, and the report also documents failures and uncertainties (an unresolved inconsistency around the video modality, a cybersecurity evaluation with mixed results).
+
+{/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/README.md, consulté 2026-07-28 */}
+{/* source: https://api.github.com/repos/MoonshotAI/Kimi-K3/commits, consulté 2026-07-28 */}
+
+## Why this report is worth reading
+
+A frontier model tech report often reads like a catalog of benchmark scores. Kimi K3's has those too, but the substance lies elsewhere: Moonshot AI explains why each building block was chosen, what it fixes, and what was tried without success. That's rare, and it's valuable for understanding where large-model engineering is headed in 2026.
+
+Kimi K3 is a Mixture-of-Experts (MoE) model: instead of activating all of its parameters on every token, it routes each request to a small subset of "specialists." On K3, that comes out to 2.8 trillion total parameters for only 104 billion activated per token, across 93 layers. The weights are published openly on Hugging Face, roughly 1.56TB spread across 96 `.safetensors` files, under a Kimi K3 license that stays permissive as long as the business running it doesn't exceed $20 million in annual revenue on MaaS usage.
+
+{/* source: https://huggingface.co/api/models/moonshotai/Kimi-K3?blobs=true, consulté 2026-07-28 */}
+{/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/LICENSE, consulté 2026-07-28 */}
+
+<Callout type="info" title="What this report doesn't say">
+The tech report publishes neither the total volume of training tokens, nor the number or type of GPUs in the pretraining cluster, nor the cost in dollars. That's a notable gap for an otherwise very detailed document, and we stick to that here: no figure of this kind is put forward in this article.
+</Callout>
+
+Let's get into it: the mechanisms that make up the architecture.
+
+## KDA + Gated MLA: why mix two attentions instead of choosing one
+
+The problem first. Classic attention (the kind Transformers have used since 2017) compares every token to all previous tokens. On a sequence of 1,000 tokens, that's manageable. On a sequence of a million tokens, the compute cost explodes quadratically. That's the main obstacle to genuinely long contexts.
+
+The usual answer is linear attention: instead of comparing each token to all the others, you maintain a summarized state that updates token by token, at constant cost. The problem with linear attention is that it loses precision on global dependencies: a summary that keeps updating continuously ends up diluting older details.
+
+Kimi K3 doesn't choose between the two. The report describes a block-based composition: three layers of Kimi Delta Attention (KDA, the linear, cheap version) followed by one layer of Gated MLA (Multi-head Latent Attention, the precise, expensive version), repeated across the network's full depth. In total, 69 KDA layers to 24 Gated MLA layers.
+
+The closest image: an intelligence service that takes summary notes at every exchange (KDA, cheap, continuous) but calls a full cross-checking meeting every few discussions (Gated MLA, expensive, but it catches what the summary may have erased). Neither the summary alone nor the permanent meeting would suffice: one is too imprecise, the other too expensive to run continuously.
+
+{/* source: k3_tech_report.pdf §2, consulté 2026-07-28 */}
+
+## NoPE: the report's most counterintuitive point
+
+Every language model needs to know where each token sits in the sequence. Without that information, "the cat eats the mouse" and "the mouse eats the cat" would be indistinguishable to the model. The dominant solution for several years has been RoPE (Rotary Position Embedding): it explicitly encodes each token's position into its vector.
+
+Kimi K3 does without it entirely. The report calls this NoPE, for "no positional embedding." No layer of the model receives explicit positional information.
+
+So how does the model know in what order the tokens arrived? The answer lies in the gating mechanism of KDA described above. This mechanism works through progressive decay of an internal state: the older a token is, the more its influence on the current state has faded. That decay is itself a clock. A token that just arrived carries more weight than one that arrived ten thousand steps earlier, and that weight difference carries the positional information without needing to write it down anywhere.
+
+It's a bit like estimating a document's age by the feel of the paper rather than its printed date: the more the trace has faded, the older the document. No timestamp needed if the fading itself tells the story of elapsed time.
+
+The practical consequence is what makes this choice interesting beyond its theoretical elegance: "Kimi K3 uses no explicit positional embedding (NoPE) […] As a result, the model extrapolates directly to 1M-token contexts without any positional-encoding modification, such as RoPE rescaling or interpolation." RoPE-based models generally need to recalibrate their positional encoding (rescaling, interpolation) to exceed the context length seen during training. K3 skips that step because it never had an explicit encoding to recalibrate in the first place.
+
+{/* source: k3_tech_report.pdf §3.4, consulté 2026-07-28 */}
+
+<Callout type="tip" title="Why this matters">
+This isn't just an engineering trick: it shifts the question of "how to handle long contexts" from an encoding problem to a memory problem. All the temporal information lives in the dynamics of KDA's recurrent state, not in data added after the fact to each token.
+</Callout>
+
+## Stable LatentMoE: routing to 16 experts out of 896 without it spinning out of control
+
+A Mixture-of-Experts is a large organization where each request is handled by only a handful of specialists rather than everyone. Kimi K3 pushes this far: 896 routed experts, of which 16 are selected per token, plus 2 shared experts that process every token regardless of the selection.
+
+Routing to that many experts raises a classic balancing problem: if the router always favors the same experts, the others stay undertrained and the model loses part of its effective capacity. The report describes three mechanisms to stabilize routing at this scale:
+
+- **Normalized LatentMoE**: normalizes the latent space in which routing decisions are made, to prevent certain experts from dominating simply because their activations are numerically larger.
+- **SiTU-GLU** (Sigmoid Tanh Unit GLU): a dedicated activation function replacing the SwiGLU used on Kimi K2, designed for this new routing regime.
+- **Quantile Balancing**: a load-balancing mechanism that distributes tokens among experts based on quantiles rather than a raw average, more robust to traffic spikes toward a given expert.
+
+The clearest analogy: a call center with 896 specialized advisors, where two generalists systematically pick up in addition to the chosen specialist advisor. Without a balancing mechanism, the routing algorithm would end up always calling the same ten advisors because they perform well, leaving the other 886 without experience.
+
+{/* source: k3_tech_report.pdf §2.3.1, §2.3.2, §2.3.3, consulté 2026-07-28 */}
+
+## AttnRes: every layer can re-read everything that came before
+
+In a classic Transformer, each layer only sees the output of the immediately preceding layer. Information from older layers has to survive the trip through every intermediate layer to remain accessible, which is never guaranteed.
+
+Kimi K3 introduces Attention Residuals (AttnRes): a mechanism where each layer has learned queries that produce attention weights over the input embedding and the outputs of all previous layers, not just the last one. In practice, a deep layer can selectively retrieve information carried by a much earlier layer, without depending on it being faithfully passed along through everything in between.
+
+It's like a notebook you can flip back through at any time, rather than a game of telephone where each person only repeats what they remembered from the previous one. The EAGLE-3 draft model used for K3's fast inference actually leverages this mechanism directly: it merges features from the first, fourth, and last AttnRes blocks to predict upcoming tokens.
+
+{/* source: k3_tech_report.pdf §2, §4.1.4, consulté 2026-07-28 */}
+
+## Per-Head Muon: an optimizer that doesn't mix heads together
+
+Muon is an optimizer that has gained ground on recent large models thanks to its ability to orthogonalize update matrices (via the Newton-Schulz algorithm), which stabilizes training at scale. Kimi K3 introduces a variant, Per-Head Muon, that changes a detail that seems minor at first glance but matters at this scale: the momentum matrices for the Q, K, and V projections are no longer orthogonalized globally, but partitioned by attention head, with each head orthogonalized independently.
+
+The underlying idea: each attention head develops its own specialty over the course of training (some track syntax, others long-range relationships, and so on). Orthogonalizing all heads together amounts to averaging their learning directions, which can blur these specializations. Treating each head separately means letting each specialist progress in its own direction without the others pulling the average toward them.
+
+{/* source: k3_tech_report.pdf §2.5, consulté 2026-07-28 */}
+
+## Native multimodality: seeing and reading learned at the same time
+
+Most multimodal models start life as pure language models, onto which a vision encoder is later grafted. Kimi K3 changes the approach with MoonViT-V2, its 401-million-parameter vision encoder: it's trained from scratch on next-token prediction, at the same time as the rest of the model, with visual and textual tokens interleaved in a single, unified training objective. The report explicitly presents this as "a key departure from Kimi K2.5," which initialized its vision encoder from a pre-existing model.
+
+The difference comes down to one sentence: rather than learning to read and then bolting on glasses later, K3 learns to read and to see in the same motion, with the same training signals.
+
+One inconsistency deserves to be flagged rather than glossed over. The repo's official "Model Summary" table lists `Modality: Text, Image`, with no mention of video. But the README's body text, the tech report (which states that "text, images, and videos are processed by a single shared backbone"), and the published benchmarks (K3 is evaluated on Video-MME) all mention video as a processed modality. The tech report doesn't resolve this contradiction, and this article won't resolve it either: it's presented as is.
+
+{/* source: k3_tech_report.pdf §2.4, consulté 2026-07-28 */}
+{/* source: https://raw.githubusercontent.com/MoonshotAI/Kimi-K3/main/README.md, consulté 2026-07-28 */}
+
+## The table that sums it all up: K2 to K3
+
+The tech report includes a direct architectural comparison between Kimi K2 and Kimi K3 (Table 1). It gives an overall view of the scale of the jump:
+
+| | Kimi K2 | Kimi K3 | Change |
+|---|---|---|---|
+| Number of layers | 61 | 93 | +52% |
+| Total parameters | 1.04T | 2.78T | +167% |
+| Activated parameters | 32.6B | 104.2B | +220% |
+| MoE dimension per expert | 2,048 | 3,072 | +50% |
+| Routed experts | 384 | 896 | +133% |
+| Active experts per token | 8 | 16 | +100% |
+| Shared experts | 1 | 2 | +100% |
+| Attention heads | 64 | 96 | +50% |
+| Training context length | 128K | 1M | ×8 |
+| Attention mechanism | MLA | Hybrid KDA-MLA | qualitative change |
+| Activation function | SwiGLU | SiTU-GLU | qualitative change |
+| Vision encoder | none | MoonViT-V2 (401M, 27 layers) | new |
+
+{/* source: k3_tech_report.pdf, Table 1, consulté 2026-07-28 */}
+
+Two lines don't appear in this table but are worth adding: K2 used RoPE in its global attention layers, K3 adopts NoPE; and Moonshot measures a roughly 2.5x gain in scaling efficiency compared to K2, on out-of-distribution validation curves. The tech report provides no numeric score comparing K2 and K3 on a shared benchmark: only this architectural comparison exists in the available sources.
+
+{/* source: k3_tech_report.pdf §3.2, consulté 2026-07-28 */}
+
+## Post-training: nine models fused into one
+
+Pretraining builds a model that's capable of a bit of everything. K3's post-training goes further: Moonshot trains nine distinct expert models, crossing three domains (general tasks, general agents, coding agents) with three effort levels (low, high, max), then merges these nine variants into a single model through on-policy multi-teacher distillation (MOPD).
+
+The reinforcement learning algorithm behind this step relies on partial rollout: trajectory generation stops as soon as a fraction of ongoing rollouts is complete, paused trajectories are requeued and resumed with priority at the next iteration. That prevents a handful of very long tasks from blocking the entire training pipeline while waiting for them to finish.
+
+A complementary mechanism, Reasoning Effort RL, forces the model to stay within a token budget: a reference budget is estimated from the post-SFT model, and the reward drops to -1 if the model exceeds a multiple of that budget. It's the equivalent of an exam where the student has a fixed number of scratch sheets and loses points for asking for more: it forces reasoning that stays efficient rather than sprawling without discipline.
+
+For tasks that can't be automatically verified (writing, open-ended research), K3 uses an Agentic Generative Reward Model: a judge model that compares two answers and must follow a fixed protocol before deciding, namely reading both outputs, generating a rubric, scoring against that rubric, then logging it all in a "scorepad." This imposed discipline serves a single purpose: preventing the judge from being swayed by a response's style rather than its actual quality, what's known as reward hacking. A judge that has to write its rubric before scoring has a harder time judging on overall impression.
+
+{/* source: k3_tech_report.pdf §4, consulté 2026-07-28 */}
+
+## QAT MXFP4: training with the shoes you'll race in
+
+Quantization reduces a model's numerical precision so it fits in memory and computes faster at inference. The classic risk: a model trained at high precision and then quantized afterward behaves differently once quantized, because it never saw that numerical format during training.
+
+Kimi K3 applies Quantization-Aware Training (QAT) in MXFP4 for the MoE experts' weights and MXFP8 for activations, starting from the SFT stage and continuing throughout post-training (SFT and RL). During the RL phase, the rollout (generation) and the training share the same quantized numerical scheme, which the report summarizes as "eliminating the train-inference mismatch."
+
+It's the equivalent of training in the shoes you'll wear on race day, rather than training barefoot and discovering cleats on the morning of the competition. The rest of the model (attention projections, routers, shared experts) stays at higher precision: only the largest part (the MoE experts) is quantized this aggressively.
+
+{/* source: k3_tech_report.pdf §4, README §4, consulté 2026-07-28 */}
+
+## Three case studies worth the detour
+
+The report devotes a whole section to practical demonstrations of the model's capabilities on real engineering tasks, rather than abstract benchmarks.
+
+**GPU kernel optimization.** With a 24-hour budget per task, K3 optimizes four critical kernels (AttnRes, DSA, KDA, MLA at head dimension 512). Result on AttnRes: latency drops from 283.6ms to 114.4ms. The report even notes that "an early Kimi K3 checkpoint was already handling most of our kernel optimization work during late-stage development": the model in development was used to optimize its own training infrastructure.
+
+**MiniTriton.** K3 built a Triton-style compiler with a Python tile-level frontend and an MLIR warp-level layer, capable of generating PTX code. On NVIDIA L20 GPUs, this compiler outperforms PyTorch eager and torch.compile on average, and its from-scratch tensor-core matmul path approaches 90% of the measured hardware ceiling at the largest sizes, close to cuBLAS.
+
+**An inference chip in 48 hours.** The most striking case: in a single autonomous 48-hour run with Kimi Code, K3 designed, optimized, and verified an inference-chip prototype, using open-source EDA tools and the Nangate45 standard-cell library. Within a 4mm² budget, the design closes timing at 100MHz and reaches a simulated RTL decode throughput of over 8,700 tokens per second, with 1.46 million standard cells. The RTL is published openly.
+
+{/* source: k3_tech_report.pdf §7, consulté 2026-07-28 */}
+
+## Cybersecurity: a result to read with its nuance
+
+The tech report includes a cybersecurity evaluation the press tends to summarize too quickly. On an internal suite of 36 exploit-development tasks (16 in userland, 20 on the Linux kernel, estimated at around 540 cumulative hours of human expertise), K3 solves 14 out of 36, versus 8 out of 36 for GLM-5.2. An independent joint evaluation by the UK AI Security Institute and NIST CAISI confirms this gap: K3 beats GLM-5.2 on ExploitBench (32% versus 24%) and progresses further on a simulated enterprise-network scenario that normally takes a human expert around twenty hours.
+
+The nuance that changes the reading: that same independent evaluation notes that K3 achieves arbitrary code execution on 0 tasks out of 41, far from truly cyber-capable frontier models. And crucially, Anthropic's and OpenAI's frontier models refuse exploit-development tasks as a matter of principle, which mechanically excludes them from this comparison. Saying "K3 beats GLM-5.2" is accurate. Concluding from it that K3 is the most dangerous model on the market isn't: the comparison only covers models that agree to participate in this type of evaluation.
+
+<Callout type="warning" title="What not to conclude from this result">
+A higher score than a competitor on a task that others refuse to do says nothing about overall positioning on the risk scale. The 0 out of 41 in arbitrary code execution is the figure that best bounds what K3 actually knows how to do in this area.
+</Callout>
+
+{/* source: k3_tech_report.pdf §6.2.2, consulté 2026-07-28 */}
+
+## Next steps
+
+This tech report reads like a condensed snapshot of the state of the art in frontier model architecture in mid-2026: a mix of attentions instead of a binary choice, implicit rather than encoded position, quantization designed in from training rather than bolted on afterward. Whether you're building your own agents with Claude Code or simply following the industry's evolution, these choices are worth understanding: they'll come back, in one form or another, in the next models from every provider.
+
+To go further on the site:
+
+- [Sonnet 5 and Fable 5: the new Claude models](/content/claude-sonnet-5-fable-5-new-models) to place Kimi K3 against the Claude 5 generation.
+- [GPT-5.6 vs Claude Sonnet 5](/content/gpt-5-6-vs-claude-sonnet-5) for a numbers-based comparison across model families.
+- [Understanding Claude Code internals through leaks](/content/comprendre-claude-code-internals) for a similar approach on the tooling side rather than the model side.

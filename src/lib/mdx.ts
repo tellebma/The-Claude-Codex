@@ -104,7 +104,7 @@ export function getMdxBySlug(slug: string, locale: string = DEFAULT_LOCALE): Mdx
   const { data, content } = matter(fileContents);
 
   return {
-    frontmatter: validateFrontmatter(data as Record<string, unknown>, slug),
+    frontmatter: validateFrontmatter(data, slug),
     content,
     slug,
   };

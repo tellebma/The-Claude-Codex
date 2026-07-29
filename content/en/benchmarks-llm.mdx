@@ -1,0 +1,80 @@
+---
+title: "LLM Benchmarks: Reference Tables by Category"
+description: "Terminal-Bench, SWE-bench, GPQA Diamond, Arena: scores for major LLMs organized by category, each with its source, vendor-reported or independent status, and measurement date."
+section: "content"
+order: 20
+datePublished: "2026-07-28"
+dateModified: "2026-07-28"
+themes: ["reference", "tooling"]
+---
+
+## What this page covers
+
+This page gathers, category by category, the scores of major LLMs on the most closely watched benchmarks available today. Every row in every table carries its source, the date the value was measured, and a badge showing whether the number comes from the model's vendor or from an independent measurement. Last global review: July 28, 2026.
+
+No number is copied into the text of this page: they all live in the tables, which stay the single source of truth. The prose explains what each family of benchmarks actually measures and where it breaks down.
+
+## Vendor-reported or independent: the distinction that matters
+
+<Callout type="warning" title="Before reading the tables">
+A score published by a model's own vendor, in a system card or an announcement post, hasn't been checked by anyone else. A score published by a third party that doesn't sell any of the compared models (Artificial Analysis, Arena, a benchmark's official maintainer) was measured under conditions the vendor doesn't control. Both have their place, but they don't carry the same weight.
+</Callout>
+
+Every row carries a Vendor or Independent badge, along with the publisher's name. The same model can appear twice on the same benchmark, once under each status: that's not redundancy, it's the most useful piece of information on this page. Before comparing two rows, check they carry the same badge first.
+
+## Coding and agentic
+
+These benchmarks have the model solve real development tasks: fixing a bug in a repository, getting a test suite to pass, running commands in a terminal. The harness wrapped around the model, meaning the agent that orchestrates its tool calls, shapes the result as much as the model itself does. The same model tested with two different harnesses won't produce the same score: the notes column records the agent used (`agent=`) whenever the source documents it.
+
+The official SWE-bench Verified leaderboard hasn't taken a new submission since February 2026. The most recent scores in this category therefore come only from vendor cards, not from a verified submission on that specific leaderboard.
+
+<BenchmarkTable benchmarkId="terminal-bench-2-1" />
+<BenchmarkTable benchmarkId="terminal-bench-2-1-aa" caption="Terminal-Bench 2.1, replayed by Artificial Analysis" />
+<BenchmarkTable benchmarkId="swe-bench-verified" />
+<BenchmarkTable benchmarkId="swe-bench-pro" />
+
+## Reasoning
+
+GPQA Diamond and Humanity's Last Exam test expert-level knowledge on closed-ended questions, with no access to external tools. GPQA Diamond is approaching saturation: the most recent models sit within a single point of each other, which no longer separates them meaningfully. Humanity's Last Exam stays more discriminating, but its score depends heavily on the scope used (text-only or the full set) and on the model used to grade open-ended answers, two parameters the notes column records when known.
+
+<BenchmarkTable benchmarkId="gpqa-diamond" />
+<BenchmarkTable benchmarkId="humanitys-last-exam" />
+
+## Agents and tools
+
+GDPval-AA, OSWorld, and BrowseComp measure capabilities closer to real-world use: completing a professional task graded by human preference for GDPval-AA, operating a graphical computer interface for OSWorld, browsing and searching the web to track down a precise piece of information for BrowseComp. These agentic benchmarks are more sensitive to safety refusals and automatic fallbacks to another model than a single-answer test is: a refusal or a fallback counts as a failure in the final average, same as an outright model error.
+
+<BenchmarkTable benchmarkId="gdpval-aa-v2" />
+<BenchmarkTable benchmarkId="osworld-2-0" />
+<BenchmarkTable benchmarkId="browsecomp" />
+
+## Long context
+
+AA-LCR and OpenAI MRCR test a model's ability to retrieve and reason over information buried in a very long context window, rather than reasoning ability in the abstract. A high score here says nothing about the same model's reasoning quality on a short context, and vice versa. Few vendors publish this kind of number across their entire lineup, which is why these tables run shorter than the other categories.
+
+<BenchmarkTable benchmarkId="aa-lcr" caption="AA-LCR: long-context reasoning" />
+<BenchmarkTable benchmarkId="openai-mrcr-v2-8-needle" />
+
+## Human preference
+
+Text Arena and WebDev Arena rank models by an Elo score built from blind human preference votes, not by automated grading. The confidence interval and the vote count matter more here than the displayed rank: on these leaderboards, several consecutive models often overlap statistically, and a recently added model can show a flattering rank on a still-small vote count. The notes column records the confidence interval (`ci=`) and the vote count (`votes=`) whenever the source publishes them.
+
+<BenchmarkTable benchmarkId="text-arena" />
+<BenchmarkTable benchmarkId="webdev-arena" />
+
+## Composite indices
+
+The Artificial Analysis Intelligence Index aggregates several benchmarks into a single score, weighted according to a published methodology. A composite index simplifies comparison but hides the gaps between categories: two models with a similar index can have very different strength profiles depending on which sub-score you look at. It gives an order of magnitude, not a verdict.
+
+<BenchmarkTable benchmarkId="aa-intelligence-index-v4-1" />
+
+## Methodology and limits
+
+This page doesn't cover every pitfall in reading a score: the effect of reasoning effort level, test set contamination, contradictions between an announcement's text and its own table. The article [How to Read an LLM Benchmark Without Getting Fooled](/content/how-to-read-llm-benchmarks) walks through nine of these pitfalls using verified cases. The scores on this page are refreshed periodically following the editorial team's update procedure; the last global review date appears at the top of the page.
+
+## Next steps
+
+- [How to Read an LLM Benchmark Without Getting Fooled: The Survival Guide](/content/how-to-read-llm-benchmarks): the methodological pitfalls behind the numbers on this page
+- [Kimi K3: the first open model in the 3T class, and what actually changes](/content/kimi-k3-what-changes): a concrete case where several of these benchmarks come into play
+- [Opus 5, GPT-5.6, Kimi K3: three launches, three rankings that contradict each other](/content/opus-5-vs-new-gpt-models): a comparative read of the most disputed scores on this page
+- [The real costs of Claude Code](/content/real-costs-claude-code): putting these scores in perspective against what they actually cost to run

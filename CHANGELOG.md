@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.15.0...v1.16.0) (2026-07-29)
+
+
+### Features
+
+* **content:** benchmarks LLM + 6 articles IA (Opus 5, Kimi K3) en FR/EN/ES ([#320](https://github.com/tellebma/The-Claude-Codex/issues/320)) ([c10b2af](https://github.com/tellebma/The-Claude-Codex/commit/c10b2af6103a7f2f9d056648feada2ee16697ee2))
+
 # [1.15.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.14.0...v1.15.0) (2026-07-10)
 
 

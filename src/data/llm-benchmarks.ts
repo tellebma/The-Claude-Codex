@@ -81,11 +81,15 @@ export interface ModelEntry {
   readonly label: string;
   readonly vendor: string;
   /**
-   * `"proprietary"` et `"unknown"` sont des cles traduites cote composant ;
-   * toute autre valeur est un nom de licence affiche tel quel
-   * (`"MIT"`, `"Apache-2.0"`, `"Kimi K3 License"`).
+   * `"proprietary"` et `"unknown"` sont traduites cote composant (constante
+   * `TRANSLATED_LICENSES` de `BenchmarkTable.tsx`) ; toute autre valeur est un
+   * nom de licence affiche tel quel (`"MIT"`, `"Apache-2.0"`, `"Kimi K3 License"`).
+   *
+   * Le type reste `string` : une union `"proprietary" | "unknown" | string`
+   * serait reduite a `string` par TypeScript et ne garantirait donc rien
+   * (regle sonar typescript:S6571).
    */
-  readonly license: "proprietary" | "unknown" | string;
+  readonly license: string;
   /** ISO `YYYY-MM-DD`. Absent si aucune source primaire ne documente la date. */
   readonly releasedAt?: string;
 }
@@ -208,7 +212,7 @@ export const benchmarks: ReadonlyArray<BenchmarkDefinition> = [
     id: "osworld-2-0",
     label: "OSWorld 2.0",
     category: "agents-tools",
-    leaderboardUrl: "http://osworld-v1.xlang.ai/",
+    leaderboardUrl: "https://osworld-v1.xlang.ai/",
     maintainer: "OSWorld team, University of Hong Kong",
   },
   {
@@ -573,7 +577,7 @@ export const scores: ReadonlyArray<ScoreEntry> = [
   {
     modelId: "claude-opus-5",
     benchmarkId: "swe-bench-verified",
-    value: 96.0,
+    value: 96,
     unit: "percent",
     sourceUrl: SRC.anthropicOpus5SystemCard,
     measuredAt: AT.anthropicOpus5,
@@ -662,7 +666,7 @@ export const scores: ReadonlyArray<ScoreEntry> = [
   {
     modelId: "claude-fable-5",
     benchmarkId: "swe-bench-pro",
-    value: 80.0,
+    value: 80,
     unit: "percent",
     sourceUrl: SRC.anthropicOpus5SystemCard,
     measuredAt: AT.anthropicOpus5,
@@ -787,7 +791,7 @@ export const scores: ReadonlyArray<ScoreEntry> = [
   {
     modelId: "muse-spark",
     benchmarkId: "swe-bench-pro",
-    value: 55.0,
+    value: 55,
     unit: "percent",
     sourceUrl: SRC.scaleSwebenchPro,
     measuredAt: AT.leaderboards,
@@ -884,7 +888,7 @@ export const scores: ReadonlyArray<ScoreEntry> = [
   {
     modelId: "claude-opus-4-8",
     benchmarkId: "gpqa-diamond",
-    value: 92.0,
+    value: 92,
     unit: "percent",
     sourceUrl: SRC.openaiGpt56,
     measuredAt: AT.openaiGpt56,
@@ -1366,7 +1370,7 @@ export const scores: ReadonlyArray<ScoreEntry> = [
   {
     modelId: "gpt-5-1",
     benchmarkId: "aa-lcr",
-    value: 75.0,
+    value: 75,
     unit: "percent",
     sourceUrl: SRC.aaLcr,
     measuredAt: AT.leaderboards,

@@ -49,11 +49,13 @@ describe("benchmark definitions", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it("has a non-empty label, maintainer and an http(s) leaderboard url", () => {
+  // https obligatoire, pas https? : une URL en clair est un hotspot de securite
+  // sonar (S5332) et fait echouer le quality gate.
+  it("has a non-empty label, maintainer and an https leaderboard url", () => {
     for (const benchmark of benchmarks) {
       expect(benchmark.label.length, benchmark.id).toBeGreaterThan(0);
       expect(benchmark.maintainer.length, benchmark.id).toBeGreaterThan(0);
-      expect(benchmark.leaderboardUrl, benchmark.id).toMatch(/^https?:\/\//);
+      expect(benchmark.leaderboardUrl, benchmark.id).toMatch(/^https:\/\//);
     }
   });
 

@@ -4,7 +4,7 @@ description: "Overview of the major open-source methodologies structuring Claude
 section: "advanced"
 order: 13
 datePublished: "2026-04-26"
-dateModified: "2026-04-26"
+dateModified: "2026-08-09"
 badge: "NEW"
 ---
 
@@ -24,6 +24,7 @@ This guide compares them honestly. Not to crown a winner: none is universal, and
 | **BMAD-METHOD** | 7k+ | Full SDLC with personas | Product-eng teams |
 | **OpenSpec** | 5k+ | Delta specs, brownfield | Legacy teams, refactoring |
 | **gstack** | 4k+ | Role personas, parallel sprints | Solo dev, small teams |
+| **Hedgehog** | new | BMAD planning + mechanical phase gates | Teams who don't trust unsupervised agents |
 
 Star counts are approximate at 2026-04-26. The pecking order shifts monthly.
 
@@ -129,6 +130,22 @@ The persona injects a system prompt that constrains tone, priorities, and tools.
 
 **Who's it for?** Solo devs, small teams, side projects. Not scalable for big projects, but unbeatable for pickup.
 
+## Hedgehog: mechanical phase gates
+
+Hedgehog starts from a specific worry: an agent that's told to follow a discipline will drift the moment the discipline gets in the way, unless something outside the agent enforces it. So it borrows BMAD-style planning intake, layers TDD progressively onto an opinionated TypeScript stack, and then gates every phase transition mechanically instead of trusting the agent to self-report compliance.
+
+```
+Phase 0: Planning intake (BMAD shelf) → scope, domain modules, add-ons
+Phase A: Backend build, one domain module at a time
+Phase B: Front-end build, same module
+        ↓ mechanical gate: tests pass, coverage holds, phase checklist verified
+Next module
+```
+
+Concretely, it ships as Claude Code agents and skills a project copies into its own `.claude/`: a `planner` for scoping, `backend-eng` / `front-end-eng` for the build phases, and a `reviewer` whose job is specifically to check phase and layer transitions against a checklist rather than vibe-check the diff. A **Correction Protocol** exists for when an agent skips a gate anyway — it's an admitted failure mode, not something the discipline pretends can't happen.
+
+**Who's it for?** Teams that want BMAD-grade planning rigor but don't trust "the agent will remember to run tests" as an enforcement mechanism. Heavier than gstack, narrower than BMAD-METHOD (opinionated TypeScript stack, not stack-agnostic). Overkill for a solo prototype where nothing is gating anything yet.
+
 ## How to compose them
 
 No methodology is exclusive. Here are a few compositions that work in practice:
@@ -162,6 +179,7 @@ If you don't know where to start:
 | Greenfield with strong constitution | **Spec Kit** |
 | Regulated industry, strong traceability | **BMAD-METHOD** |
 | Power user wanting to capitalize | **Everything Claude Code** |
+| Don't trust the agent to self-enforce a discipline | **Hedgehog** |
 
 ## The shared risk: heaviness
 

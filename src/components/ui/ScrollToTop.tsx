@@ -31,6 +31,7 @@ export function ScrollToTop() {
 
   return (
     <button
+      type="button"
       onClick={scrollToTop}
       aria-label={t("scrollToTop")}
       aria-hidden={!visible}

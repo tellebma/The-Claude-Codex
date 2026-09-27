@@ -18,6 +18,7 @@ export function ThemeToggle() {
 
   return (
     <button
+      type="button"
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       className="relative flex h-11 w-11 items-center justify-center rounded-lg border border-[color:var(--border-default)] bg-[color:var(--bg-elevated)] text-[color:var(--fg-primary)] hover:bg-[color:var(--bg-subtle)]"
       style={{

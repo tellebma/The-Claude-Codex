@@ -61,7 +61,7 @@ describe("ComparisonTable", () => {
     expect(missingRow).not.toBeNull();
     // Row has the feature header and two value cells even if one is missing.
     const cells = within(missingRow as HTMLElement).getAllByRole("cell");
-    expect(cells.length).toBe(COLUMNS.length);
+    expect(cells).toHaveLength(COLUMNS.length);
   });
 
   it("renders the caption when provided", () => {
@@ -92,6 +92,6 @@ describe("ComparisonTable", () => {
       <ComparisonTable columns={COLUMNS} rows={ROWS} />
     );
     const bodyRows = container.querySelectorAll("tbody tr");
-    expect(bodyRows.length).toBe(ROWS.length);
+    expect(bodyRows).toHaveLength(ROWS.length);
   });
 });

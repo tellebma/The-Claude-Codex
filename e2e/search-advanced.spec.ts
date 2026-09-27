@@ -207,8 +207,14 @@ test.describe("Search advanced behaviour", () => {
     await page.keyboard.press("k");
     await page.keyboard.press("/");
     await page.keyboard.press("Enter");
-    // Short wait — if the dialog were going to open it would be visible by now.
-    await page.waitForTimeout(150);
+    // Laisse React traiter les keydown et peindre : deux frames suffisent pour
+    // qu'un dialog ouvert par ces touches soit rendu.
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
     await expect(
       page.getByRole("combobox", { name: "Rechercher" }),
     ).not.toBeVisible();
@@ -216,12 +222,13 @@ test.describe("Search advanced behaviour", () => {
 
   // Negative: 1-char queries must NOT show results (min-chars gate).
   test("a 1-char query never surfaces results", async ({ page }) => {
+    await page.clock.install();
     await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("m");
-    // Wait past the debounce window.
-    await page.waitForTimeout(250);
+    // Avance l'horloge au-delà de la fenêtre de debounce (120 ms).
+    await page.clock.runFor(250);
     await expect(
       page.getByRole("listbox", { name: "Résultats de recherche" }),
     ).not.toBeVisible();
@@ -229,11 +236,13 @@ test.describe("Search advanced behaviour", () => {
 
   // Negative: whitespace-only queries must behave like empty queries.
   test("whitespace-only query does not trigger a search", async ({ page }) => {
+    await page.clock.install();
     await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("     ");
-    await page.waitForTimeout(250);
+    // Avance l'horloge au-delà de la fenêtre de debounce (120 ms).
+    await page.clock.runFor(250);
     // Suggestions (empty-state) still visible; no listbox, no noResults.
     await expect(
       page.getByRole("listbox", { name: "Résultats de recherche" }),
@@ -289,11 +298,13 @@ test.describe("Search advanced behaviour", () => {
 
   // Unicode / emojis / special chars must not crash the search runtime.
   test("special chars and emojis do not crash the search", async ({ page }) => {
+    await page.clock.install();
     await page.goto("/fr/");
     await page.getByRole("button", { name: /Rechercher/ }).click();
     const input = page.getByRole("combobox", { name: "Rechercher" });
     await input.fill("🚀 é~!@#$");
-    await page.waitForTimeout(250);
+    // Avance l'horloge au-delà de la fenêtre de debounce (120 ms).
+    await page.clock.runFor(250);
     // Either noResults OR still open — the key assertion is the dialog is
     // still alive (no crash, no white screen).
     await expect(input).toBeVisible();

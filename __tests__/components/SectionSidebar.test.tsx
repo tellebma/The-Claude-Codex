@@ -66,11 +66,18 @@ describe("SectionSidebar", () => {
     expect(screen.getByRole("complementary")).toBeInTheDocument();
   });
 
-  it("renders the section title in the sidebar", () => {
-    mockPathname = "/getting-started";
+  // useTranslations mock returns the key verbatim, so the section title is
+  // rendered as "getting-started.title". The progress label is rendered as
+  // "Page {currentPage} / {totalPages}".
+  it.each([
+    ["the section title", "/getting-started", "getting-started.title"],
+    ["'Page 1 / 8' on the overview page", "/getting-started", "Page 1 / 8"],
+    ["'Page 4 / 8' on the installation page", "/getting-started/installation", "Page 4 / 8"],
+    ["'Page 8 / 8' on the last page", "/getting-started/faq-beginner", "Page 8 / 8"],
+  ])("renders %s", (_label, pathname, expectedText) => {
+    mockPathname = pathname;
     render(<SectionSidebar />);
-    // useTranslations mock returns the key verbatim
-    expect(screen.getByText("getting-started.title")).toBeInTheDocument();
+    expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
 
   it("renders all navigation items as links", () => {
@@ -135,28 +142,6 @@ describe("SectionSidebar", () => {
 
     const progressbar = screen.getByRole("progressbar");
     expect(progressbar).toBeInTheDocument();
-  });
-
-  it("shows 'Page 1 / 8' when on the overview page of getting-started", () => {
-    mockPathname = "/getting-started";
-    render(<SectionSidebar />);
-
-    // The component renders: "Page {currentPage} / {totalPages}"
-    expect(screen.getByText("Page 1 / 8")).toBeInTheDocument();
-  });
-
-  it("shows 'Page 4 / 8' when on the installation page of getting-started", () => {
-    mockPathname = "/getting-started/installation";
-    render(<SectionSidebar />);
-
-    expect(screen.getByText("Page 4 / 8")).toBeInTheDocument();
-  });
-
-  it("shows 'Page 8 / 8' when on the last page of getting-started", () => {
-    mockPathname = "/getting-started/faq-beginner";
-    render(<SectionSidebar />);
-
-    expect(screen.getByText("Page 8 / 8")).toBeInTheDocument();
   });
 
   it("sets correct value/max on the progress bar", () => {

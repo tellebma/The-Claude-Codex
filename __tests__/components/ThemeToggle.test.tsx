@@ -29,7 +29,7 @@ describe("ThemeToggle", () => {
     render(<ThemeToggle />);
     const button = screen.getByRole("button");
     const svgs = button.querySelectorAll("svg");
-    expect(svgs.length).toBe(2);
+    expect(svgs).toHaveLength(2);
     for (const svg of Array.from(svgs)) {
       expect(svg.getAttribute("aria-hidden")).toBe("true");
     }

@@ -35,7 +35,7 @@ describe("not-found-strings", () => {
 
   describe("fallback suggestions", () => {
     it("FR et EN exposent le même nombre de suggestions", () => {
-      expect(FALLBACK_SUGGESTIONS_FR.length).toBe(
+      expect(FALLBACK_SUGGESTIONS_FR).toHaveLength(
         FALLBACK_SUGGESTIONS_EN.length,
       );
     });

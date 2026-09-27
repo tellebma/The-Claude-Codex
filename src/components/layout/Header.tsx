@@ -134,6 +134,7 @@ function MoreDropdown() {
   return (
     <div ref={ref} className="relative">
       <button
+        type="button"
         ref={buttonRef}
         onClick={() => setOpen(!open)}
         onKeyDown={(e) => handleMoreButtonKey(e, setOpen)}
@@ -282,6 +283,7 @@ export function Header() {
           <LanguageSwitcher />
           <ThemeToggle />
           <button
+            type="button"
             ref={mobileToggleRef}
             onClick={toggleMobile}
             className="flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--border-default)] bg-[var(--bg-elevated)] text-[var(--fg-primary)] transition-colors hover:bg-[var(--bg-subtle)] lg:hidden"

@@ -520,6 +520,7 @@ export function SearchDialog() {
   return (
     <>
       <button
+        type="button"
         ref={triggerRef}
         onClick={openDialog}
         aria-label={t("triggerShort")}

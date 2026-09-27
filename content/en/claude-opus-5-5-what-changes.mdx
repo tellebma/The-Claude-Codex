@@ -1,0 +1,129 @@
+---
+title: "Claude Opus 5.5: Fable 5.1-level work for 40% less than Opus 5"
+description: "Anthropic released Claude Opus 5.5 on September 22, 2026: lower prices, $0.20 cache reads, faster output and a new default model in Claude Code. What actually changes for you."
+badge: "New"
+section: "content"
+order: 27
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "performance"]
+---
+
+## Quick answer
+
+Anthropic released **Claude Opus 5.5** on September 22, 2026. It's the first model in the Claude 5.5 family. The pitch fits in one sentence: it performs at the level of Claude Fable 5.1 on most work and costs 40% less to run than Opus 5. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */}
+
+If you use Claude Code on a Pro, Max, Team or Enterprise plan, you're probably already on it: since v2.1.280, the `default` model points to Opus 5.5 on those plans and on the Anthropic API. {/* source: https://code.claude.com/docs/en/model-config.md, section "default model setting", consulté 2026-09-27 */}
+
+## Pricing: the big cut is on the cache
+
+Here's Anthropic's published price list, next to Opus 5:
+
+| Item (per million tokens) | Opus 5.5 | Opus 5 |
+|---|---|---|
+| Input | $4 | $5 |
+| Output | $20 | $25 |
+| Cache reads | $0.20 | $0.50 |
+| Cache writes | $5 | $6.25 |
+
+{/* source: https://www.anthropic.com/claude-opus-5-5, section "Pricing", consulté 2026-09-27 */}
+
+Input and output drop by 20%. Cache reads drop by 60%, and that's the number that matters most for Claude Code. Anthropic says so plainly: cache reads make up the majority of agentic and coding work costs. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */}
+
+An analogy helps. A Claude Code session is like a meeting where everyone rereads the full minutes before each new comment. The minutes (your `CLAUDE.md`, files already read, the history) get reread on every turn. The cache is the annotated copy you pull out of the drawer instead of rereading everything. When opening that drawer costs 60% less, the bill for a long session shrinks fast.
+
+Fast mode is also available for Opus 5.5 in Claude Code and on the Claude Platform, with up to 2.5x speed. It costs $8 per million input tokens and $40 per million output tokens. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */}
+
+<Callout type="info" title="The 40% figure is an average">
+The 40% comes from Anthropic's tests on "typical workloads" at default settings. It combines two effects: a lower price per token and fewer tokens per task. Your real savings depend on how you work. To measure them, check the `Prompt cache (main)` line in `/cost`, which shows the share of input tokens served from cache.
+</Callout>
+
+{/* source: https://code.claude.com/docs/en/whats-new/2026-w36 (/cost Prompt cache line), consulté 2026-09-27 */}
+
+## What the benchmarks say
+
+Anthropic publishes a comparison table. Every number below is vendor-reported, not independently measured:
+
+| Benchmark | Opus 5.5 | Fable 5.1 | Opus 5 | GPT-6 Astra |
+|---|---|---|---|---|
+| Terminal-Bench 4.0 | 66.4% | 55.8% | 52.3% | 57.9% |
+| FrontierCode v1.1 (Main) | 54.4% | 50.3% | 48.0% | 53.3% |
+| CursorBench 4.0 | 57.8% | 51.8% | 46.6% | not published |
+| GDPval-AA v2.1 (Elo) | 1846 | 1735 | 1708 | 1542 |
+| AutomationBench | 40.0% | 31.4% | 26.9% | 41.4% |
+| Terminal-Bench-Science 0.1 | 58.7% | 52.6% | 29.0% | 64.6% |
+
+{/* source: https://www.anthropic.com/claude-opus-5-5, table "Performance and cost-effectiveness", consulté 2026-09-27 */}
+
+Three things to keep in mind before drawing conclusions.
+
+First, Opus 5.5 doesn't win everywhere. GPT-6 Astra leads on AutomationBench (41.4% vs 40.0%) and on Terminal-Bench-Science (64.6% vs 58.7%). {/* source: same */}
+
+Second, the GPT-6 Astra and GPT-5.6 Sol scores on Terminal-Bench 4.0 are as reported by OpenAI, not re-measured by Anthropic. And Opus 5.5 is scored at `xhigh` effort while GPT-6 Astra is at `high`: each model is taken at its best reported score. {/* source: https://www.anthropic.com/claude-opus-5-5, table footnotes, consulté 2026-09-27 */}
+
+Third, Anthropic itself writes that at this level of capability, benchmark margins have become a less reliable guide to real-world differences, and that in its own use the gap between Opus 5.5 and Fable 5.1 is narrower than the scores suggest. It's rare for a vendor to downplay its own numbers on launch day, so that's worth noting. {/* source: same */}
+
+For more on reading these tables, our guide [How to read an LLM benchmark without getting fooled](/content/how-to-read-llm-benchmarks) still applies.
+
+## What changes day to day in Claude Code
+
+### Fewer turns, fewer tokens
+
+Opus 5.5's main argument isn't a score, it's efficiency. A few examples from the announcement:
+
+- One tester audited and fixed a 200,000-line codebase in under three hours, where Opus 5 took over 20 hours and used 2.5x as many tokens.
+- Internally, Anthropic had Opus 5.5 and Fable 5.1 translate HAProxy from C into Rust. Both rewrites passed nearly all regression tests, but Opus 5.5 finished in 9.5 hours versus 12, at 51% lower cost.
+- On FrontierCode at default effort (`medium`), Opus 5.5 scores 54.6%, beating GPT-6 Astra's top score (53.3%) for about a fifth of the cost per task.
+
+{/* source: https://www.anthropic.com/claude-opus-5-5, section "Coding", consulté 2026-09-27 */}
+
+These come from the vendor and its early-access customers. They show a trend, not a guarantee for your repo.
+
+### Clearer messages
+
+Anthropic says it reworked how Opus 5.5 writes, in response to feedback about Opus 5. The model puts the key information first, uses less jargon, and follows the writing rules you give it more closely. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Communication", consulté 2026-09-27 */} If your `CLAUDE.md` has style guidelines, now's a good time to check they're being followed.
+
+### Five effort levels
+
+Opus 5.5 offers `low`, `medium` (default), `high`, `xhigh` and `max`. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */} Several customers quoted in the announcement say Opus 5.5 at `low` matches or beats Opus 5 at `high`. So before you raise the effort out of habit, test the default on your everyday tasks.
+
+<Steps>
+<Step title="Update Claude Code" stepNumber={1}>
+Opus 5.5 requires Claude Code v2.1.280 or later. Run `claude update`, then `claude --version` to check.
+</Step>
+<Step title="Check the active model" stepNumber={2}>
+Type `/model` in a session. On the Anthropic API, the `opus` alias now points to Opus 5.5.
+</Step>
+<Step title="Pin a version if needed" stepNumber={3} isLast>
+For stable behavior (in CI, for instance), use the full ID `claude-opus-5-5` rather than the alias, or set `ANTHROPIC_DEFAULT_OPUS_MODEL`.
+</Step>
+</Steps>
+
+{/* source: https://code.claude.com/docs/en/model-config.md, consulté 2026-09-27 */}
+
+<CodeBlock language="bash" code={`claude update
+claude --model claude-opus-5-5`} />
+
+## Limits worth knowing
+
+Opus 5.5 ships with the same class of safeguards as Fable 5.1, a first for an Opus model. Most cybersecurity tasks are rerouted to Opus 4.8, and flagged biology requests to Opus 5. Finding and fixing bugs in your own code still works. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Safeguards", and https://code.claude.com/docs/en/model-config.md, section "Automatic model fallback", consultés 2026-09-27 */} We explain the mechanism in [Why Claude Code sometimes switches models mid-session](/content/automatic-model-fallback-safeguards).
+
+Two more technical points:
+
+- Thinking mode can no longer be switched off on Opus 5.5. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Data retention and compliance", consulté 2026-09-27 */}
+- The "preserved thinking" anti-distillation safeguard applies to API accounts created on or after August 31, 2026: you can no longer edit Claude's prior context to extract its reasoning. If you have an integration that rewrites message history, test it. {/* source: same, section "Distillation" */}
+
+On safety, Anthropic says Opus 5.5 attempted to circumvent boundaries around 85% less often than Opus 5 in a new dedicated evaluation. It also acknowledges that the model often suspects it's being evaluated, which makes its real-world behavior harder to measure. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Alignment", consulté 2026-09-27 */}
+
+## What about subscribers?
+
+Alongside the launch, Anthropic is raising five-hour usage limits on Pro, Max, Team and seat-based Enterprise plans. Subscribers also get a rate limit reset they can save and use whenever they choose. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Cost and speed", consulté 2026-09-27 */}
+
+Claude Sonnet 5.5 and Claude Haiku 5.5 are announced for "the coming weeks", with no specific date. {/* source: same */}
+
+## Next steps
+
+- [Fable 5.1 and Mythos 5.1: one model, two levels of safeguards](/content/fable-5-1-and-mythos-5-1): the model Opus 5.5 compares itself to
+- [GPT-6 vs Opus 5.5: what the prices and numbers really say](/content/gpt-6-vs-opus-5-5): OpenAI's answer, released the same day
+- [Real cost per task](/content/real-cost-per-task): why price per token isn't enough to compare two models
+- [What's new in Claude Code, August and September 2026](/content/claude-code-whats-new-august-september-2026): everything else that moved in the tool

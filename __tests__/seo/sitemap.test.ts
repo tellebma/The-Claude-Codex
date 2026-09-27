@@ -24,7 +24,7 @@ describe("sitemap()", () => {
       (sum, page) => sum + expectedLocalesFor(page).length,
       0
     );
-    expect(entries.length).toBe(expectedCount);
+    expect(entries).toHaveLength(expectedCount);
   });
 
   it("produces URLs that are absolute and prefixed by SITE_URL", () => {

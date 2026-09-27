@@ -33,7 +33,7 @@ describe("FooterVersion", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     render(<FooterVersion />);
-    await waitFor(() => expect(screen.getByText("v2.0.0")).toBeInTheDocument());
+    expect(await screen.findByText("v2.0.0")).toBeInTheDocument();
 
     expect(fetchMock).toHaveBeenCalledWith(
       "https://api.github.com/repos/tellebma/The-Claude-Codex/releases/latest",
@@ -67,7 +67,7 @@ describe("FooterVersion", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     render(<FooterVersion />);
-    await waitFor(() => expect(screen.getByText("v3.0.0")).toBeInTheDocument());
+    expect(await screen.findByText("v3.0.0")).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 

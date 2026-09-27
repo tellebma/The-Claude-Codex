@@ -1,0 +1,135 @@
+---
+title: "Mensajería entre sesiones: tus sesiones de Claude Code por fin se hablan"
+description: "Desde agosto de 2026, una sesión de Claude Code puede enviar un mensaje a otra con ListAgents y SendMessage. Funcionamiento, seguridad, ajustes y casos de uso concretos."
+badge: "Nuevo"
+section: "content"
+order: 30
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["tutorial", "productivity"]
+---
+
+## En resumen
+
+Si ejecutas varias sesiones de Claude Code en paralelo, conoces la escena: una sesión renombra una columna de la base de datos y eres tú quien va a avisar a la otra, copiando y pegando de un terminal a otro. Desde la v2.1.224, publicada la semana del 3 al 7 de agosto de 2026, ya no hace falta. **Tus sesiones pueden enviarse mensajes.** {/* source: https://code.claude.com/docs/en/whats-new/2026-w32, consultado 2026-09-27 */}
+
+Es como pasar de una oficina donde todos trabajan con cascos a una oficina con mensajería interna. Cada uno conserva su puesto y sus carpetas, pero puede pasar un dato sin levantarse.
+
+## Cómo funciona
+
+Claude usa dos herramientas: `ListAgents` para encontrar tus otras sesiones y `SendMessage` para escribirles. Nunca llamas a estas herramientas tú mismo. Lo pides en lenguaje natural, o Claude decide por su cuenta enviar un mensaje cuando un cambio que acaba de hacer afecta a otra sesión. {/* source: https://code.claude.com/docs/en/cross-session-messaging.md, sección "Message another session", consultado 2026-09-27 */}
+
+Un punto importante: un mensaje es un texto que Claude redacta para la otra sesión. **Nunca es tu historial de conversación ni tus archivos.** Para transferir una conversación completa, hay que reanudar la sesión, no escribirle. {/* source: ídem, introducción */}
+
+Ejemplo de la documentación oficial, con dos sesiones abiertas en la misma máquina:
+
+<CodeBlock language="text" code={`Tell the session working on the payments API that users.name is now users.display_name`} />
+
+{/* source: https://code.claude.com/docs/en/whats-new/2026-w32, consultado 2026-09-27 */}
+
+La sesión que recibe muestra una línea atenuada del tipo `› Message from @api-worker: Schema migration finished (ctrl+o to expand)`. `Ctrl+O` abre el texto completo. Claude, en cambio, siempre lee el mensaje entero, aunque no lo despliegues. {/* source: https://code.claude.com/docs/en/cross-session-messaging.md, sección "What a message looks like", consultado 2026-09-27 */}
+
+### Apuntar a una sesión concreta
+
+Desde la v2.1.232, puedes nombrar la sesión destinataria con `@`, igual que para mencionar un subagente. Escribe `@` y las primeras letras de su nombre, y elígela en la lista. {/* source: ídem, consultado 2026-09-27 */}
+
+<CodeBlock language="text" code={`Let @api-worker know the schema migration finished`} />
+
+Para dar un nombre claro a una sesión, usa `/rename` o el flag `--name` al lanzarla. Sin nombre, Claude Code genera uno. {/* source: ídem, sección "See which sessions Claude can reach" */}
+
+### Ver quién está disponible
+
+El comando `/list-agents` (alias `/peers`) muestra las sesiones a las que Claude puede llegar: los subagentes de la sesión actual, los compañeros de un agent team, tus otras sesiones locales y tus sesiones en la nube o en otras máquinas si estás conectado a Remote Control. {/* source: ídem, secciones "See which sessions Claude can reach" y "Availability" */}
+
+## Casos de uso concretos
+
+La documentación cita cuatro situaciones típicas:
+
+<Steps>
+<Step title="Transmitir un hallazgo" stepNumber={1}>
+Una sesión descubre un cambio que rompe algo o toma una decisión. Claude lo resume para la sesión que trabaja en la zona afectada, en lugar de que tú lo vuelvas a explicar.
+</Step>
+<Step title="Coordinar worktrees en paralelo" stepNumber={2}>
+Varias sesiones trabajan en el mismo repositorio en worktrees separados. Claude avisa a las demás de lo que se acaba de integrar.
+</Step>
+<Step title="Seguir un trabajo largo" stepNumber={3}>
+Una migración o una batería de tests se ejecuta en otra sesión. Puede informarte en la sesión en la que estás.
+</Step>
+<Step title="Llegar a otra máquina" stepNumber={4} isLast>
+Mediante Remote Control, puedes escribir a una sesión en otra de tus máquinas o en la nube.
+</Step>
+</Steps>
+
+{/* source: https://code.claude.com/docs/en/cross-session-messaging.md, sección "When to use cross-session messaging", consultado 2026-09-27 */}
+
+### Recibir un aviso cuando una sesión termina
+
+Desde la v2.1.236, Claude puede pedir a otra sesión local que le envíe **un único aviso** cuando quede inactiva o termine. Práctico cuando esperas una migración:
+
+<CodeBlock language="text" code={`Tell me when the migration session finishes what it's working on`} />
+
+Si no llega respuesta en 12 horas, la suscripción caduca y Claude lo sabe, para no esperar indefinidamente. {/* source: https://code.claude.com/docs/en/cross-session-messaging.md, sección "Get a notice when another session goes idle", consultado 2026-09-27 */}
+
+## La pregunta incómoda: la seguridad
+
+Dejar que los agentes hablen entre sí puede inquietar. La documentación fija reglas claras sobre lo que puede hacer un mensaje recibido:
+
+- **No puede aprobar nada.** Un mensaje de otra sesión nunca cuenta como tu consentimiento y no puede responder a una petición de permiso en tu lugar.
+- **No puede cambiar la configuración.** Claude tiene instrucciones de no modificar nunca los permisos, el `CLAUDE.md` ni otros ajustes porque otra sesión se lo pida.
+- **Los comandos no se ejecutan.** Un `/compact` escrito en un mensaje llega como texto plano.
+- **Las peticiones de permiso siguen activas.** Si actuar sobre el mensaje exige un permiso que la sesión no tiene, ves la misma petición de siempre.
+
+{/* source: https://code.claude.com/docs/en/cross-session-messaging.md, sección "How a session treats an incoming message", consultado 2026-09-27 */}
+
+En auto mode, el clasificador revisa además cada mensaje que una sesión envía a otra antes de entregarlo. {/* source: https://code.claude.com/docs/en/permission-modes.md, sección auto mode, consultado 2026-09-27 */}
+
+En una misma máquina, los mensajes pasan por un socket propio de cada sesión (una named pipe en Windows), nunca por los servidores de Anthropic. Hacia otra máquina o la nube, transitan por los servidores de Anthropic a través de Remote Control. {/* source: https://code.claude.com/docs/en/cross-session-messaging.md, sección "Message sessions on other machines", consultado 2026-09-27 */}
+
+<Callout type="warning" title="Las sesiones en bypassPermissions filtran por defecto">
+Sin ajuste explícito, una sesión que se ejecuta en `bypassPermissions` deja cada mensaje entrante a la espera de tu validación, salvo que el remitente también esté en bypass. Es intencionado: una sesión sin salvaguardas no debe recibir instrucciones de otra sin que lo sepas.
+</Callout>
+
+{/* source: ídem, sección "Control inbound messages" */}
+
+## Los ajustes útiles
+
+El parámetro `crossSessionInbound` decide qué pasa con los mensajes entrantes:
+
+| Valor | Efecto |
+|---|---|
+| `accept` | Cada mensaje se entrega a Claude |
+| `hold` | Se muestra un aviso, el mensaje no se entrega |
+| `refuse` | El mensaje se descarta sin entregarse |
+
+{/* source: ídem, sección "Control inbound messages" */}
+
+Para exigir tu aprobación antes de que un mensaje salga de la máquina, activa `isolatePeerMachines`. Y para desactivar por completo la función en una organización, la documentación propone esta configuración en los managed settings:
+
+<CodeBlock language="json" code={`{
+  "permissions": {
+    "deny": ["SendMessage", "ListAgents"]
+  },
+  "crossSessionInbound": "refuse"
+}`} />
+
+{/* source: https://code.claude.com/docs/en/cross-session-messaging.md, sección "Restrict cross-session messaging", consultado 2026-09-27 */}
+
+Cuidado: denegar `SendMessage` también corta la comunicación con los subagentes y los compañeros de un agent team, porque es la misma herramienta. {/* source: ídem */}
+
+## Disponibilidad y límites
+
+- **Versiones**: v2.1.224 como mínimo en macOS, Linux y WSL 2, v2.1.234 como mínimo en Windows nativo.
+- **Aislamiento**: una sesión dentro de un contenedor y una sesión en el host no pueden comunicarse. Tampoco una sesión en WSL 2 y una sesión de Windows nativo en el mismo ordenador.
+- **Solo texto**: sin archivos adjuntos. Un mensaje local se rechaza a partir de aproximadamente un millón de caracteres.
+- **Bucles**: la sesión receptora limita los mensajes repetidos y pone en cola como máximo 50 mensajes aceptados, así que un bucle entre dos sesiones se detiene solo.
+
+{/* source: https://code.claude.com/docs/en/cross-session-messaging.md, secciones "Availability" y "Limitations", consultado 2026-09-27 */}
+
+Si `/list-agents` no se reconoce, tu sesión no tiene la función: empieza por `claude --version`.
+
+## Próximos pasos
+
+- [Orquestar un equipo de agentes](/content/agent-team-orchestration): hacer colaborar a varios agentes en un mismo proyecto
+- Worktrees: aislar el trabajo de sesiones paralelas en un mismo repositorio
+- [Agentes en segundo plano](/agents/background-agents): lanzar y supervisar sesiones en paralelo
+- [Novedades de Claude Code en agosto y septiembre de 2026](/content/nouveautes-claude-code-aout-septembre-2026): los demás cambios del periodo

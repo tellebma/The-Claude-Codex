@@ -1,0 +1,103 @@
+---
+title: "Informe de amenazas de Anthropic (septiembre de 2026): tus claves de API de IA se han convertido en un objetivo"
+description: "El informe publicado el 10 de septiembre de 2026 describe atacantes que roban claves de API de IA para usarlas contra otros objetivos. Los casos más destacados y las lecciones concretas para desarrolladores."
+badge: "Nuevo"
+section: "content"
+order: 34
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security", "devsecops"]
+---
+
+## En resumen
+
+El 10 de septiembre de 2026, Anthropic publicó su informe «Detecting and countering misuse of AI: September 2026». Cubre las operaciones maliciosas detectadas e interrumpidas entre diciembre de 2025 y agosto de 2026, en siete ámbitos: ciberoperaciones, operaciones de influencia, vigilancia, estafas, usos biológicos, armas convencionales y destilación. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026 y https://www.anthropic.com/news (fecha Sep 10, 2026), consultados 2026-09-27 */}
+
+El informe es largo y a veces escalofriante. No vamos a resumirlo entero. Este artículo se centra en lo que afecta directamente a un desarrollador que usa Claude u otra IA en sus proyectos: **los atacantes tratan ahora las claves de API de IA como credenciales de producción.** Y tú deberías hacer lo mismo.
+
+## El panorama general
+
+Dos tendencias destacan en la parte cibernética del informe.
+
+**Los ataques sofisticados ya no requieren atacantes sofisticados.** Según Anthropic, las capacidades de los modelos han reducido la brecha de mano de obra y herramientas que separaba las operaciones estatales bien financiadas de los individuos aislados. Un hacktivista con claves robadas, delincuentes dispersos y un operador de espionaje estatal llevaron a cabo campañas contra varias víctimas que, un año antes, habrían requerido numerosos operadores cualificados. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, sección "Sophisticated attacks no longer require sophisticated attackers", consultado 2026-09-27 */}
+
+**El papel de la IA se vuelve autónomo.** La mayoría de las operaciones descritas usaban la IA en ejecución directa u orquestación, con frameworks multiagente que se encargaban del reconocimiento, la explotación y la exfiltración. Los humanos fijaban los objetivos y revisaban los resultados. {/* source: ídem, sección "AI's role in cyber operations has become increasingly autonomous" */}
+
+Todas estas operaciones usaban modelos Haiku, Sonnet u Opus. Ningún caso afectaba a Fable o Mythos, salvo un caso de destilación ilícita. {/* source: ídem, introducción */}
+
+## La cadena de suministro de IA, nuevo objetivo
+
+Es la parte más útil para un desarrollador. El informe dedica una sección entera titulada «AI supply chain as target, loot, and attack compute». Cuando un atacante obtiene credenciales de IA, consigue tres cosas a la vez:
+
+- **Botín**: las claves y cuentas robadas se revenden en mercados establecidos.
+- **Capacidad de cálculo**: sus ataques se ejecutan a costa de otro.
+- **Cobertura**: la actividad se atribuye al propietario legítimo de la clave.
+
+{/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, sección "AI supply chain as target, loot, and attack compute", consultado 2026-09-27 */}
+
+Imagina que te roban la tarjeta de combustible de la empresa. El ladrón no se limita a llenar el depósito: la usa para transportar material robado, y es tu nombre el que aparece en cada ticket.
+
+### Ejemplos concretos del informe
+
+- Una campaña hacktivista funcionó durante un mes **enteramente con claves de API robadas**.
+- Afiliados del grupo ShinyHunters, tras obtener las claves de IA de una víctima, pasaron sus propios ataques a esas claves. Una clave robada sirvió durante unas tres semanas para atacar a otras organizaciones.
+- Un operador de este grupo descargó 1,8 millones de aplicaciones Android, las descompiló y las analizó con la herramienta TruffleHog para encontrar secretos escritos en el código.
+- Un grupo de habla rusa, identificado como GTG-50020, comprometió el entorno de evaluación de un proveedor de IA y se llevó primero sus claves de producción. Una campaña lanzada desde la misma infraestructura atacó a unas treinta empresas de IA en unos cuatro días. Su objetivo declarado, acceder a un modelo Claude aún no lanzado, nunca se logró, y los sistemas de Anthropic no se vieron comprometidos: todas las claves procedían de entornos de clientes.
+- Varios actores comprometieron la implementación de LiteLLM de servicios que encapsulan modelos de IA, usando una inyección de prompt para exfiltrar las claves de API de producción de sus contenedores en la nube.
+
+{/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, secciones ShinyHunters, GTG-50020 y "AI supply chain", consultado 2026-09-27 */}
+
+### El falso revendedor de «Claude barato»
+
+Un caso merece mención aparte. Un grupo identificado como GTG-50021 ofrecía acceso a Claude a precio reducido. En realidad, el tráfico de los clientes se redirigía en silencio hacia **otro modelo**, mientras la herramienta instalada robaba sus credenciales de Anthropic para revenderlas a otros revendedores. {/* source: ídem, sección GTG-50021 */}
+
+La conclusión de Anthropic no deja lugar a dudas: el acceso a la IA solo debe comprarse por canales autorizados, y un descuento que obliga a pasar tu tráfico y tus credenciales por un intermediario desconocido supone un riesgo enorme. {/* source: ídem */}
+
+<Callout type="warning" title="La frase que hay que recordar">
+«Las organizaciones deberían tratar sus claves de IA y sus integraciones de agentes con la misma seriedad que sus credenciales de producción, porque los atacantes las tratan con la misma seriedad.» (traducción de la conclusión de la sección sobre la cadena de suministro del informe)
+</Callout>
+
+{/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, consultado 2026-09-27 */}
+
+## ¿Por dónde se filtran las claves?
+
+El informe enumera las fuentes más habituales: clientes legítimos que expusieron sin querer sus claves de API y tokens de sesión en sus productos, sus aplicaciones y su código público, como GitHub, los archivos de instalación de aplicaciones móviles, los contenedores Docker, los sitios web y los chatbots. Los actores maliciosos rastrean estas fuentes de forma permanente. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, sección "AI supply chain", consultado 2026-09-27 */}
+
+## Lo que puedes hacer desde hoy
+
+Nada de lo que sigue es nuevo, pero el informe le da una urgencia nueva.
+
+<Steps>
+<Step title="Buscar tus propias filtraciones" stepNumber={1}>
+Pasa un escáner de secretos por tus repositorios, tus imágenes Docker y tus aplicaciones móviles, exactamente como lo haría un atacante. Si una clave aparece en el historial de git, está comprometida, aunque la hayas borrado después.
+</Step>
+<Step title="No incluir nunca una clave en el cliente" stepNumber={2}>
+Una clave de API en una aplicación móvil o en el JavaScript de un sitio web es pública. Pasa por un backend que guarde la clave.
+</Step>
+<Step title="Separar y limitar las claves" stepNumber={3}>
+Una clave por uso y por entorno, con límites de gasto. Así, una clave robada cuesta como mucho el importe del límite.
+</Step>
+<Step title="Vigilar el consumo" stepNumber={4}>
+Un pico de consumo inexplicable suele ser la primera señal de que otra persona está usando una clave.
+</Step>
+<Step title="Reforzar tus integraciones de agentes" stepNumber={5} isLast>
+Un agente que lee contenido externo puede sufrir una inyección de prompt. No dejes una clave de producción accesible en su entorno de ejecución si no es necesaria.
+</Step>
+</Steps>
+
+Si alguna de tus claves ya se ha filtrado, nuestra guía Clave de API filtrada: qué hacer detalla los pasos a seguir.
+
+## El resto del informe en pocas líneas
+
+El informe cubre muchos otros temas. En la parte cibernética, describe en particular una operación de espionaje que la atribución de Anthropic relaciona con el grupo público Midnight Blizzard, que reconstruía automáticamente su malware en cuanto un antivirus lo detectaba. También describe un grupo de estudiantes cuyo programa de investigación de vulnerabilidades produjo varios fallos desconocidos en un importante producto de seguridad. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, secciones GTG-20006 y GTG-10007, consultado 2026-09-27 */}
+
+También detalla operaciones de influencia y la destilación ilícita, es decir, la extracción a escala industrial de las capacidades de un modelo mediante cuentas falsas. Anthropic afirma haber identificado e interrumpido ataques de destilación procedentes de siete laboratorios con sede en China. {/* source: ídem, sección "Illicit distillation and scaled abuse" */}
+
+En cada caso, Anthropic indica que interrumpió la actividad, reforzó sus salvaguardas y compartió la información con las autoridades y sus socios cuando procedía. {/* source: ídem, introducción */}
+
+## Próximos pasos
+
+- Clave de API filtrada: qué hacer: el procedimiento de respuesta a incidentes
+- [No des tus claves de API a Claude Code](/content/ne-pas-donner-cles-api-a-claude-code): limitar la exposición en el día a día
+- CI/CD y ciberseguridad: integrar la detección de secretos en tus pipelines
+- [El auto mode pasa a ser el modo por defecto](/content/auto-mode-par-defaut): lo que bloquea el clasificador para proteger tus secretos

@@ -1,0 +1,107 @@
+---
+title: "Por qué Claude Code cambia a veces de modelo en plena sesión"
+description: "Fable 5.1, Opus 5.5 y Opus 5 pasan a otro modelo cuando una petición toca la ciberseguridad o la biología. Cómo funciona este fallback, cómo diagnosticarlo y cómo controlarlo."
+badge: "Nuevo"
+section: "content"
+order: 36
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security", "tooling"]
+---
+
+## En resumen
+
+Trabajas con Opus 5.5 o Fable 5.1 y, de repente, aparece una línea en la transcripción: la petición se ha relanzado en otro modelo. No es un bug. Es el **fallback automático**: cuando los clasificadores de seguridad de un modelo señalan una petición, sobre todo en ciberseguridad o biología, Claude Code la relanza en otro modelo y te lo indica. {/* source: https://code.claude.com/docs/en/model-config.md, sección "Automatic model fallback", consultado 2026-09-27 */}
+
+Piensa en una centralita telefónica. Algunas preguntas no las atiende tu interlocutor habitual, se transfieren a un departamento especializado. Sigues en línea, pero ya no te responde la misma persona.
+
+## Quién pasa a quién
+
+La regla depende del modelo que rechaza la petición:
+
+| Modelo de partida | Petición señalada «biología» | Petición señalada «ciberseguridad» |
+|---|---|---|
+| Fable 5.1, Fable 5, Opus 5.5 | relanzada en Opus 5 | relanzada en Opus 4.8 |
+| Opus 5 | rechazo (sin respaldo) | relanzada en Opus 4.8 |
+
+{/* source: https://code.claude.com/docs/en/model-config.md, sección "Automatic model fallback", consultado 2026-09-27 */}
+
+Tras un fallback, **la sesión continúa en el modelo de respaldo**. Para volver a tu modelo original, ejecuta `/model`. {/* source: ídem */}
+
+Este fallback por categoría requiere Claude Code v2.1.219 o posterior. {/* source: ídem */}
+
+## Por qué existen estas salvaguardas
+
+Anthropic considera que sus modelos más recientes tienen capacidades muy altas en estos dos ámbitos. Para Opus 5.5, el anuncio indica que es comparable a Claude Mythos 5.1 en biología y ciberseguridad, y que por eso se despliega con salvaguardas similares a las de Fable 5.1. Es la primera vez que un modelo Opus se lanza con esta clase de protecciones. {/* source: https://www.anthropic.com/claude-opus-5-5, secciones "Safety" y "Safeguards", consultado 2026-09-27 */}
+
+En la práctica, con Opus 5.5 puedes seguir identificando y corrigiendo los bugs de tu código en un ciclo de desarrollo normal. Pero la mayoría de las tareas de ciberseguridad se redirigen a Opus 4.8. {/* source: ídem, sección "Cybersecurity" */}
+
+En Fable 5.1, las pruebas de intrusión, la generación de exploits y el escaneo de vulnerabilidades en binarios siguen redirigiéndose a los modelos Opus, aunque la búsqueda de vulnerabilidades con fines defensivos ya está permitida. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, sección "More precise safeguards for biology and cybersecurity", consultado 2026-09-27 */}
+
+<Callout type="info" title="Menos falsos positivos que antes">
+Con Fable 5.1, Anthropic anuncia de media alrededor de un 60 % menos de intervenciones de ciberseguridad por sesión de Claude Code, frente a las salvaguardas de Fable 5. En biología, las nuevas salvaguardas se activan un 85 % menos en preguntas elementales.
+</Callout>
+
+{/* source: ídem */}
+
+## La trampa del primer mensaje
+
+Hay un comportamiento que sorprende a menudo: el fallback puede activarse **desde la primera petición**, antes incluso de que hayas escrito nada sensible. El motivo: esa primera petición lleva el contexto de tu espacio de trabajo, incluido el contenido de tu `CLAUDE.md` y el estado de git. Un repositorio que contiene material de seguridad o de biología puede activar el clasificador solo con ese contexto. {/* source: https://code.claude.com/docs/en/model-config.md, sección "Check what triggered fallback", consultado 2026-09-27 */}
+
+Un proyecto de herramientas de pentest, una carpeta `exploits/` o un `CLAUDE.md` que habla de CVE pueden bastar.
+
+### Diagnosticar
+
+Para saber si tus personalizaciones son la causa, abre una sesión en modo seguro:
+
+<CodeBlock language="bash" code={`claude --safe-mode`} />
+
+Este modo desactiva `CLAUDE.md`, las skills, los servidores MCP y los hooks. El estado de git y los nombres de carpetas no son personalizaciones y se siguen enviando. {/* source: ídem */} Si el fallback desaparece, el desencadenante está en tus personalizaciones. Si no, está en el propio repositorio.
+
+## Mantener el control
+
+¿Prefieres decidir tú cada vez? Desactiva el cambio automático en `/config` («Switch models when a message is flagged») o en tus ajustes:
+
+<CodeBlock language="json" code={`{
+  "switchModelsOnFlag": false
+}`} />
+
+Una petición señalada pone entonces la sesión en pausa con dos opciones: pasar al modelo de respaldo, o modificar el prompt y reintentar con el modelo actual. {/* source: https://code.claude.com/docs/en/model-config.md, sección "Ask before switching", consultado 2026-09-27 */}
+
+Algunos casos particulares:
+
+- Si la categoría no tiene modelo de respaldo (biología en Opus 5), no hay elección: la petición termina en rechazo.
+- En modo no interactivo (`-p`) y en las integraciones SDK que no pueden mostrar la elección, una petición señalada termina el turno con un rechazo.
+- Si el modelo de respaldo está bloqueado por `availableModels`, no hay fallback y el rechazo se muestra como un error normal.
+
+{/* source: ídem */}
+
+<Callout type="warning" title="Cuidado en CI">
+Si ejecutas Claude Code en modo headless sobre un repositorio relacionado con la seguridad, un rechazo puede interrumpir un job sin posibilidad de cambio. Prueba tus pipelines con el modelo que piensas usar.
+</Callout>
+
+## En Bedrock, Google Agent Platform y Foundry
+
+Allí los identificadores de modelo son propios de cada proveedor. El fallback solo funciona si Claude Code sabe reconocer el modelo de partida y encontrar el modelo de respaldo en tu despliegue. Si configuras `ANTHROPIC_DEFAULT_OPUS_MODEL`, las peticiones señaladas se relanzan en ese modelo para todas las categorías que tienen respaldo. Si uno de los dos modelos no puede identificarse, no hay cambio automático: la petición termina en rechazo y puedes cambiar de modelo con `/model`. {/* source: https://code.claude.com/docs/en/model-config.md, sección "Enable fallback on Bedrock, Agent Platform, and Foundry", consultado 2026-09-27 */}
+
+## No confundir con las cadenas de fallback
+
+Claude Code tiene otro mecanismo con un nombre parecido. Las **cadenas de fallback** (`fallbackModel` o `--fallback-model`) sirven cuando el modelo principal está saturado o no disponible, no cuando se señala un contenido. Están limitadas a tres modelos, y el cambio solo dura el turno en curso. {/* source: https://code.claude.com/docs/en/model-config.md, sección "Fallback model chains", consultado 2026-09-27 */}
+
+<CodeBlock language="json" code={`{
+  "fallbackModel": ["claude-sonnet-5", "claude-haiku-4-5"]
+}`} />
+
+## ¿Te dedicas de verdad a la seguridad o a la biología?
+
+Si tu trabajo te lleva a activar estas salvaguardas con frecuencia, Anthropic ofrece programas de acceso verificado:
+
+- **Cyber Verification Program**: acceso a algunos modelos con salvaguardas de ciberseguridad reducidas para trabajo defensivo. Anthropic anuncia que se ampliará a Opus 5.5, con tres niveles de acceso cada vez más permisivos, incluido el acceso a los modelos Mythos. {/* source: https://www.anthropic.com/claude-opus-5-5, sección "Cybersecurity", consultado 2026-09-27 */}
+- **Life Sciences Verification Program**: lanzado en beta el 17 de septiembre de 2026 para equipos e instituciones. Da acceso a los modelos Mythos, Opus y Sonnet con salvaguardas más permisivas para la biología, tras verificar las credenciales de investigación, los estándares de seguridad y la supervisión ética. Aún no está abierto a los planes individuales y exige una retención de datos de 30 días para el tráfico afectado. {/* source: https://www.anthropic.com/news/life-sciences-verification-program y https://www.anthropic.com/news (fecha Sep 17, 2026), consultados 2026-09-27 */}
+
+## Próximos pasos
+
+- [Claude Opus 5.5: lo que cambia de verdad](/content/claude-opus-5-5-ce-qui-change): el primer Opus con estas salvaguardas
+- [Fable 5.1 y Mythos 5.1](/content/fable-5-1-et-mythos-5-1): el mismo modelo con dos niveles de protección
+- Revisión de seguridad con Claude Code: lo que puedes hacer sin activar el fallback
+- [El auto mode pasa a ser el modo por defecto](/content/auto-mode-par-defaut): el otro clasificador que vigila tus sesiones

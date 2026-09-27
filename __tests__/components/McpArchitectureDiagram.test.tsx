@@ -47,7 +47,7 @@ describe("McpArchitectureDiagram", () => {
     render(<McpArchitectureDiagram />);
     // 3 transitions × 2 orientations (hidden with sm:block) = 6 beams in DOM
     const beams = screen.getAllByTestId("animated-beam");
-    expect(beams.length).toBe(6);
+    expect(beams).toHaveLength(6);
   });
 
   it("renders horizontal and vertical beam variants", () => {
@@ -58,7 +58,7 @@ describe("McpArchitectureDiagram", () => {
     const verticals = screen
       .getAllByTestId("animated-beam")
       .filter((b) => b.getAttribute("data-direction") === "vertical");
-    expect(horizontals.length).toBe(3);
-    expect(verticals.length).toBe(3);
+    expect(horizontals).toHaveLength(3);
+    expect(verticals).toHaveLength(3);
   });
 });

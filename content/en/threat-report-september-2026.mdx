@@ -1,0 +1,103 @@
+---
+title: "Anthropic's threat report (September 2026): your AI API keys are now a target"
+description: "The report published September 10, 2026 describes attackers stealing AI API keys to use them against other targets. The key cases and concrete lessons for developers."
+badge: "New"
+section: "content"
+order: 34
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security", "devsecops"]
+---
+
+## Quick answer
+
+On September 10, 2026, Anthropic published its report "Detecting and countering misuse of AI: September 2026". It covers malicious operations detected and disrupted between December 2025 and August 2026, across seven areas: cyber operations, influence operations, surveillance, scams, biological misuse, conventional weapons and distillation. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026 and https://www.anthropic.com/news (date Sep 10, 2026), consultés 2026-09-27 */}
+
+The report is long and sometimes chilling. We won't summarize all of it. This article focuses on what directly concerns a developer using Claude or another AI in their projects: **attackers now treat AI API keys as production credentials.** And you should too.
+
+## The big picture
+
+Two trends stand out in the report's cyber section.
+
+**Sophisticated attacks no longer require sophisticated attackers.** According to Anthropic, model capabilities have collapsed the labor and tooling gap that used to separate well-funded state operations from lone individuals. A hacktivist with stolen keys, scattered criminals and a state espionage operator all ran multi-victim campaigns that, a year earlier, would have needed many skilled operators. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, section "Sophisticated attacks no longer require sophisticated attackers", consulté 2026-09-27 */}
+
+**AI's role is becoming autonomous.** Most of the operations described used AI through direct execution or orchestration, with multi-agent frameworks handling reconnaissance, exploitation and exfiltration. Humans set targets and reviewed results. {/* source: same, section "AI's role in cyber operations has become increasingly autonomous" */}
+
+All these operations used Haiku, Sonnet or Opus models. None involved Fable or Mythos, except one illicit distillation case. {/* source: same, introduction */}
+
+## The AI supply chain, a new target
+
+This is the most useful part for developers. The report has a whole section titled "AI supply chain as target, loot, and attack compute". When an attacker gets hold of AI credentials, they gain three things at once:
+
+- **Loot**: stolen keys and accounts resell on established markets.
+- **Compute**: their attacks run at someone else's expense.
+- **Cover**: the activity is attributed to the key's legitimate owner.
+
+{/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, section "AI supply chain as target, loot, and attack compute", consulté 2026-09-27 */}
+
+Picture someone stealing your company fuel card. The thief doesn't just fill up: they use it to haul stolen goods, and your name is on every receipt.
+
+### Concrete examples from the report
+
+- A hacktivist campaign ran for a month **entirely on stolen API keys**.
+- Affiliates of the ShinyHunters group, after grabbing a victim's AI keys, switched their own attacks onto those keys. One stolen key was used for about three weeks to attack other organizations.
+- One operator in this group downloaded 1.8 million Android apps, decompiled them and scanned them with TruffleHog to find hardcoded secrets.
+- A Russian-speaking group tracked as GTG-50020 compromised an AI vendor's evaluation sandbox and took its production keys first. A campaign run from the same infrastructure hit roughly thirty AI companies in about four days. Its stated goal, access to an unreleased Claude model, was never achieved, and Anthropic's systems weren't compromised: every key came from customer environments.
+- Several actors compromised the LiteLLM implementation of AI wrapper services, using prompt injection to exfiltrate production API keys from their cloud containers.
+
+{/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, ShinyHunters, GTG-50020 and "AI supply chain" sections, consulté 2026-09-27 */}
+
+### The "cheap Claude" fake reseller
+
+One case deserves its own mention. A group tracked as GTG-50021 offered discounted Claude access. In reality, customer traffic was silently proxied to **a different model**, while the installed tooling stole their Anthropic credentials to sell them to other resellers. {/* source: same, GTG-50021 section */}
+
+Anthropic's conclusion is unambiguous: AI access should only be bought through authorized channels, and a discount that requires routing your traffic and credentials through an unknown intermediary is a huge risk. {/* source: same */}
+
+<Callout type="warning" title="The line to remember">
+"Organizations should treat AI keys and agent integrations with the same level of seriousness as they do production credentials, because attackers treat them with the same level of seriousness, too." (from the report's AI supply chain section)
+</Callout>
+
+{/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, consulté 2026-09-27 */}
+
+## Where do keys leak?
+
+The report lists the most common sources: legitimate customers who inadvertently exposed their API keys and session tokens in their products, applications and public code such as GitHub, mobile app install files, Docker containers, websites and chatbots. Malicious actors mine these sources constantly. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, "AI supply chain" section, consulté 2026-09-27 */}
+
+## What you can do today
+
+None of this is new, but the report gives it new urgency.
+
+<Steps>
+<Step title="Hunt for your own leaks" stepNumber={1}>
+Run a secret scanner over your repos, Docker images and mobile apps, exactly as an attacker would. If a key shows up in git history, it's compromised, even if you deleted it since.
+</Step>
+<Step title="Never ship a key client-side" stepNumber={2}>
+An API key in a mobile app or a website's JavaScript is public. Go through a backend that holds the key.
+</Step>
+<Step title="Split and cap keys" stepNumber={3}>
+One key per use and per environment, with spending caps. A stolen key then costs at most the cap.
+</Step>
+<Step title="Watch usage" stepNumber={4}>
+An unexplained usage spike is often the first sign that someone else is using a key.
+</Step>
+<Step title="Harden your agent integrations" stepNumber={5} isLast>
+An agent that reads external content can be prompt-injected. Don't leave a production key reachable in its runtime environment unless it's needed.
+</Step>
+</Steps>
+
+If one of your keys has already leaked, our guide [Leaked API key: what to do](/content/leaked-api-key-recovery) walks you through it.
+
+## The rest of the report in a few lines
+
+The report covers much more. On the cyber side, it describes an espionage operation that Anthropic's attribution links to the publicly known group Midnight Blizzard, which automatically rebuilt its malware as soon as security products detected it. It also describes a group of students whose vulnerability research program produced several previously unknown flaws in a major security product. {/* source: https://www.anthropic.com/threat-intelligence-report-september-2026, GTG-20006 and GTG-10007 sections, consulté 2026-09-27 */}
+
+It also details influence operations and illicit distillation, meaning industrial-scale extraction of a model's capabilities through fake accounts. Anthropic says it identified and disrupted distillation attacks from seven labs based in China. {/* source: same, section "Illicit distillation and scaled abuse" */}
+
+In each case, Anthropic says it disrupted the activity, strengthened its safeguards and shared intelligence with authorities and partners where appropriate. {/* source: same, introduction */}
+
+## Next steps
+
+- [Leaked API key: what to do](/content/leaked-api-key-recovery): the incident response procedure
+- [Don't give your API keys to Claude Code](/content/do-not-give-api-keys-to-claude-code): limit exposure day to day
+- [CI/CD and cybersecurity](/content/ci-cd-cyber-security): build secret detection into your pipelines
+- [Auto mode is now the default](/content/auto-mode-by-default): what the classifier blocks to protect your secrets

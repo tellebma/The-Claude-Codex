@@ -172,7 +172,7 @@ describe("CouncilBuilder component", () => {
     fireEvent.click(decrease);
     // N=2 advisor cards: role inputs labelled "roleField"
     const roleInputs = screen.getAllByLabelText("roleField");
-    expect(roleInputs.length).toBe(2);
+    expect(roleInputs).toHaveLength(2);
   });
 
   it("does not go below the minimum advisor count", () => {
@@ -189,7 +189,7 @@ describe("CouncilBuilder component", () => {
       fireEvent.click(increase);
     }
     expect(increase).toBeDisabled();
-    expect(screen.getAllByLabelText("roleField").length).toBe(
+    expect(screen.getAllByLabelText("roleField")).toHaveLength(
       COUNCIL_LIMITS.max,
     );
   });

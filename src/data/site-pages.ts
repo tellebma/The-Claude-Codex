@@ -1316,6 +1316,116 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
     localesAvailable: ES_INFRA_LOCALES,
   },
   {
+    path: "/content/claude-opus-5-5-ce-qui-change",
+    pathsByLocale: { en: "/content/claude-opus-5-5-what-changes" },
+    title: "Claude Opus 5.5 : le niveau de Fable 5.1, pour 40 % moins cher qu'Opus 5",
+    description:
+      "Anthropic sort Claude Opus 5.5 le 22 septembre 2026 : prix en baisse, cache à 0,20 $, sortie plus rapide et nouveau modèle par défaut dans Claude Code. Ce qui change vraiment pour vous.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/fable-5-1-et-mythos-5-1",
+    pathsByLocale: { en: "/content/fable-5-1-and-mythos-5-1" },
+    title: "Fable 5.1 et Mythos 5.1 : un seul modèle, deux niveaux de garde-fous",
+    description:
+      "Sortis le 1er septembre 2026, Claude Fable 5.1 et Mythos 5.1 sont le même modèle avec des protections différentes. Prix du cache divisé par quatre, moins de faux positifs cyber : le point pour les devs.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/gpt-6-face-a-opus-5-5",
+    pathsByLocale: { en: "/content/gpt-6-vs-opus-5-5" },
+    title: "GPT-6 face à Opus 5.5 : ce que disent vraiment les prix et les chiffres",
+    description:
+      "OpenAI lance GPT-6 Astra le 3 septembre 2026 puis Sol et Luna le 22, le jour même d'Opus 5.5. Tarifs officiels, benchmarks disponibles et pièges de comparaison, sans parti pris.",
+    priority: 0.8,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/messagerie-inter-sessions-claude-code",
+    pathsByLocale: { en: "/content/claude-code-cross-session-messaging" },
+    title: "Messagerie inter-sessions : vos sessions Claude Code se parlent enfin",
+    description:
+      "Depuis août 2026, une session Claude Code peut envoyer un message à une autre avec ListAgents et SendMessage. Fonctionnement, sécurité, réglages et cas d'usage concrets.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/tester-ses-plugins-avec-plugin-eval",
+    pathsByLocale: { en: "/content/test-plugins-with-plugin-eval" },
+    title: "claude plugin eval : mesurer enfin ce que votre plugin apporte",
+    description:
+      "Depuis la v2.1.269 (septembre 2026), Claude Code sait tester un plugin sur une suite de cas et le comparer à une session sans plugin. Tutoriel pas à pas, coûts et pièges.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/auto-mode-par-defaut",
+    pathsByLocale: { en: "/content/auto-mode-by-default" },
+    title: "L'auto mode devient le mode par défaut de Claude Code : ce qu'il faut savoir",
+    description:
+      "Depuis le 14 août 2026, les nouvelles sessions Claude Code démarrent en auto mode sur Pro, Max et Team, puis sur toutes les offres à partir de la v2.1.283. Ce que le classifieur bloque, et comment garder la main.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/watermark-texte-claude",
+    pathsByLocale: { en: "/content/claude-text-watermark" },
+    title: "Le watermark invisible de Claude : comment il marche et ce qu'il change pour vous",
+    description:
+      "Pour se conformer à l'AI Act européen, Anthropic ajoute un filigrane invisible aux textes de ses nouveaux modèles. Fonctionnement, limites, impact sur le code et les traductions, sans fantasmes.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/rapport-menaces-septembre-2026",
+    pathsByLocale: { en: "/content/threat-report-september-2026" },
+    title: "Rapport de menaces d'Anthropic (septembre 2026) : vos clés API IA sont devenues une cible",
+    description:
+      "Le rapport publié le 10 septembre 2026 décrit des attaquants qui volent des clés API IA pour s'en servir contre d'autres cibles. Les cas marquants et les leçons concrètes pour les devs.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/nouveautes-claude-code-aout-septembre-2026",
+    pathsByLocale: { en: "/content/claude-code-whats-new-august-september-2026" },
+    title: "Nouveautés Claude Code d'août et septembre 2026 : le récap utile",
+    description:
+      "/design, /diff en panneau, /skill-doctor, diagnostic du cache dans /cost, fork mode, style Concise, fin d'Ultraplan : les changements de Claude Code des v2.1.220 à v2.1.269 qui méritent votre attention.",
+    priority: 0.75,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
+    path: "/content/fallback-automatique-garde-fous",
+    pathsByLocale: { en: "/content/automatic-model-fallback-safeguards" },
+    title: "Pourquoi Claude Code change parfois de modèle en pleine session",
+    description:
+      "Fable 5.1, Opus 5.5 et Opus 5 basculent vers un autre modèle quand une requête touche à la cybersécurité ou à la biologie. Comment fonctionne ce fallback, comment le diagnostiquer et le contrôler.",
+    priority: 0.7,
+    changeFrequency: "monthly",
+    lastModified: "2026-09-27",
+    localesAvailable: ES_INFRA_LOCALES,
+  },
+  {
     path: "/about",
     title: "À propos du Claude Codex",
     description:

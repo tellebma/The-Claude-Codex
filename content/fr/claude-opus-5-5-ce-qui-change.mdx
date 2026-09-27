@@ -1,0 +1,129 @@
+---
+title: "Claude Opus 5.5 : le niveau de Fable 5.1, pour 40 % moins cher qu'Opus 5"
+description: "Anthropic sort Claude Opus 5.5 le 22 septembre 2026 : prix en baisse, cache à 0,20 $, sortie plus rapide et nouveau modèle par défaut dans Claude Code. Ce qui change vraiment pour vous."
+badge: "Nouveau"
+section: "content"
+order: 27
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "performance"]
+---
+
+## En bref
+
+Anthropic a publié **Claude Opus 5.5** le 22 septembre 2026. C'est le premier modèle de la famille Claude 5.5. L'annonce tient en une phrase : il travaille au niveau de Claude Fable 5.1 sur la plupart des tâches et coûte 40 % moins cher à faire tourner qu'Opus 5. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */}
+
+Si vous utilisez Claude Code avec un abonnement Pro, Max, Team ou Enterprise, vous l'utilisez sans doute déjà : depuis la v2.1.280, le modèle `default` pointe vers Opus 5.5 sur ces offres, ainsi que sur l'API Anthropic. {/* source: https://code.claude.com/docs/en/model-config.md, section "default model setting", consulté 2026-09-27 */}
+
+## Les prix : la baisse porte surtout sur le cache
+
+Voici la grille publiée par Anthropic, comparée à celle d'Opus 5 :
+
+| Poste (par million de tokens) | Opus 5.5 | Opus 5 |
+|---|---|---|
+| Entrée | 4 $ | 5 $ |
+| Sortie | 20 $ | 25 $ |
+| Lecture de cache | 0,20 $ | 0,50 $ |
+| Écriture de cache | 5 $ | 6,25 $ |
+
+{/* source: https://www.anthropic.com/claude-opus-5-5, section "Pricing", consulté 2026-09-27 */}
+
+L'entrée et la sortie baissent de 20 %. La lecture de cache baisse de 60 %, et c'est ce chiffre qui compte le plus pour un usage de Claude Code. Anthropic le dit d'ailleurs sans détour : les lectures de cache représentent la majorité du coût du travail agentique et du code. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */}
+
+Une analogie aide à comprendre pourquoi. Une session Claude Code ressemble à une réunion où l'on relit le compte rendu complet avant chaque nouvelle prise de parole. Le compte rendu (votre `CLAUDE.md`, les fichiers déjà lus, l'historique) est relu à chaque tour. Le cache, c'est la version déjà annotée qu'on ressort du tiroir au lieu de tout relire. Quand ce tiroir coûte 60 % moins cher à ouvrir, la facture d'une longue session fond.
+
+Le mode rapide existe aussi pour Opus 5.5, dans Claude Code et sur la Claude Platform, avec une vitesse annoncée jusqu'à 2,5 fois supérieure. Il coûte 8 $ par million de tokens en entrée et 40 $ en sortie. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */}
+
+<Callout type="info" title="Le « 40 % moins cher » est une moyenne">
+Le chiffre de 40 % vient des tests d'Anthropic sur des charges « typiques », aux réglages par défaut. Il combine deux effets : un prix au token plus bas et moins de tokens consommés par tâche. Votre économie réelle dépend de votre usage. Pour la mesurer, regardez la ligne `Prompt cache (main)` de la commande `/cost`, qui affiche la part des tokens servis depuis le cache.
+</Callout>
+
+{/* source: https://code.claude.com/docs/en/whats-new/2026-w36 (ligne /cost Prompt cache), consulté 2026-09-27 */}
+
+## Ce que disent les benchmarks
+
+Anthropic publie un tableau comparatif. Tous les chiffres ci-dessous sont annoncés par l'éditeur, pas mesurés de façon indépendante :
+
+| Benchmark | Opus 5.5 | Fable 5.1 | Opus 5 | GPT-6 Astra |
+|---|---|---|---|---|
+| Terminal-Bench 4.0 | 66,4 % | 55,8 % | 52,3 % | 57,9 % |
+| FrontierCode v1.1 (Main) | 54,4 % | 50,3 % | 48,0 % | 53,3 % |
+| CursorBench 4.0 | 57,8 % | 51,8 % | 46,6 % | non publié |
+| GDPval-AA v2.1 (Elo) | 1846 | 1735 | 1708 | 1542 |
+| AutomationBench | 40,0 % | 31,4 % | 26,9 % | 41,4 % |
+| Terminal-Bench-Science 0.1 | 58,7 % | 52,6 % | 29,0 % | 64,6 % |
+
+{/* source: https://www.anthropic.com/claude-opus-5-5, tableau "Performance and cost-effectiveness", consulté 2026-09-27 */}
+
+Trois remarques avant d'en tirer des conclusions.
+
+D'abord, Opus 5.5 ne gagne pas partout. GPT-6 Astra le devance sur AutomationBench (41,4 % contre 40,0 %) et sur Terminal-Bench-Science (64,6 % contre 58,7 %). {/* source: idem */}
+
+Ensuite, les scores GPT-6 Astra et GPT-5.6 Sol sur Terminal-Bench 4.0 sont ceux rapportés par OpenAI, pas re-mesurés par Anthropic. Et Opus 5.5 y est noté en effort `xhigh`, GPT-6 Astra en effort `high` : chaque modèle est pris à son meilleur score déclaré. {/* source: https://www.anthropic.com/claude-opus-5-5, notes sous le tableau, consulté 2026-09-27 */}
+
+Enfin, Anthropic écrit elle-même qu'à ce niveau de capacité, les écarts de benchmark deviennent un guide moins fiable des différences réelles, et que dans son propre usage l'écart entre Opus 5.5 et Fable 5.1 est plus étroit que ne le suggèrent les scores. C'est rare qu'un éditeur relativise ses propres chiffres le jour du lancement, ça mérite d'être noté. {/* source: idem */}
+
+Pour aller plus loin sur la lecture de ces tableaux, notre guide [Lire un benchmark LLM sans se faire avoir](/content/lire-un-benchmark-llm) reste d'actualité.
+
+## Ce qui change au quotidien dans Claude Code
+
+### Moins de tours, moins de tokens
+
+L'argument principal d'Opus 5.5 n'est pas un score, c'est l'efficacité. Quelques exemples publiés dans l'annonce :
+
+- Un testeur a audité et corrigé une base de 200 000 lignes en moins de trois heures, là où Opus 5 a mis plus de 20 heures avec 2,5 fois plus de tokens.
+- En interne, Anthropic a fait traduire HAProxy du C vers le Rust par Opus 5.5 et Fable 5.1. Les deux réécritures passent presque tous les tests de régression, mais Opus 5.5 a fini en 9,5 heures contre 12, pour un coût inférieur de 51 %.
+- Sur FrontierCode, en effort par défaut (`medium`), Opus 5.5 obtient 54,6 % et dépasse le meilleur score de GPT-6 Astra (53,3 %) pour environ un cinquième du coût par tâche.
+
+{/* source: https://www.anthropic.com/claude-opus-5-5, section "Coding", consulté 2026-09-27 */}
+
+Ce sont des retours de l'éditeur et de ses clients en accès anticipé. Ils donnent une tendance, pas une garantie pour votre dépôt.
+
+### Des messages plus lisibles
+
+Anthropic dit avoir travaillé la façon dont Opus 5.5 écrit, en réponse aux retours sur Opus 5. Le modèle met l'information importante en premier, utilise moins de jargon et suit mieux les règles d'écriture qu'on lui donne. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Communication", consulté 2026-09-27 */} Si vous avez un `CLAUDE.md` avec des consignes de style, c'est le bon moment de vérifier qu'elles sont respectées.
+
+### Cinq niveaux d'effort
+
+Opus 5.5 propose les niveaux `low`, `medium` (par défaut), `high`, `xhigh` et `max`. {/* source: https://www.anthropic.com/claude-opus-5-5, consulté 2026-09-27 */} Plusieurs clients cités dans l'annonce disent qu'en `low`, Opus 5.5 égale ou dépasse Opus 5 en `high`. Avant de monter l'effort par réflexe, testez donc le réglage par défaut sur vos tâches courantes.
+
+<Steps>
+<Step title="Mettre à jour Claude Code" stepNumber={1}>
+Opus 5.5 demande Claude Code v2.1.280 ou plus récent. Lancez `claude update`, puis `claude --version` pour vérifier.
+</Step>
+<Step title="Vérifier le modèle actif" stepNumber={2}>
+Tapez `/model` dans une session. Sur l'API Anthropic, l'alias `opus` pointe désormais vers Opus 5.5.
+</Step>
+<Step title="Épingler une version si besoin" stepNumber={3} isLast>
+Pour garder un comportement stable (en CI par exemple), utilisez l'identifiant complet `claude-opus-5-5` plutôt que l'alias, ou la variable `ANTHROPIC_DEFAULT_OPUS_MODEL`.
+</Step>
+</Steps>
+
+{/* source: https://code.claude.com/docs/en/model-config.md, consulté 2026-09-27 */}
+
+<CodeBlock language="bash" code={`claude update
+claude --model claude-opus-5-5`} />
+
+## Les limites à connaître
+
+Opus 5.5 arrive avec des garde-fous de la même classe que ceux de Fable 5.1, une première pour un modèle Opus. La plupart des tâches de cybersécurité sont redirigées vers Opus 4.8, et les demandes de biologie signalées vers Opus 5. Corriger les bugs de son propre code reste possible. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Safeguards", et https://code.claude.com/docs/en/model-config.md, section "Automatic model fallback", consultés 2026-09-27 */} On détaille ce mécanisme dans [Pourquoi Claude Code change parfois de modèle en pleine session](/content/fallback-automatique-garde-fous).
+
+Deux autres points techniques :
+
+- Le mode « thinking » ne peut plus être désactivé sur Opus 5.5. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Data retention and compliance", consulté 2026-09-27 */}
+- La protection anti-distillation dite « preserved thinking » s'applique aux comptes API créés le 31 août 2026 ou après : il n'est plus possible de modifier le contexte précédent de Claude pour en extraire le raisonnement. Si vous avez une intégration qui réécrit l'historique des messages, testez-la. {/* source: idem, section "Distillation" */}
+
+Côté sécurité, Anthropic annonce qu'Opus 5.5 a tenté de contourner les limites de son environnement environ 85 % moins souvent qu'Opus 5 dans une nouvelle évaluation dédiée. Elle reconnaît aussi que le modèle soupçonne souvent d'être évalué, ce qui complique la mesure de son comportement réel. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Alignment", consulté 2026-09-27 */}
+
+## Et les abonnés ?
+
+Avec ce lancement, Anthropic relève les limites d'usage sur cinq heures pour les offres Pro, Max, Team et Enterprise à la place. Les abonnés reçoivent aussi une remise à zéro de limite qu'ils peuvent garder et utiliser quand ils le veulent. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Cost and speed", consulté 2026-09-27 */}
+
+Claude Sonnet 5.5 et Claude Haiku 5.5 sont annoncés « dans les semaines à venir », sans date précise. {/* source: idem */}
+
+## Prochaines étapes
+
+- [Fable 5.1 et Mythos 5.1 : un seul modèle, deux niveaux de garde-fous](/content/fable-5-1-et-mythos-5-1) : le modèle auquel Opus 5.5 se compare
+- [GPT-6 face à Opus 5.5 : ce que disent vraiment les prix et les chiffres](/content/gpt-6-face-a-opus-5-5) : la réponse d'OpenAI sortie le même jour
+- [Coût réel par tâche](/content/cout-reel-par-tache) : pourquoi le prix au token ne suffit pas à comparer deux modèles
+- [Nouveautés Claude Code d'août et septembre 2026](/content/nouveautes-claude-code-aout-septembre-2026) : tout ce qui a bougé dans l'outil pendant ce temps

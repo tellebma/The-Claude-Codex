@@ -120,8 +120,14 @@ async function settle(page: Page) {
     return null;
   });
   await page.addStyleTag({ content: FREEZE_ANIMATIONS_CSS });
-  // Petite stabilisation apres injection style + reduced-motion.
-  await page.waitForTimeout(150);
+  // Stabilisation apres injection style + reduced-motion : attend deux frames
+  // pour que le nouveau style soit applique et peint.
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
 }
 
 test.describe("Visual regression — landing & sections cles", () => {

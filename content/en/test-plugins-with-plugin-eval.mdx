@@ -1,0 +1,131 @@
+---
+title: "claude plugin eval: finally measure what your plugin brings"
+description: "Since v2.1.269 (September 2026), Claude Code can test a plugin on a suite of cases and compare it against a session without the plugin. Step-by-step tutorial, costs and pitfalls."
+badge: "New"
+section: "content"
+order: 31
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["tutorial", "tooling"]
+---
+
+## Quick answer
+
+You wrote a Claude Code plugin with a skill or two. It seems to work. But does it work better than Claude on its own? Until now, the only possible answer was "I think so".
+
+The **`claude plugin eval`** command, which shipped in v2.1.269 during the week of September 7 to 11, 2026, changes that. It runs your plugin against a suite of test cases, scores the results and, by default, reruns each case **without the plugin** to show what it really contributes. {/* source: https://code.claude.com/docs/en/whats-new/2026-w37, consulté 2026-09-27 */}
+
+The closest analogy is a clinical trial with a control group. You don't just measure that patients get better, you compare with those who didn't take the treatment.
+
+## The idea in three concepts
+
+**A case**: a realistic prompt, the way a user of your plugin would type it, plus one or more graders.
+
+**A grader**: a pass/fail check on what Claude produced. For example a regex over the reply, whether a specific tool was called, or a rubric a second model judges the reply against.
+
+**The no-plugin baseline**: each case runs with the plugin (`WITH` column) and without it (`W/OUT`). The difference, `Δ`, is what your plugin contributes. If a case scores 1.0 in both columns, your plugin isn't what makes it pass.
+
+{/* source: https://code.claude.com/docs/en/plugin-evals.md, introduction and "How an eval run works", consulté 2026-09-27 */}
+
+Each case runs three times by default, because a single run of a non-deterministic agent says little. A case's score is the mean across its runs. {/* source: same, section "How a case is scored" */}
+
+## Requirements
+
+- Claude Code **v2.1.269** or later (`claude --version`, then `claude update` if needed).
+- Git 2.31 or later, if git is installed.
+- A plugin directory with a `plugin.json` or `.claude-plugin/plugin.json` manifest.
+
+{/* source: https://code.claude.com/docs/en/plugin-evals.md, section "Requirements", consulté 2026-09-27 */}
+
+<Callout type="warning" title="Every run is a real model call">
+Every run and every model-judged grader is a real call, counted against your plan or billed to your API account. By default, one case is three runs with the plugin and three without, so six runs. Start small.
+</Callout>
+
+{/* source: same, intro note and "Run the suite" step */}
+
+## Your first suite, step by step
+
+<Steps>
+<Step title="Have Claude draft the cases" stepNumber={1}>
+From your plugin's root, run `claude plugin eval init`. An interactive session opens. Claude reads your plugin, asks what a good result looks like, proposes prompts that should and shouldn't trigger the plugin, designs graders, tries them once and writes one directory per case under `evals/`. Exit the session with `/exit` when Claude says the suite is ready.
+</Step>
+<Step title="Run the suite" stepNumber={2}>
+Still at the plugin root, run `claude plugin eval .` to run every case.
+</Step>
+<Step title="Read the table" stepNumber={3}>
+A summary table shows the `WITH`, `W/OUT` and `Δ` columns, the run count and the estimated cost. A detailed HTML report is written under `evals/results/`.
+</Step>
+<Step title="Iterate" stepNumber={4} isLast>
+Adjust your plugin, rerun, compare.
+</Step>
+</Steps>
+
+{/* source: https://code.claude.com/docs/en/plugin-evals.md, section "Create your first eval suite", consulté 2026-09-27 */}
+
+<CodeBlock language="bash" code={`# From the plugin root
+claude plugin eval init
+claude plugin eval .`} />
+
+Sample output from the docs:
+
+<CodeBlock language="text" code={`CASE        WITH  W/OUT Δ      RUNS COST    NOTES
+first-case  1.00  0.33  +0.67  6    $0.41
+
+1 case(s) · mean Δ +0.67 · 74s · $0.41`} />
+
+{/* source: same, "Read the summary" step */}
+
+Here, the plugin takes the case from 0.33 to 1.00: it clearly adds something.
+
+## The most common diagnosis
+
+The docs say it themselves: the most common first finding is a `Δ` near zero with the grader that checks the skill call failing. Translation: Claude isn't choosing your skill when users phrase their request naturally. {/* source: same, "Open the report and iterate" step */}
+
+The fix almost always goes through the skill's `description` field. That's the text Claude reads to decide whether to use it. Our [skills guide](/content/skills-guide) covers how to write it.
+
+To iterate quickly and cheaply on one case, run a single run without the baseline, then confirm with the default three runs before drawing conclusions:
+
+<CodeBlock language="bash" code={`claude plugin eval . --case <case-name> --runs 1 --ablation none`} />
+
+{/* source: same */}
+
+## Picking good graders
+
+There are six grader types. Four are computed from the transcript and files and cost nothing: `regex`, `tool_used`, `tool_order` and `file_exists`. The other two, `llm` and `baseline`, call a judge model and add to the cost. There are no custom-code graders. {/* source: https://code.claude.com/docs/en/plugin-evals.md, section "Choose and weight graders", consulté 2026-09-27 */}
+
+The docs' advice for stable scores:
+
+- For long output, like a generated file, prefer a `regex` over the file. Keep `llm` graders for short outputs, with concrete PASS and FAIL conditions.
+- Give each case one grader on the result and one on the path taken (`tool_used` or `tool_order`). One tells you if the answer is right, the other if your plugin produced it.
+- If the skill grader passes but `Δ` is negative, suspect the judge first. Rerun with `--judge-model sonnet` for a stronger judge.
+
+{/* source: same, section "Choose graders that give a stable signal" */}
+
+An example grader that checks your skill was called:
+
+<CodeBlock language="markdown" code={`---
+type: tool_used
+tool: Skill
+input_match: '"skill"\\s*:\\s*"(?:[\\w-]+:)?your-skill-name"'
+---`} />
+
+{/* source: same, section "Write a case manually" */}
+
+## Security: what a run can do
+
+Runs never stop to ask for permission. By default, only the read-only tools listed in the case are allowed. `Bash`, `Write`, `Edit`, `WebFetch` and `WebSearch` are removed unless you grant them with `--allow-tools`. {/* source: https://code.claude.com/docs/en/plugin-evals.md, section "Grant tools", consulté 2026-09-27 */}
+
+If you grant `Bash`, every command runs in Claude Code's OS-level sandbox: writes confined to the run's workspace, home directory unreadable, network limited to granted domains. Native Windows has no sandbox backend, so suites that grant a shell must run under WSL2. {/* source: same */}
+
+Your plugin's real MCP servers don't start during a run unless you ask. You can replace them with Markdown mocks under `evals/mocks/`. {/* source: same, section "Mock MCP servers" */}
+
+## In CI
+
+`claude plugin eval` can act as a gate in a pipeline. The docs recommend pinning the model under test with `--model`, so a default model rollout isn't mistaken for a plugin regression. {/* source: https://code.claude.com/docs/en/plugin-evals.md, "Command options" table, consulté 2026-09-27 */} Also add `evals/results/` to your `.gitignore`.
+
+## Next steps
+
+- [What are Claude Code plugins?](/plugins/what-are-plugins): the basics before writing evals
+- [Skills guide](/content/skills-guide): write descriptions Claude understands
+- [Claude Code in CI, headless mode](/advanced/headless-ci): plug your evals into a pipeline
+- [What's new in Claude Code, August and September 2026](/content/claude-code-whats-new-august-september-2026): the rest of the news, including `/skill-doctor`

@@ -52,7 +52,7 @@ describe("BenchmarkTable", () => {
     );
     render(<BenchmarkTable benchmarkId="webdev-arena" />);
     const labels = rowLabels();
-    expect(labels.length).toBe(expected.length);
+    expect(labels).toHaveLength(expected.length);
     expect(labels.map((label) => label.split("effort")[0].trim())[0]).toContain(
       expected[0],
     );
@@ -79,8 +79,8 @@ describe("BenchmarkTable", () => {
 
   it("shows both source-type badges and the publisher on a mixed benchmark", () => {
     render(<BenchmarkTable benchmarkId="swe-bench-verified" />);
-    expect(screen.getAllByText("sourceType.vendorReported").length).toBe(1);
-    expect(screen.getAllByText("sourceType.independent").length).toBe(6);
+    expect(screen.getAllByText("sourceType.vendorReported")).toHaveLength(1);
+    expect(screen.getAllByText("sourceType.independent")).toHaveLength(6);
     expect(screen.getAllByText("Anthropic").length).toBeGreaterThan(0);
     expect(screen.getAllByText("SWE-bench").length).toBeGreaterThan(0);
   });
@@ -104,7 +104,7 @@ describe("BenchmarkTable", () => {
   it("renders the measure date in a <time> element", () => {
     const { container } = render(<BenchmarkTable benchmarkId="aa-lcr" />);
     const times = Array.from(container.querySelectorAll("time"));
-    expect(times.length).toBe(getScoresForBenchmark("aa-lcr").length);
+    expect(times).toHaveLength(getScoresForBenchmark("aa-lcr").length);
     for (const time of times) {
       expect(time.getAttribute("datetime")).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
@@ -112,7 +112,7 @@ describe("BenchmarkTable", () => {
 
   it("renders the note of a score when present", () => {
     render(<BenchmarkTable benchmarkId="terminal-bench-2-1-aa" />);
-    expect(screen.getAllByText(/agent=Terminus 2/).length).toBe(2);
+    expect(screen.getAllByText(/agent=Terminus 2/)).toHaveLength(2);
     expect(screen.getByText(/effort=max · mode=adaptive/)).toBeInTheDocument();
   });
 

@@ -1,0 +1,85 @@
+---
+title: "Le watermark invisible de Claude : comment il marche et ce qu'il change pour vous"
+description: "Pour se conformer à l'AI Act européen, Anthropic ajoute un filigrane invisible aux textes de ses nouveaux modèles. Fonctionnement, limites, impact sur le code et les traductions, sans fantasmes."
+badge: "Nouveau"
+section: "content"
+order: 33
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security"]
+---
+
+## En bref
+
+Depuis l'été 2026, les textes générés par les nouveaux modèles Claude portent un **filigrane invisible**. Anthropic l'a expliqué dans un article publié le 14 août 2026. {/* source: https://www.anthropic.com/news/claude-text-watermark et https://www.anthropic.com/news (date Aug 14, 2026), consultés 2026-09-27 */}
+
+La raison est réglementaire. En juillet 2026, Anthropic a signé le Code de bonnes pratiques de l'Union européenne sur la transparence des contenus générés par IA, lié à l'AI Act. Ce code impose de marquer les sorties des modèles publiés après le 2 août 2026. D'autres grands fournisseurs l'ont signé aussi et mettront en place leurs propres filigranes. {/* source: https://www.anthropic.com/news/claude-text-watermark et https://www.anthropic.com/claude-fable-and-mythos-5-1, section "Compliance with the EU AI Act", consultés 2026-09-27 */}
+
+Fable 5.1 et Opus 5.5 sont concernés. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1 et https://www.anthropic.com/claude-opus-5-5, consultés 2026-09-27 */}
+
+## Comment ça marche, sans maths
+
+Un modèle de langage écrit mot par mot. À chaque mot, il a plusieurs candidats possibles. Anthropic prend l'exemple de la phrase « Aujourd'hui il faisait froid et… ». Le mot suivant a très peu de chances d'être « sucré », mais « couvert » ou « gris » sont tous deux très probables. Pour le lecteur, le choix entre les deux ne change rien. Habituellement, ce choix est tranché par un nombre aléatoire. {/* source: https://www.anthropic.com/news/claude-text-watermark, consulté 2026-09-27 */}
+
+Le filigrane ne change pas le fait que le choix soit aléatoire. Il change **la source du hasard**. Au lieu d'un générateur aléatoire quelconque, le modèle utilise une clé secrète et les quelques mots qui précèdent pour trancher. Quelqu'un qui possède la clé peut ensuite vérifier si la suite de mots est cohérente avec ces choix, et en déduire une probabilité que Claude ait écrit le texte. {/* source: idem */}
+
+Anthropic utilise une analogie avec le Monopoly que l'on peut résumer ainsi : au lieu de lancer les dés, les joueurs lisent les chiffres de pi à partir d'une position donnée. La partie reste aussi aléatoire pour les joueurs. Mais quelqu'un qui connaît pi peut, en regardant les coups joués, savoir si la partie a probablement utilisé pi. {/* source: idem */}
+
+La méthode est une version de l'approche **SynthID-Text** publiée par Google DeepMind en 2024. {/* source: idem */}
+
+## Ce que le filigrane n'est pas
+
+L'article d'Anthropic répond à plusieurs inquiétudes, point par point :
+
+- **Pas de caractère caché.** Rien n'est ajouté au texte.
+- **Pas de perte de qualité.** Anthropic dit n'avoir vu aucun impact en interne. Google DeepMind, qui a introduit la technique, n'avait trouvé aucune différence statistiquement significative dans les votes des utilisateurs de Gemini.
+- **Pas de surcoût.** Aucun token supplémentaire, même prix, impact négligeable sur la vitesse.
+- **Pas d'identification.** Le filigrane ne contient rien sur l'utilisateur, son organisation ou ses conversations.
+- **Pas de changement de propriété.** Le filigrane ne dit rien sur qui possède le texte ni sur la responsabilité juridique.
+
+{/* source: https://www.anthropic.com/news/claude-text-watermark, consulté 2026-09-27 */}
+
+## Et pour le code ?
+
+Si vous utilisez Claude Code, la question naturelle est : mon code est-il marqué ? La réponse est « très peu ».
+
+Le filigrane ne s'applique que là où plusieurs choix se valent. Quand un seul mot est correct, par exemple le résultat de « 2 + 2 = », rien n'est modifié. Or le code doit très souvent être exact. Anthropic écrit donc que le code porte en général moins de filigrane que d'autres textes, et que l'effet sur le code produit est négligeable. Les **commentaires** dans le code, où le choix des mots est libre, peuvent en revanche en porter. {/* source: https://www.anthropic.com/news/claude-text-watermark, consulté 2026-09-27 */}
+
+## Les cas particuliers
+
+**Relecture et correction.** Si vous demandez à Claude de corriger seulement la grammaire d'un texte que vous avez écrit, le filigrane ne peut vivre que dans les quelques corrections. Il y a de bonnes chances qu'il soit indétectable. Plus Claude écrit, plus il y a de place pour le filigrane. {/* source: idem */}
+
+**Traductions.** Elles portent un filigrane, puisque chaque mot est choisi par Claude. {/* source: idem */}
+
+**Textes courts et factuels.** La détection fonctionne mal sur de petits échantillons et sur les passages très factuels, où il y a peu de choix libres. {/* source: idem */}
+
+**Réécriture.** Une légère retouche ne supprime probablement pas le filigrane. Une réécriture complète où chaque mot est remplacé le supprime. Anthropic note qu'à ce stade, on peut se demander si le texte est encore « généré par IA ». {/* source: idem */}
+
+**Images et fichiers.** Pour les fichiers comme `.png`, `.jpg` ou `.svg`, ce n'est pas un filigrane mais une note signée dans les métadonnées, au standard ouvert C2PA, indiquant que le fichier a été produit ou traité avec Claude. {/* source: idem */}
+
+<Callout type="info" title="Ce que la détection prouve, et ce qu'elle ne prouve pas">
+La détection répond à une seule question : « quelle est la probabilité que ce texte ait été en partie écrit par Claude ? ». Elle ne confirme pas qu'un texte a été écrit par un humain, et ne détecte pas les autres IA, qui ont leur propre clé. Elle ne distingue pas non plus « Claude a écrit ceci » de « Claude a fortement retouché ceci ».
+</Callout>
+
+{/* source: https://www.anthropic.com/news/claude-text-watermark, consulté 2026-09-27 */}
+
+## Qui peut vérifier ?
+
+Anthropic ouvre une **API de détection en accès privé**. Elle est réservée pour l'instant aux organisations éligibles au titre du droit européen : régulateurs, forces de l'ordre, médias, fact-checkers, chercheurs indépendants, établissements d'enseignement et associations de la société civile européenne. Les entreprises qui doivent elles-mêmes vérifier les filigranes pour se conformer à l'AI Act y ont aussi accès. L'accès doit s'élargir avec le temps. {/* source: https://www.anthropic.com/news/claude-text-watermark, consulté 2026-09-27 */}
+
+Autrement dit, un particulier ou un enseignant ne peut pas, à ce jour, vérifier lui-même un texte avec l'outil officiel.
+
+## Pourquoi c'est mondial
+
+Le filigrane est appliqué partout, pas seulement dans l'Union européenne. Anthropic explique ne pas avoir encore de moyen durable de le limiter par région. Les modèles sortis avant le 2 août 2026 bénéficient d'une période de transition, et le filigrane leur sera ajouté dans les mois à venir. {/* source: https://www.anthropic.com/news/claude-text-watermark, consulté 2026-09-27 */}
+
+## Ce qu'il faut en retenir
+
+Pour un dev, le changement est quasi invisible : pas de coût, pas de perte de qualité, un effet négligeable sur le code. Pour quelqu'un qui publie du texte écrit avec Claude, par exemple un article ou une documentation, il faut savoir que ce texte est désormais potentiellement détectable par certains acteurs. Ce n'est pas une raison de s'inquiéter, c'est une raison d'être transparent sur ses usages.
+
+## Prochaines étapes
+
+- [Claude Opus 5.5 : ce qui change vraiment](/content/claude-opus-5-5-ce-qui-change) : le premier Opus lancé avec le filigrane
+- [Fable 5.1 et Mythos 5.1](/content/fable-5-1-et-mythos-5-1) : l'annonce qui détaille aussi la conformité AI Act
+- [Bonnes pratiques de sécurité](/content/bonnes-pratiques-securite) : ce qu'il faut savoir avant de confier des données à un modèle
+- [8 idées reçues sur Claude Code](/content/mythes-claude-code) : démêler le vrai du faux

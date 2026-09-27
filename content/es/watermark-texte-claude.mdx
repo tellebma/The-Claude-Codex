@@ -1,0 +1,85 @@
+---
+title: "La marca de agua invisible de Claude: cómo funciona y qué cambia para ti"
+description: "Para cumplir con la AI Act europea, Anthropic añade una marca de agua invisible a los textos de sus nuevos modelos. Funcionamiento, límites e impacto en el código y las traducciones, sin fantasías."
+badge: "Nuevo"
+section: "content"
+order: 33
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security"]
+---
+
+## En resumen
+
+Desde el verano de 2026, los textos generados por los nuevos modelos de Claude llevan una **marca de agua invisible**. Anthropic lo explicó en un artículo publicado el 14 de agosto de 2026. {/* source: https://www.anthropic.com/news/claude-text-watermark y https://www.anthropic.com/news (fecha Aug 14, 2026), consultados 2026-09-27 */}
+
+El motivo es normativo. En julio de 2026, Anthropic firmó el Código de buenas prácticas de la Unión Europea sobre la transparencia de los contenidos generados por IA, vinculado a la AI Act. Este código obliga a marcar las salidas de los modelos publicados después del 2 de agosto de 2026. Otros grandes proveedores también lo firmaron y aplicarán sus propias marcas de agua. {/* source: https://www.anthropic.com/news/claude-text-watermark y https://www.anthropic.com/claude-fable-and-mythos-5-1, sección "Compliance with the EU AI Act", consultados 2026-09-27 */}
+
+Fable 5.1 y Opus 5.5 están afectados. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1 y https://www.anthropic.com/claude-opus-5-5, consultados 2026-09-27 */}
+
+## Cómo funciona, sin matemáticas
+
+Un modelo de lenguaje escribe palabra a palabra. En cada palabra tiene varios candidatos posibles. Anthropic pone el ejemplo de la frase «Hoy hacía frío y…». Es muy improbable que la siguiente palabra sea «azucarado», pero «nublado» o «gris» son ambas muy probables. Para el lector, elegir una u otra no cambia nada. Normalmente, esa elección la decide un número aleatorio. {/* source: https://www.anthropic.com/news/claude-text-watermark, consultado 2026-09-27 */}
+
+La marca de agua no cambia el hecho de que la elección sea aleatoria. Cambia **la fuente del azar**. En lugar de un generador aleatorio cualquiera, el modelo usa una clave secreta y las pocas palabras anteriores para decidir. Quien tenga la clave puede luego comprobar si la secuencia de palabras es coherente con esas elecciones, y deducir una probabilidad de que Claude haya escrito el texto. {/* source: ídem */}
+
+Anthropic usa una analogía con el Monopoly que se resume así: en lugar de tirar los dados, los jugadores leen las cifras de pi a partir de una posición dada. La partida sigue siendo igual de aleatoria para los jugadores. Pero alguien que conozca pi puede, mirando las jugadas, saber si la partida probablemente usó pi. {/* source: ídem */}
+
+El método es una versión del enfoque **SynthID-Text** publicado por Google DeepMind en 2024. {/* source: ídem */}
+
+## Lo que la marca de agua no es
+
+El artículo de Anthropic responde a varias inquietudes, una por una:
+
+- **No hay caracteres ocultos.** No se añade nada al texto.
+- **No hay pérdida de calidad.** Anthropic dice no haber visto ningún impacto internamente. Google DeepMind, que introdujo la técnica, no encontró ninguna diferencia estadísticamente significativa en las valoraciones de los usuarios de Gemini.
+- **No hay sobrecoste.** Ningún token adicional, mismo precio, impacto insignificante en la velocidad.
+- **No hay identificación.** La marca de agua no contiene nada sobre el usuario, su organización o sus conversaciones.
+- **No cambia la propiedad.** La marca de agua no dice nada sobre quién es el dueño del texto ni sobre la responsabilidad jurídica.
+
+{/* source: https://www.anthropic.com/news/claude-text-watermark, consultado 2026-09-27 */}
+
+## ¿Y el código?
+
+Si usas Claude Code, la pregunta natural es: ¿está marcado mi código? La respuesta es «muy poco».
+
+La marca de agua solo se aplica donde varias opciones valen lo mismo. Cuando solo una palabra es correcta, por ejemplo el resultado de «2 + 2 =», no se modifica nada. Y el código casi siempre tiene que ser exacto. Anthropic escribe, por tanto, que el código suele llevar menos marca de agua que otros textos, y que el efecto sobre el código producido es insignificante. Los **comentarios** en el código, donde la elección de palabras es libre, sí pueden llevarla. {/* source: https://www.anthropic.com/news/claude-text-watermark, consultado 2026-09-27 */}
+
+## Los casos particulares
+
+**Revisión y corrección.** Si pides a Claude que corrija solo la gramática de un texto que has escrito tú, la marca de agua solo puede vivir en las pocas correcciones. Es muy probable que sea indetectable. Cuanto más escribe Claude, más espacio hay para la marca de agua. {/* source: ídem */}
+
+**Traducciones.** Llevan marca de agua, ya que cada palabra la elige Claude. {/* source: ídem */}
+
+**Textos cortos y factuales.** La detección funciona mal en muestras pequeñas y en pasajes muy factuales, donde hay pocas elecciones libres. {/* source: ídem */}
+
+**Reescritura.** Un retoque ligero probablemente no elimina la marca de agua. Una reescritura completa en la que se sustituye cada palabra, sí. Anthropic señala que, llegados a ese punto, cabe preguntarse si el texto sigue siendo «generado por IA». {/* source: ídem */}
+
+**Imágenes y archivos.** Para archivos como `.png`, `.jpg` o `.svg`, no es una marca de agua sino una nota firmada en los metadatos, con el estándar abierto C2PA, que indica que el archivo se produjo o procesó con Claude. {/* source: ídem */}
+
+<Callout type="info" title="Lo que demuestra la detección, y lo que no">
+La detección responde a una sola pregunta: «¿cuál es la probabilidad de que este texto haya sido escrito en parte por Claude?». No confirma que un texto lo haya escrito un humano ni detecta otras IA, que tienen su propia clave. Tampoco distingue «Claude escribió esto» de «Claude retocó mucho esto».
+</Callout>
+
+{/* source: https://www.anthropic.com/news/claude-text-watermark, consultado 2026-09-27 */}
+
+## ¿Quién puede comprobarlo?
+
+Anthropic abre una **API de detección en acceso privado**. Por ahora está reservada a las organizaciones elegibles según el derecho europeo: reguladores, fuerzas del orden, medios, verificadores de datos, investigadores independientes, centros educativos y asociaciones de la sociedad civil europea. Las empresas que deben verificar ellas mismas las marcas de agua para cumplir con la AI Act también tienen acceso. El acceso debería ampliarse con el tiempo. {/* source: https://www.anthropic.com/news/claude-text-watermark, consultado 2026-09-27 */}
+
+Dicho de otro modo, un particular o un docente no puede, a día de hoy, comprobar un texto por su cuenta con la herramienta oficial.
+
+## Por qué es mundial
+
+La marca de agua se aplica en todas partes, no solo en la Unión Europea. Anthropic explica que aún no tiene una forma duradera de limitarla por región. Los modelos publicados antes del 2 de agosto de 2026 cuentan con un periodo de transición, y la marca de agua se les añadirá en los próximos meses. {/* source: https://www.anthropic.com/news/claude-text-watermark, consultado 2026-09-27 */}
+
+## Lo que hay que retener
+
+Para un desarrollador, el cambio es casi invisible: sin coste, sin pérdida de calidad y con un efecto insignificante en el código. Para quien publica textos escritos con Claude, como un artículo o una documentación, conviene saber que ese texto es ahora potencialmente detectable por ciertos actores. No es motivo de preocupación, es motivo para ser transparente sobre tus usos.
+
+## Próximos pasos
+
+- [Claude Opus 5.5: lo que cambia de verdad](/content/claude-opus-5-5-ce-qui-change): el primer Opus lanzado con la marca de agua
+- [Fable 5.1 y Mythos 5.1](/content/fable-5-1-et-mythos-5-1): el anuncio que detalla también el cumplimiento de la AI Act
+- Buenas prácticas de seguridad: lo que hay que saber antes de confiar datos a un modelo
+- 8 ideas preconcebidas sobre Claude Code: separar lo cierto de lo falso

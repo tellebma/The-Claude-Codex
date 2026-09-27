@@ -1,0 +1,106 @@
+---
+title: "Fable 5.1 and Mythos 5.1: one model, two levels of safeguards"
+description: "Released September 1, 2026, Claude Fable 5.1 and Mythos 5.1 are the same model with different protections. Cache reads cut by 75%, fewer cyber false positives: the rundown for developers."
+badge: "New"
+section: "content"
+order: 28
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security"]
+---
+
+## Quick answer
+
+On September 1, 2026, Anthropic released **Claude Fable 5.1** and **Claude Mythos 5.1**. The most surprising part is spelled out in the announcement: they're the same model, with different levels of safeguards. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1 and https://www.anthropic.com/news (date Sep 1, 2026), consultés 2026-09-27 */}
+
+Fable 5.1 is generally available. Mythos 5.1 is only available through trusted access programs designed for defensive cybersecurity and the life sciences. {/* source: same */}
+
+Think of a production car and its track version. Same engine, same chassis. The track version has no speed limiter, but it's only handed to licensed drivers on registered circuits.
+
+## What changes on your bill
+
+Input and output prices don't move: $10 per million input tokens and $50 per million output tokens, same as Fable 5. The cut is on cache reads only, which drop to **$0.25 per million tokens**, 75% less. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, availability and pricing section, consulté 2026-09-27 */}
+
+Anthropic estimates the overall effect at about 25% savings on a typical workload, and up to about 45% on highly agentic work, where cache reads weigh the most. These estimates come from four weeks of real usage measured in August 2026. {/* source: same, caption of the chart "Indexed cost of Fable usage" */}
+
+A customer quoted in the announcement, who runs the Devin agent, sums it up: with the new cache pricing, a Fable-class model is finally economical for the workloads they had kept on Opus, starting with code review. {/* source: same, quote from Walden Yan */}
+
+<Callout type="tip" title="In Claude Code">
+Fable 5.1 is available in Claude Code with a 1M-token context window. The `fable` alias selects it since v2.1.257. Note that Fable 5.1 defaults to `high` effort in Claude Code, versus `medium` in Claude Cowork and on Claude.ai.
+</Callout>
+
+{/* source: https://code.claude.com/docs/en/whats-new/2026-w36 and https://www.anthropic.com/claude-fable-and-mythos-5-1, consultés 2026-09-27 */}
+
+<CodeBlock language="bash" code={`# In a Claude Code session
+/model fable`} />
+
+## The numbers against Fable 5
+
+A selection from Anthropic's published table (vendor-reported scores):
+
+| Benchmark | Fable 5.1 | Fable 5 |
+|---|---|---|
+| Terminal-Bench 4.0 | 55.8% | 42.0% |
+| Terminal-Bench-Science 0.1 | 52.6% | 24.7% |
+| AutomationBench | 31.4% | 17.1% |
+| CursorBench 3.2.0 | 73.4% | 70.5% |
+
+{/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, benchmark tables, consulté 2026-09-27 */}
+
+One methodology detail matters here. Fable 5.1 was evaluated with its production safeguards on. When they intervened, cyber tasks were completed by Opus 4.8 and biology tasks by Opus 5, and on some benchmarks an intervention counted as zero. Anthropic notes this likely lowers Fable 5.1's scores. {/* source: same, note under the table */}
+
+On Terminal-Bench 4.0, the gap between Fable 5.1 and Mythos 5.1 (60.9%) comes precisely from those interventions, since it's the same model. {/* source: same, Terminal-Bench 4.0 chart caption */}
+
+## Fewer cybersecurity false positives
+
+This was a common complaint with Fable 5: perfectly legitimate requests blocked because they looked like offensive security. Anthropic announces several fixes:
+
+- The new cyber safeguards block **60% fewer false positives**. In Claude Code, that means around 60% fewer interventions per session on average.
+- Fable 5.1 can now be used to **discover software vulnerabilities**, meaning defensive work. It still shouldn't develop exploits.
+- Penetration testing, exploit generation and binary-based vulnerability scanning are still rerouted to Opus models.
+- In biology, the new safeguards fire 85% less often on elementary biology and medical questions compared with those that launched with Fable 5.
+
+{/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, section "More precise safeguards for biology and cybersecurity", consulté 2026-09-27 */}
+
+If you work on a security project, you'll see Claude Code switch models less often, but it will still happen. We explain the mechanism in [Why Claude Code sometimes switches models mid-session](/content/automatic-model-fallback-safeguards).
+
+## Mythos 5.1: who's it for?
+
+Mythos 5.1 goes through two programs:
+
+- **Cyber Verification Program (CVP)**: it already gives access to some Opus and Sonnet models with reduced cyber safeguards for defensive work. Access to Mythos-class models is announced "in the near future".
+- **Life Sciences Verification Program (LSVP)**: it lets life sciences professionals use Mythos 5.1 with safeguards designed for research, in partnership with the US government.
+
+{/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, section "Trusted access for Claude Mythos 5.1", consulté 2026-09-27 */}
+
+The announcement notes that Mythos 5.1 is currently only available to a set of US organizations. For most teams, Fable 5.1 is the one that matters. {/* source: same */}
+
+The Claude Security product, which scans codebases for vulnerabilities and suggests patches for human review, now runs on Mythos 5.1. {/* source: same */}
+
+## Privacy: Enterprise Frontier Safeguards
+
+Anthropic also announced a new system, **Enterprise Frontier Safeguards (EFS)**. The idea: data stays stored in cloud infrastructure controlled by the customer, not Anthropic, and any human review is done by the customer by default. Anthropic keeps the ability to detect misuse. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, section "Automated safeguards for enterprises", consulté 2026-09-27 */}
+
+EFS rolls out in phases starting this fall, on Claude Code, Claude Enterprise, the Claude Platform, Amazon Bedrock, Google's Agent Platform and Microsoft Foundry. Until then, eligible customers can use Fable 5.1 with zero data retention. {/* source: same */}
+
+## A change that can break an API integration
+
+Fable 5.1 introduces an anti-distillation mechanism. For API accounts created from the release date onward, you can no longer manually edit Claude's prior context in a multi-turn conversation while keeping the transcript of its prior thinking. Existing accounts aren't affected for now, but Anthropic warns the rule will apply to everyone with future model releases. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, section "Anti-distillation mechanisms", consulté 2026-09-27 */}
+
+If your code rewrites message history before sending it back to the API, test it now.
+
+## And science?
+
+The announcement gives a lot of space to research. Two examples published by Anthropic:
+
+- Mythos 5.1 designed protein binders with a hit rate close to 50% across 12 targets, validated in the lab by two external organizations. Anthropic says hit rates of 10 to 15% are typical today.
+- Fable 5.1 trained a neural network to produce a new elevation map of a third of Venus, from radar images taken by NASA's Magellan mission.
+
+{/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, science section, consulté 2026-09-27 */}
+
+## Next steps
+
+- [Claude Opus 5.5: Fable 5.1-level work for 40% less](/content/claude-opus-5-5-what-changes): released three weeks later, it compares itself directly to Fable 5.1
+- [Fable is back: what you must know](/content/fable-is-back-what-you-must-know): context on the previous model
+- [Why Claude Code sometimes switches models mid-session](/content/automatic-model-fallback-safeguards): automatic fallback explained
+- [Security best practices](/content/security-best-practices): securing your everyday Claude Code usage

@@ -1,0 +1,107 @@
+---
+title: "Why Claude Code sometimes switches models mid-session"
+description: "Fable 5.1, Opus 5.5 and Opus 5 fall back to another model when a request touches cybersecurity or biology. How this fallback works, how to diagnose it and how to control it."
+badge: "New"
+section: "content"
+order: 36
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security", "tooling"]
+---
+
+## Quick answer
+
+You're working on Opus 5.5 or Fable 5.1, and suddenly a line appears in the transcript: the request was rerun on another model. It's not a bug. It's **automatic fallback**: when a model's safety classifiers flag a request, mostly in cybersecurity or biology, Claude Code reruns it on another model and tells you. {/* source: https://code.claude.com/docs/en/model-config.md, section "Automatic model fallback", consulté 2026-09-27 */}
+
+Think of a phone switchboard. Some questions aren't handled by your usual contact, they get transferred to a specialist department. You're still on the line, but someone else is answering.
+
+## Who falls back to whom
+
+The rule depends on which model refused the request:
+
+| Starting model | Biology-flagged request | Cybersecurity-flagged request |
+|---|---|---|
+| Fable 5.1, Fable 5, Opus 5.5 | rerun on Opus 5 | rerun on Opus 4.8 |
+| Opus 5 | refusal (no fallback) | rerun on Opus 4.8 |
+
+{/* source: https://code.claude.com/docs/en/model-config.md, section "Automatic model fallback", consulté 2026-09-27 */}
+
+After a fallback, **the session continues on the fallback model**. To go back to your original model, run `/model`. {/* source: same */}
+
+Category-based fallback requires Claude Code v2.1.219 or later. {/* source: same */}
+
+## Why these safeguards exist
+
+Anthropic considers its newest models highly capable in both areas. For Opus 5.5, the announcement says it's comparable to Claude Mythos 5.1 in biology and cybersecurity, so it's deployed with safeguards similar to Fable 5.1's. It's the first time an Opus model has launched with this class of protections. {/* source: https://www.anthropic.com/claude-opus-5-5, sections "Safety" and "Safeguards", consulté 2026-09-27 */}
+
+In practice, on Opus 5.5 you can still find and fix bugs in your code as part of a normal development cycle. But most cybersecurity tasks are rerouted to Opus 4.8. {/* source: same, section "Cybersecurity" */}
+
+On Fable 5.1, penetration testing, exploit generation and binary-based vulnerability scanning are still rerouted to Opus models, even though defensive vulnerability discovery is now allowed. {/* source: https://www.anthropic.com/claude-fable-and-mythos-5-1, section "More precise safeguards for biology and cybersecurity", consulté 2026-09-27 */}
+
+<Callout type="info" title="Fewer false positives than before">
+With Fable 5.1, Anthropic reports around 60% fewer cyber interventions per Claude Code session on average, compared with Fable 5's safeguards. In biology, the new safeguards fire 85% less often on elementary questions.
+</Callout>
+
+{/* source: same */}
+
+## The first-message trap
+
+One behavior often surprises people: fallback can trigger **on the very first request**, before you've written anything sensitive. The reason: that first request carries your workspace context, including your `CLAUDE.md` content and git status. A repo containing security or biology material can trip the classifier on that context alone. {/* source: https://code.claude.com/docs/en/model-config.md, section "Check what triggered fallback", consulté 2026-09-27 */}
+
+A pentest tooling project, an `exploits/` folder or a `CLAUDE.md` that talks about CVEs can be enough.
+
+### Diagnose
+
+To find out whether your customizations are the trigger, start a session in safe mode:
+
+<CodeBlock language="bash" code={`claude --safe-mode`} />
+
+This mode disables `CLAUDE.md`, skills, MCP servers and hooks. Git status and directory names aren't customizations and are still sent. {/* source: same */} If the fallback goes away, the trigger is in your customizations. Otherwise, it's in the repo itself.
+
+## Staying in control
+
+Prefer to decide each time? Turn off automatic switching in `/config` ("Switch models when a message is flagged"), or in your settings:
+
+<CodeBlock language="json" code={`{
+  "switchModelsOnFlag": false
+}`} />
+
+A flagged request then pauses the session with two options: switch to the fallback model, or edit the prompt and retry on the current model. {/* source: https://code.claude.com/docs/en/model-config.md, section "Ask before switching", consulté 2026-09-27 */}
+
+A few special cases:
+
+- If the category has no fallback model (biology on Opus 5), there's no choice: the request ends with a refusal.
+- In non-interactive mode (`-p`) and SDK integrations that can't show the prompt, a flagged request ends the turn with a refusal.
+- If the fallback model is blocked by `availableModels`, no fallback happens and the refusal shows as a normal error.
+
+{/* source: same */}
+
+<Callout type="warning" title="Watch out in CI">
+If you run Claude Code headless on a security-related repo, a refusal can stop a job with no fallback possible. Test your pipelines with the model you plan to use.
+</Callout>
+
+## On Bedrock, Google Agent Platform and Foundry
+
+Model IDs there are provider-specific. Fallback only works if Claude Code can recognize the starting model and find the fallback model in your deployment. If you set `ANTHROPIC_DEFAULT_OPUS_MODEL`, flagged requests rerun on that model for every category that has a fallback. If either model can't be identified, there's no automatic switch: the request ends with a refusal and you can switch models with `/model`. {/* source: https://code.claude.com/docs/en/model-config.md, section "Enable fallback on Bedrock, Agent Platform, and Foundry", consulté 2026-09-27 */}
+
+## Don't confuse it with fallback chains
+
+Claude Code has another mechanism with a similar name. **Fallback chains** (`fallbackModel` or `--fallback-model`) kick in when the primary model is overloaded or unavailable, not when content is flagged. They're capped at three models, and the switch only lasts for the current turn. {/* source: https://code.claude.com/docs/en/model-config.md, section "Fallback model chains", consulté 2026-09-27 */}
+
+<CodeBlock language="json" code={`{
+  "fallbackModel": ["claude-sonnet-5", "claude-haiku-4-5"]
+}`} />
+
+## Do you actually work in security or biology?
+
+If your job regularly trips these safeguards, Anthropic offers verified access programs:
+
+- **Cyber Verification Program**: access to some models with reduced cyber safeguards for defensive work. Anthropic says it will be extended to Opus 5.5, with three tiers of increasingly permissive access, including access to Mythos models. {/* source: https://www.anthropic.com/claude-opus-5-5, section "Cybersecurity", consulté 2026-09-27 */}
+- **Life Sciences Verification Program**: launched in beta on September 17, 2026 for teams and institutions. It gives access to Mythos, Opus and Sonnet models with more permissive biology safeguards, after vetting of research credentials, security standards and ethical oversight. It's not yet open to individual plans and requires 30-day data retention for the traffic concerned. {/* source: https://www.anthropic.com/news/life-sciences-verification-program and https://www.anthropic.com/news (date Sep 17, 2026), consultés 2026-09-27 */}
+
+## Next steps
+
+- [Claude Opus 5.5: what actually changes](/content/claude-opus-5-5-what-changes): the first Opus with these safeguards
+- [Fable 5.1 and Mythos 5.1](/content/fable-5-1-and-mythos-5-1): the same model with two levels of protection
+- [Security review with Claude Code](/advanced/security-review): what you can do without triggering fallback
+- [Auto mode is now the default](/content/auto-mode-by-default): the other classifier watching over your sessions

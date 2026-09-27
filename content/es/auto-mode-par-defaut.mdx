@@ -1,0 +1,117 @@
+---
+title: "El auto mode pasa a ser el modo por defecto de Claude Code: lo que hay que saber"
+description: "Desde el 14 de agosto de 2026, las nuevas sesiones de Claude Code arrancan en auto mode en Pro, Max y Team, y luego en todos los planes a partir de la v2.1.283. Lo que bloquea el clasificador y cómo mantener el control."
+badge: "Nuevo"
+section: "content"
+order: 32
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security"]
+---
+
+## En resumen
+
+Durante mucho tiempo, Claude Code te pedía permiso antes de casi cada comando de shell o modificación de archivo. Por defecto, eso se acabó. **Desde el 14 de agosto de 2026, el auto mode es el modo de permisos por defecto de las nuevas sesiones en los planes Pro, Max y Team.** {/* source: https://code.claude.com/docs/en/whats-new/2026-w32, consultado 2026-09-27 */}
+
+La documentación actual va más allá: a partir de la v2.1.283, el auto mode es el modo de inicio de las sesiones interactivas en terminal y en VS Code, en todos los planes y proveedores. {/* source: https://code.claude.com/docs/en/permission-modes.md, sección "Eliminate permission prompts with auto mode", consultado 2026-09-27 */}
+
+Si has visto aparecer `⏵⏵ auto mode on` en tu barra de estado sin tocar nada, es por esto.
+
+## El auto mode en una imagen
+
+En modo manual, tú eres el vigilante de la puerta: cada acción pasa por delante de ti. En auto mode, un **segundo modelo, el clasificador**, ocupa ese puesto. Revisa las acciones antes de que se ejecuten y bloquea las que van más allá de tu petición, apuntan a una infraestructura que no reconoce o parecen dictadas por un contenido hostil que Claude ha leído. {/* source: https://code.claude.com/docs/en/permission-modes.md, consultado 2026-09-27 */}
+
+El vigilante no ha desaparecido. Solo ha cambiado de naturaleza: menos avisos para ti, pero sigue habiendo control.
+
+<Callout type="warning" title="No es una garantía">
+La documentación de Anthropic es clara: el auto mode reduce las peticiones de permiso, pero no garantiza la seguridad. Úsalo para tareas cuya dirección general apruebas, no como sustituto de una revisión en operaciones sensibles.
+</Callout>
+
+{/* source: ídem, aviso de la sección auto mode */}
+
+## Lo que se bloquea por defecto
+
+El clasificador confía en tu carpeta de trabajo y en los remotes de git configurados al iniciar la sesión. Todo lo demás se considera externo. Esto es parte de lo que bloquea por defecto:
+
+- Descargar y ejecutar código, del tipo `curl | bash`
+- Enviar datos sensibles al exterior
+- Los despliegues y migraciones en producción
+- El `force push`
+- Los comandos que destruyen trabajo sin commitear: `git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`
+- `terraform destroy` y equivalentes
+- Mostrar una credencial o un token activo en la transcripción o en un archivo
+- Mergear una pull request que ningún humano ha aprobado, o desactivar comprobaciones de CI
+- Lanzar un comando con un flag que desactiva una protección, como `--insecure`
+
+{/* source: https://code.claude.com/docs/en/permission-modes.md, sección "What the classifier blocks by default", consultado 2026-09-27 */}
+
+Para ver la lista completa de reglas en formato JSON:
+
+<CodeBlock language="bash" code={`claude auto-mode defaults`} />
+
+{/* source: ídem */}
+
+Un remote añadido en plena sesión con `git remote add` no se considera fiable. Es una protección sencilla contra un escenario clásico de exfiltración. {/* source: ídem */}
+
+### Los endurecimientos recientes
+
+Durante el verano se añadieron varias reglas:
+
+- **Semana del 31 de agosto**: el clasificador bloquea también las peticiones de credenciales al endpoint de metadatos de la instancia cloud y las conexiones a contenedores vecinos que Claude no ha iniciado. Claude Code te pide además permiso antes de la primera lectura de un archivo fuera de tus carpetas de trabajo.
+- **Misma semana**: un `defaultMode` configurado como `"bypassPermissions"` en el `.claude/settings.json` de un proyecto ya no tiene efecto. La sesión arranca en modo manual. Un repositorio clonado ya no puede desactivar tus protecciones sin que lo sepas.
+- **Semana del 7 de septiembre**: cuando el clasificador bloquea una acción, el motivo que recibe Claude suele nombrar la regla aplicada, por ejemplo `[Data Exfiltration]`.
+
+{/* source: https://code.claude.com/docs/en/whats-new/2026-w36 y https://code.claude.com/docs/en/whats-new/2026-w37, consultados 2026-09-27 */}
+
+## Tus instrucciones cuentan
+
+Un punto poco conocido: el clasificador lee lo que dices en la conversación. Si escribes «no hagas push» o «espera a mi revisión antes de desplegar», bloquea las acciones correspondientes, aunque las reglas por defecto las hubieran permitido. {/* source: https://code.claude.com/docs/en/permission-modes.md, consultado 2026-09-27 */}
+
+Hay un límite importante. Estas consignas no se guardan como reglas: el clasificador las relee en la transcripción en cada comprobación. Si la compactación del contexto elimina el mensaje en el que las diste, pueden perderse. **Para una garantía firme, escribe una regla `deny`.** {/* source: ídem */}
+
+<CodeBlock language="json" code={`{
+  "permissions": {
+    "deny": ["Bash(git push *)"]
+  }
+}`} />
+
+## Mantener el control
+
+### Cambiar de modo en plena sesión
+
+`Shift+Tab` recorre los modos. Desde `auto`, una primera pulsación pasa al modo manual (`default`), y el ciclo continúa hacia `acceptEdits`, `plan` y vuelve a `default`. {/* source: https://code.claude.com/docs/en/permission-modes.md, sección "Switch permission modes", consultado 2026-09-27 */}
+
+### Elegir el modo de inicio
+
+Si prefieres empezar en modo manual, configura `defaultMode` en tus ajustes de usuario. Si ya tenías otro modo configurado, se conserva: Claude Code te pregunta una sola vez, y nada cambia si lo rechazas. {/* source: https://code.claude.com/docs/en/whats-new/2026-w32 y https://code.claude.com/docs/en/permission-modes.md, consultados 2026-09-27 */}
+
+<CodeBlock language="json" code={`{
+  "permissions": {
+    "defaultMode": "default"
+  }
+}`} />
+
+### En una organización
+
+Un administrador puede eliminar por completo el auto mode configurando `permissions.disableAutoMode` como `"disable"` en los managed settings. {/* source: https://code.claude.com/docs/en/permission-modes.md, consultado 2026-09-27 */}
+
+## Lo que cuesta
+
+En los planes Pro, Max y Team, las llamadas del clasificador ya no cuentan en tus límites de uso. {/* source: https://code.claude.com/docs/en/whats-new/2026-w32, consultado 2026-09-27 */}
+
+## Los modelos compatibles
+
+El auto mode no funciona con todos los modelos. En la API de Anthropic, hace falta Claude Opus 4.6 o posterior, Sonnet 4.6 o posterior, o un modelo Fable. En Bedrock, Google Agent Platform y Foundry, solo Sonnet 5, Opus 4.7 o posterior, y los modelos Fable. Haiku no está soportado. Si el modelo no es compatible, la sesión arranca en modo manual. {/* source: https://code.claude.com/docs/en/permission-modes.md, sección de requisitos, consultado 2026-09-27 */}
+
+## Nuestra opinión
+
+Para la mayoría de los desarrolladores, este cambio es una buena noticia: menos clics y una red de seguridad más inteligente que una lista blanca estática. Pero desplaza la responsabilidad. Antes validabas cada acción. Ahora tienes que saber qué deja pasar el clasificador, por ejemplo los `push` hacia las ramas del repositorio actual, que pasan sin petición salvo indicación contraria. {/* source: https://code.claude.com/docs/en/permission-modes.md, consultado 2026-09-27 */}
+
+Tres reflejos sencillos: reglas `deny` para lo que nunca debe ocurrir, un sandbox o un contenedor para los proyectos sensibles, y una revisión de los diffs antes de mergear.
+
+## Próximos pasos
+
+- Permisos y sandbox: configurar con detalle lo que Claude puede hacer
+- [No des tus claves de API a Claude Code](/content/ne-pas-donner-cles-api-a-claude-code): limitar los daños posibles
+- Buenas prácticas de seguridad: la checklist completa
+- [Por qué Claude Code cambia a veces de modelo en plena sesión](/content/fallback-automatique-garde-fous): el otro clasificador, el de las salvaguardas de ciberseguridad y biología

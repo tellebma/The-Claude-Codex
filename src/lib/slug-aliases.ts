@@ -45,6 +45,17 @@ const SLUG_GROUPS: ReadonlyArray<LocaleSlugGroup> = [
   { fr: "lire-un-benchmark-llm", en: "how-to-read-llm-benchmarks" },
   { fr: "open-weights-vs-modeles-fermes", en: "open-weights-vs-closed-models" },
   { fr: "cout-reel-par-tache", en: "real-cost-per-task" },
+  // Lot actualites septembre 2026. Les traductions ES reprennent le slug FR.
+  { fr: "claude-opus-5-5-ce-qui-change", en: "claude-opus-5-5-what-changes" },
+  { fr: "fable-5-1-et-mythos-5-1", en: "fable-5-1-and-mythos-5-1" },
+  { fr: "gpt-6-face-a-opus-5-5", en: "gpt-6-vs-opus-5-5" },
+  { fr: "messagerie-inter-sessions-claude-code", en: "claude-code-cross-session-messaging" },
+  { fr: "tester-ses-plugins-avec-plugin-eval", en: "test-plugins-with-plugin-eval" },
+  { fr: "auto-mode-par-defaut", en: "auto-mode-by-default" },
+  { fr: "watermark-texte-claude", en: "claude-text-watermark" },
+  { fr: "rapport-menaces-septembre-2026", en: "threat-report-september-2026" },
+  { fr: "nouveautes-claude-code-aout-septembre-2026", en: "claude-code-whats-new-august-september-2026" },
+  { fr: "fallback-automatique-garde-fous", en: "automatic-model-fallback-safeguards" },
 ];
 
 /**

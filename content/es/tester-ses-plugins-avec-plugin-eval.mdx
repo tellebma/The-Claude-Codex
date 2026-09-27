@@ -1,0 +1,131 @@
+---
+title: "claude plugin eval: medir por fin lo que aporta tu plugin"
+description: "Desde la v2.1.269 (septiembre de 2026), Claude Code puede probar un plugin con una batería de casos y compararlo con una sesión sin plugin. Tutorial paso a paso, costes y trampas."
+badge: "Nuevo"
+section: "content"
+order: 31
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["tutorial", "tooling"]
+---
+
+## En resumen
+
+Has escrito un plugin de Claude Code con una o dos skills. Parece que funciona. Pero ¿funciona mejor que Claude solo? Hasta ahora, la única respuesta posible era «me da la impresión de que sí».
+
+El comando **`claude plugin eval`**, llegado en la v2.1.269 durante la semana del 7 al 11 de septiembre de 2026, cambia eso. Ejecuta tu plugin sobre una batería de casos de prueba, puntúa los resultados y, por defecto, repite cada caso **sin el plugin** para mostrar lo que aporta de verdad. {/* source: https://code.claude.com/docs/en/whats-new/2026-w37, consultado 2026-09-27 */}
+
+La analogía más cercana es un ensayo clínico con grupo de control. No basta con medir que los pacientes mejoran, se compara con quienes no tomaron el tratamiento.
+
+## El principio en tres conceptos
+
+**Un caso**: un prompt realista, tal como lo escribiría un usuario de tu plugin, más uno o varios evaluadores («graders»).
+
+**Un grader**: una comprobación de aprobado o suspenso sobre lo que Claude ha producido. Por ejemplo, una regex sobre la respuesta, el hecho de que se haya llamado a una herramienta concreta, o una rúbrica que un segundo modelo aplica a la respuesta.
+
+**La baseline sin plugin**: cada caso se ejecuta con el plugin (columna `WITH`) y sin él (`W/OUT`). La diferencia, `Δ`, es lo que aporta tu plugin. Si un caso obtiene 1.0 en ambas columnas, no es tu plugin lo que lo hace pasar.
+
+{/* source: https://code.claude.com/docs/en/plugin-evals.md, introducción y "How an eval run works", consultado 2026-09-27 */}
+
+Cada caso se ejecuta tres veces por defecto, porque una sola ejecución de un agente no determinista dice poco. La puntuación de un caso es la media de sus ejecuciones. {/* source: ídem, sección "How a case is scored" */}
+
+## Requisitos
+
+- Claude Code **v2.1.269** o posterior (`claude --version`, y `claude update` si hace falta).
+- Git 2.31 o posterior, si git está instalado.
+- Una carpeta de plugin con un manifiesto `plugin.json` o `.claude-plugin/plugin.json`.
+
+{/* source: https://code.claude.com/docs/en/plugin-evals.md, sección "Requirements", consultado 2026-09-27 */}
+
+<Callout type="warning" title="Cada ejecución es una llamada real al modelo">
+Cada ejecución y cada grader juzgado por un modelo es una llamada real, que se descuenta de tu plan o se factura en tu cuenta de API. Por defecto, un caso son tres ejecuciones con el plugin y tres sin él, es decir, seis. Empieza con poco.
+</Callout>
+
+{/* source: ídem, nota de introducción y paso "Run the suite" */}
+
+## Tu primera batería, paso a paso
+
+<Steps>
+<Step title="Hacer que Claude redacte los casos" stepNumber={1}>
+Desde la raíz de tu plugin, ejecuta `claude plugin eval init`. Se abre una sesión interactiva. Claude lee tu plugin, te pregunta cómo es un buen resultado, propone prompts que deberían activar el plugin y otros que no, diseña los graders, los prueba una vez y escribe una carpeta por caso en `evals/`. Sal de la sesión con `/exit` cuando Claude anuncie que la batería está lista.
+</Step>
+<Step title="Lanzar la batería" stepNumber={2}>
+Siempre desde la raíz del plugin, ejecuta `claude plugin eval .` para lanzar todos los casos.
+</Step>
+<Step title="Leer la tabla" stepNumber={3}>
+Aparece una tabla resumen con las columnas `WITH`, `W/OUT`, `Δ`, el número de ejecuciones y el coste estimado. Se genera un informe HTML detallado en `evals/results/`.
+</Step>
+<Step title="Iterar" stepNumber={4} isLast>
+Ajusta tu plugin, relanza, compara.
+</Step>
+</Steps>
+
+{/* source: https://code.claude.com/docs/en/plugin-evals.md, sección "Create your first eval suite", consultado 2026-09-27 */}
+
+<CodeBlock language="bash" code={`# Desde la raíz del plugin
+claude plugin eval init
+claude plugin eval .`} />
+
+Ejemplo de salida tomado de la documentación:
+
+<CodeBlock language="text" code={`CASE        WITH  W/OUT Δ      RUNS COST    NOTES
+first-case  1.00  0.33  +0.67  6    $0.41
+
+1 case(s) · mean Δ +0.67 · 74s · $0.41`} />
+
+{/* source: ídem, paso "Read the summary" */}
+
+Aquí, el plugin hace pasar el caso de 0,33 a 1,00: aporta algo claramente.
+
+## El diagnóstico más frecuente
+
+La propia documentación lo dice: el primer hallazgo más habitual es un `Δ` cercano a cero, con el grader que comprueba la llamada a la skill en suspenso. Traducción: Claude no elige tu skill cuando el usuario formula su petición de forma natural. {/* source: ídem, paso "Open the report and iterate" */}
+
+La solución pasa casi siempre por el campo `description` de la skill. Es el texto que Claude lee para decidir si la usa. Nuestra guía de las skills explica cómo escribirlo.
+
+Para iterar rápido y barato sobre un solo caso, lanza una única ejecución sin baseline, y confirma con las tres ejecuciones por defecto antes de concluir:
+
+<CodeBlock language="bash" code={`claude plugin eval . --case <nombre-del-caso> --runs 1 --ablation none`} />
+
+{/* source: ídem */}
+
+## Elegir buenos graders
+
+Hay seis tipos de graders. Cuatro se calculan a partir de la transcripción y los archivos, y no cuestan nada: `regex`, `tool_used`, `tool_order` y `file_exists`. Los otros dos, `llm` y `baseline`, recurren a un modelo juez y suman coste. No existen graders con código personalizado. {/* source: https://code.claude.com/docs/en/plugin-evals.md, sección "Choose and weight graders", consultado 2026-09-27 */}
+
+Los consejos de la documentación para obtener puntuaciones estables:
+
+- Para una salida larga, como un archivo generado, usa una `regex` sobre el archivo. Reserva los graders `llm` para salidas cortas, con condiciones PASS y FAIL concretas.
+- Da a cada caso un grader sobre el resultado y otro sobre el camino seguido (`tool_used` o `tool_order`). Uno dice si la respuesta es correcta, el otro si la ha producido tu plugin.
+- Si el grader de la skill pasa pero el `Δ` es negativo, sospecha primero del juez. Relanza con `--judge-model sonnet` para un juez más sólido.
+
+{/* source: ídem, sección "Choose graders that give a stable signal" */}
+
+Un ejemplo de grader que comprueba que tu skill se ha llamado:
+
+<CodeBlock language="markdown" code={`---
+type: tool_used
+tool: Skill
+input_match: '"skill"\\s*:\\s*"(?:[\\w-]+:)?your-skill-name"'
+---`} />
+
+{/* source: ídem, sección "Write a case manually" */}
+
+## Seguridad: lo que puede hacer una ejecución
+
+Las ejecuciones nunca se detienen a pedir permiso. Por defecto, solo se permiten las herramientas de lectura listadas en el caso. `Bash`, `Write`, `Edit`, `WebFetch` y `WebSearch` se retiran, salvo que las concedas con `--allow-tools`. {/* source: https://code.claude.com/docs/en/plugin-evals.md, sección "Grant tools", consultado 2026-09-27 */}
+
+Si concedes `Bash`, cada comando se ejecuta en el sandbox del sistema de Claude Code: escrituras confinadas a la carpeta de la ejecución, carpeta personal ilegible, red limitada a los dominios concedidos. En Windows nativo no hay sandbox, así que las baterías que conceden un shell deben ejecutarse en WSL2. {/* source: ídem */}
+
+Los servidores MCP reales de tu plugin no arrancan durante una ejecución, salvo que lo pidas. Puedes sustituirlos por mocks en Markdown en `evals/mocks/`. {/* source: ídem, sección "Mock MCP servers" */}
+
+## En CI
+
+`claude plugin eval` puede servir de control en un pipeline. La documentación aconseja fijar el modelo probado con `--model`, para que un cambio de modelo por defecto no se confunda con una regresión de tu plugin. {/* source: https://code.claude.com/docs/en/plugin-evals.md, tabla "Command options", consultado 2026-09-27 */} Añade también `evals/results/` a tu `.gitignore`.
+
+## Próximos pasos
+
+- ¿Qué es un plugin de Claude Code?: lo básico antes de escribir tus evaluaciones
+- Guía de las skills: escribir descripciones que Claude entienda
+- Claude Code en CI, en modo headless: integrar tus evaluaciones en un pipeline
+- [Novedades de Claude Code en agosto y septiembre de 2026](/content/nouveautes-claude-code-aout-septembre-2026): el resto de novedades, entre ellas `/skill-doctor`

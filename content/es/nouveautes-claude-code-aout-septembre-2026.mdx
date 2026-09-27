@@ -1,0 +1,118 @@
+---
+title: "Novedades de Claude Code en agosto y septiembre de 2026: el resumen útil"
+description: "/design, /diff en panel, /skill-doctor, diagnóstico de la caché en /cost, fork mode, estilo Concise, fin de Ultraplan: los cambios de Claude Code de la v2.1.220 a la v2.1.269 que merecen tu atención."
+badge: "Nuevo"
+section: "content"
+order: 35
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["reference", "productivity"]
+---
+
+## En resumen
+
+Entre principios de agosto y mediados de septiembre de 2026, Claude Code pasó de la v2.1.220 a la v2.1.269. {/* source: https://code.claude.com/docs/en/whats-new, semanas 32 a 37, consultado 2026-09-27 */} Son muchas versiones, y el changelog completo es difícil de seguir. Lo hemos filtrado: esto es lo que cambia de verdad tu forma de trabajar, ordenado por uso y no por fecha.
+
+Algunos temas tienen su propio artículo: la [mensajería entre sesiones](/content/messagerie-inter-sessions-claude-code), [`claude plugin eval`](/content/tester-ses-plugins-avec-plugin-eval) y [el auto mode por defecto](/content/auto-mode-par-defaut).
+
+Antes de nada, actualiza:
+
+<CodeBlock language="bash" code={`claude update
+claude --version`} />
+
+## Seguir mejor lo que hace Claude
+
+### `/diff` se convierte en un panel en directo
+
+En el renderizado a pantalla completa, `/diff` abre ahora un panel junto a la conversación. Enumera los archivos modificados con las líneas añadidas y eliminadas, y se actualiza con cada modificación o comando de shell de Claude. Puedes seleccionar líneas con el ratón para adjuntarlas a tu siguiente mensaje. Hace falta un repositorio git y un terminal de al menos 110 columnas. {/* source: https://code.claude.com/docs/en/whats-new/2026-w36, sección "Live diff panel in fullscreen rendering", consultado 2026-09-27 */}
+
+Es la diferencia entre recibir un informe al final de la obra y tener una ventana a la obra mientras avanza.
+
+### El estilo de salida Concise
+
+Nuevo estilo integrado: Claude empieza por el resultado y se salta el preámbulo y la narración, trabajando con el mismo rigor que con el estilo por defecto. Los informes de error, los avisos de seguridad y las confirmaciones de acciones destructivas se mantienen completos. {/* source: https://code.claude.com/docs/en/whats-new/2026-w34, sección "Concise output style", consultado 2026-09-27 */}
+
+<CodeBlock language="json" code={`{
+  "outputStyle": "Concise"
+}`} />
+
+Actívalo en `/config`, apartado Output style, o en `~/.claude/settings.json`, y luego ejecuta `/clear` o abre una nueva sesión.
+
+## Controlar los costes
+
+### `/cost` explica tus fallos de caché
+
+`/cost` muestra ahora una línea `Prompt cache (main)`: la parte de tokens de entrada servidos desde la caché, los fallos de caché, si la caché está «caliente» y una causa probable del último fallo cuando Claude Code puede identificarla. Los scripts de la barra de estado reciben un objeto `prompt_cache` equivalente. {/* source: https://code.claude.com/docs/en/whats-new/2026-w36, "Other wins", consultado 2026-09-27 */}
+
+Con Opus 5.5, cuya lectura de caché se factura a 0,20 $ por millón de tokens frente a 4 $ por una entrada normal, cada fallo de caché sale caro. Esta línea es lo primero que hay que mirar si una sesión te parece costosa. {/* source: https://www.anthropic.com/claude-opus-5-5, consultado 2026-09-27 */}
+
+### `/skill-doctor` encuentra las skills inútiles
+
+Cada skill listada añade texto a tu contexto en cada turno, la use Claude o no. `/skill-doctor` muestra lo que cuesta cada skill en contexto y con qué frecuencia se usa, para que puedas desactivar las inútiles. Requiere la v2.1.252 o posterior. {/* source: https://code.claude.com/docs/en/whats-new/2026-w36, sección "Find unused skills with /skill-doctor", consultado 2026-09-27 */}
+
+### Limitar el esfuerzo con `maxEffortLevel`
+
+El ajuste `maxEffortLevel`, a nivel global o por modelo en `modelSettings`, limita el nivel de esfuerzo en todos los proveedores, incluidos Bedrock, Google Agent Platform y Foundry. Cualquier nivel superior se ejecuta al límite. Útil para un equipo que quiere evitar las sesiones en `max` por costumbre. {/* source: https://code.claude.com/docs/en/whats-new/2026-w37, "Other wins", consultado 2026-09-27 */}
+
+Otro detalle práctico: `/effort` y el selector `/model` guardan ahora un nivel de esfuerzo distinto para cada modelo. {/* source: https://code.claude.com/docs/en/whats-new/2026-w36, consultado 2026-09-27 */}
+
+## Trabajar en paralelo
+
+### El fork mode activado por defecto
+
+Desde la v2.1.232, en sesión interactiva, Claude puede lanzar un subagente de tipo `fork` que hereda toda la conversación y la caché, en lugar de empezar de cero. Ya no hace falta volver a explicar el contexto para una tarea secundaria. {/* source: https://code.claude.com/docs/en/whats-new/2026-w33, sección "Fork mode on by default", consultado 2026-09-27 */}
+
+<CodeBlock language="text" code={`> /subtask draft unit tests for the parser changes so far`} />
+
+Para desactivarlo: `CLAUDE_CODE_FORK_SUBAGENT=0`.
+
+### GitLab se suma a GitHub
+
+Los marketplaces de plugins aceptan URL de `gitlab.com` y, desde la v2.1.233, `--worktree` acepta una URL de merge request de GitLab para crear una rama a partir de ella. Claude Code también oculta los tokens de GitLab como `glpat-` en sus salidas. {/* source: https://code.claude.com/docs/en/whats-new/2026-w33, sección "GitLab merge requests and marketplaces", consultado 2026-09-27 */}
+
+<CodeBlock language="bash" code={`claude --worktree https://gitlab.com/group/project/-/merge_requests/42`} />
+
+## Diseño e interfaz
+
+### `/design`, en research preview
+
+La skill `/design` lleva el flujo de trabajo por artboards de Claude Design al CLI y a Claude Code Desktop. Describes lo que quieres, Claude publica un lienzo de artboards editables, eliges uno y Claude lo implementa. Disponible en Pro, Max, Team y Enterprise, a partir de la v2.1.234. {/* source: https://code.claude.com/docs/en/whats-new/2026-w34, sección "/design", consultado 2026-09-27 */}
+
+<CodeBlock language="text" code={`> /design redesign the composer based on what people actually use it for`} />
+
+### En Desktop
+
+- **Ventanas desacoplables**: cualquier panel (diff, terminal) puede salir a su propia ventana, en una segunda pantalla por ejemplo. {/* source: https://code.claude.com/docs/en/whats-new/2026-w37, consultado 2026-09-27 */}
+- **`/resume` en Desktop**: retoma en la aplicación una sesión iniciada desde el terminal, con toda la conversación. {/* source: https://code.claude.com/docs/en/whats-new/2026-w35, consultado 2026-09-27 */}
+- **Computer use en segundo plano**: en macOS, en beta para Pro y Max, Claude actúa en las aplicaciones que has autorizado mientras sigues trabajando. {/* source: https://code.claude.com/docs/en/whats-new/2026-w36, consultado 2026-09-27 */}
+
+### Desde tu teléfono
+
+Cualquier máquina que ejecute `claude remote-control` aparece como una tarjeta de dispositivo en la pestaña Code de la aplicación Claude. Basta un toque para iniciar una sesión en ella. Remote Control también ha salido de research preview. {/* source: https://code.claude.com/docs/en/whats-new/2026-w34, sección "Start a session on your machine from your phone", consultado 2026-09-27 */}
+
+## Para los equipos y la CI
+
+- **Modo restringido**: `claude --restricted` arranca sin las herramientas que ejecutan comandos o código, elimina WebFetch, limita las herramientas de archivos a las carpetas de trabajo y rechaza `bypassPermissions`. Pensado para entornos de evaluación en una máquina compartida. {/* source: https://code.claude.com/docs/en/whats-new/2026-w35, sección "Restricted mode", consultado 2026-09-27 */}
+- **Entornos autoalojados**: las sesiones en la nube de Claude Code pueden ejecutarse en la infraestructura de tu organización, en beta pública en Team y Enterprise. {/* source: https://code.claude.com/docs/en/whats-new/2026-w32, consultado 2026-09-27 */}
+- **Fin del límite de 200 subagentes por sesión**: los límites de concurrencia y profundidad se mantienen. {/* source: ídem */}
+
+<CodeBlock language="bash" code={`claude --restricted -p "review src/ for SQL injection risks"`} />
+
+## Lo que desaparece: Ultraplan
+
+La research preview de Ultraplan se retiró durante la semana del 3 al 7 de agosto, incluido el comando `/ultraplan` y la palabra clave `ultraplan`. Anthropic aconseja usar el modo plan o Claude Code en la web en su lugar. {/* source: https://code.claude.com/docs/en/whats-new/2026-w32, "Other wins", consultado 2026-09-27 */}
+
+<Callout type="warning" title="Si usabas /ultraplan">
+Tus scripts o costumbres que dependían de `/ultraplan` ya no funcionan. El modo plan sigue siendo la alternativa local más cercana.
+</Callout>
+
+## ¿Y los modelos?
+
+Durante el periodo llegaron dos nuevos modelos a Claude Code: Fable 5.1 (con el alias `fable`, a partir de la v2.1.257) y Opus 5.5 (v2.1.280 como mínimo), que pasa a ser el modelo por defecto en la mayoría de los planes. {/* source: https://code.claude.com/docs/en/whats-new/2026-w36 y https://code.claude.com/docs/en/model-config.md, consultados 2026-09-27 */} Los detalles están en nuestros artículos específicos.
+
+## Próximos pasos
+
+- [Claude Opus 5.5: lo que cambia de verdad](/content/claude-opus-5-5-ce-qui-change): el nuevo modelo por defecto
+- [Mensajería entre sesiones](/content/messagerie-inter-sessions-claude-code): hacer colaborar a tus sesiones
+- [claude plugin eval](/content/tester-ses-plugins-avec-plugin-eval): probar tus plugins en serio
+- Optimización de tokens: aprovechar la caché y reducir la factura

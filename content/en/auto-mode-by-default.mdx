@@ -1,0 +1,117 @@
+---
+title: "Auto mode is now Claude Code's default: what you need to know"
+description: "Since August 14, 2026, new Claude Code sessions start in auto mode on Pro, Max and Team, then on every plan from v2.1.283. What the classifier blocks, and how to stay in control."
+badge: "New"
+section: "content"
+order: 32
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["guide", "security"]
+---
+
+## Quick answer
+
+For a long time, Claude Code asked your permission before almost every shell command or file edit. By default, that's over. **Since August 14, 2026, auto mode is the default permission mode for new sessions on Pro, Max and Team plans.** {/* source: https://code.claude.com/docs/en/whats-new/2026-w32, consulté 2026-09-27 */}
+
+The current docs go further: from v2.1.283, auto mode is the starting mode for interactive terminal and VS Code sessions on every plan and provider. {/* source: https://code.claude.com/docs/en/permission-modes.md, section "Eliminate permission prompts with auto mode", consulté 2026-09-27 */}
+
+If `⏵⏵ auto mode on` showed up in your status bar without you touching anything, that's why.
+
+## Auto mode in one picture
+
+In manual mode, you're the guard at the door: every action goes past you. In auto mode, a **second model, the classifier**, takes that post. It reviews actions before they run and blocks those that go beyond your request, target infrastructure it doesn't recognize, or seem driven by hostile content Claude read. {/* source: https://code.claude.com/docs/en/permission-modes.md, consulté 2026-09-27 */}
+
+The guard hasn't disappeared. It just changed shape: fewer buzzes for you, but still a check.
+
+<Callout type="warning" title="Not a guarantee">
+Anthropic's docs are clear: auto mode reduces permission prompts but doesn't guarantee safety. Use it for tasks where you trust the general direction, not as a replacement for review on sensitive operations.
+</Callout>
+
+{/* source: same, warning in the auto mode section */}
+
+## What's blocked by default
+
+The classifier trusts your working directory and the git remotes configured when the session started. Everything else is treated as external. Here's part of what it blocks by default:
+
+- Downloading and executing code, like `curl | bash`
+- Sending sensitive data to external endpoints
+- Production deploys and migrations
+- Force push
+- Commands that destroy uncommitted work: `git reset --hard`, `git checkout -- .`, `git clean -fd`, `git stash drop`
+- `terraform destroy` and equivalents
+- Printing a live credential or token into the transcript or a file
+- Merging a pull request no human has approved, or disabling CI checks
+- Running a command with a flag that disarms a safety guard, like `--insecure`
+
+{/* source: https://code.claude.com/docs/en/permission-modes.md, section "What the classifier blocks by default", consulté 2026-09-27 */}
+
+To print the full rule lists as JSON:
+
+<CodeBlock language="bash" code={`claude auto-mode defaults`} />
+
+{/* source: same */}
+
+A remote added mid-session with `git remote add` isn't trusted. It's a simple protection against a classic exfiltration scenario. {/* source: same */}
+
+### Recent hardening
+
+Several rules were added over the summer:
+
+- **Week of August 31**: the classifier also blocks requesting credentials from the cloud instance-metadata endpoint, and connecting to sibling containers Claude didn't start. Claude Code also asks you before the first read of a file outside your working directories.
+- **Same week**: a `defaultMode` set to `"bypassPermissions"` in a project's `.claude/settings.json` no longer takes effect. The session starts in manual mode. A cloned repo can no longer turn off your protections behind your back.
+- **Week of September 7**: when the classifier blocks an action, the reason Claude receives usually names the matching rule, such as `[Data Exfiltration]`.
+
+{/* source: https://code.claude.com/docs/en/whats-new/2026-w36 and https://code.claude.com/docs/en/whats-new/2026-w37, consultés 2026-09-27 */}
+
+## Your instructions count
+
+A lesser-known point: the classifier reads what you say in the conversation. If you write "don't push" or "wait for my review before deploying", it blocks matching actions even when the default rules would allow them. {/* source: https://code.claude.com/docs/en/permission-modes.md, consulté 2026-09-27 */}
+
+There's an important limit. These boundaries aren't stored as rules: the classifier rereads them from the transcript on each check. If context compaction removes the message where you stated them, they can be lost. **For a hard guarantee, write a `deny` rule.** {/* source: same */}
+
+<CodeBlock language="json" code={`{
+  "permissions": {
+    "deny": ["Bash(git push *)"]
+  }
+}`} />
+
+## Staying in control
+
+### Switch modes mid-session
+
+`Shift+Tab` cycles through modes. From `auto`, the first press switches to manual (`default`), then the cycle goes to `acceptEdits`, `plan`, and back to `default`. {/* source: https://code.claude.com/docs/en/permission-modes.md, section "Switch permission modes", consulté 2026-09-27 */}
+
+### Pick your starting mode
+
+If you'd rather start in manual mode, set `defaultMode` in your user settings. If you had already set another mode, it's kept: Claude Code asks you once, and nothing changes if you decline. {/* source: https://code.claude.com/docs/en/whats-new/2026-w32 and https://code.claude.com/docs/en/permission-modes.md, consultés 2026-09-27 */}
+
+<CodeBlock language="json" code={`{
+  "permissions": {
+    "defaultMode": "default"
+  }
+}`} />
+
+### For organizations
+
+An admin can remove auto mode entirely by setting `permissions.disableAutoMode` to `"disable"` in managed settings. {/* source: https://code.claude.com/docs/en/permission-modes.md, consulté 2026-09-27 */}
+
+## What it costs
+
+On Pro, Max and Team plans, the classifier's calls no longer count toward your usage limits. {/* source: https://code.claude.com/docs/en/whats-new/2026-w32, consulté 2026-09-27 */}
+
+## Supported models
+
+Auto mode doesn't work with every model. On the Anthropic API, you need Claude Opus 4.6 or later, Sonnet 4.6 or later, or a Fable model. On Bedrock, Google Agent Platform and Foundry, only Sonnet 5, Opus 4.7 or later, and the Fable models. Haiku isn't supported. If the model doesn't qualify, the session starts in manual mode. {/* source: https://code.claude.com/docs/en/permission-modes.md, requirements section, consulté 2026-09-27 */}
+
+## Our take
+
+For most developers, this change is good news: fewer clicks, and a safety net smarter than a static allowlist. But it shifts responsibility. Before, you approved each action. Now, you need to know what the classifier lets through, for example pushes to branches of the current repo, which go through without a prompt unless you say otherwise. {/* source: https://code.claude.com/docs/en/permission-modes.md, consulté 2026-09-27 */}
+
+Three simple habits: `deny` rules for what must never happen, a sandbox or container for sensitive projects, and a review of diffs before merging.
+
+## Next steps
+
+- [Permissions and sandbox](/advanced/permissions-sandbox): fine-tune what Claude can do
+- [Don't give your API keys to Claude Code](/content/do-not-give-api-keys-to-claude-code): limit the possible damage
+- [Security best practices](/content/security-best-practices): the full checklist
+- [Why Claude Code sometimes switches models mid-session](/content/automatic-model-fallback-safeguards): the other classifier, for cyber and bio safeguards

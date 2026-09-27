@@ -1,0 +1,110 @@
+---
+title: "GPT-6 frente a Opus 5.5: lo que dicen de verdad los precios y las cifras"
+description: "OpenAI lanza GPT-6 Astra el 3 de septiembre de 2026 y luego Sol y Luna el 22, el mismo día que Opus 5.5. Tarifas oficiales, benchmarks disponibles y trampas de comparación, sin tomar partido."
+badge: "Nuevo"
+section: "content"
+order: 29
+datePublished: "2026-09-27"
+dateModified: "2026-09-27"
+themes: ["comparison", "performance"]
+---
+
+## En resumen
+
+Septiembre de 2026 vio dos grandes lanzamientos el mismo día. El 22 de septiembre, Anthropic publicó Claude Opus 5.5 y OpenAI publicó GPT-6 Sol y GPT-6 Luna. {/* source: https://www.anthropic.com/claude-opus-5-5 y https://developers.openai.com/api/docs/changelog (entrada Sep 22), consultados 2026-09-27 */} El modelo de gama alta de OpenAI, **GPT-6 Astra**, había salido un poco antes, el 3 de septiembre. {/* source: https://developers.openai.com/api/docs/changelog (entrada Sep 3), consultado 2026-09-27 */}
+
+Este artículo compara lo que se puede comparar con fuentes oficiales. Una precisión de entrada: la página de anuncio de OpenAI no pudo consultarse en el momento de la redacción (acceso denegado por el servidor). La información de OpenAI procede, por tanto, de su documentación para desarrolladores: el changelog y la página de precios.
+
+## Quién es quién en la gama GPT-6
+
+OpenAI divide GPT-6 en tres modelos, siguiendo el esquema de GPT-5.6:
+
+- **GPT-6 Astra** (`gpt-6-astra`): presentado como «nuestro modelo más capaz, diseñado para el trabajo de principio a fin más difícil». Razonamiento, código, computer use, investigación y creación de documentos.
+- **GPT-6 Sol** (`gpt-6-sol`) y **GPT-6 Luna** (`gpt-6-luna`): modelos de razonamiento que aceptan texto e imágenes, disponibles en las API Responses y Chat Completions.
+
+{/* source: https://developers.openai.com/api/docs/changelog, entradas Sep 3 y Sep 22, consultado 2026-09-27 */}
+
+Para simplificar, Astra juega en la categoría de Opus 5.5 y Fable 5.1. Sol y Luna apuntan más bien al volumen, donde Anthropic sitúa a Sonnet y Haiku (Sonnet 5.5 y Haiku 5.5 están anunciados «en las próximas semanas»). {/* source: https://www.anthropic.com/claude-opus-5-5, consultado 2026-09-27 */}
+
+## Las tarifas, lado a lado
+
+Precios oficiales por millón de tokens, en procesamiento estándar. Para OpenAI, son las tarifas de «contexto corto», que se aplican hasta 272 000 tokens de entrada.
+
+| Modelo | Entrada | Lectura de caché | Escritura de caché | Salida |
+|---|---|---|---|---|
+| Claude Opus 5.5 | 4 $ | 0,20 $ | 5 $ | 20 $ |
+| GPT-6 Astra | 10 $ | 1 $ | 12,50 $ | 50 $ |
+| GPT-6 Sol | 2 $ | 0,20 $ | 2,50 $ | 10 $ |
+| GPT-6 Luna | 0,10 $ | 0,01 $ | 0,125 $ | 0,50 $ |
+
+{/* source: https://www.anthropic.com/claude-opus-5-5 (sección Pricing) y https://developers.openai.com/api/docs/pricing (tabla Standard, short context), consultados 2026-09-27 */}
+
+Por encima de 272 000 tokens de entrada, OpenAI aplica una tarifa de «contexto largo» más alta: por ejemplo, 20 $ de entrada y 75 $ de salida para Astra. {/* source: https://developers.openai.com/api/docs/pricing, consultado 2026-09-27 */} Si trabajas con repositorios grandes y mucho contexto, es un umbral a vigilar.
+
+Sobre el papel, Opus 5.5 cuesta dos veces y media menos que Astra, token por token. GPT-6 Sol cuesta la mitad que Opus 5.5 en entrada y salida, con el mismo precio de lectura de caché.
+
+<Callout type="warning" title="El precio por token no lo dice todo">
+Dos modelos no consumen el mismo número de tokens para la misma tarea. Un modelo más caro por token pero más eficiente puede salir más barato al final. Es exactamente el argumento de Anthropic para Opus 5.5. Nuestro artículo [Coste real por tarea](/content/cout-reel-par-tache) detalla este cálculo.
+</Callout>
+
+## Los benchmarks disponibles
+
+La única tabla oficial que pone a Opus 5.5 y GPT-6 Astra lado a lado viene de Anthropic. Hay que leerla como lo que es: el punto de vista de uno de los dos competidores.
+
+| Benchmark | Opus 5.5 | GPT-6 Astra |
+|---|---|---|
+| Terminal-Bench 4.0 | 66,4 % | 57,9 % |
+| FrontierCode v1.1 (Main) | 54,4 % | 53,3 % |
+| GDPval-AA v2.1 (Elo) | 1846 | 1542 |
+| AutomationBench | 40,0 % | 41,4 % |
+| Humanity's Last Exam (con herramientas) | 67,7 % | 57,2 % |
+| Terminal-Bench-Science 0.1 | 58,7 % | 64,6 % |
+
+{/* source: https://www.anthropic.com/claude-opus-5-5, tabla comparativa, consultado 2026-09-27 */}
+
+Lo que precisan las notas de la tabla:
+
+- Las puntuaciones de GPT-6 Astra en Terminal-Bench 4.0 y Terminal-Bench-Science son «las publicadas por OpenAI». Anthropic no las volvió a medir.
+- En Terminal-Bench 4.0, Opus 5.5 aparece con esfuerzo `xhigh` y Astra con esfuerzo `high`. Cada modelo se toma en su mejor puntuación.
+- Los resultados de AutomationBench proceden de Zapier. Las ejecuciones de Opus 5.5 se hicieron sin modelo de respaldo, así que cada intervención de las salvaguardas contaba como fallo.
+
+{/* source: ídem, notas 1 a 3 bajo la tabla */}
+
+Astra gana en AutomationBench y Terminal-Bench-Science. Opus 5.5 gana en el resto. Ninguno domina en todo.
+
+Falta sobre todo una cosa: ninguna cifra compara Opus 5.5 con **GPT-6 Sol**, lanzado el mismo día. Los dos anuncios se publicaron en paralelo, y ninguna de las fuentes oficiales consultadas ofrece ese cara a cara. Desconfía de las tablas que ya circulan con esas dos columnas: comprueba de dónde salen las cifras.
+
+## Las diferencias técnicas que importan a un desarrollador
+
+Más allá de las puntuaciones, algunas restricciones documentadas pueden pesar en la elección:
+
+**En GPT-6 Astra**, el changelog de OpenAI enumera cambios a tener en cuenta en una migración: no hay nivel de razonamiento `none`, ni `temperature` o `top_p` personalizados, ni `logprobs`, y la llamada a herramientas exige la API Responses. OpenAI añade también una supervisión de alineamiento asíncrona que puede lanzar una alerta o detener una conversación para revisión. {/* source: https://developers.openai.com/api/docs/changelog, entrada Sep 3, consultado 2026-09-27 */}
+
+**En Opus 5.5**, el modo «thinking» ya no se puede desactivar, y la mayoría de las tareas de ciberseguridad se redirigen a Opus 4.8. {/* source: https://www.anthropic.com/claude-opus-5-5, consultado 2026-09-27 */}
+
+Los dos fabricantes coinciden, pues, en un punto: el razonamiento pasa a ser obligatorio en sus modelos de gama alta.
+
+<Callout type="info" title="Un bug corregido el 25 de septiembre">
+El 25 de septiembre, OpenAI corrigió un bug de codificación de imágenes que degradaba la comprensión visual de GPT-6 Sol y GPT-6 Luna, incluido el computer use. OpenAI recomienda volver a ejecutar las evaluaciones en los casos de uso con imágenes. Las primeras pruebas publicadas antes de esa fecha deben tomarse con prudencia.
+</Callout>
+
+{/* source: https://developers.openai.com/api/docs/changelog, entrada Sep 25, consultado 2026-09-27 */}
+
+## Entonces, ¿cuál elegir?
+
+Si usas Claude Code, la pregunta apenas se plantea: la herramienta funciona con los modelos de Anthropic, y Opus 5.5 es el modelo por defecto en la mayoría de los planes. {/* source: https://code.claude.com/docs/en/model-config.md, consultado 2026-09-27 */}
+
+Si construyes tu propio producto sobre una API, esta es una lectura honesta:
+
+- **Tareas de agente largas sobre código**: las cifras publicadas favorecen a Opus 5.5, pero vienen de Anthropic. Prueba con tus propias tareas.
+- **Gran volumen, tareas sencillas**: GPT-6 Luna a 0,10 $ de entrada no tiene hoy equivalente publicado en Anthropic, ya que Haiku 5.5 aún no ha salido.
+- **Investigación científica agéntica**: Astra tiene la mejor puntuación publicada en Terminal-Bench-Science (64,6 %), según esa misma tabla de Anthropic.
+
+El único método fiable sigue siendo el de julio: tomar diez tareas representativas de tu trabajo, ejecutarlas en cada modelo y medir el coste real y la calidad.
+
+## Próximos pasos
+
+- [Claude Opus 5.5: lo que cambia de verdad](/content/claude-opus-5-5-ce-qui-change): el modelo de Anthropic en detalle
+- [Leer un benchmark de LLM sin dejarse engañar](/content/lire-un-benchmark-llm): las trampas de las tablas comparativas
+- [Opus 5, GPT-5.6, Kimi K3: tres lanzamientos, tres clasificaciones](/content/opus-5-face-aux-nouveaux-gpt): la anterior oleada de lanzamientos, en julio
+- [Benchmarks LLM: tablas de referencia](/content/benchmarks-llm): nuestros datos con fuentes por categoría

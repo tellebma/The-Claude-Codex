@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.16.0...v1.17.0) (2026-09-27)
+
+
+### Features
+
+* **content:** 10 articles actualités septembre 2026 en FR/EN/ES ([#338](https://github.com/tellebma/The-Claude-Codex/issues/338)) ([94057cb](https://github.com/tellebma/The-Claude-Codex/commit/94057cb4bba51d80ee1c86734239ae4c4ef4c7c1))
+
 # [1.16.0](https://github.com/tellebma/The-Claude-Codex/compare/v1.15.0...v1.16.0) (2026-07-29)
 
 

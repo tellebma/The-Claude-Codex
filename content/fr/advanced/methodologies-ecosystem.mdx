@@ -4,7 +4,7 @@ description: "Panorama des méthodologies open-source qui structurent Claude Cod
 section: "advanced"
 order: 13
 datePublished: "2026-04-26"
-dateModified: "2026-04-26"
+dateModified: "2026-08-09"
 badge: "NEW"
 ---
 
@@ -24,6 +24,7 @@ Ce guide les compare honnêtement. Pas pour désigner un gagnant : aucune n'est 
 | **BMAD-METHOD** | 7k+ | SDLC complet avec personas | Équipes produit-eng |
 | **OpenSpec** | 5k+ | Delta specs, brownfield | Équipes legacy, refactoring |
 | **gstack** | 4k+ | Role personas, parallel sprints | Solo dev, équipes restreintes |
+| **Hedgehog** | naissant | Planning BMAD + gates de phase mécaniques | Équipes qui ne font pas confiance à l'agent sans supervision |
 
 Chiffres approximatifs au 2026-04-26. La hiérarchie change tous les mois.
 
@@ -129,6 +130,22 @@ Le persona injecte un prompt système qui contraint le ton, les priorités et le
 
 **Pour qui ?** Solo devs, équipes restreintes, projets perso. Pas industrialisable pour de gros projets, mais imbattable en prise en main.
 
+## Hedgehog : les gates de phase mécaniques
+
+Hedgehog part d'une inquiétude précise : un agent à qui on demande de suivre une discipline s'en écarte dès qu'elle devient une gêne, à moins qu'un mécanisme extérieur à l'agent ne l'impose. La méthodologie reprend donc le planning intake façon BMAD, superpose du TDD progressif sur une stack TypeScript opinionated, puis fait passer chaque transition de phase par une porte mécanique plutôt que de faire confiance à l'agent pour s'auto-déclarer conforme.
+
+```
+Phase 0 : Planning intake (shelf BMAD) → scope, modules domaine, add-ons
+Phase A : Build backend, un module domaine à la fois
+Phase B : Build front-end, même module
+        ↓ gate mécanique : tests passent, coverage tient, checklist de phase vérifiée
+Module suivant
+```
+
+Concrètement, la méthodologie est livrée sous forme d'agents et de skills Claude Code qu'un projet copie dans son propre `.claude/` : un `planner` pour le scoping, `backend-eng` / `front-end-eng` pour les phases de build, et un `reviewer` dont le rôle est spécifiquement de vérifier les transitions de phase et de layer par rapport à une checklist plutôt que de juger le diff à l'instinct. Un **Correction Protocol** existe pour le cas où un agent saute quand même une gate — c'est un mode d'échec assumé, pas quelque chose que la discipline prétend impossible.
+
+**Pour qui ?** Les équipes qui veulent la rigueur de planning de BMAD sans se contenter de "l'agent pensera à lancer les tests" comme mécanisme d'enforcement. Plus lourd que gstack, plus étroit que BMAD-METHOD (stack TypeScript opinionated, pas agnostique). Overkill pour un prototype solo où rien n'a encore besoin d'être gaté.
+
 ## Comment les composer
 
 Aucune méthodologie n'est exclusive. Voici quelques compositions qui fonctionnent en pratique :
@@ -162,6 +179,7 @@ Si vous ne savez pas par où commencer :
 | Greenfield avec constitution forte | **Spec Kit** |
 | Secteur réglementé, traçabilité forte | **BMAD-METHOD** |
 | Power user qui veut capitaliser | **Everything Claude Code** |
+| Pas confiance dans l'auto-discipline de l'agent | **Hedgehog** |
 
 ## Le risque commun : la lourdeur
 

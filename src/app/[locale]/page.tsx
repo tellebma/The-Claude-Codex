@@ -41,6 +41,7 @@ import { TrustBar } from "@/components/ui/TrustBar";
 import { CodexStatsBand } from "@/components/ui/CodexStatsBand";
 import { RecentArticlesSection } from "@/components/ui/RecentArticlesSection";
 import { CtaFinal } from "@/components/ui/CtaFinal";
+import { NewsletterForm } from "@/components/ui/NewsletterForm";
 import {
   AnimateOnScroll,
   StaggerChildren,
@@ -59,6 +60,7 @@ export default async function HomePage({
   const tAudience = await getTranslations("audience");
   const tPaths = await getTranslations("paths");
   const tTrust = await getTranslations("landing.trust");
+  const tNewsletter = await getTranslations("newsletter");
 
   const trustItems = [
     { Icon: GitBranch, label: tTrust("openSource") },
@@ -416,6 +418,28 @@ export default async function HomePage({
 
           <AnimateOnScroll preset="scale" delay={0.2} className="mt-12">
             <ConfiguratorTeaser />
+          </AnimateOnScroll>
+        </div>
+      </section>
+
+      {/* ===== NEWSLETTER (THE-4) ===== Capture email vers Supabase */}
+      <section
+        id="newsletter"
+        className="scroll-mt-24 py-16 sm:py-20 lg:py-24"
+      >
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+          <AnimateOnScroll preset="fade-up">
+            <SectionHeading
+              badge={tNewsletter("badge")}
+              title={`${tNewsletter("title")} — ${tNewsletter("titleHighlight")}`}
+              description={tNewsletter("description")}
+            />
+          </AnimateOnScroll>
+          <AnimateOnScroll preset="fade-up" delay={0.15} className="mt-8">
+            <NewsletterForm variant="section" />
+            <p className="mt-3 text-center text-sm text-[color:var(--fg-muted)]">
+              {tNewsletter("privacy")}
+            </p>
           </AnimateOnScroll>
         </div>
       </section>

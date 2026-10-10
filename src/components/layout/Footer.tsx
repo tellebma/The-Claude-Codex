@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CopyrightYear } from "@/components/ui/CopyrightYear";
 import { FooterVersion } from "@/components/layout/FooterVersion";
+import { NewsletterForm } from "@/components/ui/NewsletterForm";
 
 const guidesNavKeys = [
   { key: "gettingStarted", href: "/getting-started" },
@@ -48,6 +49,7 @@ export function Footer() {
   const tNav = useTranslations("navigation");
   const tFooter = useTranslations("footer");
   const tCommon = useTranslations("common");
+  const tNewsletter = useTranslations("newsletter");
 
   return (
     <footer className="border-t border-[color:var(--border-subtle)] bg-[color:var(--bg-subtle)]">
@@ -69,6 +71,19 @@ export function Footer() {
             <p className="mt-3 max-w-md text-sm text-[color:var(--fg-muted)]">
               {tFooter("description")}
             </p>
+
+            {/* THE-4 — Capture newsletter (placement footer) */}
+            <div className="mt-6 max-w-md">
+              <p className="text-sm font-semibold text-[color:var(--fg-primary)]">
+                {tNewsletter("title")}
+              </p>
+              <p className="mt-1 text-sm text-[color:var(--fg-muted)]">
+                {tNewsletter("description")}
+              </p>
+              <div className="mt-3">
+                <NewsletterForm variant="footer" />
+              </div>
+            </div>
           </div>
 
           <nav aria-label={tCommon("guides")}>

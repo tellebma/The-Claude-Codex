@@ -4,7 +4,7 @@ description: "The best MCPs for design and UI with Claude Code: Playwright, Chro
 section: "mcp"
 order: 5
 datePublished: "2026-03-09"
-dateModified: "2026-03-11"
+dateModified: "2026-10-27"
 ---
 
 ## MCPs for seeing and interacting with the web
@@ -211,15 +211,68 @@ claude mcp add puppeteer -- npx -y @modelcontextprotocol/server-puppeteer
 
 ---
 
+## SVG Lab: app screens, icons and illustrations
+
+**Your AI designs inside SVG Lab, and you watch it live.** Ask for an app screen, an icon set or an illustration, and SVG Lab's Design Engine does the layout, spacing, type and drawing. The result is saved as an editable SVG project in your SVG Lab account, ready to export as SVG, PNG or PDF.
+
+{/* source: https://svglab.app/mcp-server, https://github.com/ottoman9/svglab-mcp et https://glama.ai/mcp/connectors/app.svglab/svglab, consulté 2026-10-27 */}
+
+<Callout type="info" title="Remote server, no npm package">
+SVG Lab hosts the MCP server itself at `https://svglab.app/mcp` (streamable HTTP). There is nothing to install: the first time you use it, you sign in to SVG Lab with OAuth. Setup for each client is documented at [github.com/ottoman9/svglab-mcp](https://github.com/ottoman9/svglab-mcp). Every account gets 100 free credits (up to 24 app screens); after that, it needs a paid plan or a top-up.
+</Callout>
+
+### Installation
+
+```bash
+# Add the remote server (HTTP transport)
+claude mcp add --transport http svglab https://svglab.app/mcp
+
+# Then, in Claude Code: type /mcp, pick svglab and choose Authenticate
+```
+
+### JSON configuration
+
+```json
+{
+  "mcpServers": {
+    "svglab": {
+      "type": "http",
+      "url": "https://svglab.app/mcp"
+    }
+  }
+}
+```
+
+### Available tools
+
+The main ones:
+
+- **`new_project`**: Start a project for an app, a site or marketing material
+- **`create_layout`**: Build a screen or section from a layout tree
+- **`create_icon`**: Draw an icon from the built-in set
+- **`generate_illustration`**: Draw an illustration as editable SVG from a text brief
+- **`place_image`**: Place a photo in a frame, cropped to fit
+- **`look`**: Look at an artboard to check the result
+- **`export_code`**: Export screens as HTML, React, SwiftUI, Compose or Flutter code
+
+### Use cases
+
+- **App screens**: *"Use SVG Lab to design the welcome screen for my app"*
+- **Icon set**: *"Draw the tab bar icons for home, search, saved and profile"*
+- **Illustration**: *"Add an illustration of a person watering plants to the empty state"*
+- **Design to code**: *"Export the finished screens as React code"*
+
+---
+
 ## Comparison: which MCP to choose?
 
-| Criterion | Playwright | Chrome DevTools (via PW) | 21st.dev Magic | Puppeteer |
-|-----------|-----------|--------------------------|---------------|-----------|
-| **Type** | Web automation | Advanced debugging | UI generation | Chrome automation |
-| **Browsers** | Chromium, Firefox, WebKit | Chrome / Chromium | N/A (API) | Chromium only |
-| **Verified package** | `@playwright/mcp` | Via `@playwright/mcp` | `@21st-dev/magic` | `@modelcontextprotocol/server-puppeteer` |
-| **Strength** | E2E testing, multi-browser | Console, network | Modern design components | Scraping, simplicity |
-| **Difficulty** | Beginner | Intermediate | Beginner (API key required) | Beginner |
+| Criterion | Playwright | Chrome DevTools (via PW) | 21st.dev Magic | Puppeteer | SVG Lab |
+|-----------|-----------|--------------------------|---------------|-----------|---------|
+| **Type** | Web automation | Advanced debugging | UI generation | Chrome automation | UI design |
+| **Browsers** | Chromium, Firefox, WebKit | Chrome / Chromium | N/A (API) | Chromium only | N/A (remote server) |
+| **Verified package** | `@playwright/mcp` | Via `@playwright/mcp` | `@21st-dev/magic` | `@modelcontextprotocol/server-puppeteer` | None (remote server `https://svglab.app/mcp`) |
+| **Strength** | E2E testing, multi-browser | Console, network | Modern design components | Scraping, simplicity | Screens, icons and illustrations as editable SVG |
+| **Difficulty** | Beginner | Intermediate | Beginner (API key required) | Beginner | Beginner (OAuth sign-in) |
 
 <Callout type="info" title="Recommendation">
 For most projects, **Playwright + 21st.dev Magic** is the ideal combination. Playwright for testing and visual verification, 21st.dev Magic for generating quality components. Puppeteer remains useful for specific scraping cases where you only need Chromium.
@@ -234,12 +287,14 @@ These MCPs interact with browsers and external services. Here are the limitation
 - **Playwright and Puppeteer**: no API quotas, but each browser instance consumes 200-500 MB of RAM. Running multiple tests in parallel can exhaust memory.
 - **21st.dev Magic**: subject to your plan limits (number of requests/month). Complex components consume more credits.
 - **Chrome DevTools**: same memory limits as Playwright, since it uses a browser.
+- **SVG Lab**: counted in credits, 1 per tool call. As of 2026-10-27, every account gets 100 free credits (up to 24 app screens) once, then needs a paid plan or a top-up.
 
 ### Latency and reliability
 
 - **Screenshots**: taking a screenshot requires full page rendering. Heavy pages (SPAs with lots of JS) can take 3 to 10 seconds.
 - **Headless browsers**: some sites block headless browsers (anti-bot). Tests may fail on protected third-party sites.
 - **21st.dev Magic**: component generation goes through a cloud API. Latency depends on the complexity of the requested component (1 to 15 seconds).
+- **SVG Lab**: the first call of a session can take 10 to 30 seconds while the Design Engine starts.
 
 ### Common failure cases
 

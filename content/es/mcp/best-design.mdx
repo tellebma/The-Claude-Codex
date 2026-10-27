@@ -4,7 +4,7 @@ description: "Los mejores MCP para diseño y UI con Claude Code: Playwright, Chr
 section: "mcp"
 order: 5
 datePublished: "2026-03-09"
-dateModified: "2026-03-11"
+dateModified: "2026-10-27"
 ---
 
 ## Los MCP para ver e interactuar con la web
@@ -211,15 +211,68 @@ claude mcp add puppeteer -- npx -y @modelcontextprotocol/server-puppeteer
 
 ---
 
+## SVG Lab: pantallas de app, iconos e ilustraciones
+
+**Tu IA diseña dentro de SVG Lab y tú lo ves en directo.** Pide una pantalla de app, un juego de iconos o una ilustración, y el Design Engine de SVG Lab se encarga de la maquetación, el espaciado, la tipografía y el dibujo. El resultado se guarda como un proyecto SVG editable en tu cuenta de SVG Lab, listo para exportar en SVG, PNG o PDF.
+
+{/* source: https://svglab.app/mcp-server, https://github.com/ottoman9/svglab-mcp et https://glama.ai/mcp/connectors/app.svglab/svglab, consulté 2026-10-27 */}
+
+<Callout type="info" title="Servidor remoto, sin paquete npm">
+SVG Lab aloja el servidor MCP en `https://svglab.app/mcp` (streamable HTTP). No hay nada que instalar: la primera vez que lo usas, inicias sesión en SVG Lab con OAuth. La configuración de cada cliente está documentada en [github.com/ottoman9/svglab-mcp](https://github.com/ottoman9/svglab-mcp). Cada cuenta recibe 100 créditos gratis (hasta 24 pantallas de app); después, hace falta un plan de pago o una recarga.
+</Callout>
+
+### Instalación
+
+```bash
+# Añadir el servidor remoto (transporte HTTP)
+claude mcp add --transport http svglab https://svglab.app/mcp
+
+# Después, en Claude Code: escribe /mcp, elige svglab y luego Authenticate
+```
+
+### Configuración JSON
+
+```json
+{
+  "mcpServers": {
+    "svglab": {
+      "type": "http",
+      "url": "https://svglab.app/mcp"
+    }
+  }
+}
+```
+
+### Herramientas disponibles
+
+Las principales:
+
+- **`new_project`**: Empezar un proyecto para una app, una web o material de marketing
+- **`create_layout`**: Construir una pantalla o una sección a partir de un árbol de maquetación
+- **`create_icon`**: Dibujar un icono del juego integrado
+- **`generate_illustration`**: Dibujar una ilustración en SVG editable a partir de una descripción
+- **`place_image`**: Colocar una foto en un marco, recortada para que encaje
+- **`look`**: Mirar un artboard para comprobar el resultado
+- **`export_code`**: Exportar las pantallas como código HTML, React, SwiftUI, Compose o Flutter
+
+### Casos de uso
+
+- **Pantallas de app**: *"Usa SVG Lab para diseñar la pantalla de bienvenida de mi app"*
+- **Juego de iconos**: *"Dibuja los iconos de la barra de pestañas: inicio, búsqueda, guardados y perfil"*
+- **Ilustración**: *"Añade una ilustración de una persona regando plantas en la pantalla vacía"*
+- **Del diseño al código**: *"Exporta las pantallas terminadas como código React"*
+
+---
+
 ## Comparativa: ¿qué MCP elegir?
 
-| Criterio | Playwright | Chrome DevTools (vía PW) | 21st.dev Magic | Puppeteer |
-|---------|-----------|--------------------------|---------------|-----------|
-| **Tipo** | Automatización web | Depuración avanzada | Generación de UI | Automatización de Chrome |
-| **Navegadores** | Chromium, Firefox, WebKit | Chrome / Chromium | N/A (API) | Solo Chromium |
-| **Paquete verificado** | `@playwright/mcp` | Vía `@playwright/mcp` | `@21st-dev/magic` | `@modelcontextprotocol/server-puppeteer` |
-| **Punto fuerte** | Tests E2E, multinavegador | Consola, red | Componentes de diseño modernos | Scraping, sencillez |
-| **Dificultad** | Principiante | Intermedio | Principiante (requiere clave API) | Principiante |
+| Criterio | Playwright | Chrome DevTools (vía PW) | 21st.dev Magic | Puppeteer | SVG Lab |
+|---------|-----------|--------------------------|---------------|-----------|---------|
+| **Tipo** | Automatización web | Depuración avanzada | Generación de UI | Automatización de Chrome | Diseño de UI |
+| **Navegadores** | Chromium, Firefox, WebKit | Chrome / Chromium | N/A (API) | Solo Chromium | N/A (servidor remoto) |
+| **Paquete verificado** | `@playwright/mcp` | Vía `@playwright/mcp` | `@21st-dev/magic` | `@modelcontextprotocol/server-puppeteer` | Ninguno (servidor remoto `https://svglab.app/mcp`) |
+| **Punto fuerte** | Tests E2E, multinavegador | Consola, red | Componentes de diseño modernos | Scraping, sencillez | Pantallas, iconos e ilustraciones en SVG editable |
+| **Dificultad** | Principiante | Intermedio | Principiante (requiere clave API) | Principiante | Principiante (inicio de sesión OAuth) |
 
 <Callout type="info" title="Recomendación">
 Para la mayoría de proyectos, **Playwright + 21st.dev Magic** es la combinación ideal. Playwright para probar y verificar visualmente, 21st.dev Magic para generar componentes de calidad. Puppeteer sigue siendo útil para casos de scraping específicos donde solo necesitas Chromium.
@@ -234,12 +287,14 @@ Estos MCP interactúan con navegadores y servicios externos. Aquí tienes los l�
 - **Playwright y Puppeteer**: sin cuotas de API, pero cada instancia de navegador consume entre 200 y 500 MB de RAM. Si lanzas varios tests en paralelo, la memoria puede saturarse.
 - **21st.dev Magic**: sujeto a los límites de tu plan (número de peticiones al mes). Los componentes complejos consumen más créditos.
 - **Chrome DevTools**: el mismo límite de memoria que Playwright, ya que usa un navegador.
+- **SVG Lab**: se cuenta en créditos, 1 por llamada a una herramienta. A 2026-10-27, cada cuenta recibe una vez 100 créditos gratis (hasta 24 pantallas de app); después hace falta un plan de pago o una recarga.
 
 ### Latencia y fiabilidad
 
 - **Capturas de pantalla**: hacer una captura requiere el renderizado completo de la página. Las páginas pesadas (SPA con mucho JS) pueden tardar de 3 a 10 segundos.
 - **Navegadores headless**: algunos sitios bloquean los navegadores headless (anti-bot). Los tests pueden fallar en sitios de terceros protegidos.
 - **21st.dev Magic**: la generación de componentes pasa por una API en la nube. La latencia depende de la complejidad del componente solicitado (1 a 15 segundos).
+- **SVG Lab**: la primera llamada de una sesión puede tardar de 10 a 30 segundos mientras arranca el Design Engine.
 
 ### Fallos habituales
 

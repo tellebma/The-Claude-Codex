@@ -182,7 +182,7 @@ export const SITE_PAGES: ReadonlyArray<PageInfo> = [
       "Les meilleurs MCP pour le design et l’UI avec Claude Code : Playwright, Chrome DevTools, 21st.dev Magic et Puppeteer.",
     priority: 0.85,
     changeFrequency: "monthly",
-    lastModified: "2026-03-09",
+    lastModified: "2026-10-27",
     localesAvailable: ES_INFRA_LOCALES,
   },
   {
